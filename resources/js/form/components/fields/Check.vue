@@ -11,14 +11,14 @@
 
 <template>
     <FormFieldLayout v-bind="props">
-        <div class="flex items-center space-x-3">
+        <div class="group/control flex items-center gap-x-3 h-10">
             <Checkbox
                 :id="fieldErrorKey"
                 :checked="!!value"
                 :disabled="field.readOnly"
                 @update:checked="emit('input', $event)"
             />
-            <Label :for="fieldErrorKey">
+            <Label class="py-1" :for="fieldErrorKey">
                 {{ field.text }}
             </Label>
         </div>

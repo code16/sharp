@@ -20,75 +20,90 @@
     const form = useParentForm();
     const id = computed(() => useId(null, `form-field_${props.fieldErrorKey}`));
     const ariaDescribedBy = computed(() => [
-        props.field.helpMessage && `${id.value}-help-message`,
-        form.fieldHasError(props.field, props.fieldErrorKey) && `${id.value}-error`,
-    ].filter(Boolean).join(' '));
+            props.field.helpMessage && `${id.value}-help-message`,
+            form.fieldHasError(props.field, props.fieldErrorKey) && `${id.value}-error`,
+        ].filter(Boolean).join(' ')
+    );
+    const hasLabelRow = computed(() =>
+        props.field.label
+        || props.row.length > 1
+        || 'localized' in props.field && props.field.localized
+    );
 
     defineSlots<{
         default(props: { id: string, ariaDescribedBy: string }): any,
-        'help-message'(): any
+        'help-message'(): any,
+        'action'(): any,
     }>();
 </script>
 
 <template>
-    <div :class="cn('grid gap-2', props.class)"
+    <div :class="cn(
+            'grid grid-rows-subgrid gap-2.5',
+            hasLabelRow ? 'row-span-2' : '',
+            props.class
+        )"
         :role="fieldGroup ? 'group' : null"
         :aria-labelledby="fieldGroup ? `${id}-label` : null"
         :aria-describedby="fieldGroup ? ariaDescribedBy : null"
         :aria-invalid="form.fieldHasError(field, fieldErrorKey)"
         :style="field.extraStyle"
     >
-        <div class="flex">
-            <div class="flex mr-auto">
-                <template v-if="field.label">
-                    <Label
-                        :id="`${id}-label`"
-                        :as="fieldGroup ? 'div' : 'label'"
-                        class="leading-5"
-                        :class="{ 'text-destructive': form.fieldHasError(field, fieldErrorKey) }"
-                        :for="id"
-                        @click="$emit('label-click')"
-                    >
-                        {{ field.label }}
-                    </Label>
+        <template v-if="hasLabelRow">
+            <div class="flex">
+                <div class="flex mr-auto">
+                    <template v-if="field.label">
+                        <Label
+                            :id="`${id}-label`"
+                            :as="fieldGroup ? 'div' : 'label'"
+                            class="leading-4"
+                            :class="{ 'text-destructive': form.fieldHasError(field, fieldErrorKey) }"
+                            :for="id"
+                            @click="$emit('label-click')"
+                        >
+                            {{ field.label }}
+                        </Label>
+                    </template>
+                </div>
+                <template v-if="$slots.action">
+                    <div class="grid items-center content-center h-3.5">
+                        <slot name="action" />
+                    </div>
                 </template>
-                <template v-else-if="row.length > 1">
-                    <Label as="div" aria-hidden="true">&nbsp;</Label>
+                <template v-if="'localized' in field && field.localized">
+                    <ToggleGroup class="h-3.5" :model-value="locale" @update:model-value="$emit('locale-change', $event)" type="single">
+                        <template v-for="btnLocale in form.locales">
+                            <ToggleGroupItem class="uppercase text-xs h-6" size="sm" :value="btnLocale">
+                                {{ btnLocale }}
+                                <template v-if="form.fieldLocalesContainingError(fieldErrorKey).includes(btnLocale)">
+                                    <svg class="ml-1 h-1.5 w-1.5 fill-destructive" viewBox="0 0 6 6" aria-hidden="true">
+                                        <circle cx="3" cy="3" r="3" />
+                                    </svg>
+                                </template>
+                            </ToggleGroupItem>
+                        </template>
+                    </ToggleGroup>
+                    <!--                <nav class="flex items-center h-3.5">-->
+                    <!--                    <template v-for="btnLocale in form.locales">-->
+                    <!--                        <button-->
+                    <!--                            class="flex items-center rounded-md px-2 py-1 text-xs font-medium uppercase"-->
+                    <!--                            :class="[-->
+                    <!--                                btnLocale === locale ? 'bg-indigo-100 text-indigo-700' :-->
+                    <!--                                form.fieldLocalesContainingError(fieldErrorKey).includes(btnLocale) ? 'text-red-700' :-->
+                    <!--                                'text-gray-500 hover:text-gray-700',-->
+                    <!--                                form.fieldIsEmpty(field, value, btnLocale) ? 'italic' : ''-->
+                    <!--                            ]"-->
+                    <!--                            :aria-current="btnLocale === locale ? 'true' : null"-->
+                    <!--                            @click="$emit('locale-change', btnLocale)"-->
+                    <!--                        >-->
+                    <!--                            {{ btnLocale }}-->
+
+                    <!--                        </button>-->
+                    <!--                    </template>-->
+                    <!--                </nav>-->
                 </template>
             </div>
-            <template v-if="'localized' in field && field.localized">
-                <ToggleGroup class="h-3.5" :model-value="locale" @update:model-value="$emit('locale-change', $event)" type="single">
-                    <template v-for="btnLocale in form.locales">
-                        <ToggleGroupItem class="uppercase text-xs h-6" size="sm" :value="btnLocale">
-                            {{ btnLocale }}
-                            <template v-if="form.fieldLocalesContainingError(fieldErrorKey).includes(btnLocale)">
-                                <svg class="ml-1 h-1.5 w-1.5 fill-destructive" viewBox="0 0 6 6" aria-hidden="true">
-                                    <circle cx="3" cy="3" r="3" />
-                                </svg>
-                            </template>
-                        </ToggleGroupItem>
-                    </template>
-                </ToggleGroup>
-<!--                <nav class="flex items-center h-3.5">-->
-<!--                    <template v-for="btnLocale in form.locales">-->
-<!--                        <button-->
-<!--                            class="flex items-center rounded-md px-2 py-1 text-xs font-medium uppercase"-->
-<!--                            :class="[-->
-<!--                                btnLocale === locale ? 'bg-indigo-100 text-indigo-700' :-->
-<!--                                form.fieldLocalesContainingError(fieldErrorKey).includes(btnLocale) ? 'text-red-700' :-->
-<!--                                'text-gray-500 hover:text-gray-700',-->
-<!--                                form.fieldIsEmpty(field, value, btnLocale) ? 'italic' : ''-->
-<!--                            ]"-->
-<!--                            :aria-current="btnLocale === locale ? 'true' : null"-->
-<!--                            @click="$emit('locale-change', btnLocale)"-->
-<!--                        >-->
-<!--                            {{ btnLocale }}-->
-
-<!--                        </button>-->
-<!--                    </template>-->
-<!--                </nav>-->
-            </template>
-        </div>
+        </template>
 
         <slot v-bind="{ id, ariaDescribedBy }" />
 

@@ -176,7 +176,7 @@
                                                                         <template v-for="row in fieldLayout.fields">
                                                                             <FieldGridRow>
                                                                                 <template v-for="fieldLayout in row">
-                                                                                    <FieldGridColumn :layout="fieldLayout">
+                                                                                    <FieldGridColumn :layout="fieldLayout" :class="{ '!hidden': !form.fieldShouldBeVisible(fieldLayout) }">
                                                                                         <SharpFormField
                                                                                             :field="form.getField(fieldLayout.key)"
                                                                                             :field-layout="fieldLayout"
@@ -199,7 +199,7 @@
                                                         </FieldGridColumn>
                                                     </template>
                                                     <template v-else>
-                                                        <FieldGridColumn :layout="fieldLayout" v-show="form.fieldShouldBeVisible(fieldLayout)">
+                                                        <FieldGridColumn :layout="fieldLayout" :class="{ '!hidden': !form.fieldShouldBeVisible(fieldLayout) }">
                                                             <SharpFormField
                                                                 :field="form.getField(fieldLayout.key)"
                                                                 :field-layout="fieldLayout"

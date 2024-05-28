@@ -4,7 +4,6 @@
     import { FormFieldData, FormListFieldData, FormUploadFieldValueData } from "@/types";
     import { getDependantFieldsResetData } from "@/form/util";
     import { computed, ref } from "vue";
-    // import Draggable from 'vuedraggable';
     import { Button } from '@/components/ui/button';
     import ListBulkUpload from "./ListBulkUpload.vue";
     import { showAlert } from "@/utils/dialogs";
@@ -17,12 +16,10 @@
     import { useDraggable } from "vue-draggable-plus";
     import { EntityListInstance } from "@/entity-list/types";
     import FieldGrid from "@/components/ui/FieldGrid.vue";
-    import { route } from "@/utils/url";
-    import { MoreHorizontal } from "lucide-vue-next";
+    import { MoreHorizontal, GripVertical } from "lucide-vue-next";
     import {
         DropdownMenu, DropdownMenuContent,
         DropdownMenuItem,
-        DropdownMenuSeparator,
         DropdownMenuTrigger
     } from "@/components/ui/dropdown-menu";
     import { Card, CardContent } from "@/components/ui/card";
@@ -31,7 +28,6 @@
     const emit = defineEmits<FormFieldEmits<FormListFieldData>>();
 
     const form = useParentForm();
-    const isSorting = ref(false);
     const canAddItem = computed(() => {
         const { field, value } = props;
         return field.addable &&
@@ -50,16 +46,24 @@
         }
         return field.bulkUploadLimit;
     });
+    const dragging = ref(false);
+    const reordering = ref(false);
+    const sortedKey = ref(0);
     const sortableContainer = ref<HTMLElement>();
     const sortable = useDraggable<EntityListInstance>(
         sortableContainer as any,
         computed<EntityListInstance[]>({
             get: () => props.value ?? [],
-            set: (newItems) => emit('input', newItems)
+            set: (newItems) => {
+                sortedKey.value++;
+                emit('input', newItems);
+            }
         }),
-        {
-            immediate: false,
-        }
+        computed(() => ({
+            animation: 150,
+            handle: reordering.value ? null : '[data-drag-handle]',
+            // immediate: false,
+        }))
     );
 
     let itemKeyIndex = 0;
@@ -146,29 +150,30 @@
 
 <template>
     <FormFieldLayout v-bind="props" field-group>
-        <div>
-            <div class="">
-                <template v-if="field.sortable && value?.length > 1">
-                    <Toggle
-                        class="SharpList__sort-button"
-                        size="sm"
-                        :pressed="isSorting"
-                        :disabled="isUploading"
-                        @click="isSorting = !isSorting"
+        <template #action v-if="field.sortable && value?.length > 1">
+            <Toggle
+                class="SharpList__sort-button"
+                size="sm"
+                :pressed="reordering"
+                :disabled="isUploading"
+                @click="reordering = !reordering"
+            >
+                {{ __('sharp::form.list.sort_button.inactive') }}
+                <svg style="margin-left: .5em" width="1.125em" height="1.125em" viewBox="0 0 24 22" fill-rule="evenodd">
+                    <path d="M20 14V0h-4v14h-4l6 8 6-8zM4 8v14h4V8h4L6 0 0 8z"></path>
+                </svg>
+            </Toggle>
+        </template>
+        <div class="grid gap-y-4">
+            <template v-if="value?.length > 0">
+                <Card>
+                    <div class="group/list divide-y"
+                        @dragstart="dragging = true"
+                        @dragend="dragging = false"
+                        :ref="(el: HTMLElement) => sortableContainer = el"
                     >
-                        {{ __('sharp::form.list.sort_button.inactive') }}
-                        <svg style="margin-left: .5em" width="1.125em" height="1.125em" viewBox="0 0 24 22" fill-rule="evenodd">
-                            <path d="M20 14V0h-4v14h-4l6 8 6-8zM4 8v14h4V8h4L6 0 0 8z"></path>
-                        </svg>
-                    </Toggle>
-                </template>
-            </div>
-
-            <Card>
-                <CardContent class="pt-6">
-                    <div class="divide-y" :ref="(el: HTMLElement) => sortableContainer = el">
-                        <template v-for="(item, index) in value">
-                            <div class="flex">
+                        <template v-for="(item, index) in value" :key="`${item[itemKey]}-${sortedKey}`">
+                            <div class="group relative p-6 bg-background first:rounded-t-lg last:rounded-b-lg [&.sortable-drag]:rounded-lg [&.sortable-ghost]:z-10 [&.sortable-ghost]:ring-2 [&.sortable-ghost]:ring-ring [&.sortable-ghost]:ring-offset-2" :class="{ 'cursor-grab': reordering }">
                                 <!--                        <template v-if="canAddItem && field.sortable && !dragActive">-->
                                 <!--                            <div class="SharpList__new-item-zone">-->
                                 <!--                                <Button size="sm" @click="onInsert(index)">-->
@@ -177,40 +182,43 @@
                                 <!--                            </div>-->
                                 <!--                        </template>-->
 
-                                <FieldGrid class="flex-1 min-w-0">
-                                    <template v-for="row in fieldLayout.item">
-                                        <FieldGridRow>
-                                            <template v-for="itemFieldLayout in row">
-                                                <FieldGridColumn :layout="itemFieldLayout" v-show="form.fieldShouldBeVisible(itemFieldLayout, field.itemFields, item)">
-                                                    <SharpFormField
-                                                        :field="form.getField(itemFieldLayout.key, field.itemFields, item, isSorting)"
-                                                        :field-layout="itemFieldLayout"
-                                                        :field-error-key="`${field.key}.${index}.${itemFieldLayout.key}`"
-                                                        :value="item[itemFieldLayout.key]"
-                                                        :locale="form.getMeta(`${field.key}.${index}.${itemFieldLayout.key}`)?.locale ?? locale"
-                                                        :row="row"
-                                                        @input="(value, options) => onFieldInput(index, itemFieldLayout.key, value, options)"
-                                                        @locale-change="onFieldLocaleChange(`${field.key}.${index}.${itemFieldLayout.key}`, $event)"
-                                                        @uploading="onFieldUploading(`${field.key}.${index}.${itemFieldLayout.key}`, $event)"
-                                                    />
-                                                </FieldGridColumn>
-                                            </template>
-                                        </FieldGridRow>
-                                    </template>
-                                </FieldGrid>
+                                <div class="flex" :inert="reordering">
+                                    <FieldGrid class="flex-1 min-w-0 gap-6">
+                                        <template v-for="row in fieldLayout.item">
+                                            <FieldGridRow>
+                                                <template v-for="itemFieldLayout in row">
+                                                    <FieldGridColumn :layout="itemFieldLayout" :class="{ '!hidden': !form.fieldShouldBeVisible(itemFieldLayout, field.itemFields, item) }">
+                                                        <SharpFormField
+                                                            :field="form.getField(itemFieldLayout.key, field.itemFields, item)"
+                                                            :field-layout="itemFieldLayout"
+                                                            :field-error-key="`${field.key}.${index}.${itemFieldLayout.key}`"
+                                                            :value="item[itemFieldLayout.key]"
+                                                            :locale="form.getMeta(`${field.key}.${index}.${itemFieldLayout.key}`)?.locale ?? locale"
+                                                            :row="row"
+                                                            @input="(value, options) => onFieldInput(index, itemFieldLayout.key, value, options)"
+                                                            @locale-change="onFieldLocaleChange(`${field.key}.${index}.${itemFieldLayout.key}`, $event)"
+                                                            @uploading="onFieldUploading(`${field.key}.${index}.${itemFieldLayout.key}`, $event)"
+                                                        />
+                                                    </FieldGridColumn>
+                                                </template>
+                                            </FieldGridRow>
+                                        </template>
+                                    </FieldGrid>
 
-                                <DropdownMenu :modal="false">
-                                    <DropdownMenuTrigger as-child>
-                                        <Button class="shrink-0" variant="ghost" size="icon">
-                                            <MoreHorizontal class="w-4 h-4" />
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent>
-                                        <DropdownMenuItem class="text-destructive" @click="onRemove">
-                                            {{ __('sharp::form.upload.remove_button') }}
-                                        </DropdownMenuItem>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
+                                    <DropdownMenu :modal="false">
+                                        <DropdownMenuTrigger as-child>
+                                            <Button class="shrink-0" variant="ghost" size="icon">
+                                                <MoreHorizontal class="w-4 h-4" />
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent>
+                                            <DropdownMenuItem class="text-destructive" @click="onRemove(index as number)">
+                                                {{ __('sharp::form.upload.remove_button') }}
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </div>
+
                                 <!--                        <template v-if="field.removable && !field.readOnly && !dragActive">-->
                                 <!--                            <Button-->
                                 <!--                                class=""-->
@@ -221,6 +229,12 @@
                                 <!--                            >&times;</Button>-->
                                 <!--                        </template>-->
 
+                                <div class="z-10 absolute opacity-0 flex items-center justify-center left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 h-4 w-3 rounded-sm border bg-border duration-300 transition-opacity cursor-grab group-[&:has([draggable=true])]/list:opacity-0 group-[&:has([draggable=true])]/list:transition-none hover:bg-foreground hover:border-foreground hover:text-background group-hover:opacity-100"
+                                    data-drag-handle
+                                >
+                                    <div class="absolute -inset-2"></div>
+                                    <GripVertical class="h-2.5 w-2.5" />
+                                </div>
                                 <!--                        <template v-if="field.sortable && value?.length > 1 && !isUploading">-->
                                 <!--                            <div class="d-flex align-items-center px-1" data-drag-handle>-->
                                 <!--                                <i class="fas fa-grip-vertical opacity-25"></i>-->
@@ -229,14 +243,15 @@
                             </div>
                         </template>
                     </div>
-                </CardContent>
-            </Card>
+                </Card>
+            </template>
+
 
 <!--            <template v-if="field.itemFields[field.bulkUploadField]?.type === 'upload' && canAddItem && currentBulkUploadLimit > 0">-->
 <!--                <ListBulkUpload-->
 <!--                    :field="field"-->
 <!--                    :current-bulk-upload-limit="currentBulkUploadLimit"-->
-<!--                    :disabled="isSorting"-->
+<!--                    :disabled="reordering"-->
 <!--                    @change="onBulkUploadInputChange"-->
 <!--                    key="upload"-->
 <!--                />-->
@@ -246,7 +261,7 @@
                 <div>
                     <Button
                         class=" w-full"
-                        :disabled="field.readOnly || isSorting"
+                        :disabled="field.readOnly || reordering"
                         variant="secondary"
                         @click="onAdd"
                     >
