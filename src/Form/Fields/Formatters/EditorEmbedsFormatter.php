@@ -47,14 +47,13 @@ class EditorEmbedsFormatter extends SharpFieldFormatter implements FormatsAfterU
                             if ($field instanceof SharpFormUploadField) {
                                 $fieldValue = $field->formatter()
                                     ->setInstanceId($this->instanceId)
-                                    ->setAlwaysReturnFullObject()
                                     ->fromFront($field, $fieldKey, $fieldValue);
                             }
                             if ($field instanceof SharpFormListField) {
                                 $fieldValue = $field->formatter()
                                     ->formatItemFieldUsing(function (SharpFormField $field) {
                                         if ($field instanceof SharpFormUploadField) {
-                                            return $field->formatter()->setAlwaysReturnFullObject();
+                                            return $field->formatter();
                                         }
 
                                         // other field types have already been formatted, so we pass value through
