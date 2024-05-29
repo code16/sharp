@@ -3,7 +3,7 @@
     import { useParentForm } from "@/form/useParentForm";
     import { FormFieldData, FormListFieldData, FormUploadFieldValueData } from "@/types";
     import { getDependantFieldsResetData } from "@/form/util";
-    import { computed, ref } from "vue";
+    import { computed, ref, watch, watchEffect } from "vue";
     import { Button } from '@/components/ui/button';
     import ListBulkUpload from "./ListBulkUpload.vue";
     import { showAlert } from "@/utils/dialogs";
@@ -13,8 +13,6 @@
     import FieldGridColumn from "@/components/ui/FieldGridColumn.vue";
     import { Toggle } from "@/components/ui/toggle";
     import FormFieldLayout from "@/form/components/FormFieldLayout.vue";
-    import { useDraggable } from "vue-draggable-plus";
-    import { EntityListInstance } from "@/entity-list/types";
     import FieldGrid from "@/components/ui/FieldGrid.vue";
     import { MoreHorizontal, GripVertical } from "lucide-vue-next";
     import {
@@ -22,7 +20,8 @@
         DropdownMenuItem,
         DropdownMenuTrigger
     } from "@/components/ui/dropdown-menu";
-    import { Card, CardContent } from "@/components/ui/card";
+    import { Card } from "@/components/ui/card";
+    import { useSortable } from "@vueuse/integrations/useSortable";
 
     const props = defineProps<FormFieldProps<FormListFieldData>>();
     const emit = defineEmits<FormFieldEmits<FormListFieldData>>();
@@ -50,24 +49,39 @@
     const reordering = ref(false);
     const sortedKey = ref(0);
     const sortableContainer = ref<HTMLElement>();
-    const sortable = useDraggable<EntityListInstance>(
-        sortableContainer as any,
-        computed<EntityListInstance[]>({
+    const sortable = useSortable(
+        sortableContainer,
+        computed({
             get: () => props.value ?? [],
             set: (newItems) => {
-                sortedKey.value++;
+                // sortedKey.value++;
                 emit('input', newItems);
             }
         }),
-        computed(() => ({
+        {
             animation: 150,
-            handle: reordering.value ? null : '[data-drag-handle]',
-            // immediate: false,
-        }))
+            handle: '[data-drag-handle]',
+            onEnd(e) {
+                const itemMeta = form.getMeta(`${props.field.key}.${e.oldIndex}`) as FieldsMeta;
+                form.setMeta(props.field.key,
+                    (form.meta[props.field.key] as FieldsMeta[])
+                        ?.toSpliced(e.oldIndex, 1)
+                        ?.toSpliced(e.newIndex, 0, itemMeta ?? {})
+                );
+            }
+        }
     );
+    watchEffect(() => {
+        sortable.option('handle', reordering.value ? null : '[data-drag-handle]');
+    });
 
     let itemKeyIndex = 0;
     const itemKey = Symbol('itemKey');
+    const errorIndex = Symbol('errorIndex');
+
+    watch(() => form.errors, () => {
+        emit('input', props.value?.map(((item, index) => ({ ...item, [errorIndex]: index }))));
+    });
 
     emit('input', props.value?.map(item => ({ ...item, [itemKey]: itemKeyIndex++ })), { force: true });
 
@@ -81,6 +95,10 @@
 
     function onAdd() {
         emit('input', [...(props.value ?? []), createItem()]);
+        // form.setMeta(
+        //     props.field.key,
+        //     [...(form.meta[props.field.key] ?? []), {}]
+        // );
     }
 
     function onInsert(itemIndex: number) {
@@ -152,28 +170,30 @@
     <FormFieldLayout v-bind="props" field-group>
         <template #action v-if="field.sortable && value?.length > 1">
             <Toggle
-                class="SharpList__sort-button"
+                class="h-6"
                 size="sm"
                 :pressed="reordering"
                 :disabled="isUploading"
                 @click="reordering = !reordering"
             >
                 {{ __('sharp::form.list.sort_button.inactive') }}
-                <svg style="margin-left: .5em" width="1.125em" height="1.125em" viewBox="0 0 24 22" fill-rule="evenodd">
-                    <path d="M20 14V0h-4v14h-4l6 8 6-8zM4 8v14h4V8h4L6 0 0 8z"></path>
-                </svg>
             </Toggle>
         </template>
         <div class="grid gap-y-4">
             <template v-if="value?.length > 0">
-                <Card>
-                    <div class="group/list divide-y"
+<!--                <Card>-->
+                    <div class="group/list space-y-2"
                         @dragstart="dragging = true"
                         @dragend="dragging = false"
                         :ref="(el: HTMLElement) => sortableContainer = el"
                     >
                         <template v-for="(item, index) in value" :key="`${item[itemKey]}-${sortedKey}`">
-                            <div class="group relative p-6 bg-background first:rounded-t-lg last:rounded-b-lg [&.sortable-drag]:rounded-lg [&.sortable-ghost]:z-10 [&.sortable-ghost]:ring-2 [&.sortable-ghost]:ring-ring [&.sortable-ghost]:ring-offset-2" :class="{ 'cursor-grab': reordering }">
+                            <Card>
+                                <div class="group relative p-4 bg-background first:rounded-t-lg last:rounded-b-lg"
+                                :class="[
+                                    '[&.sortable-ghost]:z-10 [&.sortable-ghost]:ring-2 [&.sortable-ghost]:ring-ring [&.sortable-ghost]:ring-offset-2',
+                                    reordering ? 'cursor-grab bg-muted/30' : 'bg-background'
+                                ]">
                                 <!--                        <template v-if="canAddItem && field.sortable && !dragActive">-->
                                 <!--                            <div class="SharpList__new-item-zone">-->
                                 <!--                                <Button size="sm" @click="onInsert(index)">-->
@@ -182,7 +202,7 @@
                                 <!--                            </div>-->
                                 <!--                        </template>-->
 
-                                <div class="flex" :inert="reordering">
+                                <div :inert="reordering">
                                     <FieldGrid class="flex-1 min-w-0 gap-6">
                                         <template v-for="row in fieldLayout.item">
                                             <FieldGridRow>
@@ -191,7 +211,7 @@
                                                         <SharpFormField
                                                             :field="form.getField(itemFieldLayout.key, field.itemFields, item)"
                                                             :field-layout="itemFieldLayout"
-                                                            :field-error-key="`${field.key}.${index}.${itemFieldLayout.key}`"
+                                                            :field-error-key="`${field.key}.${item[errorIndex] ?? index}.${itemFieldLayout.key}`"
                                                             :value="item[itemFieldLayout.key]"
                                                             :locale="form.getMeta(`${field.key}.${index}.${itemFieldLayout.key}`)?.locale ?? locale"
                                                             :row="row"
@@ -207,7 +227,7 @@
 
                                     <DropdownMenu :modal="false">
                                         <DropdownMenuTrigger as-child>
-                                            <Button class="shrink-0" variant="ghost" size="icon">
+                                            <Button class="absolute top-0 right-0" variant="ghost" size="icon">
                                                 <MoreHorizontal class="w-4 h-4" />
                                             </Button>
                                         </DropdownMenuTrigger>
@@ -241,9 +261,10 @@
                                 <!--                            </div>-->
                                 <!--                        </template>-->
                             </div>
+                            </Card>
                         </template>
                     </div>
-                </Card>
+<!--                </Card>-->
             </template>
 
 

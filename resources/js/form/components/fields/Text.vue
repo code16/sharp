@@ -12,8 +12,8 @@
 
     const input = ref();
 
-    function onInput(e) {
-        const value = normalizeText(e.target.value);
+    function onInput(inputValue: string) {
+        const value = normalizeText(inputValue);
         const error = validateTextField(value, {
             maxlength: props.field.maxLength,
         });

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { computed } from "vue";
+    import { computed, onUpdated, ref } from "vue";
     import { FormFieldProps } from "@/form/types";
     import { useParentForm } from "@/form/useParentForm";
     import { useId } from "radix-vue";
@@ -30,6 +30,8 @@
         || 'localized' in props.field && props.field.localized
     );
 
+    const el = ref<HTMLElement>();
+
     defineSlots<{
         default(props: { id: string, ariaDescribedBy: string }): any,
         'help-message'(): any,
@@ -47,7 +49,7 @@
         :aria-labelledby="fieldGroup ? `${id}-label` : null"
         :aria-describedby="fieldGroup ? ariaDescribedBy : null"
         :aria-invalid="form.fieldHasError(field, fieldErrorKey)"
-        :style="field.extraStyle"
+        ref="el"
     >
         <template v-if="hasLabelRow">
             <div class="flex">
@@ -105,34 +107,37 @@
             </div>
         </template>
 
-        <slot v-bind="{ id, ariaDescribedBy }" />
+        <!-- We wrap the field + error / description to have only 2 child elements max (for subgrid alignment) -->
+        <div class="grid gap-2.5">
+            <slot v-bind="{ id, ariaDescribedBy }" />
 
-        <template v-if="field.helpMessage || form.fieldHasError(field, fieldErrorKey)">
-            <div class="grid gap-y-2">
-                <template v-if="field.helpMessage || $slots['help-message']">
-                    <p :id="`${id}-help-message`" class="text-sm text-muted-foreground">
-                        <slot name="help-message">
-                            {{ field.helpMessage }}
-                        </slot>
-                    </p>
-                </template>
+            <template v-if="field.helpMessage || form.fieldHasError(field, fieldErrorKey)">
+                <div class="grid gap-y-2">
+                    <template v-if="field.helpMessage || $slots['help-message']">
+                        <p :id="`${id}-help-message`" class="text-sm text-muted-foreground leading-4">
+                            <slot name="help-message">
+                                {{ field.helpMessage }}
+                            </slot>
+                        </p>
+                    </template>
 
-                <template v-if="form.fieldHasError(field, fieldErrorKey)">
-                    <div :id="`${id}-error`" class="text-sm font-medium text-destructive">
-                        <template v-if="form.fieldError(fieldErrorKey)">
-                            {{ form.fieldError(fieldErrorKey) }}
-                        </template>
-                        <template v-else-if="'localized' in field && field.localized">
-                            <template v-if="form.fieldError(`${fieldErrorKey}.${locale}`)">
-                                {{ form.fieldError(`${fieldErrorKey}.${locale}`) }}
+                    <template v-if="form.fieldHasError(field, fieldErrorKey)">
+                        <div :id="`${id}-error`" class="text-sm font-medium text-destructive leading-4">
+                            <template v-if="form.fieldError(fieldErrorKey)">
+                                {{ form.fieldError(fieldErrorKey) }}
                             </template>
-                            <template v-else>
-                                {{ __('sharp::form.validation_error.localized', { locales: form.fieldLocalesContainingError(fieldErrorKey).map(l => l.toUpperCase()) }) }}
+                            <template v-else-if="'localized' in field && field.localized">
+                                <template v-if="form.fieldError(`${fieldErrorKey}.${locale}`)">
+                                    {{ form.fieldError(`${fieldErrorKey}.${locale}`) }}
+                                </template>
+                                <template v-else>
+                                    {{ __('sharp::form.validation_error.localized', { locales: form.fieldLocalesContainingError(fieldErrorKey).map(l => l.toUpperCase()) }) }}
+                                </template>
                             </template>
-                        </template>
-                    </div>
-                </template>
-            </div>
-        </template>
+                        </div>
+                    </template>
+                </div>
+            </template>
+        </div>
     </div>
 </template>
