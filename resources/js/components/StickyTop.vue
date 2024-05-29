@@ -3,7 +3,7 @@
     import { computed, reactive, ref, watch } from "vue";
 
     defineProps<{
-        stuck?: boolean
+        stuck?: boolean,
     }>();
 
     const emit = defineEmits(['update:stuck']);
@@ -11,7 +11,11 @@
     const selfRect = reactive(useElementBounding(el));
     const topbarSafeRect = reactive(useElementBounding(() => document.querySelector('[data-topbar-sticky-safe-area]') as HTMLElement));
     const stuck = computed(() => {
-        return el.value && selfRect.bottom >= 0 && Math.round(selfRect.top) <= parseInt(window.getComputedStyle(el.value).top);
+        const style = el.value ? window.getComputedStyle(el.value) : null;
+        return el.value
+            && style.position === 'sticky'
+            && selfRect.bottom >= 0
+            && Math.round(selfRect.top) <= parseInt(style.top);
     });
     watch(stuck, () => {
         emit('update:stuck', stuck.value);
@@ -20,6 +24,7 @@
 
 <template>
     <div :style="{
+        '--top-bar-height': `${topbarSafeRect.height}px`,
         '--sticky-safe-left-offset': stuck ? `${Math.max(topbarSafeRect.left - selfRect.left, 0)}px` : '0px',
         '--sticky-safe-right-offset': stuck ? `${Math.max(selfRect.right - topbarSafeRect.right - parseInt(window.getComputedStyle(el).paddingRight), 0)}px` : '0px',
     }"

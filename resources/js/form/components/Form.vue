@@ -87,7 +87,7 @@
         <template v-if="form.locales?.length">
             <div class="container mb-4">
                 <template v-if="form.locales?.length">
-                    <Select :model-value="form.currentLocale" @update:model-value="onLocaleChange">
+                    <Select :model-value="form.currentLocale ?? undefined" @update:model-value="onLocaleChange">
                         <LocaleSelectTrigger />
                         <SelectContent>
                             <template v-for="locale in form.locales" :key="locale">
@@ -182,7 +182,7 @@
                                                                                             :field-layout="fieldLayout"
                                                                                             :field-error-key="fieldLayout.key"
                                                                                             :value="form.data[fieldLayout.key]"
-                                                                                            :locale="form.getMeta(fieldLayout.key)?.locale ?? form.currentLocale"
+                                                                                            :locale="form.getMeta(fieldLayout.key)?.locale ?? form.defaultLocale"
                                                                                             :row="row"
                                                                                             root
                                                                                             @input="(value, options) => onFieldInput(fieldLayout.key, value, options)"

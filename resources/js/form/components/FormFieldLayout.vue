@@ -7,41 +7,41 @@
     import { Label } from "@/components/ui/label";
     import { cn } from "@/utils/cn";
     import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+    import StickyTop from "@/components/StickyTop.vue";
 
     const props = defineProps<FormFieldProps & {
         class?: string,
         fieldGroup?: boolean,
-        shrinkEmptyLabel?: boolean,
+        stickyLabel?: boolean,
     }>();
     const emit = defineEmits<{
         (e: 'label-click'),
         (e: 'locale-change', locale: string)
     }>();
     const form = useParentForm();
-    const id = computed(() => useId(null, `form-field_${props.fieldErrorKey}`));
+    const id = useId(null, `form-field_${props.fieldErrorKey}`);
     const ariaDescribedBy = computed(() => [
-            props.field.helpMessage && `${id.value}-help-message`,
-            form.fieldHasError(props.field, props.fieldErrorKey) && `${id.value}-error`,
+            props.field.helpMessage && `${id}-help-message`,
+            form.fieldHasError(props.field, props.fieldErrorKey) && `${id}-error`,
         ].filter(Boolean).join(' ')
     );
+    const slots = defineSlots<{
+        default(props: { id: string, ariaDescribedBy: string }): any,
+        'help-message'?(): any,
+        'action'?(): any,
+    }>();
     const hasLabelRow = computed(() =>
         props.field.label
         || props.row.length > 1
         || 'localized' in props.field && props.field.localized
+        || !!slots.action
     );
-
     const el = ref<HTMLElement>();
-
-    defineSlots<{
-        default(props: { id: string, ariaDescribedBy: string }): any,
-        'help-message'(): any,
-        'action'(): any,
-    }>();
 </script>
 
 <template>
     <div :class="cn(
-            'grid grid-rows-subgrid gap-2.5',
+            'grid grid-cols-1 grid-rows-subgrid gap-2.5',
             hasLabelRow ? 'row-span-2' : '',
             props.class
         )"
@@ -52,72 +52,76 @@
         ref="el"
     >
         <template v-if="hasLabelRow">
-            <div class="flex">
-                <div class="flex mr-auto">
-                    <template v-if="field.label">
-                        <Label
-                            :id="`${id}-label`"
-                            :as="fieldGroup ? 'div' : 'label'"
-                            class="leading-4"
-                            :class="{ 'text-destructive': form.fieldHasError(field, fieldErrorKey) }"
-                            :for="id"
-                            @click="$emit('label-click')"
-                        >
-                            {{ field.label }}
-                        </Label>
+            <StickyTop :class="{ 'top-[calc(var(--top-bar-height)+.625rem)] z-10 lg:sticky': stickyLabel }" v-slot="{ stuck }">
+                <template v-if="stuck">
+                    <div class="absolute bg-background border-b -inset-x-6 -top-3 -bottom-2.5"></div>
+                </template>
+                <div class="relative flex">
+                    <div class="flex mr-auto">
+                        <template v-if="field.label">
+                            <Label
+                                :id="`${id}-label`"
+                                :as="fieldGroup ? 'div' : 'label'"
+                                class="leading-4"
+                                :class="{ 'text-destructive': form.fieldHasError(field, fieldErrorKey) }"
+                                :for="id"
+                                @click="$emit('label-click')"
+                            >
+                                {{ field.label }}
+                            </Label>
+                        </template>
+                    </div>
+                    <template v-if="$slots.action">
+                        <div class="grid items-center content-center h-3.5">
+                            <slot name="action" />
+                        </div>
+                    </template>
+                    <template v-if="'localized' in field && field.localized">
+                        <ToggleGroup class="h-3.5" :model-value="locale" @update:model-value="$emit('locale-change', $event)" type="single">
+                            <template v-for="btnLocale in form.locales">
+                                <ToggleGroupItem class="uppercase text-xs h-6" size="sm" :value="btnLocale">
+                                    {{ btnLocale }}
+                                    <template v-if="form.fieldLocalesContainingError(fieldErrorKey).includes(btnLocale)">
+                                        <svg class="ml-1 h-1.5 w-1.5 fill-destructive" viewBox="0 0 6 6" aria-hidden="true">
+                                            <circle cx="3" cy="3" r="3" />
+                                        </svg>
+                                    </template>
+                                </ToggleGroupItem>
+                            </template>
+                        </ToggleGroup>
+                        <!--                <nav class="flex items-center h-3.5">-->
+                        <!--                    <template v-for="btnLocale in form.locales">-->
+                        <!--                        <button-->
+                        <!--                            class="flex items-center rounded-md px-2 py-1 text-xs font-medium uppercase"-->
+                        <!--                            :class="[-->
+                        <!--                                btnLocale === locale ? 'bg-indigo-100 text-indigo-700' :-->
+                        <!--                                form.fieldLocalesContainingError(fieldErrorKey).includes(btnLocale) ? 'text-red-700' :-->
+                        <!--                                'text-gray-500 hover:text-gray-700',-->
+                        <!--                                form.fieldIsEmpty(field, value, btnLocale) ? 'italic' : ''-->
+                        <!--                            ]"-->
+                        <!--                            :aria-current="btnLocale === locale ? 'true' : null"-->
+                        <!--                            @click="$emit('locale-change', btnLocale)"-->
+                        <!--                        >-->
+                        <!--                            {{ btnLocale }}-->
+
+                        <!--                        </button>-->
+                        <!--                    </template>-->
+                        <!--                </nav>-->
                     </template>
                 </div>
-                <template v-if="$slots.action">
-                    <div class="grid items-center content-center h-3.5">
-                        <slot name="action" />
-                    </div>
-                </template>
-                <template v-if="'localized' in field && field.localized">
-                    <ToggleGroup class="h-3.5" :model-value="locale" @update:model-value="$emit('locale-change', $event)" type="single">
-                        <template v-for="btnLocale in form.locales">
-                            <ToggleGroupItem class="uppercase text-xs h-6" size="sm" :value="btnLocale">
-                                {{ btnLocale }}
-                                <template v-if="form.fieldLocalesContainingError(fieldErrorKey).includes(btnLocale)">
-                                    <svg class="ml-1 h-1.5 w-1.5 fill-destructive" viewBox="0 0 6 6" aria-hidden="true">
-                                        <circle cx="3" cy="3" r="3" />
-                                    </svg>
-                                </template>
-                            </ToggleGroupItem>
-                        </template>
-                    </ToggleGroup>
-                    <!--                <nav class="flex items-center h-3.5">-->
-                    <!--                    <template v-for="btnLocale in form.locales">-->
-                    <!--                        <button-->
-                    <!--                            class="flex items-center rounded-md px-2 py-1 text-xs font-medium uppercase"-->
-                    <!--                            :class="[-->
-                    <!--                                btnLocale === locale ? 'bg-indigo-100 text-indigo-700' :-->
-                    <!--                                form.fieldLocalesContainingError(fieldErrorKey).includes(btnLocale) ? 'text-red-700' :-->
-                    <!--                                'text-gray-500 hover:text-gray-700',-->
-                    <!--                                form.fieldIsEmpty(field, value, btnLocale) ? 'italic' : ''-->
-                    <!--                            ]"-->
-                    <!--                            :aria-current="btnLocale === locale ? 'true' : null"-->
-                    <!--                            @click="$emit('locale-change', btnLocale)"-->
-                    <!--                        >-->
-                    <!--                            {{ btnLocale }}-->
-
-                    <!--                        </button>-->
-                    <!--                    </template>-->
-                    <!--                </nav>-->
-                </template>
-            </div>
+            </StickyTop>
         </template>
 
         <!-- We wrap the field + error / description to have only 2 child elements max (for subgrid alignment) -->
-        <div class="grid gap-2.5">
+        <div class="isolate">
             <slot v-bind="{ id, ariaDescribedBy }" />
 
-            <template v-if="field.helpMessage || form.fieldHasError(field, fieldErrorKey)">
-                <div class="grid gap-y-2">
+            <template v-if="field.helpMessage || $slots['help-message'] || form.fieldHasError(field, fieldErrorKey)">
+                <div class="mt-2.5 grid gap-y-2">
                     <template v-if="field.helpMessage || $slots['help-message']">
                         <p :id="`${id}-help-message`" class="text-sm text-muted-foreground leading-4">
-                            <slot name="help-message">
-                                {{ field.helpMessage }}
-                            </slot>
+                            <slot name="help-message" />
+                            {{ field.helpMessage }}
                         </p>
                     </template>
 

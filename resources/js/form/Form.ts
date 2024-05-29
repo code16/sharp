@@ -93,7 +93,7 @@ export class Form implements FormData, CommandFormData {
     }
 
     get currentLocale(): string|null {
-        const selectedLocales = [...new Set(this.allFieldsMeta.map(fieldMeta => fieldMeta.locale))];
+        const selectedLocales = [...new Set(this.allFieldsMeta.map(fieldMeta => fieldMeta.locale).filter(Boolean))];
         if(!selectedLocales.length) {
             return this.locales?.[0] ?? null;
         }
@@ -101,6 +101,10 @@ export class Form implements FormData, CommandFormData {
             return selectedLocales[0];
         }
         return null;
+    }
+
+    get defaultLocale(): string|null {
+        return this.currentLocale ?? this.locales?.[0];
     }
 
     get localized(): boolean { // needed ?

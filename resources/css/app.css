@@ -40,3 +40,10 @@
         @apply px-4 lg:px-6;
     }
 }
+
+@layer utilities {
+    /* tailwindcss-animate allow to set animation duration with "duration-" classes but it clashes with items in TransitionGroup */
+    [class*="transition"] {
+        animation-duration: 0s;
+    }
+}
