@@ -4,15 +4,10 @@
     import type { UppyFile } from "@uppy/core";
     import ThumbnailGenerator from '@uppy/thumbnail-generator';
     import XHRUpload from '@uppy/xhr-upload';
-    import FileInput from '@uppy/vue/lib/file-input';
-    import type { FileInput as FileInputComponent } from '@uppy/vue';
     import DropTarget from '@uppy/drop-target';
     import Cropper from 'cropperjs';
     import {
-        Component,
-        ComponentPublicInstance,
         computed,
-        DefineComponent,
         onMounted,
         onUnmounted,
         ref,
@@ -40,7 +35,7 @@
     } from "@/components/ui/dropdown-menu";
     import { MoreHorizontal } from "lucide-vue-next";
 
-    const props = defineProps<FormFieldProps<FormUploadFieldData>>();
+    const props = defineProps<FormFieldProps<FormUploadFieldData> & { asEditorEmbed?: boolean }>();
 
     defineOptions({
         inheritAttrs: false,
@@ -269,42 +264,43 @@
 </script>
 
 <template>
-    <template v-if="value?.path || value?.uploaded || uppyFile">
-        <FormFieldLayout v-bind="{ ...props, ...$attrs }" v-slot="{ id, ariaDescribedBy }">
-            <div class="bg-background border border-input rounded-md p-4">
-                <div class="flex">
-                    <template v-if="transformedImg ?? value?.thumbnail  ?? uppyFile?.preview">
-                        <img class="mr-4 object-contain"
-                            width="150"
-                            :src="transformedImg ?? value?.thumbnail ?? uppyFile.preview"
-                            alt=""
-                        >
-                    </template>
-                    <div class="flex-1 min-w-0">
-                        <div class="text-sm font-medium truncate">
-                            <template v-if="value?.path">
-                                <a class="hover:underline underline-offset-4"
-                                    :href="route('code16.sharp.download.show', {
-                                    entityKey: form.entityKey,
-                                    instanceId: form.instanceId,
-                                    disk: value.disk,
-                                    path: value.path,
-                                })"
-                                    :download="value?.name?.split('/').at(-1)">
-                                    {{ value?.name?.split('/').at(-1) }}
-                                </a>
-                            </template>
-                            <template v-else>
-                                {{ value?.name?.split('/').at(-1) ?? uppyFile?.name }}
-                            </template>
-                        </div>
-                        <div class="flex gap-2 mt-2">
-                            <template v-if="value?.size ?? uppyFile?.size">
-                                <div class="text-xs text-muted-foreground">
-                                    {{ filesizeLabel(value?.size ?? uppyFile.size) }}
-                                </div>
-                            </template>
-                        </div>
+    <FormFieldLayout v-bind="{ ...props, ...$attrs }">
+        <template #default="{ id, ariaDescribedBy }">
+            <template v-if="value?.path || value?.uploaded || uppyFile">
+                <div :class="{ 'bg-background border border-input rounded-md p-4': !asEditorEmbed }">
+                    <div class="flex">
+                        <template v-if="transformedImg ?? value?.thumbnail  ?? uppyFile?.preview">
+                            <img class="mr-4 object-contain"
+                                width="150"
+                                :src="transformedImg ?? value?.thumbnail ?? uppyFile.preview"
+                                alt=""
+                            >
+                        </template>
+                        <div class="flex-1 min-w-0">
+                            <div class="text-sm font-medium truncate">
+                                <template v-if="value?.path">
+                                    <a class="hover:underline underline-offset-4"
+                                        :href="route('code16.sharp.download.show', {
+                                            entityKey: form.entityKey,
+                                            instanceId: form.instanceId,
+                                            disk: value.disk,
+                                            path: value.path,
+                                        })"
+                                        :download="value?.name?.split('/').at(-1)">
+                                        {{ value?.name?.split('/').at(-1) }}
+                                    </a>
+                                </template>
+                                <template v-else>
+                                    {{ value?.name?.split('/').at(-1) ?? uppyFile?.name }}
+                                </template>
+                            </div>
+                            <div class="flex gap-2 mt-2">
+                                <template v-if="value?.size ?? uppyFile?.size">
+                                    <div class="text-xs text-muted-foreground">
+                                        {{ filesizeLabel(value?.size ?? uppyFile.size) }}
+                                    </div>
+                                </template>
+                            </div>
 <!--                        <template v-if="!field.readOnly">-->
 <!--                            <div class="flex gap-2 mt-2">-->
 <!--                                <template v-if="value && (!uppyFile || !uppyFile.progress.uploadStarted || uppyFile.progress.uploadComplete) && isTransformable && !hasError">-->
@@ -333,54 +329,51 @@
 <!--                                </template>-->
 <!--                            </div>-->
 <!--                        </template>-->
-                        <template v-if="uppyFile?.progress.percentage < 100 && !hasError">
-                            <div class="mt-2">
-                                <div class="bg-primary h-0.5 transition-all" :style="{ width: `${uppyFile.progress.percentage}%` }" role="progressbar">
+                            <template v-if="uppyFile?.progress.percentage < 100 && !hasError">
+                                <div class="mt-2">
+                                    <div class="bg-primary h-0.5 transition-all" :style="{ width: `${uppyFile.progress.percentage}%` }" role="progressbar">
+                                    </div>
                                 </div>
-                            </div>
-                        </template>
-                    </div>
-                    <DropdownMenu :modal="false">
-                        <DropdownMenuTrigger as-child>
-                            <Button class="self-center" variant="ghost" size="icon">
-                                <MoreHorizontal class="w-4 h-4" />
-                            </Button>
+                            </template>
+                        </div>
+                        <DropdownMenu :modal="false">
+                            <DropdownMenuTrigger as-child>
+                                <Button class="self-center" variant="ghost" size="icon">
+                                    <MoreHorizontal class="w-4 h-4" />
+                                </Button>
 <!--                            <Button class="self-center" size="sm" variant="outline">-->
 <!--                                {{ __('sharp::form.upload.edit_button') }}-->
 <!--                            </Button>-->
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent>
-                            <template v-if="value?.path">
-                                <DropdownMenuItem
-                                    as="a"
-                                    :href="route('code16.sharp.download.show', {
-                                        entityKey: form.entityKey,
-                                        instanceId: form.instanceId,
-                                        disk: value.disk,
-                                        path: value.path,
-                                    })"
-                                >
-                                    {{ __('sharp::form.upload.download_link') }}
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                                <template v-if="value?.path">
+                                    <DropdownMenuItem
+                                        as="a"
+                                        :href="route('code16.sharp.download.show', {
+                                            entityKey: form.entityKey,
+                                            instanceId: form.instanceId,
+                                            disk: value.disk,
+                                            path: value.path,
+                                        })"
+                                    >
+                                        {{ __('sharp::form.upload.download_link') }}
+                                    </DropdownMenuItem>
+                                </template>
+                                <template v-if="value && (!uppyFile || !uppyFile.progress.uploadStarted || uppyFile.progress.uploadComplete) && isTransformable && !hasError">
+                                    <DropdownMenuItem @click="onEdit">
+                                        {{ __('sharp::form.upload.edit_button') }}
+                                    </DropdownMenuItem>
+                                </template>
+                                <DropdownMenuSeparator class="first:hidden" />
+                                <DropdownMenuItem class="text-destructive" @click="onRemove">
+                                    {{ __('sharp::form.upload.remove_button') }}
                                 </DropdownMenuItem>
-                            </template>
-                            <template v-if="value && (!uppyFile || !uppyFile.progress.uploadStarted || uppyFile.progress.uploadComplete) && isTransformable && !hasError">
-                                <DropdownMenuItem @click="onEdit">
-                                    {{ __('sharp::form.upload.edit_button') }}
-                                </DropdownMenuItem>
-                            </template>
-                            <DropdownMenuSeparator class="first:hidden" />
-                            <DropdownMenuItem class="text-destructive" @click="onRemove">
-                                {{ __('sharp::form.upload.remove_button') }}
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
                 </div>
-            </div>
-        </FormFieldLayout>
-    </template>
-    <template v-else>
-        <FormFieldLayout v-bind="{ ...props, ...$attrs }">
-            <template #default="{ id, ariaDescribedBy }">
+            </template>
+            <template v-else>
                 <Input
                     :id="id"
                     type="file"
@@ -388,18 +381,6 @@
                     :aria-describedby="ariaDescribedBy"
                     @change="onInputChange"
                 />
-            </template>
-            <template #help-message>
-                <template v-if="field.allowedExtensions?.length">
-                    <span class="">
-                        {{ field.allowedExtensions.join(', ') }}
-                    </span>
-                </template>
-                <template v-if="field.maxFileSize">
-                    {{ ' '+__('sharp::form.upload.help_text.max_file_size', { size: filesizeLabel(field.maxFileSize * 1024 * 1024) }) }}
-                </template>
-            </template>
-        </FormFieldLayout>
 
 <!--            <FileInput :uppy="uppy" :props="{ pretty: false }" ref="inputContainer" />-->
 <!--            <div class="relative flex justify-center rounded-lg border border-dashed px-6 py-10"-->
@@ -441,7 +422,20 @@
 <!--                    </div>-->
 <!--                </template>-->
 <!--            </div>-->
-    </template>
+            </template>
+        </template>
+
+        <template #help-message>
+            <template v-if="field.allowedExtensions?.length">
+                <span class="">
+                    {{ field.allowedExtensions.join(', ') }}
+                </span>
+            </template>
+            <template v-if="field.maxFileSize">
+                {{ ' '+__('sharp::form.upload.help_text.max_file_size', { size: filesizeLabel(field.maxFileSize * 1024 * 1024) }) }}
+            </template>
+        </template>
+    </FormFieldLayout>
 
     <EditModal
         v-model:visible="showEditModal"

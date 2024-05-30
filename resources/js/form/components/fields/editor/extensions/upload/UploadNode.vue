@@ -76,7 +76,7 @@
                 :field="parentEditor.props.field.uploads.fields.file"
                 :field-error-key="`${parentEditor.props.fieldErrorKey}-upload-${props.node.attrs['data-key']}`"
                 :value="upload?.file"
-                :root="false"
+                as-editor-embed
                 @thumbnail="onThumbnailGenerated"
                 @transform="onUploadTransformed"
                 @error="onUploadError"
@@ -84,7 +84,7 @@
                 @remove="onRemove"
                 @edit="onEdit"
                 ref="uploadComponent"
-            ></Upload>
+            />
             <template v-if="upload.legend">
                 <div class="text-sm mt-2">
                     {{ upload.legend }}

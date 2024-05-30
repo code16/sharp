@@ -32,7 +32,7 @@
     }>();
     const hasLabelRow = computed(() =>
         props.field.label
-        || props.row.length > 1
+        || props.row?.length > 1
         || 'localized' in props.field && props.field.localized
         || !!slots.action
     );
