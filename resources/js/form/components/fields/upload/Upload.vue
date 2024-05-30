@@ -271,8 +271,7 @@
 <template>
     <template v-if="value?.path || value?.uploaded || uppyFile">
         <FormFieldLayout v-bind="{ ...props, ...$attrs }" v-slot="{ id, ariaDescribedBy }">
-            <div class="bg-background border border-input rounded-md p-4"
-                :class="{ 'rounded-md border border-input p-4': root }">
+            <div class="bg-background border border-input rounded-md p-4">
                 <div class="flex">
                     <template v-if="transformedImg ?? value?.thumbnail  ?? uppyFile?.preview">
                         <img class="mr-4 object-contain"

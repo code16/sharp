@@ -71,27 +71,25 @@
 
 <template>
     <NodeRenderer class="editor__node" :node="node">
-        <div>
-            <div class="border rounded p-4">
-                <Upload
-                    :field="parentEditor.props.field.uploads.fields.file"
-                    :field-error-key="`${parentEditor.props.fieldErrorKey}-upload-${props.node.attrs['data-key']}`"
-                    :value="upload?.file"
-                    :root="false"
-                    @thumbnail="onThumbnailGenerated"
-                    @transform="onUploadTransformed"
-                    @error="onUploadError"
-                    @success="onUploadSuccess"
-                    @remove="onRemove"
-                    @edit="onEdit"
-                    ref="uploadComponent"
-                ></Upload>
-                <template v-if="upload.legend">
-                    <div class="text-sm mt-2">
-                        {{ upload.legend }}
-                    </div>
-                </template>
-            </div>
+        <div class="border rounded p-4">
+            <Upload
+                :field="parentEditor.props.field.uploads.fields.file"
+                :field-error-key="`${parentEditor.props.fieldErrorKey}-upload-${props.node.attrs['data-key']}`"
+                :value="upload?.file"
+                :root="false"
+                @thumbnail="onThumbnailGenerated"
+                @transform="onUploadTransformed"
+                @error="onUploadError"
+                @success="onUploadSuccess"
+                @remove="onRemove"
+                @edit="onEdit"
+                ref="uploadComponent"
+            ></Upload>
+            <template v-if="upload.legend">
+                <div class="text-sm mt-2">
+                    {{ upload.legend }}
+                </div>
+            </template>
         </div>
     </NodeRenderer>
 </template>

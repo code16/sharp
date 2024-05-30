@@ -30,7 +30,7 @@
 </script>
 
 <template>
-    <ToggleGroup class="gap-2 flex-wrap">
+    <div class="flex gap-2 flex-wrap">
         <template v-for="group in toolbarGroups">
             <div class="flex flex-wrap gap-1">
                 <template v-for="button in group">
@@ -41,8 +41,6 @@
                             :title="buttons[button].label()"
                             :editor="editor"
                             :disabled="field.readOnly"
-                            @submit="buttons[button].command(editor)"
-                            @remove="editor.chain().focus().unsetLink().run()"
                         >
                             <i :class="buttons[button].icon" data-test="link"></i>
                         </LinkDropdown>
@@ -109,5 +107,5 @@
                 </Dropdown>
             </div>
         </template>
-    </ToggleGroup>
+    </div>
 </template>
