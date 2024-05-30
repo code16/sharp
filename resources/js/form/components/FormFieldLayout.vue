@@ -52,7 +52,11 @@
         ref="el"
     >
         <template v-if="hasLabelRow">
-            <StickyTop :class="{ 'top-[calc(var(--top-bar-height)+.625rem)] z-10 lg:sticky': stickyLabel }" v-slot="{ stuck }">
+            <component
+                :is="stickyLabel ? StickyTop : 'div'"
+                :class="{ 'top-[calc(var(--top-bar-height)+.625rem)] z-10 lg:sticky': stickyLabel }"
+                v-slot="{ stuck } = {}"
+            >
                 <template v-if="stuck">
                     <div class="absolute bg-background border-b -inset-x-6 -top-3 -bottom-2.5"></div>
                 </template>
@@ -109,7 +113,7 @@
                         <!--                </nav>-->
                     </template>
                 </div>
-            </StickyTop>
+            </component>
         </template>
 
         <!-- We wrap the field + error / description to have only 2 child elements max (for subgrid alignment) -->
@@ -117,12 +121,20 @@
             <slot v-bind="{ id, ariaDescribedBy }" />
 
             <template v-if="field.helpMessage || $slots['help-message'] || form.fieldHasError(field, fieldErrorKey)">
-                <div class="mt-2.5 grid gap-y-2">
+                <div class="mt-2.5 grid grid-cols-1 gap-y-2">
                     <template v-if="field.helpMessage || $slots['help-message']">
-                        <p :id="`${id}-help-message`" class="text-sm text-muted-foreground leading-4">
-                            <slot name="help-message" />
-                            {{ field.helpMessage }}
-                        </p>
+                        <div :id="`${id}-help-message`" class="grid grid-cols-1 gap-y-2">
+                            <template v-if="field.helpMessage">
+                                <p class="text-sm text-muted-foreground leading-4">
+                                    {{ field.helpMessage }}
+                                </p>
+                            </template>
+                            <template v-if="$slots['help-message']">
+                                <p class="text-sm text-muted-foreground leading-4">
+                                    <slot name="help-message" />
+                                </p>
+                            </template>
+                        </div>
                     </template>
 
                     <template v-if="form.fieldHasError(field, fieldErrorKey)">

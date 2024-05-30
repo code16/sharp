@@ -9,7 +9,6 @@
     import FieldGridColumn from "@/components/ui/FieldGridColumn.vue";
     import { Serializable } from "@/form/Serializable";
     import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-    import { Languages } from "lucide-vue-next";
     import { ApiResponse } from "@/api/types";
     import { __ } from "@/utils/i18n";
     import { CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -19,6 +18,7 @@
     import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
     import { slugify } from "@/utils";
     import { Badge } from "@/components/ui/badge";
+    import { UseElementBounding } from "@vueuse/components";
 
     const props = defineProps<{
         form: Form
@@ -225,9 +225,15 @@
                 </template>
             </CardContent>
             <template v-if="$slots.footer">
-                <CardFooter class="justify-end">
-                    <slot name="footer" />
-                </CardFooter>
+                <UseElementBounding class="sticky z-30 -bottom-2 lg:-bottom-0" v-slot="{ bottom }">
+                    <CardFooter class="justify-end px-0">
+                        <div class="relative">
+                            <div class="bg-card absolute -inset-4 -bottom-6 lg:-inset-6 transition rounded-tl-lg border border-b-0 border-r-0 rounded-br-lg -z-10"
+                                :class="bottom >= window.innerHeight ? '' : 'border-transparent'" :data-b="[bottom,window.innerHeight]"></div>
+                            <slot name="footer" />
+                        </div>
+                    </CardFooter>
+                </UseElementBounding>
             </template>
         </component>
     </Tabs>

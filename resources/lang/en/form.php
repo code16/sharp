@@ -7,7 +7,7 @@ return [
 
     'list.remove_button' => 'Remove',
     'list.insert_button' => 'Insert',
-    'list.sort_button.inactive' => 'Sort',
+    'list.sort_button.inactive' => 'Sort...',
     'list.sort_button.active' => 'Finish',
     'list.empty' => 'Empty list',
     'list.bulk_upload.text' => '[Browse]() or drag and drop files...',

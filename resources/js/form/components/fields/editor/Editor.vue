@@ -24,6 +24,10 @@
     import { Embed } from "@/form/components/fields/editor/extensions/embed/Embed";
     import EditorUploadModal from "@/form/components/fields/editor/extensions/upload/EditorUploadModal.vue";
     import EditorEmbedModal from "@/form/components/fields/editor/extensions/embed/EditorEmbedModal.vue";
+    import FormFieldLayout from "@/form/components/FormFieldLayout.vue";
+    import { Card } from "@/components/ui/card";
+    import EditorAttributes from "@/form/components/fields/editor/EditorAttributes.vue";
+    import { cn } from "@/utils/cn";
 
     const emit = defineEmits(['input']);
     const props = defineProps<
@@ -92,11 +96,6 @@
                 enablePasteRules: [Iframe],
                 extensions,
                 injectCSS: false,
-                editorProps: {
-                    attributes: {
-                        class: 'card-body editor__content form-control p-2',
-                    },
-                }
             });
 
             watch(() => props.field.readOnly, readOnly => editor.setEditable(readOnly));
@@ -118,19 +117,15 @@
                     ? normalizeText(editor.storage.markdown.getMarkdown() ?? '')
                     : normalizeText(trimHTML(editor.getHTML(), { inline: props.field.inline }));
 
-                const value = new Serializable(
-                    content,
-                    content,
-                    content => {
-                        if(props.field.localized && typeof (props.value.text ?? {}) === 'object') {
-                            return {
-                                ...props.value,
-                                text: { ...props.value.text, [locale]: content }
-                            }
+                const value = Serializable.wrap(content, content => {
+                    if(props.field.localized && typeof (props.value.text ?? {}) === 'object') {
+                        return {
+                            ...props.value,
+                            text: { ...props.value.text, [locale]: content }
                         }
-                        return { ...props.value, text: content };
                     }
-                );
+                    return { ...props.value, text: content };
+                });
 
                 emit('input', value, { error });
             }, 50));
@@ -154,19 +149,15 @@
 </script>
 
 <template>
-    <div class="editor"
-        :class="{
-            'editor--disabled': field.readOnly,
-            'editor--no-toolbar': !field.toolbar,
-        }"
-        :style="{
-            '--min-height': field.minHeight ? `${field.minHeight}px` : null,
-            '--max-height': field.maxHeight ? `${field.maxHeight}px` : null,
-        }"
-    >
-        <div class="card">
+    <FormFieldLayout v-bind="props">
+        <div class="editor"
+            :class="{
+                'editor--disabled': field.readOnly,
+                'editor--no-toolbar': !field.toolbar,
+            }"
+        >
             <template v-if="editor && field.toolbar">
-                <div class="card-header editor__header" v-sticky ref="header">
+                <div class="card-header editor__header" ref="header">
                     <MenuBar
                         :editor="editor"
                         v-bind="$props"
@@ -176,7 +167,23 @@
                 </div>
             </template>
 
-            <EditorContent :editor="editor" :key="locale ?? 'editor'" />
+
+            <EditorAttributes
+                :class="cn(
+                    'min-h-20 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+                    {
+                        'min-h-[--min-height]': field.minHeight,
+                        'max-h-[--max-height]': field.maxHeight,
+                    },
+                )"
+                :style="{
+                    '--min-height': field.minHeight ? `${field.minHeight}px` : null,
+                    '--max-height': field.maxHeight ? `${field.maxHeight}px` : null,
+                }"
+                :editor="editor"
+            >
+                <EditorContent :editor="editor" :key="locale ?? 'editor'" />
+            </EditorAttributes>
 
             <EditorUploadModal
                 :field="field"
@@ -190,20 +197,20 @@
                 ref="embedModal"
             />
 
-            <!-- Commenting this for now because it causes infinite loop on HMR -->
+                <!-- Commenting this for now because it causes infinite loop on HMR -->
 
-<!--            <template v-if="editor && field.showCharacterCount">-->
-<!--                <div class="card-footer fs-8 text-muted bg-white">-->
-<!--                    <template v-if="field.maxLength">-->
-<!--                        <span :class="{ 'text-danger': editor.storage.characterCount.characters() > field.maxLength }">-->
-<!--                            {{ __('sharp::form.editor.character_count', { count: `${editor.storage.characterCount.characters()} / ${field.maxLength}` }) }}-->
-<!--                        </span>-->
-<!--                    </template>-->
-<!--                    <template v-else>-->
-<!--                        {{ __('sharp::form.editor.character_count', { count: editor.storage.characterCount.characters() }) }}-->
-<!--                    </template>-->
-<!--                </div>-->
-<!--            </template>-->
+                <!--            <template v-if="editor && field.showCharacterCount">-->
+                <!--                <div class="card-footer fs-8 text-muted bg-white">-->
+                <!--                    <template v-if="field.maxLength">-->
+                <!--                        <span :class="{ 'text-danger': editor.storage.characterCount.characters() > field.maxLength }">-->
+                <!--                            {{ __('sharp::form.editor.character_count', { count: `${editor.storage.characterCount.characters()} / ${field.maxLength}` }) }}-->
+                <!--                        </span>-->
+                <!--                    </template>-->
+                <!--                    <template v-else>-->
+                <!--                        {{ __('sharp::form.editor.character_count', { count: editor.storage.characterCount.characters() }) }}-->
+                <!--                    </template>-->
+                <!--                </div>-->
+                <!--            </template>-->
         </div>
-    </div>
+    </FormFieldLayout>
 </template>

@@ -1,10 +1,12 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
     import { Button } from '@/components/ui/button';
-    import { Dropdown } from "@/components/ui";
-    import TextInput from '../../text/TextInput.vue';
-    import {Editor} from "@tiptap/vue-3";
-    import {ref} from "vue";
+    import { Editor } from "@tiptap/vue-3";
+    import { ref } from "vue";
+    import { Selection } from "@tiptap/pm/state";
+    import { DropdownMenu } from "@/components/ui/dropdown-menu";
+    import { Input } from "@/components/ui/input";
+    import { Label } from "@/components/ui/label";
 
     const props = defineProps<{
         id: string,
@@ -13,25 +15,26 @@
         disabled: boolean,
     }>();
 
+    const open = ref(false);
     const label = ref();
     const href = ref();
     const hasSelectedText = ref(false);
     const inserted = ref(false);
-    const selection = ref(null);
-    const dropdown = ref<InstanceType<typeof Dropdown>>();
-    const input = ref<InstanceType<typeof TextInput>>();
+    const selection = ref<Selection>(null);
+    const input = ref<InstanceType<typeof Input>>();
 
     function hide(focusEditor = true) {
-        dropdown.value.close();
+        open.value = false;
         if(focusEditor) {
-            this.editor.chain().focus().run();
+            props.editor.chain().focus().run();
         }
     }
 
     function onShow() {
+        selection.value = props.editor.state.selection
         href.value = null;
         inserted.value = false;
-        hasSelectedText.value = !selection.empty;
+        hasSelectedText.value = !selection.value.empty;
 
         if(this.active) {
             const attrs = this.editor.getAttributes('link');
@@ -40,32 +43,42 @@
         }
 
         if(hasSelectedText.value) {
-            props.editor.commands.setLink({ href:'#' });
-            selection.value = {
-                from: props.editor.state.selection.from,
-                to: props.editor.state.selection.to,
-            }
+            // props.editor.commands.setLink({ href:'#' });
+        }
+
+        setTimeout(() => {
+            input.value.$el.focus();
+        }, 0);
+    }
+
+    function onHide() {
+        if(!inserted.value && hasSelectedText.value) {
+            const { from, to } = props.editor.state.selection;
+            this.editor.chain()
+                .setTextSelection(selection.value.from, selection.value.to)
+                .unsetLink()
+                .setTextSelection(from, to)
+                .run();
         }
     }
 
-    function onShown() {
-        setTimeout(() => {
-            input.value.focus();
-        }, 0);
+    function onSubmit() {
+        if(!href.value) {
+            hide();
+            return;
+        }
+        this.$emit('submit', {
+            href: this.href,
+            label: this.label,
+        });
+        this.inserted = true;
     }
 </script>
 
 <template>
-    <Dropdown
-        class="editor__dropdown editor__dropdown--link"
-        variant="light"
-        :active="active"
-        :disabled="disabled"
-        v-bind="$attrs"
-        @show="onShow"
-        @shown="onShown"
-        @hide="handleDropdownHide"
-        ref="dropdown"
+    <DropdownMenu
+        v-model:open="open"
+        @update:open="$event ? onShow() : onHide()"
     >
         <template v-slot:text>
             <slot />
@@ -73,28 +86,19 @@
 
         <template>
             <form @submit.prevent="handleLinkSubmitted">
-<!--                <template v-if="inserted">-->
-<!--                    <button class="btn-close position-absolute end-0 top-0 p-2 fs-8"-->
-<!--                        type="button"-->
-<!--                        @click="handleCancelClicked"-->
-<!--                    >-->
-<!--                        <span class="visually-hidden">{{ __('sharp::modals.cancel_button') }}</span>-->
-<!--                    </button>-->
-<!--                </template>-->
-
                 <template v-if="!active && !hasSelectedText">
-                    <div class="mb-3">
-                        <label class="form-label" :for="`${id}-link-label`">
+                    <div class="grid grid-cols-1 gap-3">
+                        <Label :for="`${id}-link-label`">
                             {{ __('sharp::form.editor.dialogs.link.text_label') }}
-                        </label>
-                        <TextInput :id="`${id}-link-label`" v-model="label" />
+                        </Label>
+                        <Input :id="`${id}-link-label`" v-model="label" />
                     </div>
                 </template>
 
                 <div class="mb-3">
-                    <label class="form-label" :for="`${id}-href`">
+                    <Label :for="`${id}-href`">
                         {{ __('sharp::form.editor.dialogs.link.url_label') }}
-                    </label>
+                    </Label>
                     <TextInput :id="`${id}-href`" v-model="href" placeholder="https://example.org" autocomplete="off" ref="input" />
                 </div>
 
@@ -117,7 +121,7 @@
                                 </Button>
                             </template>
                             <template v-else>
-                                <Button type="button" variant="outline" size="sm" @click="handleCancelClicked">
+                                <Button type="button" variant="outline" size="sm" @click="hide()">
                                     {{ __('sharp::modals.cancel_button') }}
                                 </Button>
                             </template>
@@ -126,38 +130,14 @@
                 </div>
             </form>
         </template>
-    </Dropdown>
+    </DropdownMenu>
 </template>
 
 <script lang="ts">
     export default {
         methods: {
-            handleDropdownShown() {
-
-            },
-            handleDropdownHide() {
-                if(!this.inserted && this.hasSelectedText) {
-                    const { from, to } = this.editor.state.selection;
-                    this.editor.chain()
-                        .setTextSelection(this.selection.from, this.selection.to)
-                        .unsetLink()
-                        .setTextSelection(from, to)
-                        .run();
-                }
-            },
-            handleCancelClicked() {
-                this.hide();
-            },
             handleLinkSubmitted() {
-                if(!this.href) {
-                    this.hide();
-                    return;
-                }
-                this.$emit('submit', {
-                    href: this.href,
-                    label: this.label,
-                });
-                this.inserted = true;
+
             },
             handleRemoveClicked() {
                 this.editor.chain().focus().unsetLink().run()
