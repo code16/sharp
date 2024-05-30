@@ -71,7 +71,7 @@
 
 <template>
     <NodeRenderer class="editor__node" :node="node">
-        <div class="border rounded p-4">
+        <div class="border rounded-md p-4">
             <Upload
                 :field="parentEditor.props.field.uploads.fields.file"
                 :field-error-key="`${parentEditor.props.fieldErrorKey}-upload-${props.node.attrs['data-key']}`"

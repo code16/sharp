@@ -1,10 +1,10 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
     import { useParentForm } from "@/form/useParentForm";
-    import { FormFieldData, FormListFieldData, FormUploadFieldValueData } from "@/types";
+    import { FormFieldData, FormListFieldData, FormUploadFieldData, FormUploadFieldValueData } from "@/types";
     import { getDependantFieldsResetData } from "@/form/util";
     import { ComponentInstance, computed, nextTick, ref, watch, watchEffect } from "vue";
-    import { Button } from '@/components/ui/button';
+    import { Button, buttonVariants } from '@/components/ui/button';
     import ListBulkUpload from "./ListBulkUpload.vue";
     import { showAlert } from "@/utils/dialogs";
     import { FieldsMeta, FormFieldEmits, FormFieldProps } from "@/form/types";
@@ -20,9 +20,10 @@
         DropdownMenuItem,
         DropdownMenuTrigger
     } from "@/components/ui/dropdown-menu";
-    import { Card } from "@/components/ui/card";
+    import { Card, CardHeader } from "@/components/ui/card";
     import { useSortable } from "@vueuse/integrations/useSortable";
     import { watchArray } from "@vueuse/core";
+    import { Input } from "@/components/ui/input";
 
     const props = defineProps<FormFieldProps<FormListFieldData>>();
     const emit = defineEmits<FormFieldEmits<FormListFieldData>>();
@@ -82,7 +83,7 @@
 
     emit('input', props.value?.map(item => ({ ...item, [itemKey]: itemKeyIndex++ })), { force: true });
 
-    watch(form.meta, () => console.log(form.meta), { deep: true });
+    // watch(form.meta, () => console.log(form.meta), { deep: true });
 
     watchArray(() => props.value, async (newList, oldList, added) => {
         if(!added.length) {
@@ -115,6 +116,7 @@
     }
 
     async function onRemove(itemIndex: number) {
+        form.clearErrors(`${props.fieldErrorKey}.${itemIndex}`);
         emit('input', props.value.toSpliced(itemIndex, 1));
     }
 
@@ -142,7 +144,7 @@
     }
 
     function onFieldInput(itemIndex: number, itemFieldKey: string, itemFieldValue: FormFieldData['value'], { force = false } = {}) {
-        const newListValue = Serializable.wrap(itemFieldValue, itemFieldValue =>
+        emit('input', Serializable.wrap(itemFieldValue, itemFieldValue =>
             props.value.map((item, i) => {
                 if(i === itemIndex) {
                     return {
@@ -153,9 +155,7 @@
                 }
                 return item;
             })
-        );
-
-        emit('input', newListValue);
+        ));
     }
 
     function onFieldLocaleChange(fieldKey: string, locale: string) {
@@ -165,10 +165,16 @@
     function onFieldUploading(fieldKey: string, uploading: boolean) {
         form.setMeta(fieldKey, { uploading });
     }
+
+    const bulkDroppingFile = ref(false);
 </script>
 
 <template>
-    <FormFieldLayout v-bind="props" field-group sticky-label>
+    <FormFieldLayout
+        v-bind="props"
+        field-group
+        sticky-label
+    >
         <template #action v-if="field.sortable">
             <Toggle
                 class="h-6"
@@ -210,13 +216,13 @@
                                                             <SharpFormField
                                                                 :field="form.getField(itemFieldLayout.key, field.itemFields, item)"
                                                                 :field-layout="itemFieldLayout"
-                                                                :field-error-key="`${field.key}.${item[errorIndex] ?? index}.${itemFieldLayout.key}`"
+                                                                :field-error-key="`${field.key}.${item[errorIndex] ?? item[itemKey]}.${itemFieldLayout.key}`"
                                                                 :value="item[itemFieldLayout.key]"
-                                                                :locale="form.getMeta(`${field.key}.${index}.${itemFieldLayout.key}`)?.locale ?? form.defaultLocale"
+                                                                :locale="form.getMeta(`${field.key}.${item[itemKey]}.${itemFieldLayout.key}`)?.locale ?? form.defaultLocale"
                                                                 :row="row"
                                                                 @input="(value, options) => onFieldInput(index, itemFieldLayout.key, value, options)"
-                                                                @locale-change="onFieldLocaleChange(`${field.key}.${index}.${itemFieldLayout.key}`, $event)"
-                                                                @uploading="onFieldUploading(`${field.key}.${index}.${itemFieldLayout.key}`, $event)"
+                                                                @locale-change="onFieldLocaleChange(`${field.key}.${item[itemKey]}.${itemFieldLayout.key}`, $event)"
+                                                                @uploading="onFieldUploading(`${field.key}.${item[itemKey]}.${itemFieldLayout.key}`, $event)"
                                                             />
                                                         </FieldGridColumn>
                                                     </template>
@@ -268,34 +274,63 @@
             </template>
 
 
-<!--            <template v-if="field.itemFields[field.bulkUploadField]?.type === 'upload' && canAddItem && currentBulkUploadLimit > 0">-->
-<!--                <ListBulkUpload-->
-<!--                    :field="field"-->
-<!--                    :current-bulk-upload-limit="currentBulkUploadLimit"-->
-<!--                    :disabled="reordering"-->
-<!--                    @change="onBulkUploadInputChange"-->
-<!--                    key="upload"-->
-<!--                />-->
-<!--            </template>-->
+            <div class="relative grid grid-cols-1 gap-y-3"
+                @dragenter="($event as DragEvent).dataTransfer.types.includes('Files') && (bulkDroppingFile = true)"
+                @dragleave="(!$event.relatedTarget || !$el.contains($event.relatedTarget)) && (bulkDroppingFile = false)"
+            >
+                <template v-if="canAddItem">
+                    <div>
+                        <Button
+                            class="w-full gap-1"
+                            :class="{ 'invisible': reordering }"
+                            variant="secondary"
+                            @click="onAdd"
+                        >
+                            <span aria-hidden="true">＋</span> {{ field.addText }}
+                        </Button>
+                    </div>
+                </template>
+                <template v-if="field.itemFields[field.bulkUploadField]?.type === 'upload' && canAddItem && currentBulkUploadLimit > 0">
+                    <Card :class="{
+                        'invisible': reordering,
+                        'ring-2 ring-ring ring-offset-2': bulkDroppingFile,
+                    }">
+                        <CardHeader :class="{ 'relative': !bulkDroppingFile }">
+                            <div class="flex flex-wrap justify-center">
+                                <div class="text-sm"
+                                    v-html='
+                                        __(`sharp::form.list.bulk_upload.text`)
+                                            .replace(
+                                                /\[(.+?)]\(.*?\)/,
+                                                `<button class="relative z-10 underline -mx-3 -my-2 ${buttonVariants({ variant: "link", size:"sm" })}" tabindex="-1">$1</button>`
+                                            )
+                                    '
+                                    @click.prevent="($refs.bulkUploadInput as HTMLInputElement).click()"
+                                ></div>
+                                <div class="text-sm text-muted-foreground">
+                                     ({{ __('sharp::form.list.bulk_upload.help_text', { limit: currentBulkUploadLimit }) }})
+                                </div>
+                            </div>
+                            <input
+                                class="absolute inset-0 opacity-0"
+                                type="file"
+                                :aria-label="__(`sharp::form.list.bulk_upload.text`)"
+                                :accept="(field.itemFields[field.bulkUploadField] as FormUploadFieldData).allowedExtensions?.join(',')"
+                                multiple
+                                @drop="bulkDroppingFile = false"
+                                @change="onBulkUploadInputChange"
+                                ref="bulkUploadInput"
+                            >
+                        </CardHeader>
+                    </Card>
+                </template>
+            </div>
 
-            <template v-if="canAddItem">
-                <div>
-                    <Button
-                        class=" w-full"
-                        :class="{ 'invisible': reordering }"
-                        :disabled="field.readOnly"
-                        variant="secondary"
-                        @click="onAdd"
-                    >
-                        ＋ {{ field.addText }}
-                    </Button>
+            <template v-if="field.readOnly && !value?.length">
+                <div class="text-muted-foreground text-sm">
+                    {{ __('sharp::form.list.empty') }}
                 </div>
             </template>
-<!--            <template v-if="field.readOnly && !value?.length">-->
-<!--                <em class="SharpList__empty-alert">-->
-<!--                    {{ __('sharp::form.list.empty') }}-->
-<!--                </em>-->
-<!--            </template>-->
         </div>
     </FormFieldLayout>
 </template>

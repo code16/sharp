@@ -8,8 +8,9 @@
     import { cn } from "@/utils/cn";
     import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
     import StickyTop from "@/components/StickyTop.vue";
+    import { FormFieldData } from "@/types";
 
-    const props = defineProps<FormFieldProps & {
+    const props = defineProps<FormFieldProps<FormFieldData, any> & {
         class?: string,
         fieldGroup?: boolean,
         stickyLabel?: boolean,

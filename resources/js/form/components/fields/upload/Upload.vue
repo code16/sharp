@@ -98,7 +98,7 @@
             console.log('file-added', JSON.parse(JSON.stringify(uppyFile.value)));
         })
         .on('restriction-failed', (file, error) => {
-            emit('error', error.message, file.data);
+            emit('error', `${error.message} (${file.name})`, file.data);
         })
         .on('thumbnail:generated', async (file, preview) => {
             const { field } = props;
@@ -129,7 +129,6 @@
         })
         .on('upload-progress', (file) => {
             uppyFile.value = uppy.getFile(file.id);
-            console.log('upload-progress', JSON.parse(JSON.stringify(uppyFile.value)));
         })
         .on('upload-success', (file, response) => {
             emit('input', {
@@ -264,7 +263,7 @@
 </script>
 
 <template>
-    <FormFieldLayout v-bind="{ ...props, ...$attrs }">
+    <FormFieldLayout v-bind="props">
         <template #default="{ id, ariaDescribedBy }">
             <template v-if="value?.path || value?.uploaded || uppyFile">
                 <div :class="{ 'bg-background border border-input rounded-md p-4': !asEditorEmbed }">
@@ -425,7 +424,7 @@
             </template>
         </template>
 
-        <template #help-message>
+        <template v-if="!(value?.path || value?.uploaded || uppyFile)" #help-message>
             <template v-if="field.allowedExtensions?.length">
                 <span class="">
                     {{ field.allowedExtensions.join(', ') }}

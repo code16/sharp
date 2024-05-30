@@ -150,6 +150,13 @@ export class Form implements FormData, CommandFormData {
         delete this.errors[key];
     }
 
+    clearErrors(baseKey: string) {
+        this.errors = Object.fromEntries(
+            Object.entries(this.errors)
+                .filter(([key]) => !key.startsWith(baseKey+'.'))
+        );
+    }
+
     getField(key: string, fields = this.fields, data = this.data, readOnly = false): WithDynamicAttributesApplied<FormFieldData> {
         const fieldsWithDynamicAttributesApplied = transformFields(fields, data);
 
