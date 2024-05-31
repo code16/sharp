@@ -104,12 +104,14 @@ class SharpBreadcrumb
         if (! $isLeaf) {
             return null;
         }
-
+        
+        $previousItem = $this->currentSharpRequest->breadcrumb()[$item->depth - 1];
+        
         return match ($item->type) {
             's-show' => trans('sharp::breadcrumb.show', [
                 'entity' => $this->getEntityLabelForInstance($item, $isLeaf),
             ]),
-            's-form' => isset($item->instance)
+            's-form' => isset($item->instance) || ($previousItem->type === 's-show' && ! isset($previousItem->instance))
                 ? trans('sharp::breadcrumb.form.edit_entity', [
                     'entity' => $this->getEntityLabelForInstance($item, $isLeaf),
                 ])
