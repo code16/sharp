@@ -101,7 +101,6 @@
     "tiptap-markdown": "^0.7.3",
     "vue": "^3.4.26",
     "vue-cropperjs": "^4.2.0",
-    "vue-draggable-plus": "^0.4.0",
     "vue-multiselect": "^2.1.3",
     "vue-notification": "^1.3.20",
     "vue-router": "^3.4.9",

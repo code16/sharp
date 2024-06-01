@@ -47,7 +47,6 @@
         }
         return field.bulkUploadLimit;
     });
-    const dragging = ref(false);
     const reordering = ref(false);
     const sortedKey = ref(0);
     const sortableContainer = ref<HTMLElement>();

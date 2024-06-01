@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { type HTMLAttributes, computed, reactive, ref, inject, watch, onMounted } from 'vue'
+    import { type HTMLAttributes, computed,  ref } from 'vue'
 import {
   AlertDialogContent,
   type AlertDialogContentEmits,
@@ -9,9 +9,7 @@ import {
   useForwardPropsEmits,
 } from 'radix-vue'
 import { cn } from '@/utils/cn'
-    import {  useElementBounding } from "@vueuse/core";
     import { useOverlayPath } from "@/composables/use-overlay-path/useOverlayPath";
-    import { DialogRootContext } from "radix-vue/dist/Dialog/DialogRoot";
 
     const props = defineProps<AlertDialogContentProps & { class?: HTMLAttributes['class'], highlightElement? }>()
 const emits = defineEmits<AlertDialogContentEmits>()

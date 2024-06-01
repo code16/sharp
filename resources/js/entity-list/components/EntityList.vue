@@ -21,7 +21,7 @@
     import Content from "@/components/Content.vue";
     import SharpFilter from "@/filters/components/Filter.vue";
     import PageAlert from "@/components/PageAlert.vue";
-    import { useDraggable } from "vue-draggable-plus";
+    import { useSortable } from '@vueuse/integrations/useSortable';
     import { CardContent, CardDescription, CardFooter, CardHeader } from "@/components/ui/card";
     import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
     import { MoreHorizontal, PlusCircle, Filter, ChevronsUpDown, ArrowUp, ArrowDown, GripVertical } from "lucide-vue-next";
@@ -189,24 +189,26 @@
     const reorderedItems: Ref<EntityListInstance[] | null> = ref(null);
     const reordering = computed(() => !!reorderedItems.value);
     const sortableTableBody = ref<InstanceType<typeof TableBody>>();
-    const sortable = useDraggable<EntityListInstance>(
-        sortableTableBody as any,
+    const sortable = useSortable<EntityListInstance>(
+        () => reordering.value ? sortableTableBody.value.$el : null,
         computed<EntityListInstance[]>({
             get: () => reorderedItems.value ?? [],
-            set: (newItems) => reorderedItems.value = newItems
+            set: (newItems) => {
+                reorderedItems.value = newItems;
+            }
         }),
         {
-            immediate: false,
+            animation: 150,
         }
     );
 
-    watch(reordering, reordering => {
-        if(reordering) {
+    watch(reordering, () => {
+        if(reordering.value) {
             sortable.start();
         } else {
-            sortable.pause();
+            sortable.stop();
         }
-        emit('reordering', reordering);
+        emit('reordering', reordering.value);
     });
 
     async function onReorderSubmit() {
@@ -263,7 +265,7 @@
                             'lg:sticky lg:border-0 lg:pt-0 lg:mt-0 lg:top-3.5 lg:bg-transparent lg:last:*:-translate-x-[--sticky-safe-right-offset]',
                             {
                                 '-top-8 z-0 px-0': inline && !needsTopBar,
-                                'relative z-[15]': reordering,
+                                'z-[15]': reordering,
                                 // 'opacity-0': inline && stuck && !needsTopBar,
                             })"
                         v-model:stuck="stuck"
@@ -449,8 +451,8 @@
                                     </div>
                                     <div class="hidden lg:flex flex-wrap gap-2"
                                         :class="{
-                                                    'opacity-0 pointer-events-none': searchExpanded,
-                                                }"
+                                                'opacity-0 pointer-events-none': searchExpanded,
+                                            }"
                                     >
                                         <template v-for="filter in entityList.visibleFilters" :key="filter.key">
                                             <SharpFilter
@@ -480,7 +482,7 @@
                                 <Table no-scroll class="w-max min-w-full max-w-[768px] md:max-w-[1024px] @5xl:w-full @5xl:max-w-none">
                                     <TableHeader>
                                         <TableRow class="hover:bg-transparent lg:first:*:pl-6 lg:last:*:pr-6">
-                                            <template v-if="selecting || reordering">
+                                            <template v-if="selecting">
                                                 <TableHead>
                                                     <span class="sr-only">Select...</span>
                                                 </TableHead>
@@ -489,8 +491,8 @@
                                                 <TableHead
                                                     class="max-w-[70cqw] md:w-[var(--width,auto)]"
                                                     :style="{
-                                                            '--width': field.width === 'fill' ? (100 / visibleFields.length)+'%' : field.width,
-                                                        }"
+                                                        '--width': field.width === 'fill' ? (100 / visibleFields.length)+'%' : field.width,
+                                                    }"
                                                 >
                                                     <template v-if="field.sortable">
                                                         <!--                                                            <DropdownMenu>-->
@@ -546,17 +548,26 @@
                                                     <span class="sr-only">Edit</span>
                                                 </TableHead>
                                             </template>
+                                            <template v-if="reordering">
+                                                <TableHead>
+                                                    <span class="sr-only">Select...</span>
+                                                </TableHead>
+                                            </template>
                                         </TableRow>
                                     </TableHeader>
-                                    <TableBody ref="sortableTableBody">
-                                        <template v-for="(item, itemIndex) in reorderedItems ?? entityList.data">
-                                            <TableRow class="relative hover:bg-transparent has-[[data-row-action]:hover]:bg-muted/50 has-[[aria-expanded=true]]:bg-muted/50 lg:first:*:pl-6 lg:last:*:pr-6"
-                                                :class="[reordering ? 'cursor-move' : '']"
+                                    <TableBody class="group" ref="sortableTableBody">
+                                        <template v-for="(item, itemIndex) in reorderedItems ?? entityList.data" :key="entityList.instanceId(item)">
+                                            <TableRow
+                                                :class="cn(
+                                                    'relative bg-background hover:bg-background has-[[data-row-action]:hover]:bg-muted/50 has-[[aria-expanded=true]]:bg-muted/50 lg:first:*:pl-6 lg:last:*:pr-6',
+                                                    reordering ? 'cursor-move hover:bg-muted/50 group-[:has(.sortable-chosen)]:bg-background [&.sortable-chosen]:transition-none' : ''
+                                                )"
                                                 :data-instance-row="entityList.instanceId(item)"
                                             >
                                                 <template v-if="selecting && selectedItems">
                                                     <TableCell>
                                                         <Checkbox
+                                                            class="block"
                                                             :id="`check-${entityKey}-${entityList.instanceId(item)}`"
                                                             :checked="selectedItems[entityList.instanceId(item)]"
                                                             @update:checked="(checked) => selectedItems[entityList.instanceId(item)] = checked"
@@ -564,11 +575,6 @@
                                                         <label class="absolute inset-0 z-20" data-row-action :for="`check-${entityKey}-${entityList.instanceId(item)}`">
                                                             <span class="sr-only">Select</span>
                                                         </label>
-                                                    </TableCell>
-                                                </template>
-                                                <template v-if="reordering">
-                                                    <TableCell>
-                                                        <GripVertical class="w-4 h-4 opacity-50" />
                                                     </TableCell>
                                                 </template>
                                                 <template v-for="(field, fieldIndex) in visibleFields" :key="field.key">
@@ -615,8 +621,16 @@
                                                     </template>
                                                 </template>
 
+                                                <template v-if="reordering">
+                                                    <TableCell class="w-0 hidden lg:table-cell @5xl:pl-4">
+                                                        <div class="flex justify-center w-10"> <!-- same size than dropdown -->
+                                                            <GripVertical class="w-4 h-4 opacity-50" />
+                                                        </div>
+                                                    </TableCell>
+                                                </template>
+
                                                 <template v-if="!reordering && !selecting && entityList.instanceHasActions(item, showEntityState)">
-                                                    <TableCell class="sticky bg-background pl-1 -right-3 lg:-right-3 z-10 group-data-[scroll-arrived-right=true]/viewport:bg-transparent @5xl:pl-4 @5xl:bg-transparent">
+                                                    <TableCell class="sticky bg-background pl-1 -right-3 z-10 group-data-[scroll-arrived-right=true]/viewport:bg-transparent @5xl:pl-4 @5xl:bg-transparent">
                                                         <div class="absolute inset-0 -left-2 overflow-hidden" aria-hidden="true"></div>
                                                         <div class="absolute inset-0 -left-4 overflow-hidden pointer-events-none" aria-hidden="true">
                                                             <div class="absolute inset-0 left-4 shadow-l-xl dark:border-l shadow-border transition-opacity group-data-[scroll-arrived-right=true]/viewport:opacity-0  @5xl:opacity-0" aria-hidden="true"></div>

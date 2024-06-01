@@ -105,7 +105,7 @@ class SharpBreadcrumb
             return null;
         }
         
-        $previousItem = $this->currentSharpRequest->breadcrumb()[$item->depth - 1];
+        $previousItem = $this->currentSharpRequest->breadcrumb()[$item->depth - 1] ?? null;
         
         return match ($item->type) {
             's-show' => trans('sharp::breadcrumb.show', [

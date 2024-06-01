@@ -11,7 +11,7 @@ use Spatie\TypeScriptTransformer\Attributes\Optional;
 final class FormListFieldData extends Data
 {
     #[Optional]
-    #[LiteralTypeScriptType('Array<{ [key:string]: any }> | null')]
+    #[LiteralTypeScriptType('Array<{ [key:string]: Exclude<FormFieldData["value"], FormListFieldData> }> | null')]
     public ?array $value;
 
     public function __construct(

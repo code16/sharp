@@ -405,7 +405,7 @@ export type FormGeolocationFieldData = {
   extraStyle: string | null;
 };
 export type FormHtmlFieldData = {
-  value: { [key: string]: any } | null;
+  value?: { [key: string]: any } | null;
   key: string;
   type: "html";
   template: string;
@@ -433,7 +433,9 @@ export type FormLayoutTabData = {
   columns: Array<FormLayoutColumnData>;
 };
 export type FormListFieldData = {
-  value?: Array<{ [key: string]: any }> | null;
+  value?: Array<{
+    [key: string]: Exclude<FormFieldData["value"], FormListFieldData>;
+  }> | null;
   key: string;
   type: "list";
   addable: boolean;
