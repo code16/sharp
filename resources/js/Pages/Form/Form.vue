@@ -20,7 +20,6 @@
     const { entityKey, instanceId } = route().params as { entityKey: string, instanceId?: string };
     const form = new Form(props.form, entityKey, instanceId);
     const loading = ref(false);
-    const bottomBarStuck = ref(false);
 
     watchEffect(() => {
         form.errors = props.errors;

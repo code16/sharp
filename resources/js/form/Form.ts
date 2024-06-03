@@ -11,7 +11,7 @@ import {
 import { computeCondition } from "./util/conditional-display";
 import { reactive } from "vue";
 import { transformFields } from "./util";
-import { FieldMeta, FieldsMeta, WithDynamicAttributesApplied } from "./types";
+import { FieldMeta, FieldsMeta, WithDynamicAttributesApplied, WithFieldsMeta } from "./types";
 import get from 'lodash/get';
 import set from 'lodash/set';
 
@@ -25,7 +25,7 @@ export class Form implements FormData, CommandFormData {
     pageAlert: FormData['pageAlert'];
 
     state = reactive<{
-        data: FormData['data'],
+        data: WithFieldsMeta<FormData['data']>,
         meta: { [fieldKey: string]: FieldMeta | Array<FieldsMeta> },
         errors: { [key: string]: string | string[] }
     }>({
@@ -140,6 +140,34 @@ export class Form implements FormData, CommandFormData {
                 Object.assign(fieldMeta, values);
             }
         });
+    }
+
+    setErrors(errors: { [key: string]: string }, data = this.data, fields = this.fields) {
+        Object.entries(fields)
+            .filter(([fieldKey]) => fieldKey in errors)
+            .map(([fieldKey, field]) => {
+                data._meta = {
+                    ...data._meta,
+                    errors: Object.fromEntries(
+                        Object.entries(errors)
+                            .filter(([key]) =>
+                                [fieldKey, ...('localized' in field && field.localized ? this.locales.map(locale => `${fieldKey}.${locale}`) : [])]
+                                    .includes(key)
+                            )
+                    ),
+                };
+
+                if(field.type === 'list') {
+                    (data[fieldKey] as FormListFieldData['value']).forEach((item, index) => {
+                        const itemErrors = Object.fromEntries(
+                            Object.entries(errors)
+                                .filter(([key]) => key.startsWith(`${fieldKey}.${index}.`))
+                                .map(([key, error]) => [key.slice(`${fieldKey}.${index}.`.length), error])
+                        );
+                        this.setErrors(itemErrors, item, field.itemFields);
+                    });
+                }
+            });
     }
 
     setError(key: string, error: string) {
