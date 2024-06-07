@@ -140,7 +140,7 @@ it('allows to test_deleteSharpShow', function () {
 })->todo();
 
 it('allows to test_callSharpInstanceCommandFromList', function () {
-    $fake = new class extends Orchestra\Testbench\TestCase
+    $fake = new class('fake') extends Orchestra\Testbench\TestCase
     {
         use SharpAssertions;
 
@@ -165,10 +165,10 @@ it('allows to test_callSharpInstanceCommandFromList', function () {
     );
 
     $this->assertEquals('some_value', $response->postedData->data->attr);
-})->todo();
+});
 
 it('allows to test_callSharpInstanceCommandFromShow', function () {
-    $fake = new class extends Orchestra\Testbench\TestCase
+    $fake = new class('fake') extends Orchestra\Testbench\TestCase
     {
         use SharpAssertions;
 
@@ -193,10 +193,10 @@ it('allows to test_callSharpInstanceCommandFromShow', function () {
     );
 
     $this->assertEquals('some_value', $response->postedData->data->attr);
-})->todo();
+});
 
 it('allows to test_callSharpInstanceCommandFromList_with_a_wizard_step', function () {
-    $fake = new class extends Orchestra\Testbench\TestCase
+    $fake = new class('fake') extends Orchestra\Testbench\TestCase
     {
         use SharpAssertions;
 
@@ -212,7 +212,7 @@ it('allows to test_callSharpInstanceCommandFromList_with_a_wizard_step', functio
     $response = $fake->callSharpInstanceCommandFromList('leaves', 6, 'command', ['attr' => 'some_value'], 'my-step:123');
 
     $this->assertEquals('my-step:123', $response->postedData->command_step);
-})->todo();
+});
 
 it('allows to define_a_current_breadcrumb', function () {
     $fake = new class extends Orchestra\Testbench\TestCase
