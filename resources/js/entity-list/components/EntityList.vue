@@ -578,7 +578,7 @@
                                                     </TableCell>
                                                 </template>
                                                 <template v-for="(field, fieldIndex) in visibleFields" :key="field.key">
-                                                    <template v-if="field.key === '@state' && entityList.config.state && showEntityState">
+                                                    <template v-if="field.key === '@state' && entityList.config.state && showEntityState && entityList.instanceCanUpdateState(item)">
                                                         <TableCell class="max-w-[70cqw]">
                                                             <DropdownMenu>
                                                                 <DropdownMenuTrigger as-child>
