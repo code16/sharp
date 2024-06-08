@@ -1,6 +1,7 @@
 <script setup lang="ts">
     import { PageAlertData } from "@/types";
-    import { ExclamationTriangleIcon, InformationCircleIcon, XCircleIcon } from '@heroicons/vue/20/solid';
+    import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+    import { Info, TriangleAlert, CircleAlert } from 'lucide-vue-next';
 
     defineProps<{
         pageAlert: PageAlertData,
@@ -8,30 +9,18 @@
 </script>
 
 <template>
-    <div class="border-l-4 p-4"
-        :class="{
-            'border-red-400 bg-red-50 text-red-700': pageAlert.level === 'error',
-            'border-blue-400 bg-blue-50 text-blue-700': pageAlert.level === 'info',
-            'border-primary-400 bg-primary-50 text-primary-700': pageAlert.level === 'primary',
-            'border-gray-400 bg-gray-50 text-gray-700': pageAlert.level === 'secondary',
-            'border-yellow-400 bg-yellow-50 text-yellow-700': pageAlert.level === 'warning',
-        }"
-    >
-        <div class="flex">
-            <template v-if="['error', 'info', 'warning'].includes(pageAlert.level)">
-                <div class="flex-shrink-0 mr-3">
-                    <template v-if="pageAlert.level === 'error'">
-                        <XCircleIcon class="h-5 w-5 text-red-400" aria-hidden="true" />
-                    </template>
-                    <template v-if="pageAlert.level === 'info'">
-                        <InformationCircleIcon class="h-5 w-5 text-blue-400" aria-hidden="true" />
-                    </template>
-                    <template v-if="pageAlert.level === 'warning'">
-                        <ExclamationTriangleIcon class="h-5 w-5 text-yellow-400" aria-hidden="true" />
-                    </template>
-                </div>
-            </template>
-            <div class="text-sm" v-html="pageAlert.text"></div>
-        </div>
-    </div>
+    <Alert :variant="pageAlert.level === 'danger' ? 'destructive' : 'default'">
+        <template v-if="pageAlert.level === 'danger'">
+            <CircleAlert class="w-4 h-4"/>
+        </template>
+        <template v-else-if="pageAlert.level === 'warning'">
+            <TriangleAlert class="w-4 h-4" />
+        </template>
+        <template v-else>
+            <Info class="w-4 h-4" />
+        </template>
+        <AlertDescription :class="{ 'font-medium': pageAlert.level === 'warning' || pageAlert.level === 'danger' }">
+            <div v-html="pageAlert.text"></div>
+        </AlertDescription>
+    </Alert>
 </template>

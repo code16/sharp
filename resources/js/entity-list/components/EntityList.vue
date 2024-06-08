@@ -242,15 +242,6 @@
 <template>
     <WithCommands :commands="commands">
         <div ref="el">
-            <div class="container" :class="[inline ? 'px-0' : 'px-4 lg:px-6']">
-                <template v-if="entityList?.pageAlert">
-                    <PageAlert
-                        class="mb-3"
-                        :page-alert="entityList.pageAlert"
-                    />
-                </template>
-            </div>
-
             <transition enter-active-class="transition" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition" leave-from-class="opacity-100" leave-to-class="opacity-0">
                     <template v-if="reordering">
                         <div class="fixed inset-0 z-10 bg-black/5"></div>
@@ -367,6 +358,15 @@
             <template v-else>
                 <div class="h-8 mb-4"></div>
             </template>
+
+            <div class="container" :class="[inline ? 'px-0' : 'px-4 lg:px-6']">
+                <template v-if="entityList?.pageAlert">
+                    <PageAlert
+                        class="mb-3"
+                        :page-alert="entityList.pageAlert"
+                    />
+                </template>
+            </div>
 
             <RootCard  :class="reordering ? 'relative z-[11]' : ''">
                 <CardHeader>
@@ -578,11 +578,11 @@
                                                     </TableCell>
                                                 </template>
                                                 <template v-for="(field, fieldIndex) in visibleFields" :key="field.key">
-                                                    <template v-if="field.key === '@state' && entityList.config.state && showEntityState && entityList.instanceCanUpdateState(item)">
+                                                    <template v-if="field.key === '@state' && entityList.config.state && showEntityState">
                                                         <TableCell class="max-w-[70cqw]">
                                                             <DropdownMenu>
                                                                 <DropdownMenuTrigger as-child>
-                                                                    <Button class="relative -mx-3" variant="ghost" size="sm">
+                                                                    <Button class="relative disabled:opacity-100 -mx-3" variant="ghost" size="sm" :disabled="!entityList.instanceCanUpdateState(item)">
                                                                         <Badge variant="outline">
                                                                             <StateIcon class="-ml-0.5 mr-1.5" :state-value="entityList.instanceStateValue(item)" />
                                                                             {{ entityList.instanceStateValue(item)?.label }}

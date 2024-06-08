@@ -1,5 +1,13 @@
+<script lang="ts">
+    import { inject, Ref } from "vue";
+
+    export function useMenuBoundaryElement() {
+        return inject<Ref<HTMLElement>>('menuBoundary');
+    }
+</script>
+
 <script setup lang="ts">
-import { ref } from "vue";
+    import { provide, ref } from "vue";
 import { CircleUser, ChevronsUpDown, LogOut, Menu, PanelLeftClose, PanelLeftOpen, Moon, Sun } from "lucide-vue-next";
 import Notifications from "@/components/Notifications.vue";
 import { useDialogs } from "@/utils/dialogs";
@@ -37,6 +45,8 @@ const dialogs = useDialogs();
 const menu = useMenu();
 const globalFilters = usePage().props.globalFilters as GlobalFiltersData | null;
 const showDesktopLeftNav = ref(true);
+const menuBoundary = ref<HTMLElement>();
+provide('menuBoundary', menuBoundary);
 </script>
 
 <template>
@@ -293,7 +303,12 @@ const showDesktopLeftNav = ref(true);
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </header>
-                <main class="flex-1 pt-4 lg:pt-6 pb-24">
+                <main class="relative flex-1 pt-4 lg:pt-6 pb-24">
+                    <div class="absolute inset-0 -z-10">
+                        <div class="container h-full">
+                            <div class="h-full" data-menu-boundary :ref="(el: HTMLElement) => menuBoundary = el"></div>
+                        </div>
+                    </div>
                     <slot />
                 </main>
             </div>

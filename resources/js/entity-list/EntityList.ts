@@ -176,7 +176,7 @@ export class EntityList implements EntityListData {
     instanceHasActions(instance: EntityListInstance, showEntityState: boolean): boolean {
         return (
             this.instanceCommands(instance)?.flat().length > 0 ||
-            this.config.state && showEntityState ||
+            this.config.state && showEntityState && this.instanceCanUpdateState(instance) ||
             !this.config.deleteHidden && this.instanceCanDelete(instance)
         );
     }

@@ -134,7 +134,7 @@
                         <template v-if="show.config.state">
                             <DropdownMenu>
                                 <DropdownMenuTrigger as-child>
-                                    <Button class="h-8 -mx-2" variant="ghost" size="sm" :disabled="!show.config.state.authorization">
+                                    <Button class="h-8 -mx-2 disabled:opacity-100" variant="ghost" size="sm" :disabled="!show.config.state.authorization">
                                         <Badge variant="outline">
                                             <StateIcon class="-ml-0.5 mr-1.5" :state-value="show.instanceStateValue" />
                                             {{ show.instanceStateValue?.label }}
@@ -161,7 +161,7 @@
                                         {{ __('sharp::entity_list.commands.instance.label') }}
                                     </Button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent side="bottom" align="center">
+                                <DropdownMenuContent>
                                     <template v-if="show.config.state && show.config.state.authorization">
                                         <DropdownMenuGroup>
                                             <DropdownMenuSub>
