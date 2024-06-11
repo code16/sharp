@@ -2,6 +2,8 @@
 
 namespace Code16\Sharp\Utils\Testing;
 
+use Code16\Sharp\Http\Context\CurrentSharpRequest;
+
 trait SharpAssertions
 {
     private ?array $currentBreadcrumb = null;
@@ -31,8 +33,8 @@ trait SharpAssertions
     {
         return $this
             ->withHeader(
-                'referer',
-                $this->buildRefererUrl(
+                CurrentSharpRequest::CURRENT_PAGE_URL_HEADER,
+                $this->buildCurrentPageUrl(
                     ['list', $entityKey],
                 ),
             )
@@ -106,8 +108,8 @@ trait SharpAssertions
 
         return $this
             ->withHeader(
-                'referer',
-                $this->buildRefererUrl(
+                CurrentSharpRequest::CURRENT_PAGE_URL_HEADER,
+                $this->buildCurrentPageUrl(
                     ['list', $entityKey],
                 ),
             )
@@ -133,8 +135,8 @@ trait SharpAssertions
 
         return $this
             ->withHeader(
-                'referer',
-                $this->buildRefererUrl(
+                CurrentSharpRequest::CURRENT_PAGE_URL_HEADER,
+                $this->buildCurrentPageUrl(
                     ['list', $entityKey],
                     ['show', $entityKey, $instanceId],
                 ),
@@ -160,8 +162,8 @@ trait SharpAssertions
 
         return $this
             ->withHeader(
-                'referer',
-                $this->buildRefererUrl(
+                CurrentSharpRequest::CURRENT_PAGE_URL_HEADER,
+                $this->buildCurrentPageUrl(
                     ['list', $entityKey],
                 ),
             )
@@ -176,7 +178,7 @@ trait SharpAssertions
         return $this->actingAs($user, sharpConfig()->get('auth.guard') ?: config('auth.defaults.guard'));
     }
 
-    private function buildRefererUrl(...$breadcrumbItems): string
+    private function buildCurrentPageUrl(...$breadcrumbItems): string
     {
         return url(
             sprintf(

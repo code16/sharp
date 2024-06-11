@@ -28,16 +28,12 @@ class PostSharpFormTest extends TestCase
         $post = Post::factory()->create();
 
         $this
-            ->withSharpCurrentBreadcrumb([
-                ['list', 'posts']
-            ])
+            ->withSharpCurrentBreadcrumb(['list', 'posts'])
             ->getSharpForm('posts', $post->id)
             ->assertOk();
 
         $this
-            ->withSharpCurrentBreadcrumb([
-                ['list', 'posts']
-            ])
+            ->withSharpCurrentBreadcrumb(['list', 'posts'])
             ->getSharpForm('posts')
             ->assertOk();
     }
@@ -157,17 +153,15 @@ class PostSharpFormTest extends TestCase
             ->create();
 
         $this
-            ->withSharpCurrentBreadcrumb([
-                ['list', 'posts']
-            ])
+            ->withSharpCurrentBreadcrumb(['list', 'posts'])
             ->getSharpShow('posts', $publishedPost->id)
             ->assertOk();
 
         $this
-            ->withSharpCurrentBreadcrumb([
+            ->withSharpCurrentBreadcrumb(
                 ['list', 'posts'],
                 ['show', 'posts', $publishedPost->id],
-            ])
+            )
             ->getSharpForm('posts', $publishedPost->id)
             ->assertForbidden();
     }
@@ -184,9 +178,7 @@ class PostSharpFormTest extends TestCase
             ]);
 
         $this
-            ->withSharpCurrentBreadcrumb([
-                ['list', 'posts']
-            ])
+            ->withSharpCurrentBreadcrumb(['list', 'posts'])
             ->getSharpShow('posts', $publishedPost->id)
             ->assertForbidden();
     }

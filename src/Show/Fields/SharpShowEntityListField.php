@@ -147,6 +147,7 @@ class SharpShowEntityListField extends SharpShowField
             function (array &$options) {
                 $options['endpointUrl'] = route('code16.sharp.api.list', [
                     'entityKey' => $this->entityListKey,
+                    'current_page_url' => request()->url(),
                     ...app(SharpEntityManager::class)
                         ->entityFor($this->entityListKey)
                         ->getListOrFail()

@@ -14,6 +14,8 @@ class CurrentSharpRequest
 {
     protected ?Collection $breadcrumb = null;
     private Collection $cachedInstances;
+    
+    public const CURRENT_PAGE_URL_HEADER = 'X-Current-Page-Url';
 
     public function breadcrumb(): Collection
     {
@@ -224,8 +226,9 @@ class CurrentSharpRequest
     protected function getSegmentsFromRequest(): Collection
     {
         if (request()->wantsJson() || request()->segment(2) === 'api') {
-            // API case: we use the referer
-            $urlToParse = request()->header('referer');
+            // API case: we use the X-Current-Page-Url header sent by the front
+            // for preloaded EEL we look for 'current_page_url' query
+            $urlToParse = request()->header(static::CURRENT_PAGE_URL_HEADER) ?? request()->query('current_page_url');
 
             return collect(explode('/', parse_url($urlToParse)['path']))
                 ->filter(fn (string $segment) => strlen(trim($segment))

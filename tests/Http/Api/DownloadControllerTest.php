@@ -51,10 +51,6 @@ it('allows to download a file from a show field', function () {
 
 it('returns a 404 for a missing file', function () {
     $this
-        ->withHeader(
-            'referer',
-            url('/sharp/s-list/person/s-form/person/1'),
-        )
         ->get(
             route('code16.sharp.download.show', [
                 'entityKey' => 'person',
