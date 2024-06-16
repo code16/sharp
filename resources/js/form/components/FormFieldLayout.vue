@@ -95,24 +95,6 @@
                                 </ToggleGroupItem>
                             </template>
                         </ToggleGroup>
-                        <!--                <nav class="flex items-center h-3.5">-->
-                        <!--                    <template v-for="btnLocale in form.locales">-->
-                        <!--                        <button-->
-                        <!--                            class="flex items-center rounded-md px-2 py-1 text-xs font-medium uppercase"-->
-                        <!--                            :class="[-->
-                        <!--                                btnLocale === locale ? 'bg-indigo-100 text-indigo-700' :-->
-                        <!--                                form.fieldLocalesContainingError(fieldErrorKey).includes(btnLocale) ? 'text-red-700' :-->
-                        <!--                                'text-gray-500 hover:text-gray-700',-->
-                        <!--                                form.fieldIsEmpty(field, value, btnLocale) ? 'italic' : ''-->
-                        <!--                            ]"-->
-                        <!--                            :aria-current="btnLocale === locale ? 'true' : null"-->
-                        <!--                            @click="$emit('locale-change', btnLocale)"-->
-                        <!--                        >-->
-                        <!--                            {{ btnLocale }}-->
-
-                        <!--                        </button>-->
-                        <!--                    </template>-->
-                        <!--                </nav>-->
                     </template>
                 </div>
             </component>
