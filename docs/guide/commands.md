@@ -378,10 +378,27 @@ As seen before, Entity Commands are executed on multiple instances: all of them,
 
 In order to allow that, you must:
 
-### Configure the Command to allow an instance selection
+### Add your Command to the Entity List
 
 ```php
+
 class PostList extends SharpEntityList
+{
+    // [...]
+    
+    public function getEntityCommands(): array
+    {
+        return [
+            MyBulkCommand::class
+        ];
+    }
+}
+```
+
+### Configure the Entity Command to allow an instance selection
+
+```php
+class MyBulkCommand extends EntityCommand
 {
     // [...]
     public function buildCommandConfig(): void
@@ -398,7 +415,7 @@ You may use `configureInstanceSelectionRequired()` instead to declare that the c
 You can use the `$this->selectedIds()` method to retrieve the list of selected instances ids, and apply the Command to them:
 
 ```php
-class PostList extends SharpEntityList
+class MyBulkCommand extends EntityCommand
 {
     // [...]
     
