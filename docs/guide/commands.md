@@ -378,16 +378,15 @@ Dashboard can use Commands too, with a very similar API, apart for:
 
 ## Bulk Commands (Entity List only)
 
-As seen before, Entity Commands are executed on multiple instances: all of them, or a filtered list of them. But sometimes you may need to execute a Command on a specific list of instances, a user selection.
+As seen before, Entity Commands are executed on multiple instances: either all of them, or a sublist based on active filters. But sometimes you may need to execute a Command on a custom list of instances, crafted by the user. In order to allow that, you can:
 
-In order to allow that, you must:
-
-### Configure the Command to allow an instance selection
+### Configure the Entity Command to allow an instance selection
 
 ```php
-class PostList extends SharpEntityList
+class MyBulkCommand extends EntityCommand
 {
     // [...]
+    
     public function buildCommandConfig(): void
     {
         $this->configureInstanceSelectionAllowed();
@@ -395,14 +394,16 @@ class PostList extends SharpEntityList
 }
 ```
 
+::: tip
 You may use `configureInstanceSelectionRequired()` instead to declare that the command can not be executed without a selection.
+:::
 
 ### Apply the Command to the selected instances
 
-You can use the `$this->selectedIds()` method to retrieve the list of selected instances ids, and apply the Command to them:
+Use the `$this->selectedIds()` method to retrieve the list of selected instances ids and apply the Command to them; for instance:
 
 ```php
-class PostList extends SharpEntityList
+class MyBulkCommand extends EntityCommand
 {
     // [...]
     
