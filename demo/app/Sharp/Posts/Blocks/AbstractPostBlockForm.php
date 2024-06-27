@@ -38,10 +38,9 @@ abstract class AbstractPostBlockForm extends SharpForm
     {
         $formLayout
             ->addColumn(6, function (FormLayoutColumn $column) {
-                $column->withSingleField('type');
-                if ($this->getContentField()) {
-                    $column->withSingleField('content');
-                }
+                $column->withField('type')
+                    ->when($this->getContentField(), fn ($column) => $column->withField('content'));
+                
                 $this->addAdditionalFieldsToLayout($column);
             });
     }

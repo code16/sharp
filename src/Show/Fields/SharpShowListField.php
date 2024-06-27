@@ -47,9 +47,7 @@ class SharpShowListField extends SharpShowField
         return parent::buildArray([
             'label' => $this->label,
             'itemFields' => collect($this->itemFields)
-                ->map(function (SharpShowField $field) {
-                    return $field->toArray();
-                })
+                ->map(fn (SharpShowField $field) => $field->toArray())
                 ->keyBy('key')
                 ->all(),
         ]);

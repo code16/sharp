@@ -7,13 +7,13 @@ Commands can be defined in an Entity List, in a Show Page or in a Dashboard. Thi
 ## Generator for an 'Entity' command
 
 ```bash
-php artisan sharp:make:entity-command <class_name> [--with-form]
+php artisan sharp:make:entity-command <class_name> [--model=<model_name>,--wizard,--form]
 ```
 
 ## Generator for an 'Instance' command
 
 ```bash
-php artisan sharp:make:instance-command <class_name> [--with-form]
+php artisan sharp:make:instance-command <class_name> [--model=<model_name>,--wizard,--form]
 ```
 
 ## Write the Command class
@@ -79,7 +79,7 @@ class SendInvoiceToCustomerCommand extends InstanceCommand
 
 The API is the same as building a standard Form (see [Building an Entity Form](building-form.md)).
 
-Once this method has been declared, a form will be prompted to the user in a modal as he clicks on the Command. Then, in the `execute()` method, you can grab the entered value, and even to handle the validation:
+Once this method has been declared, a form will be prompted to the user in a modal as he clicks on the Command. Then, in the `execute()` method, you can grab the entered value and handle validation:
 
 ```php
 class SendInvoiceToCustomerCommand extends InstanceCommand
@@ -99,6 +99,10 @@ class SendInvoiceToCustomerCommand extends InstanceCommand
     }
 }
 ```
+
+::: tip
+Notice that validation can be extracted to a dedicated `rules()` method instead.
+:::
 
 #### Initializing form data
 

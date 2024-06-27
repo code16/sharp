@@ -9,12 +9,15 @@ Under the hood Sharp manages a breadcrumb to keep track of stacked pages.
 You can activate the breadcrumb display in sharp's configuration: 
 
 ```php
-// config/sharp.php
-return [
-    // [...]
-    
-    "display_breadcrumb" => true,
-];
+class SharpServiceProvider extends SharpAppServiceProvider
+{
+    protected function configureSharp(SharpConfigBuilder $config): void
+    {
+        $config
+            ->displayBreadcrumb()
+            // [...]
+    }
+}
 ```
 
 ## Configure entity label

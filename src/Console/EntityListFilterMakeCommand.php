@@ -13,21 +13,21 @@ class EntityListFilterMakeCommand extends GeneratorCommand
 
     protected function getStub()
     {
-        if ($this->option('required')) {
+        if ($this->option('required') !== false) {
             return $this->option('date-range')
                 ? __DIR__.'/stubs/filters/entity-list-date-range-filter.required.stub'
                 : __DIR__.'/stubs/filters/entity-list-select-filter.required.stub';
         }
 
-        if ($this->option('date-range')) {
+        if ($this->option('date-range') !== false) {
             return __DIR__.'/stubs/filters/entity-list-date-range-filter.stub';
         }
 
-        if ($this->option('check')) {
+        if ($this->option('check') !== false) {
             return __DIR__.'/stubs/filters/entity-list-check-filter.stub';
         }
 
-        return $this->option('multiple')
+        return $this->option('multiple') !== false
             ? __DIR__.'/stubs/filters/entity-list-select-filter.multiple.stub'
             : __DIR__.'/stubs/filters/entity-list-select-filter.stub';
     }

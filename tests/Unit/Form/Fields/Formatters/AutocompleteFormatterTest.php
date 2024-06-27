@@ -1,111 +1,97 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Form\Fields\Formatters;
-
 use Code16\Sharp\Form\Fields\Formatters\AutocompleteFormatter;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
-use Code16\Sharp\Tests\SharpTestCase;
 use Illuminate\Support\Str;
 
-class AutocompleteFormatterTest extends SharpTestCase
-{
-    use WithSimpleTestFormatter;
+it('allows to format local value to front', function () {
+    $value = Str::random();
 
-    /** @test */
-    public function we_can_format_local_value_to_front()
-    {
-        $value = Str::random();
+    // Front always need an object
+    $toFront = (new AutocompleteFormatter)
+        ->toFront(SharpFormAutocompleteField::make('text', 'local'), $value);
 
-        // Front always need an object
-        $this->assertEquals(['id' => $value], (new AutocompleteFormatter)->toFront(
-            SharpFormAutocompleteField::make('text', 'local'),
-            $value,
-        ));
+    expect($toFront)->toBe(['id' => $value]);
 
-        $this->assertEquals(['num' => $value], (new AutocompleteFormatter)->toFront(
-            SharpFormAutocompleteField::make('text', 'local')->setItemIdAttribute('num'),
-            $value,
-        ));
+    $toFront = (new AutocompleteFormatter)
+        ->toFront(SharpFormAutocompleteField::make('text', 'local')->setItemIdAttribute('num'), $value);
 
-        $this->assertEquals(['id' => $value], (new AutocompleteFormatter)->toFront(
-            SharpFormAutocompleteField::make('text', 'local'),
-            ['id' => $value],
-        ));
+    expect($toFront)->toBe(['num' => $value]);
 
-        $this->assertEquals(['id' => $value], (new AutocompleteFormatter)->toFront(
-            SharpFormAutocompleteField::make('text', 'local'),
-            (object) ['id' => $value],
-        ));
+    $toFront = (new AutocompleteFormatter)
+        ->toFront(SharpFormAutocompleteField::make('text', 'local'), ['id' => $value]);
 
-        $this->assertEquals(['id' => $value], (new AutocompleteFormatter)->toFront(
-            SharpFormAutocompleteField::make('text', 'local'),
-            new class($value)
+    expect($toFront)->toBe(['id' => $value]);
+
+    $toFront = (new AutocompleteFormatter)
+        ->toFront(SharpFormAutocompleteField::make('text', 'local'), (object) ['id' => $value]);
+
+    expect($toFront)->toBe(['id' => $value]);
+
+    $toFront = (new AutocompleteFormatter)->toFront(
+        SharpFormAutocompleteField::make('text', 'local'),
+        new class($value)
+        {
+            public function __construct(private $value)
             {
-                public function __construct($value)
-                {
-                    $this->value = $value;
-                }
+            }
 
-                public function toArray()
-                {
-                    return ['id' => $this->value];
-                }
-            },
-        ));
-    }
+            public function toArray()
+            {
+                return ['id' => $this->value];
+            }
+        },
+    );
 
-    /** @test */
-    public function we_can_format_remote_value_to_front()
-    {
-        $value = [
-            'id' => Str::random(),
-            'label' => Str::random(),
-        ];
+    expect($toFront)->toEqual(['id' => $value]);
+});
 
-        $this->assertEquals($value, (new AutocompleteFormatter)->toFront(
-            SharpFormAutocompleteField::make('text', 'remote'),
-            $value,
-        ));
-    }
+it('allows to format remote value to front', function () {
+    $value = [
+        'id' => Str::random(),
+        'label' => Str::random(),
+    ];
 
-    /** @test */
-    public function we_can_format_null_value_to_front()
-    {
-        $this->assertNull((new AutocompleteFormatter)->toFront(
+    $toFront = (new AutocompleteFormatter)->toFront(
+        SharpFormAutocompleteField::make('text', 'remote'),
+        $value,
+    );
+
+    expect($toFront)->toEqual($value);
+});
+
+it('allows to format null value to front', function () {
+    expect(
+        (new AutocompleteFormatter)->toFront(
             SharpFormAutocompleteField::make('text', 'local'),
             null,
-        ));
-    }
+        )
+    )->toBeNull();
+});
 
-    /** @test */
-    public function we_can_format_null_value_from_front()
-    {
-        $this->assertNull(
-            (new AutocompleteFormatter)->fromFront(
-                SharpFormAutocompleteField::make('text', 'local'),
-                'attribute',
-                null,
-            ),
-        );
-    }
+it('allows to format null value from front', function () {
+    expect(
+        (new AutocompleteFormatter)->fromFront(
+            SharpFormAutocompleteField::make('text', 'local'),
+            'attribute',
+            null,
+        )
+    )->toBeNull();
+});
 
-    /** @test */
-    public function we_can_format_local_value_from_front()
-    {
-        // Front always send an object
-        $value = [
-            'id' => Str::random(),
-            'label' => Str::random(),
-        ];
+it('allows to format local value from front', function () {
+    // Front always send an object
+    $value = [
+        'id' => Str::random(),
+        'label' => Str::random(),
+    ];
 
-        // Back always need an id
-        $this->assertEquals(
-            $value['id'],
-            (new AutocompleteFormatter)->fromFront(
-                SharpFormAutocompleteField::make('text', 'local'),
-                'attribute',
-                $value,
-            ),
-        );
-    }
-}
+    // Back always need an id
+    expect(
+        (new AutocompleteFormatter)->fromFront(
+            SharpFormAutocompleteField::make('text', 'local'),
+            'attribute',
+            $value,
+        )
+    )->toBe($value['id']);
+});

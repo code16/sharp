@@ -25,11 +25,8 @@ abstract class BaseSharpEntity
             return new SharpEntityPolicy();
         }
 
-        if (is_string($policy)) {
-            $policy = app($policy);
-            if (! $policy instanceof SharpEntityPolicy) {
-                throw new SharpException('Policy class '.$policy.' must implement '.SharpEntityPolicy::class);
-            }
+        if (! $policy instanceof SharpEntityPolicy) {
+            throw new SharpException('Policy class must implement '.SharpEntityPolicy::class);
         }
 
         return $policy;
@@ -45,9 +42,9 @@ abstract class BaseSharpEntity
         return $this->isDashboard;
     }
 
-    protected function getPolicy(): string|SharpEntityPolicy|null
+    protected function getPolicy(): ?SharpEntityPolicy
     {
-        return $this->policy;
+        return $this->policy ? app($this->policy) : null;
     }
 
     abstract public function isActionProhibited(string $action): bool;

@@ -24,9 +24,7 @@
         @if($item->isExternalLink())
             target="_blank"
         @endif
-        @if($item->isEntity() && $item->getEntityKey() === $currentEntityKey)
-            current
-        @endif
+        entity-key="{{ $item->getEntityKey() }}"
     >
         <div class="row flex-nowrap gx-3">
             @if($item->getIcon())

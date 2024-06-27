@@ -11,7 +11,7 @@ Note that transformers need your data models to allow direct access to their att
 In an Entity List, a Show Page or a Form, you can use the `transform()` function which will:
 
 - apply all custom transformers on your list (see below),
-- transform the given model(s) into an array, handling pagination if a `LengthAwarePaginator` is provided.
+- transform the given model(s) into an array, handling pagination if a `Paginator` is provided.
 
 Eloquent example in an Entity List:
 
@@ -105,7 +105,7 @@ class ProductEntityList extends SharpEntityList
     
     function buildList(EntityListFieldsContainer $fields): void
     {
-        $fieldsContainer->addField(
+        $fields->addField(
             EntityListDataContainer::make('author:name')
                 ->setLabel('Author')
         );

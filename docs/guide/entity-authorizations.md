@@ -42,16 +42,16 @@ For user-based rules, create a `Policy` class which is just a plain class defini
 It must extend `Code16\Sharp\Auth\SharpEntityPolicy`:
 
 ```php
-class SpaceshipPolicy extends SharpEntityPolicy
+class PostPolicy extends SharpEntityPolicy
 {
     public function entity($user): bool
     {
-        return sharp_user()->hasGroup('admin');
+        return $user->hasGroup('admin');
     }
 
     public function view($user, $instanceId): bool
     {
-        return sharp_user()->owner_id == $user->id;
+        return Post::find($instanceId)?->owner_id == $user->id;
     }
 
     public function update($user, $instanceId): bool
@@ -78,13 +78,24 @@ Only write methods which don't return true, as this is the default behaviour.
 The policy must be declared in the [Entity class](entity-class.md):
 
 ```php
-class SpaceshipEntity extends SharpEntity
+class PostEntity extends SharpEntity
 {
     // [...]
-    protected ?string $policy = SpaceshipSharpPolicy::class;
+    protected ?string $policy = PostSharpPolicy::class;
 }
 ```
 
 ### Policies for Dashboards
 
-It's all the same, except Dashboards have only one method: `public function entity($user): bool`.
+The only useful method in case of a Dashboard is `function entity($user)`; apart from this, they work the same.
+
+```php
+class SalesDashboardPolicy extends SharpEntityPolicy
+{
+    public function entity($user): bool
+    {
+        return $user->hasGroup('admin');
+    }
+}
+```
+

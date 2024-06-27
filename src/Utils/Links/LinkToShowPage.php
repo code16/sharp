@@ -30,16 +30,22 @@ class LinkToShowPage extends SharpLinkTo
             return url(
                 sprintf(
                     '%s/%s/%s',
-                    config('sharp.custom_url_segment', 'sharp'),
+                    sharpConfig()->get('custom_url_segment'),
                     $this->breadcrumbBuilder->generateUri(),
                     $this->generateUri()
                 )
             );
         }
 
-        return route('code16.sharp.list.subpage', [
+        return $this->generateUrl();
+    }
+
+    protected function generateUrl(): string
+    {
+        return route('code16.sharp.show.show', [
+            'parentUri' => sprintf('s-list/%s', $this->entityKey),
             'entityKey' => $this->entityKey,
-            'uri' => $this->generateUri(),
+            'instanceId' => $this->instanceId,
         ]);
     }
 

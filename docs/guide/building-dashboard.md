@@ -10,7 +10,7 @@ php artisan sharp:make:dashboard <class_name>
 
 ## Write the class
 
-The first step is to create a new class extending `Code16\Sharp\Dashboard\SharpDashboard` which leads us to implement three functions:
+The first step is to create a new class extending `Code16\Sharp\Dashboard\SharpDashboard`, and to implement three functions:
 
 - `buildWidgets(WidgetsContainer $widgetsContainer)`,
 - `buildDashboardLayout(DashboardLayout $dashboardLayout)`,
@@ -91,20 +91,18 @@ Widget data is set with specific methods depending on their type. The documentat
 
 A Dashboard must have his own [Entity class, as documented here](entity-class.md). 
 
-Once this class (`CompanyDashboardEntity` for instance) written, we have to declare it the sharp config file:
+Once this class (`CompanyDashboardEntity` for instance) written, we have to declare it:
 
 ```php
-// config/sharp.php
-
-return [
-    "entities" => [
-        // ...
-    ],
-    "dashboards" => [
-        "company_dashboard" => \App\Sharp\CompanyDashboardEntity::class
-    ],
-    // ...
-];
+class SharpServiceProvider extends SharpAppServiceProvider
+{
+    protected function configureSharp(SharpConfigBuilder $config): void
+    {
+        $config
+            ->addEntity('company_dashboard', CompanyDashboardEntity::class)
+            // [...]
+    }
+}
 ```
 
 In the menu, like an Entity, a Dashboard can be displayed anywhere.
