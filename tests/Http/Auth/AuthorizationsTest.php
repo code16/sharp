@@ -103,14 +103,14 @@ it('returns prohibited actions with a list get request', function () {
 
     app(SharpEntityManager::class)
         ->entityFor('person')
-        ->setProhibitedActions(['delete', 'update']);
+        ->setProhibitedActions(['delete']);
 
     $this
         ->get('/sharp/s-list/person')
         ->assertInertia(fn (Assert $page) => $page
             ->where('entityList.authorizations', [
                 'delete' => [],
-                'update' => [],
+                'reorder' => true,
                 'create' => true,
                 'view' => [1, 2],
             ])
@@ -159,7 +159,7 @@ it('allow access by default', function () {
         ->assertInertia(fn (Assert $page) => $page
             ->where('entityList.authorizations', [
                 'delete' => [1, 2],
-                'update' => [1, 2],
+                'reorder' => true,
                 'create' => true,
                 'view' => [1, 2],
             ])
@@ -171,7 +171,7 @@ it('allow access by default', function () {
         ->assertJsonFragment([
             'authorizations' => [
                 'delete' => [1, 2],
-                'update' => [1, 2],
+                'reorder' => true,
                 'create' => true,
                 'view' => [1, 2],
             ],
