@@ -118,7 +118,7 @@ it('returns policies with a list get request', function () {
 
     fakePolicyFor('person', new class extends SharpEntityPolicy
     {
-        public function update($user, $instanceId): bool
+        public function delete($user, $instanceId): bool
         {
             return $instanceId == 1;
         }
@@ -128,8 +128,8 @@ it('returns policies with a list get request', function () {
         ->get('/sharp/s-list/person')
         ->assertInertia(fn (Assert $page) => $page
             ->where('entityList.authorizations', [
-                'delete' => [1, 2],
-                'update' => [1],
+                'delete' => [1],
+                'reorder' => true,
                 'create' => true,
                 'view' => [1, 2],
             ])

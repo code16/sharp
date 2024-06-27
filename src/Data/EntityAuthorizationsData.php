@@ -7,8 +7,7 @@ final class EntityAuthorizationsData extends Data
     public function __construct(
         /** @var array<int|string> */
         public array $view,
-        /** @var array<int|string> */
-        public array $update,
+        public bool $reorder,
         /** @var array<int|string> */
         public array $delete,
         public bool $create,
