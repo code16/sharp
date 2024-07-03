@@ -24,7 +24,6 @@
 </template>
 
 <script>
-    import { Multiselect } from '@/components/ui';
     import localize from '../../mixins/localize/Tags';
 
     class LabelledItem {
@@ -50,9 +49,6 @@
     export default {
         name: 'SharpTags',
         mixins:[localize],
-        components: {
-            Multiselect
-        },
         props: {
             id: String,
             value: Array, // [{id:0, label: 'AAA'}, ...]

@@ -4,7 +4,7 @@
     import WithCommands from "@/commands/components/WithCommands.vue";
     import Section from "@/show/components/Section.vue";
     import { Button } from '@/components/ui/button';
-    import { StateIcon } from '@/components/ui';
+    import StateIcon from '@/components/ui/StateIcon.vue';
     import UnknownField from "@/components/UnknownField.vue";
     import Layout from "@/Layouts/Layout.vue";
     import { config } from "@/utils/config";
@@ -25,9 +25,9 @@
     import FieldGridColumn from "@/components/ui/FieldGridColumn.vue";
     import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
     import EntityList from "@/show/components/fields/entity-list/EntityList.vue";
-    import { ChevronDown, ChevronsUpDown, Languages, MoreHorizontal } from "lucide-vue-next";
+    import { ChevronsUpDown } from "lucide-vue-next";
     import StickyTop from "@/components/StickyTop.vue";
-    import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+    import { Select, SelectContent, SelectItem } from "@/components/ui/select";
     import {
         DropdownMenu,
         DropdownMenuCheckboxItem,

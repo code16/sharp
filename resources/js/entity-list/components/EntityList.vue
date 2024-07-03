@@ -15,12 +15,12 @@
     import { EntityListInstance, InstanceId } from "../types";
     import { getAppendableParentUri, route } from "@/utils/url";
     import { Button } from '@/components/ui/button';
-    import { StateIcon } from '@/components/ui';
     import { api } from "@/api/api";
     import EntityListPagination from "@/entity-list/components/EntityListPagination.vue";
     import Content from "@/components/Content.vue";
     import SharpFilter from "@/filters/components/Filter.vue";
     import PageAlert from "@/components/PageAlert.vue";
+    import StateIcon from '@/components/ui/StateIcon.vue';
     import { useSortable } from '@vueuse/integrations/useSortable';
     import { CardContent, CardDescription, CardFooter, CardHeader } from "@/components/ui/card";
     import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
