@@ -71,7 +71,7 @@ class EntityListController extends SharpProtectedController
     {
         $authorizations = [
             'view' => [],
-            'update' => [],
+            'reorder' => $this->sharpAuthorizationManager->isAllowed('reorder', $entityKey),
             'delete' => [],
             'create' => $this->sharpAuthorizationManager->isAllowed('create', $entityKey),
         ];
@@ -82,9 +82,6 @@ class EntityListController extends SharpProtectedController
             ->each(function ($instanceId) use (&$authorizations, $entityKey) {
                 if ($this->sharpAuthorizationManager->isAllowed('view', $entityKey, $instanceId)) {
                     $authorizations['view'][] = $instanceId;
-                }
-                if ($this->sharpAuthorizationManager->isAllowed('update', $entityKey, $instanceId)) {
-                    $authorizations['update'][] = $instanceId;
                 }
                 if ($this->sharpAuthorizationManager->isAllowed('delete', $entityKey, $instanceId)) {
                     $authorizations['delete'][] = $instanceId;
