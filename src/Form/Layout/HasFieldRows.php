@@ -3,9 +3,12 @@
 namespace Code16\Sharp\Form\Layout;
 
 use Code16\Sharp\Utils\Layout\LayoutField;
+use Illuminate\Support\Traits\Conditionable;
 
 trait HasFieldRows
 {
+    use Conditionable;
+    
     protected array $rows = [];
 
     public function withSingleField(string $fieldKey, \Closure $subLayoutCallback = null): self
