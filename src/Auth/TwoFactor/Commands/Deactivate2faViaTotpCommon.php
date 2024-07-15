@@ -33,8 +33,8 @@ trait Deactivate2faViaTotpCommon
                 'required',
                 'string',
                 function (string $attribute, mixed $value, Closure $fail) {
-                    $loginAttr = config('sharp.auth.login_attribute', 'email');
-                    $passwordAttr = config('sharp.auth.password_attribute', 'password');
+                    $loginAttr = sharpConfig()->get('auth.login_attribute');
+                    $passwordAttr = sharpConfig()->get('auth.password_attribute');
 
                     $credentials = [
                         $loginAttr => auth()->user()->$loginAttr,

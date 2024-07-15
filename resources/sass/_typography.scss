@@ -1,0 +1,40 @@
+
+.ui-font {
+  font-family: 'Karla', $font-family-sans-serif;
+  //text-transform: uppercase;
+  font-weight: 700;
+}
+
+.ui-title-font {
+  font-family: 'Karla', $font-family-sans-serif;
+  //text-transform: uppercase;
+  font-weight: 600;
+}
+
+.ui-font-size {
+  font-size: $ui-font-size;
+}
+
+h1.ui-heading-font-size {
+  font-size: 1.75rem;
+}
+
+h2.ui-heading-font-size {
+  font-size: 1.5rem;
+}
+
+h3.ui-heading-font-size {
+  font-size: 1.25rem;
+}
+
+h4.ui-heading-font-size {
+  font-size: 1.125rem;
+}
+
+h5.ui-heading-font-size {
+  font-size: 1rem;
+}
+
+h6.ui-heading-font-size {
+  font-size: .875rem;
+}

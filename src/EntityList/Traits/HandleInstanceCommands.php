@@ -39,7 +39,7 @@ trait HandleInstanceCommands
     {
         $this->getInstanceCommandsHandlers()['instance']
             // Take all authorized instance commands...
-            ->filter->authorize()
+            ->filter(fn (InstanceCommand $commandHandler) => $commandHandler->authorize())
 
             // ... and Entity State if present...
             ->when($this->entityStateHandler, function (Collection $collection) {
@@ -47,7 +47,7 @@ trait HandleInstanceCommands
             })
 
             // ... and for each of them, set authorization for every $item
-            ->each(function ($commandHandler) use ($items) {
+            ->each(function (InstanceCommand $commandHandler) use ($items) {
                 foreach ($items as $item) {
                     $commandHandler->checkAndStoreAuthorizationFor(
                         $item[$this->instanceIdAttribute],

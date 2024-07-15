@@ -2,7 +2,9 @@
 
 namespace Code16\Sharp\Http\Context;
 
+use Closure;
 use Code16\Sharp\Http\Context\Util\BreadcrumbItem;
+use Code16\Sharp\Utils\Filters\GlobalFilters;
 use Code16\Sharp\Utils\Filters\GlobalRequiredFilter;
 use Code16\Sharp\Utils\Menu\SharpMenuManager;
 use Illuminate\Support\Collection;
@@ -11,6 +13,9 @@ use Illuminate\Support\Str;
 class CurrentSharpRequest
 {
     protected ?Collection $breadcrumb = null;
+    private Collection $cachedInstances;
+    
+    public const CURRENT_PAGE_URL_HEADER = 'X-Current-Page-Url';
 
     public function breadcrumb(): Collection
     {
@@ -63,7 +68,7 @@ class CurrentSharpRequest
         return url(
             sprintf(
                 '%s/%s',
-                config('sharp.custom_url_segment', 'sharp'),
+                sharpConfig()->get('custom_url_segment'),
                 $breadcrumb
                     ->map(fn (BreadcrumbItem $item) => $item->toUri())
                     ->implode('/'),
@@ -103,35 +108,40 @@ class CurrentSharpRequest
     {
         $current = $this->getCurrentBreadcrumbItem();
 
-        return $current ? $current->isEntityList() : false;
+        return $current && $current->isEntityList();
     }
 
     public function isShow(): bool
     {
         $current = $this->getCurrentBreadcrumbItem();
 
-        return $current ? $current->isShow() : false;
+        return $current && $current->isShow();
     }
 
     public function isForm(): bool
     {
         $current = $this->getCurrentBreadcrumbItem();
 
-        return $current ? $current->isForm() : false;
+        return $current && $current->isForm();
     }
 
     public function isCreation(): bool
     {
         $current = $this->getCurrentBreadcrumbItem();
 
-        return $current && $current->isForm() && ! $current->isSingleForm() && $current->instanceId() === null;
+        return $current
+            && $current->isForm()
+            && ! $current->isSingleForm()
+            && $current->instanceId() === null;
     }
 
     public function isUpdate(): bool
     {
         $current = $this->getCurrentBreadcrumbItem();
 
-        return $current && $current->isForm() && ($current->instanceId() !== null || $current->isSingleForm());
+        return $current
+            && $current->isForm()
+            && ($current->instanceId() !== null || $current->isSingleForm());
     }
 
     public function entityKey(): ?string
@@ -148,13 +158,31 @@ class CurrentSharpRequest
         return $current?->instanceId();
     }
 
-    final public function globalFilterFor(string $handlerClass): array|string|null
+    final public function globalFilterFor(string $handlerClassOrKey): array|string|null
     {
-        $handler = app($handlerClass);
+        $handler = class_exists($handlerClassOrKey)
+            ? app($handlerClassOrKey)
+            : app(GlobalFilters::class)->findFilter($handlerClassOrKey);
 
         abort_if(! $handler instanceof GlobalRequiredFilter, 404);
 
         return $handler->currentValue();
+    }
+
+    final public function cacheInstances(?Collection $instances): self
+    {
+        $this->cachedInstances = $instances ?: collect();
+
+        return $this;
+    }
+
+    final public function findCachedInstance($instanceId, Closure $notFoundCallback): mixed
+    {
+        if (isset($this->cachedInstances)) {
+            $instance = $this->cachedInstances[$instanceId] ?? null;
+        }
+
+        return $instance ?? $notFoundCallback($instanceId);
     }
 
     private function buildBreadcrumb(): void
@@ -198,13 +226,14 @@ class CurrentSharpRequest
     protected function getSegmentsFromRequest(): Collection
     {
         if (request()->wantsJson() || request()->segment(2) === 'api') {
-            // API case: we use the referer
-            $urlToParse = request()->header('referer');
+            // API case: we use the X-Current-Page-Url header sent by the front
+            // for preloaded EEL we look for 'current_page_url' query
+            $urlToParse = request()->header(static::CURRENT_PAGE_URL_HEADER) ?? request()->query('current_page_url');
 
             return collect(explode('/', parse_url($urlToParse)['path']))
-                ->filter(function (string $segment) {
-                    return strlen(trim($segment)) && $segment !== sharp_base_url_segment();
-                })
+                ->filter(fn (string $segment) => strlen(trim($segment))
+                    && $segment !== sharpConfig()->get('custom_url_segment')
+                )
                 ->values();
         }
 

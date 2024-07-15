@@ -2,16 +2,36 @@
 
 namespace Code16\Sharp\Form\Layout;
 
+use Closure;
 use Code16\Sharp\Utils\Layout\LayoutField;
 use Illuminate\Support\Traits\Conditionable;
 
 trait HasFieldRows
 {
     use Conditionable;
-    
+
     protected array $rows = [];
 
+    /** @deprecated use withField() or withListField() instead */
     public function withSingleField(string $fieldKey, \Closure $subLayoutCallback = null): self
+    {
+        if ($subLayoutCallback) {
+            return $this->withListField($fieldKey, $subLayoutCallback);
+        }
+
+        return $this->withField($fieldKey);
+    }
+
+    public function withField(string $fieldKey): self
+    {
+        $this->addRowLayout([
+            $this->newLayoutField($fieldKey),
+        ]);
+
+        return $this;
+    }
+
+    public function withListField(string $fieldKey, Closure $subLayoutCallback): self
     {
         $this->addRowLayout([
             $this->newLayoutField($fieldKey, $subLayoutCallback),
@@ -63,15 +83,18 @@ trait HasFieldRows
     {
         return [
             'fields' => collect($this->rows)
-                ->map(function ($row) {
-                    return collect($row)
-                        ->map(function ($field) {
-                            return $field->toArray();
-                        })
-                        ->all();
-                })
+                ->map(fn ($row) => collect($row)
+                    ->map(fn ($field) => $field->toArray())
+                    ->all()
+                )
                 ->all(),
         ];
+    }
+
+    public function hasFields(): bool
+    {
+        return collect($this->rows)
+                ->firstWhere(fn ($row) => sizeof($row) > 0) !== null;
     }
 
     protected function newLayoutField(string $fieldKey, \Closure $subLayoutCallback = null): LayoutField

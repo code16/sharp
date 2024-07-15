@@ -12,17 +12,29 @@ class DummyClass extends SharpForm
 {
     public function buildFormFields(FieldsContainer $formFields): void
     {
-        // $formFields->addField(SharpFormTextField::make('myField'))
+        $formFields
+            ->addField(
+                SharpFormTextField::make('my_field')
+                    ->setLabel('My field')
+            );
     }
 
     public function buildFormLayout(FormLayout $formLayout): void
     {
-        // $formLayout->addColumn(6, function(FormLayoutColumn $column) { ... })
+         $formLayout
+             ->addColumn(6, function (FormLayoutColumn $column) {
+                 $column
+                     ->withSingleField('my_field');
+             });
     }
 
     public function find($id): array
     {
-        // return $this->transform(...);
+        return $this->transform(
+            [
+                "my_field" => "My value"
+            ]
+        );
     }
 
     public function update($id, array $data)
@@ -30,8 +42,10 @@ class DummyClass extends SharpForm
         //
     }
 
-    public function delete($id): void
+    public function rules(): array
     {
-        //
+    	return [
+    		'my_field' => 'required',
+    	];
     }
 }
