@@ -3,9 +3,12 @@
 namespace Code16\Sharp\Show\Layout;
 
 use Code16\Sharp\Form\Layout\HasLayout;
+use Illuminate\Support\Traits\Conditionable;
 
 class ShowLayout implements HasLayout
 {
+    use Conditionable;
+
     protected array $sections = [];
 
     final public function addSection(string $label, \Closure $callback = null): self
