@@ -2,6 +2,26 @@
 
 ## On the front side
 
+### Requirements
+
+Sharp will render your custom field as a **Vue 2** component. You must install and require the `@vitejs/plugin-vue2` dependency and set it up in your `vite.config.js` like this :
+    
+```js
+import { defineConfig, loadEnv } from 'vite';
+import vue from "@vitejs/plugin-vue2";
+import laravel from 'laravel-vite-plugin';
+
+export default defineConfig({
+    plugins: [
+        vue(),
+        laravel({
+            input: ['resources/css/app.css', 'resources/js/app.js', ...],
+            refresh: true,
+        }),
+    ],
+});
+```
+
 ### Creating the Vue component
 
 Example of custom sharp field:
@@ -26,12 +46,12 @@ Example of custom sharp field:
 
 #### Exposed Props
 
-| Prop            | Description                                 |
-|-----------------|---------------------------------------------|
-| value           | value of the field, *required*                                            |
-| fieldKey        | field key in the show                       |
-| emptyVisible    | boolean determined by the [->setShowIfEmpty()](building-show-page.md) method, true by default  |
-| ...             | *All other props given in the field definition* |
+| Prop            | Description                                                                                   |
+|-----------------|-----------------------------------------------------------------------------------------------|
+| value           | value of the field, *required*                                                                |
+| fieldKey        | field key in the show                                                                         |
+| emptyVisible    | boolean determined by the [->setShowIfEmpty()](building-show-page.md) method, true by default |
+| ...             | *All other props given in the `toArray()` function of your field definition class*              |
 
 #### Listened events
 
