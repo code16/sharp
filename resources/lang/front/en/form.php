@@ -100,4 +100,9 @@ return [
     'editor.toolbar.fullscreen.title' => 'Full screen',
     'editor.toolbar.undo.title' => 'Undo',
     'editor.toolbar.redo.title' => 'Redo',
+    'editor.toolbar.align-left.title' => 'Align left',
+    'editor.toolbar.align-center.title' => 'Center',
+    'editor.toolbar.align-right.title' => 'Align right',
+    'editor.toolbar.align-justify.title' => 'Justify',
+    'editor.toolbar.align-unset.title' => 'Default alignment',
 ];

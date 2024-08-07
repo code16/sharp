@@ -93,4 +93,9 @@ return [
     'editor.toolbar.fullscreen.title' => 'Tela cheia',
     'editor.toolbar.undo.title' => 'Desfazer',
     'editor.toolbar.redo.title' => 'Refazer',
+    'editor.toolbar.align-left.title' => 'Alinhar à esquerda',
+    'editor.toolbar.align-center.title' => 'Centro',
+    'editor.toolbar.align-right.title' => 'Alinhar à direita',
+    'editor.toolbar.align-justify.title' => 'Justificar',
+    'editor.toolbar.align-unset.title' => 'Alinhamento padrão',
 ];

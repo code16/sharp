@@ -102,4 +102,9 @@ return [
     'editor.toolbar.fullscreen.title' => 'Plein écran',
     'editor.toolbar.undo.title' => 'Annuler',
     'editor.toolbar.redo.title' => 'Rétablir',
+    'editor.toolbar.align-left.title' => 'Aligner à gauche',
+    'editor.toolbar.align-center.title' => 'Centrer',
+    'editor.toolbar.align-right.title' => 'Aligner à droite',
+    'editor.toolbar.align-justify.title' => 'Justifier',
+    'editor.toolbar.align-unset.title' => 'Alignement par défaut',
 ];
