@@ -94,4 +94,9 @@ return [
     'editor.toolbar.fullscreen.title' => 'Полный экран',
     'editor.toolbar.undo.title' => 'Отменить действие',
     'editor.toolbar.redo.title' => 'Повторить действие',
+    'editor.toolbar.align-left.title' => 'Выровнять по левому краю',
+    'editor.toolbar.align-center.title' => 'Центр',
+    'editor.toolbar.align-right.title' => 'Выровнять по правому краю',
+    'editor.toolbar.align-justify.title' => 'Выровнять по ширине',
+    'editor.toolbar.align-unset.title' => 'Выравнивание по умолчанию',
 ];

@@ -13,6 +13,7 @@ import { TableCell } from "@tiptap/extension-table-cell";
 import { Highlight } from "@tiptap/extension-highlight";
 import { CodeBlock } from "@tiptap/extension-code-block";
 import { Superscript } from "@tiptap/extension-superscript";
+import { TextAlign } from '@tiptap/extension-text-align';
 import { Selected } from "./selected";
 import { Html } from "./html";
 import { TrailingNode } from "./trailing-node";
@@ -139,6 +140,10 @@ function getHardBreakExtension({ inline }) {
         });
 }
 
+function getTextAlignExtension() {
+    return TextAlign;
+}
+
 function getTrailingNodeExtension({ inline }) {
     if(!inline) {
         return TrailingNode;
@@ -208,6 +213,7 @@ export function getDefaultExtensions({ placeholder, toolbar, inline } = {}) {
         getPlaceholderExtension(placeholder),
         getTrailingNodeExtension({ inline }),
         getCharacterCountExtension(),
+        getTextAlignExtension(),
         Html,
         Selected,
     ];

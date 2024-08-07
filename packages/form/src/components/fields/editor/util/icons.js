@@ -26,6 +26,12 @@ const toolbarIcons = {
     'html': 'far fa-file-code',
     'code-block': 'fas fa-file-code',
     'superscript': 'fas fa-superscript',
+    'align-left': 'fas fa-align-left',
+    'align-center': 'fas fa-align-center',
+    'align-right': 'fas fa-align-right',
+    'align-justify': 'fas fa-align-justify',
+    'align-unset': 'fas fa-text-slash'
+
 };
 
 export function getToolbarIcon(key) {

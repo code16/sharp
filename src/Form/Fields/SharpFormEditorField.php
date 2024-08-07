@@ -23,6 +23,11 @@ class SharpFormEditorField extends SharpFormField
 
     const B = 'bold';
     const I = 'italic';
+    const ALIGN_LEFT = 'align-left';
+    const ALIGN_CENTER = 'align-center';
+    const ALIGN_RIGHT = 'align-right';
+    const ALIGN_JUSTIFY = 'align-justify';
+    const ALIGN_UNSET = 'align-unset';
     const HIGHLIGHT = 'highlight';
     const SMALL = 'small';
     const UL = 'bullet-list';
