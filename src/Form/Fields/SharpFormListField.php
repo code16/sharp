@@ -14,7 +14,7 @@ class SharpFormListField extends SharpFormField
     protected bool $addable = false;
     protected bool $sortable = false;
     protected bool $removable = false;
-    protected string $addText = 'Add an item';
+    protected string $addText;
     protected string $itemIdAttribute = 'id';
     protected ?string $orderAttribute = null;
     protected ?int $maxItemCount = null;
@@ -177,16 +177,14 @@ class SharpFormListField extends SharpFormField
             'addable' => $this->addable,
             'removable' => $this->removable,
             'sortable' => $this->sortable,
-            'addText' => $this->addText,
+            'addText' => $this->addText ?? trans('sharp-front::form.list.add_button'),
             'collapsedItemTemplate' => $this->template('item'),
             'maxItemCount' => $this->maxItemCount,
             'bulkUploadField' => $this->allowBulkUpload ? $this->bulkUploadItemFieldKey : null,
             'bulkUploadLimit' => $this->bulkUploadFileCountLimit,
             'itemIdAttribute' => $this->itemIdAttribute,
             'itemFields' => collect($this->itemFields)
-                ->map(function ($field) {
-                    return $field->toArray();
-                })
+                ->map(fn ($field) => $field->toArray())
                 ->keyBy('key')
                 ->all(),
         ]);
