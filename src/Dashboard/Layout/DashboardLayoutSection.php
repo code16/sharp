@@ -13,6 +13,9 @@ class DashboardLayoutSection
     {
     }
 
+    /**
+     * @param  (\Closure(DashboardLayoutRow): mixed)  $callback
+     */
     final public function addRow(Closure $callback): self
     {
         $row = new DashboardLayoutRow();
