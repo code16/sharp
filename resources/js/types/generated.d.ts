@@ -116,11 +116,11 @@ export type EmbedFormData = {
   fields: { [key: string]: FormFieldData };
   layout: FormLayoutData;
 };
-export type EntityAuthorizationsData = {
+export type EntityListAuthorizationsData = {
   view: Array<number | string>;
-  update: Array<number | string>;
   delete: Array<number | string>;
   create: boolean;
+  reorder: boolean;
 };
 export type EntityListConfigData = {
   instanceIdAttribute: string;
@@ -137,7 +137,7 @@ export type EntityListConfigData = {
   state: EntityStateData | null;
 };
 export type EntityListData = {
-  authorizations: EntityAuthorizationsData;
+  authorizations: EntityListAuthorizationsData;
   config: EntityListConfigData;
   fields: Array<EntityListFieldData>;
   data: Array<{ [key: string]: any }>;
