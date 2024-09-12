@@ -11,7 +11,7 @@ use App\Sharp\Utils\Embeds\TableOfContentsEmbed;
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
-use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
+use Code16\Sharp\Form\Fields\SharpFormAutocompleteRemoteField;
 use Code16\Sharp\Form\Fields\SharpFormCheckField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
@@ -134,7 +134,7 @@ class PostForm extends SharpForm
                     ),
             )
             ->when(currentSharpRequest()->isUpdate(), fn ($formFields) => $formFields->addField(
-                SharpFormAutocompleteField::make('author_id', 'remote')
+                SharpFormAutocompleteRemoteField::make('author_id')
                     ->setReadOnly(! auth()->user()->isAdmin())
                     ->setLabel('Author')
                     ->setRemoteEndpoint('/api/admin/users')

@@ -1,25 +1,43 @@
 <?php
 
 use Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException;
-use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
+use Code16\Sharp\Form\Fields\SharpFormAutocompleteLocalField;
+use Code16\Sharp\Form\Fields\SharpFormAutocompleteRemoteField;
 
-it('sets default values', function () {
-    $localValues = [
+it('sets default values for local autocomplete', function () {
+    $defaultFormField = buildDefaultLocalAutocomplete([
         1 => 'bob',
-    ];
-
-    $defaultFormField = buildDefaultLocalAutocomplete($localValues);
+    ]);
 
     expect($defaultFormField->toArray())
         ->toEqual([
-            'key' => 'field', 'type' => 'autocomplete',
-            'mode' => 'local', 'searchKeys' => ['value'],
-            'remoteMethod' => 'GET', 'itemIdAttribute' => 'id',
+            'key' => 'field',
+            'type' => 'autocomplete',
+            'mode' => 'local',
+            'searchKeys' => ['value'],
+            'itemIdAttribute' => 'id',
             'listItemTemplate' => 'LIT-content',
             'resultItemTemplate' => 'RIT-content',
-            'searchMinChars' => 1, 'localValues' => [
+            'localValues' => [
                 ['id' => 1, 'label' => 'bob'],
             ],
+        ]);
+});
+
+it('sets default values for remote autocomplete', function () {
+    $defaultFormField = buildDefaultRemoteAutocomplete('/endpoint');
+
+    expect($defaultFormField->toArray())
+        ->toEqual([
+            'key' => 'field',
+            'type' => 'autocomplete',
+            'mode' => 'remote',
+            'remoteMethod' => 'GET',
+            'remoteEndpoint' => '/endpoint',
+            'itemIdAttribute' => 'id',
+            'listItemTemplate' => 'LIT-content',
+            'resultItemTemplate' => 'RIT-content',
+            'searchMinChars' => 1,
             'remoteSearchAttribute' => 'query',
             'dataWrapper' => '',
             'debounceDelay' => 300,
@@ -27,7 +45,7 @@ it('sets default values', function () {
 });
 
 it('allows to define remote attributes', function () {
-    $formField = SharpFormAutocompleteField::make('field', 'remote')
+    $formField = SharpFormAutocompleteRemoteField::make('field')
         ->setListItemTemplatePath('LIT.vue')
         ->setResultItemTemplatePath('RIT.vue')
         ->setRemoteMethodPOST()
@@ -67,7 +85,7 @@ it('allows to define_localValues_as_an_object_array', function () {
 });
 
 it('allows to define searchMinChars', function () {
-    $formField = buildDefaultLocalAutocomplete()
+    $formField = buildDefaultRemoteAutocomplete()
         ->setSearchMinChars(3);
 
     expect($formField->toArray())
@@ -75,7 +93,7 @@ it('allows to define searchMinChars', function () {
 });
 
 it('allows to define debounceDelay', function () {
-    $formField = buildDefaultLocalAutocomplete()
+    $formField = buildDefaultRemoteAutocomplete()
         ->setDebounceDelayInMilliseconds(500);
 
     expect($formField->toArray())
@@ -83,7 +101,7 @@ it('allows to define debounceDelay', function () {
 });
 
 it('allows to define setDataWrapper', function () {
-    $formField = buildDefaultLocalAutocomplete()
+    $formField = buildDefaultRemoteAutocomplete()
         ->setDataWrapper('test');
 
     expect($formField->toArray())
@@ -115,7 +133,7 @@ it('allows to define templateData', function () {
 it('disallows to define a remote autocomplete without remoteEndpoint', function () {
     $this->expectException(SharpFormFieldValidationException::class);
 
-    SharpFormAutocompleteField::make('field', 'remote')
+    SharpFormAutocompleteRemoteField::make('field')
         ->setListItemTemplatePath('LIT.vue')
         ->setResultItemTemplatePath('RIT.vue')
         ->toArray();
@@ -270,11 +288,11 @@ it('allows to define linked remote endpoint with multiple default value with dyn
         ]);
 });
 
-function buildDefaultLocalAutocomplete(?array $localValues = null): SharpFormAutocompleteField
+function buildDefaultLocalAutocomplete(?array $localValues = null): SharpFormAutocompleteLocalField
 {
     createFakeAutocompleteFieldTemplates();
 
-    return SharpFormAutocompleteField::make('field', 'local')
+    return SharpFormAutocompleteLocalField::make('field')
         ->setListItemTemplatePath('LIT.vue')
         ->setResultItemTemplatePath('RIT.vue')
         ->setLocalValues($localValues ?: [
@@ -282,17 +300,27 @@ function buildDefaultLocalAutocomplete(?array $localValues = null): SharpFormAut
         ]);
 }
 
-function buildDefaultDynamicRemoteAutocomplete(string $remoteEndpoint, array $defaultValues = []): SharpFormAutocompleteField
+function buildDefaultRemoteAutocomplete(string $remoteEndpoint = '/endpoint'): SharpFormAutocompleteRemoteField
 {
     createFakeAutocompleteFieldTemplates();
 
-    return SharpFormAutocompleteField::make('field', 'remote')
+    return SharpFormAutocompleteRemoteField::make('field')
+        ->setRemoteEndpoint($remoteEndpoint)
+        ->setListItemTemplatePath('LIT.vue')
+        ->setResultItemTemplatePath('RIT.vue');
+}
+
+function buildDefaultDynamicRemoteAutocomplete(string $remoteEndpoint, array $defaultValues = []): SharpFormAutocompleteRemoteField
+{
+    createFakeAutocompleteFieldTemplates();
+
+    return SharpFormAutocompleteRemoteField::make('field')
         ->setListItemTemplatePath('LIT.vue')
         ->setResultItemTemplatePath('RIT.vue')
         ->setDynamicRemoteEndpoint($remoteEndpoint, $defaultValues);
 }
 
-function createFakeAutocompleteFieldTemplates()
+function createFakeAutocompleteFieldTemplates(): void
 {
     @unlink(resource_path('views/LIT.vue'));
     @unlink(resource_path('views/RIT.vue'));
