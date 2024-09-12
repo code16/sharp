@@ -4,13 +4,12 @@ namespace App\Sharp\TestForm;
 
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
-use Code16\Sharp\Form\Fields\Formatters\TextFormatter;
-use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteListField;
+use Code16\Sharp\Form\Fields\SharpFormAutocompleteLocalField;
+use Code16\Sharp\Form\Fields\SharpFormAutocompleteRemoteField;
 use Code16\Sharp\Form\Fields\SharpFormCheckField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
-use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Fields\SharpFormGeolocationField;
 use Code16\Sharp\Form\Fields\SharpFormHtmlField;
 use Code16\Sharp\Form\Fields\SharpFormListField;
@@ -37,7 +36,7 @@ class TestForm extends SharpSingleForm
                     ->setLabel('Text'),
             )
             ->addField(
-                SharpFormAutocompleteField::make('autocomplete_local', 'local')
+                SharpFormAutocompleteLocalField::make('autocomplete_local')
                     ->setLocalized()
                     ->setLabel('Autocomplete local')
                     ->setLocalSearchKeys(['label'])
@@ -46,7 +45,7 @@ class TestForm extends SharpSingleForm
                     ->setLocalValues($this->options(true)),
             )
             ->addField(
-                SharpFormAutocompleteField::make('autocomplete_remote', 'remote')
+                SharpFormAutocompleteRemoteField::make('autocomplete_remote')
                     ->setLabel('Autocomplete remote')
                     ->setRemoteSearchAttribute('query')
                     ->setListItemInlineTemplate('{{name}}')
@@ -59,7 +58,7 @@ class TestForm extends SharpSingleForm
                     ->setAddable()
                     ->setRemovable()
                     ->setItemField(
-                        SharpFormAutocompleteField::make('item', 'remote')
+                        SharpFormAutocompleteRemoteField::make('item')
                             ->setLabel('Passenger')
                             ->setPlaceholder('test')
                             ->setListItemInlineTemplate('{{ name }}')

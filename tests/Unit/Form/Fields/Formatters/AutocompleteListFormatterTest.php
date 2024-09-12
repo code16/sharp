@@ -1,13 +1,13 @@
 <?php
 
 use Code16\Sharp\Form\Fields\Formatters\AutocompleteListFormatter;
-use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteListField;
+use Code16\Sharp\Form\Fields\SharpFormAutocompleteRemoteField;
 
 it('allows to format value to front', function () {
     $formatter = new AutocompleteListFormatter();
     $field = SharpFormAutocompleteListField::make('list')
-        ->setItemField(SharpFormAutocompleteField::make('item', 'remote')
+        ->setItemField(SharpFormAutocompleteRemoteField::make('item')
             ->setRemoteEndpoint('/endpoint'),
         );
 
@@ -28,7 +28,7 @@ it('allows to format value to front', function () {
 it('allows to format value from front', function () {
     $formatter = new AutocompleteListFormatter();
     $field = SharpFormAutocompleteListField::make('list')
-        ->setItemField(SharpFormAutocompleteField::make('item', 'remote')
+        ->setItemField(SharpFormAutocompleteRemoteField::make('item')
             ->setRemoteEndpoint('/endpoint'),
         );
 

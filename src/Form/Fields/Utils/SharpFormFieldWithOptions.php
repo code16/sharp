@@ -7,12 +7,7 @@ use Illuminate\Support\Collection;
 
 trait SharpFormFieldWithOptions
 {
-    /**
-     * @param  array|Collection  $options
-     * @param  string  $idAttribute
-     * @return array
-     */
-    protected static function formatOptions($options, string $idAttribute = 'id'): array
+    protected static function formatOptions(array|Collection $options, string $idAttribute = 'id'): array
     {
         if (! sizeof($options)) {
             return [];
@@ -28,19 +23,12 @@ trait SharpFormFieldWithOptions
 
         // Simple [key => value] array case
         return $options
-            ->map(function ($label, $id) {
-                return compact('id', 'label');
-            })
+            ->map(fn ($label, $id) => compact('id', 'label'))
             ->values()
             ->all();
     }
 
-    /**
-     * @param  array|Collection  $options
-     * @param  int  $depth
-     * @return array
-     */
-    protected static function formatDynamicOptions(&$options, int $depth): array
+    protected static function formatDynamicOptions(array|Collection &$options, int $depth): array
     {
         if (! sizeof($options)) {
             return [];
@@ -53,9 +41,7 @@ trait SharpFormFieldWithOptions
                 }
 
                 return collect($values)
-                    ->map(function ($label, $id) {
-                        return compact('id', 'label');
-                    })
+                    ->map(fn ($label, $id) => compact('id', 'label'))
                     ->values()
                     ->all();
             })
