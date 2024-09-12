@@ -8,9 +8,13 @@ it('sets only default values', function () {
 
     expect($formField->toArray())
         ->toEqual([
-            'key' => 'field', 'type' => 'list',
-            'addable' => false, 'removable' => false, 'sortable' => false,
-            'addText' => 'Add an item', 'itemIdAttribute' => 'id',
+            'key' => 'field',
+            'type' => 'list',
+            'addable' => false,
+            'removable' => false,
+            'sortable' => false,
+            'addText' => 'Add an item',
+            'itemIdAttribute' => 'id',
             'bulkUploadLimit' => 10,
             'itemFields' => [
                 'text' => [
