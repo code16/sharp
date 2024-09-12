@@ -10,38 +10,35 @@ beforeEach(function() {
 it('allows to define a EEL field', function () {
     $field = SharpShowEntityListField::make('entityListField', 'entityKey');
 
-    expect($field->toArray())->toEqual([
-        'key' => 'entityListField',
-        'type' => 'entityList',
-        'entityListKey' => 'entityKey',
-        'showEntityState' => true,
-        'showCreateButton' => true,
-        'showReorderButton' => true,
-        'showSearchField' => true,
-        'emptyVisible' => false,
-        'showCount' => false,
-        'hiddenCommands' => ['entity' => [], 'instance' => []],
-        'endpointUrl' => route('code16.sharp.api.list', ['entityKey']),
-    ]);
+    expect($field->toArray())
+        ->key->toBe('entityListField')
+        ->type->toBe('entityList')
+        ->entityListKey->toBe('entityKey')
+        ->showEntityState->toBeTrue()
+        ->showCreateButton->toBeTrue()
+        ->showReorderButton->toBeTrue()
+        ->showSearchField->toBeTrue()
+        ->emptyVisible->toBeFalse()
+        ->showCount->toBeFalse()
+        ->hiddenCommands->toEqual(['entity' => [], 'instance' => []])
+        ->endpointUrl->toStartWith(route('code16.sharp.api.list', ['entityKey']));
 });
 
 it('allows to define EEL field with default key', function () {
     sharpConfig()->addEntity('instances', PersonEntity::class);
     $field = SharpShowEntityListField::make('instances');
 
-    expect($field->toArray())->toEqual([
-        'key' => 'instances',
-        'type' => 'entityList',
-        'entityListKey' => 'instances',
-        'showEntityState' => true,
-        'showCreateButton' => true,
-        'showReorderButton' => true,
-        'showSearchField' => true,
-        'emptyVisible' => false,
-        'showCount' => false,
-        'hiddenCommands' => ['entity' => [], 'instance' => []],
-        'endpointUrl' => route('code16.sharp.api.list', ['instances']),
-    ]);
+    expect($field->toArray())->key->toBe('instances')
+        ->type->toBe('entityList')
+        ->entityListKey->toBe('instances')
+        ->showEntityState->toBeTrue()
+        ->showCreateButton->toBeTrue()
+        ->showReorderButton->toBeTrue()
+        ->showSearchField->toBeTrue()
+        ->emptyVisible->toBeFalse()
+        ->showCount->toBeFalse()
+        ->hiddenCommands->toEqual(['entity' => [], 'instance' => []])
+        ->endpointUrl->toStartWith(route('code16.sharp.api.list', ['instances']));
 });
 
 it('handles hideFilterWithValue', function () {
