@@ -44,7 +44,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
 }
 ```
 
-::: note
+::: info
 The `SharpServiceProvider` class is created bye the `sharp:install` artisan command; in case you don't have it, you can create it by yourself in the `App\Providers` namespace, or use the `sharp:make:provider` command.
 :::
 

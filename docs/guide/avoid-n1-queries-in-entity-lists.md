@@ -92,7 +92,7 @@ This `findCachedInstance()` method of the `CurrentSharpRequest` class will retri
 
 The `findCachedInstance()` takes a second argument: this is a callback that will be called only if the instance is not already in the cache, passing the instance id as parameter. This Closure must return the instance.
 
-::: 
+::: info
 Note that the cache set is automatic if you use the standard `->transform()` method. In case you don’t, you can still set it manually with the `->cacheInstances(?Collection $instances)` method of the `CurrentSharpRequest` class. 
 :::
 
