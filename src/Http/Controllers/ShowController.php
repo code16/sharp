@@ -8,7 +8,6 @@ use Code16\Sharp\Data\NotificationData;
 use Code16\Sharp\Data\Show\ShowData;
 use Code16\Sharp\Show\SharpSingleShow;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
-use Code16\Sharp\Utils\SharpBreadcrumb;
 use Inertia\Inertia;
 
 class ShowController extends SharpProtectedController
@@ -23,7 +22,7 @@ class ShowController extends SharpProtectedController
         parent::__construct();
     }
 
-    public function show(string $parentUri, string $entityKey, string $instanceId, SharpBreadcrumb $breadcrumb)
+    public function show(string $parentUri, string $entityKey, string $instanceId)
     {
         sharp_check_ability('view', $entityKey, $instanceId);
 
@@ -52,7 +51,7 @@ class ShowController extends SharpProtectedController
         ]);
         
         if ($breadcrumbAttr = $showData[$payload->config->breadcrumbAttribute] ?? false) {
-            $breadcrumb->setCurrentInstanceLabel($breadcrumbAttr);
+            sharp()->context()->breadcrumb()->setCurrentInstanceLabel($breadcrumbAttr);
         }
         
         $this->addPreloadHeadersForShowEntityLists($payload);
@@ -60,7 +59,7 @@ class ShowController extends SharpProtectedController
         return Inertia::render('Show/Show', [
             'show' => $payload,
             'breadcrumb' => BreadcrumbData::from([
-                'items' => $breadcrumb->getItems(),
+                'items' => sharp()->context()->breadcrumb()->allSegments(),
             ]),
             'notifications' => NotificationData::collection($this->getSharpNotifications()),
         ]);
@@ -74,6 +73,6 @@ class ShowController extends SharpProtectedController
 
         $show->delete($instanceId);
 
-        return redirect()->to($this->currentSharpRequest->getUrlOfPreviousBreadcrumbItem());
+        return redirect()->to(sharp()->context()->breadcrumb()->getUrlOfPreviousSegment());
     }
 }

@@ -33,7 +33,8 @@ class PostPolicy extends SharpEntityPolicy
 
     private function findPost($postId): ?Post
     {
-        return currentSharpRequest()
-            ->findCachedInstance($postId, fn ($postId) => Post::find($postId));
+        return sharp()
+            ->context()
+            ->findListInstance($postId, fn ($postId) => Post::find($postId));
     }
 }

@@ -69,7 +69,7 @@ function login(?User $user = null)
 {
     return test()->actingAs(
         $user ?: new User,
-        sharpConfig()->get('auth.guard') ?: 'web'
+        sharp()->config()->get('auth.guard') ?: 'web'
     );
 }
 

@@ -4,7 +4,7 @@ use Code16\Sharp\Show\Fields\SharpShowEntityListField;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 
 beforeEach(function() {
-    sharpConfig()->addEntity('entityKey', PersonEntity::class);
+    sharp()->config()->addEntity('entityKey', PersonEntity::class);
 });
 
 it('allows to define a EEL field', function () {
@@ -25,7 +25,7 @@ it('allows to define a EEL field', function () {
 });
 
 it('allows to define EEL field with default key', function () {
-    sharpConfig()->addEntity('instances', PersonEntity::class);
+    sharp()->config()->addEntity('instances', PersonEntity::class);
     $field = SharpShowEntityListField::make('instances');
 
     expect($field->toArray())->key->toBe('instances')

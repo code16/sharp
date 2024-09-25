@@ -7,7 +7,7 @@ use Inertia\Testing\AssertableInertia as Assert;
 beforeEach(function () {
     login();
 
-    sharpConfig()->addGlobalFilter(
+    sharp()->config()->addGlobalFilter(
         new class extends GlobalRequiredFilter
         {
             public function buildFilterConfig(): void
@@ -39,7 +39,7 @@ it('allows to user to update a global filter', function () {
         ->post(route('code16.sharp.filters.update', 'test'), ['value' => 1])
         ->assertRedirect(route('code16.sharp.home'));
 
-    $this->assertEquals(1, currentSharpRequest()->globalFilterFor('test'));
+    $this->assertEquals(1, sharp()->context()->globalFilterValue('test'));
 });
 
 it('sets to global filter to the default value if missing', function () {
@@ -47,7 +47,7 @@ it('sets to global filter to the default value if missing', function () {
         ->post(route('code16.sharp.filters.update', 'test'))
         ->assertRedirect(route('code16.sharp.home'));
 
-    $this->assertEquals(2, currentSharpRequest()->globalFilterFor('test'));
+    $this->assertEquals(2, sharp()->context()->globalFilterValue('test'));
 });
 
 it('does not allow to set a global filter to an unexpected value', function () {
@@ -55,11 +55,11 @@ it('does not allow to set a global filter to an unexpected value', function () {
         ->post(route('code16.sharp.filters.update', 'test'), ['value' => 4])
         ->assertRedirect(route('code16.sharp.home'));
 
-    $this->assertEquals(2, currentSharpRequest()->globalFilterFor('test'));
+    $this->assertEquals(2, sharp()->context()->globalFilterValue('test'));
 });
 
 it('the current value of the global filter is sent with every inertia request', function () {
-    sharpConfig()->addEntity('person', PersonEntity::class);
+    sharp()->config()->addEntity('person', PersonEntity::class);
 
     $this
         ->get('/sharp/s-list/person')

@@ -133,7 +133,7 @@ class PostForm extends SharpForm
                             ->addConditionalDisplay('!is_link'),
                     ),
             )
-            ->when(currentSharpRequest()->isUpdate(), fn ($formFields) => $formFields->addField(
+            ->when(sharp()->context()->isUpdate(), fn ($formFields) => $formFields->addField(
                 SharpFormAutocompleteRemoteField::make('author_id')
                     ->setReadOnly(! auth()->user()->isAdmin())
                     ->setLabel('Author')
@@ -153,7 +153,7 @@ class PostForm extends SharpForm
                         $column
                             ->withField('title')
                             ->when(
-                                currentSharpRequest()->isUpdate(),
+                                sharp()->context()->isUpdate(),
                                 fn ($column) => $column->withField('author_id')
                             )
                             ->withFields('published_at', 'categories')
@@ -217,7 +217,7 @@ class PostForm extends SharpForm
             ->ignore(auth()->user()->isAdmin() ? [] : ['author_id'])
             ->save($post, $data);
 
-        if (currentSharpRequest()->isCreation()) {
+        if (sharp()->context()->isCreation()) {
             $this->notify('Your post was created, but not published yet.');
         }
 

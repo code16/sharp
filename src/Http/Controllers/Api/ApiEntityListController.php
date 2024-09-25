@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Http\Controllers\Api;
 
+use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Exceptions\SharpInvalidEntityKeyException;
 use Code16\Sharp\Exceptions\SharpMethodNotImplementedException;
 
@@ -32,7 +33,7 @@ class ApiEntityListController extends ApiController
         sharp_check_ability('delete', $entityKey, $instanceId);
 
         $impl = $this->getListInstance($entityKey);
-        if (! is_method_implemented_in_concrete_class($impl, 'delete')) {
+        if (! self::isDeleteMethodImplementedInConcreteClass($impl)) {
             // Try to delete from Show Page
             try {
                 $impl = $this->getShowInstance($entityKey);
@@ -47,5 +48,17 @@ class ApiEntityListController extends ApiController
         return response()->json([
             'ok' => true,
         ]);
+    }
+
+    private static function isDeleteMethodImplementedInConcreteClass(SharpEntityList $impl): bool
+    {
+        try {
+            $foo = new \ReflectionMethod(get_class($impl), 'delete');
+            $declaringClass = $foo->getDeclaringClass()->getName();
+
+            return $foo->getPrototype()->getDeclaringClass()->getName() !== $declaringClass;
+        } catch (\ReflectionException) {
+            return false;
+        }
     }
 }

@@ -31,7 +31,7 @@ class TestCase extends Orchestra
         config()->set('database.default', 'testing');
 
         // We have to set these two because otherwise corresponding routes won't be loaded at all
-        sharpConfig()
+        sharp()->config()
             ->enableForgottenPassword()
             ->enableImpersonation();
     }

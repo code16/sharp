@@ -11,7 +11,7 @@ class SharpProtectedController extends Controller
 
     public function __construct()
     {
-        $guardSuffix = sharpConfig()->get('auth.guard') ? ':'.sharpConfig()->get('auth.guard') : '';
+        $guardSuffix = sharp()->config()->get('auth.guard') ? ':'.sharp()->config()->get('auth.guard') : '';
         $this->middleware('sharp_auth'.$guardSuffix);
         $this->currentSharpRequest = app(CurrentSharpRequest::class);
     }

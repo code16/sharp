@@ -15,8 +15,8 @@ it('sets only default values', function () {
             'imageTransformKeepOriginal' => true,
             'storageBasePath' => 'data',
             'storageDisk' => 'local',
-            'maxFileSize' => sharpConfig()->get('uploads.max_file_size'),
-            'validationRule' => ['file', 'max:'.sharpConfig()->get('uploads.max_file_size') * 1024],
+            'maxFileSize' => sharp()->config()->get('uploads.max_file_size'),
+            'validationRule' => ['file', 'max:'.sharp()->config()->get('uploads.max_file_size') * 1024],
         ]);
 });
 
@@ -46,7 +46,7 @@ it('allows to define transformKeepOriginal with transformable', function () {
 });
 
 it('allows to define transformKeepOriginal with config', function () {
-    sharpConfig()->configureUploads(
+    sharp()->config()->configureUploads(
         keepOriginalImageOnTransform: false
     );
 

@@ -5,7 +5,7 @@ use Code16\Sharp\Tests\Fixtures\Person;
 use Illuminate\Support\Facades\Storage;
 
 beforeEach(function () {
-//    sharpConfig()->configureUploadsThumbnailCreation(
+//    sharp()->config()->configureUploadsThumbnailCreation(
 //        thumbnailsDisk: 'public',
 //        thumbnailsDir: 'thumbnails',
 //    );

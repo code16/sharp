@@ -6,7 +6,7 @@ use Code16\Sharp\Tests\Unit\Form\Eloquent\Uploads\Transformers\Fakes\FakePictura
 use Illuminate\Support\Facades\Storage;
 
 beforeEach(function () {
-//    sharpConfig()->configureUploadsThumbnailCreation(
+//    sharp()->config()->configureUploadsThumbnailCreation(
 //        thumbnailsDisk: 'public',
 //        thumbnailsDir: 'thumbnails',
 //    );

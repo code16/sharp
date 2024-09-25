@@ -28,8 +28,8 @@ class ApiFormUploadController extends Controller
         ]);
 
         $file = request()->file('file');
-        $baseDir = sharpConfig()->get('uploads.tmp_dir');
-        $baseDisk = sharpConfig()->get('uploads.tmp_disk');
+        $baseDir = sharp()->config()->get('uploads.tmp_dir');
+        $baseDisk = sharp()->config()->get('uploads.tmp_disk');
 
         $filename = $fileUtil->findAvailableName(
             $file->getClientOriginalName(),
