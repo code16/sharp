@@ -273,7 +273,6 @@ class SharpBreadcrumb
 
     protected function getSegmentsFromRequest(): Collection
     {
-        dd('nooooo');
         if (request()->wantsJson() || request()->segment(2) === 'api') {
             // API case: we use the X-Current-Page-Url header sent by the front
             // for preloaded EEL we look for 'current_page_url' query

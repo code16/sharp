@@ -11,14 +11,11 @@ trait HandlesFiltersInSession
     {
         return $this->getFilterHandlers()
             ->flatten()
-            ->filter(function (Filter $handler) {
-                return $this->isRetainedFilter($handler);
-            })
-            ->mapWithKeys(function (Filter $handler) {
-                return [
-                    $handler->getKey() => $handler->fromQueryParam(session("_sharp_retained_filter_{$handler->getKey()}")),
-                ];
-            });
+            ->filter(fn (Filter $handler) => $this->isRetainedFilter($handler))
+            ->mapWithKeys(fn (Filter $handler) => [
+                $handler->getKey() => $handler
+                    ->fromQueryParam(session('_sharp_retained_filter_' . $handler->getKey()))
+            ]);
     }
     
     /**
@@ -31,18 +28,16 @@ trait HandlesFiltersInSession
         $this->getFilterHandlers()
             ->flatten()
             // Only filters sent which are declared "retained"
-            ->filter(function (Filter $handler) {
-                return $handler->isRetainInSession();
-            })
+            ->filter(fn (Filter $handler) => $handler->isRetainInSession())
             ->each(function (Filter $handler) use ($filterValues) {
                 $value = $handler->toQueryParam($filterValues[$handler->getKey()] ?? null);
                 
                 if ($value === null || $value === '') {
                     // No value, we have to unset the retained value
-                    session()->forget("_sharp_retained_filter_{$handler->getKey()}");
+                    session()->forget('_sharp_retained_filter_' . $handler->getKey());
                 } else {
                     session()->put(
-                        "_sharp_retained_filter_{$handler->getKey()}",
+                        '_sharp_retained_filter_' . $handler->getKey(),
                         $value,
                     );
                 }
@@ -54,6 +49,6 @@ trait HandlesFiltersInSession
     public function isRetainedFilter(Filter $handler): bool
     {
         return $handler->isRetainInSession()
-            && session()->has("_sharp_retained_filter_{$handler->getKey()}");
+            && session()->has('_sharp_retained_filter_' . $handler->getKey());
     }
 }

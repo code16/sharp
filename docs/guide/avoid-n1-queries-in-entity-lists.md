@@ -66,9 +66,9 @@ Nothing fancy here: if we are an admin, we can update and preview any post; if w
 Notice that this is written in a way which prevents any query to be executed in the "admin" case, which is a good thing for performance; but it can hide the fact that all non-admins will face a different case: they will query the same instance twice per row + one time for the list query itself.
 
 
-## Leveraging Sharp’s request cache to avoid this
+## Leveraging Sharp’s instances list cache to avoid this
 
-Here’s how we can rewrite the PostPolicy to avoid this:
+Here’s how we can rewrite the `PostPolicy` to avoid this:
 
 ```php
 class PostPolicy extends SharpEntityPolicy
@@ -88,7 +88,7 @@ class PostPolicy extends SharpEntityPolicy
 
 The same should be done for the `PreviewPostCommand`.
 
-This `findListInstance()` method in the `sharp()->context()` helper class will retrieve the instance from a cache that was automatically set by Sharp when calling `$this->transform($posts)`, in `PostList::getListData()`. 
+This `findListInstance()` method in the `sharp()->context()` helper class (see [context documentation](context.md)) will retrieve the instance from a cache that was automatically set by Sharp when calling `$this->transform($posts)`, in `PostList::getListData()`. 
 
 The `findListInstance()` takes a second argument: this is a callback that will be called only if the instance is not already in the cache, passing the instance id as parameter. This Closure must return the instance.
 

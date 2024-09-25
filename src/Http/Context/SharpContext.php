@@ -23,9 +23,13 @@ class SharpContext
         return $handler->currentValue();
     }
 
-    public function retainedFilterValue()
+    public function retainedFilterValue(string $handlerClassOrKey): array|string|null
     {
+        $key = class_exists($handlerClassOrKey)
+            ? app($handlerClassOrKey)->getKey()
+            : $handlerClassOrKey;
 
+        return session()->get('_sharp_retained_filter_' . $key);
     }
 
     public function breadcrumb(): SharpBreadcrumb

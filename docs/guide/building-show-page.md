@@ -323,8 +323,8 @@ class ProductSharpForm extends SharpForm
         $product = $id ? Product::findOrFail($id) : new Product;
         $product = $this->save($product, $data);
         
-        if(currentSharpRequest()->isCreation()) {
-              Order::findOrFail(currentSharpRequest()->getPreviousShowFromBreadcrumbItems()->instanceId())
+        if (sharp()->context()->isCreation()) {
+              Order::findOrFail(sharp()->context()->previousShowSegment()->instanceId())
                   ->products()
                   ->attach($product->id);
         }

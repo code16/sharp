@@ -215,12 +215,12 @@ $column->withListField('pictures', function (FormLayoutColumn $listItem) {
 
 #### Conditions
 
-Since layout classes apply Laravel's `Conditionable` trait, you can use the `when()` method to conditionally display a column:
+Since layout classes apply Laravel’s `Conditionable` trait, you can use the `when()` method to conditionally display a column:
 
 ```php
 $column
 	->withField('title')
-	->when(currentSharpRequest()->isUpdate(), function (FormLayoutColumn $column) {
+	->when(sharp()->context()->isUpdate(), function (FormLayoutColumn $column) {
 		$column->withField('author');
 	});
 ```
