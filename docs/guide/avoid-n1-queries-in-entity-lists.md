@@ -79,8 +79,8 @@ class PostPolicy extends SharpEntityPolicy
             return true;
         }
         
-        return currentSharpRequest()
-            ->findCachedInstance($postId, fn($postId) => Post::find($postId))
+        return sharp()->context()
+            ->findListInstance($postId, fn($postId) => Post::find($postId))
             ->author_id === auth()->id();
     }
 }
@@ -88,12 +88,12 @@ class PostPolicy extends SharpEntityPolicy
 
 The same should be done for the `PreviewPostCommand`.
 
-This `findCachedInstance()` method of the `CurrentSharpRequest` class will retrieve the instance from a cache that was automatically set by Sharp when calling `$this->transform($posts)`, in `PostList::getListData()`. 
+This `findListInstance()` method in the `sharp()->context()` helper class will retrieve the instance from a cache that was automatically set by Sharp when calling `$this->transform($posts)`, in `PostList::getListData()`. 
 
-The `findCachedInstance()` takes a second argument: this is a callback that will be called only if the instance is not already in the cache, passing the instance id as parameter. This Closure must return the instance.
+The `findListInstance()` takes a second argument: this is a callback that will be called only if the instance is not already in the cache, passing the instance id as parameter. This Closure must return the instance.
 
 ::: info
-Note that the cache set is automatic if you use the standard `->transform()` method. In case you don’t, you can still set it manually with the `->cacheInstances(?Collection $instances)` method of the `CurrentSharpRequest` class. 
+Note that the cache set is automatic if you use the standard `->transform()` method. In case you don’t, you can still set it manually calling `sharp()->context()->cacheInstances(?Collection $instances)`. 
 :::
 
 With this quite simple trick you can avoid a lot of useless queries and improve the performance of your Entity Lists.

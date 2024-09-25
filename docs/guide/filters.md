@@ -333,7 +333,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
 Finally, to get the actual value of the filter on your Entity List, Show Page or Form classes, you must use the context:
 
 ```php
-currentSharpRequest()->globalFilterFor(OrganizationGlobalFilter::class)
+sharp()->context()->globalFilterValue(OrganizationGlobalFilter::class)
 ```
 
 The usage of Sharp Context is [detailed here](context.md).

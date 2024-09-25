@@ -3,12 +3,13 @@
 namespace Code16\Sharp\Http\Context;
 
 use Code16\Sharp\Http\Context\Util\BreadcrumbItem;
-use Code16\Sharp\Utils\Filters\GlobalFilters;
-use Code16\Sharp\Utils\Filters\GlobalRequiredFilter;
 use Code16\Sharp\Utils\Menu\SharpMenuManager;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
+/**
+ * @deprecated use sharp()->request() and sharp()->context() instead
+ */
 class CurrentSharpRequest
 {
     protected ?Collection $breadcrumb = null;
@@ -158,13 +159,7 @@ class CurrentSharpRequest
 
     final public function globalFilterFor(string $handlerClassOrKey): array|string|null
     {
-        $handler = class_exists($handlerClassOrKey)
-            ? app($handlerClassOrKey)
-            : app(GlobalFilters::class)->findFilter($handlerClassOrKey);
-
-        abort_if(! $handler instanceof GlobalRequiredFilter, 404);
-
-        return $handler->currentValue();
+        return sharp()->context()->globalFilterValue($handlerClassOrKey);
     }
 
     private function buildBreadcrumb(): void
