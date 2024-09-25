@@ -11,7 +11,7 @@ beforeEach(function () {
 });
 
 it('updates the state of an instance from a show and return a "refresh" action by default', function () {
-    sharpConfig()->addEntity('person', PersonEntity::class);
+    sharp()->config()->addEntity('person', PersonEntity::class);
 
     fakeShowFor('person', new class extends PersonShow
     {
@@ -49,7 +49,7 @@ it('updates the state of an instance from a show and return a "refresh" action b
 });
 
 it('allows to update the state of an instance from a single show', function () {
-    sharpConfig()->addEntity('person', SinglePersonEntity::class);
+    sharp()->config()->addEntity('person', SinglePersonEntity::class);
 
     fakeShowFor('person', new class extends SinglePersonShow
     {

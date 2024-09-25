@@ -10,7 +10,7 @@ final class GlobalFilters implements Arrayable
 
     public function getFilters(): array
     {
-        return sharpConfig()->get('global_filters');
+        return sharp()->config()->get('global_filters');
     }
 
     public function isEnabled(): bool

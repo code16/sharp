@@ -10,9 +10,9 @@ class SharpEntityManager
     {
         $entityKey = sharp_normalize_entity_key($entityKey)[0];
 
-        if (count(sharpConfig()->get('entities')) > 0) {
-            $entity = sharpConfig()->get('entities.'.$entityKey) ?: sharpConfig()->get('dashboards.'.$entityKey);
-        } elseif ($sharpEntityResolver = sharpConfig()->get('entity_resolver')) {
+        if (count(sharp()->config()->get('entities')) > 0) {
+            $entity = sharp()->config()->get('entities.'.$entityKey) ?: sharp()->config()->get('dashboards.'.$entityKey);
+        } elseif ($sharpEntityResolver = sharp()->config()->get('entity_resolver')) {
             // A custom SharpEntityResolver is used (this is deprecated in 9.x)
             if (!app()->bound($sharpEntityResolver)) {
                 app()->singleton($sharpEntityResolver, $sharpEntityResolver);

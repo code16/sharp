@@ -25,7 +25,7 @@ class SharpBreadcrumb
 
     public function getItems(): array
     {
-        $url = sharpConfig()->get('custom_url_segment');
+        $url = sharp()->config()->get('custom_url_segment');
         $breadcrumb = $this->currentSharpRequest->breadcrumb();
 
         return $breadcrumb
@@ -39,7 +39,7 @@ class SharpBreadcrumb
 
                 return [
                     'type' => $this->getFrontTypeNameFor($item->type),
-                    'label' => sharpConfig()->get('display_breadcrumb')
+                    'label' => sharp()->config()->get('display_breadcrumb')
                         ? $this->getBreadcrumbLabelFor($item, $isLeaf)
                         : '',
                     'documentTitleLabel' => $this->getDocumentTitleLabelFor($item, $isLeaf),

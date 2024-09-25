@@ -7,7 +7,7 @@ use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
 use Illuminate\Contracts\Support\Arrayable;
 
 beforeEach(function () {
-    sharpConfig()->addEntity('person', PersonEntity::class);
+    sharp()->config()->addEntity('person', PersonEntity::class);
     login();
 });
 

@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Http\Context;
 
-use Closure;
 use Code16\Sharp\Http\Context\Util\BreadcrumbItem;
 use Code16\Sharp\Utils\Filters\GlobalFilters;
 use Code16\Sharp\Utils\Filters\GlobalRequiredFilter;
@@ -13,8 +12,7 @@ use Illuminate\Support\Str;
 class CurrentSharpRequest
 {
     protected ?Collection $breadcrumb = null;
-    private Collection $cachedInstances;
-    
+
     public const CURRENT_PAGE_URL_HEADER = 'X-Current-Page-Url';
 
     public function breadcrumb(): Collection
@@ -68,7 +66,7 @@ class CurrentSharpRequest
         return url(
             sprintf(
                 '%s/%s',
-                sharpConfig()->get('custom_url_segment'),
+                sharp()->config()->get('custom_url_segment'),
                 $breadcrumb
                     ->map(fn (BreadcrumbItem $item) => $item->toUri())
                     ->implode('/'),
@@ -169,22 +167,6 @@ class CurrentSharpRequest
         return $handler->currentValue();
     }
 
-    final public function cacheInstances(?Collection $instances): self
-    {
-        $this->cachedInstances = $instances ?: collect();
-
-        return $this;
-    }
-
-    final public function findCachedInstance($instanceId, Closure $notFoundCallback): mixed
-    {
-        if (isset($this->cachedInstances)) {
-            $instance = $this->cachedInstances[$instanceId] ?? null;
-        }
-
-        return $instance ?? $notFoundCallback($instanceId);
-    }
-
     private function buildBreadcrumb(): void
     {
         $this->breadcrumb = new Collection();
@@ -232,7 +214,7 @@ class CurrentSharpRequest
 
             return collect(explode('/', parse_url($urlToParse)['path']))
                 ->filter(fn (string $segment) => strlen(trim($segment))
-                    && $segment !== sharpConfig()->get('custom_url_segment')
+                    && $segment !== sharp()->config()->get('custom_url_segment')
                 )
                 ->values();
         }

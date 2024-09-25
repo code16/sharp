@@ -175,7 +175,7 @@ trait SharpAssertions
 
     public function loginAsSharpUser($user): self
     {
-        return $this->actingAs($user, sharpConfig()->get('auth.guard') ?: config('auth.defaults.guard'));
+        return $this->actingAs($user, sharp()->config()->get('auth.guard') ?: config('auth.defaults.guard'));
     }
 
     private function buildCurrentPageUrl(...$breadcrumbItems): string
@@ -183,7 +183,7 @@ trait SharpAssertions
         return url(
             sprintf(
                 '/%s/%s',
-                sharpConfig()->get('custom_url_segment'),
+                sharp()->config()->get('custom_url_segment'),
                 $this->buildCurrentParentUri(...$breadcrumbItems)
             )
         );

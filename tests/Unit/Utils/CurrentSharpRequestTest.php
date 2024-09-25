@@ -18,7 +18,7 @@ it('allows to get form update state from request', function () {
 it('allows to get form creation state from request', function () {
     // We have to define "child" as a non-single form
     app()->bind('child_entity', fn () => new class extends SharpEntity {});
-    sharpConfig()->addEntity('child', 'child_entity');
+    sharp()->config()->addEntity('child', 'child_entity');
 
     $this->fakeCurrentSharpRequestWithUrl('/sharp/s-list/person/s-show/person/1/s-form/child');
 

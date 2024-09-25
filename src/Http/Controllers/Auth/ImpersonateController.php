@@ -13,7 +13,7 @@ class ImpersonateController extends Controller
 {
     public function __construct()
     {
-        $guardSuffix = sharpConfig()->get('auth.guard') ? ':'.sharpConfig()->get('auth.guard') : '';
+        $guardSuffix = sharp()->config()->get('auth.guard') ? ':'.sharp()->config()->get('auth.guard') : '';
         $this->middleware('sharp_guest'.$guardSuffix);
     }
 
@@ -28,7 +28,7 @@ class ImpersonateController extends Controller
 
     public function store(ImpersonateRequest $request): RedirectResponse
     {
-        auth(sharpConfig()->get('auth.guard'))
+        auth(sharp()->config()->get('auth.guard'))
             ->loginUsingId($request->input('user_id'));
 
         $request->session()->regenerate();

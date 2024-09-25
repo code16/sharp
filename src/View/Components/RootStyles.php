@@ -14,7 +14,7 @@ class RootStyles extends Component
 
     public function __construct()
     {
-        $this->primaryColor = sharpConfig()->get('theme.primary_color');
+        $this->primaryColor = sharp()->config()->get('theme.primary_color');
         $this->primaryColorHSL = Colors::hexToHsl($this->primaryColor);
         $this->primaryColorLuminosity = Colors::luminosity($this->primaryColor);
     }

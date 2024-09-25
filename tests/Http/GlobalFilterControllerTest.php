@@ -7,7 +7,7 @@ use Inertia\Testing\AssertableInertia as Assert;
 beforeEach(function () {
     login();
 
-    sharpConfig()->addGlobalFilter(
+    sharp()->config()->addGlobalFilter(
         new class extends GlobalRequiredFilter
         {
             public function buildFilterConfig(): void
@@ -59,7 +59,7 @@ it('does not allow to set a global filter to an unexpected value', function () {
 });
 
 it('the current value of the global filter is sent with every inertia request', function () {
-    sharpConfig()->addEntity('person', PersonEntity::class);
+    sharp()->config()->addEntity('person', PersonEntity::class);
 
     $this
         ->get('/sharp/s-list/person')

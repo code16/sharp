@@ -26,7 +26,7 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
         if ($value['uploaded'] ?? false) {
             $uploadedFieldRelativePath = sprintf(
                 '%s/%s',
-                sharpConfig()->get('uploads.tmp_dir'),
+                sharp()->config()->get('uploads.tmp_dir'),
                 $value['name'],
             );
 
@@ -38,9 +38,9 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
                         $value['name'], $field->storageBasePath(), $field->storageDisk(),
                     )
                 ),
-                'size' => Storage::disk(sharpConfig()->get('uploads.tmp_disk'))
+                'size' => Storage::disk(sharp()->config()->get('uploads.tmp_disk'))
                     ->size($uploadedFieldRelativePath),
-                'mime_type' => Storage::disk(sharpConfig()->get('uploads.tmp_disk'))
+                'mime_type' => Storage::disk(sharp()->config()->get('uploads.tmp_disk'))
                     ->mimeType($uploadedFieldRelativePath),
                 'disk' => $field->storageDisk(),
                 'filters' => $field->isImageTransformOriginal()

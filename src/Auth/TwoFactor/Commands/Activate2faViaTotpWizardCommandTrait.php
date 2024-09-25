@@ -42,8 +42,8 @@ trait Activate2faViaTotpWizardCommandTrait
                 'required',
                 'string',
                 function (string $attribute, mixed $value, Closure $fail) {
-                    $loginAttr = sharpConfig()->get('auth.login_attribute');
-                    $passwordAttr = sharpConfig()->get('auth.password_attribute');
+                    $loginAttr = sharp()->config()->get('auth.login_attribute');
+                    $passwordAttr = sharp()->config()->get('auth.password_attribute');
 
                     $credentials = [
                         $loginAttr => auth()->user()->$loginAttr,
