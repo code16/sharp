@@ -7,7 +7,6 @@ use Code16\Sharp\Data\BreadcrumbData;
 use Code16\Sharp\Data\Form\FormData;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Form\SharpSingleForm;
-use Code16\Sharp\Http\Context\SharpBreadcrumb;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Uploads\SharpUploadManager;
 use Inertia\Inertia;
@@ -46,7 +45,7 @@ class FormController extends SharpProtectedController
         return Inertia::render('Form/Form', [
             'form' => FormData::from($data),
             'breadcrumb' => BreadcrumbData::from([
-                'items' => app(SharpBreadcrumb::class)->allSegments($data),
+                'items' => sharp()->context()->breadcrumb()->allSegments(),
             ]),
         ]);
     }
@@ -75,7 +74,7 @@ class FormController extends SharpProtectedController
         return Inertia::render('Form/Form', [
             'form' => FormData::from($data),
             'breadcrumb' => BreadcrumbData::from([
-                'items' => app(SharpBreadcrumb::class)->allSegments($data),
+                'items' => sharp()->context()->breadcrumb()->allSegments(),
             ]),
         ]);
     }

@@ -2,17 +2,17 @@
 
 namespace Code16\Sharp\Tests\Unit\Utils;
 
-use Code16\Sharp\Http\Context\CurrentSharpRequest;
+use Code16\Sharp\Http\Context\SharpBreadcrumb;
 use Illuminate\Support\Collection;
 
-trait FakesCurrentSharpRequest
+trait FakesBreadcrumb
 {
-    protected function fakeCurrentSharpRequestWithUrl(string $url): void
+    protected function fakeBreadcrumbWithUrl(string $url): void
     {
         app()->bind(
-            CurrentSharpRequest::class,
+            SharpBreadcrumb::class,
             function () use ($url) {
-                return new class($url) extends CurrentSharpRequest
+                return new class($url) extends SharpBreadcrumb
                 {
                     public string $url;
 

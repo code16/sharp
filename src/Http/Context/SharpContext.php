@@ -12,11 +12,6 @@ class SharpContext
     private Collection $cachedListInstances;
     private SharpBreadcrumb $breadcrumb;
 
-    public function __construct()
-    {
-        $this->breadcrumb = new SharpBreadcrumb();
-    }
-
     public function globalFilterValue(string $handlerClassOrKey): array|string|null
     {
         $handler = class_exists($handlerClassOrKey)
@@ -35,6 +30,10 @@ class SharpContext
 
     public function breadcrumb(): SharpBreadcrumb
     {
+        if (!isset($this->breadcrumb)) {
+            $this->breadcrumb = app(SharpBreadcrumb::class);
+        }
+
         return $this->breadcrumb;
     }
 

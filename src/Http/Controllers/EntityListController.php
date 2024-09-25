@@ -7,7 +7,6 @@ use Code16\Sharp\Data\BreadcrumbData;
 use Code16\Sharp\Data\EntityList\EntityListData;
 use Code16\Sharp\Data\NotificationData;
 use Code16\Sharp\Exceptions\SharpInvalidConfigException;
-use Code16\Sharp\Http\Context\SharpBreadcrumb;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Inertia\Inertia;
 
@@ -22,7 +21,7 @@ class EntityListController extends SharpProtectedController
         parent::__construct();
     }
 
-    public function show(string $entityKey, SharpBreadcrumb $breadcrumb)
+    public function show(string $entityKey)
     {
         sharp_check_ability('entity', $entityKey);
 
@@ -61,7 +60,7 @@ class EntityListController extends SharpProtectedController
         return Inertia::render('EntityList/EntityList', [
             'entityList' => EntityListData::from($data),
             'breadcrumb' => BreadcrumbData::from([
-                'items' => $breadcrumb->allSegments(),
+                'items' => sharp()->context()->breadcrumb()->allSegments(),
             ]),
             'notifications' => NotificationData::collection($this->getSharpNotifications()),
         ]);
