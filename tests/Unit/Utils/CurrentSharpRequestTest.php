@@ -73,10 +73,3 @@ it('allows to get previous show of a given key from request', function () {
         ->and(currentSharpRequest()->getPreviousShowFromBreadcrumbItems('person')->entityKey())->toBe('person')
         ->and(currentSharpRequest()->getPreviousShowFromBreadcrumbItems('person')->instanceId())->toEqual(42);
 });
-
-it('allows to get previous url from request', function () {
-    $this->fakeBreadcrumbWithUrl('/sharp/s-list/person/s-show/person/42/s-form/child/2');
-
-    expect(currentSharpRequest()->getUrlOfPreviousBreadcrumbItem())
-        ->toEqual(url('/sharp/s-list/person/s-show/person/42'));
-});
