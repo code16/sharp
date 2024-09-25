@@ -1,6 +1,5 @@
 <?php
 
-use Code16\Sharp\Http\Context\CurrentSharpRequest;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Entities\SinglePersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonShow;
@@ -19,10 +18,8 @@ it('builds the breadcrumb for an entity list', function () {
         ->get(route('code16.sharp.list', ['person']))
         ->assertOk();
 
-    $currentRequest = app(CurrentSharpRequest::class);
-
-    expect($currentRequest->isEntityList())->toBeTrue()
-        ->and($currentRequest->breadcrumb())->toHaveCount(1);
+    expect(sharp()->context()->isEntityList())->toBeTrue()
+        ->and(sharp()->context()->breadcrumb()->allSegments())->toHaveCount(1);
 });
 
 it('builds the breadcrumb for a show page', function () {
@@ -36,10 +33,8 @@ it('builds the breadcrumb for a show page', function () {
         )
         ->assertOk();
 
-    $currentRequest = app(CurrentSharpRequest::class);
-
-    expect($currentRequest->isShow())->toBeTrue()
-        ->and($currentRequest->breadcrumb())->toHaveCount(2);
+    expect(sharp()->context()->isShow())->toBeTrue()
+        ->and(sharp()->context()->breadcrumb()->allSegments())->toHaveCount(2);
 });
 
 it('builds the breadcrumb for a single show page', function () {
@@ -49,10 +44,8 @@ it('builds the breadcrumb for a single show page', function () {
         ->get(route('code16.sharp.single-show', 'single-person'))
         ->assertOk();
 
-    $currentRequest = app(CurrentSharpRequest::class);
-
-    expect($currentRequest->isShow())->toBeTrue()
-        ->and($currentRequest->breadcrumb())->toHaveCount(1);
+    expect(sharp()->context()->isShow())->toBeTrue()
+        ->and(sharp()->context()->breadcrumb()->allSegments())->toHaveCount(1);
 });
 
 it('builds the breadcrumb for a form', function () {
@@ -66,10 +59,8 @@ it('builds the breadcrumb for a form', function () {
         )
         ->assertOk();
 
-    $currentRequest = app(CurrentSharpRequest::class);
-
-    expect($currentRequest->isForm())->toBeTrue()
-        ->and($currentRequest->breadcrumb())->toHaveCount(2);
+    expect(sharp()->context()->isForm())->toBeTrue()
+        ->and(sharp()->context()->breadcrumb()->allSegments())->toHaveCount(2);
 });
 
 it('builds the breadcrumb for a form through a show page', function () {
@@ -83,10 +74,8 @@ it('builds the breadcrumb for a form through a show page', function () {
         )
         ->assertOk();
 
-    $currentRequest = app(CurrentSharpRequest::class);
-
-    expect($currentRequest->isForm())->toBeTrue()
-        ->and($currentRequest->breadcrumb())->toHaveCount(3);
+    expect(sharp()->context()->isForm())->toBeTrue()
+        ->and(sharp()->context()->breadcrumb()->allSegments())->toHaveCount(3);
 });
 
 it('uses labels defined for entities in the config', function () {

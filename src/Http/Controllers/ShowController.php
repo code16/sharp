@@ -6,9 +6,9 @@ use Code16\Sharp\Auth\SharpAuthorizationManager;
 use Code16\Sharp\Data\BreadcrumbData;
 use Code16\Sharp\Data\NotificationData;
 use Code16\Sharp\Data\Show\ShowData;
+use Code16\Sharp\Http\Context\SharpBreadcrumb;
 use Code16\Sharp\Show\SharpSingleShow;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
-use Code16\Sharp\Utils\SharpBreadcrumb;
 use Inertia\Inertia;
 
 class ShowController extends SharpProtectedController
@@ -60,7 +60,7 @@ class ShowController extends SharpProtectedController
         return Inertia::render('Show/Show', [
             'show' => $payload,
             'breadcrumb' => BreadcrumbData::from([
-                'items' => $breadcrumb->getItems(),
+                'items' => $breadcrumb->allSegments(),
             ]),
             'notifications' => NotificationData::collection($this->getSharpNotifications()),
         ]);
@@ -74,6 +74,6 @@ class ShowController extends SharpProtectedController
 
         $show->delete($instanceId);
 
-        return redirect()->to($this->currentSharpRequest->getUrlOfPreviousBreadcrumbItem());
+        return redirect()->to(sharp()->context()->breadcrumb()->getUrlOfPreviousSegment());
     }
 }

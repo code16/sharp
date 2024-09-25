@@ -1,8 +1,9 @@
 <?php
 
-namespace Code16\Sharp\Utils\Context;
+namespace Code16\Sharp\Utils;
 
 use Code16\Sharp\Config\SharpConfigBuilder;
+use Code16\Sharp\Http\Context\SharpContext;
 use Code16\Sharp\SharpInternalServiceProvider;
 
 class SharpUtil
@@ -27,10 +28,5 @@ class SharpUtil
     public function context(): SharpContext
     {
         return $this->context;
-    }
-
-    public function request()
-    {
-        
     }
 }

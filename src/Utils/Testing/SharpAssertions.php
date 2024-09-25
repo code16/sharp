@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Utils\Testing;
 
-use Code16\Sharp\Http\Context\CurrentSharpRequest;
+use Code16\Sharp\Http\Context\SharpBreadcrumb;
 
 trait SharpAssertions
 {
@@ -33,7 +33,7 @@ trait SharpAssertions
     {
         return $this
             ->withHeader(
-                CurrentSharpRequest::CURRENT_PAGE_URL_HEADER,
+                SharpBreadcrumb::CURRENT_PAGE_URL_HEADER,
                 $this->buildCurrentPageUrl(
                     ['list', $entityKey],
                 ),
@@ -108,7 +108,7 @@ trait SharpAssertions
 
         return $this
             ->withHeader(
-                CurrentSharpRequest::CURRENT_PAGE_URL_HEADER,
+                SharpBreadcrumb::CURRENT_PAGE_URL_HEADER,
                 $this->buildCurrentPageUrl(
                     ['list', $entityKey],
                 ),
@@ -135,7 +135,7 @@ trait SharpAssertions
 
         return $this
             ->withHeader(
-                CurrentSharpRequest::CURRENT_PAGE_URL_HEADER,
+                SharpBreadcrumb::CURRENT_PAGE_URL_HEADER,
                 $this->buildCurrentPageUrl(
                     ['list', $entityKey],
                     ['show', $entityKey, $instanceId],
@@ -162,7 +162,7 @@ trait SharpAssertions
 
         return $this
             ->withHeader(
-                CurrentSharpRequest::CURRENT_PAGE_URL_HEADER,
+                SharpBreadcrumb::CURRENT_PAGE_URL_HEADER,
                 $this->buildCurrentPageUrl(
                     ['list', $entityKey],
                 ),

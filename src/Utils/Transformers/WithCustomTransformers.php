@@ -179,7 +179,7 @@ trait WithCustomTransformers
     {
         $idAttr = $this->instanceIdAttribute;
 
-        sharp()->context()->cacheInstances(
+        sharp()->context()->cacheListInstances(
             collect($instances)
                 ->filter(fn ($instance) => (((object) $instance)->$idAttr ?? null) !== null)
                 ->mapWithKeys(fn ($instance) => [
