@@ -5,10 +5,11 @@ namespace App\Sharp\Utils\Embeds;
 use App\Models\User;
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
-use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
+use Code16\Sharp\Form\Fields\SharpFormAutocompleteRemoteField;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Code16\Sharp\Utils\PageAlerts\PageAlert;
 use Illuminate\Support\Arr;
 
 class AuthorEmbed extends SharpFormEditorEmbed
@@ -18,15 +19,21 @@ class AuthorEmbed extends SharpFormEditorEmbed
         $this
             ->configureLabel('Author')
             ->configureTagName('x-author')
-            ->configurePageAlert('Please fill author detail below', static::$pageAlertLevelSecondary)
             ->configureFormTemplatePath('sharp/templates/author_embed.vue');
+    }
+
+    protected function buildPageAlert(PageAlert $pageAlert): void
+    {
+        $pageAlert
+            ->setLevelSecondary()
+            ->setMessage('Please fill author detail below');
     }
 
     public function buildFormFields(FieldsContainer $formFields): void
     {
         $formFields
             ->addField(
-                SharpFormAutocompleteField::make('author', 'remote')
+                SharpFormAutocompleteRemoteField::make('author')
                     ->setLabel('Author')
                     ->setRemoteEndpoint('/api/admin/users')
                     ->setListItemInlineTemplate('<div>{{name}}</div><div><small>{{email}}</small></div>')
@@ -35,9 +42,9 @@ class AuthorEmbed extends SharpFormEditorEmbed
             ->addField(
                 SharpFormUploadField::make('picture')
                     ->setMaxFileSize(1)
+                    ->setImageOnly()
                     ->setLabel('Picture')
-                    ->setFileFilterImages()
-                    ->setCropRatio('1:1')
+                    ->setImageCropRatio('1:1')
                     ->setStorageDisk('local')
                     ->setStorageBasePath('data/embeds'),
             )

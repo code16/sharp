@@ -8,11 +8,14 @@ class DummyClass extends EntityListDateRangeRequiredFilter
 {
     public function buildFilterConfig(): void
     {
-        // $this->configureLabel('My Filter')
+        $this->configureLabel('My Filter')
     }
 
     public function defaultValue(): array
     {
-        // return ['start' => Carbon::yesterday(), 'end' => Carbon::today()];
+        return [
+            'start' => Carbon::yesterday(),
+            'end' => Carbon::today(),
+        ];
     }
 }

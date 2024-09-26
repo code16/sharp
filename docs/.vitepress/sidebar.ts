@@ -1,12 +1,13 @@
-import type { DefaultTheme } from "vitepress";
+import type {DefaultTheme} from "vitepress";
 
 export function sidebar(): DefaultTheme.SidebarItem[] {
     return [
         {
             text: 'Introduction',
             items: [
-                { text: 'Getting started', link: '/guide/index.md' },
-                { text: 'The entity class', link: '/guide/entity-class.md' }
+                { text: 'Getting started and installation', link: '/guide/index.md' },
+                { text: 'The entity class', link: '/guide/entity-class.md' },
+                { text: 'The Menu', link: '/guide/building-menu.md' }
             ]
         },
         {
@@ -16,7 +17,8 @@ export function sidebar(): DefaultTheme.SidebarItem[] {
                 { text: 'Building an Entity List', link: '/guide/building-entity-list.md' },
                 { text: 'Filters', link: '/guide/filters.md' },
                 { text: 'Entity States', link: '/guide/entity-states.md' },
-                { text: 'Reordering instances', link: '/guide/reordering-instances.md' }
+                { text: 'Reordering instances', link: '/guide/reordering-instances.md' },
+                { text: 'Avoid n+1 queries in Entity Lists', link: '/guide/avoid-n1-queries-in-entity-lists.md' }
             ]
         },
         {
@@ -89,8 +91,7 @@ export function sidebar(): DefaultTheme.SidebarItem[] {
             text: 'Generalities',
             collapsed: true,
             items: [
-                { text: 'Building the menu', link: '/guide/building-menu.md' },
-                { text: "Sharp's breadcrumb", link: '/guide/sharp-breadcrumb.md' },
+                { text: 'Sharp’s breadcrumb', link: '/guide/sharp-breadcrumb.md' },
                 { text: 'Implement global search', link: '/guide/global-search.md' },
                 { text: 'How to transform data', link: '/guide/how-to-transform-data.md' },
                 { text: 'Create links to an entity', link: '/guide/link-to.md' },
@@ -107,6 +108,7 @@ export function sidebar(): DefaultTheme.SidebarItem[] {
             text: 'Migrations guide',
             collapsed: true,
             items: [
+                { text: 'Upgrading from 8.x to 9.x', link: '/guide/upgrading/9.0.md' },
                 { text: 'Upgrading from 7.x to 8.x', link: '/guide/upgrading/8.0.md' },
                 { text: 'Upgrading from 6.x to 7.x', link: '/guide/upgrading/7.0.md' },
                 { text: 'Upgrading from 5.x to 6.x', link: '/guide/upgrading/6.0.md' },

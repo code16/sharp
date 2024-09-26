@@ -12,6 +12,9 @@ class PostAttachment extends Model
     use HasFactory;
 
     protected $guarded = [];
+    protected $casts = [
+        'is_link' => 'boolean',
+    ];
 
     public function post(): BelongsTo
     {

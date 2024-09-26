@@ -1,37 +1,28 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Form\Layout;
-
 use Code16\Sharp\Form\Layout\FormLayoutTab;
-use Code16\Sharp\Tests\SharpTestCase;
 
-class FormLayoutTabTest extends SharpTestCase
-{
-    /** @test */
-    public function we_can_set_a_title()
-    {
-        $formTab = new FormLayoutTab('test');
+it('allows to set a title', function () {
+    $formTab = new FormLayoutTab('test');
 
-        $this->assertEquals('test', $formTab->toArray()['title']);
-    }
+    expect($formTab->toArray()['title'])
+        ->toEqual('test');
+});
 
-    /** @test */
-    public function we_can_add_a_column()
-    {
-        $formTab = new FormLayoutTab('test');
-        $formTab->addColumn(2);
+it('allows to add a column', function () {
+    $formTab = new FormLayoutTab('test');
+    $formTab->addColumn(2);
 
-        $this->assertCount(1, $formTab->toArray()['columns']);
-    }
+    expect($formTab->toArray()['columns'])
+        ->toHaveCount(1);
+});
 
-    /** @test */
-    public function we_can_add_several_columns()
-    {
-        $formTab = new FormLayoutTab('test');
-        $formTab->addColumn(2);
-        $formTab->addColumn(2);
-        $formTab->addColumn(2);
+it('allows to add several columns', function () {
+    $formTab = new FormLayoutTab('test');
+    $formTab->addColumn(2)
+        ->addColumn(2)
+        ->addColumn(2);
 
-        $this->assertCount(3, $formTab->toArray()['columns']);
-    }
-}
+    expect($formTab->toArray()['columns'])
+        ->toHaveCount(3);
+});
