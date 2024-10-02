@@ -147,5 +147,34 @@ export const buttons = {
         command: editor => editor.chain().redo().run(),
         icon: getToolbarIcon('redo'),
         label: lang('form.editor.toolbar.redo.title'),
-    }
+    },
+    'align-left': {
+        command: editor => editor.chain().focus().setTextAlign('left').run(),
+        isActive: editor => editor.isActive('textAlign', { align: 'left' }),
+        icon: getToolbarIcon('align-left'),
+        label: lang('form.editor.toolbar.align-left.title'),
+    },
+    'align-center': {
+        command: editor => editor.chain().focus().setTextAlign('center').run(),
+        isActive: editor => editor.isActive('textAlign', { align: 'center' }),
+        icon: getToolbarIcon('align-center'),
+        label: lang('form.editor.toolbar.align-center.title'),
+    },
+    'align-right': {
+        command: editor => editor.chain().focus().setTextAlign('right').run(),
+        isActive: editor => editor.isActive('textAlign', { align: 'right' }),
+        icon: getToolbarIcon('align-right'),
+        label: lang('form.editor.toolbar.align-right.title'),
+    },
+    'align-justify': {
+        command: editor => editor.chain().focus().setTextAlign('justify').run(),
+        isActive: editor => editor.isActive('textAlign', { align: 'justify' }),
+        icon: getToolbarIcon('align-justify'),
+        label: lang('form.editor.toolbar.align-justify.title'),
+    },
+    'align-unset': {
+        command: editor => editor.chain().focus().unsetTextAlign().run(),
+        icon: getToolbarIcon('align-unset'),
+        label: lang('form.editor.toolbar.align-unset.title'),
+    },
 }

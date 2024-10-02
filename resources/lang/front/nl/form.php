@@ -93,4 +93,9 @@ return [
     'editor.toolbar.fullscreen.title' => 'Volledig scherm',
     'editor.toolbar.undo.title' => 'Ongedaan maken',
     'editor.toolbar.redo.title' => 'Opnieuw doen',
+    'editor.toolbar.align-left.title' => 'Links uitlijnen',
+    'editor.toolbar.align-center.title' => 'Centrum',
+    'editor.toolbar.align-right.title' => 'Rechts uitlijnen',
+    'editor.toolbar.align-justify.title' => 'Verantwoorden',
+    'editor.toolbar.align-unset.title' => 'Standaarduitlijning',
 ];
