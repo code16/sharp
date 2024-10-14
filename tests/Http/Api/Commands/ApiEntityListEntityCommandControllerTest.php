@@ -102,6 +102,35 @@ it('allows to call a view entity command', function () {
         ]);
 });
 
+it('allows to call a html instance command', function () {
+    fakeListFor('person', new class extends PersonList
+    {
+        protected function getEntityCommands(): ?array
+        {
+            return [
+                'cmd' => new class extends EntityCommand
+                {
+                    public function label(): ?string
+                    {
+                        return 'my command';
+                    }
+                    
+                    public function execute(array $data = []): array
+                    {
+                        return $this->html('Hello world');
+                    }
+                },
+            ];
+        }
+    });
+    
+    $this->postJson(route('code16.sharp.api.list.command.entity', ['person', 'cmd']))
+        ->assertOk()
+        ->assertJson([
+            'action' => 'view',
+        ]);
+});
+
 it('allows to call a refresh entity command', function () {
     fakeListFor('person', new class extends PersonList
     {
