@@ -38,7 +38,7 @@ use Intervention\Image\ImageManager;
 
 class SharpServiceProvider extends ServiceProvider
 {
-    const VERSION = '8.4.4';
+    const VERSION = '8.5.0';
 
     public function boot()
     {
