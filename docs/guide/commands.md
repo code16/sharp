@@ -167,6 +167,7 @@ Finally, let's review the return possibilities: after a Command has been execute
 - `return $this->reload()`: reload the current page (with context).
 - `return $this->refresh(1)`*: refresh only the instance with an id on `1`. We can pass an id array also to refresh more than one instance.
 - `return $this->view('view.name', ['some'=>'params'])`: display a view right in Sharp; useful for page previews.
+- `return $this->html('...')`: display an HTML content.
 - `return $this->link('/path/to/redirect')`: redirect to the given path.
 - `return $this->download('path', 'diskName')`: the browser will download the specified file.
 - `return $this->streamDownload('path', 'name')`: the browser will stream the specified file.
