@@ -68,6 +68,14 @@ abstract class Command
             'html' => view($bladeView, $params)->render(),
         ];
     }
+    
+    protected function html(string $htmlContent): array
+    {
+        return [
+            'action' => 'view',
+            'html' => $htmlContent,
+        ];
+    }
 
     protected function download(string $filePath, string $fileName = null, string $diskName = null): array
     {
