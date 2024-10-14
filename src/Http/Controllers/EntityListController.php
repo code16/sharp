@@ -8,7 +8,6 @@ use Code16\Sharp\Data\EntityList\EntityListData;
 use Code16\Sharp\Data\NotificationData;
 use Code16\Sharp\Exceptions\SharpInvalidConfigException;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
-use Code16\Sharp\Utils\SharpBreadcrumb;
 use Inertia\Inertia;
 
 class EntityListController extends SharpProtectedController
@@ -22,7 +21,7 @@ class EntityListController extends SharpProtectedController
         parent::__construct();
     }
 
-    public function show(string $entityKey, SharpBreadcrumb $breadcrumb)
+    public function show(string $entityKey)
     {
         sharp_check_ability('entity', $entityKey);
 
@@ -61,7 +60,7 @@ class EntityListController extends SharpProtectedController
         return Inertia::render('EntityList/EntityList', [
             'entityList' => EntityListData::from($data),
             'breadcrumb' => BreadcrumbData::from([
-                'items' => $breadcrumb->getItems(),
+                'items' => sharp()->context()->breadcrumb()->allSegments(),
             ]),
             'notifications' => NotificationData::collection($this->getSharpNotifications()),
         ]);
@@ -71,7 +70,7 @@ class EntityListController extends SharpProtectedController
     {
         $authorizations = [
             'view' => [],
-            'update' => [],
+            'reorder' => $this->sharpAuthorizationManager->isAllowed('reorder', $entityKey),
             'delete' => [],
             'create' => $this->sharpAuthorizationManager->isAllowed('create', $entityKey),
         ];
@@ -82,9 +81,6 @@ class EntityListController extends SharpProtectedController
             ->each(function ($instanceId) use (&$authorizations, $entityKey) {
                 if ($this->sharpAuthorizationManager->isAllowed('view', $entityKey, $instanceId)) {
                     $authorizations['view'][] = $instanceId;
-                }
-                if ($this->sharpAuthorizationManager->isAllowed('update', $entityKey, $instanceId)) {
-                    $authorizations['update'][] = $instanceId;
                 }
                 if ($this->sharpAuthorizationManager->isAllowed('delete', $entityKey, $instanceId)) {
                     $authorizations['delete'][] = $instanceId;

@@ -10,7 +10,7 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
-    sharpConfig()->addEntity('person', PersonEntity::class);
+    sharp()->config()->addEntity('person', PersonEntity::class);
     login();
 });
 

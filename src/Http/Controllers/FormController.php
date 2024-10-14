@@ -8,7 +8,6 @@ use Code16\Sharp\Data\Form\FormData;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Form\SharpSingleForm;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
-use Code16\Sharp\Utils\SharpBreadcrumb;
 use Code16\Sharp\Utils\Uploads\SharpUploadManager;
 use Inertia\Inertia;
 
@@ -46,7 +45,7 @@ class FormController extends SharpProtectedController
         return Inertia::render('Form/Form', [
             'form' => FormData::from($data),
             'breadcrumb' => BreadcrumbData::from([
-                'items' => app(SharpBreadcrumb::class)->getItems($data),
+                'items' => sharp()->context()->breadcrumb()->allSegments(),
             ]),
         ]);
     }
@@ -75,7 +74,7 @@ class FormController extends SharpProtectedController
         return Inertia::render('Form/Form', [
             'form' => FormData::from($data),
             'breadcrumb' => BreadcrumbData::from([
-                'items' => app(SharpBreadcrumb::class)->getItems($data),
+                'items' => sharp()->context()->breadcrumb()->allSegments(),
             ]),
         ]);
     }
@@ -98,7 +97,7 @@ class FormController extends SharpProtectedController
         $form->update($instanceId, $formattedData);
         $this->uploadManager->dispatchJobs($instanceId);
 
-        return redirect()->to($this->currentSharpRequest->getUrlOfPreviousBreadcrumbItem());
+        return redirect()->to(sharp()->context()->breadcrumb()->getUrlOfPreviousSegment());
     }
 
     public function store(string $parentUri, string $entityKey)
@@ -117,7 +116,7 @@ class FormController extends SharpProtectedController
         $instanceId = $form->update(null, $formattedData);
         $this->uploadManager->dispatchJobs($instanceId);
 
-        $previousUrl = $this->currentSharpRequest->getUrlOfPreviousBreadcrumbItem();
+        $previousUrl = sharp()->context()->breadcrumb()->getUrlOfPreviousSegment();
 
         return redirect()->to(
             $form->isDisplayShowPageAfterCreation()

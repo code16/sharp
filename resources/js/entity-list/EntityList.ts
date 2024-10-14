@@ -79,7 +79,7 @@ export class EntityList implements EntityListData {
 
     get canReorder() {
         return this.config.reorderable
-            && this.authorizations.update
+            && this.authorizations.reorder
             && this.data.length > 0;
     }
 

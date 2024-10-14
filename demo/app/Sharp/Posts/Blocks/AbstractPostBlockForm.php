@@ -84,7 +84,7 @@ abstract class AbstractPostBlockForm extends SharpForm
             ? PostBlock::findOrFail($id)
             : new PostBlock([
                 'type' => static::$postBlockType,
-                'post_id' => currentSharpRequest()->getPreviousShowFromBreadcrumbItems('posts')->instanceId(),
+                'post_id' => sharp()->context()->breadcrumb()->previousShowSegment('posts')->instanceId(),
             ]);
 
         $this->save($postBlock, $data);

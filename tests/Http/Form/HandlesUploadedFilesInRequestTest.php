@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Storage;
 
 beforeEach(function () {
     $this->withoutExceptionHandling();
-    sharpConfig()->addEntity('person', PersonEntity::class);
+    sharp()->config()->addEntity('person', PersonEntity::class);
     login();
     Storage::fake('local');
     Queue::fake();
@@ -433,7 +433,7 @@ it('pushes jobs on right queue / connections', function () {
             && $job->connection == 'sync';
     });
 
-    sharpConfig()->configureUploads(
+    sharp()->config()->configureUploads(
         fileHandingQueue: 'uploads',
         fileHandlingQueueConnection: 'redis'
     );

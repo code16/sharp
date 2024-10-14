@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Utils\Testing;
 
-use Code16\Sharp\Http\Context\CurrentSharpRequest;
+use Code16\Sharp\Http\Context\SharpBreadcrumb;
 
 trait SharpAssertions
 {
@@ -33,7 +33,7 @@ trait SharpAssertions
     {
         return $this
             ->withHeader(
-                CurrentSharpRequest::CURRENT_PAGE_URL_HEADER,
+                SharpBreadcrumb::CURRENT_PAGE_URL_HEADER,
                 $this->buildCurrentPageUrl(
                     ['list', $entityKey],
                 ),
@@ -108,7 +108,7 @@ trait SharpAssertions
 
         return $this
             ->withHeader(
-                CurrentSharpRequest::CURRENT_PAGE_URL_HEADER,
+                SharpBreadcrumb::CURRENT_PAGE_URL_HEADER,
                 $this->buildCurrentPageUrl(
                     ['list', $entityKey],
                 ),
@@ -135,7 +135,7 @@ trait SharpAssertions
 
         return $this
             ->withHeader(
-                CurrentSharpRequest::CURRENT_PAGE_URL_HEADER,
+                SharpBreadcrumb::CURRENT_PAGE_URL_HEADER,
                 $this->buildCurrentPageUrl(
                     ['list', $entityKey],
                     ['show', $entityKey, $instanceId],
@@ -162,7 +162,7 @@ trait SharpAssertions
 
         return $this
             ->withHeader(
-                CurrentSharpRequest::CURRENT_PAGE_URL_HEADER,
+                SharpBreadcrumb::CURRENT_PAGE_URL_HEADER,
                 $this->buildCurrentPageUrl(
                     ['list', $entityKey],
                 ),
@@ -175,7 +175,7 @@ trait SharpAssertions
 
     public function loginAsSharpUser($user): self
     {
-        return $this->actingAs($user, sharpConfig()->get('auth.guard') ?: config('auth.defaults.guard'));
+        return $this->actingAs($user, sharp()->config()->get('auth.guard') ?: config('auth.defaults.guard'));
     }
 
     private function buildCurrentPageUrl(...$breadcrumbItems): string
@@ -183,7 +183,7 @@ trait SharpAssertions
         return url(
             sprintf(
                 '/%s/%s',
-                sharpConfig()->get('custom_url_segment'),
+                sharp()->config()->get('custom_url_segment'),
                 $this->buildCurrentParentUri(...$breadcrumbItems)
             )
         );

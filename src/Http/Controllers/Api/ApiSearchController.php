@@ -11,7 +11,7 @@ class ApiSearchController extends ApiController
     public function index()
     {
         $searchEngine = tap(
-            sharpConfig()->get('search.engine'),
+            sharp()->config()->get('search.engine'),
             fn (SharpSearchEngine $engine) => $engine->searchFor(
                 app(StringUtil::class)
                     ->explodeSearchTerms(request()->input('q', ''))

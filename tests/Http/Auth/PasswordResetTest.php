@@ -5,7 +5,7 @@ namespace Tests\Feature\Auth;
 use Code16\Sharp\Tests\Fixtures\TestPasswordBroker;
 
 beforeEach(function () {
-    sharpConfig()->enableForgottenPassword(broker: TestPasswordBroker::class);
+    sharp()->config()->enableForgottenPassword(broker: TestPasswordBroker::class);
 });
 
 it('allows to display password link screen', function () {
@@ -23,7 +23,7 @@ it('allows to request a reset password link', function () {
 
 it('allows to reset password', function () {
     $this->withoutExceptionHandling();
-    sharpConfig()->enableForgottenPassword(
+    sharp()->config()->enableForgottenPassword(
         broker: TestPasswordBroker::class,
         resetCallback: function ($user, $password) {
             throw_if(

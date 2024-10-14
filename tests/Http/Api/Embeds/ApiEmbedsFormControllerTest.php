@@ -6,7 +6,7 @@ use Code16\Sharp\Tests\Http\Api\Embeds\Fixtures\ApiEmbedsFormControllerTestEmbed
 use Illuminate\Support\Str;
 
 beforeEach(function () {
-    sharpConfig()->addEntity('person', PersonEntity::class);
+    sharp()->config()->addEntity('person', PersonEntity::class);
     login();
 });
 

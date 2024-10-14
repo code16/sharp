@@ -5,14 +5,14 @@ use Code16\Sharp\Tests\Fixtures\TestAuthGuard;
 use Code16\Sharp\Tests\Fixtures\User;
 
 beforeEach(function () {
-    sharpConfig()->addEntity('person', PersonEntity::class);
+    sharp()->config()->addEntity('person', PersonEntity::class);
 });
 
 function setTestAuthGuard(): void
 {
     auth()->extend('sharp', fn() => new TestAuthGuard());
     config()->set('auth.guards.sharp', ['driver' => 'sharp', 'provider' => 'users']);
-    sharpConfig()->setAuthCustomGuard('sharp');
+    sharp()->config()->setAuthCustomGuard('sharp');
 }
 
 it('redirects guests to the login page', function () {
@@ -60,7 +60,7 @@ it('does not allow to login with invalid payload', function () {
 it('handles remember_me option', function () {
     setTestAuthGuard();
 
-    sharpConfig()->suggestRememberMeOnLoginForm();
+    sharp()->config()->suggestRememberMeOnLoginForm();
 
     $this
         ->post(route('code16.sharp.login.post'), [
@@ -76,7 +76,7 @@ it('handles remember_me option', function () {
 it('does not allow remember_me option without proper config', function () {
     setTestAuthGuard();
 
-    sharpConfig()->suggestRememberMeOnLoginForm(false);
+    sharp()->config()->suggestRememberMeOnLoginForm(false);
 
     $this
         ->post(route('code16.sharp.login.post'), [
@@ -92,7 +92,7 @@ it('does not allow remember_me option without proper config', function () {
 it('hits rate limiter if configured', function () {
     setTestAuthGuard();
 
-    sharpConfig()->enableLoginRateLimiting(1);
+    sharp()->config()->enableLoginRateLimiting(1);
 
     $this->post(route('code16.sharp.login.post'), ['login' => 'test@example.org', 'password' => 'bad'])
         ->assertSessionHasErrors(['login' => trans('sharp::auth.invalid_credentials')]);
@@ -155,7 +155,7 @@ it('allows custom auth guard', function () {
         };
     });
 
-    sharpConfig()->setAuthCustomGuard('test');
+    sharp()->config()->setAuthCustomGuard('test');
 
     $this->app['config']->set(
         'auth.guards.test', [

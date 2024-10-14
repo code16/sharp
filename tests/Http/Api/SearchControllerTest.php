@@ -5,14 +5,14 @@ use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Utils\Links\LinkToShowPage;
 
 beforeEach(function () {
-    sharpConfig()->addEntity('person', PersonEntity::class);
+    sharp()->config()->addEntity('person', PersonEntity::class);
     login();
 });
 
 it('returns result on a valid search', function () {
     $this->withoutExceptionHandling();
 
-    sharpconfig()->enableGlobalSearch(
+    sharp()->config()->enableGlobalSearch(
         new class extends SharpSearchEngine
         {
             public function searchFor(array $terms): void
@@ -47,7 +47,7 @@ it('returns result on a valid search', function () {
 });
 
 it('allows to configure a custom empty state label', function () {
-    sharpconfig()->enableGlobalSearch(
+    sharp()->config()->enableGlobalSearch(
         new class extends SharpSearchEngine
         {
             public function searchFor(array $terms): void
@@ -71,7 +71,7 @@ it('allows to configure a custom empty state label', function () {
 });
 
 it('allows to configure hide when empty', function () {
-    sharpconfig()->enableGlobalSearch(
+    sharp()->config()->enableGlobalSearch(
         new class extends SharpSearchEngine
         {
             public function searchFor(array $terms): void
@@ -95,7 +95,7 @@ it('allows to configure hide when empty', function () {
 });
 
 it('raises validation errors', function () {
-    sharpconfig()->enableGlobalSearch(
+    sharp()->config()->enableGlobalSearch(
         new class extends SharpSearchEngine
         {
             public function searchFor(array $terms): void
@@ -127,7 +127,7 @@ it('raises validation errors', function () {
 });
 
 it('handles multiple result sets', function () {
-    sharpconfig()->enableGlobalSearch(
+    sharp()->config()->enableGlobalSearch(
         new class extends SharpSearchEngine
         {
             public function searchFor(array $terms): void
@@ -171,7 +171,7 @@ it('handles multiple result sets', function () {
 });
 
 it('allows multiple search terms', function () {
-    sharpconfig()->enableGlobalSearch(
+    sharp()->config()->enableGlobalSearch(
         new class extends SharpSearchEngine
         {
             public function searchFor(array $terms): void

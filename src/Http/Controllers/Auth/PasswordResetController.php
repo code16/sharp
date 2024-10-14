@@ -40,12 +40,12 @@ class PasswordResetController extends Controller
                 ->save();
         };
 
-        $passwordBroker = sharpConfig()->get('auth.forgotten_password.password_broker')
+        $passwordBroker = sharp()->config()->get('auth.forgotten_password.password_broker')
             ?: Password::broker(config('auth.defaults.passwords'));
 
         $status = $passwordBroker->reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
-            sharpConfig()->get('auth.forgotten_password.reset_password_callback') ?: $defaultResetCallback
+            sharp()->config()->get('auth.forgotten_password.reset_password_callback') ?: $defaultResetCallback
         );
 
         if ($status == Password::PASSWORD_RESET) {

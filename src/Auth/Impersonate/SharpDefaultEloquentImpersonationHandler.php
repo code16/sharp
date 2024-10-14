@@ -6,10 +6,10 @@ class SharpDefaultEloquentImpersonationHandler extends SharpImpersonationHandler
 {
     public function getUsers(): array
     {
-        $guard = sharpConfig()->get('auth.guard') ?: config('auth.defaults.guard');
+        $guard = sharp()->config()->get('auth.guard') ?: config('auth.defaults.guard');
         $userProvider = config('auth.guards.'.$guard.'.provider');
         $userModelClassName = config('auth.providers.'.$userProvider.'.model');
-        $loginAttribute = sharpConfig()->get('auth.login_attribute');
+        $loginAttribute = sharp()->config()->get('auth.login_attribute');
 
         return $userModelClassName::query()
             ->orderBy($loginAttribute)
