@@ -9,7 +9,7 @@ use Code16\Sharp\Utils\Menu\SharpMenuManager;
 final class MenuItemData extends Data
 {
     public function __construct(
-        public ?array $icon = null,
+        public ?IconData $icon = null,
         public ?string $label = null,
         public ?string $url = null,
         public bool $isExternalLink = false,
@@ -44,7 +44,7 @@ final class MenuItemData extends Data
         }
 
         return new self(
-            icon: app(IconManager::class)->iconToArray($item->getIcon()),
+            icon: IconData::optional(app(IconManager::class)->iconToArray($item->getIcon())),
             label: $item->getLabel(),
             url: $item->getUrl(),
             isExternalLink: $item->isExternalLink(),

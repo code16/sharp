@@ -106,7 +106,7 @@ export type EmbedData = {
   key: string;
   label: string;
   tag: string;
-  icon: string | null;
+  icon: Array<any> | null;
   attributes: Array<string>;
   template: string;
   fields: { [key: string]: FormFieldData };
@@ -203,16 +203,35 @@ export type FilterValuesData = {
   default: { [key: string]: any };
   valuated: { [key: string]: boolean };
 };
-export type FormAutocompleteFieldData = {
+export type FormAutocompleteLocalFieldData = {
   value: string | number | null | { [locale: string]: string | number | null };
   key: string;
   type: "autocomplete";
-  mode: "local" | "remote";
+  mode: "local";
+  itemIdAttribute: string;
+  listItemTemplate: string;
+  resultItemTemplate: string;
+  localValues: Array<{ [key: string]: any }> | FormDynamicOptionsData;
+  placeholder: string | null;
+  templateData: { [key: string]: any } | null;
+  searchKeys: Array<string> | null;
+  localized: boolean | null;
+  dynamicAttributes: Array<FormDynamicAttributeData> | null;
+  label: string | null;
+  readOnly: boolean | null;
+  conditionalDisplay: FormConditionalDisplayData | null;
+  helpMessage: string | null;
+  extraStyle: string | null;
+};
+export type FormAutocompleteRemoteFieldData = {
+  value: string | number | null | { [locale: string]: string | number | null };
+  key: string;
+  type: "autocomplete";
+  mode: "remote";
   itemIdAttribute: string;
   listItemTemplate: string;
   resultItemTemplate: string;
   searchMinChars: number;
-  localValues: Array<{ [key: string]: any }> | FormDynamicOptionsData;
   debounceDelay: number;
   dataWrapper: string;
   placeholder: string | null;
@@ -353,7 +372,8 @@ export type FormEditorToolbarButton =
   | "redo"
   | "|";
 export type FormFieldData =
-  | FormAutocompleteFieldData
+  | FormAutocompleteLocalFieldData
+  | FormAutocompleteRemoteFieldData
   | FormCheckFieldData
   | FormDateFieldData
   | FormEditorFieldData
@@ -597,6 +617,10 @@ export type GraphWidgetData = {
   options: { curved: boolean; horizontal: boolean };
 };
 export type GraphWidgetDisplay = "bar" | "line" | "pie";
+export type IconData = {
+  svg: string | null;
+  name: string | null;
+};
 export type InstanceAuthorizationsData = {
   view: boolean;
   create: boolean;
@@ -620,7 +644,7 @@ export type MenuData = {
   isVisible: boolean;
 };
 export type MenuItemData = {
-  icon: string | null;
+  icon: IconData | null;
   label: string | null;
   url: string | null;
   isExternalLink: boolean;

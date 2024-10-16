@@ -1,6 +1,8 @@
 <script setup lang="ts">
+    import { IconData } from "@/types";
+
     const props = defineProps<{
-        icon: { svg: string }
+        icon: IconData,
     }>();
 
     const renderer = document.createElement('div');

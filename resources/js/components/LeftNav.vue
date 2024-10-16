@@ -40,7 +40,7 @@ const globalFilters = usePage().props.globalFilters as GlobalFiltersData | null;
                                             <template v-else>
                                                 <component :is="childItem.isExternalLink ? 'a' : Link" :href="childItem.url" :class="[childItem.current ? 'bg-gray-50' : 'hover:bg-gray-50', 'flex  items-center gap-x-3 rounded-md py-2 px-2 text-sm leading-6 text-gray-700']">
                                                     <template v-if="childItem.icon">
-                                                        <Icon :icon="childItem.icon" class="w-4 h-4" :class="[childItem.icon, childItem.current ? 'text-primary-600' : 'text-gray-400 group-hover:text-primary-600']" />
+                                                        <Icon :icon="childItem.icon" class="w-4 h-4" :class="[childItem.current ? 'text-primary-600' : 'text-gray-400 group-hover:text-primary-600']" />
 <!--                                                        <i class="fa fa-fw" :class="[childItem.icon, childItem.current ? 'text-primary-600' : 'text-gray-400 group-hover:text-primary-600']"></i>-->
                                                     </template>
                                                     {{ childItem.label }}
