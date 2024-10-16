@@ -11,7 +11,7 @@ use App\Sharp\Utils\Embeds\TableOfContentsEmbed;
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
-use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
+use Code16\Sharp\Form\Fields\SharpFormAutocompleteRemoteField;
 use Code16\Sharp\Form\Fields\SharpFormCheckField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
@@ -133,8 +133,8 @@ class PostForm extends SharpForm
                             ->addConditionalDisplay('!is_link'),
                     ),
             )
-            ->when(currentSharpRequest()->isUpdate(), fn ($formFields) => $formFields->addField(
-                SharpFormAutocompleteField::make('author_id', 'remote')
+            ->when(sharp()->context()->isUpdate(), fn ($formFields) => $formFields->addField(
+                SharpFormAutocompleteRemoteField::make('author_id')
                     ->setReadOnly(! auth()->user()->isAdmin())
                     ->setLabel('Author')
                     ->setRemoteEndpoint('/api/admin/users')
@@ -153,7 +153,7 @@ class PostForm extends SharpForm
                         $column
                             ->withField('title')
                             ->when(
-                                currentSharpRequest()->isUpdate(),
+                                sharp()->context()->isUpdate(),
                                 fn ($column) => $column->withField('author_id')
                             )
                             ->withFields('published_at', 'categories')
@@ -198,12 +198,10 @@ class PostForm extends SharpForm
         return [
             'title.fr' => ['required', 'string', 'max:150'],
             'title.en' => ['required', 'string', 'max:150'],
-            //            'content.text.fr' => ['required', 'string', 'max:2000'],
-            //            'content.text.en' => ['required', 'string', 'max:2000'],
             'published_at' => ['required', 'date'],
-            //            'attachments.*.title' => ['required', 'string', 'max:50'],
-            //            'attachments.*.link_url' => ['required_if:attachments.*.is_link,true,1', 'nullable', 'url', 'max:150'],
-            //            'attachments.*.document' => ['required_if:attachments.*.is_link,false,0'],
+            'attachments.*.title' => ['required', 'string', 'max:50'],
+            'attachments.*.link_url' => ['required_if:attachments.*.is_link,true,1', 'nullable', 'url', 'max:150'],
+            'attachments.*.document' => ['required_if:attachments.*.is_link,false,0'],
         ];
     }
 
@@ -219,7 +217,7 @@ class PostForm extends SharpForm
             ->ignore(auth()->user()->isAdmin() ? [] : ['author_id'])
             ->save($post, $data);
 
-        if (currentSharpRequest()->isCreation()) {
+        if (sharp()->context()->isCreation()) {
             $this->notify('Your post was created, but not published yet.');
         }
 

@@ -1,6 +1,5 @@
 <?php
 
-use Code16\Sharp\Http\Context\CurrentSharpRequest;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Entities\SinglePersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonShow;
@@ -8,13 +7,10 @@ use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
-    config()->set('sharp.display_breadcrumb', true);
+    sharp()->config()
+        ->displayBreadcrumb()
+        ->addEntity('person', PersonEntity::class);
     login();
-
-    config()->set(
-        'sharp.entities.person',
-        PersonEntity::class,
-    );
 });
 
 it('builds the breadcrumb for an entity list', function () {
@@ -22,10 +18,8 @@ it('builds the breadcrumb for an entity list', function () {
         ->get(route('code16.sharp.list', ['person']))
         ->assertOk();
 
-    $currentRequest = app(CurrentSharpRequest::class);
-
-    expect($currentRequest->isEntityList())->toBeTrue()
-        ->and($currentRequest->breadcrumb())->toHaveCount(1);
+    expect(sharp()->context()->isEntityList())->toBeTrue()
+        ->and(sharp()->context()->breadcrumb()->allSegments())->toHaveCount(1);
 });
 
 it('builds the breadcrumb for a show page', function () {
@@ -39,26 +33,19 @@ it('builds the breadcrumb for a show page', function () {
         )
         ->assertOk();
 
-    $currentRequest = app(CurrentSharpRequest::class);
-
-    expect($currentRequest->isShow())->toBeTrue()
-        ->and($currentRequest->breadcrumb())->toHaveCount(2);
+    expect(sharp()->context()->isShow())->toBeTrue()
+        ->and(sharp()->context()->breadcrumb()->allSegments())->toHaveCount(2);
 });
 
 it('builds the breadcrumb for a single show page', function () {
-    config()->set(
-        'sharp.entities.single-person',
-        SinglePersonEntity::class,
-    );
+    sharp()->config()->addEntity('single-person', SinglePersonEntity::class);
 
     $this
         ->get(route('code16.sharp.single-show', 'single-person'))
         ->assertOk();
 
-    $currentRequest = app(CurrentSharpRequest::class);
-
-    expect($currentRequest->isShow())->toBeTrue()
-        ->and($currentRequest->breadcrumb())->toHaveCount(1);
+    expect(sharp()->context()->isShow())->toBeTrue()
+        ->and(sharp()->context()->breadcrumb()->allSegments())->toHaveCount(1);
 });
 
 it('builds the breadcrumb for a form', function () {
@@ -72,10 +59,8 @@ it('builds the breadcrumb for a form', function () {
         )
         ->assertOk();
 
-    $currentRequest = app(CurrentSharpRequest::class);
-
-    expect($currentRequest->isForm())->toBeTrue()
-        ->and($currentRequest->breadcrumb())->toHaveCount(2);
+    expect(sharp()->context()->isForm())->toBeTrue()
+        ->and(sharp()->context()->breadcrumb()->allSegments())->toHaveCount(2);
 });
 
 it('builds the breadcrumb for a form through a show page', function () {
@@ -89,10 +74,8 @@ it('builds the breadcrumb for a form through a show page', function () {
         )
         ->assertOk();
 
-    $currentRequest = app(CurrentSharpRequest::class);
-
-    expect($currentRequest->isForm())->toBeTrue()
-        ->and($currentRequest->breadcrumb())->toHaveCount(3);
+    expect(sharp()->context()->isForm())->toBeTrue()
+        ->and(sharp()->context()->breadcrumb()->allSegments())->toHaveCount(3);
 });
 
 it('uses labels defined for entities in the config', function () {
@@ -115,7 +98,7 @@ it('uses labels defined for entities in the config', function () {
         );
 });
 
-it('uses custom labels on leaves if configured', function () {
+it('uses custom labels on leaves if configured, based on unformatted data', function () {
     fakeShowFor('person', new class extends PersonShow
     {
         public function buildShowConfig(): void
@@ -125,7 +108,10 @@ it('uses custom labels on leaves if configured', function () {
 
         public function find($id): array
         {
-            return ['id' => 1, 'name' => 'Marie Curie'];
+            return $this->transform([
+                'id' => 1,
+                'name' => 'Marie Curie'
+            ]);
         }
     });
 
@@ -140,6 +126,10 @@ it('uses custom labels on leaves if configured', function () {
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('breadcrumb.items.0.label', 'List')
+            // Data is not formatted for breadcrumb:
             ->where('breadcrumb.items.1.label', 'Marie Curie')
+            // Data is formatted for fields:
+            ->where('show.data.name', ['text' => 'Marie Curie'])
         );
 });
+

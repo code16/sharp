@@ -1,6 +1,5 @@
 <script setup lang="ts">
     import { Modal } from "@/components/ui";
-    import FormComponent from "../../../../Form.vue";
     import { Form } from "@/form/Form";
     import { ref } from "vue";
     import { FormData } from "@/types";
@@ -41,11 +40,12 @@
         </template>
 
         <template v-if="form">
-            <FormComponent
+            <SharpForm
                 :entity-key="parentForm.entityKey"
                 :instance-id="parentForm.instanceId"
                 :form="form"
                 :post-fn="post"
+                inline
                 style="transition-duration: 300ms"
                 ref="formComponent"
             />

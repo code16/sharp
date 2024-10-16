@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Exceptions;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Inertia\Inertia;
@@ -18,13 +19,13 @@ class SharpException extends \Exception
         parent::__construct($message, 0, $previous);
     }
 
-    public function render(Request $request): Response|JsonResponse|bool
+    public function render(Request $request): Response|RedirectResponse|JsonResponse|bool
     {
         if (app()->environment('local')) {
             return false;
         }
 
-        if ($request->expectsJson() && ! $request->inertia()) {
+        if ($request->routeIs('code16.sharp.api.*')) {
             return false;
         }
 

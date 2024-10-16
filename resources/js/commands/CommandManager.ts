@@ -1,6 +1,6 @@
 import { CommandData, CommandFormData, CommandResponseData, FormData } from "@/types";
-import { api } from "@/api";
-import { showAlert, showConfirm } from "@/utils/dialogs";
+import { api } from "@/api/api";
+import { RootAlertDialog, showAlert, showConfirm } from "@/utils/dialogs";
 import { parseBlobJSONContent } from "@/utils/request";
 import { AxiosResponse } from "axios";
 import { reactive } from "vue";
@@ -74,7 +74,7 @@ export class CommandManager {
         };
     }
 
-    async send(command: CommandData, endpoints: CommandEndpoints) {
+    async send(command: CommandData, endpoints: CommandEndpoints, confirmDialogOptions?: Partial<RootAlertDialog>) {
         this.state.currentCommand = command;
         this.state.currentCommandEndpoints = endpoints;
 
@@ -84,7 +84,10 @@ export class CommandManager {
         }
 
         if(command.confirmation) {
-            if(! await showConfirm(command.confirmation)) {
+            if(! await showConfirm(command.confirmation.description, {
+                title: command.confirmation.title,
+                ...confirmDialogOptions,
+            })) {
                 this.finish();
                 return;
             }
@@ -144,16 +147,22 @@ export class CommandManager {
     }
 
     async postForm(data: CommandFormData['data']) {
-        const response = await api.post(this.state.currentCommandEndpoints.postCommand, {
-            data,
-            query: this.state.currentCommandEndpoints.query,
-            command_step: this.state.currentCommandResponse?.action === 'step'
-                ? this.state.currentCommandResponse.step
-                : null,
-        }, {
-            responseType: 'blob',
-        });
+        this.state.currentCommandFormLoading = true;
 
-        this.handleCommandApiResponse(response);
+        try {
+            const response = await api.post(this.state.currentCommandEndpoints.postCommand, {
+                data,
+                query: this.state.currentCommandEndpoints.query,
+                command_step: this.state.currentCommandResponse?.action === 'step'
+                    ? this.state.currentCommandResponse.step
+                    : null,
+            }, {
+                responseType: 'blob',
+            });
+
+            this.handleCommandApiResponse(response);
+        } finally {
+            this.state.currentCommandFormLoading = false;
+        }
     }
 }

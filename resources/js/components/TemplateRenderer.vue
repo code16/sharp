@@ -1,38 +1,31 @@
+<script lang="ts" setup>
+    import { Card, CardHeader } from "@/components/ui/card";
+    import { computed } from "vue";
+    import { Badge } from "@/components/ui/badge";
+
+    const props = defineProps<{
+        templateData?: Record<string, any>,
+        templateProps?: string[],
+        template: string,
+    }>();
+
+    const component = computed(() => ({
+        components: {
+            'sharp-card': Card,
+            'sharp-card-header': CardHeader,
+            'sharp-badge': Badge,
+        },
+        template: `<div class="SharpTemplate">${props.template ?? ''}</div>`,
+        props: [
+            ...(props.templateProps || []),
+            ...Object.keys(props.templateData ?? {}),
+        ],
+    }));
+</script>
+
 <template>
-    <component :is="component" v-bind="templateData">
+    <component :is="component" v-bind="templateData ?? {}">
         <slot />
     </component>
 </template>
 
-<script>
-    export default {
-        props: {
-            name: String,
-            templateData: Object,
-            templateProps: Array,
-            template: String,
-        },
-
-        computed: {
-            component() {
-                return {
-                    name: 'TemplateRendererContent',
-                    template: `<div class="SharpTemplate">${this.template ?? ''}</div>`,
-                    props: [
-                        ...(this.templateProps || []),
-                        ...Object.keys(this.templateData ?? {}),
-                    ],
-                    mounted() {
-                        const isEmpty = !this.$el.children?.length && !this.$el.innerText?.trim();
-                        this.$emit('content-change', {
-                            isEmpty,
-                        });
-                        if(this.$el.children?.length > 0) {
-                            this.$el.classList.add('SharpTemplate--has-children');
-                        }
-                    },
-                }
-            },
-        }
-    }
-</script>

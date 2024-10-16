@@ -56,8 +56,6 @@ it('returns commands config', function () {
                     'description' => null,
                     'instance_selection' => null,
                     'confirmation' => null,
-                    'modal_title' => null,
-                    'modal_confirm_label' => null,
                     'has_form' => false,
                 ],
             ],
@@ -71,8 +69,6 @@ it('returns commands config', function () {
                     'authorization' => [],
                     'description' => null,
                     'confirmation' => null,
-                    'modal_title' => null,
-                    'modal_confirm_label' => null,
                     'has_form' => false,
                 ],
             ],
@@ -108,7 +104,10 @@ it('handles confirmation on a command', function () {
 
     $list->buildListConfig();
 
-    expect($list->listConfig()['commands']['entity'][0][0]['confirmation'])->toEqual('Sure?');
+    expect($list->listConfig()['commands']['entity'][0][0]['confirmation'])->toEqual([
+        'title' => 'Sure?',
+        'description' => null,
+    ]);
 });
 
 it('allows to declare instance selection mode on a command', function () {
@@ -210,37 +209,6 @@ it('allows to define a form to a command', function () {
     $list->buildListConfig();
 
     expect($list->listConfig()['commands']['entity'][0][0]['has_form'])->toBeTrue();
-});
-
-it('allows to define a form modal title on a command', function () {
-    $list = new class extends FakeSharpEntityList
-    {
-        public function getEntityCommands(): ?array
-        {
-            return [
-                'entityCommand' => new class extends EntityCommand
-                {
-                    public function label(): string
-                    {
-                        return 'My Entity Command';
-                    }
-
-                    public function buildCommandConfig(): void
-                    {
-                        $this->configureFormModalTitle('My title');
-                    }
-
-                    public function execute(array $data = []): array
-                    {
-                    }
-                },
-            ];
-        }
-    };
-
-    $list->buildListConfig();
-
-    expect($list->listConfig()['commands']['entity'][0][0]['modal_title'])->toEqual('My title');
 });
 
 it('handles authorization in an entity command', function () {
@@ -390,8 +358,9 @@ it('allows to define separators in instance commands', function () {
     };
 
     $list->buildListConfig();
-
-    expect($list->listConfig()['commands']['instance'][0][0]['key'])->toEqual('command-1')
+    
+    expect($list->listConfig()['commands']['instance'])->toHaveCount(2)
+        ->and($list->listConfig()['commands']['instance'][0][0]['key'])->toEqual('command-1')
         ->and($list->listConfig()['commands']['instance'][0][1]['key'])->toEqual('command-2')
         ->and($list->listConfig()['commands']['instance'][1][0]['key'])->toEqual('command-3');
 });
@@ -441,8 +410,9 @@ it('allows to define separators in entity commands', function () {
     };
 
     $list->buildListConfig();
-
-    expect($list->listConfig()['commands']['entity'][0][0]['key'])->toEqual('command-1')
+    
+    expect($list->listConfig()['commands']['entity'])->toHaveCount(2)
+        ->and($list->listConfig()['commands']['entity'][0][0]['key'])->toEqual('command-1')
         ->and($list->listConfig()['commands']['entity'][1][0]['key'])->toEqual('command-2')
         ->and($list->listConfig()['commands']['entity'][1][1]['key'])->toEqual('command-3');
 });

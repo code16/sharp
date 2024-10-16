@@ -39,7 +39,6 @@ trait HandleFields
     final public function fields(): array
     {
         return $this->getBuiltFields()
-            ->when($this->pageAlertHtmlField ?? null, fn ($collection) => $collection->push($this->pageAlertHtmlField))
             ->when($this->pageTitleField ?? null, fn ($collection) => $collection->push($this->pageTitleField))
             ->map(fn ($collection) => $collection->toArray())
             ->keyBy('key')
@@ -67,6 +66,23 @@ trait HandleFields
         }
 
         return $fields[$key] ?? null;
+    }
+
+    final public function applyFormatters(?array $attributes): ?array
+    {
+        if (!$attributes) {
+            return null;
+        }
+
+        return collect($attributes)
+            ->map(function ($value, $key) {
+                $field = $this->findFieldByKey($key);
+
+                return $field
+                    ? $field->formatter()->toFront($field, $value)
+                    : $value;
+            })
+            ->all();
     }
 
     /**

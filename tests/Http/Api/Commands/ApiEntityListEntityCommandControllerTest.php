@@ -10,12 +10,8 @@ use Code16\Sharp\Utils\PageAlerts\PageAlert;
 use Illuminate\Http\UploadedFile;
 
 beforeEach(function () {
+    sharp()->config()->addEntity('person', PersonEntity::class);
     login();
-
-    config()->set(
-        'sharp.entities.person',
-        PersonEntity::class,
-    );
 });
 
 it('allows to call an info entity command', function () {
@@ -99,6 +95,35 @@ it('allows to call a view entity command', function () {
         }
     });
 
+    $this->postJson(route('code16.sharp.api.list.command.entity', ['person', 'cmd']))
+        ->assertOk()
+        ->assertJson([
+            'action' => 'view',
+        ]);
+});
+
+it('allows to call a html instance command', function () {
+    fakeListFor('person', new class extends PersonList
+    {
+        protected function getEntityCommands(): ?array
+        {
+            return [
+                'cmd' => new class extends EntityCommand
+                {
+                    public function label(): ?string
+                    {
+                        return 'my command';
+                    }
+                    
+                    public function execute(array $data = []): array
+                    {
+                        return $this->html('Hello world');
+                    }
+                },
+            ];
+        }
+    });
+    
     $this->postJson(route('code16.sharp.api.list.command.entity', ['person', 'cmd']))
         ->assertOk()
         ->assertJson([
@@ -447,6 +472,7 @@ it('disallows to call an unauthorized entity command', function () {
 });
 
 it('returns the form fields of the entity command and build a basic layout if missing', function () {
+    $this->withoutExceptionHandling();
     fakeListFor('person', new class extends PersonList
     {
         protected function getEntityCommands(): ?array
@@ -524,7 +550,12 @@ it('allows to configure a page alert on an entity command', function () {
                             ->setLevelInfo()
                             ->setMessage('My page alert');
                     }
-
+                    
+                    public function buildFormFields(FieldsContainer $formFields): void
+                    {
+                        $formFields->addField(SharpFormTextField::make('name'));
+                    }
+                    
                     public function execute(array $data = []): array
                     {
                         return $this->reload();
@@ -535,6 +566,7 @@ it('allows to configure a page alert on an entity command', function () {
     });
 
     $this
+        ->withoutExceptionHandling()
         ->getJson(route('code16.sharp.api.list.command.entity.form', ['person', 'cmd']))
         ->assertOk()
         ->assertJsonFragment([
@@ -604,6 +636,12 @@ it('allows to initialize form data in an entity command', function () {
                     public function label(): ?string
                     {
                         return 'entity';
+                    }
+                    
+                    public function buildCommandConfig(): void
+                    {
+                        $this->configureFormModalTitle(fn ($data) => "Edit {$data['name']}")
+                            ->configureFormModalDescription('Custom description');
                     }
 
                     public function buildFormFields(FieldsContainer $formFields): void

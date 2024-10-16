@@ -5,6 +5,7 @@ namespace Code16\Sharp\Data\Dashboard;
 use Code16\Sharp\Data\Dashboard\Widgets\WidgetData;
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\DataCollection;
+use Code16\Sharp\Data\Filters\FilterValuesData;
 use Code16\Sharp\Data\PageAlertData;
 
 final class DashboardData extends Data
@@ -16,6 +17,7 @@ final class DashboardData extends Data
         public DashboardLayoutData $layout,
         /** @var array<string,mixed> */
         public array $data,
+        public FilterValuesData $filterValues,
         public ?PageAlertData $pageAlert = null,
     ) {
     }
@@ -27,6 +29,7 @@ final class DashboardData extends Data
             config: DashboardConfigData::from($dashboard['config']),
             layout: DashboardLayoutData::from($dashboard['layout']),
             data: $dashboard['data'],
+            filterValues: FilterValuesData::from($dashboard['filterValues']),
             pageAlert: PageAlertData::optional($dashboard['pageAlert'] ?? null),
         );
     }

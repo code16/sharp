@@ -13,7 +13,6 @@ export type CheckFilterData = {
   key: string;
   label: string | null;
   type: "check";
-  default: boolean | null;
 };
 export type CommandAction =
   | "download"
@@ -29,16 +28,20 @@ export type CommandData = {
   label: string | null;
   description: string | null;
   type: CommandType;
-  confirmation: string | null;
-  modal_title: string | null;
-  modal_confirm_label: string | null;
+  confirmation: { title: string; description: string | null } | null;
   has_form: boolean;
   authorization: Array<string | number> | boolean;
   instance_selection: InstanceSelectionMode | null;
   primary: boolean | null;
 };
+export type CommandFormConfigData = {
+  title: string | null;
+  description: string | null;
+  buttonLabel: string | null;
+};
 export type CommandFormData = {
   data: { [key: string]: FormFieldData["value"] };
+  config: CommandFormConfigData;
   fields: { [key: string]: FormFieldData } | null;
   layout: FormLayoutData | null;
   locales: Array<string> | null;
@@ -68,6 +71,7 @@ export type DashboardData = {
   config: DashboardConfigData;
   layout: DashboardLayoutData;
   data: { [key: string]: any };
+  filterValues: FilterValuesData;
   pageAlert: PageAlertData | null;
 };
 export type DashboardLayoutData = {
@@ -87,14 +91,15 @@ export type DateRangeFilterData = {
   key: string;
   label: string | null;
   type: "daterange";
-  default: DateRangeFilterValueData | null;
   required: boolean;
   mondayFirst: boolean;
   displayFormat: string;
+  presets: Array<{ key: string; label: string }> | null;
 };
 export type DateRangeFilterValueData = {
-  start: Date | string;
-  end: Date | string;
+  start: string;
+  end: string;
+  preset: string | null;
 };
 export type EmbedData = {
   value?: FormData["data"] & { slot: string };
@@ -111,11 +116,11 @@ export type EmbedFormData = {
   fields: { [key: string]: FormFieldData };
   layout: FormLayoutData;
 };
-export type EntityAuthorizationsData = {
+export type EntityListAuthorizationsData = {
   view: Array<number | string>;
-  update: Array<number | string>;
   delete: Array<number | string>;
   create: boolean;
+  reorder: boolean;
 };
 export type EntityListConfigData = {
   instanceIdAttribute: string;
@@ -132,22 +137,24 @@ export type EntityListConfigData = {
   state: EntityStateData | null;
 };
 export type EntityListData = {
-  authorizations: EntityAuthorizationsData;
+  authorizations: EntityListAuthorizationsData;
   config: EntityListConfigData;
   fields: Array<EntityListFieldData>;
   data: Array<{ [key: string]: any }>;
   forms: { [key: string]: EntityListMultiformData };
+  filterValues: FilterValuesData;
+  query: EntityListQueryParamsData | null;
   meta: PaginatorMetaData | null;
   pageAlert: PageAlertData | null;
 };
 export type EntityListFieldData = {
+  type: string;
   key: string;
   label: string;
   sortable: boolean;
-  html: boolean;
-  size: string;
+  width: string | null;
   hideOnXS: boolean;
-  sizeXS: string;
+  html?: boolean | null;
 };
 export type EntityListMultiformData = {
   key: string;
@@ -155,10 +162,12 @@ export type EntityListMultiformData = {
   instances: Array<number | string>;
 };
 export type EntityListQueryParamsData = {
-  search?: string | null;
-  page?: number | null;
-  sort?: string | null;
+  search?: string;
+  page?: number;
+  sort?: string;
   dir?: "asc" | "desc";
+} & {
+  [filterKey: string]: string;
 };
 export type EntityStateData = {
   attribute: string;
@@ -189,6 +198,11 @@ export type FilterData =
   | DateRangeFilterData
   | SelectFilterData;
 export type FilterType = "select" | "daterange" | "check";
+export type FilterValuesData = {
+  current: { [key: string]: any };
+  default: { [key: string]: any };
+  valuated: { [key: string]: boolean };
+};
 export type FormAutocompleteFieldData = {
   value: string | number | null | { [locale: string]: string | number | null };
   key: string;
@@ -391,7 +405,7 @@ export type FormGeolocationFieldData = {
   extraStyle: string | null;
 };
 export type FormHtmlFieldData = {
-  value: { [key: string]: any } | null;
+  value?: { [key: string]: any } | null;
   key: string;
   type: "html";
   template: string;
@@ -419,7 +433,9 @@ export type FormLayoutTabData = {
   columns: Array<FormLayoutColumnData>;
 };
 export type FormListFieldData = {
-  value?: Array<{ [key: string]: any }> | null;
+  value?: Array<{
+    [key: string]: Exclude<FormFieldData["value"], FormListFieldData>;
+  }> | null;
   key: string;
   type: "list";
   addable: boolean;
@@ -454,11 +470,14 @@ export type FormNumberFieldData = {
   extraStyle: string | null;
 };
 export type FormSelectFieldData = {
-  value: string | number | Array<string | number> | null;
+  value?: string | number | Array<string | number> | null;
   key: string;
   type: "select";
   options:
-    | Array<{ id: string | number; label: string }>
+    | Array<{
+        id: string | number;
+        label: string | { [locale: string]: string };
+      }>
     | FormDynamicOptionsData;
   multiple: boolean;
   showSelectAll: boolean;
@@ -556,7 +575,8 @@ export type FormUploadFieldValueData = {
   nativeFile?: File;
 };
 export type GlobalFiltersData = {
-  filters: ConfigFiltersData;
+  config: { filters: ConfigFiltersData };
+  filterValues: FilterValuesData;
 };
 export type GraphWidgetData = {
   value?: {
@@ -589,6 +609,10 @@ export type LayoutFieldData = {
   size: number;
   sizeXS: number;
   item: Array<Array<LayoutFieldData>> | null;
+};
+export type LogoData = {
+  svg: string | null;
+  url: string;
 };
 export type MenuData = {
   items: Array<MenuItemData>;
@@ -637,12 +661,12 @@ export type PageAlertLevel =
 export type PaginatorMetaData = {
   current_page: number;
   first_page_url: string;
-  from: number;
+  from: number | null;
   next_page_url: string | null;
   path: string;
   per_page: number;
   prev_page_url: string | null;
-  to: number;
+  to: number | null;
   links: Array<{ url: string | null; label: string; active: boolean }>;
   last_page: number | null;
   last_page_url: string | null;
@@ -661,7 +685,6 @@ export type SelectFilterData = {
   key: string;
   label: string | null;
   type: "select";
-  default: number | string | Array<number | string> | null;
   multiple: boolean;
   required: boolean;
   values: Array<{ id: string | number } & { [key: string]: any }>;
@@ -670,6 +693,13 @@ export type SelectFilterData = {
   searchKeys: Array<any>;
   template: string;
 };
+export type SessionData = {
+  _token: string;
+  status: string | null;
+  status_title: string | null;
+  status_level: SessionStatusLevel | null;
+};
+export type SessionStatusLevel = "error" | "success";
 export type ShowConfigData = {
   deleteConfirmationText: string;
   isSingle: boolean;
@@ -706,6 +736,7 @@ export type ShowEntityListFieldData = {
   showCreateButton: boolean;
   showSearchField: boolean;
   showCount: boolean;
+  endpointUrl: string;
   label: string | null;
   hiddenFilters: { [key: string]: any } | null;
 };
@@ -749,7 +780,7 @@ export type ShowLayoutColumnData = {
   fields: Array<Array<LayoutFieldData>>;
 };
 export type ShowLayoutData = {
-  sections: Array<ShowLayoutSectionData>;
+  sections: { [key: number]: ShowLayoutSectionData };
 };
 export type ShowLayoutSectionData = {
   key: string | null;
@@ -790,6 +821,7 @@ export type ShowTextFieldData = {
 };
 export type UserData = {
   name: string | null;
+  email: string | null;
 };
 export type UserMenuData = {
   items: Array<MenuItemData>;

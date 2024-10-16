@@ -1,8 +1,14 @@
 import { parseBlobJSONContent } from "@/utils/request";
 import { handleErrorAlert } from "./errors";
+import { Axios } from "axios";
 
 
-export function installInterceptors(api) {
+export function installInterceptors(api: Axios) {
+    api.interceptors.request.use(request => {
+        request.headers['X-Current-Page-Url'] = location.href;
+        return request;
+    });
+
     api.interceptors.response.use(
         response => {
             if(!response.headers['content-type']?.includes('application/json')

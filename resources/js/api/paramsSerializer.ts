@@ -10,9 +10,11 @@ function transformValue(value) {
 }
 
 export function transformParams(params) {
-    return Object.entries(params).reduce((res, [key, value]) => ({
-        ...res, [key]: transformValue(value)
-    }), params || {});
+    return Object.fromEntries(
+        Object.entries(params ?? {}).map(([key, value]) => {
+            return [key, transformValue(value)];
+        })
+    );
 }
 
 export default function paramsSerializer(params) {

@@ -15,6 +15,10 @@ jobs:
     strategy:
       matrix:
         include:
+          - php: 8.8
+            env:
+              LARAVEL: 11.*
+              TESTBENCH: 9.*
           - php: 8.2
             env:
               LARAVEL: 11.*
@@ -93,7 +97,7 @@ jobs:
 #          working-directory: tests-e2e
 #          env: CI=true
 #
-#      - uses: actions/upload-artifact@v2
+#      - uses: actions/upload-artifact@v4
 #        if: always()
 #        continue-on-error: true
 #        with:

@@ -1,6 +1,7 @@
 <?php
 
 use Carbon\Carbon;
+use Code16\Sharp\EntityList\Fields\EntityListFilterField;
 use Code16\Sharp\EntityList\Filters\EntityListCheckFilter;
 use Code16\Sharp\EntityList\Filters\EntityListDateRangeFilter;
 use Code16\Sharp\EntityList\Filters\EntityListDateRangeRequiredFilter;
@@ -46,7 +47,6 @@ it('allows to configure filters with a key', function () {
                         ['id' => 1, 'label' => 'A'],
                         ['id' => 2, 'label' => 'B'],
                     ],
-                    'default' => null,
                     'type' => 'select',
                     'master' => false,
                     'searchable' => false,
@@ -155,6 +155,11 @@ it('allows list filter to be required', function () {
             return [
                 new class extends EntityListSelectRequiredFilter
                 {
+                    public function buildFilterConfig(): void
+                    {
+                        $this->configureKey('test');
+                    }
+                    
                     public function values(): array
                     {
                         return ['A' => 'A', 'B' => 'B'];
@@ -172,7 +177,11 @@ it('allows list filter to be required', function () {
     $list->buildListConfig();
 
     expect($list->listConfig()['filters']['_root'][0]['required'])->toBeTrue()
-        ->and($list->listConfig()['filters']['_root'][0]['default'])->toEqual('B');
+        ->and($list->filterContainer()->getCurrentFilterValuesForFront(null))->toEqual([
+            'default' => ['test' => 'B'],
+            'current' => ['test' => 'B'],
+            'valuated' => ['test' => false],
+        ]);
 });
 
 it('allows to define a label for the filter', function () {
@@ -346,7 +355,11 @@ it('allows to declare a filter as retained and to set its default value', functi
     session()->put('_sharp_retained_filter_test_20', 2);
     $list->buildListConfig();
 
-    expect($list->listConfig()['filters']['_root'][0]['default'])->toEqual(2);
+    expect($list->filterContainer()->getCurrentFilterValuesForFront(null))->toEqual([
+        'default' => ['test_20' => null],
+        'current' => ['test_20' => 2],
+        'valuated' => ['test_20' => true],
+    ]);
 });
 
 it('returns retained value for required and retained filters returns by default', function () {
@@ -380,8 +393,12 @@ it('returns retained value for required and retained filters returns by default'
     // Artificially put retained value in session
     session()->put('_sharp_retained_filter_test_21', 2);
     $list->buildListConfig();
-
-    expect($list->listConfig()['filters']['_root'][0]['default'])->toEqual(2);
+    
+    expect($list->filterContainer()->getCurrentFilterValuesForFront(null))->toEqual([
+        'default' => ['test_21' => 1],
+        'current' => ['test_21' => 2],
+        'valuated' => ['test_21' => true],
+    ]);
 });
 
 it('formats date range filter retained value', function () {
@@ -405,10 +422,17 @@ it('formats date range filter retained value', function () {
     // Artificially put retained value in session
     session()->put('_sharp_retained_filter_test_22', '20190922..20190925');
     $list->buildListConfig();
-
-    expect($list->listConfig()['filters']['_root'][0]['default'])->toEqual([
-        'start' => '2019-09-22',
-        'end' => '2019-09-25',
+    
+    expect($list->filterContainer()->getCurrentFilterValuesForFront(null))->toEqual([
+        'default' => ['test_22' => null],
+        'current' => [
+            'test_22' => [
+                'start' => '2019-09-22',
+                'end' => '2019-09-25',
+                'preset' => null,
+            ]
+        ],
+        'valuated' => ['test_22' => true],
     ]);
 });
 
@@ -420,6 +444,11 @@ it('allows to declare a date range filter as required', function () {
             return [
                 new class extends EntityListDateRangeRequiredFilter
                 {
+                    public function buildFilterConfig(): void
+                    {
+                        $this->configureKey('test');
+                    }
+                    
                     public function defaultValue(): array
                     {
                         return ['start' => Carbon::now()->subDay(), 'end' => Carbon::now()];
@@ -432,9 +461,22 @@ it('allows to declare a date range filter as required', function () {
     $list->buildListConfig();
 
     expect($list->listConfig()['filters']['_root'][0]['required'])->toBeTrue()
-        ->and($list->listConfig()['filters']['_root'][0]['default'])->toEqual([
-            'start' => Carbon::now()->subDay()->format('Y-m-d'),
-            'end' => Carbon::now()->format('Y-m-d'),
+        ->and($list->filterContainer()->getCurrentFilterValuesForFront(null))->toEqual([
+            'default' => [
+                'test' => [
+                    'start' => Carbon::now()->subDay()->format('Y-m-d'),
+                    'end' => Carbon::now()->format('Y-m-d'),
+                    'preset' => null,
+                ]
+            ],
+            'current' => [
+                'test' => [
+                    'start' => Carbon::now()->subDay()->format('Y-m-d'),
+                    'end' => Carbon::now()->format('Y-m-d'),
+                    'preset' => null,
+                ]
+            ],
+            'valuated' => ['test' => false],
         ]);
 });
 

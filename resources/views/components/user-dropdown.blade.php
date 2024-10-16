@@ -6,7 +6,7 @@
                 <div class="col-auto">
                     <i class="fas fa-user me-1" style="font-size: 1em"></i>
                 </div>
-                @if($username = sharp_user()->{config('sharp.auth.display_attribute', 'name')})
+                @if($username = auth()->user()->{config('sharp.auth.display_attribute', 'name')})
                     <div class="col" style="min-width: 0">
                         <div class="text-truncate fs-7 fw-normal"
                             style="text-transform: none; letter-spacing: 0; font-family: var(--bs-body-font-family)"

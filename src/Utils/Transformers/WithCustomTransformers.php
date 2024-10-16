@@ -7,7 +7,6 @@ use Code16\Sharp\EntityList\Commands\Command;
 use Code16\Sharp\Form\Fields\Editor\Uploads\FormEditorUploadForm;
 use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
 use Code16\Sharp\Form\SharpForm;
-use Code16\Sharp\Http\Context\CurrentSharpRequest;
 use Code16\Sharp\Show\SharpShow;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Pagination\AbstractPaginator;
@@ -43,20 +42,13 @@ trait WithCustomTransformers
             || $this instanceof SharpFormEditorEmbed
             || $this instanceof FormEditorUploadForm
         ) {
-            // Form case: there's only one model and we must apply Formatters in the process
-            return $this->applyFormatters(
-                $this->applyTransformers($models),
-            );
+            // Form case: there's only one model
+            return $this->applyTransformers($models);
         }
 
         if ($this instanceof SharpShow) {
             // Show case: there's only one model
-            return $this->applyFormatters(
-                $this->applyTransformers(
-                    model: $models,
-                    forceFullObject: false
-                )
-            );
+            return $this->applyTransformers(model: $models, forceFullObject: false);
         }
 
         // SharpEntityList case: collection of models (potentially paginated)
@@ -165,19 +157,6 @@ trait WithCustomTransformers
         return $attributes;
     }
 
-    protected function applyFormatters(array $attributes): array
-    {
-        return collect($attributes)
-            ->map(function ($value, $key) {
-                $field = $this->findFieldByKey($key);
-
-                return $field
-                    ? $field->formatter()->toFront($field, $value)
-                    : $value;
-            })
-            ->all();
-    }
-
     /**
      * Handle `:` separator: we want to transform a related attribute in
      * a hasOne or belongsTo relationship. Ex: with "mother:name",
@@ -200,13 +179,12 @@ trait WithCustomTransformers
     {
         $idAttr = $this->instanceIdAttribute;
 
-        app(CurrentSharpRequest::class)
-            ->cacheInstances(
-                collect($instances)
-                    ->filter(fn ($instance) => (((object) $instance)->$idAttr ?? null) !== null)
-                    ->mapWithKeys(fn ($instance) => [
-                        ((object) $instance)->$idAttr => $instance,
-                    ])
-            );
+        sharp()->context()->cacheListInstances(
+            collect($instances)
+                ->filter(fn ($instance) => (((object) $instance)->$idAttr ?? null) !== null)
+                ->mapWithKeys(fn ($instance) => [
+                    ((object) $instance)->$idAttr => $instance,
+                ])
+        );
     }
 }

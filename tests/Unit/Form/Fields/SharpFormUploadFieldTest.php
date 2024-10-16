@@ -15,8 +15,8 @@ it('sets only default values', function () {
             'imageTransformKeepOriginal' => true,
             'storageBasePath' => 'data',
             'storageDisk' => 'local',
-            'maxFileSize' => config('sharp.uploads.max_file_size'),
-            'validationRule' => ['file', 'max:'.config('sharp.uploads.max_file_size') * 1024],
+            'maxFileSize' => sharp()->config()->get('uploads.max_file_size'),
+            'validationRule' => ['file', 'max:'.sharp()->config()->get('uploads.max_file_size') * 1024],
         ]);
 });
 
@@ -46,7 +46,9 @@ it('allows to define transformKeepOriginal with transformable', function () {
 });
 
 it('allows to define transformKeepOriginal with config', function () {
-    config()->set('sharp.uploads.transform_keep_original_image', false);
+    sharp()->config()->configureUploads(
+        keepOriginalImageOnTransform: false
+    );
 
     $formField = SharpFormUploadField::make('file');
 

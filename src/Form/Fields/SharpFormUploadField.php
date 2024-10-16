@@ -124,7 +124,7 @@ class SharpFormUploadField extends SharpFormField implements IsUploadField
 
     public function isImageTransformKeepOriginal(): bool
     {
-        return $this->imageTransformKeepOriginal ?? config('sharp.uploads.transform_keep_original_image', true);
+        return $this->imageTransformKeepOriginal ?? sharp()->config()->get('uploads.transform_keep_original_image');
     }
 
     public function imageTransformableFileTypes(): ?array
@@ -200,7 +200,7 @@ class SharpFormUploadField extends SharpFormField implements IsUploadField
             'imageTransformableFileTypes' => $this->imageTransformableFileTypes,
             'imageTransformKeepOriginal' => $this->isImageTransformKeepOriginal(),
             'imageCompactThumbnail' => $this->imageCompactThumbnail,
-            'maxFileSize' => $this->maxFileSize ?: config('sharp.uploads.max_file_size'),
+            'maxFileSize' => $this->maxFileSize ?: sharp()->config()->get('uploads.max_file_size'),
             'allowedExtensions' => $this->allowedExtensions,
             'validationRule' => $this->buildValidationRule(),
             'storageBasePath' => $this->storageBasePath,
@@ -214,7 +214,7 @@ class SharpFormUploadField extends SharpFormField implements IsUploadField
             ? SharpImageValidation::make()
             : SharpFileValidation::make();
 
-        $maxFileSizeInMB = $this->maxFileSize ?: config('sharp.uploads.max_file_size');
+        $maxFileSizeInMB = $this->maxFileSize ?: sharp()->config()->get('uploads.max_file_size');
 
         $validationRule
             ->max($maxFileSizeInMB * 1024)

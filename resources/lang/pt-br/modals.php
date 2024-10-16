@@ -1,10 +1,10 @@
 <?php
 
 return [
-    '401.title' => 'Não autenticado',
-    '403.title' => 'Não autorizado',
-    '419.title' => 'Inválido',
-    '419.message' => 'Esta ação não é mais válida, provavelmente devido a um longo período de inatividade. A página será recarregada automaticamente.',
+    'api.401.title' => 'Não autenticado',
+    'api.403.title' => 'Não autorizado',
+    'api.419.title' => 'Inválido',
+    'api.419.message' => 'Esta ação não é mais válida, provavelmente devido a um longo período de inatividade. A página será recarregada automaticamente.',
 
     'confirm.ok_button' => 'Confirmar',
 

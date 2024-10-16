@@ -5,7 +5,7 @@ use Code16\Sharp\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 
 Route::group([
-    'prefix' => '/'.sharp_base_url_segment(),
+    'prefix' => '/'.sharp()->config()->get('custom_url_segment'),
     'middleware' => ['sharp_common', 'sharp_web'],
 ], function () {
     Route::get('/login', [LoginController::class, 'create'])

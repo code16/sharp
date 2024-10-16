@@ -11,7 +11,11 @@ class PreviewPostCommand extends InstanceCommand
     {
         return 'Preview post';
     }
-
+    
+    public function buildCommandConfig(): void
+    {
+    }
+    
     public function execute(mixed $instanceId, array $data = []): array
     {
         return $this->view('sharp.post-preview', [
@@ -25,8 +29,9 @@ class PreviewPostCommand extends InstanceCommand
             return true;
         }
 
-        $post = currentSharpRequest()
-            ->findCachedInstance($instanceId, fn ($instanceId) => Post::find($instanceId));
+        $post = sharp()
+            ->context()
+            ->findListInstance($instanceId, fn ($postId) => Post::find($postId));
 
         return $post && ($post->isOnline() || $post->author_id === auth()->id());
     }

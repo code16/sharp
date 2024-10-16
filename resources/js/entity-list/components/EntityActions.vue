@@ -1,17 +1,34 @@
 <script setup lang="ts">
-    import { nextTick, ref } from "vue";
+    import { ref, watchEffect } from "vue";
 
-    const stateDropdown = ref();
+    const menuOpened = ref(false);
+    const stateSubmenuOpened = ref(false);
+    const requestedStateMenu = ref(false);
 
-    async function openStateDropdown() {
-        await nextTick();
-        stateDropdown.value.open();
-    }
+    let timeout = null;
+    const slotProps = {
+        menuOpened,
+        stateSubmenuOpened,
+        requestedStateMenu,
+        openStateMenu() {
+            clearTimeout(timeout);
+            requestedStateMenu.value = true;
+            menuOpened.value = true;
+            setTimeout(() => stateSubmenuOpened.value = true, 50);
+        },
+    };
+
+    watchEffect(() => {
+        if(!menuOpened.value) {
+            timeout = setTimeout(() => requestedStateMenu.value = false, 100);
+        }
+    });
+
+    defineSlots<{
+        default: (props: typeof slotProps) => any
+    }>();
 </script>
 
 <template>
-    <slot v-bind="{
-        stateDropdownRef: el => stateDropdown = el,
-        openStateDropdown,
-    }" />
+    <slot v-bind="slotProps" />
 </template>

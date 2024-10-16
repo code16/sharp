@@ -197,7 +197,7 @@ To add custom attributes to `<x-sharp-image>` component you can use the followin
 You can extend `<x-sharp-file>` and `<x-sharp-image>` components by publishing them:
 
 ```
-php artisan vendor:publish --provider=Code16\\Sharp\\SharpServiceProvider --tag=views
+php artisan vendor:publish --tag=sharp-views
 ```
 
 Here are the parameters passed to the components:

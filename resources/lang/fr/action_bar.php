@@ -1,14 +1,19 @@
 <?php
 
 return [
+    'color-mode-dropdown.label' => 'Thème',
+    'color-mode-dropdown.light' => 'Clair',
+    'color-mode-dropdown.dark' => 'Sombre',
+    'color-mode-dropdown.system' => 'Système',
 
-    'list.items_count' => ':count élément(s)',
-    'list.search.placeholder' => 'Rechercher',
-    'list.search.title' => 'Résultats pour “:search”',
+    'list.items_count' => ':count élément|:count éléments',
+    'list.search.button' => 'Rechercher',
+    'list.search.placeholder' => 'Rechercher...',
+    'list.search.title' => ':count résultat|:count résultats',
     'list.create_button' => 'Nouveau...',
     'list.forms_dropdown' => 'Nouveau',
     'list.reorder_button' => 'Réarranger',
-    'list.reorder_button.finish' => 'Ok',
+    'list.reorder_button.finish' => 'Valider',
     'list.reorder_button.cancel' => 'Annuler',
     'list.select_button' => 'Sélectionner...',
     'locale_selector.label' => 'Choisissez une langue',

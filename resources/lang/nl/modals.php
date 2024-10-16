@@ -1,10 +1,10 @@
 <?php
 
 return [
-    '401.title' => 'Ongeverifieerd',
-    '403.title' => 'Niet geautoriseerd',
-    '419.title' => 'Ongeldig',
-    '419.message' => 'Deze actie is niet meer geldig, waarschijnlijk door inactiviteit. De pagina zal automatisch worden herladen.',
+    'api.401.title' => 'Ongeverifieerd',
+    'api.403.title' => 'Niet geautoriseerd',
+    'api.419.title' => 'Ongeldig',
+    'api.419.message' => 'Deze actie is niet meer geldig, waarschijnlijk door inactiviteit. De pagina zal automatisch worden herladen.',
 
     'confirm.ok_button' => 'Bevestig',
 

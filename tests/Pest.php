@@ -67,7 +67,10 @@ uses()
 
 function login(?User $user = null)
 {
-    return test()->actingAs($user ?: new User, config('sharp.auth.guard', 'web'));
+    return test()->actingAs(
+        $user ?: new User,
+        sharp()->config()->get('auth.guard') ?: 'web'
+    );
 }
 
 function fakeListFor(string $entityKey, $fakeImplementation)

@@ -11,6 +11,6 @@ trait UsesSharpUploadModel
      */
     public static function getUploadModelClass(): string
     {
-        return config('sharp.uploads.model_class') ?: SharpUploadModel::class;
+        return sharp()->config()->get('uploads.model_class') ?: SharpUploadModel::class;
     }
 }

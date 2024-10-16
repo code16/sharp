@@ -1,0 +1,19 @@
+<?php
+
+namespace DummyEntitiesNamespace;
+
+use DummyFullEntityListClass;
+use DummyFullFormClass;
+use DummyFullPolicyClass;
+use DummyFullShowClass;
+use Code16\Sharp\Utils\Entities\SharpEntity;
+
+class DummyClass extends SharpEntity
+{
+    protected string $label = 'My dummy label';
+    protected ?string $list = DummyEntityListClass::class;
+    protected ?string $show = DummyShowClass::class;
+    protected ?string $form = DummyFormClass::class;
+    protected ?string $policy = DummyPolicyClass::class;
+    protected array $prohibitedActions = [];
+}

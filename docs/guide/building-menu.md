@@ -1,18 +1,20 @@
 # Building the menu
 
-Sharp UI is organized with two menus: the main one is on a left sidebar, and the user menu is a dropdown located in the top right corner.
+The Sharp UI is organized with two menus: the main one is on a left sidebar, and the user menu is a dropdown located in the top right corner.
 
 ![](./img/menu-v8.png)
 
-All links shares common things:
-
-- an icon (from [Font Awesome 5](https://fontawesome.com/icons/))
-- a label
-- and a URL
+All links shares common things: an icon, a label and an URL.
 
 Links can be grouped in categories, like "Blog" in this screenshot.
 
 ## Create a SharpMenu class
+
+### Generator
+
+```bash
+php artisan sharp:make:menu <class_name>
+```
 
 ### Write and declare the class
 
@@ -28,17 +30,23 @@ class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
 }
 ```
 
-And should be declared in the config file:
+And should be declared in your SharpServiceProvider:
 
 ```php
-// config/sharp.php
-
-return [
-    // [...]
-    
-    'menu' => MySharpMenu::class,
-]
+class SharpServiceProvider extends SharpAppServiceProvider
+{
+    protected function configureSharp(SharpConfigBuilder $config): void
+    {
+        $config
+            ->setSharpMenu(MySharpMenu::class)
+            // [...]
+    }
+}
 ```
+
+::: info
+The `SharpServiceProvider` class is created bye the `sharp:install` artisan command; in case you don't have it, you can create it by yourself in the `App\Providers` namespace, or use the `sharp:make:provider` command.
+:::
 
 ### Link to an Entity List, a Dashboard or to a single Show Page
 

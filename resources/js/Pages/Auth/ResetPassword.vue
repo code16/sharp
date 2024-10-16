@@ -1,11 +1,17 @@
 <script setup lang="ts">
-    import AuthLayout from "@/Layouts/AuthLayout.vue";
+    import AuthLayout from "@/Layouts/Auth/AuthLayout.vue";
     import Title from "@/components/Title.vue";
     import { __ } from "@/utils/i18n";
     import { useForm } from "@inertiajs/vue3";
-    import TextInput from "@/form/components/fields/text/TextInput.vue";
-    import { Button } from "@/components/ui";
+    import { Button } from '@/components/ui/button';
     import { route } from "@/utils/url";
+    import AuthCard from "@/Layouts/Auth/AuthCard.vue";
+    import { FormItem, FormMessage } from "@/components/ui/form";
+    import { Label } from "@/components/ui/label";
+    import { Input } from "@/components/ui/input";
+    import { session } from "@/utils/session";
+    import { Alert, AlertTitle } from "@/components/ui/alert";
+    import { Check } from "lucide-vue-next";
 
     const props = defineProps<{
         token: string,
@@ -23,63 +29,48 @@
 <template>
     <AuthLayout>
         <Title>
-            {{ __('sharp::auth.reset_password.page_title') }}
+            {{ __('sharp::pages/auth/reset-password.title') }}
         </Title>
 
-        <div class="text-sm text-gray-500 leading-6 mb-6">
-            {{ __('sharp::pages/auth/reset-password.description') }}
-        </div>
-
         <form @submit.prevent="form.post(route('code16.sharp.password.reset.post'), {
-            onFinish: () => form.reset('password', 'password_confirmation'),
+            onFinish: () => { form.reset('password', 'password_confirmation') },
         })">
-            <div class="space-y-6">
-                <div>
-                    <label class="block text-sm font-medium leading-6 text-gray-900 mb-2" for="email">
-                        {{ __('sharp::pages/auth/reset-password.email_field') }}
-                    </label>
-                    <TextInput
-                        id="email"
-                        v-model="form.email"
-                        :has-error="!!form.errors.email"
-                    />
-                    <p v-if="form.errors.email" class="mt-2 text-sm text-red-600">
-                        {{ form.errors.email }}
-                    </p>
+            <AuthCard>
+                <template #title>
+                    {{ __('sharp::pages/auth/reset-password.title') }}
+                </template>
+                <template #description>
+                    {{ __('sharp::pages/auth/reset-password.description') }}
+                </template>
+                <div class="grid gap-4">
+                    <FormItem>
+                        <Label for="email">
+                            {{ __('sharp::pages/auth/reset-password.email_field') }}
+                        </Label>
+                        <Input id="email" type="email" v-model="form.email" />
+                        <FormMessage :message="form.errors.email" />
+                    </FormItem>
+                    <FormItem>
+                        <Label for="password">
+                            {{ __('sharp::pages/auth/reset-password.password_field') }}
+                        </Label>
+                        <Input id="password" type="password" v-model="form.password" />
+                        <FormMessage :message="form.errors.password" />
+                    </FormItem>
+                    <FormItem>
+                        <Label for="password_confirmation">
+                            {{ __('sharp::pages/auth/reset-password.password_confirmation_field') }}
+                        </Label>
+                        <Input id="password_confirmation" type="password" v-model="form.password_confirmation" />
+                        <FormMessage :message="form.errors.password_confirmation" />
+                    </FormItem>
                 </div>
-                <div>
-                    <label class="block text-sm font-medium leading-6 text-gray-900 mb-2" for="password">
-                        {{ __('sharp::pages/auth/reset-password.password_field') }}
-                    </label>
-                    <TextInput
-                        id="password"
-                        v-model="form.password"
-                        :has-error="!!form.errors.password"
-                        type="password"
-                        autofocus
-                    />
-                    <p v-if="form.errors.password" class="mt-2 text-sm text-red-600">
-                        {{ form.errors.password }}
-                    </p>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium leading-6 text-gray-900 mb-2" for="password_confirmation">
-                        {{ __('sharp::pages/auth/reset-password.password_confirmation_field') }}
-                    </label>
-                    <TextInput
-                        id="password_confirmation"
-                        v-model="form.password_confirmation"
-                        :has-error="!!form.errors.password_confirmation"
-                        type="password"
-                    />
-                    <p v-if="form.errors.password_confirmation" class="mt-2 text-sm text-red-600">
-                        {{ form.errors.password_confirmation }}
-                    </p>
-                </div>
-            </div>
-            <Button class="w-full mt-6" type="submit">
-                {{ __('sharp::pages/auth/reset-password.submit') }}
-            </Button>
+                <template #footer>
+                    <Button class="w-full" type="submit">
+                        {{ __('sharp::pages/auth/reset-password.submit') }}
+                    </Button>
+                </template>
+            </AuthCard>
         </form>
     </AuthLayout>
 </template>

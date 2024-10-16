@@ -3,7 +3,8 @@
     import { ExtensionNodeProps } from "@/form/components/fields/editor/types";
     import { Iframe, IframeAttributes } from "@/form/components/fields/editor/extensions/iframe/Iframe";
     import debounce from 'lodash/debounce';
-    import { Modal, Button } from "@/components/ui";
+    import { Button } from '@/components/ui/button';
+    import { Modal } from "@/components/ui";
     import NodeRenderer from "../../NodeRenderer.vue";
     import { getHTMLFromFragment } from "@tiptap/core";
     import { Fragment, Node } from "@tiptap/pm/model";
@@ -81,12 +82,12 @@
                     <div class="mt-3">
                         <div class="row row-cols-auto gx-2">
                             <div>
-                                <Button outline small @click="onEdit">
+                                <Button variant="outline" size="sm" @click="onEdit">
                                     {{ __('sharp::form.upload.edit_button') }}
                                 </Button>
                             </div>
                             <div>
-                                <Button variant="danger" outline small @click="onRemove">
+                                <Button variant="destructive" size="sm" @click="onRemove">
                                     {{ __('sharp::form.upload.remove_button') }}
                                 </Button>
                             </div>
@@ -124,7 +125,7 @@
             ></textarea>
 
             <template v-if="previewHtml && !invalid">
-                <div class="[&_iframe]:w-full [&_iframe]:max-h-[260px] [&_iframe[height$=%]]:h-[260px] mt-3" v-html="previewHtml">
+                <div class="[&_iframe]:w-full [&_iframe]:max-h-[260px] [&_iframe[height$='%']]:h-[260px] mt-3" v-html="previewHtml">
                 </div>
             </template>
         </Modal>

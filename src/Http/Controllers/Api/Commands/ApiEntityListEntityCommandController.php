@@ -4,7 +4,6 @@ namespace Code16\Sharp\Http\Controllers\Api\Commands;
 
 use Code16\Sharp\Data\Commands\CommandFormData;
 use Code16\Sharp\EntityList\Commands\EntityCommand;
-use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
 use Code16\Sharp\Http\Controllers\Api\ApiController;
@@ -25,17 +24,14 @@ class ApiEntityListEntityCommandController extends ApiController
     {
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();
-        $list->initQueryParams();
+        $list->initQueryParams(request()->query());
 
         $commandHandler = $this->getCommandHandler($list, $commandKey);
-        $formData = $commandHandler->formData() ?: null;
 
         return response()->json(
-            CommandFormData::from([
-                ...$this->getCommandForm($commandHandler),
-                'data' => $formData,
-                'pageAlert' => $commandHandler->pageAlert($formData),
-            ])
+            CommandFormData::from(
+                $this->getCommandForm($commandHandler, $commandHandler->formData())
+            )
         );
     }
 
@@ -43,7 +39,7 @@ class ApiEntityListEntityCommandController extends ApiController
     {
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();
-        $list->initQueryParams();
+        $list->initQueryParams(request()->input('query'));
 
         $commandHandler = $this->getCommandHandler($list, $commandKey);
 
@@ -58,7 +54,6 @@ class ApiEntityListEntityCommandController extends ApiController
     {
         $commandHandler = $list->findEntityCommandHandler($commandKey);
         $commandHandler->buildCommandConfig();
-        $commandHandler->initQueryParams(EntityListQueryParams::create()->fillWithRequest());
 
         if (! $commandHandler->authorize()) {
             throw new SharpAuthorizationException();

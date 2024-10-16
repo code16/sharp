@@ -1,6 +1,6 @@
 import { Form } from "@/form/Form";
 import { EmbedData, FormData, FormEditorFieldData } from "@/types";
-import { api } from "@/api";
+import { api } from "@/api/api";
 import { route } from "@/utils/url";
 import { Show } from "@/show/Show";
 import { reactive } from "vue";

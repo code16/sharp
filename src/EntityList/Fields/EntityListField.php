@@ -2,36 +2,20 @@
 
 namespace Code16\Sharp\EntityList\Fields;
 
-class EntityListField
+class EntityListField implements IsEntityListField
 {
-    public string $key;
-    protected string $label = '';
-    protected bool $sortable = false;
+    use HasCommonEntityListFieldAttributes;
+
     protected bool $html = true;
-    protected ?int $width;
-    protected int|bool|null $widthXs;
-    protected bool $hideOnXs = false;
+
+    private function __construct(string $key)
+    {
+        $this->key = $key;
+    }
 
     public static function make(string $key): self
     {
-        $instance = new static();
-        $instance->key = $key;
-
-        return $instance;
-    }
-
-    public function setLabel(string $label): self
-    {
-        $this->label = $label;
-
-        return $this;
-    }
-
-    public function setSortable(bool $sortable = true): self
-    {
-        $this->sortable = $sortable;
-
-        return $this;
+        return new static($key);
     }
 
     public function setHtml(bool $html = true): self
@@ -41,53 +25,32 @@ class EntityListField
         return $this;
     }
 
-    public function setWidth(int $width): self
-    {
-        $this->width = $width;
-
-        return $this;
-    }
-
-    public function setWidthFill(): self
-    {
-        $this->width = null;
-
-        return $this;
-    }
-
+    /**
+     * @deprecated
+     */
     public function setWidthOnSmallScreens(int $widthOnSmallScreens): self
     {
-        $this->widthXs = $widthOnSmallScreens;
-
         return $this;
     }
-
+    
+    /**
+     * @deprecated
+     */
     public function setWidthOnSmallScreensFill(): self
     {
-        $this->widthXs = true;
-
-        return $this;
-    }
-
-    public function hideOnSmallScreens(bool $hideOnSmallScreens = true): self
-    {
-        $this->hideOnXs = $hideOnSmallScreens;
-
         return $this;
     }
 
     public function getFieldProperties(): array
     {
         return [
+            'type' => 'text',
             'key' => $this->key,
             'label' => $this->label,
             'sortable' => $this->sortable,
             'html' => $this->html,
-            'size' => $this->width ?? 'fill',
+            'width' => $this->width,
             'hideOnXS' => $this->hideOnXs,
-            'sizeXS' => isset($this->widthXs)
-                ? ($this->widthXs === true ? 'fill' : $this->widthXs)
-                : ($this->width ?? 'fill'),
         ];
     }
 }

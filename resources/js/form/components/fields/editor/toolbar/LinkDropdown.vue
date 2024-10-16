@@ -1,36 +1,37 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
-    import { Button, Dropdown } from "@/components/ui";
-    import TextInput from '../../text/TextInput.vue';
-    import {Editor} from "@tiptap/vue-3";
-    import {ref} from "vue";
+    import { Button } from '@/components/ui/button';
+    import { Editor } from "@tiptap/vue-3";
+    import { ref } from "vue";
+    import { Selection } from "@tiptap/pm/state";
+    import { Input } from "@/components/ui/input";
+    import { Label } from "@/components/ui/label";
+    import { Toggle } from "@/components/ui/toggle";
+    import { LinkIcon } from "lucide-vue-next";
+    import { Popover, PopoverTrigger } from "@/components/ui/popover";
 
     const props = defineProps<{
         id: string,
         editor: Editor,
         active: boolean,
         disabled: boolean,
+        title: string,
     }>();
 
+    const open = ref(false);
     const label = ref();
     const href = ref();
     const hasSelectedText = ref(false);
     const inserted = ref(false);
-    const selection = ref(null);
-    const dropdown = ref<InstanceType<typeof Dropdown>>();
-    const input = ref<InstanceType<typeof TextInput>>();
+    const selection = ref<Selection>(null);
+    const input = ref<InstanceType<typeof Input>>();
 
-    function hide(focusEditor = true) {
-        dropdown.value.close();
-        if(focusEditor) {
-            this.editor.chain().focus().run();
-        }
-    }
 
     function onShow() {
+        selection.value = props.editor.state.selection
         href.value = null;
         inserted.value = false;
-        hasSelectedText.value = !selection.empty;
+        hasSelectedText.value = !selection.value.empty;
 
         if(this.active) {
             const attrs = this.editor.getAttributes('link');
@@ -39,68 +40,93 @@
         }
 
         if(hasSelectedText.value) {
-            props.editor.commands.setLink({ href:'#' });
-            selection.value = {
-                from: props.editor.state.selection.from,
-                to: props.editor.state.selection.to,
-            }
+            // props.editor.commands.setLink({ href:'#' });
+        }
+
+        setTimeout(() => {
+            input.value.$el.focus();
+        }, 0);
+    }
+
+    function onHide() {
+        if(!inserted.value && hasSelectedText.value) {
+            const { from, to } = props.editor.state.selection;
+            this.editor.chain()
+                .setTextSelection(selection.value.from, selection.value.to)
+                .unsetLink()
+                .setTextSelection(from, to)
+                .run();
         }
     }
 
-    function onShown() {
-        setTimeout(() => {
-            input.value.focus();
-        }, 0);
+    function onSubmit({ editor } = props) {
+        if(!href.value) {
+            open.value = false;
+            props.editor.commands.focus();
+            return;
+        }
+
+        const selection = editor.state.tr.selection;
+
+        if(editor.isActive('link')) {
+            editor.chain()
+                .focus()
+                .extendMarkRange('link')
+                .setLink({ href })
+                .run();
+
+        } else if(selection.empty) {
+            editor.chain()
+                .focus()
+                .insertContent(`<a href="${href}">${label || href}</a>`)
+                .run();
+
+        } else {
+            editor.chain().focus().setLink({ href }).run();
+        }
+
+        inserted.value = true;
+    }
+
+    function onRemove() {
+        open.value = false;
+        props.editor.chain().focus().unsetLink().run();
     }
 </script>
 
 <template>
-    <Dropdown
-        class="editor__dropdown editor__dropdown--link"
-        variant="light"
-        :active="active"
-        :disabled="disabled"
-        v-bind="$attrs"
-        @show="onShow"
-        @shown="onShown"
-        @hide="handleDropdownHide"
-        ref="dropdown"
+    <Popover
+        v-model:open="open"
+        @update:open="$event ? onShow() : onHide()"
     >
-        <template v-slot:text>
-            <slot />
-        </template>
+        <PopoverTrigger as-child>
+            <Toggle :pressed="active">
+                <LinkIcon class="w-4 h-4" />
+            </Toggle>
+        </PopoverTrigger>
 
         <template>
-            <form @submit.prevent="handleLinkSubmitted">
-                <template v-if="inserted">
-                    <button class="btn-close position-absolute end-0 top-0 p-2 fs-8"
-                        type="button"
-                        @click="handleCancelClicked"
-                    >
-                        <span class="visually-hidden">{{ __('sharp::modals.cancel_button') }}</span>
-                    </button>
-                </template>
-
+            <form @submit.prevent="onSubmit()">
                 <template v-if="!active && !hasSelectedText">
-                    <div class="mb-3">
-                        <label class="form-label" :for="`${id}-link-label`">
+                    <div class="grid grid-cols-1 gap-3">
+                        <Label :for="`${id}-link-label`">
                             {{ __('sharp::form.editor.dialogs.link.text_label') }}
-                        </label>
-                        <TextInput :id="`${id}-link-label`" v-model="label" />
+                        </Label>
+                        <Input :id="`${id}-link-label`" v-model="label" />
                     </div>
                 </template>
 
                 <div class="mb-3">
-                    <label class="form-label" :for="`${id}-href`">
+                    <Label :for="`${id}-href`">
                         {{ __('sharp::form.editor.dialogs.link.url_label') }}
-                    </label>
-                    <TextInput :id="`${id}-href`" v-model="href" placeholder="https://example.org" autocomplete="off" ref="input" />
+                    </Label>
+                    <Input :id="`${id}-href`" v-model="href" placeholder="https://example.org" autocomplete="off" ref="input" />
                 </div>
 
                 <div class="mt-3">
                     <div class="row g-2 flex-sm-nowrap">
                         <div class="col-auto">
-                            <Button type="submit" small variant="primary">
+                            <Button type="submit" size="sm">
                                 <template v-if="inserted">
                                     {{ __('sharp::form.editor.dialogs.link.update_button') }}
                                 </template>
@@ -111,12 +137,12 @@
                         </div>
                         <div class="col-auto">
                             <template v-if="inserted">
-                                <Button type="button" small variant="danger" outline @click="handleRemoveClicked">
+                                <Button type="button" variant="destructive" size="sm" @click="onRemove()">
                                     {{ __('sharp::form.editor.dialogs.link.remove_button') }}
                                 </Button>
                             </template>
                             <template v-else>
-                                <Button type="button" small variant="light" @click="handleCancelClicked">
+                                <Button type="button" variant="outline" size="sm" @click="open = false; editor.commands.focus()">
                                     {{ __('sharp::modals.cancel_button') }}
                                 </Button>
                             </template>
@@ -125,43 +151,5 @@
                 </div>
             </form>
         </template>
-    </Dropdown>
+    </Popover>
 </template>
-
-<script lang="ts">
-    export default {
-        methods: {
-            handleDropdownShown() {
-
-            },
-            handleDropdownHide() {
-                if(!this.inserted && this.hasSelectedText) {
-                    const { from, to } = this.editor.state.selection;
-                    this.editor.chain()
-                        .setTextSelection(this.selection.from, this.selection.to)
-                        .unsetLink()
-                        .setTextSelection(from, to)
-                        .run();
-                }
-            },
-            handleCancelClicked() {
-                this.hide();
-            },
-            handleLinkSubmitted() {
-                if(!this.href) {
-                    this.hide();
-                    return;
-                }
-                this.$emit('submit', {
-                    href: this.href,
-                    label: this.label,
-                });
-                this.inserted = true;
-            },
-            handleRemoveClicked() {
-                this.editor.chain().focus().unsetLink().run()
-                this.$emit('remove');
-            },
-        }
-    }
-</script>

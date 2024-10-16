@@ -5,9 +5,10 @@ return [
     'validation_error.description' => 'Veuillez contrôler votre saisie, les erreurs sont indiquées sous chaque champ.',
     'validation_error.localized' => 'Il y a une erreur avec la/les langue(s) : :locales',
 
+    'list.add_button' => 'Ajouter un élément',
     'list.remove_button' => 'Supprimer',
     'list.insert_button' => 'Insérer',
-    'list.sort_button.inactive' => 'Trier',
+    'list.sort_button.inactive' => 'Réarranger...',
     'list.sort_button.active' => 'Terminer',
     'list.empty' => 'Liste vide',
     'list.bulk_upload.text' => '[Parcourir]() ou glisser-déposer des fichiers...',

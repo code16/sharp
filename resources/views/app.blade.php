@@ -6,13 +6,19 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="robots" content="noindex, nofollow" />
 
-        <x-sharp::vite>
-            @vite([
-                'resources/sass/vendors.scss',
-        //        'resources/sass/app.scss',
-            'resources/css/app.css',
-            ], '/vendor/sharp')
-        </x-sharp::vite>
+{{--        <x-sharp::vite>--}}
+{{--            @vite([--}}
+{{--                'resources/css/vendors.css',--}}
+{{--                'resources/css/app.css',--}}
+{{--            ], '/vendor/sharp')--}}
+{{--        </x-sharp::vite>--}}
+
+        <script>
+            const preference = localStorage.getItem('vueuse-color-scheme') || 'auto';
+            if(preference === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches || preference === 'dark') {
+                document.documentElement.classList.add('dark');
+            }
+        </script>
 
         <x-sharp::root-styles />
 
@@ -26,25 +32,23 @@
 
         <x-sharp::extensions.custom-fields-script />
 
-        @php(config()->set('ziggy', ['only' => 'code16.sharp.*']))
+        @php
+            config()->set('ziggy', ['only' => 'code16.sharp.*'])
+        @endphp
         @routes
         @inertiaHead
 
         <x-sharp::vite>
+            @if(!Vite::isRunningHot())
+                @vite(['vite/legacy-polyfills'], '/vendor/sharp')
+            @endif
             @vite('resources/js/sharp.ts', '/vendor/sharp')
         </x-sharp::vite>
     </head>
-    <body>
+    <body class="font-sans antialiased">
         <x-sharp::alert.assets-outdated />
 
         @inertia
-
-        @if($login ?? false)
-            <template id="login-append">
-                @includeIf(config("sharp.auth.login_form.message_blade_path", config("sharp.login_page_message_blade_path")))
-            </template>
-        @endif
-
         @stack('script')
     </body>
 </html>

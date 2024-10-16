@@ -2,16 +2,18 @@
 
 use Code16\Sharp\Http\Controllers\Api\DownloadController;
 use Code16\Sharp\Http\Controllers\DashboardController;
+use Code16\Sharp\Http\Controllers\DashboardFiltersController;
 use Code16\Sharp\Http\Controllers\EntityListController;
+use Code16\Sharp\Http\Controllers\EntityListFiltersController;
 use Code16\Sharp\Http\Controllers\FormController;
 use Code16\Sharp\Http\Controllers\GlobalFilterController;
 use Code16\Sharp\Http\Controllers\HomeController;
+use Code16\Sharp\Http\Controllers\ShowController;
 use Code16\Sharp\Http\Controllers\SingleShowController;
-use Code16\Sharp\Show\ShowController;
 use Illuminate\Support\Facades\Route;
 
 Route::group([
-    'prefix' => '/'.sharp_base_url_segment(),
+    'prefix' => '/'.sharp()->config()->get('custom_url_segment'),
     'middleware' => ['sharp_common', 'sharp_web'],
 ], function () {
     Route::get('/', [HomeController::class, 'index'])
@@ -19,9 +21,15 @@ Route::group([
 
     Route::get('/s-dashboard/{dashboardKey}', [DashboardController::class, 'show'])
         ->name('code16.sharp.dashboard');
+    
+    Route::post('/s-dashboard/{dashboardKey}', [DashboardFiltersController::class, 'store'])
+        ->name('code16.sharp.dashboard.filters.store');
 
     Route::get('/s-list/{entityKey}', [EntityListController::class, 'show'])
         ->name('code16.sharp.list');
+    
+    Route::post('/s-list/{entityKey}/filters', [EntityListFiltersController::class, 'store'])
+        ->name('code16.sharp.list.filters.store');
 
     Route::get('/s-show/{entityKey}', [SingleShowController::class, 'show'])
         ->name('code16.sharp.single-show');

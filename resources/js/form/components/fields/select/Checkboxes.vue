@@ -1,82 +1,64 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
-    import CheckInput from "../check/CheckInput.vue";
     import { FormSelectFieldData } from "@/types";
+    import { FormFieldEmits, FormFieldProps } from "@/form/types";
+    import { isSelected } from "@/form/util/select";
+    import { Checkbox } from "@/components/ui/checkbox";
+    import { Button } from "@/components/ui/button";
+    import { Label } from "@/components/ui/label";
+    import FormFieldLayout from "@/form/components/FormFieldLayout.vue";
 
-    defineProps<{
-        field: FormSelectFieldData,
-        value: FormSelectFieldData['value'],
-        fieldErrorKey: string,
-        root: boolean,
-    }>()
+    const props = defineProps<FormFieldProps<FormSelectFieldData, Array<string | number> | null>>();
+    const emit = defineEmits<FormFieldEmits<FormSelectFieldData>>();
+
+    function validate(value: typeof props.value) {
+        if(props.field.maxSelected && value?.length > props.field.maxSelected) {
+            return __('sharp::form.select.validation.max_selected', { max_selected: props.field.maxSelected });
+        }
+        return null;
+    }
+
+    function onChange(checked: boolean, option: typeof props.field.options[0]) {
+        const value = props.field.options
+            .filter(o => o.id === option.id ? checked : props.value?.some(val => isSelected(o, val)))
+            .map(o => o.id);
+        emit('input', value, { error: validate(value) });
+    }
 </script>
 
 <template>
-    <div :class="{ 'border bg-white rounded':root }">
-        <div class="row gy-1 gx-3" :class="field.inline ? 'row-cols-auto' : 'row-cols-1'">
-            <template v-for="(option, index) in field.options" :key="option.id">
-                <div class="col">
-                    <CheckInput
-                        class="mb-0"
-                        :id="`${fieldErrorKey}.${index}`"
-                        :checked="isChecked(option)"
-                        :disabled="field.readOnly"
-                        @change="handleCheckboxChanged($event, option)"
-                    >
-                        {{ labels[option.id] }}
-                    </CheckInput>
+    <FormFieldLayout
+        v-bind="props"
+        field-group
+        v-slot="{ id }"
+    >
+        <div>
+            <div class="flex items-start gap-y-1.5 gap-x-6" :class="field.inline ? 'flex-row' : 'flex-col'">
+                <template v-for="(option, index) in field.options" :key="option.id">
+                    <div class="group/control flex items-center space-x-3">
+                        <Checkbox
+                            :id="`${id}.${index}`"
+                            :checked="value?.some(v => isSelected(option, v))"
+                            :disabled="field.readOnly"
+                            @update:checked="onChange($event, option)"
+                        />
+                        <Label class="font-normal py-1" :for="`${id}.${index}`">
+                            {{ field.localized && typeof option.label === 'object' ? option.label?.[locale] : option.label }}
+                        </Label>
+                    </div>
+                </template>
+            </div>
+
+            <template v-if="field.showSelectAll">
+                <div class="mt-4 flex gap-2">
+                    <Button variant="link" @click="$emit('input', field.options.map(o => o.id))">
+                        {{ __('sharp::form.select.select_all') }}
+                    </Button>
+                    <Button variant="link" @click="$emit('input', [])">
+                        {{ __('sharp::form.select.unselect_all') }}
+                    </Button>
                 </div>
             </template>
         </div>
-
-        <template v-if="showSelectAll">
-            <div class="SharpSelect__links mt-3">
-                <div class="row gx-3">
-                    <div class="col-auto">
-                        <a href="#" @click.prevent="handleSelectAllClicked">{{ __('sharp::form.select.select_all') }}</a>
-                    </div>
-                    <div class="col-auto">
-                        <a href="#" @click.prevent="handleUnselectAllClicked">{{ __('sharp::form.select.unselect_all') }}</a>
-                    </div>
-                </div>
-            </div>
-        </template>
-    </div>
+    </FormFieldLayout>
 </template>
-
-<script lang="ts">
-    import Check from "../Check.vue";
-    import { isSelected } from "../../../util/select";
-    import { __ } from "@/utils/i18n";
-
-    export default {
-        components: {
-            Check,
-        },
-        methods: {
-            isChecked(option) {
-                return this.value?.some(value => isSelected(option, value));
-            },
-            handleSelectAllClicked() {
-                this.$emit('input', this.options.map(option => option.id));
-            },
-            handleUnselectAllClicked() {
-                this.$emit('input', []);
-            },
-            handleCheckboxChanged(checked, option) {
-                const value = checked
-                    ? [...(this.value ?? []), option.id]
-                    : (this.value ?? []).filter(val => !isSelected(option, val));
-
-                const error = this.validate(value);
-                this.$emit('input', value, { error });
-            },
-            validate(value) {
-                if(this.maxSelected && value?.length > this.maxSelected) {
-                    return __('sharp::form.select.validation.max_selected', { max_selected: this.maxSelected });
-                }
-                return null;
-            },
-        }
-    }
-</script>

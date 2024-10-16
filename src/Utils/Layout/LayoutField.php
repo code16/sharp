@@ -2,6 +2,8 @@
 
 namespace Code16\Sharp\Utils\Layout;
 
+use Closure;
+
 abstract class LayoutField
 {
     protected string $fieldKey;
@@ -9,15 +11,14 @@ abstract class LayoutField
     protected int $sizeXS = 12;
     protected array $itemLayout = [];
 
-    public function __construct(string $fieldKey, \Closure $subLayoutCallback = null)
+    public function __construct(string $fieldKey, Closure $subLayoutCallback = null)
     {
         if (strpos($fieldKey, '|')) {
             [$this->fieldKey, $sizes] = explode('|', $fieldKey);
 
             if (strpos($fieldKey, ',')) {
-                [$this->size, $this->sizeXS] = collect(explode(',', $sizes))->map(function ($size) {
-                    return (int) $size;
-                });
+                [$this->size, $this->sizeXS] = collect(explode(',', $sizes))
+                    ->map(fn ($size) => (int) $size);
             } else {
                 $this->size = (int) $sizes;
             }

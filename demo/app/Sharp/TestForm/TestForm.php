@@ -4,8 +4,9 @@ namespace App\Sharp\TestForm;
 
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
-use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteListField;
+use Code16\Sharp\Form\Fields\SharpFormAutocompleteLocalField;
+use Code16\Sharp\Form\Fields\SharpFormAutocompleteRemoteField;
 use Code16\Sharp\Form\Fields\SharpFormCheckField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
@@ -35,7 +36,7 @@ class TestForm extends SharpSingleForm
                     ->setLabel('Text'),
             )
             ->addField(
-                SharpFormAutocompleteField::make('autocomplete_local', 'local')
+                SharpFormAutocompleteLocalField::make('autocomplete_local')
                     ->setLocalized()
                     ->setLabel('Autocomplete local')
                     ->setLocalSearchKeys(['label'])
@@ -44,7 +45,7 @@ class TestForm extends SharpSingleForm
                     ->setLocalValues($this->options(true)),
             )
             ->addField(
-                SharpFormAutocompleteField::make('autocomplete_remote', 'remote')
+                SharpFormAutocompleteRemoteField::make('autocomplete_remote')
                     ->setLabel('Autocomplete remote')
                     ->setRemoteSearchAttribute('query')
                     ->setListItemInlineTemplate('{{name}}')
@@ -57,7 +58,7 @@ class TestForm extends SharpSingleForm
                     ->setAddable()
                     ->setRemovable()
                     ->setItemField(
-                        SharpFormAutocompleteField::make('item', 'remote')
+                        SharpFormAutocompleteRemoteField::make('item')
                             ->setLabel('Passenger')
                             ->setPlaceholder('test')
                             ->setListItemInlineTemplate('{{ name }}')
@@ -208,6 +209,7 @@ class TestForm extends SharpSingleForm
                 SharpFormSelectField::make('select_dropdown', $this->options(true))
                     ->setLocalized()
                     ->setLabel('Select dropdown')
+                    ->setMultiple()
                     ->setDisplayAsDropdown(),
             )
             ->addField(
@@ -246,7 +248,8 @@ class TestForm extends SharpSingleForm
                     ->setImageCropRatio('1:1')
                     ->setStorageDisk('local')
                     ->setStorageBasePath('data'),
-            );
+            )
+            ->addField(CustomField::make('custom'));
     }
 
     public function buildFormLayout(FormLayout $formLayout): void
@@ -383,6 +386,19 @@ class TestForm extends SharpSingleForm
             '1' => ['en' => 'Option one', 'fr' => 'Option un'],
             '2' => ['en' => 'Option two', 'fr' => 'Option deux'],
             '3' => ['en' => 'Option three', 'fr' => 'Option trois'],
+            '4' => ['en' => 'Option four', 'fr' => 'Option quatre'],
+            '5' => ['en' => 'Option five', 'fr' => 'Option cinq'],
+            '6' => ['en' => 'Option six', 'fr' => 'Option six'],
+            '7' => ['en' => 'Option seven', 'fr' => 'Option sept'],
+            '8' => ['en' => 'Option eight', 'fr' => 'Option huit'],
+            '9' => ['en' => 'Option nine', 'fr' => 'Option neuf'],
+            '10' => ['en' => 'Option ten', 'fr' => 'Option dix'],
+            '11' => ['en' => 'Option eleven', 'fr' => 'Option onze'],
+            '12' => ['en' => 'Option twelve', 'fr' => 'Option douze'],
+            '13' => ['en' => 'Option thirteen', 'fr' => 'Option treize'],
+            '14' => ['en' => 'Option fourteen', 'fr' => 'Option quatorze'],
+            '15' => ['en' => 'Option fifteen', 'fr' => 'Option quinze'],
+            '16' => ['en' => 'Option sixteen', 'fr' => 'Option seize'],
         ];
     }
 }

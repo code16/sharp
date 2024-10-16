@@ -7,13 +7,13 @@ Commands can be defined in an Entity List, in a Show Page or in a Dashboard. Thi
 ## Generator for an 'Entity' command
 
 ```bash
-php artisan sharp:make:entity-command <class_name> [--with-form]
+php artisan sharp:make:entity-command <class_name> [--model=<model_name>,--wizard,--form]
 ```
 
 ## Generator for an 'Instance' command
 
 ```bash
-php artisan sharp:make:instance-command <class_name> [--with-form]
+php artisan sharp:make:instance-command <class_name> [--model=<model_name>,--wizard,--form]
 ```
 
 ## Write the Command class
@@ -171,6 +171,7 @@ Finally, let's review the return possibilities: after a Command has been execute
 - `return $this->reload()`: reload the current page (with context).
 - `return $this->refresh(1)`*: refresh only the instance with an id on `1`. We can pass an id array also to refresh more than one instance.
 - `return $this->view('view.name', ['some'=>'params'])`: display a view right in Sharp; useful for page previews.
+- `return $this->html('...')`: display an HTML content.
 - `return $this->link('/path/to/redirect')`: redirect to the given path.
 - `return $this->download('path', 'diskName')`: the browser will download the specified file.
 - `return $this->streamDownload('path', 'name')`: the browser will stream the specified file.
@@ -378,16 +379,15 @@ Dashboard can use Commands too, with a very similar API, apart for:
 
 ## Bulk Commands (Entity List only)
 
-As seen before, Entity Commands are executed on multiple instances: all of them, or a filtered list of them. But sometimes you may need to execute a Command on a specific list of instances, a user selection.
+As seen before, Entity Commands are executed on multiple instances: either all of them, or a sublist based on active filters. But sometimes you may need to execute a Command on a custom list of instances, crafted by the user. In order to allow that, you can:
 
-In order to allow that, you must:
-
-### Configure the Command to allow an instance selection
+### Configure the Entity Command to allow an instance selection
 
 ```php
-class PostList extends SharpEntityList
+class MyBulkCommand extends EntityCommand
 {
     // [...]
+    
     public function buildCommandConfig(): void
     {
         $this->configureInstanceSelectionAllowed();
@@ -395,14 +395,16 @@ class PostList extends SharpEntityList
 }
 ```
 
+::: tip
 You may use `configureInstanceSelectionRequired()` instead to declare that the command can not be executed without a selection.
+:::
 
 ### Apply the Command to the selected instances
 
-You can use the `$this->selectedIds()` method to retrieve the list of selected instances ids, and apply the Command to them:
+Use the `$this->selectedIds()` method to retrieve the list of selected instances ids and apply the Command to them; for instance:
 
 ```php
-class PostList extends SharpEntityList
+class MyBulkCommand extends EntityCommand
 {
     // [...]
     

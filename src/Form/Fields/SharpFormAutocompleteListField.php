@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Form\Fields;
 
 use Code16\Sharp\Form\Fields\Formatters\AutocompleteListFormatter;
+use Code16\Sharp\Form\Fields\Utils\IsSharpFormAutocompleteField;
 
 class SharpFormAutocompleteListField extends SharpFormListField
 {
@@ -11,7 +12,7 @@ class SharpFormAutocompleteListField extends SharpFormListField
         return new static($key, static::FIELD_TYPE, new AutocompleteListFormatter);
     }
 
-    public function setItemField(SharpFormAutocompleteField $field): self
+    public function setItemField(IsSharpFormAutocompleteField $field): self
     {
         $this->itemFields = [$field];
 
@@ -20,14 +21,14 @@ class SharpFormAutocompleteListField extends SharpFormListField
 
     public function addItemField(SharpFormField $field): self
     {
-        if (! $field instanceof SharpFormAutocompleteField) {
-            throw new \InvalidArgumentException('AutocompleteList item can only contain one field, and it must be a SharpFormAutocompleteField');
+        if (! $field instanceof IsSharpFormAutocompleteField) {
+            throw new \InvalidArgumentException('AutocompleteList item can only contain one field, and it must be SharpFormAutocompleteRemoteField or SharpFormAutocompleteLocalField');
         }
 
         return $this->setItemField($field);
     }
 
-    public function autocompleteField(): SharpFormAutocompleteField
+    public function autocompleteField(): IsSharpFormAutocompleteField
     {
         return $this->itemFields()[0];
     }

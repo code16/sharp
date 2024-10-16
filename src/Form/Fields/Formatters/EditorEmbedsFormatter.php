@@ -6,21 +6,21 @@ use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
-use Code16\Sharp\Utils\Fields\Formatters\FormatsEditorEmbedsToFront;
+use Code16\Sharp\Utils\Fields\Formatters\FormatsEditorEmbeds;
+use Code16\Sharp\Utils\Fields\Formatters\FormatsHtmlContent;
 use Illuminate\Support\Str;
 
 class EditorEmbedsFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
 {
-    use HasMaybeLocalizedValue;
-    use HandlesHtmlContent;
-    use FormatsEditorEmbedsToFront;
+    use FormatsHtmlContent;
+    use FormatsEditorEmbeds;
 
     /**
      * @param  SharpFormEditorField  $field
      */
     public function toFront(SharpFormField $field, $value)
     {
-        return $this->formatsEditorEmbedsToFront($field, $value);
+        return $this->formatEditorEmbedsToFront($field, $value);
     }
 
     /**
@@ -47,14 +47,13 @@ class EditorEmbedsFormatter extends SharpFieldFormatter implements FormatsAfterU
                             if ($field instanceof SharpFormUploadField) {
                                 $fieldValue = $field->formatter()
                                     ->setInstanceId($this->instanceId)
-                                    ->setAlwaysReturnFullObject()
                                     ->fromFront($field, $fieldKey, $fieldValue);
                             }
                             if ($field instanceof SharpFormListField) {
                                 $fieldValue = $field->formatter()
                                     ->formatItemFieldUsing(function (SharpFormField $field) {
                                         if ($field instanceof SharpFormUploadField) {
-                                            return $field->formatter()->setAlwaysReturnFullObject();
+                                            return $field->formatter();
                                         }
 
                                         // other field types have already been formatted, so we pass value through

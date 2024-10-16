@@ -16,13 +16,8 @@ class InviteUserCommand extends EntityCommand
 
     public function buildCommandConfig(): void
     {
-        $this->configureFormModalTitle('Invite a new user as author');
-    }
-
-    protected function buildPageAlert(PageAlert $pageAlert): void
-    {
-        $pageAlert
-            ->setMessage('<div>Provide the email address of the new author, and an invitation will be sent to him</div><div><small>(not true, we won’t send anything)</small></div>');
+        $this->configureFormModalTitle('Invite a new user as author')
+            ->configureFormModalDescription('Provide the email address of the new author, and an invitation will be sent to him (not true, we won’t send anything).');
     }
 
     public function buildFormFields(FieldsContainer $formFields): void

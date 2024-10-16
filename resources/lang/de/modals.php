@@ -1,10 +1,10 @@
 <?php
 
 return [
-    '401.title' => 'Fehlende Authentisierung',
-    '403.title' => 'Fehlende Berechtigungen',
-    '419.title' => 'Ungültig',
-    '419.message' => 'Diese Aktion ist ungültig, Höchstwahrscheinlich ist zu viel Zeit vergangen. Die Seite lädt neu.',
+    'api.401.title' => 'Fehlende Authentisierung',
+    'api.403.title' => 'Fehlende Berechtigungen',
+    'api.419.title' => 'Ungültig',
+    'api.419.message' => 'Diese Aktion ist ungültig, Höchstwahrscheinlich ist zu viel Zeit vergangen. Die Seite lädt neu.',
 
     'confirm.ok_button' => 'Bestätigen',
     'confirm.delete.ok_button' => 'Löschen',

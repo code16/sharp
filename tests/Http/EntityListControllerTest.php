@@ -15,12 +15,8 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
+    sharp()->config()->addEntity('person', PersonEntity::class);
     login();
-
-    config()->set(
-        'sharp.entities.person',
-        PersonEntity::class,
-    );
 });
 
 it('gets list data for an entity', function () {
@@ -145,7 +141,6 @@ it('gets containers and layout', function () {
                     EntityListField::make('name')
                         ->setLabel('Name')
                         ->setWidth(6)
-                        ->setWidthOnSmallScreensFill()
                         ->setSortable()
                 )
                 ->addField(
@@ -164,16 +159,15 @@ it('gets containers and layout', function () {
             ->has('entityList.fields.0', fn (Assert $name) => $name
                 ->where('key', 'name')
                 ->where('label', 'Name')
-                ->where('size', '6')
+                ->where('width', '50%')
                 ->where('hideOnXS', false)
-                ->where('sizeXS', 'fill')
                 ->where('sortable', true)
                 ->etc()
             )
             ->has('entityList.fields.1', fn (Assert $job) => $job
                 ->where('key', 'job')
                 ->where('label', 'Job')
-                ->where('size', '6')
+                ->where('width', '50%')
                 ->where('hideOnXS', true)
                 ->etc()
             )
@@ -224,11 +218,6 @@ it('gets authorizations of each instance', function () {
             return $instanceId != 3;
         }
 
-        public function update($user, $instanceId): bool
-        {
-            return $instanceId == 1;
-        }
-
         public function delete($user, $instanceId): bool
         {
             return $instanceId == 2;
@@ -241,7 +230,7 @@ it('gets authorizations of each instance', function () {
             ->has('entityList.authorizations', fn (Assert $config) => $config
                 ->where('create', true)
                 ->where('view', [1, 2])
-                ->where('update', [1])
+                ->where('reorder', true)
                 ->where('delete', [2])
             )
         );

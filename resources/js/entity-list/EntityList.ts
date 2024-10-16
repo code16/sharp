@@ -6,7 +6,7 @@ import {
     FilterData,
 } from "@/types";
 import { getAppendableParentUri, route } from "@/utils/url";
-import { Instance, InstanceId } from "./types";
+import { EntityListInstance, InstanceId } from "./types";
 
 export class EntityList implements EntityListData {
     authorizations: EntityListData['authorizations'];
@@ -16,6 +16,8 @@ export class EntityList implements EntityListData {
     forms: EntityListData['forms'];
     meta: EntityListData['meta'];
     pageAlert: EntityListData['pageAlert'];
+    query: EntityListData['query'];
+    filterValues: EntityListData['filterValues'];
 
     entityKey: string;
     hiddenFilters?: Record<string, FilterData['value']>;
@@ -38,16 +40,24 @@ export class EntityList implements EntityListData {
         return this.meta?.total ?? this.data.length;
     }
 
-    get visibleFilters(): Array<FilterData> {
-        return this.config.filters._root.filter(filter => !this.hiddenFilters?.[filter.key]);
+    get currentSort() {
+        return this.query?.sort ?? this.config.defaultSort;
+    }
+
+    get currentSortDir() {
+        return this.query?.dir ?? this.config.defaultSortDir;
+    }
+
+    get visibleFilters(): Array<FilterData>|null {
+        return this.config.filters?._root.filter(filter => !this.hiddenFilters?.[filter.key]);
     }
 
     get visibleCommands(): ConfigCommandsData {
         return {
-            instance: this.config.commands.instance?.map(group => group.filter(command => {
+            instance: this.config.commands?.instance?.map(group => group.filter(command => {
                 return !this.hiddenCommands?.instance?.includes(command.key);
             })),
-            entity: this.config.commands.entity?.map(group => group.filter(command => {
+            entity: this.config.commands?.entity?.map(group => group.filter(command => {
                 return !this.hiddenCommands?.entity?.includes(command.key);
             })),
         }
@@ -69,11 +79,11 @@ export class EntityList implements EntityListData {
 
     get canReorder() {
         return this.config.reorderable
-            && this.authorizations.update
+            && this.authorizations.reorder
             && this.data.length > 0;
     }
 
-    withRefreshedItems(refreshedItems: Instance[]): EntityList {
+    withRefreshedItems(refreshedItems: EntityListInstance[]): EntityList {
         this.data = this.data.map(item => {
             return refreshedItems.find(refreshedItem => this.instanceId(refreshedItem) === this.instanceId(item))
                 ?? item;
@@ -92,11 +102,11 @@ export class EntityList implements EntityListData {
         );
     }
 
-    instanceId(instance: Instance): InstanceId {
+    instanceId(instance: EntityListInstance): InstanceId {
         return instance[this.config.instanceIdAttribute];
     }
 
-    instanceUrl(instance: Instance): string | null {
+    instanceUrl(instance: EntityListInstance): string | null {
         const entityKey = this.entityKey;
         const instanceId = this.instanceId(instance);
 
@@ -129,31 +139,31 @@ export class EntityList implements EntityListData {
         });
     }
 
-    instanceState(instance: Instance): string | number | null {
+    instanceState(instance: EntityListInstance): string | number | null {
         return this.config.state
             ? instance[this.config.state.attribute]
             : null;
     }
 
-    instanceStateValue(instance: Instance): EntityStateValueData | undefined {
+    instanceStateValue(instance: EntityListInstance): EntityStateValueData | undefined {
         return this.config.state?.values.find(item => item.value === this.instanceState(instance));
     }
 
-    instanceCanUpdateState(instance: Instance): boolean {
+    instanceCanUpdateState(instance: EntityListInstance): boolean {
         if(Array.isArray(this.config.state.authorization)) {
             return this.config.state.authorization.includes(this.instanceId(instance));
         }
         return !!this.config.state.authorization;
     }
 
-    instanceCanDelete(instance: Instance): boolean {
+    instanceCanDelete(instance: EntityListInstance): boolean {
         if(Array.isArray(this.authorizations.delete)) {
             return this.authorizations.delete?.includes(this.instanceId(instance));
         }
         return !!this.authorizations.delete;
     }
 
-    instanceCommands(instance: Instance): Array<Array<CommandData>> | undefined {
+    instanceCommands(instance: EntityListInstance): Array<Array<CommandData>> | undefined {
         return this.visibleCommands?.instance
             ?.map(group => group.filter(command => {
                 if(Array.isArray(command.authorization)) {
@@ -163,10 +173,10 @@ export class EntityList implements EntityListData {
             }));
     }
 
-    instanceHasActions(instance: Instance, showEntityState: boolean): boolean {
+    instanceHasActions(instance: EntityListInstance, showEntityState: boolean): boolean {
         return (
             this.instanceCommands(instance)?.flat().length > 0 ||
-            this.config.state && showEntityState ||
+            this.config.state && showEntityState && this.instanceCanUpdateState(instance) ||
             !this.config.deleteHidden && this.instanceCanDelete(instance)
         );
     }

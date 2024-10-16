@@ -14,12 +14,8 @@ use Code16\Sharp\Utils\PageAlerts\PageAlert;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
+    sharp()->config()->addEntity('stats', DashboardEntity::class);
     login();
-
-    config()->set(
-        'sharp.entities.stats',
-        DashboardEntity::class,
-    );
 });
 
 it('gets dashboard widgets, layout and data', function () {

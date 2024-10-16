@@ -21,17 +21,14 @@ class ApiEntityListInstanceCommandController extends ApiController
     {
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();
-        $list->initQueryParams();
+        $list->initQueryParams(request()->query());
 
         $commandHandler = $this->getInstanceCommandHandler($list, $commandKey, $instanceId);
-        $formData = $commandHandler->formData($instanceId) ?: null;
 
         return response()->json(
-            CommandFormData::from([
-                ...$this->getCommandForm($commandHandler),
-                'data' => $formData,
-                'pageAlert' => $commandHandler->pageAlert($formData),
-            ]),
+            CommandFormData::from(
+                $this->getCommandForm($commandHandler, $commandHandler->formData($instanceId)),
+            ),
         );
     }
 
@@ -42,7 +39,7 @@ class ApiEntityListInstanceCommandController extends ApiController
     {
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();
-        $list->initQueryParams();
+        $list->initQueryParams(request()->input('query'));
 
         $commandHandler = $this->getInstanceCommandHandler($list, $commandKey, $instanceId);
 

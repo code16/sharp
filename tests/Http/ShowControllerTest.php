@@ -18,15 +18,29 @@ use Code16\Sharp\Utils\PageAlerts\PageAlert;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
+    sharp()->config()->addEntity('person', PersonEntity::class);
     login();
-
-    config()->set(
-        'sharp.entities.person',
-        PersonEntity::class,
-    );
 });
 
-it('gets show data for an instance', function () {
+it('gets formatted show data for an instance', function () {
+    fakeShowFor('person', new class extends PersonShow
+    {
+        public function find($id): array
+        {
+            return $this->transform([
+                'name' => 'James Clerk Maxwell',
+            ]);
+        }
+    });
+
+    $this->get('/sharp/s-list/person/s-show/person/1')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('show.data.name', ['text' => 'James Clerk Maxwell'])
+        );
+});
+
+it('gets formatted show data even without data transformation', function () {
     fakeShowFor('person', new class extends PersonShow
     {
         public function find($id): array
@@ -40,7 +54,7 @@ it('gets show data for an instance', function () {
     $this->get('/sharp/s-list/person/s-show/person/1')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('show.data.name', 'James Clerk Maxwell')
+            ->where('show.data.name', ['text' => 'James Clerk Maxwell'])
         );
 });
 
@@ -110,6 +124,7 @@ it('gets attribute for entity state if defined', function () {
 });
 
 it('returns configured show fields', function () {
+    $this->withoutExceptionHandling();
     fakeShowFor('person', new class extends PersonShow
     {
         public function buildShowFields(FieldsContainer $showFields): void
@@ -154,6 +169,8 @@ it('returns configured show layout', function () {
         }
     });
 
+    $this->withoutExceptionHandling();
+
     $this->get('/sharp/s-list/person/s-show/person/1')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
@@ -183,10 +200,7 @@ it('returns show configuration', function () {
 });
 
 it('gets show data for an instance in a single show case', function () {
-    config()->set(
-        'sharp.entities.single-person',
-        SinglePersonEntity::class,
-    );
+    sharp()->config()->addEntity('single-person', SinglePersonEntity::class);
 
     fakeShowFor('single-person', new class extends PersonSingleShow
     {

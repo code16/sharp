@@ -8,16 +8,23 @@ class DummyClass extends EntityCommand
 {
     public function label(): string
     {
-        return 'My Command';
+        return 'My entity command';
     }
-    
+
     public function buildCommandConfig(): void
     {
-        // $this->configureDescription(...)
+        $this
+            ->configureDescription('My description')
+            ->configureConfirmationText('History will be lost. Are you sure ?');
     }
 
     public function execute(array $data = []): array
     {
         return $this->reload();
+    }
+
+    public function authorize(): bool
+    {
+        return true;
     }
 }

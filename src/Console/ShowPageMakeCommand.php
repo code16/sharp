@@ -31,9 +31,15 @@ class ShowPageMakeCommand extends GeneratorCommand
 
     protected function getStub()
     {
-        return $this->option('model')
-            ? __DIR__.'/stubs/show-page.model.stub'
-            : __DIR__.'/stubs/show-page.stub';
+        if ($this->option('single') !== false) {
+            return __DIR__.'/stubs/show-page.single.stub';
+        }
+
+        if (! $this->option('model')) {
+            return __DIR__.'/stubs/show-page.stub';
+        }
+
+        return __DIR__.'/stubs/show-page.model.stub';
     }
 
     protected function getDefaultNamespace($rootNamespace)
@@ -45,6 +51,7 @@ class ShowPageMakeCommand extends GeneratorCommand
     {
         return [
             ['model', 'm', InputOption::VALUE_REQUIRED, 'The model that the show displays'],
+            ['single', 's', InputOption::VALUE_NONE, 'Show page is single'],
         ];
     }
 }

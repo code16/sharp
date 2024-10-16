@@ -1,26 +1,26 @@
 <script setup lang="ts">
     import { CheckFilterData } from "@/types";
+    import { Button } from "@/components/ui/button";
+    import { Checkbox } from "@/components/ui/checkbox";
+    import { Label } from "@/components/ui/label";
+    import { useId } from "radix-vue";
 
-    defineProps<{
+    const props = defineProps<{
         value: CheckFilterData['value'],
         filter: Omit<CheckFilterData, 'value'>,
         disabled?: boolean,
     }>();
+    defineEmits(['input']);
+
+    const id = useId(null, `filter-${props.filter.key}`);
 </script>
 
 <template>
-    <div class="SharpFilterCheck form-check mt-1 mx-2">
-        <input
-            :id="`filter-${filter.key}`"
-            class="form-check-input"
-            type="checkbox"
-            :name="filter.key"
-            :checked="value"
-            :disabled="disabled"
-            @change="$emit('input', ($event.target as HTMLInputElement).checked)"
-        >
-        <label class="ui-font fs-8" :for="`filter-${filter.key}`">
+    <Button as="div" class="relative h-8 border-dashed" variant="outline" size="sm">
+        <Label class="flex items-center gap-2">
+            <span class="absolute inset-0"></span>
+            <Checkbox :checked="value" @update:checked="$emit('input', $event)" />
             {{ filter.label }}
-        </label>
-    </div>
+        </Label>
+    </Button>
 </template>

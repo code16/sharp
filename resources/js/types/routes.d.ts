@@ -7,7 +7,17 @@ declare module 'ziggy-js' {
             "name": "dashboardKey"
         }
     ],
+    "code16.sharp.dashboard.filters.store": [
+        {
+            "name": "dashboardKey"
+        }
+    ],
     "code16.sharp.list": [
+        {
+            "name": "entityKey"
+        }
+    ],
+    "code16.sharp.list.filters.store": [
         {
             "name": "entityKey"
         }
@@ -111,6 +121,11 @@ declare module 'ziggy-js' {
             "name": "entityKey"
         }
     ],
+    "code16.sharp.api.list.filters.store": [
+        {
+            "name": "entityKey"
+        }
+    ],
     "code16.sharp.api.list.reorder": [
         {
             "name": "entityKey"
@@ -209,14 +224,6 @@ declare module 'ziggy-js' {
         }
     ],
     "code16.sharp.api.search.index": [],
-    "code16.sharp.api.embed.show": [
-        {
-            "name": "embedKey"
-        },
-        {
-            "name": "entityKey"
-        }
-    ],
     "code16.sharp.api.embed.form.show": [
         {
             "name": "embedKey"
@@ -231,17 +238,6 @@ declare module 'ziggy-js' {
         },
         {
             "name": "entityKey"
-        }
-    ],
-    "code16.sharp.api.embed.instance.show": [
-        {
-            "name": "embedKey"
-        },
-        {
-            "name": "entityKey"
-        },
-        {
-            "name": "instanceId"
         }
     ],
     "code16.sharp.api.embed.instance.form.show": [
@@ -274,7 +270,14 @@ declare module 'ziggy-js' {
             "name": "instanceId"
         }
     ],
-    "code16.sharp.api.form.upload.thumbnail.show": [],
+    "code16.sharp.api.form.upload.thumbnail.show": [
+        {
+            "name": "entityKey"
+        },
+        {
+            "name": "instanceId"
+        }
+    ],
     "code16.sharp.api.form.upload": [],
     "code16.sharp.login": [],
     "code16.sharp.login.post": [],
@@ -288,7 +291,9 @@ declare module 'ziggy-js' {
             "name": "token"
         }
     ],
-    "code16.sharp.password.reset.post": []
+    "code16.sharp.password.reset.post": [],
+    "code16.sharp.impersonate": [],
+    "code16.sharp.impersonate.post": []
 }
 }
 export {};

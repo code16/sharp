@@ -1,19 +1,18 @@
 <?php
 
+use Code16\Sharp\Auth\SharpAuthenticationCheckHandler;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
+use Code16\Sharp\Tests\Fixtures\User;
 use Code16\Sharp\Tests\Unit\EntityList\Fakes\FakeSharpEntityList;
 use Code16\Sharp\Tests\Unit\Form\Fakes\FakeSharpForm;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
     login();
-
-    config()->set(
-        'sharp.entities.person',
-        PersonEntity::class,
-    );
+    sharp()->config()->addEntity('person', PersonEntity::class);
 });
 
 it('allows to configure prohibited actions on entities', function () {
@@ -104,14 +103,14 @@ it('returns prohibited actions with a list get request', function () {
 
     app(SharpEntityManager::class)
         ->entityFor('person')
-        ->setProhibitedActions(['delete', 'update']);
+        ->setProhibitedActions(['delete']);
 
     $this
         ->get('/sharp/s-list/person')
         ->assertInertia(fn (Assert $page) => $page
             ->where('entityList.authorizations', [
                 'delete' => [],
-                'update' => [],
+                'reorder' => true,
                 'create' => true,
                 'view' => [1, 2],
             ])
@@ -160,7 +159,7 @@ it('allow access by default', function () {
         ->assertInertia(fn (Assert $page) => $page
             ->where('entityList.authorizations', [
                 'delete' => [1, 2],
-                'update' => [1, 2],
+                'reorder' => true,
                 'create' => true,
                 'view' => [1, 2],
             ])
@@ -168,11 +167,11 @@ it('allow access by default', function () {
 
     // EEL (json)
     $this
-        ->getJson('/sharp/s-list/person')
+        ->getJson('/sharp/api/list/person')
         ->assertJsonFragment([
             'authorizations' => [
                 'delete' => [1, 2],
-                'update' => [1, 2],
+                'reorder' => true,
                 'create' => true,
                 'view' => [1, 2],
             ],
@@ -180,6 +179,7 @@ it('allow access by default', function () {
 });
 
 it('checks the main entity prohibited actions in case of a sub entity', function () {
+
     app(SharpEntityManager::class)
         ->entityFor('person')
         ->setMultiforms([
@@ -193,4 +193,37 @@ it('checks the main entity prohibited actions in case of a sub entity', function
     $this->post('/sharp/s-list/person/s-form/person:big/50')->assertRedirect();
     $this->delete('/sharp/s-list/person/s-show/person:big/50')->assertForbidden();
     $this->get('/sharp/s-list/person')->assertOk();
+});
+
+it('handles custom auth check', function () {
+    $this->app['config']->set(
+        'sharp.auth.check_handler',
+        fn () => new class implements SharpAuthenticationCheckHandler
+        {
+            public function check($user): bool
+            {
+                return $user->name == 'ok';
+            }
+        }
+    );
+
+    login(new User(['name' => 'ok']));
+    $this->get('/sharp/s-list/person')
+        ->assertOk();
+
+    login(new User(['name' => 'ko']));
+    $this->get('/sharp/s-list/person')
+        ->assertRedirect(route('code16.sharp.login'));
+});
+
+it('checks useSharp Gate', function () {
+    Gate::define('viewSharp', fn ($user) => $user->name === 'ok');
+
+    login(new User(['name' => 'ok']));
+    $this->get('/sharp/s-list/person')
+        ->assertOk();
+
+    login(new User(['name' => 'ko']));
+    $this->get('/sharp/s-list/person')
+        ->assertRedirect(route('code16.sharp.login'));
 });

@@ -2,9 +2,9 @@
 
 use Code16\Sharp\Utils\FileUtil;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 beforeEach(function () {
-//    config('sharp.uploads.tmp_disk', 'local');
     Storage::fake('local');
 });
 

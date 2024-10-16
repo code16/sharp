@@ -7,12 +7,8 @@ use Code16\Sharp\Tests\Fixtures\Sharp\TestDashboard;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 beforeEach(function () {
+    sharp()->config()->addEntity('dashboard', DashboardEntity::class);
     login();
-
-    config()->set(
-        'sharp.entities.dashboard',
-        DashboardEntity::class,
-    );
 });
 
 it('allows to call an info dashboard command', function () {
@@ -59,7 +55,13 @@ it('allows to initialize form data in a dashboard command', function () {
                     {
                         return 'entity';
                     }
-
+                    
+                    public function buildCommandConfig(): void
+                    {
+                        $this->configureFormModalTitle(fn ($data) => "Edit {$data['name']}")
+                            ->configureFormModalDescription('Custom description');
+                    }
+                    
                     public function buildFormFields(FieldsContainer $formFields): void
                     {
                         $formFields->addField(SharpFormTextField::make('name')->setLocalized());
@@ -87,6 +89,10 @@ it('allows to initialize form data in a dashboard command', function () {
         ->assertJsonFragment([
             'data' => [
                 'name' => 'Marie Curie',
+            ],
+            'config' => [
+                'title' => 'Edit Marie Curie',
+                'description' => 'Custom description',
             ],
         ]);
 });

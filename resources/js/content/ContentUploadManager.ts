@@ -1,4 +1,4 @@
-import { api } from "@/api";
+import { api } from "@/api/api";
 import { route } from "@/utils/url";
 import { Form } from "@/form/Form";
 import { FormEditorFieldData, FormUploadFieldValueData } from "@/types";

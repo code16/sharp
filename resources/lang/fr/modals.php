@@ -1,15 +1,16 @@
 <?php
 
 return [
-    '401.title' => 'Non identifié',
-    '403.title' => 'Non autorisé',
-    '419.title' => 'Invalide',
-    '419.message' => 'Cette action n’est plus valide, probablement à cause d’une trop longue période d’inactivité. La page va être rechargée automatiquement.',
-
+    'api.401.title' => 'Non identifié',
+    'api.403.title' => 'Non autorisé',
+    
+    'confirm.title'  => 'Confirmation',
     'confirm.ok_button' => 'Confirmer',
     'confirm.delete.ok_button' => 'Supprimer',
+    'confirm.delete.title' => 'Confirmez la suppression',
 
     'command.info.title' => 'Information',
+    'command.submit_button' => 'Envoyer',
     'state.422.title' => "Impossible de modifier l'état",
     'cropper.title' => 'Transformer l’image',
 

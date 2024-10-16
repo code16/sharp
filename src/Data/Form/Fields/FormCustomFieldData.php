@@ -20,22 +20,13 @@ final class FormCustomFieldData extends Data
         public ?FormConditionalDisplayData $conditionalDisplay = null,
         public ?string $helpMessage = null,
         public ?string $extraStyle = null,
+        ...$additionalOptions,
     ) {
+        $this->additional($additionalOptions);
     }
 
     public static function from(array $field): self
     {
-        $commonAttributes = Arr::only($field, [
-            'key',
-            'type',
-            'label',
-            'readOnly',
-            'conditionalDisplay',
-            'helpMessage',
-            'extraStyle',
-        ]);
-
-        return (new self(...$commonAttributes))
-            ->additional(Arr::except($field, array_keys($commonAttributes)));
+        return new self(...$field);
     }
 }

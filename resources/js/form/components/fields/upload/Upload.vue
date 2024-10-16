@@ -4,26 +4,38 @@
     import type { UppyFile } from "@uppy/core";
     import ThumbnailGenerator from '@uppy/thumbnail-generator';
     import XHRUpload from '@uppy/xhr-upload';
-    import FileInput from '@uppy/vue/lib/file-input';
     import DropTarget from '@uppy/drop-target';
     import Cropper from 'cropperjs';
-    import { computed, onMounted, onUnmounted, ref, watch } from "vue";
-    import { getErrorMessage, handleErrorAlert } from "@/api";
+    import {
+        computed,
+        onMounted,
+        onUnmounted,
+        ref,
+        watch
+    } from "vue";
+    import { getErrorMessage, handleErrorAlert } from "@/api/api";
     import { getFiltersFromCropData } from "./util/filters";
-    import { Button } from "@/components/ui";
-    import { ArrowDownOnSquareIcon } from "@heroicons/vue/24/outline";
+    import { Button } from '@/components/ui/button';
     import { route } from "@/utils/url";
 
     import { __ } from "@/utils/i18n";
     import { filesizeLabel } from "@/utils/file";
     import EditModal from "./EditModal.vue";
-    import { useParentForm } from "../../../useParentForm";
-    import UploadDropText from "./UploadDropText.vue";
+    import { useParentForm } from "@/form/useParentForm";
     import { getCsrfToken } from "@/utils/request";
 
     import { FormFieldProps } from "@/form/types";
+    import FormFieldLayout from "@/form/components/FormFieldLayout.vue";
+    import { Input } from "@/components/ui/input";
+    import {
+        DropdownMenu,
+        DropdownMenuContent,
+        DropdownMenuItem, DropdownMenuSeparator,
+        DropdownMenuTrigger
+    } from "@/components/ui/dropdown-menu";
+    import { MoreHorizontal } from "lucide-vue-next";
 
-    const props = defineProps<FormFieldProps<FormUploadFieldData>>();
+    const props = defineProps<FormFieldProps<FormUploadFieldData> & { asEditorEmbed?: boolean }>();
 
     defineOptions({
         inheritAttrs: false,
@@ -45,8 +57,9 @@
     const showEditModal = ref(false);
     const isTransformable = computed(() => {
         const { field } = props;
-        return field.imageTransformable &&
-            (!field.imageTransformableFileTypes || field.imageTransformableFileTypes?.includes(extension.value));
+        return field.imageTransformable
+            && (!field.imageTransformableFileTypes || field.imageTransformableFileTypes?.includes(extension.value))
+            && props.value?.mime_type?.startsWith('image/');
     });
     const transformedImg = ref<string>();
     const uppyFile = ref<UppyFile>();
@@ -85,7 +98,7 @@
             console.log('file-added', JSON.parse(JSON.stringify(uppyFile.value)));
         })
         .on('restriction-failed', (file, error) => {
-            emit('error', error.message, file.data);
+            emit('error', `${error.message} (${file.name})`, file.data);
         })
         .on('thumbnail:generated', async (file, preview) => {
             const { field } = props;
@@ -116,7 +129,6 @@
         })
         .on('upload-progress', (file) => {
             uppyFile.value = uppy.getFile(file.id);
-            console.log('upload-progress', JSON.parse(JSON.stringify(uppyFile.value)));
         })
         .on('upload-success', (file, response) => {
             emit('input', {
@@ -218,6 +230,18 @@
         onImageTransform(cropper);
     }
 
+    function onInputChange(e: Event) {
+        const target = e.target as HTMLInputElement;
+        if(target.files?.length) {
+            uppy.addFile({
+                name: target.files[0].name,
+                type: target.files[0].type,
+                data: target.files[0],
+            });
+            target.value = null;
+        }
+    }
+
     onMounted(() => {
         if(props.value?.nativeFile && !props.value?.uploaded) {
             uppy.addFile({
@@ -234,106 +258,183 @@
         uppy.emit('cancel-all', { reason: 'user' });
         emit('uploading', false);
     });
+
+    const menuOpened = ref(false);
 </script>
 
 <template>
-    <template v-if="value?.path || value?.uploaded || uppyFile">
-        <div class="bg-white" :class="{ 'rounded border p-4': root }">
-            <div class="flex">
-                <template v-if="transformedImg ?? value?.thumbnail  ?? uppyFile?.preview">
-                    <img class="mr-4"
-                        width="100"
-                        :src="transformedImg ?? value?.thumbnail ?? uppyFile.preview"
-                        alt=""
-                    >
-                </template>
-                <div class="flex-1 min-w-0">
-                    <div class="text-sm font-medium truncate text-gray-800 text-truncate">
-                        {{ value?.name?.split('/').at(-1) ?? uppyFile?.name }}
-                    </div>
-                    <div class="flex gap-2 mt-2">
-                        <template v-if="value?.size ?? uppyFile?.size">
-                            <div class="text-sm text-gray-600">
-                                {{ filesizeLabel(value?.size ?? uppyFile.size) }}
-                            </div>
-                        </template>
-                        <template v-if="value?.path">
-                            <a class="text-sm text-primary-700 underline"
-                                :href="route('code16.sharp.download.show', {
-                                entityKey: form.entityKey,
-                                instanceId: form.instanceId,
-                                disk: value.disk,
-                                path: value.path,
-                            })"
-                                :download="value?.name?.split('/').at(-1)"
+    <FormFieldLayout v-bind="props">
+        <template #default="{ id, ariaDescribedBy }">
+            <template v-if="value?.path || value?.uploaded || uppyFile">
+                <div :class="{ 'bg-background border border-input rounded-md p-4': !asEditorEmbed }">
+                    <div class="flex">
+                        <template v-if="transformedImg ?? value?.thumbnail  ?? uppyFile?.preview">
+                            <img class="mr-4 object-contain"
+                                width="150"
+                                :src="transformedImg ?? value?.thumbnail ?? uppyFile.preview"
+                                alt=""
                             >
-                                {{ __('sharp::form.upload.download_link') }}
-                            </a>
                         </template>
-                    </div>
-                    <template v-if="!field.readOnly">
-                        <div class="flex gap-2 mt-2">
-                            <template v-if="value && (!uppyFile || !uppyFile.progress.uploadStarted || uppyFile.progress.uploadComplete) && isTransformable && !hasError">
-                                <Button class="mr-2" outline small @click="onEdit">
-                                    {{ __('sharp::form.upload.edit_button') }}
-                                </Button>
-                            </template>
-                            <Button variant="danger" outline small @click="onRemove">
-                                {{ __('sharp::form.upload.remove_button') }}
-                            </Button>
-                        </div>
-                    </template>
-                    <template v-if="uppyFile?.progress.percentage < 100 && !hasError">
-                        <div class="mt-2">
-                            <div class="bg-primary h-0.5 transition-all" :style="{ width: `${uppyFile.progress.percentage}%` }" role="progressbar">
+                        <div class="flex-1 min-w-0">
+                            <div class="text-sm font-medium truncate">
+                                <template v-if="value?.path">
+                                    <a class="hover:underline underline-offset-4"
+                                        :href="route('code16.sharp.download.show', {
+                                            entityKey: form.entityKey,
+                                            instanceId: form.instanceId,
+                                            disk: value.disk,
+                                            path: value.path,
+                                        })"
+                                        :download="value?.name?.split('/').at(-1)">
+                                        {{ value?.name?.split('/').at(-1) }}
+                                    </a>
+                                </template>
+                                <template v-else>
+                                    {{ value?.name?.split('/').at(-1) ?? uppyFile?.name }}
+                                </template>
                             </div>
+                            <div class="flex gap-2 mt-2">
+                                <template v-if="value?.size ?? uppyFile?.size">
+                                    <div class="text-xs text-muted-foreground">
+                                        {{ filesizeLabel(value?.size ?? uppyFile.size) }}
+                                    </div>
+                                </template>
+                            </div>
+<!--                        <template v-if="!field.readOnly">-->
+<!--                            <div class="flex gap-2 mt-2">-->
+<!--                                <template v-if="value && (!uppyFile || !uppyFile.progress.uploadStarted || uppyFile.progress.uploadComplete) && isTransformable && !hasError">-->
+<!--                                    <Button class="h-8" variant="outline" size="sm" @click="onEdit">-->
+<!--                                        {{ __('sharp::form.upload.edit_button') }}-->
+<!--                                    </Button>-->
+<!--                                </template>-->
+<!--                                <Button class="h-8" variant="outline" size="sm" @click="onRemove">-->
+<!--                                    {{ __('sharp::form.upload.remove_button') }}-->
+<!--                                </Button>-->
+<!--                                <template v-if="value?.path">-->
+<!--                                    <Button-->
+<!--                                        class="h-8 underline -ml-2"-->
+<!--                                        size="sm"-->
+<!--                                        variant="link"-->
+<!--                                        :href="route('code16.sharp.download.show', {-->
+<!--                                            entityKey: form.entityKey,-->
+<!--                                            instanceId: form.instanceId,-->
+<!--                                            disk: value.disk,-->
+<!--                                            path: value.path,-->
+<!--                                        })"-->
+<!--                                        :download="value?.name?.split('/').at(-1)"-->
+<!--                                    >-->
+<!--                                        {{ __('sharp::form.upload.download_link') }}-->
+<!--                                    </Button>-->
+<!--                                </template>-->
+<!--                            </div>-->
+<!--                        </template>-->
+                            <template v-if="uppyFile?.progress.percentage < 100 && !hasError">
+                                <div class="mt-2">
+                                    <div class="bg-primary h-0.5 transition-all" :style="{ width: `${uppyFile.progress.percentage}%` }" role="progressbar">
+                                    </div>
+                                </div>
+                            </template>
                         </div>
-                    </template>
-                </div>
-            </div>
-        </div>
-    </template>
-    <template v-else>
-        <div class="relative flex justify-center rounded-lg border border-dashed px-6 py-10"
-            :class="[
-                isDraggingOver ? 'border-primary-600' :
-                hasError ? 'border-red-600' :
-                'border-gray-900/25'
-            ]"
-            ref="dropTarget"
-        >
-            <div class="text-center" :class="{ 'invisible': isDraggingOver }">
-                <div class="text-sm leading-6 text-gray-600">
-                    <UploadDropText>
-                        <template #link="{ text }">
-                            <label class="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
-                                <span>{{ text }}</span>
-                                <FileInput class="sr-only" :uppy="uppy" :props="{ pretty: false }" />
-                            </label>
-                        </template>
-                    </UploadDropText>
-                </div>
-                <p class="text-xs leading-5 text-gray-600">
-                    <template v-if="field.allowedExtensions?.length">
-                        <span class="uppercase">
-                            {{ field.allowedExtensions.map(extension => extension.replace('.', '')).join(', ') }}
-                        </span>
-                    </template>
-                    <template v-if="field.maxFileSize">
-                        {{ ' '+__('sharp::form.upload.help_text.max_file_size', { size: filesizeLabel(field.maxFileSize * 1024 * 1024) }) }}
-                    </template>
-                </p>
-            </div>
-            <template v-if="isDraggingOver">
-                <div class="absolute inset-0 flex flex-col justify-center items-center pointer-events-none">
-                    <ArrowDownOnSquareIcon class="w-8 h-8 text-gray-400 mb-1" />
-                    <div class="text-sm leading-6 text-gray-600">
-                        Drop your file here
+                        <DropdownMenu :modal="false">
+                            <DropdownMenuTrigger as-child>
+                                <Button class="self-center" variant="ghost" size="icon">
+                                    <MoreHorizontal class="w-4 h-4" />
+                                </Button>
+<!--                            <Button class="self-center" size="sm" variant="outline">-->
+<!--                                {{ __('sharp::form.upload.edit_button') }}-->
+<!--                            </Button>-->
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                                <template v-if="value?.path">
+                                    <DropdownMenuItem
+                                        as="a"
+                                        :href="route('code16.sharp.download.show', {
+                                            entityKey: form.entityKey,
+                                            instanceId: form.instanceId,
+                                            disk: value.disk,
+                                            path: value.path,
+                                        })"
+                                    >
+                                        {{ __('sharp::form.upload.download_link') }}
+                                    </DropdownMenuItem>
+                                </template>
+                                <template v-if="value && (!uppyFile || !uppyFile.progress.uploadStarted || uppyFile.progress.uploadComplete) && isTransformable && !hasError">
+                                    <DropdownMenuItem @click="onEdit">
+                                        {{ __('sharp::form.upload.edit_button') }}
+                                    </DropdownMenuItem>
+                                </template>
+                                <DropdownMenuSeparator class="first:hidden" />
+                                <DropdownMenuItem class="text-destructive" @click="onRemove">
+                                    {{ __('sharp::form.upload.remove_button') }}
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </div>
                 </div>
             </template>
-        </div>
-    </template>
+            <template v-else>
+                <Input
+                    :id="id"
+                    type="file"
+                    :accept="field.allowedExtensions?.join(',')"
+                    :aria-describedby="ariaDescribedBy"
+                    @change="onInputChange"
+                />
+
+<!--            <FileInput :uppy="uppy" :props="{ pretty: false }" ref="inputContainer" />-->
+<!--            <div class="relative flex justify-center rounded-lg border border-dashed px-6 py-10"-->
+<!--                :class="[-->
+<!--                    isDraggingOver ? 'border-primary-600' :-->
+<!--                    hasError ? 'border-red-600' :-->
+<!--                    'border-gray-900/25'-->
+<!--                ]"-->
+<!--                ref="dropTarget"-->
+<!--            >-->
+<!--                <div class="text-center" :class="{ 'invisible': isDraggingOver }">-->
+<!--                    <div class="text-sm leading-6 text-gray-600">-->
+<!--                        <UploadDropText>-->
+<!--                            <template #link="{ text }">-->
+<!--                                <label class="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">-->
+<!--                                    <span>{{ text }}</span>-->
+<!--                                    <FileInput class="sr-only" :uppy="uppy" :props="{ pretty: false }" ref="inputContainer" />-->
+<!--                                </label>-->
+<!--                            </template>-->
+<!--                        </UploadDropText>-->
+<!--                    </div>-->
+<!--                    <p class="text-xs leading-5 text-gray-600">-->
+<!--                        <template v-if="field.allowedExtensions?.length">-->
+<!--                            <span class="uppercase">-->
+<!--                                {{ field.allowedExtensions.map(extension => extension.replace('.', '')).join(', ') }}-->
+<!--                            </span>-->
+<!--                        </template>-->
+<!--                        <template v-if="field.maxFileSize">-->
+<!--                            {{ ' '+__('sharp::form.upload.help_text.max_file_size', { size: filesizeLabel(field.maxFileSize * 1024 * 1024) }) }}-->
+<!--                        </template>-->
+<!--                    </p>-->
+<!--                </div>-->
+<!--                <template v-if="isDraggingOver">-->
+<!--                    <div class="absolute inset-0 flex flex-col justify-center items-center pointer-events-none">-->
+<!--                        <ArrowDownOnSquareIcon class="w-8 h-8 text-gray-400 mb-1" />-->
+<!--                        <div class="text-sm leading-6 text-gray-600">-->
+<!--                            Drop your file here-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </template>-->
+<!--            </div>-->
+            </template>
+        </template>
+
+        <template v-if="!(value?.path || value?.uploaded || uppyFile)" #help-message>
+            <template v-if="field.allowedExtensions?.length">
+                <span class="">
+                    {{ field.allowedExtensions.join(', ') }}
+                </span>
+            </template>
+            <template v-if="field.maxFileSize">
+                {{ ' '+__('sharp::form.upload.help_text.max_file_size', { size: filesizeLabel(field.maxFileSize * 1024 * 1024) }) }}
+            </template>
+        </template>
+    </FormFieldLayout>
 
     <EditModal
         v-model:visible="showEditModal"
@@ -343,3 +444,9 @@
         @submit="onTransformSubmit"
     />
 </template>
+
+<style>
+    .uppy-DragDrop-container {
+        @apply flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10;
+    }
+</style>

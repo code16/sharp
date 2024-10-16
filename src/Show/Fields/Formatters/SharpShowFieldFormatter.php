@@ -3,20 +3,14 @@
 namespace Code16\Sharp\Show\Fields\Formatters;
 
 use Code16\Sharp\Show\Fields\SharpShowField;
+use Code16\Sharp\Utils\Fields\Formatters\FormatsLocalizedValue;
 
 class SharpShowFieldFormatter
 {
-    protected ?array $dataLocalizations = null;
+    use FormatsLocalizedValue;
 
     public function toFront(SharpShowField $field, $value)
     {
         return $value;
-    }
-
-    public function setDataLocalizations(array $dataLocalizations): static
-    {
-        $this->dataLocalizations = $dataLocalizations;
-
-        return $this;
     }
 }

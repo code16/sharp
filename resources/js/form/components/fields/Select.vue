@@ -1,121 +1,55 @@
-<template>
-    <component
-        :is="component"
-        class="SharpSelect"
-        :class="classes"
-        :labels="optionsLabel"
-        v-bind="{ ...$props, ...$attrs }"
-        @input="handleInput"
-        ref="component"
-    >
-    </component>
-</template>
-
-<script>
+<script setup lang="ts">
+    import { FormFieldEmitInputOptions, FormFieldEmits, FormFieldProps } from "@/form/types";
+    import { FormSelectFieldData } from "@/types";
+    import { nextTick, watch } from "vue";
     import DropdownSelect from "./select/DropdownSelect.vue";
     import Checkboxes from "./select/Checkboxes.vue";
     import Radios from "./select/Radios.vue";
-    import localize from '../../mixins/localize/Select';
-    import { setDefaultValue } from "../../util";
 
-    export default {
-        name: 'SharpSelect',
+    const props = defineProps<FormFieldProps<FormSelectFieldData>>();
+    const emit = defineEmits<FormFieldEmits<FormSelectFieldData>>();
 
-        mixins: [localize],
+    function onInput(value: FormSelectFieldData['value'], options?: FormFieldEmitInputOptions) {
+        emit('input', value, { error: options?.error });
+    }
 
-        props: {
-            value: [Array, String, Number],
-            uniqueIdentifier: String,
-            options: {
-                type: Array,
-                required: true,
-                default: ()=>[],
-            },
-            multiple: {
-                type: Boolean,
-                default: false
-            },
-            display: {
-                type: String,
-                default: 'dropdown'
-            },
-            clearable: {
-                type: Boolean,
-                default: false
-            },
-            showSelectAll: {
-                type: Boolean,
-                default: true,
-            },
-            placeholder: {
-                type: String,
-                default: '-'
-            },
-            maxSelected: Number,
-            readOnly: Boolean,
-
-            inline: {
-                type: Boolean,
-                default: true
-            },
-            root: Boolean,
-        },
-        watch: {
-            options() {
-                this.init();
+    // todo put this in SelectFormatter instead ?
+    async function setDefaultValue() {
+        if(!props.field.multiple
+            && props.value == null
+            && props.field.options.length > 0
+        ) {
+            if(props.field.dynamicAttributes?.length) { // has dynamic options
+                await nextTick();
             }
-        },
-        computed: {
-            classes() {
-                return [
-                    `SharpSelect--${this.display}`,
-                    {
-                        'SharpSelect--multiple': this.multiple,
-                    }
-                ];
-            },
-            component() {
-                if(this.display === 'dropdown') {
-                    return DropdownSelect;
-                }
-                return this.multiple
-                    ? Checkboxes
-                    : Radios;
-            },
-            optionsLabel() {
-                return this.options.reduce((map, opt) => {
-                    map[opt.id] = this.localizedOptionLabel(opt);
-                    return map;
-                }, {});
-            },
-        },
-        methods: {
-            handleInput(value, { error } = {}) {
-                this.$emit('input', value, { error });
-            },
-            setDefault() {
-                if(!this.clearable
-                    && !this.multiple
-                    && this.value == null
-                    && this.options.length > 0
-                ) {
-                    this.$emit('input', this.options[0].id, { force:true });
-                }
-            },
-            init() {
-                setDefaultValue(this, this.setDefault, {
-                    dependantAttributes: ['options'],
-                });
-            },
-            /**
-             * @public
-             */
-            blur() {
-                this.$refs.component.$refs?.multiselect.deactivate();
-            }
-        },
-        created() {
-            // this.init();
+            emit('input', props.field.options[0].id, { force:true });
         }
     }
+
+    watch(() => props.field.options, () => {
+        setDefaultValue();
+    });
+
+    setDefaultValue();
 </script>
+
+<template>
+    <template v-if="field.display === 'list'">
+        <template v-if="field.multiple">
+            <Checkboxes
+                v-bind="{ ...$props, ...$attrs }"
+                :value="value as Array<number|string> | null"
+                @input="onInput"
+            />
+        </template>
+        <template v-else>
+            <Radios
+                v-bind="{ ...$props, ...$attrs }"
+                :value="value as string|number|null"
+                @input="onInput" />
+        </template>
+    </template>
+    <template v-else>
+        <DropdownSelect v-bind="{ ...$props, ...$attrs }" @input="onInput" />
+    </template>
+</template>

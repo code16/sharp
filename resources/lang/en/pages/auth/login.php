@@ -1,10 +1,11 @@
 <?php
 
 return [
-    'title' => 'Login',
-    'login_field' => 'login',
-    'password_field' => 'password',
-    'code_field' => 'code',
+    'title' => 'Sign in',
+    'login_field' => 'Login',
+    'login_field_for_email' => 'Email',
+    'password_field' => 'Password',
+    'code_field' => 'Code',
     'remember' => 'Remember me',
     'button' => 'Login',
     'forgot_password_link' => 'Forgot password?',

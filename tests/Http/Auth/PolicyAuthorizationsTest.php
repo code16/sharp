@@ -11,11 +11,7 @@ use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
     login();
-
-    config()->set(
-        'sharp.entities.person',
-        PersonEntity::class,
-    );
+    sharp()->config()->addEntity('person', PersonEntity::class);
 });
 
 it('allows to configure a policy', function () {
@@ -122,7 +118,7 @@ it('returns policies with a list get request', function () {
 
     fakePolicyFor('person', new class extends SharpEntityPolicy
     {
-        public function update($user, $instanceId): bool
+        public function delete($user, $instanceId): bool
         {
             return $instanceId == 1;
         }
@@ -132,8 +128,8 @@ it('returns policies with a list get request', function () {
         ->get('/sharp/s-list/person')
         ->assertInertia(fn (Assert $page) => $page
             ->where('entityList.authorizations', [
-                'delete' => [1, 2],
-                'update' => [1],
+                'delete' => [1],
+                'reorder' => true,
                 'create' => true,
                 'view' => [1, 2],
             ])
@@ -176,10 +172,7 @@ it('allows to set the entity authorization in a policy', function () {
 });
 
 it('allows to set dashboard view policy to handle whole dashboard visibility', function () {
-    config()->set(
-        'sharp.entities.dashboard',
-        DashboardEntity::class,
-    );
+    sharp()->config()->addEntity('dashboard', DashboardEntity::class);
 
     fakePolicyFor('dashboard', new class extends SharpEntityPolicy
     {

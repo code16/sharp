@@ -15,13 +15,13 @@ class SharpUploadManager
         foreach ($this->uploadedFileQueue as $params) {
             $params['instanceId'] = $instanceId;
             HandleUploadedFileJob::dispatch(...$params)
-                ->onQueue(config('sharp.uploads.file_handling_queue', 'default'))
-                ->onConnection(config('sharp.uploads.file_handling_queue_connection', 'sync'));
+                ->onQueue(sharp()->config()->get('uploads.file_handling_queue'))
+                ->onConnection(sharp()->config()->get('uploads.file_handling_queue_connection'));
         }
         foreach ($this->transformedFileQueue as $params) {
             HandleTransformedFileJob::dispatch(...$params)
-                ->onQueue(config('sharp.uploads.file_handling_queue', 'default'))
-                ->onConnection(config('sharp.uploads.file_handling_queue_connection', 'sync'));
+                ->onQueue(sharp()->config()->get('uploads.file_handling_queue'))
+                ->onConnection(sharp()->config()->get('uploads.file_handling_queue_connection'));
         }
     }
 

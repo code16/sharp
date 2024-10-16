@@ -7,12 +7,12 @@ use Code16\Sharp\Data\BreadcrumbData;
 use Code16\Sharp\Data\NotificationData;
 use Code16\Sharp\Data\Show\ShowData;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
-use Code16\Sharp\Utils\SharpBreadcrumb;
 use Inertia\Inertia;
 
 class SingleShowController extends SharpProtectedController
 {
     use HandlesSharpNotificationsInRequest;
+    use PreloadsShowEntityLists;
 
     public function __construct(
         private SharpAuthorizationManager $sharpAuthorizationManager,
@@ -30,7 +30,7 @@ class SingleShowController extends SharpProtectedController
         $show->buildShowConfig();
         $showData = $show->instance(null);
 
-        $data = [
+        $payload = ShowData::from([
             'config' => $show->showConfig(null),
             'fields' => $show->fields(),
             'layout' => $show->showLayout(),
@@ -45,12 +45,14 @@ class SingleShowController extends SharpProtectedController
                 'update' => $this->sharpAuthorizationManager->isAllowed('update', $entityKey),
                 'delete' => $this->sharpAuthorizationManager->isAllowed('delete', $entityKey),
             ],
-        ];
+        ]);
+        
+        $this->addPreloadHeadersForShowEntityLists($payload);
 
         return Inertia::render('Show/Show', [
-            'show' => ShowData::from($data),
+            'show' => $payload,
             'breadcrumb' => BreadcrumbData::from([
-                'items' => app(SharpBreadcrumb::class)->getItems($data),
+                'items' => sharp()->context()->breadcrumb()->allSegments(),
             ]),
             'notifications' => NotificationData::collection($this->getSharpNotifications()),
         ]);

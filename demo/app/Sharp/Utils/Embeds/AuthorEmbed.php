@@ -5,7 +5,7 @@ namespace App\Sharp\Utils\Embeds;
 use App\Models\User;
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
-use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
+use Code16\Sharp\Form\Fields\SharpFormAutocompleteRemoteField;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
@@ -33,7 +33,7 @@ class AuthorEmbed extends SharpFormEditorEmbed
     {
         $formFields
             ->addField(
-                SharpFormAutocompleteField::make('author', 'remote')
+                SharpFormAutocompleteRemoteField::make('author')
                     ->setLabel('Author')
                     ->setRemoteEndpoint('/api/admin/users')
                     ->setListItemInlineTemplate('<div>{{name}}</div><div><small>{{email}}</small></div>')

@@ -60,14 +60,14 @@ class PostShow extends SharpShow
             ->addField(
                 SharpShowEntityListField::make('blocks')
                     ->setLabel('Blocks')
-                    ->hideFilterWithValue('post', fn ($instanceId) => $instanceId)
+                    ->hideFilterWithValue('post', fn($instanceId) => $instanceId)
             );
     }
 
     protected function buildShowLayout(ShowLayout $showLayout): void
     {
         $showLayout
-            ->addSection('', function (ShowLayoutSection $section) {
+            ->addSection(function (ShowLayoutSection $section) {
                 $section
                     ->addColumn(7, function (ShowLayoutColumn $column) {
                         $column
@@ -147,11 +147,15 @@ class PostShow extends SharpShow
             })
             ->setCustomTransformer('categories', function ($value, Post $instance) {
                 return $instance->categories
-                    ->map(fn ($category) => LinkToShowPage::make('categories', $category->id)->renderAsText($category->name))
+                    ->map(fn($category) => LinkToShowPage::make('categories', $category->id)
+                        ->renderAsText($category->name))
                     ->implode(', ');
             })
             ->setCustomTransformer('cover', new SharpUploadModelThumbnailUrlTransformer(500))
-            ->setCustomTransformer('attachments[document]', new SharpUploadModelFormAttributeTransformer(withThumbnails: false))
+            ->setCustomTransformer(
+                'attachments[document]',
+                new SharpUploadModelFormAttributeTransformer(withThumbnails: false)
+            )
             ->setCustomTransformer('attachments[link_url]', function ($value, $instance) {
                 return $instance->is_link
                     ? sprintf('<a href="%s" alt="">%s</a>', $value, str($value)->limit(30))

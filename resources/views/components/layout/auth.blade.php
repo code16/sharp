@@ -41,7 +41,7 @@
 
         <p class="text-center mt-2 text-white login__powered">
             <span>powered by</span>
-            <a class="text-reset" href="https://sharp.code16.fr/docs/">Sharp {{sharp_version()}}</a>
+            <a class="text-reset" href="https://sharp.code16.fr/docs/">Sharp {{sharp()->version()}}</a>
         </p>
     </div>
 </div>

@@ -27,8 +27,7 @@ it('caches array of entities at transform stage', function () {
 
     $list->data();
 
-    expect(currentSharpRequest()->findCachedInstance($this->people[0]->id, function () {
-    }))
+    expect(sharp()->context()->findListInstance($this->people[0]->id))
         ->name
         ->toEqual($this->people[0]->name);
 });
@@ -48,8 +47,7 @@ it('caches collection of entities at transform stage', function () {
 
     $list->data();
 
-    expect(currentSharpRequest()->findCachedInstance($this->people[0]->id, function () {
-    }))
+    expect(sharp()->context()->findListInstance($this->people[0]->id))
         ->name
         ->toEqual($this->people[0]->name);
 });
@@ -69,8 +67,7 @@ it('caches paginated entities at transform stage', function () {
 
     $list->data();
 
-    expect(currentSharpRequest()->findCachedInstance($this->people[0]->id, function () {
-    }))
+    expect(sharp()->context()->findListInstance($this->people[0]->id))
         ->name
         ->toEqual($this->people[0]->name);
 });
@@ -106,8 +103,7 @@ it('uses configured instance id to check id', function () {
     $list->buildListConfig();
     $list->data();
 
-    expect(currentSharpRequest()->findCachedInstance($this->people[0]->key, function () {
-    }))
+    expect(sharp()->context()->findListInstance($this->people[0]->key))
         ->name
         ->toEqual($this->people[0]->name);
 });
@@ -117,8 +113,7 @@ it('callback is called in case of missing entity', function () {
 
     $list->data();
 
-    expect(currentSharpRequest()
-        ->findCachedInstance(
+    expect(sharp()->context()->findListInstance(
             12,
             fn ($id) => $id == 12 ? new Person(['id' => 12, 'name' => 'test']) : null
         ))

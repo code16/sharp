@@ -25,6 +25,7 @@ class MediaFactory extends Factory
 
             return [
                 'file_name' => sprintf("data/$destRelativePath/%s", basename($srcFullPath)),
+                'size' => filesize($srcFullPath),
             ];
         });
     }

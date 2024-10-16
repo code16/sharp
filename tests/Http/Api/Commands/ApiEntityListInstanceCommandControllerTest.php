@@ -10,12 +10,8 @@ use Code16\Sharp\Utils\PageAlerts\PageAlert;
 use Illuminate\Http\UploadedFile;
 
 beforeEach(function () {
+    sharp()->config()->addEntity('person', PersonEntity::class);
     login();
-
-    config()->set(
-        'sharp.entities.person',
-        PersonEntity::class,
-    );
 });
 
 it('allows to call an info instance command', function () {
@@ -105,6 +101,36 @@ it('allows to call a view instance command', function () {
             'action' => 'view',
         ]);
 });
+
+it('allows to call a html instance command', function () {
+    fakeListFor('person', new class extends PersonList
+    {
+        protected function getInstanceCommands(): ?array
+        {
+            return [
+                'instance_html' => new class extends InstanceCommand
+                {
+                    public function label(): ?string
+                    {
+                        return 'my command';
+                    }
+                    
+                    public function execute($instanceId, array $data = []): array
+                    {
+                        return $this->html('Hello world');
+                    }
+                },
+            ];
+        }
+    });
+    
+    $this->postJson(route('code16.sharp.api.list.command.instance', ['person', 'instance_html', 1]))
+        ->assertOk()
+        ->assertJson([
+            'action' => 'view',
+        ]);
+});
+
 
 it('allows to call a refresh instance command', function () {
     fakeListFor('person', new class extends PersonList
@@ -407,6 +433,11 @@ it('allows to configure a page alert on an instance command', function () {
                             ->setLevelInfo()
                             ->setMessage('My page alert');
                     }
+                    
+                    public function buildFormFields(FieldsContainer $formFields): void
+                    {
+                        $formFields->addField(SharpFormTextField::make('name'));
+                    }
 
                     public function execute($instanceId, array $data = []): array
                     {
@@ -488,6 +519,12 @@ it('allows to initialize form data in an instance command', function () {
                     {
                         return 'my command';
                     }
+                    
+                    public function buildCommandConfig(): void
+                    {
+                        $this->configureFormModalTitle(fn ($data) => "Edit {$data['name']}")
+                            ->configureFormModalDescription('Custom description');
+                    }
 
                     public function buildFormFields(FieldsContainer $formFields): void
                     {
@@ -516,6 +553,10 @@ it('allows to initialize form data in an instance command', function () {
         ->assertJsonFragment([
             'data' => [
                 'name' => 'Marie Curie',
+            ],
+            'config' => [
+                'title' => 'Edit Marie Curie',
+                'description' => 'Custom description',
             ],
         ]);
 });

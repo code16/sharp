@@ -8,7 +8,6 @@ use Code16\Sharp\Data\EntityList\EntityListData;
 use Code16\Sharp\Data\NotificationData;
 use Code16\Sharp\Exceptions\SharpInvalidConfigException;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
-use Code16\Sharp\Utils\SharpBreadcrumb;
 use Inertia\Inertia;
 
 class EntityListController extends SharpProtectedController
@@ -28,7 +27,7 @@ class EntityListController extends SharpProtectedController
 
         $list = $this->entityManager->entityFor($entityKey)->getListOrFail();
         $list->buildListConfig();
-        $list->initQueryParams();
+        $list->initQueryParams(request()->query());
 
         $listData = $list->data();
         $listConfig = $list->listConfig($this->entityManager->entityFor($entityKey)->hasShow());
@@ -49,17 +48,19 @@ class EntityListController extends SharpProtectedController
                 $listData['items'],
                 $listConfig,
             ),
+            'filterValues' => $list->filterContainer()->getCurrentFilterValuesForFront(request()->all()),
+            'query' => count(request()->query()) ? request()->query() : null,
         ];
 
-        if (request()->expectsJson()) {
+        if (request()->routeIs('code16.sharp.api.list')) {
             // EEL case, need to return JSON
-            return response()->json(EntityListData::from($data));
+            return response()->json(EntityListData::from($data)->toArray());
         }
 
         return Inertia::render('EntityList/EntityList', [
             'entityList' => EntityListData::from($data),
             'breadcrumb' => BreadcrumbData::from([
-                'items' => app(SharpBreadcrumb::class)->getItems($data),
+                'items' => sharp()->context()->breadcrumb()->allSegments(),
             ]),
             'notifications' => NotificationData::collection($this->getSharpNotifications()),
         ]);
@@ -69,7 +70,7 @@ class EntityListController extends SharpProtectedController
     {
         $authorizations = [
             'view' => [],
-            'update' => [],
+            'reorder' => $this->sharpAuthorizationManager->isAllowed('reorder', $entityKey),
             'delete' => [],
             'create' => $this->sharpAuthorizationManager->isAllowed('create', $entityKey),
         ];
@@ -80,9 +81,6 @@ class EntityListController extends SharpProtectedController
             ->each(function ($instanceId) use (&$authorizations, $entityKey) {
                 if ($this->sharpAuthorizationManager->isAllowed('view', $entityKey, $instanceId)) {
                     $authorizations['view'][] = $instanceId;
-                }
-                if ($this->sharpAuthorizationManager->isAllowed('update', $entityKey, $instanceId)) {
-                    $authorizations['update'][] = $instanceId;
                 }
                 if ($this->sharpAuthorizationManager->isAllowed('delete', $entityKey, $instanceId)) {
                     $authorizations['delete'][] = $instanceId;

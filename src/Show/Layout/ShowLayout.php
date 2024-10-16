@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Show\Layout;
 
+use Closure;
 use Code16\Sharp\Form\Layout\HasLayout;
 use Illuminate\Support\Traits\Conditionable;
 
@@ -11,8 +12,13 @@ class ShowLayout implements HasLayout
 
     protected array $sections = [];
 
-    final public function addSection(string $label, \Closure $callback = null): self
+    final public function addSection(string|Closure $label, ?Closure $callback = null): self
     {
+        if ($label instanceof Closure) {
+            $callback = $label;
+            $label = '';
+        }
+
         $section = new ShowLayoutSection($label);
         $this->sections[] = $section;
 

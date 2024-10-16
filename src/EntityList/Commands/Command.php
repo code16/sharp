@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\EntityList\Commands;
 
+use Closure;
 use Code16\Sharp\Enums\CommandAction;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\HasModalFormLayout;
@@ -22,9 +23,11 @@ abstract class Command
 
     protected int $groupIndex = 0;
     protected ?string $commandKey = null;
-    private ?string $formModalTitle = null;
+    private string|Closure|null $formModalTitle = null;
+    private string|Closure|null $formModalDescription = null;
     private ?string $formModalButtonLabel = null;
-    private ?string $confirmationText = null;
+    private ?string $confirmationTitle = null;
+    private ?string $confirmationDescription = null;
     private ?string $description = null;
 
     protected function info(string $message): array
@@ -65,6 +68,14 @@ abstract class Command
             'html' => view($bladeView, $params)->render(),
         ];
     }
+    
+    protected function html(string $htmlContent): array
+    {
+        return [
+            'action' => 'view',
+            'html' => $htmlContent,
+        ];
+    }
 
     protected function download(string $filePath, string $fileName = null, string $diskName = null): array
     {
@@ -90,14 +101,21 @@ abstract class Command
         return new SharpNotification($title);
     }
 
-    final protected function configureFormModalTitle(string $formModalTitle): self
+    final protected function configureFormModalTitle(string|Closure $formModalTitle): self
     {
         $this->formModalTitle = $formModalTitle;
 
         return $this;
     }
+    
+    final protected function configureFormModalDescription(string|Closure $formModalDescription): self
+    {
+        $this->formModalDescription = $formModalDescription;
+        
+        return $this;
+    }
 
-    final protected function configureFormModalButtonLabel(string $formModalButtonLabel): self
+    final protected function configureFormModalButtonLabel(string|Closure $formModalButtonLabel): self
     {
         $this->formModalButtonLabel = $formModalButtonLabel;
 
@@ -113,7 +131,8 @@ abstract class Command
 
     final protected function configureConfirmationText(string $confirmationText): self
     {
-        $this->confirmationText = $confirmationText;
+        $this->confirmationTitle = strlen($confirmationText) > 50 ? __('sharp::modals.confirm.title') : $confirmationText;
+        $this->confirmationDescription = strlen($confirmationText) > 50 ? $confirmationText : null;
 
         return $this;
     }
@@ -131,9 +150,14 @@ abstract class Command
         return $this->authorize();
     }
 
-    final public function getConfirmationText(): ?string
+    final public function getConfirmationTitle(): ?string
     {
-        return $this->confirmationText;
+        return $this->confirmationTitle;
+    }
+    
+    final public function getConfirmationDescription(): ?string
+    {
+        return $this->confirmationDescription;
     }
 
     final public function getDescription(): ?string
@@ -141,9 +165,18 @@ abstract class Command
         return $this->description;
     }
 
-    final public function getFormModalTitle(): ?string
+    final public function getFormModalTitle(?array $formData): ?string
     {
-        return $this->formModalTitle;
+        return ($callback = $this->formModalTitle) instanceof Closure
+            ? $callback($formData)
+            : $this->formModalTitle;
+    }
+    
+    final public function getFormModalDescription(?array $formData): ?string
+    {
+        return ($callback = $this->formModalDescription) instanceof Closure
+            ? $callback($formData)
+            : $this->formModalDescription;
     }
 
     final public function getFormModalButtonLabel(): ?string

@@ -10,15 +10,6 @@ use Illuminate\Support\Facades\Storage;
 
 class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
 {
-    private bool $alwaysReturnFullObject = false;
-
-    public function setAlwaysReturnFullObject(?bool $returnFullObject = true): self
-    {
-        $this->alwaysReturnFullObject = $returnFullObject;
-
-        return $this;
-    }
-
     /**
      * @param  SharpFormUploadField  $field
      */
@@ -35,11 +26,11 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
         if ($value['uploaded'] ?? false) {
             $uploadedFieldRelativePath = sprintf(
                 '%s/%s',
-                config('sharp.uploads.tmp_dir', 'tmp'),
+                sharp()->config()->get('uploads.tmp_dir'),
                 $value['name'],
             );
 
-            return tap($this->maybeFullObject($value, [
+            return tap($this->normalizeFromFront($value, [
                 'file_name' => sprintf(
                     '%s/%s',
                     str($field->storageBasePath())->replace('{id}', $this->instanceId ?? '{id}'),
@@ -47,9 +38,9 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
                         $value['name'], $field->storageBasePath(), $field->storageDisk(),
                     )
                 ),
-                'size' => Storage::disk(config('sharp.uploads.tmp_disk', 'local'))
+                'size' => Storage::disk(sharp()->config()->get('uploads.tmp_disk'))
                     ->size($uploadedFieldRelativePath),
-                'mime_type' => Storage::disk(config('sharp.uploads.tmp_disk', 'local'))
+                'mime_type' => Storage::disk(sharp()->config()->get('uploads.tmp_disk'))
                     ->mimeType($uploadedFieldRelativePath),
                 'disk' => $field->storageDisk(),
                 'filters' => $field->isImageTransformOriginal()
@@ -70,12 +61,7 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
 
         if ($value['transformed'] ?? false) {
             // Transformation on an existing file
-            return tap($this->maybeFullObject($value, [
-                'file_name' => $value['path'],
-                'disk' => $value['disk'],
-                'size' => $value['size'],
-                'filters' => $value['filters'] ?? null,
-            ]), function ($formatted) use ($field) {
+            return tap($this->normalizeFromFront($value), function ($formatted) use ($field) {
                 if ($field->isImageTransformOriginal()) {
                     app(SharpUploadManager::class)->queueHandleTransformedFile(
                         disk: $field->storageDisk(),
@@ -87,7 +73,7 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
         }
 
         // No change was made
-        return $this->maybeFullObject($value, $value === null ? null : []);
+        return $this->normalizeFromFront($value);
     }
 
     public function afterUpdate(SharpFormField $field, string $attribute, mixed $value): ?array
@@ -101,19 +87,18 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
         return $value;
     }
 
-    protected function maybeFullObject(?array $value, ?array $formatted): ?array
+    protected function normalizeFromFront(?array $value, ?array $formatted = null): ?array
     {
-        if ($this->alwaysReturnFullObject) {
-            return $value === null ? null :
-                 collect([
-                     'file_name' => $formatted['file_name'] ?? $value['path'],
-                     'size' => $formatted['size'] ?? $value['size'] ?? null,
-                     'mime_type' => $formatted['mime_type'] ?? $value['mime_type'] ?? null,
-                     'disk' => $formatted['disk'] ?? $value['disk'],
-                     'filters' => $formatted['filters'] ?? $value['filters'] ?? null,
-                 ])->whereNotNull()->toArray();
+        if($value === null) {
+            return null;
         }
-
-        return $formatted;
+        
+        return collect([
+            'file_name' => $formatted['file_name'] ?? $value['path'],
+            'size' => $formatted['size'] ?? $value['size'] ?? null,
+            'mime_type' => $formatted['mime_type'] ?? $value['mime_type'] ?? null,
+            'disk' => $formatted['disk'] ?? $value['disk'],
+            'filters' => $formatted['filters'] ?? $value['filters'] ?? null,
+        ])->whereNotNull()->toArray();
     }
 }

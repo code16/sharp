@@ -1,4 +1,5 @@
 import {
+    CommandFormData,
     FormData,
     FormEditorFieldData,
     FormFieldData,
@@ -10,14 +11,14 @@ import {
 import { computeCondition } from "./util/conditional-display";
 import { reactive } from "vue";
 import { transformFields } from "./util";
-import { FieldMeta, FieldsMeta } from "./types";
+import { FieldMeta, FieldsMeta, WithDynamicAttributesApplied } from "./types";
 import get from 'lodash/get';
 import set from 'lodash/set';
 
 
-export class Form  implements FormData {
+export class Form implements FormData, CommandFormData {
     authorizations: FormData['authorizations'];
-    config: FormData['config'];
+    config: FormData['config'] & CommandFormData['config'];
     fields: FormData['fields'];
     layout: FormData['layout'];
     locales: FormData['locales'];
@@ -46,7 +47,7 @@ export class Form  implements FormData {
     }
 
     get data() {
-        return this.state.data;
+        return this.state.data ?? {};
     }
     set data(data) {
         this.state.data = data;
@@ -92,7 +93,7 @@ export class Form  implements FormData {
     }
 
     get currentLocale(): string|null {
-        const selectedLocales = [...new Set(this.allFieldsMeta.map(fieldMeta => fieldMeta.locale))];
+        const selectedLocales = [...new Set(this.allFieldsMeta.map(fieldMeta => fieldMeta.locale).filter(Boolean))];
         if(!selectedLocales.length) {
             return this.locales?.[0] ?? null;
         }
@@ -102,6 +103,10 @@ export class Form  implements FormData {
         return null;
     }
 
+    get defaultLocale(): string|null {
+        return this.currentLocale ?? this.locales?.[0];
+    }
+
     get localized(): boolean { // needed ?
         return this.locales?.length > 0;
     }
@@ -109,8 +114,6 @@ export class Form  implements FormData {
     get isUploading(): boolean {
         return this.allFieldsMeta.some(fieldMeta => fieldMeta.uploading);
     }
-
-
 
     getMeta(fieldKey: string): FieldMeta | undefined {
         return get(this.meta, fieldKey);
@@ -147,7 +150,14 @@ export class Form  implements FormData {
         delete this.errors[key];
     }
 
-    getField(key: string, fields = this.fields, data = this.data, readOnly = false): FormFieldData {
+    clearErrors(baseKey: string) {
+        this.errors = Object.fromEntries(
+            Object.entries(this.errors)
+                .filter(([key]) => !key.startsWith(baseKey+'.'))
+        );
+    }
+
+    getField(key: string, fields = this.fields, data = this.data, readOnly = false): WithDynamicAttributesApplied<FormFieldData> {
         const fieldsWithDynamicAttributesApplied = transformFields(fields, data);
 
         return {
@@ -214,7 +224,7 @@ export class Form  implements FormData {
         return !value;
     }
 
-    tabHasError(tab: FormLayoutTabData): boolean {
+    tabErrorsCount(tab: FormLayoutTabData): number {
         const tabFields = tab.columns
             .map(col =>
                 col.fields.flat(2).map(fieldLayout =>
@@ -225,6 +235,6 @@ export class Form  implements FormData {
             .map(fieldLayout => this.fields[fieldLayout.key])
             .filter(Boolean);
 
-        return tabFields.some(field => this.fieldHasError(field, field.key, null, true));
+        return tabFields.filter(field => this.fieldHasError(field, field.key, null, true)).length;
     }
 }

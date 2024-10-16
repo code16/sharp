@@ -5,20 +5,15 @@ use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Utils\Links\LinkToShowPage;
 
 beforeEach(function () {
+    sharp()->config()->addEntity('person', PersonEntity::class);
     login();
-
-    config()->set(
-        'sharp.entities.person',
-        PersonEntity::class,
-    );
 });
 
 it('returns result on a valid search', function () {
     $this->withoutExceptionHandling();
 
-    config()->set(
-        'sharp.search.engine',
-        fn () => new class extends SharpSearchEngine
+    sharp()->config()->enableGlobalSearch(
+        new class extends SharpSearchEngine
         {
             public function searchFor(array $terms): void
             {
@@ -26,7 +21,8 @@ it('returns result on a valid search', function () {
                 $resultSet->addResultLink(LinkToShowPage::make('person', 1), 'John Wayne');
                 $resultSet->addResultLink(LinkToShowPage::make('person', 2), 'Jane Ford', 'Some detail');
             }
-        });
+        }
+    );
 
     $this
         ->getJson('/sharp/api/search?q=some-search')
@@ -51,15 +47,15 @@ it('returns result on a valid search', function () {
 });
 
 it('allows to configure a custom empty state label', function () {
-    config()->set(
-        'sharp.search.engine',
-        fn () => new class extends SharpSearchEngine
+    sharp()->config()->enableGlobalSearch(
+        new class extends SharpSearchEngine
         {
             public function searchFor(array $terms): void
             {
                 $this->addResultSet('People')->setEmptyStateLabel('Nobody found');
             }
-        });
+        }
+    );
 
     $this->getJson('/sharp/api/search?q=some-search')
         ->assertJson(
@@ -75,15 +71,15 @@ it('allows to configure a custom empty state label', function () {
 });
 
 it('allows to configure hide when empty', function () {
-    config()->set(
-        'sharp.search.engine',
-        fn () => new class extends SharpSearchEngine
+    sharp()->config()->enableGlobalSearch(
+        new class extends SharpSearchEngine
         {
             public function searchFor(array $terms): void
             {
                 $this->addResultSet('People')->hideWhenEmpty();
             }
-        });
+        }
+    );
 
     $this->getJson('/sharp/api/search?q=some-search')
         ->assertJson(
@@ -99,9 +95,8 @@ it('allows to configure hide when empty', function () {
 });
 
 it('raises validation errors', function () {
-    config()->set(
-        'sharp.search.engine',
-        fn () => new class extends SharpSearchEngine
+    sharp()->config()->enableGlobalSearch(
+        new class extends SharpSearchEngine
         {
             public function searchFor(array $terms): void
             {
@@ -112,7 +107,8 @@ it('raises validation errors', function () {
                 );
                 $resultSet->addResultLink(LinkToShowPage::make('person', 1), 'John Wayne');
             }
-        });
+        }
+    );
 
     $this->getJson('/sharp/api/search?q=bb')
         ->assertJson(
@@ -131,9 +127,8 @@ it('raises validation errors', function () {
 });
 
 it('handles multiple result sets', function () {
-    config()->set(
-        'sharp.search.engine',
-        fn () => new class extends SharpSearchEngine
+    sharp()->config()->enableGlobalSearch(
+        new class extends SharpSearchEngine
         {
             public function searchFor(array $terms): void
             {
@@ -143,7 +138,8 @@ it('handles multiple result sets', function () {
                 $this->addResultSet('Cars', 'fa-car')
                     ->addResultLink(LinkToShowPage::make('car', 1), 'Aston Martin');
             }
-        });
+        }
+    );
 
     $this->getJson('/sharp/api/search?q=some-search')
         ->assertJson(
@@ -175,9 +171,8 @@ it('handles multiple result sets', function () {
 });
 
 it('allows multiple search terms', function () {
-    config()->set(
-        'sharp.search.engine',
-        fn () => new class extends SharpSearchEngine
+    sharp()->config()->enableGlobalSearch(
+        new class extends SharpSearchEngine
         {
             public function searchFor(array $terms): void
             {
@@ -186,7 +181,8 @@ it('allows multiple search terms', function () {
                         ->addResultLink(LinkToShowPage::make('person', 1), 'John Wayne');
                 }
             }
-        });
+        }
+    );
 
     $this->getJson('/sharp/api/search?q=john+%20wayne%20')
         ->assertJsonFragment([

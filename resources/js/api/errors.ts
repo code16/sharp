@@ -9,17 +9,18 @@ export function getErrorMessage({ data, status }) {
 
 export async function handleErrorAlert({ data, method, status }) {
     const text = getErrorMessage({ data, status });
-    const title = __(`sharp::modals.${status}.title`) === `sharp::modals.${status}.title`
+    const title = __(`sharp::modals.api.${status}.title`) === `sharp::modals.api.${status}.title`
         ? __(`sharp::modals.error.title`)
-        : __(`sharp::modals.${status}.title`);
+        : __(`sharp::modals.api.${status}.title`);
 
     if(status === 404 && method === 'get' || status === 422) {
         return;
     }
 
-    await showAlert(text, { title, isError: true });
-
+    // for 401 / 419 we directly redirect to the login page
     if(status === 401 || status === 419) {
         location.reload();
+    } else {
+        showAlert(text, { title, isError: true });
     }
 }

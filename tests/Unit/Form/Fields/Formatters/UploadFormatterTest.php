@@ -32,17 +32,27 @@ it('allows to format value to front', function () {
     );
 });
 
-it('ignores not existing file from front', function () {
+it('format existing file from front', function () {
     $formatter = app(UploadFormatter::class);
     $field = SharpFormUploadField::make('upload');
 
     $this->assertEquals(
-        [],
+        [
+            'file_name' => 'data/Post/1/test.png',
+            'mime_type' => 'image/png',
+            'size' => 1000,
+            'disk' => 'local',
+            'filters' => ['rotate' => ['angle' => 10]],
+        ],
         $formatter->fromFront(
             $field,
             'attribute',
             [
-                'name' => 'test.png',
+                'path' => 'data/Post/1/test.png',
+                'mime_type' => 'image/png',
+                'size' => 1000,
+                'disk' => 'local',
+                'filters' => ['rotate' => ['angle' => 10]],
             ]),
     );
 });
@@ -69,35 +79,7 @@ it('allows to use a closure as storageBasePath', function () {
     )->toHaveKey('file_name', '/some/updated/path/image.jpg');
 });
 
-it('returns full object after no change was made if configured', function () {
-    $field = SharpFormUploadField::make('upload')
-        ->setStorageDisk('local')
-        ->setImageTransformable()
-        ->setStorageBasePath('data/Test');
-
-    $value = [
-        'path' => 'data/Test/image.jpg',
-        'size' => 0,
-        'mime_type' => 'image/jpeg',
-        'disk' => 'local',
-        'filters' => ['rotate' => ['angle' => 20]],
-    ];
-
-    expect(
-        app(UploadFormatter::class)
-        ->setAlwaysReturnFullObject()
-        ->fromFront($field, 'attribute', $value)
-    )
-        ->toEqual([
-            'file_name' => 'data/Test/image.jpg',
-            'size' => 0,
-            'mime_type' => 'image/jpeg',
-            'disk' => 'local',
-            'filters' => ['rotate' => ['angle' => 20]],
-        ]);
-});
-
-it('returns full object after only transformations if configured', function () {
+it('returns full object after transformations', function () {
     $field = SharpFormUploadField::make('upload')
         ->setStorageDisk('local')
         ->setImageTransformable()
@@ -122,11 +104,7 @@ it('returns full object after only transformations if configured', function () {
         ],
     ];
 
-    expect(
-        app(UploadFormatter::class)
-            ->setAlwaysReturnFullObject()
-            ->fromFront($field, 'attr', $value)
-    )
+    expect(app(UploadFormatter::class)->fromFront($field, 'attr', $value))
         ->toEqual([
             'file_name' => 'data/Test/image.jpg',
             'disk' => 'local',

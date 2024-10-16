@@ -1,31 +1,21 @@
 <?php
 
+function sharp(): \Code16\Sharp\Utils\SharpUtil
+{
+    return app(\Code16\Sharp\Utils\SharpUtil::class);
+}
+
+/**
+ * @deprecated use sharp()->context() instead
+ */
 function currentSharpRequest(): \Code16\Sharp\Http\Context\CurrentSharpRequest
 {
     return app(\Code16\Sharp\Http\Context\CurrentSharpRequest::class);
 }
 
-function sharp_version(): string
-{
-    return \Code16\Sharp\SharpServiceProvider::VERSION;
-}
-
 function instanciate($class)
 {
-    if (is_string($class)) {
-        return app($class);
-    }
-
-    if ($class instanceof Closure) {
-        return $class();
-    }
-
-    return $class;
-}
-
-function sharp_user()
-{
-    return auth()->user();
+    return is_string($class) ? app($class) : value($class);
 }
 
 function sharp_has_ability(string $ability, string $entityKey, string $instanceId = null): bool
@@ -45,25 +35,4 @@ function sharp_normalize_entity_key(string $entityKey): array
     $parts = explode(':', $entityKey);
 
     return count($parts) == 1 ? [$parts[0], null] : $parts;
-}
-
-function sharp_base_url_segment(): string
-{
-    return config('sharp.custom_url_segment', 'sharp');
-}
-
-/**
- * Return true if the $handler class actually implements the $methodName method;
- * return false if the method is defined as concrete in a super class and not overridden.
- */
-function is_method_implemented_in_concrete_class($handler, string $methodName): bool
-{
-    try {
-        $foo = new \ReflectionMethod(get_class($handler), $methodName);
-        $declaringClass = $foo->getDeclaringClass()->getName();
-
-        return $foo->getPrototype()->getDeclaringClass()->getName() !== $declaringClass;
-    } catch (\ReflectionException $e) {
-        return false;
-    }
 }

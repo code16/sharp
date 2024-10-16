@@ -9,15 +9,12 @@ use Illuminate\Contracts\Support\Arrayable;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
+    sharp()->config()->addEntity('person', PersonEntity::class);
     login();
-
-    config()->set(
-        'sharp.entities.person',
-        PersonEntity::class,
-    );
 });
 
 it('filters instances of an entity list', function () {
+    $this->withoutExceptionHandling();
     fakeListFor('person', new class extends PersonList
     {
         protected function getFilters(): ?array
@@ -113,6 +110,7 @@ it('uses the default value of a required filter if no value was sent', function 
 });
 
 it('handles multiple filter values', function () {
+    $this->withoutExceptionHandling();
     fakeListFor('person', new class extends PersonList
     {
         protected function getFilters(): ?array
@@ -197,12 +195,17 @@ it('saves retained filters in the session when set', function () {
     });
 
     expect(session()->all())->not->toHaveKey('_sharp_retained_filter_job');
-
-    // Call to retain the filter on session
+    
     $this
-        ->get('/sharp/s-list/person?filter_job=physicist')
-        ->assertOk();
-
+        ->withoutExceptionHandling()
+        ->post(route('code16.sharp.list.filters.store', ['entityKey' => 'person']), [
+            'filterValues' => [
+                'job' => 'physicist',
+            ],
+        ])
+        ->assertSessionHasNoErrors()
+        ->assertRedirect('/sharp/s-list/person?filter_job=physicist');
+    
     expect(session('_sharp_retained_filter_job'))->toBe('physicist');
 
     // Second call: filter should be valued
@@ -215,7 +218,7 @@ it('saves retained filters in the session when set', function () {
             ])
         );
 
-    // Third call: update retained filter value
+    // Third call: should use QS instead of session
     $this
         ->get('/sharp/s-list/person?filter_job=physician')
         ->assertOk()
@@ -224,10 +227,19 @@ it('saves retained filters in the session when set', function () {
                 ['id' => 2, 'name' => 'Louis Pasteur'],
             ])
         );
-
-    // Fourth call: reset retained filter value
+    
+    // reset retained filter value
     $this
-        ->get('/sharp/s-list/person?filter_job=')
+        ->post(route('code16.sharp.list.filters.store', ['entityKey' => 'person']), [
+            'filterValues' => [
+                'job' => null,
+            ],
+        ])
+        ->assertSessionHasNoErrors()
+        ->assertRedirect('/sharp/s-list/person');
+    
+    $this
+        ->get('/sharp/s-list/person')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('entityList.data', [
@@ -264,7 +276,16 @@ it('handles retained multiple filter', function () {
     });
 
     expect(session()->all())->not->toHaveKey('_sharp_retained_filter_job');
-
+    
+    $this
+        ->post(route('code16.sharp.list.filters.store', ['entityKey' => 'person']), [
+            'filterValues' => [
+                'job' => ['physicist', 'physician'],
+            ],
+        ])
+        ->assertSessionHasNoErrors()
+        ->assertRedirect('/sharp/s-list/person?filter_job='.urlencode('physicist,physician'));
+    
     // Call to retain the filter on session
     $this
         ->get('/sharp/s-list/person?filter_job=physicist,physician')
@@ -325,6 +346,15 @@ it('handles retained required filter', function () {
                 ['id' => 1, 'name' => 'Marie Curie'],
             ])
         );
+    
+    $this
+        ->post(route('code16.sharp.list.filters.store', ['entityKey' => 'person']), [
+            'filterValues' => [
+                'job' => 'physician',
+            ],
+        ])
+        ->assertSessionHasNoErrors()
+        ->assertRedirect('/sharp/s-list/person?filter_job=physician');
 
     // Second call: use filter value
     $this
@@ -345,10 +375,19 @@ it('handles retained required filter', function () {
                 ['id' => 2, 'name' => 'Louis Pasteur'],
             ])
         );
+    
+    $this
+        ->post(route('code16.sharp.list.filters.store', ['entityKey' => 'person']), [
+            'filterValues' => [
+                'job' => null,
+            ],
+        ])
+        ->assertSessionHasNoErrors()
+        ->assertRedirect('/sharp/s-list/person');
 
     // Fourth call: reset retained value
     $this
-        ->get('/sharp/s-list/person?filter_job=')
+        ->get('/sharp/s-list/person')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('entityList.data', [

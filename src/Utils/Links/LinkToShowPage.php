@@ -30,7 +30,7 @@ class LinkToShowPage extends SharpLinkTo
             return url(
                 sprintf(
                     '%s/%s/%s',
-                    config('sharp.custom_url_segment', 'sharp'),
+                    sharp()->config()->get('custom_url_segment'),
                     $this->breadcrumbBuilder->generateUri(),
                     $this->generateUri()
                 )

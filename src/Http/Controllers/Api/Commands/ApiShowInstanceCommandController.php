@@ -22,14 +22,11 @@ class ApiShowInstanceCommandController extends ApiController
     {
         $showPage = $this->getShowPage($entityKey, $instanceId);
         $commandHandler = $this->getInstanceCommandHandler($showPage, $commandKey, $instanceId);
-        $formData = $commandHandler->formData($instanceId) ?: null;
 
         return response()->json(
-            CommandFormData::from([
-                ...$this->getCommandForm($commandHandler),
-                'data' => $formData,
-                'pageAlert' => $commandHandler->pageAlert($formData),
-            ]),
+            CommandFormData::from(
+                $this->getCommandForm($commandHandler, $commandHandler->formData($instanceId))
+            ),
         );
     }
 

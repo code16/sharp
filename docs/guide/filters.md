@@ -33,7 +33,7 @@ You can implement the optional `buildFilterConfig()` method to configure the fil
 ```php
 class ProductCategoryFilter extends EntityListSelectFilter
 {
-    // [...]
+    // ...
     
     public function buildFilterConfig(): void
     {
@@ -55,7 +55,7 @@ Next, in the Entity List, we must declare the filter:
 ```php
 class ProductEntityList extends SharpEntityList
 {
-    // [...]
+    // ...
     
     function getFilters(): ?array
     {
@@ -77,7 +77,7 @@ Example:
 ```php
 class ProductEntityList extends SharpEntityList
 {
-    // [...]
+    // ...
     
     function getListData()
     {
@@ -87,7 +87,7 @@ class ProductEntityList extends SharpEntityList
             $products->where('category_id', $cat);
         }
     
-        // [...]
+        // ...
     }
 }
 ```
@@ -101,7 +101,7 @@ In this case, with Eloquent for instance, your might have to modify your code to
 ```php
 class ProductEntityList extends SharpEntityList
 {
-    // [...]
+    // ...
     
     function getListData()
     {
@@ -111,7 +111,7 @@ class ProductEntityList extends SharpEntityList
             $products->whereIn('category_id', $categories);
         }
     
-        // [...]
+        // ...
     }
 }
 ```
@@ -127,7 +127,7 @@ Then you need to adjust the query with selected range (Sharp will return an asso
 ```php
 class ProductEntityList extends SharpEntityList
 {
-    // [...]
+    // ...
     
     function getListData()
     {
@@ -139,24 +139,26 @@ class ProductEntityList extends SharpEntityList
             );
         }
         
-        // [...]
+        // ...
     }
 }
 ```
 
 ### Configuration
 
-You can define the date display format (default is `MM-DD-YYYY`, using [the Moment.js parser syntax](https://momentjs.com/docs/#/parsing/string-format/)) and choose if the week should start on monday (default is sunday) implementing those two optional methods in your filter implementation:
+You can define the date display format (default is `MM-DD-YYYY`, using [the Moment.js parser syntax](https://momentjs.com/docs/#/parsing/string-format/)) and choose if the week should start on monday (default is sunday).
+With `configureShowPresets()`, a list of buttons is displayed allowing the user to quickly select a date range.
 
 ```php
 class ProductCreationDateFilter extends EntityListDateRangeFilter
 {
-    // [...]
+    // ...
     
     public function buildFilterConfig(): void
     {
         $this->configureDateFormat("YYYY-MM-DD")
-            ->configureMondayFirst(false);
+            ->configureMondayFirst(false)
+            ->configureShowPresets();
     }
 }
 ```
@@ -283,6 +285,7 @@ And with that Sharp will keep the filter value in session and ensure it is value
 In order to make this feature work, since filters are generalized, you'll need to have unique filters key (the filter class name by default).
 :::
 
+
 ## Filters for Dashboards
 
 [Dashboards](building-dashboard.md) also can take advantage of filters; the API the same, but base classes are specific: `Code16\Sharp\Dashboard\Filters\DashboardSelectFilter`, `Code16\Sharp\Dashboard\Filters\DashboardDateRangeFilter`,`Code16\Sharp\Dashboard\DashboardCheckFilter` and so on.
@@ -313,24 +316,24 @@ class OrganizationGlobalFilter extends GlobalRequiredFilter
 }
 ```
 
-And then, we declare it in Sharp's config file:
+And then, we declare it:
 
 ```php
-// in config/sharp.php
-
-return [
-    // [...]
-
-    'global_filters' => [
-        OrganizationGlobalFilter::class
-    ],
-];
+class SharpServiceProvider extends SharpAppServiceProvider
+{
+    protected function configureSharp(SharpConfigBuilder $config): void
+    {
+        $config
+            ->addGlobalFilter(OrganizationGlobalFilter::class)
+            // ...
+    }
+}
 ```
 
 Finally, to get the actual value of the filter on your Entity List, Show Page or Form classes, you must use the context:
 
 ```php
-currentSharpRequest()->globalFilterFor(OrganizationGlobalFilter::class)
+sharp()->context()->globalFilterValue(OrganizationGlobalFilter::class)
 ```
 
 The usage of Sharp Context is [detailed here](context.md).

@@ -1,14 +1,12 @@
 <script setup lang="ts">
     import { provide, ref } from "vue";
     import { BreadcrumbData, CommandData, ShowData } from "@/types";
-    import CommandsDropdown from "@/commands/components/CommandsDropdown.vue";
     import WithCommands from "@/commands/components/WithCommands.vue";
-    import ShowField from '@/show/components/Field.vue';
     import Section from "@/show/components/Section.vue";
-    import { Dropdown, DropdownItem, DropdownSeparator, StateIcon, SectionTitle, Button } from '@/components/ui';
+    import { Button } from '@/components/ui/button';
+    import { StateIcon } from '@/components/ui';
     import UnknownField from "@/components/UnknownField.vue";
     import Layout from "@/Layouts/Layout.vue";
-    import LocaleSelect from "@/form/components/LocaleSelect.vue";
     import { config } from "@/utils/config";
     import { __ } from "@/utils/i18n";
     import { Show } from '@/show/Show';
@@ -16,15 +14,33 @@
     import Title from "@/components/Title.vue";
     import { useReorderingLists } from "@/Pages/Show/useReorderingLists";
     import { useCommands } from "@/commands/useCommands";
-    import Breadcrumb from "@/components/Breadcrumb.vue";
-    import { api } from "@/api";
-    import { router } from "@inertiajs/vue3";
+    import PageBreadcrumb from "@/components/PageBreadcrumb.vue";
+    import { api } from "@/api/api";
+    import { router, Link } from "@inertiajs/vue3";
     import { parseQuery } from "@/utils/querystring";
     import PageAlert from "@/components/PageAlert.vue";
     import { route } from "@/utils/url";
     import FieldGrid from "@/components/ui/FieldGrid.vue";
     import FieldGridRow from "@/components/ui/FieldGridRow.vue";
     import FieldGridColumn from "@/components/ui/FieldGridColumn.vue";
+    import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+    import EntityList from "@/show/components/fields/entity-list/EntityList.vue";
+    import { ChevronDown, ChevronsUpDown, Languages, MoreHorizontal } from "lucide-vue-next";
+    import StickyTop from "@/components/StickyTop.vue";
+    import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+    import {
+        DropdownMenu,
+        DropdownMenuCheckboxItem,
+        DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator,
+        DropdownMenuSub, DropdownMenuSubContent,
+        DropdownMenuSubTrigger,
+        DropdownMenuTrigger
+    } from "@/components/ui/dropdown-menu";
+    import { Badge } from "@/components/ui/badge";
+    import CommandDropdownItems from "@/commands/components/CommandDropdownItems.vue";
+    import { DropdownMenuPortal } from "radix-vue";
+    import RootCard from "@/components/ui/RootCard.vue";
+    import LocaleSelectTrigger from "@/components/LocaleSelectTrigger.vue";
 
     const props = defineProps<{
         show: ShowData,
@@ -35,6 +51,7 @@
     const show = new Show(props.show, entityKey, instanceId);
     const locale = ref(show.locales?.[0]);
     const { isReordering, onEntityListReordering } = useReorderingLists();
+    const entityListNeedsTopBar = ref(false);
     const commands = useCommands();
 
     provide('show', show);
@@ -84,154 +101,248 @@
     <Layout>
         <Title :breadcrumb="breadcrumb" />
 
+        <template #breadcrumb>
+            <template v-if="config('sharp.display_breadcrumb')">
+                <PageBreadcrumb :breadcrumb="breadcrumb" />
+            </template>
+        </template>
+
         <WithCommands :commands="commands">
-            <div class="container mx-auto">
-                <div class="action-bar mt-4 mb-3">
-                    <div class="row align-items-center gx-3">
-                        <div class="col">
-                            <template v-if="config('sharp.display_breadcrumb')">
-                                <Breadcrumb :breadcrumb="breadcrumb" />
-                            </template>
-                        </div>
+            <StickyTop
+                class="group container mb-4 pointer-events-none top-3.5 data-[stuck=true]:z-20"
+                :class="[
+                    { 'lg:sticky': !entityListNeedsTopBar }
+                ]"
+            >
+                <div class="flex flex-wrap flex-row-reverse gap-3 pointer-events-auto lg:ml-[--sticky-safe-left-offset]">
+                    <div class="flex-1 order-1">
                         <template v-if="show.locales?.length">
-                            <div class="col-auto">
-                                <LocaleSelect
-                                    outline
-                                    right
-                                    :locale="locale"
-                                    :locales="show.locales"
-                                    @change="locale = $event"
-                                />
-                            </div>
+                            <Select v-model="locale">
+                                <LocaleSelectTrigger />
+                                <SelectContent>
+                                    <template v-for="locale in show.locales" :key="locale">
+                                        <SelectItem :value="locale">
+                                            <span class="uppercase text-xs">{{ locale }}</span>
+                                        </SelectItem>
+                                    </template>
+                                </SelectContent>
+                            </Select>
                         </template>
+                    </div>
+
+                    <div class="flex gap-3 lg:mr-[--sticky-safe-right-offset]">
                         <template v-if="show.config.state">
-                            <div class="col-auto">
-                                <Dropdown
-                                    :show-caret="!!show.config.state.authorization"
-                                    outline
-                                    right
-                                    :disabled="!show.config.state.authorization"
-                                >
-                                    <template v-slot:text>
-                                        <StateIcon class="me-1" :state-value="show.instanceStateValue" style="vertical-align: -.125em" />
-                                        <span class="text-truncate">{{ show.instanceStateValue ? show.instanceStateValue.label : show.instanceState }}</span>
-                                    </template>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger as-child>
+                                    <Button class="h-8 -mx-2 disabled:opacity-100" variant="ghost" size="sm" :disabled="!show.config.state.authorization">
+                                        <Badge variant="outline">
+                                            <StateIcon class="-ml-0.5 mr-1.5" :state-value="show.instanceStateValue" />
+                                            {{ show.instanceStateValue?.label }}
+                                        </Badge>
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent>
                                     <template v-for="stateValue in show.config.state.values" :key="stateValue.value">
-                                        <DropdownItem :active="show.instanceState === stateValue.value" @click="onStateChange(stateValue.value)">
-                                            <StateIcon class="me-1" :state-value="stateValue" style="vertical-align: -.125em" />
-                                            <span class="text-truncate">{{ stateValue.label }}</span>
-                                        </DropdownItem>
+                                        <DropdownMenuCheckboxItem
+                                            :checked="stateValue.value === show.instanceState"
+                                            @update:checked="(checked) => checked && onStateChange(stateValue.value)"
+                                        >
+                                            <StateIcon class="mr-1.5" :state-value="stateValue" />
+                                            <span class="truncate">{{ stateValue.label }}</span>
+                                        </DropdownMenuCheckboxItem>
                                     </template>
-                                </Dropdown>
-                            </div>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
                         </template>
-                        <template v-if="show.allowedInstanceCommands?.flat().length || show.authorizations.delete">
-                            <div class="col-auto">
-                                <CommandsDropdown outline :small="false" :commands="show.allowedInstanceCommands" @select="onCommand">
-                                    <template v-slot:text>
+                        <template v-if="show.allowedInstanceCommands?.flat().length || show.authorizations.delete || show.config.state">
+                            <DropdownMenu>
+                                <DropdownMenuTrigger as-child>
+                                    <Button class="h-8" variant="outline" size="sm">
                                         {{ __('sharp::entity_list.commands.instance.label') }}
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent>
+                                    <template v-if="show.config.state && show.config.state.authorization">
+                                        <DropdownMenuGroup>
+                                            <DropdownMenuSub>
+                                                <DropdownMenuSubTrigger>
+                                                    {{ __('sharp::modals.entity_state.edit.title') }}
+                                                </DropdownMenuSubTrigger>
+                                                <DropdownMenuPortal>
+                                                    <DropdownMenuSubContent>
+                                                        <template v-for="stateValue in show.config.state.values" :key="stateValue.value">
+                                                            <DropdownMenuCheckboxItem
+                                                                :checked="stateValue.value === show.instanceState"
+                                                                @update:checked="(checked) => checked && onStateChange(stateValue.value)"
+                                                            >
+                                                                <StateIcon class="mr-1.5" :state-value="stateValue" />
+                                                                <span class="truncate">{{ stateValue.label }}</span>
+                                                            </DropdownMenuCheckboxItem>
+                                                        </template>
+                                                    </DropdownMenuSubContent>
+                                                </DropdownMenuPortal>
+                                            </DropdownMenuSub>
+                                        </DropdownMenuGroup>
+                                        <DropdownMenuSeparator />
                                     </template>
-                                    <template v-if="show.authorizations.delete" v-slot:append>
-                                        <DropdownSeparator />
-                                        <DropdownItem link-class="text-danger" @click="onDelete">
+
+                                    <CommandDropdownItems
+                                        :commands="show.allowedInstanceCommands"
+                                        @select="onCommand"
+                                    />
+                                    <template v-if="show.authorizations.delete">
+                                        <template v-if="show.allowedInstanceCommands?.flat().length">
+                                            <DropdownMenuSeparator />
+                                        </template>
+                                        <DropdownMenuItem class="text-destructive" @click="onDelete">
                                             {{ __('sharp::action_bar.form.delete_button') }}
-                                        </DropdownItem>
+                                        </DropdownMenuItem>
                                     </template>
-                                </CommandsDropdown>
-                            </div>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
                         </template>
                         <template v-if="show.authorizations.update">
-                            <div class="col-auto">
-                                <Button :href="show.formUrl" :disabled="isReordering">
+                            <Button class="h-8" size="sm" :disabled="isReordering" as-child>
+                                <template v-if="isReordering">
                                     {{ __('sharp::action_bar.show.edit_button') }}
-                                </Button>
-                            </div>
+                                </template>
+                                <template v-else>
+                                    <Link :href="show.formUrl">
+                                        {{ __('sharp::action_bar.show.edit_button') }}
+                                    </Link>
+                                </template>
+                            </Button>
                         </template>
                     </div>
                 </div>
 
-                <template v-if="show.pageAlert">
+<!--                    <div class="flex-1">-->
+<!--                    </div>-->
+
+            </StickyTop>
+
+            <template v-if="show.pageAlert">
+                <div class="container">
                     <PageAlert
                         class="mb-3"
                         :page-alert="show.pageAlert"
                     />
+                </div>
+            </template>
+
+            <div class="grid gap-6 md:gap-8">
+                <template v-if="show.getTitle(locale) && show.layout.sections[0] && (show.sectionHasField(show.layout.sections[0], 'entityList') || show.layout.sections[0].title)">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>
+                                {{ show.getTitle(locale) }}
+                            </CardTitle>
+                        </CardHeader>
+                    </Card>
                 </template>
-
-                <div class="ShowPage__content">
-                    <template v-if="show.getTitle(locale)">
-                        <div class="mb-4">
-                            <div class="row align-items-center gx-3 gx-md-4">
-                                <div class="col" style="min-width: 0">
-                                    <h1 class="mb-0 text-truncate h2" data-top-bar-title v-html="show.getTitle(locale)"></h1>
-                                </div>
-                            </div>
-                        </div>
-                    </template>
-
-                    <template v-for="section in show.layout.sections">
-                        <Section v-slot="{ collapsed, onToggle }">
-                            <div v-show="show.sectionShouldBeVisible(section, locale)">
-                                <div class="flex">
-                                    <template v-if="section.collapsable && !show.sectionHasField(section, 'entityList') || section.title">
-                                        <SectionTitle
-                                            class="flex-1"
-                                            :section="section"
-                                            :collapsable="section.collapsable && !show.sectionHasField(section, 'entityList')"
-                                            :collapsed="collapsed"
-                                            @toggle="onToggle"
-                                        />
+                <template v-for="(section, i) in show.layout.sections">
+                    <Section
+                        class="min-w-0"
+                        v-show="show.sectionShouldBeVisible(section, locale)"
+                        v-slot="{ collapsed, onToggle }"
+                    >
+                        <template v-if="show.sectionHasField(section, 'entityList')">
+                            <template v-for="column in section.columns">
+                                <template v-for="row in column.fields">
+                                    <template v-for="fieldLayout in row">
+                                        <template v-if="show.fields[fieldLayout.key]">
+                                            <EntityList
+                                                :field="show.fields[fieldLayout.key]"
+                                                :collapsable="section.collapsable"
+                                                :value="null"
+                                                @reordering="onEntityListReordering(fieldLayout.key, $event)"
+                                                @needs-topbar="entityListNeedsTopBar = $event"
+                                            />
+                                        </template>
+                                        <template v-else>
+                                            <UnknownField :name="fieldLayout.key" />
+                                        </template>
                                     </template>
-                                    <template v-if="show.sectionCommands(section)?.flat().length && !collapsed">
-                                        <CommandsDropdown :commands="show.sectionCommands(section)" @select="onCommand">
-                                            <template v-slot:text>
+                                </template>
+                            </template>
+                        </template>
+                        <template v-else>
+                            <template v-if="show.sectionCommands(section)?.flat().length">
+                                <div class="container flex justify-end mb-4" :class="{ 'invisible': collapsed }">
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger as-child>
+                                            <Button class="h-8" size="sm" variant="outline">
                                                 {{ __('sharp::entity_list.commands.instance.label') }}
-                                            </template>
-                                        </CommandsDropdown>
-                                    </template>
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent>
+                                            <CommandDropdownItems
+                                                :commands="show.sectionCommands(section)"
+                                                @select="onCommand"
+                                            />
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
                                 </div>
-
-                                <template v-if="!collapsed">
-                                    <div :class="!show.sectionHasField(section, 'entityList') ? 'p-4 bg-white border rounded' : ''">
-                                        <div class="flex -mx-4">
-                                            <template v-for="column in section.columns">
-                                                <div class="w-[calc(var(--size)/12*100%)] px-4" :style="{ '--size': `${column.size}` }">
-                                                    <FieldGrid class="gap-x-4 gap-y-4">
-                                                        <template v-for="row in column.fields">
-                                                            <FieldGridRow>
-                                                                <template v-for="fieldLayout in row">
-                                                                    <FieldGridColumn
-                                                                        :layout="fieldLayout"
-                                                                        v-show="show.fieldShouldBeVisible(show.fields[fieldLayout.key], show.data[fieldLayout.key], locale)"
-                                                                    >
-                                                                        <template v-if="show.fields[fieldLayout.key]">
-                                                                            <ShowField
-                                                                                :field="show.fields[fieldLayout.key]"
-                                                                                :field-layout="fieldLayout"
-                                                                                :value="show.data[fieldLayout.key]"
-                                                                                :locale="locale"
-                                                                                :collapsable="section.collapsable"
-                                                                                :entity-key="entityKey"
-                                                                                :instance-id="instanceId"
-                                                                                @reordering="onEntityListReordering(fieldLayout.key, $event)"
-                                                                            />
-                                                                        </template>
-                                                                        <template v-else>
-                                                                            <UnknownField :name="fieldLayout.key" />
-                                                                        </template>
-                                                                    </FieldGridColumn>
-                                                                </template>
-                                                            </FieldGridRow>
-                                                        </template>
-                                                    </FieldGrid>
-                                                </div>
+                            </template>
+                            <RootCard>
+                                <template v-if="section.title || (!i && show.getTitle(locale)) || section.collapsable || show.sectionCommands(section)?.flat().length">
+                                    <CardHeader>
+                                        <div class="flex gap-4">
+                                            <template v-if="section.title || (!i && show.getTitle(locale))">
+                                                <CardTitle v-html="section.title || (!i && show.getTitle(locale))">
+                                                </CardTitle>
+                                            </template>
+                                            <template v-if="section.collapsable">
+                                                <Button variant="ghost" size="sm" class="w-9 p-0 -my-1.5" @click="onToggle">
+                                                    <ChevronsUpDown class="w-4 h-4" />
+                                                </Button>
                                             </template>
                                         </div>
-                                    </div>
+                                    </CardHeader>
                                 </template>
-                            </div>
-                        </Section>
-                    </template>
-                </div>
+                                <template v-else>
+                                    <CardHeader class="pb-0" />
+                                </template>
+                                <CardContent v-show="!collapsed">
+                                    <div class="flex flex-wrap gap-y-4 -mx-4">
+                                        <template v-for="column in section.columns">
+                                            <div class="min-w-0 w-full sm:w-[calc(var(--size)/12*100%)] px-4" :style="{ '--size': `${column.size}` }">
+                                                <FieldGrid class="gap-x-4 gap-y-4">
+                                                    <template v-for="row in column.fields">
+                                                        <FieldGridRow>
+                                                            <template v-for="fieldLayout in row">
+                                                                <FieldGridColumn
+                                                                    :layout="fieldLayout"
+                                                                    v-show="show.fieldShouldBeVisible(show.fields[fieldLayout.key], show.data[fieldLayout.key], locale)"
+                                                                >
+                                                                    <template v-if="show.fields[fieldLayout.key]">
+                                                                        <SharpShowField
+                                                                            :field="show.fields[fieldLayout.key]"
+                                                                            :field-layout="fieldLayout"
+                                                                            :value="show.data[fieldLayout.key]"
+                                                                            :locale="locale"
+                                                                            :collapsable="section.collapsable"
+                                                                            :entity-key="entityKey"
+                                                                            :instance-id="instanceId"
+                                                                            @reordering="onEntityListReordering(fieldLayout.key, $event)"
+                                                                        />
+                                                                    </template>
+                                                                    <template v-else>
+                                                                        <UnknownField :name="fieldLayout.key" />
+                                                                    </template>
+                                                                </FieldGridColumn>
+                                                            </template>
+                                                        </FieldGridRow>
+                                                    </template>
+                                                </FieldGrid>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </CardContent>
+                            </RootCard>
+                        </template>
+                    </Section>
+                </template>
             </div>
         </WithCommands>
     </Layout>

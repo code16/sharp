@@ -9,7 +9,7 @@ Forms as used to create or update instances.
 ## Generator
 
 ```bash
-php artisan sharp:make:form <class_name> [--model=<model_name>]
+php artisan sharp:make:form <class_name> [--model=<model_name>,--single]
 ```
 
 ## Write the class
@@ -29,17 +29,22 @@ In short, this method is meant to host the code responsible for the declaration 
 This must be done calling `$formFields->addField`:
 
 ```php
-function buildFormFields(FieldsContainer $formFields)
+class ProductForm extends SharpForm
 {
-    $formFields
-		->addField(
-			SharpFormTextField::make('name')
-				->setLabel('Name')
-		)
-		->addField(
-			SharpFormTextField::make('capacity')
-				->setLabel('Full capacity (x1000)')
-		);
+    // ...
+    
+	public function buildFormFields(FieldsContainer $formFields): void
+	{
+		$formFields
+			->addField(
+				SharpFormTextField::make('name')
+					->setLabel('Name')
+			)
+			->addField(
+				SharpFormTextField::make('capacity')
+					->setLabel('Full capacity (x1000)')
+			);
+	}
 }
 ```
 
@@ -105,12 +110,17 @@ Now let's build the form layout. A form layout is made of `columns`, which conta
 Here's how we can define the layout for the simple two-fields form we built above:
 
 ```php
-function buildFormLayout(FormLayout $formLayout)
+class ProductForm extends SharpForm
 {
-    $formLayout->addColumn(6, function (FormLayoutColumn $column) {
-        $column->withField('name')
-            ->withField('capacity');
-    });
+    // ...
+    
+	public function buildFormLayout(FormLayout $formLayout): void
+	{
+		$formLayout->addColumn(6, function (FormLayoutColumn $column) {
+			$column->withField('name')
+				->withField('capacity');
+		});
+	}
 }
 ```
 
@@ -119,15 +129,20 @@ This will result in a 50% column (columns width are 12-based, like in Entity Lis
 Here's another possible layout, with two unequally large columns:
 
 ```php
-function buildFormLayout(FormLayout $formLayout)
+class ProductForm extends SharpForm
 {
-    $formLayout
-        ->addColumn(7, function (FormLayoutColumn $column) {
-            $column->withField('name');
-    	})
-    	->addColumn(5, function (FormLayoutColumn $column) {
-            $column->withField('capacity');
-    	});
+    // ...
+    
+	public function buildFormLayout(FormLayout $formLayout): void
+	{
+		$formLayout
+			->addColumn(7, function (FormLayoutColumn $column) {
+				$column->withField('name');
+			})
+			->addColumn(5, function (FormLayoutColumn $column) {
+				$column->withField('capacity');
+			});
+	}
 }
 ```
 
@@ -136,11 +151,16 @@ function buildFormLayout(FormLayout $formLayout)
 One final way is to put fields side by side on the same column:
 
 ```php
-function buildFormLayout(FormLayout $formLayout)
+class ProductForm extends SharpForm
 {
-    $formLayout->addColumn(6, function (FormLayoutColumn $column) {
-        $column->withFields('name', 'capacity');
-    });
+    // ...
+    
+	public function buildFormLayout(FormLayout $formLayout): void
+	{
+		$formLayout->addColumn(6, function (FormLayoutColumn $column) {
+			$column->withFields('name', 'capacity');
+		});
+	}
 }
 ```
 
@@ -195,12 +215,12 @@ $column->withListField('pictures', function (FormLayoutColumn $listItem) {
 
 #### Conditions
 
-Since layout classes apply Laravel's `Conditionable` trait, you can use the `when()` method to conditionally display a column:
+Since layout classes apply Laravel’s `Conditionable` trait, you can use the `when()` method to conditionally display a column:
 
 ```php
 $column
 	->withField('title')
-	->when(currentSharpRequest()->isUpdate(), function (FormLayoutColumn $column) {
+	->when(sharp()->context()->isUpdate(), function (FormLayoutColumn $column) {
 		$column->withField('author');
 	});
 ```
@@ -214,7 +234,7 @@ $formLayout
     ->addTab('tab 1', function (FormLayoutTab $tab) {
         $tab->addColumn(6, function (FormLayoutColumn $column) {
             $column->withField('name');
-            // [...]
+            // ...
 	    });
     })
     ->addTab([...])
@@ -227,12 +247,17 @@ The tab will here be labelled "tab 1".
 Next, we have to write the code responsible for the instance data (in an update case). The method must return a key-value array:
 
 ```php
-function find($id): array
+class ProductForm extends SharpForm
 {
-    return [
-        'name' => 'USS Enterprise',
-        'capacity' => 3000
-    ];
+    // ...
+    
+	public function find($id): array
+	{
+		return [
+			'name' => 'USS Enterprise',
+			'capacity' => 3000
+		];
+	}
 }
 ```
 
@@ -266,9 +291,9 @@ Sharp also aims to help the applicative code to be as small as possible, and if 
 ```php
 class ProductForm extends SharpForm
 {
-    // [...]
+    // ...
     
-    function update($id, array $data)
+    public function update($id, array $data)
     {
         $instance = $id ? Product::findOrFail($id) : new Product;
     
@@ -291,15 +316,19 @@ Finally, we call `$this->save()` with the instance and the sent data. This metho
 In the `update($id, array $data)` method you may want to throw an exception on a special case, other than validation (which is explained below). Here's how to do that:
 
 ```php
-function update($id, array $data)
+class ProductForm extends SharpForm
 {
-    // [...]
-
-    if($sometingIsWrong) {
-        throw new SharpApplicativeException('Something is wrong');
-    }
-    
-    // [...]
+    // ...
+	public function update($id, array $data)
+	{
+		// ...
+	
+		if($sometingIsWrong) {
+			throw new SharpApplicativeException('Something is wrong');
+		}
+		
+		// ...
+	}
 }
 ```
 
@@ -314,18 +343,23 @@ This method must return the id of the updated or stored instance.
 Sometimes you'll want to display a message to the user, after a creation or an update. Sharp way to do this is to call `->notify()` in the Form code:
 
 ```php
-function update($id, array $data)
+class ProductForm extends SharpForm
 {
-    $instance = $id ? Product::findOrFail($id) : new Product;
+    // ...
 
-    $this->save($instance, $data);
-
-    $this->notify('Product was indeed updated.')
-         ->setDetail('As you asked.')
-         ->setLevelSuccess()
-         ->setAutoHide(false);
-
-    return $instance->id;
+	public function update($id, array $data)
+	{
+		$instance = $id ? Product::findOrFail($id) : new Product;
+	
+		$this->save($instance, $data);
+	
+		$this->notify('Product was indeed updated.')
+			 ->setDetail('As you asked.')
+			 ->setLevelSuccess()
+			 ->setAutoHide(false);
+	
+		return $instance->id;
+	}
 }
 ```
 
@@ -343,9 +377,14 @@ Note that you can add up notifications, calling the `notify()` function multiple
 This method **is not mandatory**, a default implementation is proposed by Sharp, but you can override it if necessary. The aim is to return an array version of a new instance (for the creation form). For instance, with Eloquent and the `Code16\Sharp\Utils\Transformers\SharpAttributeTransformer` trait:
 
 ```php
-function create(): array
+class ProductForm extends SharpForm
 {
-    return $this->transform(new Product(['name' => 'new']));
+    // ...
+    
+	public function create(): array
+	{
+		return $this->transform(new Product(['name' => 'new']));
+	}
 }
 ```
 
@@ -362,10 +401,15 @@ This method, entirely optional, is the place to configure these:
 Example
 
 ```php
-function buildFormConfig(): void
+class ProductForm extends SharpForm
 {
-	$this->configureBreadcrumbCustomLabelAttribute('name')
-		->setDisplayShowPageAfterCreation();
+    // ...
+    
+	public function buildFormConfig(): void
+	{
+		$this->configureBreadcrumbCustomLabelAttribute('name')
+			->setDisplayShowPageAfterCreation();
+	}
 }
 ```
 

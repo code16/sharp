@@ -7,8 +7,9 @@
 
     defineProps<{
         filter: FilterData,
-        value: FilterData['value'],
-        disabled?: boolean
+        value: any,
+        valuated: boolean,
+        disabled?: boolean,
     }>();
 
     const components: Record<FilterData['type'], Component> = {
@@ -24,5 +25,6 @@
         :filter="filter"
         :value="value"
         :disabled="disabled"
+        :valuated="valuated"
     />
 </template>

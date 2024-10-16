@@ -13,10 +13,7 @@ beforeEach(function () {
 });
 
 it('allows to call an info instance command from a show', function () {
-    config()->set(
-        'sharp.entities.person',
-        PersonEntity::class,
-    );
+    sharp()->config()->addEntity('person', PersonEntity::class);
 
     fakeShowFor('person', new class extends PersonShow
     {
@@ -48,10 +45,7 @@ it('allows to call an info instance command from a show', function () {
 });
 
 it('allows to call an info instance command from a single show', function () {
-    config()->set(
-        'sharp.entities.person',
-        SinglePersonEntity::class,
-    );
+    sharp()->config()->addEntity('person', SinglePersonEntity::class);
 
     fakeShowFor('person', new class extends SinglePersonShow
     {
@@ -83,10 +77,7 @@ it('allows to call an info instance command from a single show', function () {
 });
 
 it('gets form and initialize form data in an instance command of a show', function () {
-    config()->set(
-        'sharp.entities.person',
-        PersonEntity::class,
-    );
+    sharp()->config()->addEntity('person', PersonEntity::class);
 
     fakeShowFor('person', new class extends PersonShow
     {
@@ -98,6 +89,12 @@ it('gets form and initialize form data in an instance command of a show', functi
                     public function label(): ?string
                     {
                         return 'instance';
+                    }
+                    
+                    public function buildCommandConfig(): void
+                    {
+                        $this->configureFormModalTitle(fn ($data) => "Edit {$data['name']}")
+                            ->configureFormModalDescription('Custom description');
                     }
 
                     public function buildFormFields(FieldsContainer $formFields): void
@@ -129,6 +126,10 @@ it('gets form and initialize form data in an instance command of a show', functi
         ->assertJsonFragment([
             'data' => [
                 'name' => 'Marie Curie',
+            ],
+            'config' => [
+                'title' => 'Edit Marie Curie',
+                'description' => 'Custom description',
             ],
             'fields' => [
                 'name' => [
@@ -166,10 +167,7 @@ it('gets form and initialize form data in an instance command of a show', functi
 });
 
 it('gets form and initialize form data in an instance command of a single show', function () {
-    config()->set(
-        'sharp.entities.person',
-        SinglePersonEntity::class,
-    );
+    sharp()->config()->addEntity('person', SinglePersonEntity::class);
 
     fakeShowFor('person', new class extends SinglePersonShow
     {
@@ -181,6 +179,12 @@ it('gets form and initialize form data in an instance command of a single show',
                     public function label(): ?string
                     {
                         return 'instance';
+                    }
+                    
+                    public function buildCommandConfig(): void
+                    {
+                        $this->configureFormModalTitle(fn ($data) => "Edit {$data['name']}")
+                            ->configureFormModalDescription('Custom description');
                     }
 
                     public function buildFormFields(FieldsContainer $formFields): void
@@ -217,6 +221,10 @@ it('gets form and initialize form data in an instance command of a single show',
         ->assertJsonFragment([
             'data' => [
                 'name' => 'Marie Curie',
+            ],
+            'config' => [
+                'title' => 'Edit Marie Curie',
+                'description' => 'Custom description',
             ],
             'fields' => [
                 'name' => [

@@ -37,7 +37,7 @@ class PostBlockVisualsForm extends AbstractPostBlockForm
                         ->setStorageBasePath(function () {
                             return sprintf(
                                 'data/posts/%s/blocks/{id}',
-                                currentSharpRequest()->getPreviousShowFromBreadcrumbItems('posts')->instanceId(),
+                                sharp()->context()->breadcrumb()->previousShowSegment('posts')->instanceId(),
                             );
                         }),
                 )

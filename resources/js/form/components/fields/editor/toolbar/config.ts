@@ -2,6 +2,7 @@ import { getToolbarIcon } from '@/form/components/fields/editor/utils/icons';
 import { __ } from "@/utils/i18n";
 import {FormEditorToolbarButton} from "@/types";
 import {Editor} from "@tiptap/vue-3";
+import LinkDropdown from "@/form/components/fields/editor/toolbar/LinkDropdown.vue";
 
 type ButtonConfig = {
     command: (editor: Editor, data?: any) => void,
@@ -78,26 +79,7 @@ export const buttons: { [key in Exclude<FormEditorToolbarButton, '|'>]: ButtonCo
         label: () => __('sharp::form.editor.toolbar.ordered_list.title'),
     },
     'link': {
-        command: (editor, { href, label }) => {
-            const selection = editor.state.tr.selection;
-
-            if(editor.isActive('link')) {
-                editor.chain()
-                    .focus()
-                    .extendMarkRange('link')
-                    .setLink({ href })
-                    .run();
-
-            } else if(selection.empty) {
-                editor.chain()
-                    .focus()
-                    .insertContent(`<a href="${href}">${label || href}</a>`)
-                    .run();
-
-            } else {
-                editor.chain().focus().setLink({ href }).run();
-            }
-        },
+        command: () => {}, /** @see LinkDropdown */
         isActive: editor => editor.isActive('link'),
         icon: getToolbarIcon('link'),
         label: () => __('sharp::form.editor.toolbar.link.title'),
