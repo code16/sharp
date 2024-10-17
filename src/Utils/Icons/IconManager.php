@@ -11,14 +11,26 @@ class IconManager
     
     protected function resolveBladeIconName(string $icon): ?string
     {
-        $classes = str($icon)->explode(' ');
-        
-        if($name = $classes->first(fn ($class) => str($class)->startsWith('fa-'))) {
-            $prefix = $classes->first(fn ($class) => in_array($class, ['fas', 'far', 'fab'])) ?? 'fas';
-            return sprintf('%s-%s', $prefix, str($name)->after('fa-'));
+        if($fontAwesomeBladeIconName = $this->resolveLegacyFontAwesomeBladeIconName($icon)) {
+            return $fontAwesomeBladeIconName;
         }
         
         return $icon;
+    }
+    
+    protected function resolveLegacyFontAwesomeBladeIconName(string $icon): ?string
+    {
+        if(preg_match('/\bfa-([a-z1-9-]+)\b/', $icon, $name)) {
+            preg_match('/\b(fas|fab|far)\b/', $icon, $prefix);
+            
+            if(!isset($prefix[1]) && str_ends_with($name[1], '-o')) {
+                return 'far-' . substr($name[1], 0, -2);
+            }
+            
+            return ($prefix[1] ?? 'fas') . '-' . $name[1];
+        }
+        
+        return null;
     }
     
     public function iconToArray(?string $icon): ?array

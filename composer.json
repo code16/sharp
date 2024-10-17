@@ -22,7 +22,6 @@
         "laravel/framework": "^11.0",
         "league/commonmark": "^2.4",
         "masterminds/html5": "^2.8",
-        "owenvoke/blade-fontawesome": "^2.6",
         "spatie/image-optimizer": "^1.6",
         "tightenco/ziggy": "^1.8",
         "laravel/prompts": "^0.1.12"

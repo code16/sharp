@@ -106,7 +106,7 @@ export type EmbedData = {
   key: string;
   label: string;
   tag: string;
-  icon: Array<any> | null;
+  icon: IconData | null;
   attributes: Array<string>;
   template: string;
   fields: { [key: string]: FormFieldData };

@@ -165,11 +165,21 @@ class SharpFormEditorField extends SharpFormField implements IsSharpFieldWithLoc
 
         return collect($this->toolbar)
             ->map(function (FormEditorToolbarButton|string $button) {
-                if (is_string($button)) {
-                    if (in_array($button, $this->embeds)) {
-                        return 'embed:'.app($button)->key();
+                if (is_string($button) && class_exists($button)) {
+                    if($embed = $this->getAllowedEmbed($button)) {
+                        if(!$embed->toConfigArray(true)['icon']) {
+                            throw new SharpInvalidConfigException(
+                                sprintf('%s ("%s") : %s must have an icon to be in the toolbar',
+                                    class_basename($this),
+                                    $this->key(),
+                                    $button
+                                )
+                            );
+                        }
+                        
+                        return 'embed:'.$embed->key();
                     }
-
+                    
                     throw new SharpInvalidConfigException(
                         sprintf('%s ("%s") : %s must be present in ->allowEmbeds() array to have it in the toolbar',
                             class_basename($this),

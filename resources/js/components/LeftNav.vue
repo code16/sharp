@@ -53,7 +53,7 @@ const globalFilters = usePage().props.globalFilters as GlobalFiltersData | null;
                             <template v-else>
                                 <component :is="item.isExternalLink ? 'a' : Link" :href="item.url" :class="[item.current ? 'bg-gray-50 text-primary-600' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50', 'group flex items-center gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold']">
                                     <template v-if="item.icon">
-                                        <i class="fa fa-fw" :class="[item.icon, item.current ? 'text-primary-600' : 'text-gray-400 group-hover:text-primary-600']"></i>
+                                        <Icon :icon="item.icon" class="w-4 h-4" :class="[item.current ? 'text-primary-600' : 'text-gray-400 group-hover:text-primary-600']" />
                                     </template>
                                     {{ item.label }}
                                 </component>

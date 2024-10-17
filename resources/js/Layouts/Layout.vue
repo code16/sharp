@@ -40,6 +40,7 @@ import { GlobalFiltersData } from "@/types";
 import GlobalFilters from "@/filters/components/GlobalFilters.vue";
 import SharpLogoMini from '../../svg/logo-mini.svg';
 import ColorModeDropdownItems from "@/components/ColorModeDropdownItems.vue";
+    import Icon from "@/components/ui/Icon.vue";
 
 const dialogs = useDialogs();
 const menu = useMenu();
@@ -112,7 +113,7 @@ provide('menuBoundary', menuBoundary);
                                                                         class="flex items-center gap-3 rounded-lg px-3 py-2 min-w-0 transition-all hover:text-primary"
                                                                         :class="childItem.current ? 'bg-muted text-primary' : 'text-muted-foreground'"
                                                                     >
-                                                                        <i class="fa fa-fw h-4 w-4" :class="childItem.icon"></i>
+                                                                        <Icon :icon="childItem.icon" class="size-4" />
                                                                         <div class="min-w-0 break-words">
                                                                             {{ childItem.label }}
                                                                         </div>
@@ -131,7 +132,7 @@ provide('menuBoundary', menuBoundary);
                                             class="flex items-center gap-3 rounded-lg px-3 py-2 min-w-0 transition-all hover:text-primary"
                                             :class="item.current ? 'bg-muted text-primary' : 'text-muted-foreground'"
                                         >
-                                            <i class="fa fa-fw h-4 w-4" :class="item.icon"></i>
+                                            <Icon :icon="item.icon" class="size-4" />
                                             <div class="min-w-0 break-words">
                                                 {{ item.label }}
                                             </div>
@@ -190,7 +191,7 @@ provide('menuBoundary', menuBoundary);
                                                                 class="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
                                                                 :class="childItem.current ? 'bg-muted text-foreground' : 'text-muted-foreground'"
                                                             >
-                                                                <i class="fa h-4 w-4" :class="childItem.icon"></i>
+                                                                <Icon :icon="childItem.icon" class="size-4" />
                                                                 {{ childItem.label }}
                                                             </component>
                                                         </li>
@@ -205,7 +206,7 @@ provide('menuBoundary', menuBoundary);
                                             class="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
                                             :class="item.current ? 'bg-muted text-foreground' : 'text-muted-foreground'"
                                         >
-                                            <i class="fa h-4 w-4" :class="item.icon"></i>
+                                            <Icon :icon="item.icon" class="size-4" />
                                             {{ item.label }}
                                         </component>
                                     </template>
@@ -270,7 +271,7 @@ provide('menuBoundary', menuBoundary);
                                         </template>
                                         <template v-else>
                                             <DropdownMenuItem :as="item.isExternalLink ? 'a' : Link" :href="item.url">
-                                                <i class="fa w-4 h-4 mr-2" :class="item.icon"></i>
+                                                <Icon class="mr-2 size-4" :icon="item.icon" />
                                                 <span>
                                                     {{ item.label }}
                                                 </span>
