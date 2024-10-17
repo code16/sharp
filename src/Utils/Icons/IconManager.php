@@ -20,8 +20,8 @@ class IconManager
     
     protected function resolveLegacyFontAwesomeBladeIconName(string $icon): ?string
     {
-        if(preg_match('/\bfa-([a-z1-9-]+)\b/', $icon, $name)) {
-            preg_match('/\b(fas|fab|far)\b/', $icon, $prefix);
+        if(preg_match('/(?:^| )fa-([a-z1-9-]+)(?: |$)/', $icon, $name)) {
+            preg_match('/(?:^| )(fas|fab|far)(?: |$)/', $icon, $prefix);
             
             if(!isset($prefix[1]) && str_ends_with($name[1], '-o')) {
                 return 'far-' . substr($name[1], 0, -2);
