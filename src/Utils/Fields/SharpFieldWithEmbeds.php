@@ -33,6 +33,11 @@ trait SharpFieldWithEmbeds
                 ];
             }));
     }
+    
+    protected function getAllowedEmbed(string $embedClass): ?SharpFormEditorEmbed
+    {
+        return $this->embeds()->first(fn (SharpFormEditorEmbed $embed) => $embed instanceof $embedClass);
+    }
 
     protected function innerComponentEmbedsConfiguration(bool $isForm = true): ?array
     {

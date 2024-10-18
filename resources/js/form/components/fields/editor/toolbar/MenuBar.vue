@@ -11,6 +11,7 @@
     import { ContentEmbedManager } from "@/content/ContentEmbedManager";
     import { FormFieldProps } from "@/form/types";
     import { useParentEditor } from "@/form/components/fields/editor/useParentEditor";
+    import Icon from "@/components/ui/Icon.vue";
     import { Toggle } from "@/components/ui/toggle";
     import { ToggleGroup } from "@/components/ui/toggle-group";
 
@@ -62,7 +63,7 @@
                             @click="$emit('embed', field.embeds[button.replace('embed:', '')])"
                             :data-test="button"
                         >
-                            <i :class="field.embeds[button.replace('embed:', '')].icon"></i>
+                            <Icon :icon="field.embeds[button.replace('embed:', '')].icon" class="w-4 h-4" />
                         </Toggle>
                     </template>
                     <template v-else :key="button">

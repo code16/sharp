@@ -9,8 +9,7 @@ Example of custom sharp field:
 ```vue
 <template>
     <div>
-        Name: {{ value }}
-        <i class="fa" :class="icon"></i>
+        Title: <span :class="`title title-${level}`">{{ value }}</span>
     </div>
 </template>
 
@@ -18,7 +17,7 @@ Example of custom sharp field:
     export default {
         props: {
             value: String, // field value
-            icon: String,   // custom added props (given in field definition)
+            level: String, // custom added props (given in field definition)
         },
     }
 </script>

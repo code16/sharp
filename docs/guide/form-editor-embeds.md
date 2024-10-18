@@ -70,7 +70,7 @@ public function buildEmbedConfig(): void
     $this
         ->configureLabel('Related Post')
         ->configureTagName('x-related-post')
-        ->configureFormInlineTemplate('<div><span v-if="online" style="color: blue">●</span><i v-if="!online" style="color: orange">●</i> <i class="fa fa-link"></i> <em>{{ title }}</em></div>');
+        ->configureFormInlineTemplate('<div><span v-if="online" style="color: blue">●</span><i v-if="!online" style="color: orange">●</i> <em>{{ title }}</em></div>');
 }
 ```
 

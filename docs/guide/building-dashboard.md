@@ -113,7 +113,7 @@ class AppSharpMenu extends SharpMenu
     public function build(): self
     {
         return $this
-            ->addEntityLink('company_dashboard', 'Dashboard', 'fas fa-chart-line')
+            ->addEntityLink('company_dashboard', 'Dashboard')
             // ...
     }
 }

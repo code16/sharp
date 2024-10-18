@@ -12,7 +12,8 @@ class EditorFormatterTestEmbed extends SharpFormEditorEmbed
 {
     public function buildEmbedConfig(): void
     {
-        $this->configureTagName('x-embed');
+        $this->configureTagName('x-embed')
+            ->configureIcon('testicon-car');
     }
 
     public function buildFormFields(FieldsContainer $formFields): void

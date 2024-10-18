@@ -56,8 +56,8 @@ class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
     public function build(): self
     {
         return $this
-            ->addEntityLink('post', 'Posts', 'fas fa-file')
-            ->addEntityLink('category', 'Categories', 'fas fa-folder');
+            ->addEntityLink('post', 'Posts')
+            ->addEntityLink('category', 'Categories');
     }
 }
 ```
@@ -71,7 +71,24 @@ class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
 {
     public function build(): self
     {
-        return $this->addExternalLink('https://google.com', 'Some external link', 'fas fa-globe');
+        return $this->addExternalLink('https://google.com', 'Some external link');
+    }
+}
+```
+
+### Define icons
+
+Yon can specify a [blade-icons](https://blade-ui-kit.com/blade-icons) name for each link. It can be an icon set coming from a [package](https://github.com/blade-ui-kit/blade-icons?tab=readme-ov-file#icon-packages) or defined in the project config.
+
+```php
+class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
+{
+    public function build(): self
+    {
+        return $this
+            ->addEntityLink('post', 'Posts', icon: 'fas-file')
+            ->addEntityLink('directory', 'Directories', icon: 'heroicon-o-folder')
+            ->addExternalLink('https://example.org', 'Homepage', icon: 'icon-logo'); // icon defined in the project (e.g. in resources/svg)
     }
 }
 ```
@@ -88,8 +105,8 @@ class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
         return $this
             ->addSection('Admin', function(SharpMenuItemSection $section) {
                 $section
-                    ->addEntityLink('account', 'My account', 'fas fa-user')
-                    ->addEntityLink('user', 'Sharp users', 'fas fa-user-secret');
+                    ->addEntityLink('account', 'My account')
+                    ->addEntityLink('user', 'Sharp users');
             });
     }
 }
@@ -107,9 +124,9 @@ class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
         return $this
             ->addSection('Admin', function(SharpMenuItemSection $section) {
                 $section
-                    ->addEntityLink('account', 'My account', 'fas fa-user')
+                    ->addEntityLink('account', 'My account')
                     ->addSeparator('Other users')
-                    ->addEntityLink('user', 'Sharp users', 'fas fa-user-secret');
+                    ->addEntityLink('user', 'Sharp users');
             });
     }
 }
@@ -128,7 +145,7 @@ class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
             ->addSection('Admin', function(SharpMenuItemSection $section) {
                 $section
                     ->setCollapsible(false)
-                    ->addEntityLink('account', 'My account', 'fas fa-user');
+                    ->addEntityLink('account', 'My account');
             });
     }
 }
@@ -161,7 +178,7 @@ class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
     {
         return $this
             ->setUserMenu(function (SharpMenuUserMenu $menu) {
-                $menu->addEntityLink('account', 'My account', 'fas fa-user');
+                $menu->addEntityLink('account', 'My account');
             });
     }
 }
