@@ -113,7 +113,9 @@ provide('menuBoundary', menuBoundary);
                                                                         class="flex items-center gap-3 rounded-lg px-3 py-2 min-w-0 transition-all hover:text-primary"
                                                                         :class="childItem.current ? 'bg-muted text-primary' : 'text-muted-foreground'"
                                                                     >
-                                                                        <Icon :icon="childItem.icon" class="size-4" />
+                                                                        <template v-if="childItem.icon">
+                                                                            <Icon :icon="childItem.icon" class="size-4" />
+                                                                        </template>
                                                                         <div class="min-w-0 break-words">
                                                                             {{ childItem.label }}
                                                                         </div>
@@ -132,7 +134,9 @@ provide('menuBoundary', menuBoundary);
                                             class="flex items-center gap-3 rounded-lg px-3 py-2 min-w-0 transition-all hover:text-primary"
                                             :class="item.current ? 'bg-muted text-primary' : 'text-muted-foreground'"
                                         >
-                                            <Icon :icon="item.icon" class="size-4" />
+                                            <template v-if="item.icon">
+                                                <Icon :icon="item.icon" class="size-4" />
+                                            </template>
                                             <div class="min-w-0 break-words">
                                                 {{ item.label }}
                                             </div>
@@ -191,7 +195,9 @@ provide('menuBoundary', menuBoundary);
                                                                 class="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
                                                                 :class="childItem.current ? 'bg-muted text-foreground' : 'text-muted-foreground'"
                                                             >
-                                                                <Icon :icon="childItem.icon" class="size-4" />
+                                                                <template v-if="childItem.icon">
+                                                                    <Icon :icon="childItem.icon" class="size-4" />
+                                                                </template>
                                                                 {{ childItem.label }}
                                                             </component>
                                                         </li>
@@ -206,7 +212,9 @@ provide('menuBoundary', menuBoundary);
                                             class="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
                                             :class="item.current ? 'bg-muted text-foreground' : 'text-muted-foreground'"
                                         >
-                                            <Icon :icon="item.icon" class="size-4" />
+                                            <template v-if="item.icon">
+                                                <Icon :icon="item.icon" class="size-4" />
+                                            </template>
                                             {{ item.label }}
                                         </component>
                                     </template>
@@ -271,7 +279,9 @@ provide('menuBoundary', menuBoundary);
                                         </template>
                                         <template v-else>
                                             <DropdownMenuItem :as="item.isExternalLink ? 'a' : Link" :href="item.url">
-                                                <Icon class="mr-2 size-4" :icon="item.icon" />
+                                                <template v-if="item.icon">
+                                                    <Icon class="mr-2 size-4" :icon="item.icon" />
+                                                </template>
                                                 <span>
                                                     {{ item.label }}
                                                 </span>

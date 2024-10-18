@@ -35,7 +35,7 @@ class IconManager
     
     public function iconToArray(?string $icon): ?array
     {
-        if($icon === null) {
+        if(!$icon) {
             return null;
         }
         

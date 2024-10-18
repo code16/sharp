@@ -28,10 +28,7 @@ class MySearchEngine extends SharpSearchEngine
     public function searchFor(array $terms): void
     {
         $resultSet = $this
-            ->addResultSet(
-                label: 'Posts',
-                icon: 'fa-file-o',
-            );
+            ->addResultSet('Posts');
 
         $builder = Post::query();
 
@@ -74,10 +71,7 @@ class MySearchEngine extends SharpSearchEngine
     public function searchFor(array $terms): void
     {
         $resultSet = $this
-            ->addResultSet(
-                label: 'Posts',
-                icon: 'fa-file-o',
-            );
+            ->addResultSet('Posts');
             
       if (! $resultSet->validateSearch(
           ['string', 'min:3'], 
