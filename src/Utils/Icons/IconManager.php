@@ -2,20 +2,22 @@
 
 namespace Code16\Sharp\Utils\Icons;
 
+use BladeUI\Icons\Exceptions\SvgNotFound;
+use BladeUI\Icons\Svg;
+
 class IconManager
 {
-    protected function resolveBladeIcon(string $bladeIconName): string
+    protected function resolveBladeIcon(string $icon): ?Svg
     {
-        return svg($bladeIconName)->toHtml();
-    }
-    
-    protected function resolveBladeIconName(string $icon): ?string
-    {
-        if($fontAwesomeBladeIconName = $this->resolveLegacyFontAwesomeBladeIconName($icon)) {
-            return $fontAwesomeBladeIconName;
+        if($nameFromLegacy = $this->resolveLegacyFontAwesomeBladeIconName($icon)) {
+            try {
+                return svg($nameFromLegacy);
+            } catch (SvgNotFound) {
+                return null; // for legacy "fa-" class names we don't want to throw (if owenvoke/blade-fontawesome is not installed)
+            }
         }
         
-        return $icon;
+        return svg($icon);
     }
     
     protected function resolveLegacyFontAwesomeBladeIconName(string $icon): ?string
@@ -39,11 +41,13 @@ class IconManager
             return null;
         }
         
-        $name = $this->resolveBladeIconName($icon);
+        $svg = $this->resolveBladeIcon($icon);
         
-        return [
-            'name' => $name,
-            'svg' => $name ? $this->resolveBladeIcon($name) : null,
-        ];
+        return $svg
+            ? [
+                'name' => $svg->name(),
+                'svg' => $svg->toHtml(),
+            ]
+            : null;
     }
 }
