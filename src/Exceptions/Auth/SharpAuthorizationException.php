@@ -6,4 +6,8 @@ use Code16\Sharp\Exceptions\SharpException;
 
 class SharpAuthorizationException extends SharpException
 {
+    public function getStatusCode(): int
+    {
+        return 403;
+    }
 }

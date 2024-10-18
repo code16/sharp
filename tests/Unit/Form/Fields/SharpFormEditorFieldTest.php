@@ -1,220 +1,175 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Form\Fields;
-
+use Code16\Sharp\Exceptions\SharpInvalidConfigException;
+use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
-use Code16\Sharp\Tests\SharpTestCase;
+use Code16\Sharp\Tests\Unit\Form\Fields\Formatters\Fixtures\EditorFormatterTestEmbed;
 
-class SharpFormEditorFieldTest extends SharpTestCase
-{
-    /** @test */
-    public function only_default_values_are_set()
-    {
-        $formField = SharpFormEditorField::make('text');
+it('sets only default values', function () {
+    $formField = SharpFormEditorField::make('text');
 
-        $this->assertEquals(
-            [
-                'key' => 'text',
-                'type' => 'editor',
-                'minHeight' => 200,
-                'showCharacterCount' => false,
-                'toolbar' => [
-                    SharpFormEditorField::B, SharpFormEditorField::I, SharpFormEditorField::SEPARATOR,
-                    SharpFormEditorField::UL,
-                    SharpFormEditorField::SEPARATOR,
-                    SharpFormEditorField::A,
-                ],
-                'embeds' => [
-                    'upload' => [
-                        'maxFileSize' => 2,
-                        'transformable' => true,
-                        'fileFilter' => ['.jpg', '.jpeg', '.gif', '.png'],
-                        'transformKeepOriginal' => true,
-                        'transformableFileTypes' => null,
-                        'ratioX' => null,
-                        'ratioY' => null,
-                    ],
-                ],
-                'markdown' => false,
-                'inline' => false,
-            ],
-            $formField->toArray(),
-        );
-    }
-
-    /** @test */
-    public function we_can_define_height()
-    {
-        $formField = SharpFormEditorField::make('text')
-            ->setHeight(50);
-
-        $this->assertArraySubset(
-            ['minHeight' => 50, 'maxHeight' => 50],
-            $formField->toArray(),
-        );
-    }
-
-    /** @test */
-    public function we_can_define_height_with_maxHeight()
-    {
-        $formField = SharpFormEditorField::make('text');
-
-        $this->assertArraySubset(
-            ['minHeight' => 50, 'maxHeight' => 100],
-            $formField->setHeight(50, 100)->toArray(),
-        );
-
-        $this->assertArraySubset(
-            ['minHeight' => 50],
-            $formField->setHeight(50, 0)->toArray(),
-        );
-    }
-
-    /** @test */
-    public function we_can_define_upload_configuration()
-    {
-        $formField = SharpFormEditorField::make('text')
-            ->setMaxFileSize(50);
-
-        $this->assertArraySubset(
-            [
-                'embeds' => [
-                    'upload' => [
-                        'maxFileSize' => 50,
-                        'transformable' => true,
-                    ],
-                ],
-            ],
-            $formField->toArray(),
-        );
-
-        $formField->setCropRatio('16:9');
-
-        $this->assertArraySubset(
-            [
-                'embeds' => [
-                    'upload' => [
-                        'maxFileSize' => 50,
-                        'transformable' => true,
-                        'ratioX' => 16,
-                        'ratioY' => 9,
-                    ],
-                ],
-            ],
-            $formField->toArray(),
-        );
-
-        $formField->setFileFilter(['jpg', 'pdf']);
-
-        $this->assertArraySubset(
-            [
-                'embeds' => [
-                    'upload' => [
-                        'maxFileSize' => 50,
-                        'ratioX' => 16,
-                        'ratioY' => 9,
-                        'transformable' => true,
-                        'fileFilter' => ['.jpg', '.pdf'],
-                    ],
-                ],
-            ],
-            $formField->toArray(),
-        );
-
-        $formField->setTransformable(false);
-
-        $this->assertArraySubset(
-            [
-                'embeds' => [
-                    'upload' => [
-                        'maxFileSize' => 50,
-                        'ratioX' => 16,
-                        'ratioY' => 9,
-                        'transformable' => false,
-                        'fileFilter' => ['.jpg', '.pdf'],
-                    ],
-                ],
-            ],
-            $formField->toArray(),
-        );
-    }
-
-    /** @test */
-    public function we_can_define_toolbar()
-    {
-        $formField = SharpFormEditorField::make('text')
-            ->setToolbar([
-                SharpFormEditorField::UPLOAD,
+    expect($formField->toArray())
+        ->toEqual([
+            'key' => 'text',
+            'type' => 'editor',
+            'minHeight' => 200,
+            'showCharacterCount' => false,
+            'toolbar' => [
+                SharpFormEditorField::B,
+                SharpFormEditorField::I,
                 SharpFormEditorField::SEPARATOR,
                 SharpFormEditorField::UL,
-            ]);
-
-        $this->assertArraySubset(
-            ['toolbar' => [
-                SharpFormEditorField::UPLOAD,
                 SharpFormEditorField::SEPARATOR,
-                SharpFormEditorField::UL,
-            ]],
-            $formField->toArray(),
+                SharpFormEditorField::A,
+            ],
+            'markdown' => false,
+            'inline' => false,
+        ]);
+});
+
+it('allows to define height', function () {
+    $formField = SharpFormEditorField::make('text')
+        ->setHeight(50);
+
+    expect($formField->toArray())
+        ->toHaveKey('minHeight', 50)
+        ->toHaveKey('maxHeight', 50);
+});
+
+it('allows to define height with maxHeight', function () {
+    $formField = SharpFormEditorField::make('text')
+        ->setHeight(50, 100);
+
+    expect($formField->toArray())
+        ->toHaveKey('minHeight', 50)
+        ->toHaveKey('maxHeight', 100)
+        ->and($formField->setHeight(50, 0)->toArray())
+        ->toHaveKey('minHeight', 50)
+        ->not->toHaveKey('maxHeight');
+});
+
+it('allows to allow uploads with configuration', function () {
+    $formField = SharpFormEditorField::make('text')
+        ->allowUploads(
+            SharpFormEditorUpload::make()
+                ->setImageOnly()
+                ->setMaxFileSize(5)
+                ->setAllowedExtensions(['jpg', 'gif'])
+                ->setImageCropRatio('16:9')
+                ->setHasLegend()
         );
-    }
 
-    /** @test */
-    public function we_can_hide_toolbar()
-    {
-        $formField = SharpFormEditorField::make('text')
-            ->setHeight(50)
-            ->hideToolbar();
+    expect($formField->toArray())
+        ->toHaveKey('uploads.fields.file.validationRule', [
+            'file', 'extensions:jpg,gif', 'max:5120', 'image',
+        ])
+        ->toHaveKey('uploads.fields.file.imageTransformable', true)
+        ->toHaveKey('uploads.fields.file.imageCropRatio', [16, 9])
+        ->toHaveKey('uploads.fields.legend');
 
-        $this->assertArrayNotHasKey('toolbar', $formField->toArray());
-    }
+    $formField = SharpFormEditorField::make('text')
+        ->allowUploads(
+            SharpFormEditorUpload::make()
+                ->setImageOnly()
+                ->setImageTransformable(false)
+        );
 
-    /** @test */
-    public function we_can_define_markdown_as_content_renderer()
-    {
-        // These configs are globally set in the config
-        config()->set('sharp.markdown_editor', [
-            'tight_lists_only' => true,
-            'nl2br' => true,
+    expect($formField->toArray())
+        ->toHaveKey('uploads.fields.file.imageTransformable', false);
+});
+
+it('allows to define toolbar', function () {
+    $formField = SharpFormEditorField::make('text')
+        ->setToolbar([
+            SharpFormEditorField::TABLE,
+            SharpFormEditorField::SEPARATOR,
+            SharpFormEditorField::UL,
         ]);
 
-        $formField = SharpFormEditorField::make('text')
-            ->setHeight(50)
-            ->setRenderContentAsMarkdown();
+    expect($formField->toArray())
+        ->toHaveKey('toolbar', [
+            SharpFormEditorField::TABLE,
+            SharpFormEditorField::SEPARATOR,
+            SharpFormEditorField::UL,
+        ]);
+});
 
-        $this->assertArraySubset(
-            [
-                'markdown' => true,
-                'tightListsOnly' => true,
-                'nl2br' => true,
-            ],
-            $formField->toArray(),
-        );
-    }
+it('allows to hide toolbar', function () {
+    $formField = SharpFormEditorField::make('text')
+        ->setHeight(50)
+        ->hideToolbar();
 
-    /** @test */
-    public function we_can_define_setWithoutParagraphs()
-    {
-        $formField = SharpFormEditorField::make('text')
-            ->setWithoutParagraphs();
+    expect($formField->toArray())
+        ->not->toHaveKey('toolbar');
+});
 
-        $this->assertArraySubset(
-            ['inline' => true],
-            $formField->toArray(),
-        );
-    }
+it('allows to define markdown as content renderer', function () {
+    $formField = SharpFormEditorField::make('text')
+        ->setHeight(50)
+        ->setRenderContentAsMarkdown();
 
-    /** @test */
-    public function we_can_define_maxLength_and_showCount()
-    {
-        $this->assertArraySubset(
-            ['maxLength' => 500, 'showCharacterCount' => true],
-            SharpFormEditorField::make('text')->setMaxLength(500)->toArray(),
-        );
+    expect($formField->toArray())
+        ->toHaveKey('markdown', true);
+});
 
-        $this->assertArraySubset(
-            ['showCharacterCount' => true],
-            SharpFormEditorField::make('text')->showCharacterCount()->toArray(),
-        );
-    }
-}
+it('allows to define setWithoutParagraphs', function () {
+    $formField = SharpFormEditorField::make('text')
+        ->setWithoutParagraphs();
+
+    expect($formField->toArray())
+        ->toHaveKey('inline', true);
+});
+
+it('allows to define maxLength and showCount', function () {
+    expect(SharpFormEditorField::make('text')->setMaxLength(500)->toArray())
+        ->toHaveKey('maxLength', 500)
+        ->toHaveKey('showCharacterCount', true)
+        ->and(SharpFormEditorField::make('text')->showCharacterCount()->toArray())
+        ->toHaveKey('showCharacterCount', true);
+});
+
+it('throws an exception when setting an UPLOAD item in the toolbar without defining allowUploads', function () {
+    $formField = SharpFormEditorField::make('text')
+        ->setToolbar([
+            SharpFormEditorField::UPLOAD,
+        ]);
+
+    $formField->toArray();
+})->expectException(SharpInvalidConfigException::class);
+
+it('allows to allows embeds', function () {
+    $formField = SharpFormEditorField::make('text')
+        ->allowEmbeds([
+            EditorFormatterTestEmbed::class,
+        ])
+        ->setToolbar([
+            SharpFormEditorField::H1,
+            EditorFormatterTestEmbed::class,
+        ]);
+
+    expect($formField->toArray()['embeds'])
+        ->toHaveKey(app(EditorFormatterTestEmbed::class)->key());
+});
+
+it('allows to place an allowed embed in the toolbar', function () {
+    $formField = SharpFormEditorField::make('text')
+        ->allowEmbeds([
+            EditorFormatterTestEmbed::class,
+        ])
+        ->setToolbar([
+            SharpFormEditorField::H1,
+            EditorFormatterTestEmbed::class,
+        ]);
+
+    expect($formField->toArray()['toolbar'][1])
+        ->toEqual('embed:'.app(EditorFormatterTestEmbed::class)->key());
+});
+
+it('throws an exception when setting an embed item in the toolbar without allowing it', function () {
+    $formField = SharpFormEditorField::make('text')
+        ->setToolbar([
+            EditorFormatterTestEmbed::class,
+        ]);
+
+    $formField->toArray();
+})->expectException(SharpInvalidConfigException::class);

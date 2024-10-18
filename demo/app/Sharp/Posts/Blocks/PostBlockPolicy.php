@@ -17,6 +17,6 @@ class PostBlockPolicy extends SharpEntityPolicy
     public function create($user): bool
     {
         return $user->isAdmin()
-            || Post::find(currentSharpRequest()->getPreviousShowFromBreadcrumbItems('posts')->instanceId())?->author_id === $user->id;
+            || Post::find(sharp()->context()->breadcrumb()->previousShowSegment('posts')->instanceId())?->author_id === $user->id;
     }
 }

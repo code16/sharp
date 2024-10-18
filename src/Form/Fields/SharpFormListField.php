@@ -177,7 +177,7 @@ class SharpFormListField extends SharpFormField
             'addable' => $this->addable,
             'removable' => $this->removable,
             'sortable' => $this->sortable,
-            'addText' => $this->addText ?? trans('sharp-front::form.list.add_button'),
+            'addText' => $this->addText ?? trans('sharp::form.list.add_button'),
             'collapsedItemTemplate' => $this->template('item'),
             'maxItemCount' => $this->maxItemCount,
             'bulkUploadField' => $this->allowBulkUpload ? $this->bulkUploadItemFieldKey : null,

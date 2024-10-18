@@ -1,141 +1,93 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Form\Fields;
-
 use Code16\Sharp\Form\Fields\SharpFormDateField;
-use Code16\Sharp\Tests\SharpTestCase;
 
-class SharpFormDateFieldTest extends SharpTestCase
-{
-    /** @test */
-    public function only_default_values_are_set()
-    {
-        $defaultFormField = SharpFormDateField::make('date');
+it('sets default values', function () {
+    $defaultFormField = SharpFormDateField::make('date');
 
-        $this->assertEquals(
-            [
-                'key' => 'date',
-                'type' => 'date',
-                'hasDate' => true,
-                'hasTime' => false,
-                'minTime' => '00:00',
-                'maxTime' => '23:59',
-                'stepTime' => 30,
-                'displayFormat' => 'YYYY-MM-DD',
-                'mondayFirst' => true,
-                'language' => $this->app->getLocale(),
-            ],
-            $defaultFormField->toArray(),
-        );
-    }
+    expect($defaultFormField->toArray())
+        ->toEqual([
+            'key' => 'date', 'type' => 'date',
+            'hasDate' => true, 'hasTime' => false,
+            'minTime' => '00:00', 'maxTime' => '23:59',
+            'stepTime' => 30,
+            'displayFormat' => 'YYYY-MM-DD',
+            'mondayFirst' => true,
+            'language' => app()->getLocale(),
+        ]);
+});
 
-    /** @test */
-    public function we_can_define_hasDate_and_hasTime()
-    {
-        $dateFormField = SharpFormDateField::make('date')
-            ->setHasDate();
+it('allows to define hasDate and hasTime', function () {
+    $dateFormField = SharpFormDateField::make('date')
+        ->setHasDate();
 
-        $dateTimeFormField = SharpFormDateField::make('date')
-            ->setHasTime();
+    $dateTimeFormField = SharpFormDateField::make('date')
+        ->setHasTime();
 
-        $timeFormField = SharpFormDateField::make('date')
-            ->setHasTime()
-            ->setHasDate(false);
+    $timeFormField = SharpFormDateField::make('date')
+        ->setHasTime()
+        ->setHasDate(false);
 
-        $this->assertArraySubset(
-            ['key' => 'date', 'type' => 'date', 'hasDate' => true, 'hasTime' => false],
-            $dateFormField->toArray(),
-        );
+    expect($dateFormField->toArray())
+        ->toHaveKey('hasDate', true)
+        ->toHaveKey('hasTime', false)
+        ->and($dateTimeFormField->toArray())
+        ->toHaveKey('hasDate', true)
+        ->toHaveKey('hasTime', true)
+        ->and($timeFormField->toArray())
+        ->toHaveKey('hasDate', false)
+        ->toHaveKey('hasTime', true);
+});
 
-        $this->assertArraySubset(
-            ['key' => 'date', 'type' => 'date', 'hasTime' => true, 'hasDate' => true],
-            $dateTimeFormField->toArray(),
-        );
+it('allows to define min and max time', function () {
+    $dateTimeFormField = SharpFormDateField::make('date')
+        ->setMinTime(8)
+        ->setMaxTime(20, 30);
 
-        $this->assertArraySubset(
-            ['key' => 'date', 'type' => 'date', 'hasTime' => true, 'hasDate' => false],
-            $timeFormField->toArray(),
-        );
-    }
+    expect($dateTimeFormField->toArray())
+        ->toHaveKey('minTime', '08:00')
+        ->toHaveKey('maxTime', '20:30');
+});
 
-    /** @test */
-    public function we_can_define_min_and_max_time()
-    {
-        $dateTimeFormField = SharpFormDateField::make('date')
-            ->setMinTime(8)
-            ->setMaxTime(20, 30);
+it('allows to define a step time', function () {
+    $dateFormField = SharpFormDateField::make('date')
+        ->setStepTime(45);
 
-        $this->assertArraySubset(
-            [
-                'minTime' => '08:00',
-                'maxTime' => '20:30',
-            ],
-            $dateTimeFormField->toArray(),
-        );
-    }
+    expect($dateFormField->toArray())
+        ->toHaveKey('stepTime', 45);
+});
 
-    /** @test */
-    public function we_can_define_a_step_time()
-    {
-        $dateFormField = SharpFormDateField::make('date')
-            ->setStepTime(45);
+it('allows to define monday as first day of week', function () {
+    $dateFormField = SharpFormDateField::make('date')
+        ->setMondayFirst();
 
-        $this->assertArraySubset(
-            ['stepTime' => 45],
-            $dateFormField->toArray(),
-        );
-    }
+    expect($dateFormField->toArray())
+        ->toHaveKey('mondayFirst', true);
+});
 
-    /** @test */
-    public function we_can_define_monday_as_first_day_of_week()
-    {
-        $dateFormField = SharpFormDateField::make('date')
-            ->setMondayFirst();
+it('allows to define a display format', function () {
+    $dateFormField = SharpFormDateField::make('date')
+        ->setDisplayFormat('DD/MM/YYYY');
 
-        $this->assertArraySubset(
-            ['mondayFirst' => true],
-            $dateFormField->toArray(),
-        );
-    }
+    expect($dateFormField->toArray())
+        ->toHaveKey('displayFormat', 'DD/MM/YYYY');
+});
 
-    /** @test */
-    public function we_can_define_a_display_format()
-    {
-        $dateFormField = SharpFormDateField::make('date')
-            ->setDisplayFormat('DD/MM/YYYY');
+it('formats default displayFormat regarding date and time configuration', function () {
+    $dateFormField = SharpFormDateField::make('date')
+        ->setHasDate();
 
-        $this->assertArraySubset(
-            ['displayFormat' => 'DD/MM/YYYY'],
-            $dateFormField->toArray(),
-        );
-    }
+    $dateTimeFormField = SharpFormDateField::make('date')
+        ->setHasTime();
 
-    /** @test */
-    public function default_displayFormat_depends_on_date_time_configuration()
-    {
-        $dateFormField = SharpFormDateField::make('date')
-            ->setHasDate();
+    $timeFormField = SharpFormDateField::make('date')
+        ->setHasTime()
+        ->setHasDate(false);
 
-        $dateTimeFormField = SharpFormDateField::make('date')
-            ->setHasTime();
-
-        $timeFormField = SharpFormDateField::make('date')
-            ->setHasTime()
-            ->setHasDate(false);
-
-        $this->assertArraySubset(
-            ['displayFormat' => 'YYYY-MM-DD'],
-            $dateFormField->toArray(),
-        );
-
-        $this->assertArraySubset(
-            ['displayFormat' => 'YYYY-MM-DD HH:mm'],
-            $dateTimeFormField->toArray(),
-        );
-
-        $this->assertArraySubset(
-            ['displayFormat' => 'HH:mm'],
-            $timeFormField->toArray(),
-        );
-    }
-}
+    expect($dateFormField->toArray())
+        ->toHaveKey('displayFormat', 'YYYY-MM-DD')
+        ->and($dateTimeFormField->toArray())
+        ->toHaveKey('displayFormat', 'YYYY-MM-DD HH:mm')
+        ->and($timeFormField->toArray())
+        ->toHaveKey('displayFormat', 'HH:mm');
+});

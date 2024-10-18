@@ -5,6 +5,7 @@ namespace App\Sharp\Authors\Commands;
 use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Code16\Sharp\Utils\PageAlerts\PageAlert;
 
 class InviteUserCommand extends EntityCommand
 {
@@ -16,10 +17,7 @@ class InviteUserCommand extends EntityCommand
     public function buildCommandConfig(): void
     {
         $this->configureFormModalTitle('Invite a new user as author')
-            ->configurePageAlert(
-                '<div>Provide the email address of the new author, and an invitation will be sent to him</div><div><small>(not true, we won’t send anything)</small></div>',
-                static::$pageAlertLevelInfo,
-            );
+            ->configureFormModalDescription('Provide the email address of the new author, and an invitation will be sent to him (not true, we won’t send anything).');
     }
 
     public function buildFormFields(FieldsContainer $formFields): void

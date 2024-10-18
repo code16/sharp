@@ -3,12 +3,14 @@
 namespace Code16\Sharp\Form\Fields;
 
 use Code16\Sharp\Form\Fields\Formatters\SelectFormatter;
-use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithDataLocalization;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithOptions;
+use Code16\Sharp\Utils\Fields\IsSharpFieldWithLocalization;
+use Code16\Sharp\Utils\Fields\SharpFieldWithLocalization;
 
-class SharpFormSelectField extends SharpFormField
+class SharpFormSelectField extends SharpFormField implements IsSharpFieldWithLocalization
 {
-    use SharpFormFieldWithOptions, SharpFormFieldWithDataLocalization;
+    use SharpFormFieldWithOptions;
+    use SharpFieldWithLocalization;
 
     const FIELD_TYPE = 'select';
 
