@@ -132,10 +132,10 @@ it('handles multiple result sets', function () {
         {
             public function searchFor(array $terms): void
             {
-                $this->addResultSet('People', 'fa-user')
+                $this->addResultSet('People', 'testicon-user')
                     ->addResultLink(LinkToShowPage::make('person', 1), 'John Wayne');
 
-                $this->addResultSet('Cars', 'fa-car')
+                $this->addResultSet('Cars', 'testicon-car')
                     ->addResultLink(LinkToShowPage::make('car', 1), 'Aston Martin');
             }
         }
@@ -146,7 +146,10 @@ it('handles multiple result sets', function () {
             [
                 [
                     'label' => 'People',
-                    'icon' => 'fa-user',
+                    'icon' => [
+                        'name' => 'testicon-user',
+                        'svg' => '<svg><!--user--></svg>',
+                    ],
                     'results' => [
                         [
                             'label' => 'John Wayne',
@@ -157,7 +160,10 @@ it('handles multiple result sets', function () {
                 ],
                 [
                     'label' => 'Cars',
-                    'icon' => 'fa-car',
+                    'icon' => [
+                        'name' => 'testicon-car',
+                        'svg' => '<svg><!--car--></svg>',
+                    ],
                     'results' => [
                         [
                             'label' => 'Aston Martin',
@@ -177,7 +183,7 @@ it('allows multiple search terms', function () {
             public function searchFor(array $terms): void
             {
                 if ($terms[0] == '%john%' && $terms[1] == '%wayne%') {
-                    $this->addResultSet('People', 'fa-user')
+                    $this->addResultSet('People', 'testicon-user')
                         ->addResultLink(LinkToShowPage::make('person', 1), 'John Wayne');
                 }
             }
