@@ -1,6 +1,6 @@
 <?php
 
-use Code16\Sharp\Form\Eloquent\Migrations\MigrateContentsForSharp9;
+use Code16\Sharp\Form\Eloquent\Migrations\MigrateEditorContentsForSharp9;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\UploadedFile;
@@ -25,11 +25,11 @@ it('Migrate <x-sharp-image> for sharp 9', function () {
 
     $migration = new class extends Migration
     {
-        use MigrateContentsForSharp9;
+        use MigrateEditorContentsForSharp9;
 
         public function up(): void
         {
-            $this->updateContentOf(DB::table('posts'), ['content']);
+            $this->updateEditorContentOf(DB::table('posts'), ['content']);
         }
     };
 
@@ -61,11 +61,11 @@ it('Migrate <x-sharp-file> for sharp 9', function () {
 
     $migration = new class extends Migration
     {
-        use MigrateContentsForSharp9;
+        use MigrateEditorContentsForSharp9;
 
         public function up(): void
         {
-            $this->updateContentOf(DB::table('posts'), ['content']);
+            $this->updateEditorContentOf(DB::table('posts'), ['content']);
         }
     };
 
@@ -93,11 +93,11 @@ it('Should not throw if file does not exists', function () {
 
     $migration = new class extends Migration
     {
-        use MigrateContentsForSharp9;
+        use MigrateEditorContentsForSharp9;
 
         public function up(): void
         {
-            $this->updateContentOf(DB::table('posts'), ['content']);
+            $this->updateEditorContentOf(DB::table('posts'), ['content']);
         }
     };
 

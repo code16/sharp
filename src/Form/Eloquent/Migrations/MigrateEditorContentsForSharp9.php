@@ -11,11 +11,11 @@ use League\Flysystem\UnableToRetrieveMetadata;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
-trait MigrateContentsForSharp9
+trait MigrateEditorContentsForSharp9
 {
     use InteractsWithIO;
 
-    protected function updateContentOf(Builder $query, array $contentColumns, string $primaryKey = 'id', bool $fetchMissingDataFromFileSystem = true): self
+    protected function updateEditorContentOf(Builder $query, array $contentColumns, string $primaryKey = 'id', bool $fetchMissingDataFromFileSystem = true): self
     {
         $this->input ??= new StringInput('');
         $this->output ??= new OutputStyle($this->input, new ConsoleOutput());
@@ -32,7 +32,7 @@ trait MigrateContentsForSharp9
         foreach ($rows as $row) {
             $data = [];
             foreach ($contentColumns as $column) {
-                $data[$column] = $this->updateContent(
+                $data[$column] = $this->updateEditorContent(
                     $row->{$column},
                     $fetchMissingDataFromFileSystem,
                     sprintf('%s[%s][%s]', $query->from, $row->{$primaryKey}, $column),
@@ -47,7 +47,7 @@ trait MigrateContentsForSharp9
         return $this;
     }
 
-    protected function updateContent(?string $content, bool $fetchMissingDataFromFileSystem = true, string $rowLocation = ''): ?string
+    protected function updateEditorContent(?string $content, bool $fetchMissingDataFromFileSystem = true, string $rowLocation = ''): ?string
     {
         if (is_null($content)) {
             return null;
