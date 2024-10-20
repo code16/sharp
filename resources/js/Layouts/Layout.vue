@@ -148,8 +148,9 @@ provide('menuBoundary', menuBoundary);
                     </div>
                 </div>
             <div class="flex flex-col min-w-0">
-                <header class="flex h-14 items-center gap-4 border-b bg-muted/40 backdrop-blur px-4 sticky top-0 z-20 lg:h-[60px] lg:px-6">
-                    <div class="absolute inset-0 bg-neutral-50/80 dark:hidden pointer-events-none -z-10"></div>
+                <header class="flex h-14 items-center gap-4 border-b backdrop-blur px-4 sticky top-0 z-20 lg:h-[60px] lg:px-6">
+                    <div class="absolute inset-0 bg-white/80 dark:hidden pointer-events-none -z-10"></div>
+                    <div class="absolute inset-0 bg-muted/40 dark:hidden pointer-events-none -z-10"></div>
                     <Button
                         variant="outline"
                         size="icon"

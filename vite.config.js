@@ -33,7 +33,7 @@ export default defineConfig(({ mode, command }) => {
             },
         },
         plugins: [
-            circleDependency(),
+            // circleDependency(),
             svgLoader({ svgo: false }),
             laravel({
                 input: [

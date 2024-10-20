@@ -7,7 +7,7 @@
 
 <template>
     <template v-if="logo.svg">
-        <div class="[&_svg]:w-auto [&_svg]:max-w-full [&_svg]:h-[--height]"
+        <div class="text-primary [&_svg]:w-auto [&_svg]:max-w-full [&_svg]:h-[--height]"
             :style="{ '--height': config('sharp.theme.logo_height') ?? '1.5rem' }"
             v-html="logo.svg"
         ></div>

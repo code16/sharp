@@ -3,9 +3,10 @@ import containerQueries from '@tailwindcss/container-queries';
 // import forms from '@tailwindcss/forms';
 import animate from 'tailwindcss-animate';
 import defaultTheme from 'tailwindcss/defaultTheme';
+import flattenColorPalette from 'tailwindcss/src/util/flattenColorPalette.js';
 
 /** @type {import('tailwindcss').Config} */
-export default {
+const config = {
     darkMode: ["class"],
     safelist: ["dark"],
     prefix: "",
@@ -45,7 +46,7 @@ export default {
                 background: "hsl(var(--background))",
                 foreground: "hsl(var(--foreground))",
                 primary: {
-                    DEFAULT: "hsl(var(--primary))",
+                    DEFAULT: "oklch(var(--primary-oklch) / <alpha-value>)",
                     foreground: "hsl(var(--primary-foreground))",
                     50: 'var(--color-primary-50)',
                     100: 'var(--color-primary-100)',
@@ -67,8 +68,8 @@ export default {
                     foreground: "hsl(var(--destructive-foreground))",
                 },
                 muted: {
-                    DEFAULT: "hsl(var(--muted))",
-                    foreground: "hsl(var(--muted-foreground))",
+                    DEFAULT: "oklch(var(--muted-oklch) / <alpha-value>)",
+                    foreground: "oklch(var(--muted-foreground-oklch) / <alpha-value>)",
                 },
                 accent: {
                     DEFAULT: "hsl(var(--accent))",
@@ -118,22 +119,72 @@ export default {
     plugins: [
         animate,
         containerQueries,
-        // forms,
         plugin(function ({ matchUtilities, theme }) {
-            matchUtilities({
-                'gap-x': (value) => {
-                    return {
-                        'column-gap': value,
-                        '--gap-x': value,
-                    };
+            const fallbackColor = (value) => {
+                const color = typeof value === 'function' ? value({ opacityVariable: '--tw-bg-opacity', opacityValue: `var(--tw-bg-opacity)` }) : value;
+                return [
+                    color.replace('oklch(var(--primary-oklch)', 'hsl(var(--primary)'),
+                    color.replace('oklch(var(--muted-oklch)', 'hsl(var(--muted)'),
+                    color.replace('oklch(var(--muted-foreground-oklch)', 'hsl(var(--muted-foreground)'),
+                ].find(replaced => replaced !== color);
+            }
+            matchUtilities(
+                {
+                    'bg': (value) => {
+                        const color = fallbackColor(value);
+                        return color ? {
+                            '@supports not (color: oklch(0 0 0))': {
+                                'background-color': color,
+                            }
+                        } : null;
+                    },
                 },
-                'gap-y': (value) => {
-                    return {
-                        'row-gap': value,
-                        '--gap-y': value,
-                    };
+                { values: flattenColorPalette(theme('backgroundColor')), type: ['color'] }
+            );
+            matchUtilities(
+                {
+                    'text': (value) => {
+                        const color = fallbackColor(value);
+                        return color ? {
+                            '@supports not (color: oklch(0 0 0))': {
+                                'color': color,
+                            }
+                        } : null;
+                    },
                 },
-            }, { values: theme('gap') });
+                { values: flattenColorPalette(theme('textColor')), type: ['color'] }
+            );
+            matchUtilities(
+                {
+                    'border': (value) => {
+                        const color = fallbackColor(value);
+                        return color ? {
+                            '@supports not (color: oklch(0 0 0))': {
+                                'border-color': color,
+                            }
+                        } : null;
+                    },
+                },
+                { values: flattenColorPalette(theme('borderColor')), type: ['color'] }
+            );
         }),
+        // plugin(function ({ matchUtilities, theme }) {
+        //     matchUtilities({
+        //         'gap-x': (value) => {
+        //             return {
+        //                 'column-gap': value,
+        //                 '--gap-x': value,
+        //             };
+        //         },
+        //         'gap-y': (value) => {
+        //             return {
+        //                 'row-gap': value,
+        //                 '--gap-y': value,
+        //             };
+        //         },
+        //     }, { values: theme('gap') });
+        // }),
     ],
 }
+
+export default config;
