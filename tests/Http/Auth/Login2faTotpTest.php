@@ -29,7 +29,7 @@ beforeEach(function () {
         }
     );
 
-    sharpConfig()
+    sharp()->config()
         ->addEntity('person', PersonEntity::class)
         ->setAuthCustomGuard('sharp')
         ->enable2faCustom(new class(app(Sharp2faTotpEngine::class)) extends Sharp2faTotpHandler {

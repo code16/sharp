@@ -37,6 +37,7 @@
                             <template v-if="resultSet.label">
                                 <h6 class="d-flex mb-3">
                                     <template v-if="resultSet.icon">
+                                        <!-- TODO migrate to <Icon> + blade-icon sent by the back -->
                                         <i class="fa fa-fw me-2" :class="resultSet.icon"></i>
                                     </template>
                                     {{ resultSet.label }}

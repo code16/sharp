@@ -7,7 +7,6 @@ use Code16\Sharp\EntityList\Commands\Command;
 use Code16\Sharp\Form\Fields\Editor\Uploads\FormEditorUploadForm;
 use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
 use Code16\Sharp\Form\SharpForm;
-use Code16\Sharp\Http\Context\CurrentSharpRequest;
 use Code16\Sharp\Show\SharpShow;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Pagination\AbstractPaginator;
@@ -180,13 +179,12 @@ trait WithCustomTransformers
     {
         $idAttr = $this->instanceIdAttribute;
 
-        app(CurrentSharpRequest::class)
-            ->cacheInstances(
-                collect($instances)
-                    ->filter(fn ($instance) => (((object) $instance)->$idAttr ?? null) !== null)
-                    ->mapWithKeys(fn ($instance) => [
-                        ((object) $instance)->$idAttr => $instance,
-                    ])
-            );
+        sharp()->context()->cacheListInstances(
+            collect($instances)
+                ->filter(fn ($instance) => (((object) $instance)->$idAttr ?? null) !== null)
+                ->mapWithKeys(fn ($instance) => [
+                    ((object) $instance)->$idAttr => $instance,
+                ])
+        );
     }
 }

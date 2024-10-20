@@ -6,7 +6,7 @@ abstract class SharpImpersonationHandler
 {
     public function enabled(): bool
     {
-        return sharpConfig()->get('auth.impersonate.enabled') === true
+        return sharp()->config()->get('auth.impersonate.enabled') === true
             && app()->isLocal();
     }
 

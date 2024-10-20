@@ -8,7 +8,8 @@ use Code16\Sharp\Enums\FormFieldType;
 use Spatie\TypeScriptTransformer\Attributes\TypeScriptType;
 
 #[TypeScriptType(
-    FormAutocompleteFieldData::class
+    FormAutocompleteLocalFieldData::class
+    .'|'.FormAutocompleteRemoteFieldData::class
     .'|'.FormCheckFieldData::class
 //    .'|'.FormCustomFieldData::class
     .'|'.FormDateFieldData::class
@@ -35,7 +36,10 @@ final class FormFieldData extends Data
         $field['conditionalDisplay'] = FormConditionalDisplayData::optional($field['conditionalDisplay'] ?? null);
 
         return match ($field['type']) {
-            FormFieldType::Autocomplete => FormAutocompleteFieldData::from($field),
+            FormFieldType::Autocomplete => match($field['mode']) {
+                'remote' => FormAutocompleteRemoteFieldData::from($field),
+                'local' => FormAutocompleteLocalFieldData::from($field),
+            },
             FormFieldType::Check => FormCheckFieldData::from($field),
             FormFieldType::Date => FormDateFieldData::from($field),
             FormFieldType::Editor => FormEditorFieldData::from($field),

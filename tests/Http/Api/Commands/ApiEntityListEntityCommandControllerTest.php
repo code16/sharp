@@ -10,7 +10,7 @@ use Code16\Sharp\Utils\PageAlerts\PageAlert;
 use Illuminate\Http\UploadedFile;
 
 beforeEach(function () {
-    sharpConfig()->addEntity('person', PersonEntity::class);
+    sharp()->config()->addEntity('person', PersonEntity::class);
     login();
 });
 
@@ -95,6 +95,35 @@ it('allows to call a view entity command', function () {
         }
     });
 
+    $this->postJson(route('code16.sharp.api.list.command.entity', ['person', 'cmd']))
+        ->assertOk()
+        ->assertJson([
+            'action' => 'view',
+        ]);
+});
+
+it('allows to call a html instance command', function () {
+    fakeListFor('person', new class extends PersonList
+    {
+        protected function getEntityCommands(): ?array
+        {
+            return [
+                'cmd' => new class extends EntityCommand
+                {
+                    public function label(): ?string
+                    {
+                        return 'my command';
+                    }
+                    
+                    public function execute(array $data = []): array
+                    {
+                        return $this->html('Hello world');
+                    }
+                },
+            ];
+        }
+    });
+    
     $this->postJson(route('code16.sharp.api.list.command.entity', ['person', 'cmd']))
         ->assertOk()
         ->assertJson([

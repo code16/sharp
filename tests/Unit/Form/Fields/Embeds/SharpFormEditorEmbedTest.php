@@ -167,12 +167,15 @@ it('allows to configure icon', function () {
         public function buildEmbedConfig(): void
         {
             $this->configureTagName('test')
-                ->configureIcon('fa-user');
+                ->configureIcon('testicon-user');
         }
     };
 
     $defaultEmbed->buildEmbedConfig();
 
     expect($defaultEmbed->toConfigArray(true)['icon'])
-        ->toEqual('fa-user');
+        ->toEqual([
+            'name' => 'testicon-user',
+            'svg' => '<svg><!--user--></svg>',
+        ]);
 });

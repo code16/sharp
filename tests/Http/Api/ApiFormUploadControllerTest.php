@@ -17,7 +17,7 @@ it('allows to upload a file', function () {
 });
 
 it('allows to upload a file on a custom defined disk', function () {
-    sharpConfig()->configureUploads(uploadDisk: 'uploads');
+    sharp()->config()->configureUploads(uploadDisk: 'uploads');
     Storage::fake('uploads');
 
     $this

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Notification;
 beforeEach(function () {
     auth()->extend('sharp', fn() => new TestAuthGuard());
 
-    sharpConfig()->addEntity('person', PersonEntity::class)
+    sharp()->config()->addEntity('person', PersonEntity::class)
         ->setAuthCustomGuard('sharp')
         ->enable2faByNotification();
 
@@ -49,7 +49,7 @@ it('sends to the user a 2fa notification after successful first step login', fun
 it('logs in the user after successful 2fa code validation', function () {
     Notification::fake();
 
-    sharpConfig()->enable2faCustom(
+    sharp()->config()->enable2faCustom(
         new class extends Sharp2faNotificationHandler {
             protected function generateRandomCode(): int
             {

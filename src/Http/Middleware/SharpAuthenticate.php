@@ -38,7 +38,7 @@ class SharpAuthenticate extends BaseAuthenticate
     
     protected function redirectTo(Request $request)
     {
-        if ($loginPageUrl = sharpConfig()->get('auth.login_page_url')) {
+        if ($loginPageUrl = sharp()->config()->get('auth.login_page_url')) {
             return $loginPageUrl;
         }
 

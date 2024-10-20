@@ -7,7 +7,7 @@ use Code16\Sharp\Tests\Fixtures\Sharp\TestDashboard;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 beforeEach(function () {
-    sharpConfig()->addEntity('dashboard', DashboardEntity::class);
+    sharp()->config()->addEntity('dashboard', DashboardEntity::class);
     login();
 });
 

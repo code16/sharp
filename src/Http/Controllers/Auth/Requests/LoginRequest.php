@@ -34,7 +34,7 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        $remember = sharpConfig()->get('auth.suggest_remember_me') && $this->boolean('remember');
+        $remember = sharp()->config()->get('auth.suggest_remember_me') && $this->boolean('remember');
 
         if (!$this->attemptToLogin($remember)) {
             RateLimiter::hit($this->throttleKey());
@@ -51,11 +51,11 @@ class LoginRequest extends FormRequest
     {
         $guard = $this->getGuard();
         $credentials = [
-            sharpConfig()->get('auth.login_attribute') => $this->input('login'),
-            sharpConfig()->get('auth.password_attribute') => $this->input('password'),
+            sharp()->config()->get('auth.login_attribute') => $this->input('login'),
+            sharp()->config()->get('auth.password_attribute') => $this->input('password'),
         ];
 
-        if (sharpConfig()->get('auth.2fa.enabled')) {
+        if (sharp()->config()->get('auth.2fa.enabled')) {
             // 2fa is globally configured, but we have to ensure that the user has 2fa enabled
             if ($guard->once($credentials)) {
                 $handler = app(Sharp2faHandler::class);
@@ -74,13 +74,13 @@ class LoginRequest extends FormRequest
 
     private function ensureIsNotRateLimited(): void
     {
-        if (sharpConfig()->get('auth.rate_limiting.enabled') === false) {
+        if (sharp()->config()->get('auth.rate_limiting.enabled') === false) {
             return;
         }
 
         if (!RateLimiter::tooManyAttempts(
             $this->throttleKey(),
-            sharpConfig()->get('auth.rate_limiting.max_attempts'))
+            sharp()->config()->get('auth.rate_limiting.max_attempts'))
         ) {
             return;
         }
@@ -104,6 +104,6 @@ class LoginRequest extends FormRequest
 
     private function getGuard(): StatefulGuard
     {
-        return Auth::guard(sharpConfig()->get('auth.guard'));
+        return Auth::guard(sharp()->config()->get('auth.guard'));
     }
 }

@@ -5,14 +5,14 @@ use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Utils\Links\LinkToShowPage;
 
 beforeEach(function () {
-    sharpConfig()->addEntity('person', PersonEntity::class);
+    sharp()->config()->addEntity('person', PersonEntity::class);
     login();
 });
 
 it('returns result on a valid search', function () {
     $this->withoutExceptionHandling();
 
-    sharpconfig()->enableGlobalSearch(
+    sharp()->config()->enableGlobalSearch(
         new class extends SharpSearchEngine
         {
             public function searchFor(array $terms): void
@@ -47,7 +47,7 @@ it('returns result on a valid search', function () {
 });
 
 it('allows to configure a custom empty state label', function () {
-    sharpconfig()->enableGlobalSearch(
+    sharp()->config()->enableGlobalSearch(
         new class extends SharpSearchEngine
         {
             public function searchFor(array $terms): void
@@ -71,7 +71,7 @@ it('allows to configure a custom empty state label', function () {
 });
 
 it('allows to configure hide when empty', function () {
-    sharpconfig()->enableGlobalSearch(
+    sharp()->config()->enableGlobalSearch(
         new class extends SharpSearchEngine
         {
             public function searchFor(array $terms): void
@@ -95,7 +95,7 @@ it('allows to configure hide when empty', function () {
 });
 
 it('raises validation errors', function () {
-    sharpconfig()->enableGlobalSearch(
+    sharp()->config()->enableGlobalSearch(
         new class extends SharpSearchEngine
         {
             public function searchFor(array $terms): void
@@ -127,15 +127,15 @@ it('raises validation errors', function () {
 });
 
 it('handles multiple result sets', function () {
-    sharpconfig()->enableGlobalSearch(
+    sharp()->config()->enableGlobalSearch(
         new class extends SharpSearchEngine
         {
             public function searchFor(array $terms): void
             {
-                $this->addResultSet('People', 'fa-user')
+                $this->addResultSet('People', 'testicon-user')
                     ->addResultLink(LinkToShowPage::make('person', 1), 'John Wayne');
 
-                $this->addResultSet('Cars', 'fa-car')
+                $this->addResultSet('Cars', 'testicon-car')
                     ->addResultLink(LinkToShowPage::make('car', 1), 'Aston Martin');
             }
         }
@@ -146,7 +146,10 @@ it('handles multiple result sets', function () {
             [
                 [
                     'label' => 'People',
-                    'icon' => 'fa-user',
+                    'icon' => [
+                        'name' => 'testicon-user',
+                        'svg' => '<svg><!--user--></svg>',
+                    ],
                     'results' => [
                         [
                             'label' => 'John Wayne',
@@ -157,7 +160,10 @@ it('handles multiple result sets', function () {
                 ],
                 [
                     'label' => 'Cars',
-                    'icon' => 'fa-car',
+                    'icon' => [
+                        'name' => 'testicon-car',
+                        'svg' => '<svg><!--car--></svg>',
+                    ],
                     'results' => [
                         [
                             'label' => 'Aston Martin',
@@ -171,13 +177,13 @@ it('handles multiple result sets', function () {
 });
 
 it('allows multiple search terms', function () {
-    sharpconfig()->enableGlobalSearch(
+    sharp()->config()->enableGlobalSearch(
         new class extends SharpSearchEngine
         {
             public function searchFor(array $terms): void
             {
                 if ($terms[0] == '%john%' && $terms[1] == '%wayne%') {
-                    $this->addResultSet('People', 'fa-user')
+                    $this->addResultSet('People', 'testicon-user')
                         ->addResultLink(LinkToShowPage::make('person', 1), 'John Wayne');
                 }
             }

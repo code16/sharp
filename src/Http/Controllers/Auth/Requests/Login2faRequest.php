@@ -73,6 +73,6 @@ class Login2faRequest extends FormRequest
 
     private function getGuard(): StatefulGuard
     {
-        return Auth::guard(sharpConfig()->get('auth.guard'));
+        return Auth::guard(sharp()->config()->get('auth.guard'));
     }
 }

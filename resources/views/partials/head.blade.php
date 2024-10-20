@@ -1,4 +1,4 @@
 
-@if($faviconUrl = sharpConfig()->get('theme.favicon_url'))
+@if($faviconUrl = sharp()->config()->get('theme.favicon_url'))
     <link rel="icon" href="{{ $faviconUrl }}">
 @endif

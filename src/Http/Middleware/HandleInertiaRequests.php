@@ -27,7 +27,7 @@ class HandleInertiaRequests extends Middleware
     {
         return [
             ...parent::share($request),
-            'sharpVersion' => sharpVersion(),
+            'sharpVersion' => sharp()->version(),
             'locale' => app()->getLocale(),
             'session' => SessionData::from([
                 '_token' => session()->token(),
@@ -37,7 +37,7 @@ class HandleInertiaRequests extends Middleware
                     ? SessionStatusLevel::from(session('status_level'))
                     : null,
             ]),
-            'translations' => Cache::rememberForever('sharp.translations.'.app()->getLocale().'.'.sharpVersion(), function () {
+            'translations' => Cache::rememberForever('sharp.translations.'.app()->getLocale().'.'.sharp()->version(), function () {
                 return collect([
                     'sharp::action_bar',
                     'sharp::dashboard',
@@ -60,18 +60,18 @@ class HandleInertiaRequests extends Middleware
                     ->toArray();
             }),
             'config' => [
-                'sharp.auth.forgotten_password.enabled' => sharpConfig()->get('auth.forgotten_password.enabled'),
-                'sharp.auth.suggest_remember_me' => sharpConfig()->get('auth.suggest_remember_me'),
-                'sharp.custom_url_segment' => sharpConfig()->get('custom_url_segment'),
-                'sharp.display_sharp_version_in_title' => sharpConfig()->get('display_sharp_version_in_title'),
-                'sharp.display_breadcrumb' => sharpConfig()->get('display_breadcrumb'),
-                'sharp.name' => sharpConfig()->get('name'),
-                'sharp.search.enabled' => sharpConfig()->get('search.enabled'),
-                'sharp.search.placeholder' => sharpConfig()->get('search.placeholder'),
-                'sharp.theme.logo_height' => sharpConfig()->get('theme.logo_height'),
+                'sharp.auth.forgotten_password.enabled' => sharp()->config()->get('auth.forgotten_password.enabled'),
+                'sharp.auth.suggest_remember_me' => sharp()->config()->get('auth.suggest_remember_me'),
+                'sharp.custom_url_segment' => sharp()->config()->get('custom_url_segment'),
+                'sharp.display_sharp_version_in_title' => sharp()->config()->get('display_sharp_version_in_title'),
+                'sharp.display_breadcrumb' => sharp()->config()->get('display_breadcrumb'),
+                'sharp.name' => sharp()->config()->get('name'),
+                'sharp.search.enabled' => sharp()->config()->get('search.enabled'),
+                'sharp.search.placeholder' => sharp()->config()->get('search.placeholder'),
+                'sharp.theme.logo_height' => sharp()->config()->get('theme.logo_height'),
             ],
             'logo' => LogoData::optional(transform(
-                sharpConfig()->get('theme.logo_url'),
+                sharp()->config()->get('theme.logo_url'),
                 fn($url) => $url ? [
                     'svg' => str($url)->startsWith('/') && str($url)->endsWith('.svg') && $this->filesystem->exists(public_path($url))
                         ? $this->filesystem->get(public_path($url))

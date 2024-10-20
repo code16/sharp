@@ -15,7 +15,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
-    sharpConfig()->addEntity('person', PersonEntity::class);
+    sharp()->config()->addEntity('person', PersonEntity::class);
     login();
 });
 
@@ -218,11 +218,6 @@ it('gets authorizations of each instance', function () {
             return $instanceId != 3;
         }
 
-        public function update($user, $instanceId): bool
-        {
-            return $instanceId == 1;
-        }
-
         public function delete($user, $instanceId): bool
         {
             return $instanceId == 2;
@@ -235,7 +230,7 @@ it('gets authorizations of each instance', function () {
             ->has('entityList.authorizations', fn (Assert $config) => $config
                 ->where('create', true)
                 ->where('view', [1, 2])
-                ->where('update', [1])
+                ->where('reorder', true)
                 ->where('delete', [2])
             )
         );

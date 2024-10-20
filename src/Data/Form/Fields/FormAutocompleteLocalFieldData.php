@@ -9,7 +9,7 @@ use Code16\Sharp\Data\Form\Fields\Common\FormDynamicAttributeData;
 use Code16\Sharp\Enums\FormFieldType;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 
-final class FormAutocompleteFieldData extends Data
+final class FormAutocompleteLocalFieldData extends Data
 {
     #[Optional]
     #[LiteralTypeScriptType('string|number|null | { [locale:string]: string|number|null }')]
@@ -19,25 +19,18 @@ final class FormAutocompleteFieldData extends Data
         public string $key,
         #[LiteralTypeScriptType('"'.FormFieldType::Autocomplete->value.'"')]
         public FormFieldType $type,
-        #[LiteralTypeScriptType('"local" | "remote"')]
+        #[LiteralTypeScriptType('"local"')]
         public string $mode,
         public string $itemIdAttribute,
         public string $listItemTemplate,
         public string $resultItemTemplate,
-        public int $searchMinChars,
         #[LiteralTypeScriptType('Array<{ [key:string]: any }> | FormDynamicOptionsData')]
         public array $localValues,
-        public int $debounceDelay,
-        public string $dataWrapper,
         public ?string $placeholder = null,
         #[LiteralTypeScriptType('{ [key:string]: any } | null')]
         public ?array $templateData = null,
         /** @var array<string> */
         public ?array $searchKeys = null,
-        public ?string $remoteEndpoint = null,
-        #[LiteralTypeScriptType('"GET" | "POST" | null')]
-        public ?string $remoteMethod = null,
-        public ?string $remoteSearchAttribute = null,
         public ?bool $localized = null,
         /** @var DataCollection<FormDynamicAttributeData> */
         public ?DataCollection $dynamicAttributes = null,

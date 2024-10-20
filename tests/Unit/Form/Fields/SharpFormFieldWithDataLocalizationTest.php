@@ -1,6 +1,6 @@
 <?php
 
-use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
+use Code16\Sharp\Form\Fields\SharpFormAutocompleteLocalField;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
 use Code16\Sharp\Form\Fields\SharpFormTagsField;
@@ -40,7 +40,7 @@ it('allows to define the localized attribute for select field', function () {
 });
 
 it('allows to define the localized attribute for autocomplete field', function () {
-    $formField = SharpFormAutocompleteField::make('name', 'local')
+    $formField = SharpFormAutocompleteLocalField::make('name')
         ->setLocalValues(['1' => 'one'])
         ->setResultItemInlineTemplate('{{id}}')
         ->setListItemInlineTemplate('{{id}}')
