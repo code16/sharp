@@ -24,15 +24,6 @@
         --radius: 0.5rem;
     }
 
-    :root {
-        /*--primary-oklch: from var(--primary-hsl) .21 .04 h; !* default levels *!*/
-        --primary-oklch: from var(--primary-hsl) 0.3 0.1 h;
-        /*--muted-oklch: from var(--primary-hsl) .97 0 h; !* default levels *!*/
-        --muted-oklch: from var(--primary-hsl) 0.97 0.01 h;
-        /*--muted-foreground-oklch: from var(--primary-hsl) .55 .01 h; !* default levels *!*/
-        --muted-foreground-oklch: from var(--primary-hsl) 0.55 0.03 h;
-    }
-
     .dark {
         --background: 240 10% 3.9%;
         --foreground: 0 0% 98%;

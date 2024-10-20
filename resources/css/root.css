@@ -1,6 +1,9 @@
 
 @layer base {
     :root {
+        /**
+         * Legacy vars (TODO remove)
+         */
         --primary-hsl: hsl(var(--primary-h), var(--primary-s), var(--primary-l));
 
         --accent-bg-amount: 20%;

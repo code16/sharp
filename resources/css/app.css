@@ -1,6 +1,7 @@
 @import "./fonts.css";
 @import "./root.css";
 @import "./shadcn.css";
+@import "./shadcn-overrides.css";
 @import "./content.css";
 @import "./nprogress.css";
 

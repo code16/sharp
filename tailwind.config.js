@@ -119,7 +119,7 @@ const config = {
     plugins: [
         animate,
         containerQueries,
-        plugin(function ({ matchUtilities, theme }) {
+        plugin(function enableOklchFallbacks({ matchUtilities, theme }) {
             const fallbackColor = (value) => {
                 const color = typeof value === 'function' ? value({ opacityVariable: '--tw-bg-opacity', opacityValue: `var(--tw-bg-opacity)` }) : value;
                 return [
@@ -133,7 +133,7 @@ const config = {
                     'bg': (value) => {
                         const color = fallbackColor(value);
                         return color ? {
-                            '@supports not (color: oklch(0 0 0))': {
+                            '@supports not (color: oklch(from #000 l c h))': {
                                 'background-color': color,
                             }
                         } : null;
@@ -146,7 +146,7 @@ const config = {
                     'text': (value) => {
                         const color = fallbackColor(value);
                         return color ? {
-                            '@supports not (color: oklch(0 0 0))': {
+                            '@supports not (color: oklch(from #000 l c h))': {
                                 'color': color,
                             }
                         } : null;
@@ -159,7 +159,7 @@ const config = {
                     'border': (value) => {
                         const color = fallbackColor(value);
                         return color ? {
-                            '@supports not (color: oklch(0 0 0))': {
+                            '@supports not (color: oklch(from #000 l c h))': {
                                 'border-color': color,
                             }
                         } : null;
