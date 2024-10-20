@@ -4,21 +4,10 @@ namespace Code16\Sharp\Utils\Icons;
 
 use BladeUI\Icons\Exceptions\SvgNotFound;
 use BladeUI\Icons\Svg;
+use Illuminate\Support\Arr;
 
 class IconManager
 {
-    protected function resolveBladeIcon(string $icon): ?Svg
-    {
-        if($nameFromLegacy = $this->resolveLegacyFontAwesomeBladeIconName($icon)) {
-            try {
-                return svg($nameFromLegacy);
-            } catch (SvgNotFound) {
-                return null; // for legacy "fa-" class names we don't want to throw (if owenvoke/blade-fontawesome is not installed)
-            }
-        }
-        
-        return svg($icon);
-    }
     
     protected function resolveLegacyFontAwesomeBladeIconName(string $icon): ?string
     {
@@ -35,19 +24,40 @@ class IconManager
         return null;
     }
     
+    /**
+     * @throws SvgNotFound
+     */
+    protected function legacyIconToArray(string $resolvedBladeIconName): ?array
+    {
+        try {
+            return [
+                'name' => $resolvedBladeIconName,
+                'svg' => svg($resolvedBladeIconName)->toHtml(),
+            ];
+        } catch (SvgNotFound $e) {
+            if(! str_contains($e->getMessage(), 'fontawesome')) {
+                return null; // for legacy "fa-" class names we don't want to throw (if owenvoke/blade-fontawesome is not installed)
+            }
+            throw $e;
+        }
+    }
+    
+    /**
+     * @throws SvgNotFound
+     */
     public function iconToArray(?string $icon): ?array
     {
         if(!$icon) {
             return null;
         }
         
-        $svg = $this->resolveBladeIcon($icon);
+        if($nameFromLegacy = $this->resolveLegacyFontAwesomeBladeIconName($icon)) {
+            return $this->legacyIconToArray($nameFromLegacy);
+        }
         
-        return $svg
-            ? [
-                'name' => $svg->name(),
-                'svg' => $svg->toHtml(),
-            ]
-            : null;
+        return [
+            'name' => $icon,
+            'svg' => svg($icon)->toHtml(),
+        ];
     }
 }

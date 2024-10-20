@@ -127,6 +127,8 @@ it('raises validation errors', function () {
 });
 
 it('handles multiple result sets', function () {
+    $this->withoutExceptionHandling();
+    
     sharp()->config()->enableGlobalSearch(
         new class extends SharpSearchEngine
         {
