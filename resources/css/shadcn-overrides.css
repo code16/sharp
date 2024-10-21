@@ -4,10 +4,10 @@
     :root {
         /*--primary-oklch: from var(--sharp-config-primary) 0.21 0.04 h; !* default levels *!*/
         --primary-oklch: from var(--sharp-config-primary) 0.3 0.1 h;
-        /*--muted-oklch: from var(--sharp-config-primary) 0.97 0 h; !* default levels *!*/
-        --muted-oklch: from var(--sharp-config-primary) 0.97 0.005 h;
-        /*--muted-foreground-oklch: from var(--sharp-config-primary) 0.55 0.01 h; !* default levels *!*/
-        --muted-foreground-oklch: from var(--sharp-config-primary) 0.55 0.03 h;
+        --muted-oklch: from var(--sharp-config-primary) 0.97 0 h; /* default levels */
+        /*--muted-oklch: from var(--sharp-config-primary) 0.97 0.005 h;*/
+        --muted-foreground-oklch: from var(--sharp-config-primary) 0.55 0.01 h; /* default levels */
+        /*--muted-foreground-oklch: from var(--sharp-config-primary) 0.55 0.03 h;*/
         /*--sidebar-background-oklch: from var(--sharp-config-primary) 0.98 0 h; !* default levels *!*/
         --sidebar-background-oklch: from var(--sharp-config-primary) 0.98 0.005 h;
         /*--sidebar-foreground-oklch: from var(--sharp-config-primary) 0.37 0.01 h; !* default levels *!*/

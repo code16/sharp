@@ -28,7 +28,7 @@
         '--sticky-safe-left-offset': stuck ? `${Math.max(topbarSafeRect.left - selfRect.left, 0)}px` : '0px',
         '--sticky-safe-right-offset': stuck ? `${Math.max(selfRect.right - topbarSafeRect.right - parseInt(window.getComputedStyle(el).paddingRight), 0)}px` : '0px',
     }"
-        :data-stuck="stuck"
+        :data-stuck="stuck ? true : null"
         ref="el">
         <slot v-bind="{ stuck, largerThanTopbar: selfRect.height > topbarSafeRect.height }" />
     </div>

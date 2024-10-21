@@ -14,17 +14,15 @@
 </script>
 
 <template>
-    <Card class="my-4 first:mt-0 last:mb-0">
-        <CardContent>
-            <component v-if="embedData" :is="embed.tag">
-                <EmbedRenderer
-                    :data="embedData"
-                    :embed="embed"
-                >
-                    <slot />
-                </EmbedRenderer>
-            </component>
-        </CardContent>
-    </Card>
+    <div class="my-4 first:mt-0 last:mb-0 bg-background border rounded-md p-4">
+        <component v-if="embedData" :is="embed.tag">
+            <EmbedRenderer
+                :data="embedData"
+                :embed="embed"
+            >
+                <slot />
+            </EmbedRenderer>
+        </component>
+    </div>
 </template>
 

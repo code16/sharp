@@ -55,11 +55,12 @@
         <template v-if="hasLabelRow">
             <component
                 :is="stickyLabel ? StickyTop : 'div'"
+                class="group"
                 :class="{ 'top-[calc(var(--top-bar-height)+.625rem)] z-10 lg:sticky': stickyLabel }"
-                v-slot="{ stuck=false } = {}"
+                v-slot="{ stuck = false } = {}"
             >
                 <template v-if="stickyLabel">
-                    <div class="absolute bg-background transition-colors hidden border-b -inset-x-6 -top-3 -bottom-2.5 lg:block"
+                    <div class="absolute bg-background transition-colors hidden border-b -inset-x-6 -top-3 -bottom-2.5 lg:group-data-[stuck]:block"
                         :class="stuck ? 'border-border' : 'border-transparent'"></div>
                 </template>
                 <div class="relative flex">

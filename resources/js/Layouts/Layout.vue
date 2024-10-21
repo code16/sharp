@@ -7,7 +7,7 @@
 </script>
 
 <script setup lang="ts">
-    import { provide, ref } from "vue";
+    import { provide, ref, useTemplateRef } from "vue";
 import { CircleUser, ChevronsUpDown, LogOut, Menu, PanelLeftClose, PanelLeftOpen, Moon, Sun } from "lucide-vue-next";
 import Notifications from "@/components/Notifications.vue";
 import { useDialogs } from "@/utils/dialogs";
@@ -46,7 +46,7 @@ const dialogs = useDialogs();
 const menu = useMenu();
 const globalFilters = usePage().props.globalFilters as GlobalFiltersData | null;
 const showDesktopLeftNav = ref(true);
-const menuBoundary = ref<HTMLElement>();
+const menuBoundary = useTemplateRef<HTMLElement>('menuBoundary');
 provide('menuBoundary', menuBoundary);
 </script>
 
@@ -246,7 +246,7 @@ provide('menuBoundary', menuBoundary);
                                 <span class="sr-only">Toggle theme</span>
                             </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
+                        <DropdownMenuContent :collision-boundary="null" align="end">
                             <DropdownMenuLabel>
                                 {{ __('sharp::action_bar.color-mode-dropdown.label') }}
                             </DropdownMenuLabel>
@@ -260,7 +260,7 @@ provide('menuBoundary', menuBoundary);
                                 <span class="sr-only">Toggle user menu</span>
                             </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
+                        <DropdownMenuContent :collision-boundary="null" align="end">
                             <DropdownMenuLabel class="font-normal flex">
                                 <div class="flex flex-col space-y-1">
                                     <p class="text-sm font-medium leading-none">
@@ -318,7 +318,7 @@ provide('menuBoundary', menuBoundary);
                 <main class="relative flex-1 pt-4 lg:pt-6 pb-24">
                     <div class="absolute inset-0 -z-10">
                         <div class="container h-full">
-                            <div class="h-full" data-menu-boundary :ref="(el: HTMLElement) => menuBoundary = el"></div>
+                            <div class="h-full" data-menu-boundary ref="menuBoundary"></div>
                         </div>
                     </div>
                     <slot />

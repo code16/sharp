@@ -1,4 +1,3 @@
-import { PageProps as InertiaPageProps } from '@inertiajs/core';
 import { SessionData } from "@/types/generated";
 
 
@@ -10,7 +9,9 @@ export type SharpPageProps<T extends Record<string, unknown> = Record<string, un
 };
 
 declare module '@inertiajs/core' {
-    interface PageProps extends InertiaPageProps, SharpPageProps {}
+    interface PageProps extends SharpPageProps {
+        [key: string]: unknown;
+    }
 }
 
 declare module '@vue/runtime-core' {

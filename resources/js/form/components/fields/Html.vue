@@ -9,9 +9,11 @@
 
 <template>
     <FormFieldLayout v-bind="$props">
-        <TemplateRenderer
-            :template="field.template"
-            :template-data="value"
-        />
+        <div class="text-sm">
+            <TemplateRenderer
+                :template="field.template"
+                :template-data="value"
+            />
+        </div>
     </FormFieldLayout>
 </template>

@@ -77,7 +77,7 @@
         }"
         :label="field.label"
     >
-        <template v-if="field.html">
+        <template v-if="currentContent && field.html">
             <TextRenderer
                 class="content content-sm text-sm"
                 :content="currentContent"

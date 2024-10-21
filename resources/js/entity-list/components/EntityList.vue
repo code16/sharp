@@ -320,7 +320,7 @@
                             </template>
 
                             <template v-if="showCreateButton && entityList.authorizations.create && !reordering && !selecting">
-                                <template v-if="entityList.forms">
+                                <template v-if="entityList.forms?.length">
                                     <DropdownMenu>
                                         <DropdownMenuTrigger as-child>
                                             <Button class="h-8 gap-1" size="sm">
@@ -341,6 +341,7 @@
                                 </template>
                                 <template v-else>
                                     <Button
+                                        :as="Link"
                                         class="h-8 gap-1"
                                         size="sm"
                                         :disabled="reordering || selecting"
@@ -451,8 +452,8 @@
                                     </div>
                                     <div class="hidden lg:flex flex-wrap gap-2"
                                         :class="{
-                                                'opacity-0 pointer-events-none': searchExpanded,
-                                            }"
+                                            'opacity-0 pointer-events-none': searchExpanded,
+                                        }"
                                     >
                                         <template v-for="filter in entityList.visibleFilters" :key="filter.key">
                                             <SharpFilter
