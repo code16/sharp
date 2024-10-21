@@ -7,6 +7,8 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Validator;
 
 /**
+ * @deprecated use the new validation system. Will be removed in 10.x.
+ *
  * Sharp special implementation of Laravel's Validator to handle specific SharpFormField,
  * like the SharpFormEditorField and their ["text"=>...] structure.
  */

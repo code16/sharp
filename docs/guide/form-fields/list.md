@@ -12,21 +12,21 @@ Here's how we can build this:
 function buildFormFields()
 {
     $this->addField(
-        SharpFormListField::make("pieces")
-            ->setLabel("Art pieces")
+        SharpFormListField::make('pieces')
+            ->setLabel('Art pieces')
             ->setAddable()
             ->setRemovable()
             ->addItemField(
-                SharpFormDateField::make("acquisition_date")
-                    ->setLabel("Acquisition")
+                SharpFormDateField::make('acquisition_date')
+                    ->setLabel('Acquisition')
             )
             ->addItemField(
-                SharpFormTextField::make("title")
-                    ->setLabel("Title")
+                SharpFormTextField::make('title')
+                    ->setLabel('Title')
             )
             ->addItemField(
-                SharpFormSelectField::make("artist_id", [...])
-                    ->setLabel("Artist")
+                SharpFormSelectField::make('artist_id', /*[...]*/)
+                    ->setLabel('Artist')
             )
     );
 }
@@ -74,7 +74,7 @@ Example:
 
 ```php
 $list->setCollapsedItemInlineTemplate(
-    "Foreground: <strong>{{color}}</strong>"
+    'Foreground: <strong>{{color}}</strong>'
 )
 ```
 
@@ -110,18 +110,26 @@ Default: 10
 
 ## Layout
 
-The List item layout must be defined like the form itself, in the `buildFormLayout()` function. The item layout is managed as a Form column, with a `FormLayoutColumn` object. To link the column and the item, use the classic `withSingleField()` function with a second argument, a Closure accepting a `FormLayoutColumn`.
+The List item layout must be defined like the form itself, in the `buildFormLayout()` function. The item layout is managed as a Form column, with a `FormLayoutColumn` object. To link the column and the item, use the classic `withField()` function with a second argument, a Closure accepting a `FormLayoutColumn`.
 
 Here's an example for the Museum List defined above:
 
 ```php
-$this->addColumn(6, function(FormLayoutColumn $column) {
-     $column->withSingleField("pieces", function(FormLayoutColumn $listItem) {
-          $listItem->withSingleField("acquisition_date")
-              ->withSingleField("title")
-              ->withSingleField("artist_id");
-     });
- });
+class MyForm extends SharpForm
+{
+    // [...]
+    
+    function buildFormLayout(FormLayout $formLayout)
+    {
+        $this->addColumn(6, function (FormLayoutColumn $column) {
+             $column->withSingleField('pieces', function (FormLayoutColumn $listItem) {
+                  $listItem->withField('acquisition_date')
+                      ->withField('title')
+                      ->withField('artist_id');
+             });
+         });
+    }
+}
 ```
 
 ## Formatter

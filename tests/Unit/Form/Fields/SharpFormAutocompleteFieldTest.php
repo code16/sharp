@@ -1,390 +1,329 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Form\Fields;
-
 use Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException;
-use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
-use Code16\Sharp\Tests\SharpTestCase;
-use Illuminate\Support\Str;
+use Code16\Sharp\Form\Fields\SharpFormAutocompleteLocalField;
+use Code16\Sharp\Form\Fields\SharpFormAutocompleteRemoteField;
 
-class SharpFormAutocompleteFieldTest extends SharpTestCase
-{
-    protected function setUp(): void
-    {
-        parent::setUp();
+it('sets default values for local autocomplete', function () {
+    $defaultFormField = buildDefaultLocalAutocomplete([
+        1 => 'bob',
+    ]);
 
-        @unlink(resource_path('views/LIT.vue'));
-        @unlink(resource_path('views/RIT.vue'));
-        file_put_contents(resource_path('views/LIT.vue'), 'LIT-content');
-        file_put_contents(resource_path('views/RIT.vue'), 'RIT-content');
-    }
-
-    /** @test */
-    public function only_default_values_are_set()
-    {
-        $localValues = [
-            1 => 'bob',
-        ];
-
-        $defaultFormField = $this->getDefaultLocalAutocomplete($localValues);
-
-        $this->assertEquals(
-            [
-                'key' => 'field', 'type' => 'autocomplete',
-                'mode' => 'local', 'searchKeys' => ['value'],
-                'remoteMethod' => 'GET', 'itemIdAttribute' => 'id',
-                'listItemTemplate' => 'LIT-content',
-                'resultItemTemplate' => 'RIT-content',
-                'searchMinChars' => 1, 'localValues' => [
-                    ['id' => 1, 'label' => 'bob'],
-                ],
-                'remoteSearchAttribute' => 'query',
-                'dataWrapper' => '',
-                'debounceDelay' => 300,
+    expect($defaultFormField->toArray())
+        ->toEqual([
+            'key' => 'field',
+            'type' => 'autocomplete',
+            'mode' => 'local',
+            'searchKeys' => ['value'],
+            'itemIdAttribute' => 'id',
+            'listItemTemplate' => 'LIT-content',
+            'resultItemTemplate' => 'RIT-content',
+            'localValues' => [
+                ['id' => 1, 'label' => 'bob'],
             ],
-            $defaultFormField->toArray(),
-        );
-    }
+        ]);
+});
 
-    /** @test */
-    public function we_can_define_remote_attributes()
-    {
-        $formField = SharpFormAutocompleteField::make('field', 'remote')
-            ->setListItemTemplatePath('LIT.vue')
-            ->setResultItemTemplatePath('RIT.vue')
-            ->setRemoteMethodPOST()
-            ->setRemoteEndpoint('endpoint')
-            ->setRemoteSearchAttribute('attribute');
+it('sets default values for remote autocomplete', function () {
+    $defaultFormField = buildDefaultRemoteAutocomplete('/endpoint');
 
-        $this->assertArraySubset(
-            [
-                'remoteMethod' => 'POST', 'remoteEndpoint' => 'endpoint',
-                'remoteSearchAttribute' => 'attribute',
-            ],
-            $formField->toArray(),
-        );
-    }
+    expect($defaultFormField->toArray())
+        ->toEqual([
+            'key' => 'field',
+            'type' => 'autocomplete',
+            'mode' => 'remote',
+            'remoteMethod' => 'GET',
+            'remoteEndpoint' => '/endpoint',
+            'itemIdAttribute' => 'id',
+            'listItemTemplate' => 'LIT-content',
+            'resultItemTemplate' => 'RIT-content',
+            'searchMinChars' => 1,
+            'remoteSearchAttribute' => 'query',
+            'dataWrapper' => '',
+            'debounceDelay' => 300,
+        ]);
+});
 
-    /** @test */
-    public function we_can_define_localValues_as_a_id_label_array()
-    {
-        $formField = $this->getDefaultLocalAutocomplete([
+it('allows to define remote attributes', function () {
+    $formField = SharpFormAutocompleteRemoteField::make('field')
+        ->setListItemTemplatePath('LIT.vue')
+        ->setResultItemTemplatePath('RIT.vue')
+        ->setRemoteMethodPOST()
+        ->setRemoteEndpoint('endpoint')
+        ->setRemoteSearchAttribute('attribute');
+
+    expect($formField->toArray())
+        ->toHaveKey('remoteMethod', 'POST')
+        ->toHaveKey('remoteEndpoint', 'endpoint')
+        ->toHaveKey('remoteSearchAttribute', 'attribute');
+});
+
+it('allows to define localValues as a id label array', function () {
+    $formField = buildDefaultLocalAutocomplete([
+        ['id' => 1, 'label' => 'Elem 1'],
+        ['id' => 2, 'label' => 'Elem 2'],
+    ]);
+
+    expect($formField->toArray()['localValues'])
+        ->toEqual([
             ['id' => 1, 'label' => 'Elem 1'],
             ['id' => 2, 'label' => 'Elem 2'],
         ]);
+});
 
-        $this->assertArraySubset(
-            ['localValues' => [
-                ['id' => 1, 'label' => 'Elem 1'],
-                ['id' => 2, 'label' => 'Elem 2'],
-            ]],
-            $formField->toArray(),
-        );
-    }
+it('allows to define_localValues_as_an_object_array', function () {
+    $formField = buildDefaultLocalAutocomplete([
+        (object) ['id' => 1, 'label' => 'Elem 1'],
+        (object) ['id' => 2, 'label' => 'Elem 2'],
+    ]);
 
-    /** @test */
-    public function we_can_define_localValues_as_an_object_array()
-    {
-        $formField = $this->getDefaultLocalAutocomplete([
+    expect($formField->toArray()['localValues'])
+        ->toEqual([
             (object) ['id' => 1, 'label' => 'Elem 1'],
             (object) ['id' => 2, 'label' => 'Elem 2'],
         ]);
+});
 
-        $this->assertArraySubset(
-            ['localValues' => [
-                (object) ['id' => 1, 'label' => 'Elem 1'],
-                (object) ['id' => 2, 'label' => 'Elem 2'],
-            ]],
-            $formField->toArray(),
-        );
-    }
+it('allows to define searchMinChars', function () {
+    $formField = buildDefaultRemoteAutocomplete()
+        ->setSearchMinChars(3);
 
-    /** @test */
-    public function we_can_define_searchMinChars()
-    {
-        $formField = $this->getDefaultLocalAutocomplete()
-            ->setSearchMinChars(3);
+    expect($formField->toArray())
+        ->toHaveKey('searchMinChars', 3);
+});
 
-        $this->assertArraySubset(
-            [
-                'searchMinChars' => 3,
-            ],
-            $formField->toArray(),
-        );
-    }
+it('allows to define debounceDelay', function () {
+    $formField = buildDefaultRemoteAutocomplete()
+        ->setDebounceDelayInMilliseconds(500);
 
-    /** @test */
-    public function we_can_define_debounceDelay()
-    {
-        $formField = $this->getDefaultLocalAutocomplete()
-            ->setDebounceDelayInMilliseconds(500);
+    expect($formField->toArray())
+        ->toHaveKey('debounceDelay', 500);
+});
 
-        $this->assertArraySubset(
-            [
-                'debounceDelay' => 500,
-            ],
-            $formField->toArray(),
-        );
-    }
+it('allows to define setDataWrapper', function () {
+    $formField = buildDefaultRemoteAutocomplete()
+        ->setDataWrapper('test');
 
-    /** @test */
-    public function we_can_define_setDataWrapper()
-    {
-        $formField = $this->getDefaultLocalAutocomplete()
-            ->setDataWrapper('test');
+    expect($formField->toArray())
+        ->toHaveKey('dataWrapper', 'test');
+});
 
-        $this->assertArraySubset(
-            [
-                'dataWrapper' => 'test',
-            ],
-            $formField->toArray(),
-        );
-    }
+it('allows to define inline templates', function () {
+    $formField = buildDefaultLocalAutocomplete()
+        ->setListItemInlineTemplate('<strong>LIT</strong>')
+        ->setResultItemInlineTemplate('<strong>RIT</strong>');
 
-    /** @test */
-    public function we_can_define_inline_templates()
-    {
-        $formField = $this->getDefaultLocalAutocomplete()
-            ->setListItemInlineTemplate('<strong>LIT</strong>')
-            ->setResultItemInlineTemplate('<strong>RIT</strong>');
+    expect($formField->toArray())
+        ->toHaveKey('listItemTemplate', '<strong>LIT</strong>')
+        ->toHaveKey('resultItemTemplate', '<strong>RIT</strong>');
+});
 
-        $this->assertArraySubset(
-            [
-                'listItemTemplate' => '<strong>LIT</strong>',
-                'resultItemTemplate' => '<strong>RIT</strong>',
-            ],
-            $formField->toArray(),
-        );
-    }
+it('allows to define templateData', function () {
+    $formField = buildDefaultLocalAutocomplete()
+        ->setAdditionalTemplateData([
+            'lang' => ['fr', 'de'],
+        ]);
 
-    /** @test */
-    public function we_can_define_templateData()
-    {
-        $formField = $this->getDefaultLocalAutocomplete()
-            ->setAdditionalTemplateData([
-                'lang' => ['fr', 'de'],
-            ]);
+    expect($formField->toArray())
+        ->toHaveKey('templateData', [
+            'lang' => ['fr', 'de'],
+        ]);
+});
 
-        $this->assertArraySubset(
-            [
-                'templateData' => [
-                    'lang' => ['fr', 'de'],
-                ],
-            ],
-            $formField->toArray(),
-        );
-    }
+it('disallows to define a remote autocomplete without remoteEndpoint', function () {
+    $this->expectException(SharpFormFieldValidationException::class);
 
-    /** @test */
-    public function we_cant_define_a_remote_autocomplete_without_remoteEndpoint()
-    {
-        $this->expectException(SharpFormFieldValidationException::class);
+    SharpFormAutocompleteRemoteField::make('field')
+        ->setListItemTemplatePath('LIT.vue')
+        ->setResultItemTemplatePath('RIT.vue')
+        ->toArray();
+});
 
-        SharpFormAutocompleteField::make('field', 'remote')
-            ->setListItemTemplatePath('LIT.vue')
-            ->setResultItemTemplatePath('RIT.vue')
-            ->toArray();
-    }
+it('allows to define linked localValues with dynamic attributes', function () {
+    $formField = buildDefaultLocalAutocomplete([
+        'A' => [
+            'A1' => 'test A1',
+            'A2' => 'test A2',
+        ],
+        'B' => [
+            'B1' => 'test B1',
+            'B2' => 'test B2',
+        ],
+    ])->setLocalValuesLinkedTo('master');
 
-    /** @test */
-    public function we_can_define_linked_localValues_with_dynamic_attributes()
-    {
-        $formField = $this->getDefaultLocalAutocomplete([
+    expect($formField->toArray()['localValues'])
+        ->toEqual([
             'A' => [
-                'A1' => 'test A1',
-                'A2' => 'test A2',
+                ['id' => 'A1', 'label' => 'test A1'],
+                ['id' => 'A2', 'label' => 'test A2'],
             ],
             'B' => [
-                'B1' => 'test B1',
-                'B2' => 'test B2',
+                ['id' => 'B1', 'label' => 'test B1'],
+                ['id' => 'B2', 'label' => 'test B2'],
             ],
-        ])->setLocalValuesLinkedTo('master');
+        ]);
+});
 
-        $this->assertArraySubset(
-            ['localValues' => [
-                'A' => [
-                    ['id' => 'A1', 'label' => 'test A1'],
-                    ['id' => 'A2', 'label' => 'test A2'],
-                ],
-                'B' => [
-                    ['id' => 'B1', 'label' => 'test B1'],
-                    ['id' => 'B2', 'label' => 'test B2'],
-                ],
-            ]],
-            $formField->toArray(),
-        );
-    }
+it('allows to define linked localValues with dynamic attributes and localization', function () {
+    $formField = buildDefaultLocalAutocomplete([
+        'A' => [
+            'A1' => ['fr' => 'test A1 fr', 'en' => 'test A1 en'],
+            'A2' => ['fr' => 'test A2 fr', 'en' => 'test A2 en'],
+        ],
+        'B' => [
+            'B1' => ['fr' => 'test B1 fr', 'en' => 'test B1 en'],
+            'B2' => ['fr' => 'test B2 fr', 'en' => 'test B2 en'],
+        ],
+    ])->setLocalValuesLinkedTo('master')->setLocalized();
 
-    /** @test */
-    public function we_can_define_linked_localValues_with_dynamic_attributes_and_localization()
-    {
-        $formField = $this->getDefaultLocalAutocomplete([
+    expect($formField->toArray()['localValues'])
+        ->toEqual([
             'A' => [
-                'A1' => ['fr' => 'test A1 fr', 'en' => 'test A1 en'],
-                'A2' => ['fr' => 'test A2 fr', 'en' => 'test A2 en'],
+                ['id' => 'A1', 'label' => ['fr' => 'test A1 fr', 'en' => 'test A1 en']],
+                ['id' => 'A2', 'label' => ['fr' => 'test A2 fr', 'en' => 'test A2 en']],
             ],
             'B' => [
-                'B1' => ['fr' => 'test B1 fr', 'en' => 'test B1 en'],
-                'B2' => ['fr' => 'test B2 fr', 'en' => 'test B2 en'],
+                ['id' => 'B1', 'label' => ['fr' => 'test B1 fr', 'en' => 'test B1 en']],
+                ['id' => 'B2', 'label' => ['fr' => 'test B2 fr', 'en' => 'test B2 en']],
             ],
-        ])->setLocalValuesLinkedTo('master')->setLocalized();
+        ]);
+});
 
-        $this->assertArraySubset(
-            ['localValues' => [
-                'A' => [
-                    ['id' => 'A1', 'label' => ['fr' => 'test A1 fr', 'en' => 'test A1 en']],
-                    ['id' => 'A2', 'label' => ['fr' => 'test A2 fr', 'en' => 'test A2 en']],
-                ],
-                'B' => [
-                    ['id' => 'B1', 'label' => ['fr' => 'test B1 fr', 'en' => 'test B1 en']],
-                    ['id' => 'B2', 'label' => ['fr' => 'test B2 fr', 'en' => 'test B2 en']],
-                ],
-            ]],
-            $formField->toArray(),
-        );
-    }
+it('allows to define linked localValues with dynamic attributes on multiple master fields', function () {
+    $formField = buildDefaultLocalAutocomplete([
+        'A' => [
+            'A1' => [
+                'A11' => 'test A11',
+                'A12' => 'test A12',
+            ],
+            'A2' => [
+                'A21' => 'test A21',
+                'A22' => 'test A22',
+            ],
+        ],
+        'B' => [
+            'B1' => [
+                'B11' => 'test B11',
+                'B12' => 'test B12',
+            ],
+        ],
+    ])->setLocalValuesLinkedTo('master', 'master2');
 
-    /** @test */
-    public function we_can_define_linked_localValues_with_dynamic_attributes_on_multiple_master_fields()
-    {
-        $formField = $this->getDefaultLocalAutocomplete([
+    expect($formField->toArray()['localValues'])
+        ->toEqual([
             'A' => [
                 'A1' => [
-                    'A11' => 'test A11',
-                    'A12' => 'test A12',
+                    ['id' => 'A11', 'label' => 'test A11'],
+                    ['id' => 'A12', 'label' => 'test A12'],
                 ],
                 'A2' => [
-                    'A21' => 'test A21',
-                    'A22' => 'test A22',
+                    ['id' => 'A21', 'label' => 'test A21'],
+                    ['id' => 'A22', 'label' => 'test A22'],
                 ],
             ],
             'B' => [
                 'B1' => [
-                    'B11' => 'test B11',
-                    'B12' => 'test B12',
+                    ['id' => 'B11', 'label' => 'test B11'],
+                    ['id' => 'B12', 'label' => 'test B12'],
                 ],
             ],
-        ])->setLocalValuesLinkedTo('master', 'master2');
+        ]);
+});
 
-        $this->assertArraySubset(
-            ['localValues' => [
-                'A' => [
-                    'A1' => [
-                        ['id' => 'A11', 'label' => 'test A11'],
-                        ['id' => 'A12', 'label' => 'test A12'],
-                    ],
-                    'A2' => [
-                        ['id' => 'A21', 'label' => 'test A21'],
-                        ['id' => 'A22', 'label' => 'test A22'],
-                    ],
-                ],
-                'B' => [
-                    'B1' => [
-                        ['id' => 'B11', 'label' => 'test B11'],
-                        ['id' => 'B12', 'label' => 'test B12'],
-                    ],
-                ],
-            ]],
-            $formField->toArray(),
-        );
-    }
+it('allows to define linked remote endpoint with dynamic attributes', function () {
+    $formField = buildDefaultDynamicRemoteAutocomplete(
+        'autocomplete/{{master}}/endpoint',
+    );
 
-    /** @test */
-    public function we_can_define_linked_remote_endpoint_with_dynamic_attributes()
-    {
-        $formField = $this->getDefaultDynamicRemoteAutocomplete(
-            'autocomplete/{{master}}/endpoint',
-        );
-
-        $this->assertArraySubset([
-            'remoteEndpoint' => 'autocomplete/{{master}}/endpoint',
-            'dynamicAttributes' => [
-                [
-                    'name' => 'remoteEndpoint',
-                    'type' => 'template',
-                ],
+    expect($formField->toArray())
+        ->toHaveKey('remoteEndpoint', 'autocomplete/{{master}}/endpoint')
+        ->toHaveKey('dynamicAttributes', [
+            [
+                'name' => 'remoteEndpoint',
+                'type' => 'template',
+                'default' => null,
             ],
+        ]);
+});
+
+it('allows to define linked remote endpoint with default value with dynamic attributes', function () {
+    $master = Str::random(4);
+
+    $formField = buildDefaultDynamicRemoteAutocomplete(
+        'autocomplete/{{master}}/endpoint', [
+            'master' => $master,
         ],
-            $formField->toArray(),
-        );
-    }
+    );
 
-    /** @test */
-    public function we_can_define_linked_remote_endpoint_with_default_value_with_dynamic_attributes()
-    {
-        $master = Str::random(4);
-
-        $formField = $this->getDefaultDynamicRemoteAutocomplete(
-            'autocomplete/{{master}}/endpoint', [
-                'master' => $master,
+    expect($formField->toArray())
+        ->toHaveKey('remoteEndpoint', 'autocomplete/{{master}}/endpoint')
+        ->toHaveKey('dynamicAttributes', [
+            [
+                'name' => 'remoteEndpoint',
+                'type' => 'template',
+                'default' => "autocomplete/$master/endpoint",
             ],
-        );
+        ]);
+});
 
-        $this->assertArraySubset([
-            'remoteEndpoint' => 'autocomplete/{{master}}/endpoint',
-            'dynamicAttributes' => [
-                [
-                    'name' => 'remoteEndpoint',
-                    'type' => 'template',
-                    'default' => "autocomplete/$master/endpoint",
-                ],
-            ],
+it('allows to define linked remote endpoint with multiple default value with dynamic attributes', function () {
+    $master = Str::random(4);
+    $secondary = Str::random(4);
+
+    $formField = buildDefaultDynamicRemoteAutocomplete(
+        'autocomplete/{{master}}/{{secondary}}/endpoint', [
+            'master' => $master,
+            'secondary' => $secondary,
         ],
-            $formField->toArray(),
-        );
-    }
+    );
 
-    /** @test */
-    public function we_can_define_linked_remote_endpoint_with_multiple_default_value_with_dynamic_attributes()
-    {
-        $master = Str::random(4);
-        $secondary = Str::random(4);
-
-        $formField = $this->getDefaultDynamicRemoteAutocomplete(
-            'autocomplete/{{master}}/{{secondary}}/endpoint', [
-                'master' => $master,
-                'secondary' => $secondary,
+    expect($formField->toArray())
+        ->toHaveKey('remoteEndpoint', 'autocomplete/{{master}}/{{secondary}}/endpoint')
+        ->toHaveKey('dynamicAttributes', [
+            [
+                'name' => 'remoteEndpoint',
+                'type' => 'template',
+                'default' => "autocomplete/$master/$secondary/endpoint",
             ],
-        );
+        ]);
+});
 
-        $this->assertArraySubset([
-            'remoteEndpoint' => 'autocomplete/{{master}}/{{secondary}}/endpoint',
-            'dynamicAttributes' => [
-                [
-                    'name' => 'remoteEndpoint',
-                    'type' => 'template',
-                    'default' => "autocomplete/$master/$secondary/endpoint",
-                ],
-            ],
-        ],
-            $formField->toArray(),
-        );
-    }
+function buildDefaultLocalAutocomplete(?array $localValues = null): SharpFormAutocompleteLocalField
+{
+    createFakeAutocompleteFieldTemplates();
 
-    /**
-     * @param  array|null  $localValues
-     * @return SharpFormAutocompleteField
-     */
-    private function getDefaultLocalAutocomplete($localValues = null)
-    {
-        return SharpFormAutocompleteField::make('field', 'local')
-            ->setListItemTemplatePath('LIT.vue')
-            ->setResultItemTemplatePath('RIT.vue')
-            ->setLocalValues($localValues ?: [
-                1 => 'bob',
-            ]);
-    }
+    return SharpFormAutocompleteLocalField::make('field')
+        ->setListItemTemplatePath('LIT.vue')
+        ->setResultItemTemplatePath('RIT.vue')
+        ->setLocalValues($localValues ?: [
+            1 => 'bob',
+        ]);
+}
 
-    /**
-     * @param  string  $remoteEndpoint
-     * @param  array  $defaultValues
-     * @return SharpFormAutocompleteField
-     */
-    private function getDefaultDynamicRemoteAutocomplete($remoteEndpoint, array $defaultValues = [])
-    {
-        return SharpFormAutocompleteField::make('field', 'remote')
-            ->setListItemTemplatePath('LIT.vue')
-            ->setResultItemTemplatePath('RIT.vue')
-            ->setDynamicRemoteEndpoint($remoteEndpoint, $defaultValues);
-    }
+function buildDefaultRemoteAutocomplete(string $remoteEndpoint = '/endpoint'): SharpFormAutocompleteRemoteField
+{
+    createFakeAutocompleteFieldTemplates();
+
+    return SharpFormAutocompleteRemoteField::make('field')
+        ->setRemoteEndpoint($remoteEndpoint)
+        ->setListItemTemplatePath('LIT.vue')
+        ->setResultItemTemplatePath('RIT.vue');
+}
+
+function buildDefaultDynamicRemoteAutocomplete(string $remoteEndpoint, array $defaultValues = []): SharpFormAutocompleteRemoteField
+{
+    createFakeAutocompleteFieldTemplates();
+
+    return SharpFormAutocompleteRemoteField::make('field')
+        ->setListItemTemplatePath('LIT.vue')
+        ->setResultItemTemplatePath('RIT.vue')
+        ->setDynamicRemoteEndpoint($remoteEndpoint, $defaultValues);
+}
+
+function createFakeAutocompleteFieldTemplates(): void
+{
+    @unlink(resource_path('views/LIT.vue'));
+    @unlink(resource_path('views/RIT.vue'));
+    file_put_contents(resource_path('views/LIT.vue'), 'LIT-content');
+    file_put_contents(resource_path('views/RIT.vue'), 'RIT-content');
 }

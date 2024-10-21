@@ -1,0 +1,147 @@
+<template>
+    <div :class="{ 'SharpDataList--reordering': reordering }" :style="styles">
+        <div class="SharpDataList__table SharpDataList__table--border">
+            <slot name="prepend"></slot>
+            <template v-if="!hideHeader">
+                <div class="SharpDataList__thead" ref="head">
+                    <DataListRow :columns="columns" header>
+                        <template v-slot:cell="{ column }">
+                            <div class="row">
+                                <div class="col-auto">
+                                    <div class="row align-items-center gx-2">
+                                        <div class="col" style="min-width: 0">
+                                            <div class="overflow-hidden">
+                                                {{ column.label }}
+                                            </div>
+                                        </div>
+                                        <template v-if="column.sortable">
+                                            <div class="col-auto">
+                                                <svg class="SharpDataList__caret"
+                                                    :class="{
+                                                        'SharpDataList__caret--selected': sort === column.key,
+                                                        'SharpDataList__caret--ascending': sort === column.key && dir === 'asc'
+                                                    }"
+                                                    width="10" height="5" viewBox="0 0 10 5" fill-rule="evenodd"
+                                                >
+                                                    <path d="M10 0L5 5 0 0z"></path>
+                                                </svg>
+                                                <a class="SharpDataList__sort-link" @click.prevent="handleSortClicked(column.key)" href=""></a>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                        <template v-if="$slots['append-head']" v-slot:append>
+                            <slot name="append-head" />
+                        </template>
+                    </DataListRow>
+                </div>
+            </template>
+            <div class="SharpDataList__tbody" ref="body">
+                <Draggable :options="draggableOptions" :model-value="currentItems" @input="handleItemsChanged">
+                    <template #item="{ element }">
+                        <slot name="item" :item="element" />
+                    </template>
+                </Draggable>
+                <slot name="append-body" />
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    import DataListRow from './DataListRow.vue';
+    // import Draggable from 'vuedraggable';
+
+    export default {
+        components: {
+            DataListRow,
+            Draggable,
+        },
+        props: {
+            items: Array,
+            columns: Array,
+
+            reordering: Boolean,
+
+            sort: String,
+            dir: String,
+
+            hideHeader: Boolean,
+        },
+        data() {
+            return {
+                reorderedItems: null,
+
+                //layout
+                prependWidth: 0,
+                appendWidth: 0,
+            }
+        },
+        watch: {
+            reordering(active) {
+                this.handleReorderingChanged(active);
+            }
+        },
+        computed: {
+            draggableOptions() {
+                return {
+                    disabled: !this.reordering
+                }
+            },
+            currentItems() {
+                return this.reordering ? this.reorderedItems : this.items;
+            },
+            isEmpty() {
+                return (this.items||[]).length === 0;
+            },
+            styles() {
+                return {
+                    '--prepend-width': this.prependWidth ? `${this.prependWidth}px` : null,
+                    '--append-width': this.appendWidth ? `${this.appendWidth}px` : null,
+                }
+            },
+        },
+        methods: {
+            handleItemsChanged(items) {
+                this.reorderedItems = items;
+                this.$emit('change', items);
+            },
+            handleSortClicked(columnKey) {
+                this.$emit('sort-change', {
+                    prop: columnKey,
+                    dir: this.sort === columnKey
+                        ? (this.dir === 'asc' ? 'desc' : 'asc')
+                        : 'asc'
+                });
+            },
+            handleReorderingChanged(active) {
+                this.reorderedItems = active ? [...this.items] : null;
+            },
+            async updateLayout() {
+                this.appendWidth = 0;
+                await this.$nextTick();
+                const headAppendWidth = this.$refs.head?.querySelector('.SharpDataList__row-append')?.offsetWidth ?? 0;
+                const bodyAppendWidth = this.$refs.body?.querySelector('.SharpDataList__row-append')?.offsetWidth ?? 0;
+                const bodyPrependWidth = this.$refs.body?.querySelector('.SharpDataList__row-prepend')?.offsetWidth ?? 0;
+                this.appendWidth = Math.max(headAppendWidth, bodyAppendWidth);
+                this.prependWidth = bodyPrependWidth;
+            }
+        },
+        updated() {
+            // const headAppendWidth = this.$refs.head?.querySelector('.SharpDataList__row-append')?.offsetWidth ?? 0;
+            // const bodyAppendWidth = this.$refs.body?.querySelector('.SharpDataList__row-append')?.offsetWidth ?? 0;
+            // const bodyPrependWidth = this.$refs.body?.querySelector('.SharpDataList__row-prepend')?.offsetWidth ?? 0;
+            // this.appendWidth = Math.max(headAppendWidth, bodyAppendWidth);
+            // this.prependWidth = bodyPrependWidth;
+        },
+        mounted() {
+            this.updateLayout();
+            window.addEventListener('resize', this.updateLayout);
+        },
+        destroyed() {
+            window.removeEventListener('resize', this.updateLayout);
+        }
+    }
+</script>

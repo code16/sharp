@@ -10,6 +10,6 @@
     </svg>
 
     <small class="sharp-file__name">
-        {{ $name }}
+        {{ $legend ?? $name }}
     </small>
 </p>

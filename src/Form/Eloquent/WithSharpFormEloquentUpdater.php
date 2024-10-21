@@ -25,21 +25,21 @@ trait WithSharpFormEloquentUpdater
      */
     public function save(Model $instance, array $data): Model
     {
-        // First transform data, passing false as a second parameter to allow partial objects.
-        // This is important: this save() can be the second one called in the same request
-        // for any field which formatter required a delay in his execution.
-        $data = $this->applyTransformers($data, false);
+        $data = $this->applyTransformers($data, forceFullObject: false);
 
-        // Then handle manually ignored attributes...
+        // Handle manually ignored attributes
         if (count($this->ignoredAttributes)) {
             $data = collect($data)
                 ->filter(fn ($value, $attribute) => ! in_array($attribute, $this->ignoredAttributes))
                 ->all();
         }
 
-        // Finally call updater
+        // Call updater
         return app(EloquentModelUpdater::class)
             ->initRelationshipsConfiguration($this->getFormListFieldsConfiguration())
+            ->fillAfterUpdateUsing(
+                fn ($instanceId) => $this->formatDataAfterUpdate($data, $instanceId)
+            )
             ->update($instance, $data);
     }
 
@@ -50,16 +50,13 @@ trait WithSharpFormEloquentUpdater
     protected function getFormListFieldsConfiguration(): Collection
     {
         return collect($this->fieldsContainer()->getFields())
-            ->filter(function ($field) {
-                return $field instanceof SharpFormListField
-                    && $field->isSortable();
-            })
-            ->map(function ($listField) {
-                return [
-                    'key' => $listField->key(),
-                    'orderAttribute' => $listField->orderAttribute(),
-                ];
-            })
+            ->filter(
+                fn ($field) => $field instanceof SharpFormListField && $field->isSortable()
+            )
+            ->map(fn ($listField) => [
+                'key' => $listField->key(),
+                'orderAttribute' => $listField->orderAttribute(),
+            ])
             ->keyBy('key');
     }
 }

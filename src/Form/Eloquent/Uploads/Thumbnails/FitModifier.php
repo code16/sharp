@@ -6,9 +6,13 @@ use Intervention\Image\Interfaces\ImageInterface;
 
 class FitModifier extends ThumbnailModifier
 {
+    public function __construct(private readonly int $width, private readonly int $height)
+    {
+    }
+
     public function apply(ImageInterface $image): ImageInterface
     {
-        return $image->cover($this->params['w'], $this->params['h']);
+        return $image->cover($this->width, $this->height);
     }
 
     public function resized(): bool
