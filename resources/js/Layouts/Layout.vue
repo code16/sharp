@@ -56,101 +56,101 @@ provide('menuBoundary', menuBoundary);
             'min-[1244px]:grid-cols-[280px_1fr]', // collapse only before 1024px+220px to prevent EL layout shift
             showDesktopLeftNav ? 'md:grid' : 'xl:grid'
         ]">
-            <div class="hidden border-r bg-muted/40" :class="showDesktopLeftNav ? 'md:block' : 'xl:block'">
-                    <div class="flex h-full max-h-screen flex-col gap-2 sticky top-0">
-                        <div class="flex h-14 items-center border-b px-4 lg:h-[60px] xl:px-6">
-                            <template v-if="$page.props.logo">
+            <div class="hidden border-r border-sidebar-border bg-sidebar" :class="showDesktopLeftNav ? 'md:block' : 'xl:block'">
+                <div class="flex h-full max-h-screen flex-col gap-2 sticky top-0">
+                    <div class="flex h-14 items-center px-4 lg:h-[60px] xl:px-6">
+                        <template v-if="$page.props.logo">
+                            <div class="text-sidebar-accent-foreground">
                                 <Logo />
-                            </template>
-                            <template v-else>
-                                <div class="flex items-center gap-2 font-semibold">
-                                    <div class="grid place-content-center w-6 h-6">
-                                        <SharpLogoMini class="w-3 h-3" />
-                                    </div>
-                                    <span>
-                                        {{ config('sharp.name') }}
-                                    </span>
+                            </div>
+                        </template>
+                        <template v-else>
+                            <div class="flex items-center gap-2 font-semibold">
+                                <div class="grid place-content-center w-6 h-6">
+                                    <SharpLogoMini class="w-3 h-3" />
                                 </div>
-                            </template>
-                            <!--                    <Button variant="outline" size="icon" class="ml-auto h-8 w-8">-->
-                            <!--                        <Bell class="h-4 w-4" />-->
-                            <!--                        <span class="sr-only">Toggle notifications</span>-->
-                            <!--                    </Button>-->
-                        </div>
-                        <div class="flex-1 px-2 xl:px-4">
-                            <template v-if="globalFilters">
-                                <div class="mb-4 mt-2">
-                                    <GlobalFilters :global-filters="globalFilters" />
-                                </div>
-                            </template>
-                            <nav class="grid items-start text-sm font-medium">
-                                <template v-for="item in menu.items">
-                                    <template v-if="item.children">
-                                        <div class="py-2 mb-4 last:mb-0">
-                                            <Collapsible default-open v-slot="{ open }">
-                                                <div class="flex items-center space-x-4 mb-2">
-                                                    <h2 class="flex-1 text-lg font-semibold pl-3 tracking-tight">
-                                                        {{ item.label }}
-                                                    </h2>
-                                                    <template v-if="item.isCollapsible">
-                                                        <CollapsibleTrigger as-child>
-                                                            <Button class="gap-3" size="sm" variant="ghost">
-                                                                <ChevronsUpDown class="h-4 w-4" />
-                                                            </Button>
-                                                        </CollapsibleTrigger>
-                                                    </template>
-                                                </div>
-                                                <CollapsibleContent>
-                                                    <ul>
-                                                        <template v-for="childItem in item.children">
-                                                            <li>
-                                                                <template v-if="childItem.isSeparator">
-                                                                    <hr>
-                                                                </template>
-                                                                <template v-else>
-                                                                    <component :is="childItem.isExternalLink ? 'a' : Link"
-                                                                        :href="childItem.url"
-                                                                        class="flex items-center gap-3 rounded-lg px-3 py-2 min-w-0 transition-all hover:text-primary"
-                                                                        :class="childItem.current ? 'bg-muted text-primary' : 'text-muted-foreground'"
-                                                                    >
-                                                                        <template v-if="childItem.icon">
-                                                                            <Icon :icon="childItem.icon" class="size-4" />
-                                                                        </template>
-                                                                        <div class="min-w-0 break-words">
-                                                                            {{ childItem.label }}
-                                                                        </div>
-                                                                    </component>
-                                                                </template>
-                                                            </li>
-                                                        </template>
-                                                    </ul>
-                                                </CollapsibleContent>
-                                            </Collapsible>
-                                        </div>
-                                    </template>
-                                    <template v-else>
-                                        <component :is="item.isExternalLink ? 'a' : Link"
-                                            :href="item.url"
-                                            class="flex items-center gap-3 rounded-lg px-3 py-2 min-w-0 transition-all hover:text-primary"
-                                            :class="item.current ? 'bg-muted text-primary' : 'text-muted-foreground'"
-                                        >
-                                            <template v-if="item.icon">
-                                                <Icon :icon="item.icon" class="size-4" />
-                                            </template>
-                                            <div class="min-w-0 break-words">
-                                                {{ item.label }}
+                                <span>
+                                    {{ config('sharp.name') }}
+                                </span>
+                            </div>
+                        </template>
+                        <!--                    <Button variant="outline" size="icon" class="ml-auto h-8 w-8">-->
+                        <!--                        <Bell class="h-4 w-4" />-->
+                        <!--                        <span class="sr-only">Toggle notifications</span>-->
+                        <!--                    </Button>-->
+                    </div>
+                    <div class="flex-1 px-2 xl:px-4">
+                        <template v-if="globalFilters">
+                            <div class="mb-4 mt-2">
+                                <GlobalFilters :global-filters="globalFilters" />
+                            </div>
+                        </template>
+                        <nav class="grid items-start text-sm font-medium">
+                            <template v-for="item in menu.items">
+                                <template v-if="item.children">
+                                    <div class="py-2 mb-4 last:mb-0">
+                                        <Collapsible default-open v-slot="{ open }">
+                                            <div class="flex items-center space-x-4 mb-2">
+                                                <h2 class="flex-1 text-lg font-semibold pl-3 text-sidebar-foreground tracking-tight">
+                                                    {{ item.label }}
+                                                </h2>
+                                                <template v-if="item.isCollapsible">
+                                                    <CollapsibleTrigger as-child>
+                                                        <Button class="gap-3" size="sm" variant="ghost">
+                                                            <ChevronsUpDown class="h-4 w-4" />
+                                                        </Button>
+                                                    </CollapsibleTrigger>
+                                                </template>
                                             </div>
-                                        </component>
-                                    </template>
+                                            <CollapsibleContent>
+                                                <ul>
+                                                    <template v-for="childItem in item.children">
+                                                        <li>
+                                                            <template v-if="childItem.isSeparator">
+                                                                <hr>
+                                                            </template>
+                                                            <template v-else>
+                                                                <component :is="childItem.isExternalLink ? 'a' : Link"
+                                                                    :href="childItem.url"
+                                                                    class="flex items-center gap-3 rounded-lg px-3 py-2 min-w-0 transition-all text-sidebar-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground hover:text-sidebar-accent-foreground"
+                                                                    :data-active="childItem.current"
+                                                                >
+                                                                    <template v-if="childItem.icon">
+                                                                        <Icon :icon="childItem.icon" class="size-4" />
+                                                                    </template>
+                                                                    <div class="min-w-0 break-words">
+                                                                        {{ childItem.label }}
+                                                                    </div>
+                                                                </component>
+                                                            </template>
+                                                        </li>
+                                                    </template>
+                                                </ul>
+                                            </CollapsibleContent>
+                                        </Collapsible>
+                                    </div>
                                 </template>
-                            </nav>
-                        </div>
+                                <template v-else>
+                                    <component :is="item.isExternalLink ? 'a' : Link"
+                                        :href="item.url"
+                                        class="flex items-center gap-3 rounded-lg px-3 py-2 min-w-0 transition-all text-sidebar-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground hover:text-sidebar-accent-foreground"
+                                        :data-active="item.current"
+                                    >
+                                        <template v-if="item.icon">
+                                            <Icon :icon="item.icon" class="size-4" />
+                                        </template>
+                                        <div class="min-w-0 break-words">
+                                            {{ item.label }}
+                                        </div>
+                                    </component>
+                                </template>
+                            </template>
+                        </nav>
                     </div>
                 </div>
+            </div>
             <div class="flex flex-col min-w-0">
-                <header class="flex h-14 items-center gap-4 border-b backdrop-blur px-4 sticky top-0 z-20 lg:h-[60px] lg:px-6">
-                    <div class="absolute inset-0 bg-white/80 dark:hidden pointer-events-none -z-10"></div>
-                    <div class="absolute inset-0 bg-muted/40 dark:hidden pointer-events-none -z-10"></div>
+                <header class="flex h-14 items-center gap-4 border-b backdrop-blur bg-background/90 px-4 sticky top-0 z-20 lg:h-[60px] lg:px-6">
                     <Button
                         variant="outline"
                         size="icon"
@@ -193,8 +193,8 @@ provide('menuBoundary', menuBoundary);
                                                         <li>
                                                             <component :is="childItem.isExternalLink ? 'a' : Link"
                                                                 :href="childItem.url"
-                                                                class="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                                                                :class="childItem.current ? 'bg-muted text-foreground' : 'text-muted-foreground'"
+                                                                :data-active="childItem.current"
+                                                                class="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-sidebar-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground hover:text-sidebar-accent-foreground"
                                                             >
                                                                 <template v-if="childItem.icon">
                                                                     <Icon :icon="childItem.icon" class="size-4" />
@@ -210,8 +210,8 @@ provide('menuBoundary', menuBoundary);
                                     <template v-else>
                                         <component :is="item.isExternalLink ? 'a' : Link"
                                             :href="item.url"
-                                            class="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                                            :class="item.current ? 'bg-muted text-foreground' : 'text-muted-foreground'"
+                                            :data-active="item.current"
+                                            class="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-sidebar-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground hover:text-sidebar-accent-foreground"
                                         >
                                             <template v-if="item.icon">
                                                 <Icon :icon="item.icon" class="size-4" />

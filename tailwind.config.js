@@ -83,6 +83,16 @@ const config = {
                     DEFAULT: "hsl(var(--card))",
                     foreground: "hsl(var(--card-foreground))",
                 },
+                sidebar: {
+                    DEFAULT: "oklch(var(--sidebar-background-oklch) / <alpha-value>)",
+                    foreground: "oklch(var(--sidebar-foreground-oklch) / <alpha-value>)",
+                    primary: "hsl(var(--sidebar-primary))",
+                    "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
+                    accent: "oklch(var(--sidebar-accent-oklch) / <alpha-value>)",
+                    "accent-foreground": "oklch(var(--sidebar-accent-foreground-oklch) / <alpha-value>)",
+                    border: "oklch(var(--sidebar-border-oklch) / <alpha-value>)",
+                    ring: "hsl(var(--sidebar-ring))",
+                },
             },
             borderRadius: {
                 xl: "calc(var(--radius) + 4px)",
@@ -126,6 +136,11 @@ const config = {
                     color.replace('oklch(var(--primary-oklch)', 'hsl(var(--primary)'),
                     color.replace('oklch(var(--muted-oklch)', 'hsl(var(--muted)'),
                     color.replace('oklch(var(--muted-foreground-oklch)', 'hsl(var(--muted-foreground)'),
+                    color.replace('oklch(var(--sidebar-background-oklch)', 'hsl(var(--sidebar-background)'),
+                    color.replace('oklch(var(--sidebar-foreground-oklch)', 'hsl(var(--sidebar-foreground)'),
+                    color.replace('oklch(var(--sidebar-accent-oklch)', 'hsl(var(--sidebar-accent)'),
+                    color.replace('oklch(var(--sidebar-accent-foreground-oklch)', 'hsl(var(--sidebar-accent-foreground)'),
+                    color.replace('oklch(var(--sidebar-border-oklch)', 'hsl(var(--sidebar-border)'),
                 ].find(replaced => replaced !== color);
             }
             matchUtilities(

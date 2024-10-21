@@ -2,15 +2,40 @@
 
 @layer base {
     :root {
-        /*--primary-oklch: from var(--primary-hsl) .21 .04 h; !* default levels *!*/
+        /*--primary-oklch: from var(--sharp-config-primary) 0.21 0.04 h; !* default levels *!*/
         --primary-oklch: from var(--sharp-config-primary) 0.3 0.1 h;
-        /*--muted-oklch: from var(--primary-hsl) .97 0 h; !* default levels *!*/
+        /*--muted-oklch: from var(--sharp-config-primary) 0.97 0 h; !* default levels *!*/
         --muted-oklch: from var(--sharp-config-primary) 0.97 0.005 h;
-        /*--muted-foreground-oklch: from var(--primary-hsl) .55 .01 h; !* default levels *!*/
+        /*--muted-foreground-oklch: from var(--sharp-config-primary) 0.55 0.01 h; !* default levels *!*/
         --muted-foreground-oklch: from var(--sharp-config-primary) 0.55 0.03 h;
+        /*--sidebar-background-oklch: from var(--sharp-config-primary) 0.98 0 h; !* default levels *!*/
+        --sidebar-background-oklch: from var(--sharp-config-primary) 0.98 0.005 h;
+        /*--sidebar-foreground-oklch: from var(--sharp-config-primary) 0.37 0.01 h; !* default levels *!*/
+        --sidebar-foreground-oklch: from var(--sharp-config-primary) 0.37 0.05 h;
+        /*--sidebar-accent-oklch: from var(--sharp-config-primary) 0.97 0 h; !* default levels *!*/
+        --sidebar-accent-oklch: from var(--sharp-config-primary) 0.96 0.01 h;
+        /*--sidebar-accent-oklch: from var(--sharp-config-primary) 0.21 0.01 h; !* default levels *!*/
+        --sidebar-accent-foreground-oklch: from var(--sharp-config-primary) 0.21 0.2 h;
+        /*--sidebar-accent-oklch: from var(--sharp-config-primary) 0.93 0.01 h; !* default levels *!*/
+        --sidebar-border-oklch: from var(--sharp-config-primary) 0.93 0.015 h;
     }
 
     .dark {
-        /** TODO */
+        /*--primary-oklch: from var(--sharp-config-primary) 0.98 0 h; !* default levels *!*/
+        --primary-oklch: from var(--sharp-config-primary) 0.98 0.1 h;
+        /*--muted-oklch: from var(--sharp-config-primary) 0.27 0.01 h; !* default levels *!*/
+        --muted-oklch: from var(--sharp-config-primary) 0.20 0.05 h;
+        /*--muted-foreground-oklch: from var(--sharp-config-primary) 0.71 0.01 h; !* default levels *!*/
+        --muted-foreground-oklch: from var(--sharp-config-primary) 0.71 0.03 h;
+        /*--sidebar-background-oklch: from var(--sharp-config-primary) 0.21 0.01 h; !* default levels *!*/
+        --sidebar-background-oklch: from var(--sharp-config-primary) 0.21 0.02 h;
+        /*--sidebar-foreground-oklch: from var(--sharp-config-primary) 0.97 0 h; !* default levels *!*/
+        --sidebar-foreground-oklch: from var(--sharp-config-primary) 0.97 0.005 h;
+        /*--sidebar-accent-oklch: from var(--sharp-config-primary) 0.27 0.01 h; !* default levels *!*/
+        --sidebar-accent-oklch: from var(--sharp-config-primary) 0.27 0.01 h;
+        /*--sidebar-accent-foreground-oklch: from var(--sharp-config-primary) 0.97 0 h; !* default levels *!*/
+        --sidebar-accent-foreground-oklch: from var(--sharp-config-primary) 0.97 0.005 h;
+        /*--sidebar-border-oklch: from var(--sharp-config-primary) 0.27 0.01 h; !* default levels *!*/
+        --sidebar-border-oklch: from var(--sharp-config-primary) 0.27 0.015 h;
     }
 }
