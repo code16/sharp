@@ -5,11 +5,11 @@
     import FieldLayout from "../../FieldLayout.vue";
     import TextRenderer from "./TextRenderer.vue";
     import clip from "text-clipper";
-    import { ShowFieldProps } from "../../../types";
+    import { ShowFieldProps } from "@/show/types";
     import { ContentEmbedManager } from "@/content/ContentEmbedManager";
     import { useParentShow } from "@/show/useParentShow";
-    import { Show } from "@/show/Show";
     import { ContentUploadManager } from "@/content/ContentUploadManager";
+    import { Button } from "@/components/ui/button";
 
     const props = defineProps<ShowFieldProps<ShowTextFieldData>>();
 
@@ -79,26 +79,26 @@
     >
         <template v-if="field.html">
             <TextRenderer
-                class="ShowTextField__content"
+                class="content content-sm text-sm"
                 :content="currentContent"
                 :field="field"
             />
         </template>
         <template v-else>
-            <div class="ShowTextField__content">{{ currentContent }}</div>
+            <div class="content content-sm text-sm">
+                {{ currentContent }}
+            </div>
         </template>
 
         <template v-if="collapsedContent">
-            <div class="mt-2">
-                <a href="#" class="ShowTextField__more" @click.prevent="expanded = !expanded">
-                    <template v-if="expanded">
-                        - {{ __('sharp::show.text.show_less') }}
-                    </template>
-                    <template v-else>
-                        + {{ __('sharp::show.text.show_more') }}
-                    </template>
-                </a>
-            </div>
+            <Button class="mt-2 px-0" variant="link" @click.prevent="expanded = !expanded">
+                <template v-if="expanded">
+                    - {{ __('sharp::show.text.show_less') }}
+                </template>
+                <template v-else>
+                    + {{ __('sharp::show.text.show_more') }}
+                </template>
+            </Button>
         </template>
     </FieldLayout>
 </template>

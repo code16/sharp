@@ -7,4 +7,5 @@ export type ShowFieldProps<Data extends ShowFieldData = ShowFieldData> = {
     locale?: string,
     collapsable?: boolean,
     root?: boolean,
+    isRightCol?: boolean
 }

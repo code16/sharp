@@ -3,8 +3,6 @@
 namespace Code16\Sharp\Utils\Icons;
 
 use BladeUI\Icons\Exceptions\SvgNotFound;
-use BladeUI\Icons\Svg;
-use Illuminate\Support\Arr;
 
 class IconManager
 {

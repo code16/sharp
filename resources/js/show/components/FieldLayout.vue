@@ -1,4 +1,6 @@
 <script setup lang="ts">
+    import { Label } from "@/components/ui/label";
+
     defineProps<{
         label?: string,
     }>();
@@ -7,10 +9,12 @@
 <template>
     <div>
         <template v-if="label">
-            <div class="show-field__label form-label">{{ label }}</div>
+            <Label>
+                {{ label }}
+            </Label>
         </template>
 
-        <div class="show-field__content">
+        <div :class="[label ? 'mt-2' : '']">
             <slot />
         </div>
     </div>

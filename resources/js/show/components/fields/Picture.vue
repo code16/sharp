@@ -7,9 +7,9 @@
 </script>
 
 <template>
-    <FieldLayout class="ShowPictureField">
-        <div class="text-center">
-            <img class="ShowPictureField__thumbnail" :src="value" alt="">
+    <FieldLayout>
+        <div class="flex" :class="[isRightCol ? 'md:justify-end' : '']">
+            <img class="rounded-md" :src="value" alt="">
         </div>
     </FieldLayout>
 </template>

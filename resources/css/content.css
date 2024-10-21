@@ -5,16 +5,19 @@
       @apply mt-6 border-l-2 pl-6 italic;
     }
     :where(p) {
-      @apply leading-7 [&:not(:first-child)]:mt-6;
+      @apply [&:not(:first-child)]:mt-6;
     }
     :where(a:not([style],[class])) {
-      @apply p-1.5 -m-1.5 font-medium text-primary rounded-sm underline underline-offset-4;
-    }
-    :where(a) {
+      @apply relative p-1.5 -m-1.5 font-medium text-primary rounded-sm underline underline-offset-4;
       @apply before:absolute before:inset-0 before:transition-colors before:duration-100 before:rounded-[inherit] before:hover:bg-primary/10;
     }
     :where(ul) {
       @apply my-6 ml-6 list-disc [&>li]:mt-2 first:mt-0 last:mb-0;
+    }
+  }
+  .content-sm {
+    :where(p) {
+      @apply [&:not(:first-child)]:mt-4;
     }
   }
 }

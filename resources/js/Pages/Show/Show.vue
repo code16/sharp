@@ -305,9 +305,9 @@
                                 </template>
                                 <CardContent v-show="!collapsed">
                                     <div class="flex flex-wrap gap-y-4 -mx-4">
-                                        <template v-for="column in section.columns">
+                                        <template v-for="(column, columnIndex) in section.columns">
                                             <div class="min-w-0 w-full sm:w-[calc(var(--size)/12*100%)] px-4" :style="{ '--size': `${column.size}` }">
-                                                <FieldGrid class="gap-x-4 gap-y-4">
+                                                <FieldGrid class="gap-x-4 gap-y-6">
                                                     <template v-for="row in column.fields">
                                                         <FieldGridRow>
                                                             <template v-for="fieldLayout in row">
@@ -324,6 +324,7 @@
                                                                             :collapsable="section.collapsable"
                                                                             :entity-key="entityKey"
                                                                             :instance-id="instanceId"
+                                                                            :is-right-col="columnIndex === section.columns.length - 1"
                                                                             @reordering="onEntityListReordering(fieldLayout.key, $event)"
                                                                         />
                                                                     </template>

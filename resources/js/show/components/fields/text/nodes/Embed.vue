@@ -4,6 +4,7 @@
     import { ContentEmbedManager } from "@/content/ContentEmbedManager";
     import { Show } from "@/show/Show";
     import { EmbedData } from "@/types";
+    import { Card, CardContent } from "@/components/ui/card";
     const props = defineProps<{
         embed: EmbedData,
     }>();
@@ -13,13 +14,17 @@
 </script>
 
 <template>
-    <component v-if="embedData" :is="embed.tag" class="embed">
-        <EmbedRenderer
-            :data="embedData"
-            :embed="embed"
-        >
-            <slot />
-        </EmbedRenderer>
-    </component>
+    <Card class="my-4 first:mt-0 last:mb-0">
+        <CardContent>
+            <component v-if="embedData" :is="embed.tag">
+                <EmbedRenderer
+                    :data="embedData"
+                    :embed="embed"
+                >
+                    <slot />
+                </EmbedRenderer>
+            </component>
+        </CardContent>
+    </Card>
 </template>
 

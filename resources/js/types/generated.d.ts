@@ -785,6 +785,7 @@ export type ShowFileFieldData = {
     path: string;
     thumbnail: string;
     size: number;
+    mime_type: string;
   };
   key: string;
   type: "file";

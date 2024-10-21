@@ -1,7 +1,6 @@
 <script setup lang="ts">
     import File from "../../File.vue";
     import { inject, ref, useAttrs } from "vue";
-    import { FormEditorUploadData } from "@/content/types";
     import { ContentUploadManager } from "@/content/ContentUploadManager";
     import { Show } from "@/show/Show";
     import { ShowFileFieldData } from "@/types";
@@ -11,16 +10,12 @@
 </script>
 
 <template>
-    <div>
-        <File
-            class="embed"
-            :field="{} as ShowFileFieldData"
-            :value="upload.file"
-            :locale="null"
-            :root="false"
-        />
-        <template v-if="upload.legend">
-            {{ upload.legend }}
-        </template>
-    </div>
+    <File
+        class="my-4 first:mt-0 last:mb-0"
+        :field="{} as ShowFileFieldData"
+        :value="upload.file"
+        :legend="upload.legend"
+        :locale="null"
+        :root="false"
+    />
 </template>

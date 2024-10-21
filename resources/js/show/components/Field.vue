@@ -22,7 +22,7 @@
 </script>
 
 <template>
-    <div class="show-field" :class="`show-field--${field.type}`">
+    <div>
         <component
             :is="isCustomField(field.type) ? resolveCustomField(field.type) : components[field.type]"
             v-bind="$props"
