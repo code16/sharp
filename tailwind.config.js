@@ -40,14 +40,14 @@ const config = {
                 'sans': ['geist-sans', ...defaultTheme.fontFamily.sans]
             },
             colors: {
-                border: "hsl(var(--border))",
-                input: "hsl(var(--input))",
-                ring: "hsl(var(--ring))",
+                border: "oklch(var(--border-oklch) / <alpha-value>)",
+                input: "oklch(var(--input-oklch) / <alpha-value>)",
+                ring: "oklch(var(--ring-oklch) / <alpha-value>)",
                 background: "hsl(var(--background))",
                 foreground: "hsl(var(--foreground))",
                 primary: {
                     DEFAULT: "oklch(var(--primary-oklch) / <alpha-value>)",
-                    foreground: "hsl(var(--primary-foreground))",
+                    foreground: "oklch(var(--primary-foreground-oklch) / <alpha-value>)",
                     50: 'var(--color-primary-50)',
                     100: 'var(--color-primary-100)',
                     200: 'var(--color-primary-200)',
@@ -60,8 +60,9 @@ const config = {
                     900: 'var(--color-primary-900)',
                 },
                 secondary: {
-                    DEFAULT: "hsl(var(--secondary))",
-                    foreground: "hsl(var(--secondary-foreground))",
+                    DEFAULT: "oklch(var(--secondary-oklch) / <alpha-value>)",
+                    foreground: "oklch(var(--secondary-foreground-oklch) / <alpha-value>)",
+                    // foreground: "hsl(var(--secondary-foreground))",
                 },
                 destructive: {
                     DEFAULT: "hsl(var(--destructive))",
@@ -72,8 +73,8 @@ const config = {
                     foreground: "oklch(var(--muted-foreground-oklch) / <alpha-value>)",
                 },
                 accent: {
-                    DEFAULT: "hsl(var(--accent))",
-                    foreground: "hsl(var(--accent-foreground))",
+                    DEFAULT: "oklch(var(--accent-oklch) / <alpha-value>)",
+                    foreground: "oklch(var(--accent-foreground-oklch) / <alpha-value>)",
                 },
                 popover: {
                     DEFAULT: "hsl(var(--popover))",
@@ -134,8 +135,16 @@ const config = {
                 const color = typeof value === 'function' ? value({ opacityVariable: '--tw-bg-opacity', opacityValue: `var(--tw-bg-opacity)` }) : value;
                 return [
                     color.replace('oklch(var(--primary-oklch)', 'hsl(var(--primary)'),
+                    color.replace('oklch(var(--primary-foreground-oklch)', 'hsl(var(--primary-foreground)'),
+                    color.replace('oklch(var(--secondary-oklch)', 'hsl(var(--secondary)'),
+                    color.replace('oklch(var(--secondary-foreground-oklch)', 'hsl(var(--secondary-foreground)'),
                     color.replace('oklch(var(--muted-oklch)', 'hsl(var(--muted)'),
                     color.replace('oklch(var(--muted-foreground-oklch)', 'hsl(var(--muted-foreground)'),
+                    color.replace('oklch(var(--accent-oklch)', 'hsl(var(--accent)'),
+                    color.replace('oklch(var(--accent-foreground-oklch)', 'hsl(var(--accent-foreground)'),
+                    color.replace('oklch(var(--input-oklch)', 'hsl(var(--input)'),
+                    color.replace('oklch(var(--border-oklch)', 'hsl(var(--border)'),
+                    color.replace('oklch(var(--ring-oklch)', 'hsl(var(--ring)'),
                     color.replace('oklch(var(--sidebar-background-oklch)', 'hsl(var(--sidebar-background)'),
                     color.replace('oklch(var(--sidebar-foreground-oklch)', 'hsl(var(--sidebar-foreground)'),
                     color.replace('oklch(var(--sidebar-accent-oklch)', 'hsl(var(--sidebar-accent)'),
