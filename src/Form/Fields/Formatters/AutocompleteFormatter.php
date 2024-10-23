@@ -7,11 +7,6 @@ use Code16\Sharp\Utils\Transformers\ArrayConverter;
 
 class AutocompleteFormatter extends SharpFieldFormatter
 {
-    /**
-     * @param  SharpFormField  $field
-     * @param  $value
-     * @return mixed
-     */
     public function toFront(SharpFormField $field, $value)
     {
         $value = ArrayConverter::modelToArray($value);
@@ -21,12 +16,6 @@ class AutocompleteFormatter extends SharpFieldFormatter
             : [$field->itemIdAttribute() => $value];
     }
 
-    /**
-     * @param  SharpFormField  $field
-     * @param  string  $attribute
-     * @param  $value
-     * @return mixed
-     */
     public function fromFront(SharpFormField $field, string $attribute, $value)
     {
         return is_array($value)

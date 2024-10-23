@@ -31,9 +31,15 @@ class FormMakeCommand extends GeneratorCommand
 
     protected function getStub()
     {
-        return $this->option('model')
-            ? __DIR__.'/stubs/form.model.stub'
-            : __DIR__.'/stubs/form.stub';
+        if ($this->option('single') !== false) {
+            return __DIR__.'/stubs/form.single.stub';
+        }
+
+        if (! $this->option('model')) {
+            return __DIR__.'/stubs/form.stub';
+        }
+
+        return __DIR__.'/stubs/form.model.stub';
     }
 
     protected function getDefaultNamespace($rootNamespace)
@@ -45,6 +51,7 @@ class FormMakeCommand extends GeneratorCommand
     {
         return [
             ['model', 'm', InputOption::VALUE_REQUIRED, 'The model that the form handles'],
+            ['single', 'si', InputOption::VALUE_NONE, 'If the form should be a single form'],
         ];
     }
 }
