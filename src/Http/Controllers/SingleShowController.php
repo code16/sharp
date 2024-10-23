@@ -34,7 +34,7 @@ class SingleShowController extends SharpProtectedController
             'config' => $show->showConfig(null),
             'fields' => $show->fields(),
             'layout' => $show->showLayout(),
-            'data' => $showData,
+            'data' => $show->applyFormatters($showData),
             'pageAlert' => $show->pageAlert($showData),
             'locales' => $show->hasDataLocalizations()
                 ? $show->getDataLocalizations()
