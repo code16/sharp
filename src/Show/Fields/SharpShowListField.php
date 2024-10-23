@@ -2,6 +2,9 @@
 
 namespace Code16\Sharp\Show\Fields;
 
+use Code16\Sharp\Show\Fields\Formatters\ListFormatter;
+use Illuminate\Support\Collection;
+
 class SharpShowListField extends SharpShowField
 {
     const FIELD_TYPE = 'list';
@@ -11,7 +14,7 @@ class SharpShowListField extends SharpShowField
 
     public static function make(string $key): SharpShowListField
     {
-        return new static($key, static::FIELD_TYPE);
+        return new static($key, static::FIELD_TYPE, new ListFormatter());
     }
 
     public function setLabel(string $label): self
@@ -33,6 +36,11 @@ class SharpShowListField extends SharpShowField
         return collect($this->itemFields)
             ->where('key', $key)
             ->first();
+    }
+    
+    public function itemFields(): Collection
+    {
+        return collect($this->itemFields);
     }
 
     protected function validationRules(): array

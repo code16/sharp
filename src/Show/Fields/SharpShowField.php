@@ -31,6 +31,11 @@ abstract class SharpShowField
     {
         return $this->formatter;
     }
+    
+    public function key(): string
+    {
+        return $this->key;
+    }
 
     protected function buildArray(array $childArray): array
     {
