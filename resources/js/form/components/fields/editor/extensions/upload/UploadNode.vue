@@ -70,7 +70,7 @@
 </script>
 
 <template>
-    <NodeRenderer class="editor__node" :node="node">
+    <NodeRenderer :node="node">
         <div class="border rounded-md p-4">
             <Upload
                 :field="parentEditor.props.field.uploads.fields.file"

@@ -18,6 +18,12 @@
                 chart: {
                     type: 'pie'
                 },
+                dataLabels: {
+                    enabled: true,
+                    style: {
+                        fontFamily: 'inherit',
+                    }
+                },
                 colors: datasets?.map(dataset => normalizeColor(dataset.color)),
                 labels: datasets?.map(dataset => dataset.label ?? ''),
                 legend: {

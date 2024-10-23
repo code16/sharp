@@ -33,11 +33,12 @@
         if(props.field.uploads.fields.legend) {
             currentModalUpload.value = {
                 id,
-                form: new Form({
+                form: new Form(
+                    {
                         fields: props.field.uploads.fields,
                         layout: props.field.uploads.layout,
                         data: id ? uploadManager.getUpload(id) : {},
-                    } as FormData,
+                    },
                     parentForm.entityKey,
                     parentForm.instanceId,
                 ),
@@ -58,7 +59,7 @@
 </script>
 
 <template>
-    <input class="hidden" type="file" :accept="props.field.uploads.fields.file.allowedExtensions" @change="onInputChange" ref="input">
+    <input class="hidden" type="file" :accept="props.field.uploads.fields.file.allowedExtensions.join(',')" @change="onInputChange" ref="input">
 
     <EmbedFormModal
         :visible="!!currentModalUpload"

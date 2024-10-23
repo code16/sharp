@@ -1,6 +1,7 @@
 <script setup lang="ts">
-    import { __ } from "@/utils/i18n";
     import { FigureWidgetData } from "@/types";
+    import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+    import { ArrowUpRight, ArrowDownRight } from "lucide-vue-next";
 
     defineProps<{
         widget: Omit<FigureWidgetData, 'value'>,
@@ -9,47 +10,41 @@
 </script>
 
 <template>
-    <div>
-        <template v-if="widget.title">
-            <h2 class="SharpWidget__title mb-2">
-                {{ widget.title }}
-            </h2>
-        </template>
-        <div class="d-flex align-items-center">
-            <p class="display-5 fw-bold mb-0">
-                {{ value.data.figure }}
-                <template v-if="value.data.unit">
-                    <span class="fs-5 fw-normal">{{ value.data.unit }}</span>
-                </template>
-            </p>
-            <template v-if="value.data.evolution">
-                <div class="d-flex align-items-center ms-3"
-                    :style="{ color: value.data.evolution.increase ? '#198754' : '#dc3545' }"
-                >
-                    <template v-if="value.data.evolution.increase">
-                        <!-- heroicons: 20/solid/arrow-up -->
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M10 17a.75.75 0 01-.75-.75V5.612L5.29 9.77a.75.75 0 01-1.08-1.04l5.25-5.5a.75.75 0 011.08 0l5.25 5.5a.75.75 0 11-1.08 1.04l-3.96-4.158V16.25A.75.75 0 0110 17z" clip-rule="evenodd" />
-                        </svg>
+    <Card class="relative">
+        <template v-if="widget.title || value.data.evolution">
+            <CardHeader class="flex flex-row items-center gap-2 pb-2">
+                <CardTitle class="text-sm/tight font-medium">
+                    <template v-if="widget.link">
+                        <a class="hover:underline" :href="widget.link">
+                            <span class="absolute inset-0"></span>
+                            {{ widget.title }}
+                        </a>
                     </template>
                     <template v-else>
-                        <!-- heroicons: 20/solid/arrow-down -->
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M10 3a.75.75 0 01.75.75v10.638l3.96-4.158a.75.75 0 111.08 1.04l-5.25 5.5a.75.75 0 01-1.08 0l-5.25-5.5a.75.75 0 111.08-1.04l3.96 4.158V3.75A.75.75 0 0110 3z" clip-rule="evenodd" />
-                        </svg>
+                        {{ widget.title }}
                     </template>
-                    <span class="ms-1">
-                        {{ value.data.evolution.value }}
-                    </span>
-                </div>
-            </template>
-        </div>
-        <template v-if="widget.link">
-            <div class="text-start mt-2">
-                <a :href="widget.link">
-                    {{ __('sharp::dashboard.widget.link_label') }}
-                </a>
-            </div>
+                </CardTitle>
+                <template v-if="value.data.evolution?.startsWith('+')">
+                    <ArrowUpRight class="ml-auto size-4 text-muted-foreground" />
+                </template>
+                <template v-else-if="value.data.evolution?.startsWith('-')">
+                    <ArrowDownRight class="ml-auto size-4 text-muted-foreground" />
+                </template>
+            </CardHeader>
         </template>
-    </div>
+        <CardContent>
+            <div class="text-2xl font-bold">
+                {{ value.data.figure }}
+                <template v-if="value.data.unit">
+                    {{ value.data.unit }}
+                </template>
+            </div>
+            <template v-if="value.data.evolution">
+                <p class="text-xs text-muted-foreground">
+                    {{ value.data.evolution }}
+                </p>
+            </template>
+<!--              {{ __('sharp::dashboard.widget.link_label') }} -->
+        </CardContent>
+    </Card>
 </template>

@@ -1,5 +1,6 @@
 import {
     CommandFormData,
+    EmbedFormData,
     FormData,
     FormEditorFieldData,
     FormFieldData,
@@ -39,7 +40,7 @@ export class Form implements FormData, CommandFormData {
     entityKey: string;
     instanceId: string | number;
 
-    constructor(data: FormData, entityKey: string, instanceId: string | number) {
+    constructor(data: FormData | EmbedFormData, entityKey: string, instanceId: string | number) {
         Object.assign(this, data);
         this.entityKey = entityKey;
         this.instanceId = instanceId;

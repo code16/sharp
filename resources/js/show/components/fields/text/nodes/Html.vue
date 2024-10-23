@@ -5,9 +5,7 @@
 </script>
 
 <template>
-    <div class="card mb-3 html-content overflow-auto" data-html-content="true">
-        <div class="card-body">
-            <pre class="overflow-visible mb-0">{{ content }}</pre>
-        </div>
+    <div class="my-4 first:mt-0 last:mb-0 bg-background border rounded-md p-4 max-h-[200px] overflow-auto">
+        <pre>{{ content }}</pre>
     </div>
 </template>

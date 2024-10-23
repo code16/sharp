@@ -16,7 +16,7 @@
             const { widget, value } = props;
             return {
                 chart: {
-                    type: 'area',
+                    type: 'line',
                     sparkline: {
                         enabled: widget.minimal,
                     },
@@ -34,7 +34,7 @@
                     name: dataset.label,
                 })),
                 stroke: {
-                    width: 4,
+                    width: 2,
                     curve: widget.options?.curved ?? true ? 'smooth' : 'straight',
                 },
                 xaxis: {

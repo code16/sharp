@@ -4,6 +4,7 @@
     import Bar from "./graph/Bar.vue";
     import Line from "./graph/Line.vue";
     import Pie from "./graph/Pie.vue";
+    import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
     defineProps<{
         widget: Omit<GraphWidgetData, 'value'>,
@@ -18,27 +19,27 @@
 </script>
 
 <template>
-    <div>
+    <Card>
         <template v-if="widget.title">
-            <h2 class="SharpWidget__title mb-2 mt-3 px-3">
-                {{ widget.title }}
-            </h2>
+            <CardHeader>
+                <CardTitle class="text-sm/tight font-medium">
+                    {{ widget.title }}
+                </CardTitle>
+            </CardHeader>
         </template>
-        <component
-            :is="components[widget.display]"
-            :value="value"
-            :widget="widget"
-            class="SharpWidgetChart"
-            :class="[
-                `SharpWidgetChart--${widget.display}`,
-                {
-                    'SharpWidgetChart--aspect-ratio': !widget.height,
-                }
-            ]"
-            :style="{
-                '--ratio-x': widget.ratioX,
-                '--ratio-y': widget.ratioY,
-            }"
-        />
-    </div>
+        <CardContent :class="widget.minimal ? '!p-0' : ''">
+            <component
+                :is="components[widget.display]"
+                :value="value"
+                :widget="widget"
+                class="[&_svg]:rounded-b-[calc(.5rem-1px)]"
+                :class="[
+                    !widget.height ? 'aspect-[--ratio]' : '',
+                ]"
+                :style="{
+                    '--ratio': `${widget.ratioX} / ${widget.ratioY}`,
+                }"
+            />
+        </CardContent>
+    </Card>
 </template>

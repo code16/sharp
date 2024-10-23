@@ -7,23 +7,45 @@
     import { Html, HtmlContentNodeAttributes } from "@/form/components/fields/editor/extensions/html/Html";
     import { elementFromString } from "./utils";
     import { ref } from "vue";
+    import {
+        Dialog,
+        DialogClose,
+        DialogFooter,
+        DialogHeader, DialogScrollContent,
+        DialogTitle
+    } from "@/components/ui/dialog";
+    import { Textarea } from "@/components/ui/textarea";
+    import {
+        DropdownMenu,
+        DropdownMenuContent, DropdownMenuItem,
+        DropdownMenuTrigger
+    } from "@/components/ui/dropdown-menu";
+    import { MoreHorizontal } from "lucide-vue-next";
 
     const props = defineProps<ExtensionNodeProps<typeof Html, HtmlContentNodeAttributes>>();
 
-    const modalVisible = ref(false);
+    const modalOpen = ref(props.node.attrs.isNew);
     const editContent = ref('');
 
     function onEdit() {
         editContent.value = props.node.attrs.content;
-        modalVisible.value = true;
+        modalOpen.value = true;
+    }
+
+    function onRemove() {
+        props.deleteNode();
+        setTimeout(() => {
+            props.editor.commands.focus();
+        });
     }
 
     function onModalOk() {
-        const content = elementFromString(this.editContent).innerHTML;
+        const content = elementFromString(editContent.value).innerHTML;
         props.updateAttributes({
             content,
             isNew: false,
         });
+        modalOpen.value = false;
     }
 
     function onModalHidden() {
@@ -38,35 +60,55 @@
 
 <template>
     <NodeViewWrapper>
-        <div class="card editor__node html-node" :class="{ 'shadow border-primary': selected }">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col" style="min-width: 0">
-                        <pre class="mb-0">{{ node.attrs.content }}</pre>
-                    </div>
-                    <div class="col-auto me-n2 my-n2">
-                        <Button variant="secondary" size="sm" @click="onEdit">
-                            <i class="fas fa-pencil-alt fs-7"></i>
-                        </Button>
-                    </div>
-                </div>
+        <div class="border rounded-md items-center p-4 flex" :class="{ 'shadow border-primary': selected }">
+            <div class="flex-1">
+                 <pre>{{ node.attrs.content }}</pre>
             </div>
+            <DropdownMenu :modal="false">
+                <DropdownMenuTrigger as-child>
+                    <Button class="self-center" variant="ghost" size="icon">
+                        <MoreHorizontal class="size-4" />
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                    <DropdownMenuItem @click="onEdit">
+                        {{ __('sharp::form.upload.edit_button') }}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem class="text-destructive" @click="onRemove">
+                        {{ __('sharp::form.upload.remove_button') }}
+                    </DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
         </div>
-        <Modal
-            v-model:visible="modalVisible"
-            @ok="onModalOk"
-            @hidden="onModalHidden"
+        <Dialog
+            v-model:open="modalOpen"
+            @update:open="!$event && onModalHidden()"
         >
-            <template v-slot:title>
-                <template v-if="node.attrs.isNew">
-                    {{ __('sharp::form.editor.dialogs.raw_html.insert_title') }}
-                </template>
-                <template v-else>
-                    {{ __('sharp::form.editor.dialogs.raw_html.edit_title') }}
-                </template>
-            </template>
+            <DialogScrollContent class="gap-6" @pointer-down-outside.prevent>
+                <DialogHeader>
+                    <DialogTitle>
+                        <template v-if="node.attrs.isNew">
+                            {{ __('sharp::form.editor.dialogs.raw_html.insert_title') }}
+                        </template>
+                        <template v-else>
+                            {{ __('sharp::form.editor.dialogs.raw_html.edit_title') }}
+                        </template>
+                    </DialogTitle>
+                </DialogHeader>
 
-            <textarea class="form-control" v-model="editContent" rows="6"></textarea>
-        </Modal>
+                <Textarea v-model="editContent" rows="6" />
+
+                <DialogFooter>
+                    <DialogClose as-child>
+                        <Button variant="outline">
+                            {{ __('sharp::modals.cancel_button') }}
+                        </Button>
+                    </DialogClose>
+                    <Button @click="onModalOk">
+                        {{ __('sharp::modals.command.submit_button') }}
+                    </Button>
+                </DialogFooter>
+            </DialogScrollContent>
+        </Dialog>
     </NodeViewWrapper>
 </template>

@@ -13,22 +13,24 @@
 
     const props = defineProps<ShowFieldProps<ShowListFieldData>>();
     const show = useParentShow();
-    const hasOnlyOneVisibleFile = computed(() => {
+    const hasOnlyOneVisibleFileField = computed(() => {
         return props.field.itemFields
-            && Object.values(props.field.itemFields).filter(field => field.type === 'file').length === 1
-            && props.value?.every(item => Object.values(props.field.itemFields).filter(field =>
-                show.fieldShouldBeVisible(field, item[field.key], props.locale)
-            ))
+            && props.value?.every(item => {
+                const visibleFields = Object.values(props.field.itemFields).filter(field =>
+                    show.fieldShouldBeVisible(field, item[field.key], props.locale)
+                );
+                return visibleFields.length === 1 && visibleFields[0].type === 'file';
+            })
     });
 </script>
 
 <template>
     <FieldLayout class="ShowListField" :label="field.label">
         <template v-if="value?.length > 0">
-            <div :class="hasOnlyOneVisibleFile ? 'space-y-4' : 'space-y-6'">
+            <div :class="hasOnlyOneVisibleFileField ? 'space-y-4' : 'space-y-6'">
                 <template v-for="item in value">
-                    <Card :class="hasOnlyOneVisibleFile ? 'shadow-none border-none bg-none' : ''">
-                        <CardContent :class="hasOnlyOneVisibleFile ? '!p-0' : ''">
+                    <Card :class="hasOnlyOneVisibleFileField ? 'shadow-none border-none bg-none' : ''">
+                        <CardContent :class="hasOnlyOneVisibleFileField ? '!p-0' : ''">
                             <FieldGrid class="gap-x-4 gap-y-4">
                                 <template v-for="row in fieldLayout.item">
                                     <FieldGridRow>
@@ -58,9 +60,9 @@
             </div>
         </template>
         <template v-else>
-            <em class="ShowListField__empty text-muted">
+            <div class="text-muted-foreground">
                 {{ __('sharp::show.list.empty') }}
-            </em>
+            </div>
         </template>
     </FieldLayout>
 </template>

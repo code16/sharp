@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { CommandData, DashboardData, FilterData } from "@/types";
     import { useFilters } from "@/filters/useFilters";
-    import { parseQuery, stringifyQuery } from "@/utils/querystring";
+    import { parseQuery } from "@/utils/querystring";
     import { router } from "@inertiajs/vue3";
     import Widget from "@/dashboard/components/Widget.vue";
     import Layout from "@/Layouts/Layout.vue";
@@ -15,7 +15,6 @@
     import { Button } from "@/components/ui/button";
     import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
     import CommandDropdownItems from "@/commands/components/CommandDropdownItems.vue";
-    import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
     import { watch } from "vue";
 
     const props = defineProps<{
@@ -77,7 +76,7 @@
                     />
                 </template>
 
-                <div class="flex gap-3 mb-4">
+                <div class="mb-8 flex gap-3">
                     <template v-if="filters.rootFilters.length > 0">
                         <div class="flex gap-3">
                             <template v-for="filter in filters.rootFilters" :key="filter.key">
@@ -90,7 +89,7 @@
                                 />
                             </template>
                             <template v-if="filters.isValuated(filters.rootFilters)">
-                                <Button class="h-8" size="sm" variant="link" @click="onFiltersReset(filters.rootFilters)">
+                                <Button class="h-8 underline underline-offset-4 -ml-2" variant="ghost" size="sm" @click="onFiltersReset(filters.rootFilters)">
                                     {{ __('sharp::filters.reset_all') }}
                                 </Button>
                             </template>
@@ -118,6 +117,11 @@
                 <div class="grid gap-4 md:gap-8">
                     <template v-for="section in dashboard.layout.sections">
                         <section>
+                            <template v-if="section.title">
+                                <h2 class="mb-4 text-2xl/tight font-bold">
+                                    {{ section.title }}
+                                </h2>
+                            </template>
                             <template v-if="dashboard.config.filters?.[section.key]?.length || dashboard.config.commands?.[section.key]?.flat().length">
                                 <div class="flex gap-3 mb-4">
                                     <template v-if="dashboard.config.filters?.[section.key]?.length">
@@ -132,11 +136,9 @@
                                                 />
                                             </template>
                                             <template v-if="filters.isValuated(dashboard.config.filters[section.key])">
-                                                <div class="d-flex">
-                                                    <button class="btn btn-sm d-inline-flex align-items-center btn-link" @click="onFiltersReset(dashboard.config.filters[section.key])">
-                                                        {{ __('sharp::filters.reset_all') }}
-                                                    </button>
-                                                </div>
+                                                <Button class="h-8 underline underline-offset-4 -ml-2" variant="ghost" size="sm" @click="onFiltersReset(dashboard.config.filters[section.key])">
+                                                    {{ __('sharp::filters.reset_all') }}
+                                                </Button>
                                             </template>
                                         </div>
                                     </template>
@@ -159,33 +161,46 @@
                                     </template>
                                 </div>
                             </template>
-                            <Card>
-                                <template v-if="section.title">
-                                    <CardHeader>
-                                        <CardTitle>
-                                            {{ section.title }}
-                                        </CardTitle>
-                                    </CardHeader>
+                            <div class="grid grid-cols-12 gap-4">
+                                <template v-for="row in section.rows">
+                                    <template v-for="widgetLayout in row">
+                                        <div class="col-[span_var(--size)]" :style="{ '--size': widgetLayout.size }">
+                                            <Widget
+                                                :widget="dashboard.widgets[widgetLayout.key]"
+                                                :value="dashboard.data[widgetLayout.key]"
+                                            />
+                                        </div>
+                                    </template>
                                 </template>
-                                <template v-else>
-                                    <CardHeader class="pb-0" />
-                                </template>
-                                <CardContent>
-                                    <div class="grid grid-cols-12 gap-4">
-                                        <template v-for="row in section.rows">
-                                            <template v-for="widgetLayout in row">
-                                                <div class="col-[span_var(--size)]" :style="{ '--size': widgetLayout.size }">
-                                                    <Widget
-                                                        :widget="dashboard.widgets[widgetLayout.key]"
-                                                        :value="dashboard.data[widgetLayout.key]"
-                                                    />
-                                                </div>
-                                            </template>
-                                        </template>
-                                    </div>
-                                </CardContent>
-                            </Card>
+                            </div>
                         </section>
+
+<!--                            <Card>-->
+<!--                                <template v-if="section.title">-->
+<!--                                    <CardHeader>-->
+<!--                                        <CardTitle>-->
+<!--                                            {{ section.title }}-->
+<!--                                        </CardTitle>-->
+<!--                                    </CardHeader>-->
+<!--                                </template>-->
+<!--                                <template v-else>-->
+<!--                                    <CardHeader class="pb-0" />-->
+<!--                                </template>-->
+<!--                                <CardContent>-->
+<!--                                    <div class="grid grid-cols-12 gap-4">-->
+<!--                                        <template v-for="row in section.rows">-->
+<!--                                            <template v-for="widgetLayout in row">-->
+<!--                                                <div class="col-[span_var(&#45;&#45;size)]" :style="{ '&#45;&#45;size': widgetLayout.size }">-->
+<!--                                                    <Widget-->
+<!--                                                        :widget="dashboard.widgets[widgetLayout.key]"-->
+<!--                                                        :value="dashboard.data[widgetLayout.key]"-->
+<!--                                                    />-->
+<!--                                                </div>-->
+<!--                                            </template>-->
+<!--                                        </template>-->
+<!--                                    </div>-->
+<!--                                </CardContent>-->
+<!--                            </Card>-->
                     </template>
                 </div>
             </div>

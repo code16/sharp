@@ -27,8 +27,8 @@ class TestShow extends SharpSingleShow
 
     public function findSingle(): array
     {
-        return [
+        return $this->transform([
             'message' => '<h2 class="text-center my-5 py-5">Please stay calm,<br>this is a test.</h2>',
-        ];
+        ]);
     }
 }

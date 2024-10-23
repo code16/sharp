@@ -182,16 +182,13 @@ export type EntityStateValueData = {
 export type FigureWidgetData = {
   value?: {
     key: string;
-    data: {
-      figure: string;
-      unit: string;
-      evolution: { increase: boolean; value: string };
-    };
+    data: { figure: string; unit: string; evolution: string | null };
   };
   key: string;
   type: "figure";
   title: string | null;
   link: string | null;
+  icon: IconData | null;
 };
 export type FilterData =
   | CheckFilterData
@@ -811,7 +808,7 @@ export type ShowLayoutSectionData = {
   key: string | null;
   title: string;
   collapsable: boolean;
-  columns: Array<ShowLayoutColumnData>;
+  columns: { [key: number]: ShowLayoutColumnData };
 };
 export type ShowListFieldData = {
   value?: Array<{ [key: string]: ShowFieldData["value"] }>;

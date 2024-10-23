@@ -348,6 +348,7 @@
                                 <template v-if="value?.path">
                                     <DropdownMenuItem
                                         as="a"
+                                        :download="value.name ?? ''"
                                         :href="route('code16.sharp.download.show', {
                                             entityKey: form.entityKey,
                                             instanceId: form.instanceId,

@@ -183,7 +183,7 @@ abstract class SharpDashboard
         $this->figureWidgetsData[$figureWidgetKey] = [
             'figure' => $figure,
             'unit' => $unit,
-            'evolution' => SharpFigureWidget::formatEvolution($evolution),
+            'evolution' => $evolution,
         ];
 
         return $this;

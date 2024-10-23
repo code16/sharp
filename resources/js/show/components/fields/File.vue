@@ -5,7 +5,14 @@
     import { filesizeLabel } from '@/utils/file';
     import { route } from "@/utils/url";
     import { useParentShow } from "@/show/useParentShow";
-    import { Card, CardContent } from "@/components/ui/card";
+    import {
+        DropdownMenu,
+        DropdownMenuContent,
+        DropdownMenuItem,
+        DropdownMenuTrigger
+    } from "@/components/ui/dropdown-menu";
+    import { Button } from "@/components/ui/button";
+    import { MoreHorizontal } from "lucide-vue-next";
 
     const props = defineProps<ShowFieldProps<ShowFileFieldData> & { legend?: string }>();
     const show = useParentShow();
@@ -36,20 +43,29 @@
                             {{ filesizeLabel(value.size) }}
                         </div>
                     </template>
-                    <a :href="route('code16.sharp.download.show', {
+                </div>
+            </div>
+            <DropdownMenu :modal="false">
+                <DropdownMenuTrigger as-child>
+                    <Button class="self-center" variant="ghost" size="icon">
+                        <MoreHorizontal class="size-4" />
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                    <DropdownMenuItem
+                        as="a"
+                        :download="value.name ?? ''"
+                        :href="route('code16.sharp.download.show', {
                             entityKey: show.entityKey,
                             instanceId: show.instanceId,
                             disk: value.disk,
                             path: value.path,
                         })"
-                        :download="value.name ?? ''"
-                        class="ml-auto relative underline text-sm text-muted-foreground decoration-1 underline-offset-2 hover:text-foreground"
                     >
-                        <span class="absolute -inset-2"></span>
                         {{ __('sharp::show.file.download') }}
-                    </a>
-                </div>
-            </div>
+                    </DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
         </template>
     </div>
 </template>
