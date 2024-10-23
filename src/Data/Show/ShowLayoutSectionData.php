@@ -11,7 +11,7 @@ final class ShowLayoutSectionData extends Data
         public ?string $key,
         public string $title,
         public bool $collapsable,
-        /** @var DataCollection<ShowLayoutColumnData> */
+        /** @var DataCollection<int, ShowLayoutColumnData> */
         public DataCollection $columns
     ) {
     }
