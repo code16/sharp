@@ -20,9 +20,7 @@
                 },
                 colors: value?.datasets?.map(dataset => normalizeColor(dataset.color)),
                 grid: {
-                    padding: {
-                        right: 12,
-                    }
+                    show: false,
                 },
                 labels: value?.labels,
                 legend: {
@@ -41,6 +39,14 @@
                     type: !widget.options?.horizontal && widget.dateLabels
                         ? 'datetime'
                         : 'category',
+                    axisBorder: {
+                        show: false,
+                    }
+                },
+                yaxis: {
+                    axisBorder: {
+                        show: false,
+                    }
                 },
             }
         })

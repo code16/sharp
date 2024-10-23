@@ -28,16 +28,16 @@ use Illuminate\Support\Facades\DB;
 class DemoDashboard extends SharpDashboard
 {
     private static array $colors = [
-        '#7F1D1D',
-        '#F472B6',
-        '#6366F1',
-        '#10B981',
-        '#F59E0B',
-        '#3B82F6',
-        '#064E3B',
-        '#EC4899',
-        '#78350F',
-        '#9CA3AF',
+        '#2a9d90',
+        '#e76e50',
+        '#274754',
+        '#e8c468',
+        '#f4a462',
+//        '#3B82F6',
+//        '#064E3B',
+//        '#EC4899',
+//        '#78350F',
+//        '#9CA3AF',
     ];
     private static int $colorsIndex = 0;
 

@@ -21,8 +21,14 @@
                 dataLabels: {
                     enabled: true,
                     style: {
-                        fontFamily: 'inherit',
-                    }
+                        fontFamily: 'inherit'
+                    },
+                    dropShadow: {
+                        enabled: false,
+                    },
+                },
+                stroke: {
+                    show: false,
                 },
                 colors: datasets?.map(dataset => normalizeColor(dataset.color)),
                 labels: datasets?.map(dataset => dataset.label ?? ''),
