@@ -1,6 +1,8 @@
 <?php
 
 use Code16\Sharp\Form\Fields\Formatters\ListFormatter;
+use Code16\Sharp\Form\Fields\Formatters\SharpFieldFormatter;
+use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Illuminate\Support\Arr;
@@ -52,6 +54,33 @@ it('non configured values are ignored when formatting from front', function () {
         ->all();
 
     $this->assertEquals($expectedData, (new ListFormatter)->fromFront($field, $attribute, $data));
+});
+
+it('executes formatter on each field', function () {
+    $field = SharpFormListField::make('list')
+        ->addItemField(SharpFormTextField::make('job')->setFormatter(new class extends SharpFieldFormatter {
+            public function toFront(SharpFormField $field, $value)
+            {
+                return strtoupper($value);
+            }
+            public function fromFront(SharpFormField $field, string $attribute, $value)
+            {
+                return strtolower($value);
+            }
+        }));
+    
+    $data = [
+        ['id' => 1, 'job' => 'Developer'],
+        ['id' => 2, 'job' => 'Designer'],
+    ];
+    expect((new ListFormatter)->toFront($field, $data))->toBe([
+        ['id' => 1, 'job' => 'DEVELOPER'],
+        ['id' => 2, 'job' => 'DESIGNER'],
+    ]);
+    expect((new ListFormatter)->fromFront($field, 'list', $data))->toBe([
+        ['id' => 1, 'job' => 'developer'],
+        ['id' => 2, 'job' => 'designer'],
+    ]);
 });
 
 it('allows to configure the id attribute', function () {
