@@ -3,12 +3,10 @@
 namespace Code16\Sharp\Dashboard;
 
 use Code16\Sharp\Dashboard\Layout\DashboardLayout;
-use Code16\Sharp\Dashboard\Widgets\SharpFigureWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
 use Code16\Sharp\Dashboard\Widgets\SharpWidget;
 use Code16\Sharp\Dashboard\Widgets\WidgetsContainer;
 use Code16\Sharp\EntityList\Traits\HandleDashboardCommands;
-use Code16\Sharp\Utils\Filters\FilterContainer;
 use Code16\Sharp\Utils\Filters\HandleFilters;
 use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
 use Illuminate\Support\Arr;
@@ -126,6 +124,7 @@ abstract class SharpDashboard
                     ->map(fn ($data, $key) => [
                         'key' => $key,
                         'data' => $data,
+                        'html' => $this->findWidgetByKey($key)->render($data),
                     ])
             )
 

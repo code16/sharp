@@ -20,9 +20,11 @@ use Code16\Sharp\Dashboard\Widgets\SharpFigureWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
 use Code16\Sharp\Dashboard\Widgets\SharpLineGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpOrderedListWidget;
+use Code16\Sharp\Dashboard\Widgets\SharpPanelWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpPieGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\WidgetsContainer;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
+use Code16\Sharp\Utils\Links\LinkToShowPage;
 use Code16\Sharp\Utils\PageAlerts\PageAlert;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
@@ -78,6 +80,11 @@ class DemoDashboard extends SharpDashboard
                 SharpOrderedListWidget::make('list')
                     ->setTitle('Top 3 categories')
                     ->buildItemLink(fn (array $item) => $item['url'] ?? null)
+            )
+            ->addWidget(
+                SharpPanelWidget::make('highlighted_post')
+                    ->setTitle('On the spotlight')
+                    ->setTemplate(view('sharp.templates.dashboard_ranking'))
             );
     }
 
@@ -100,7 +107,8 @@ class DemoDashboard extends SharpDashboard
                     )
                     ->addFullWidthWidget('visits_line')
                     ->addRow(fn (DashboardLayoutRow $row) => $row
-                        ->addWidget(3, 'list')
+                        ->addWidget(5, 'list')
+                        ->addWidget(7, 'highlighted_post')
                     );
             });
     }
@@ -142,6 +150,7 @@ class DemoDashboard extends SharpDashboard
         $this->setBarsGraphDataSet();
         $this->setLineGraphDataSet();
         $this->setOrderedListDataSet();
+        $this->setCustomPanelDataSet();
         
         $posts = DB::table('posts')
             ->select(DB::raw('state, count(*) as count'))
@@ -184,7 +193,7 @@ class DemoDashboard extends SharpDashboard
             );
     }
 
-    protected function setBarsGraphDataSet()
+    protected function setBarsGraphDataSet(): void
     {
         $data = User::withCount([
             'posts' => function (Builder $query) {
@@ -246,6 +255,22 @@ class DemoDashboard extends SharpDashboard
                 ])
                 ->toArray()
         );
+    }
+
+    protected function setCustomPanelDataSet(): void
+    {
+        $author = User::query()
+            ->withWhereHas('posts', fn ($query) => $query
+                ->whereBetween('published_at', [$this->getStartDate(), $this->getEndDate()])
+            )
+            ->inRandomOrder()
+            ->first();
+
+        $this->setPanelData('highlighted_post', [
+            'author' => $author,
+            'post' => $author->posts->first(),
+            'postUrl' => LinkToShowPage::make('posts', $author->posts->first()->id)->renderAsUrl(),
+        ]);
     }
 
     private static function nextColor(): string

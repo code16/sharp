@@ -22,9 +22,7 @@ final class PanelWidgetData extends Data
         public string $key,
         #[LiteralTypeScriptType('"'.WidgetType::Panel->value.'"')]
         public WidgetType $type,
-        public string $template,
         public ?string $title = null,
-        public ?string $link = null,
     ) {
     }
 
