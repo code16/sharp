@@ -1,8 +1,9 @@
 <script setup lang="ts">
-    // import { DataList, DataListRow } from '@/components/ui';
     import { OrderedListWidgetData } from "@/types";
-
-    type OrderedListItem = OrderedListWidgetData['value']['data'][0];
+    import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+    import { Badge } from "@/components/ui/badge";
+    import MaybeInertiaLink from "@/components/MaybeInertiaLink.vue";
+    import { __ } from "@/utils/i18n";
 
     defineProps<{
         widget: Omit<OrderedListWidgetData, 'value'>,
@@ -11,22 +12,37 @@
 </script>
 
 <template>
-    <div class="SharpWidgetOrderedList w-100">
-        <h2 class="SharpWidget__title mb-3 px-3">
-            {{ widget.title }}
-        </h2>
-<!--        <DataList class="SharpWidgetOrderedList__list"-->
-<!--            :items="value.data"-->
-<!--            :columns="[{ key: 'label', size: 12, sizeXS: 12, html: widget.html }]"-->
-<!--            hide-header-->
-<!--        >-->
-<!--            <template v-slot:item="{ item }: { item:OrderedListItem }">-->
-<!--                <DataListRow :url="item.url" :columns="[{ key: 'label', size: 12, sizeXS: 12, html: widget.html }]" :row="item">-->
-<!--                    <template v-if="item.count != null" v-slot:append>-->
-<!--                        <span class="SharpTag SharpTag&#45;&#45;default">{{ item.count }}</span>-->
-<!--                    </template>-->
-<!--                </DataListRow>-->
-<!--            </template>-->
-<!--        </DataList>-->
-    </div>
+    <Card>
+        <template v-if="widget.title">
+            <CardHeader>
+                <CardTitle class="text-sm/tight font-medium">
+                    {{ widget.title }}
+                </CardTitle>
+            </CardHeader>
+        </template>
+        <CardContent>
+            <div class="-my-2 divide-y">
+                <template v-for="item in value.data">
+                    <div class="group/item isolate relative flex items-center py-4 gap-x-4">
+                        <template v-if="item.url">
+                            <div class="absolute inset-0 -inset-x-2 -z-10 transition-colors group-hover/item:bg-muted/50"></div>
+                        </template>
+                        <div class="flex-1">
+                            <div class="content content-sm text-sm" v-html="item.label"></div>
+                            <template v-if="item.url">
+                                <MaybeInertiaLink :href="item.url" :aria-label="__('sharp::dashboard.widget.link_label')">
+                                    <span class="absolute inset-0"></span>
+                                </MaybeInertiaLink>
+                            </template>
+                        </div>
+                        <template v-if="item.count != null">
+                            <Badge variant="secondary">
+                                {{ item.count }}
+                            </Badge>
+                        </template>
+                    </div>
+                </template>
+            </div>
+        </CardContent>
+    </Card>
 </template>

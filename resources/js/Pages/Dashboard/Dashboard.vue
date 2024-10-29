@@ -174,33 +174,6 @@
                                 </template>
                             </div>
                         </section>
-
-<!--                            <Card>-->
-<!--                                <template v-if="section.title">-->
-<!--                                    <CardHeader>-->
-<!--                                        <CardTitle>-->
-<!--                                            {{ section.title }}-->
-<!--                                        </CardTitle>-->
-<!--                                    </CardHeader>-->
-<!--                                </template>-->
-<!--                                <template v-else>-->
-<!--                                    <CardHeader class="pb-0" />-->
-<!--                                </template>-->
-<!--                                <CardContent>-->
-<!--                                    <div class="grid grid-cols-12 gap-4">-->
-<!--                                        <template v-for="row in section.rows">-->
-<!--                                            <template v-for="widgetLayout in row">-->
-<!--                                                <div class="col-[span_var(&#45;&#45;size)]" :style="{ '&#45;&#45;size': widgetLayout.size }">-->
-<!--                                                    <Widget-->
-<!--                                                        :widget="dashboard.widgets[widgetLayout.key]"-->
-<!--                                                        :value="dashboard.data[widgetLayout.key]"-->
-<!--                                                    />-->
-<!--                                                </div>-->
-<!--                                            </template>-->
-<!--                                        </template>-->
-<!--                                    </div>-->
-<!--                                </CardContent>-->
-<!--                            </Card>-->
                     </template>
                 </div>
             </div>

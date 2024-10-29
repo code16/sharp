@@ -21,8 +21,8 @@ final class OrderedListWidgetData extends Data
         #[LiteralTypeScriptType('"'.WidgetType::OrderedList->value.'"')]
         public WidgetType $type,
         public ?string $title,
-        public ?string $link,
         public bool $html,
+        public ?string $link = null,
     ) {
     }
 

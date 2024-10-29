@@ -101,6 +101,7 @@ abstract class SharpDashboard
 
     final public function data(): array
     {
+        $this->checkDashboardIsBuilt();
         $this->buildWidgetsData();
 
         return collect($this->graphWidgetDataSets)

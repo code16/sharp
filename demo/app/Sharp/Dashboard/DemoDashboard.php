@@ -18,6 +18,7 @@ use Code16\Sharp\Dashboard\Widgets\SharpBarGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpFigureWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
 use Code16\Sharp\Dashboard\Widgets\SharpLineGraphWidget;
+use Code16\Sharp\Dashboard\Widgets\SharpOrderedListWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpPieGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\WidgetsContainer;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
@@ -71,6 +72,13 @@ class DemoDashboard extends SharpDashboard
                 SharpFigureWidget::make('online_panel')
                     ->setTitle('Online posts')
                     ->setLink(LinkToEntityList::make('posts')->addFilter(StateFilter::class, 'online')),
+            )
+            ->addWidget(
+                SharpOrderedListWidget::make('list')
+                    ->setTitle('My list')
+                    ->buildItemLink(function (array $item) {
+                        return $item['url'] ?? null;
+                    })
             );
     }
 
@@ -83,6 +91,9 @@ class DemoDashboard extends SharpDashboard
                         $row->addWidget(6, 'draft_panel')
                             ->addWidget(6, 'online_panel');
                     });
+//                    ->addRow(function (DashboardLayoutRow $row) {
+//                        $row->addWidget(3, 'list');
+//                    });
             })
             ->addSection('Stats', function (DashboardLayoutSection $section) {
                 $section
@@ -132,6 +143,24 @@ class DemoDashboard extends SharpDashboard
         $this->setPieGraphDataSet();
         $this->setBarsGraphDataSet();
         $this->setLineGraphDataSet();
+        
+//        $this->setOrderedListData('list', [
+//            [
+//                'label' => 'Integer ante arcu, accumsan a, consectetuer eget, posuere ut, mauris. Praesent ut ligula non mi varius sagittis.',
+//                'count' => 12,
+//                'url' => '/',
+//            ],
+//            [
+//                'label' => 'Second item',
+//                'count' => 5,
+//                'url' => '/',
+//            ],
+//            [
+//                'label' => 'Third item',
+//                'count' => 8,
+//                'url' => '/',
+//            ],
+//        ]);
 
         $posts = DB::table('posts')
             ->select(DB::raw('state, count(*) as count'))

@@ -20,17 +20,9 @@
 </script>
 
 <template>
-    <div class="SharpWidget card" :class="{
-        'SharpWidget--chart': widget.type === 'graph',
-        'SharpWidget--panel': widget.type === 'panel',
-        'SharpWidget--link': 'link' in widget && widget.link,
-    }">
-        <div class="card-body">
-            <component
-                :is="components[widget.type]"
-                :value="value"
-                :widget="widget"
-            />
-        </div>
-    </div>
+    <component
+        :is="components[widget.type]"
+        :value="value"
+        :widget="widget"
+    />
 </template>
