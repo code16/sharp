@@ -22,7 +22,7 @@
     <Card>
         <template v-if="widget.title">
             <CardHeader>
-                <CardTitle class="text-sm/tight font-medium">
+                <CardTitle class="text-base/none font-semibold tracking-tight">
                     {{ widget.title }}
                 </CardTitle>
             </CardHeader>

@@ -14,7 +14,7 @@
     <Card class="relative">
         <template v-if="widget.title">
             <CardHeader>
-                <CardTitle class="text-sm/tight font-medium">
+                <CardTitle class="text-base/none font-semibold tracking-tight">
                     <template v-if="widget.link">
                         <MaybeInertiaLink class="hover:underline" :href="widget.link">
                             <span class="absolute inset-0"></span>

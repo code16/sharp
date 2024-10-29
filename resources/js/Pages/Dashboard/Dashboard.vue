@@ -118,7 +118,7 @@
                     <template v-for="section in dashboard.layout.sections">
                         <section>
                             <template v-if="section.title">
-                                <h2 class="mb-4 text-2xl/tight font-bold">
+                                <h2 class="mb-4 text-2xl font-semibold">
                                     {{ section.title }}
                                 </h2>
                             </template>

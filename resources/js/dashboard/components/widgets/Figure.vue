@@ -14,7 +14,7 @@
     <Card class="relative">
         <template v-if="widget.title || value.data.evolution">
             <CardHeader class="flex flex-row items-center gap-2 pb-2">
-                <CardTitle class="text-sm/tight font-medium">
+                <CardTitle class="text-sm tracking-tight font-medium">
                     <template v-if="widget.link">
                         <MaybeInertiaLink class="hover:underline" :href="widget.link">
                             <span class="absolute inset-0"></span>
@@ -25,12 +25,12 @@
                         {{ widget.title }}
                     </template>
                 </CardTitle>
-                <template v-if="value.data.evolution?.startsWith('+')">
-                    <ArrowUpRight class="ml-auto size-4 text-muted-foreground" />
-                </template>
-                <template v-else-if="value.data.evolution?.startsWith('-')">
-                    <ArrowDownRight class="ml-auto size-4 text-muted-foreground" />
-                </template>
+<!--                <template v-if="value.data.evolution?.startsWith('+')">-->
+<!--                    <ArrowUpRight class="ml-auto size-4 text-muted-foreground" />-->
+<!--                </template>-->
+<!--                <template v-else-if="value.data.evolution?.startsWith('-')">-->
+<!--                    <ArrowDownRight class="ml-auto size-4 text-muted-foreground" />-->
+<!--                </template>-->
             </CardHeader>
         </template>
         <CardContent>
