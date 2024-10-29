@@ -3,7 +3,7 @@ import { getContextSources } from "./resolve";
 
 
 export function hasDependency(sourceKey, dynamicAttributes, attributes) {
-    return (dynamicAttributes || []).some(options => {
+    return (dynamicAttributes || []).some(options => {
         const attributeValue = attributes[options.name];
         const contextSources = getContextSources({
             dynamicOptions: options,

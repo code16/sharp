@@ -18,6 +18,8 @@ export function useFormTabs(props: { form: FormData }) {
             router.page.url = url;
             // @ts-ignore
             history.replaceState(router.page, null, url);
+            // todo inertia v2 router.page doesn't exist so we will have to hack with popstate event
+            // window.dispatchEvent(new PopStateEvent('popstate'));
         }, { immediate: true });
     }
 
