@@ -1,8 +1,8 @@
 <script setup lang="ts">
-    import { __ } from "@/utils/i18n";
-    import { TemplateRenderer } from '@/components';
     import { PanelWidgetData } from "@/types";
-    import { Link } from '@inertiajs/vue3';
+    import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+    import MaybeInertiaLink from "@/components/MaybeInertiaLink.vue";
+    import Content from "@/components/Content.vue";
 
     defineProps<{
         widget: Omit<PanelWidgetData, 'value'>,
@@ -11,19 +11,24 @@
 </script>
 
 <template>
-    <div class="SharpWidgetPanel">
+    <Card class="relative">
         <template v-if="widget.title">
-            <h2 class="SharpWidget__title mb-2">
-                {{ widget.title }}
-            </h2>
+            <CardHeader>
+                <CardTitle class="text-sm/tight font-medium">
+                    <template v-if="widget.link">
+                        <MaybeInertiaLink class="hover:underline" :href="widget.link">
+                            <span class="absolute inset-0"></span>
+                            {{ widget.title }}
+                        </MaybeInertiaLink>
+                    </template>
+                    <template v-else>
+                        {{ widget.title }}
+                    </template>
+                </CardTitle>
+            </CardHeader>
         </template>
-        <TemplateRenderer name="WidgetPanel" :template="widget.template" :template-data="value.data" />
-        <template v-if="widget.link">
-            <Link class="stretched-link" :href="widget.link">
-                <span class="visually-hidden">
-                    {{ __('sharp::dashboard.widget.link_label') }}
-                </span>
-            </Link>
-        </template>
-    </div>
+        <CardContent>
+            <Content class="content-sm text-sm" :html="value.html" />
+        </CardContent>
+    </Card>
 </template>

@@ -70,13 +70,7 @@
 </script>
 
 <template>
-    <FieldLayout
-        class="ShowTextField"
-        :class="{
-            'ShowTextField--html': field.html,
-        }"
-        :label="field.label"
-    >
+    <FieldLayout :label="field.label">
         <template v-if="currentContent && field.html">
             <TextRenderer
                 class="content content-sm text-sm"

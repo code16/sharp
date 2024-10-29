@@ -2,6 +2,7 @@
     import { FigureWidgetData } from "@/types";
     import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
     import { ArrowUpRight, ArrowDownRight } from "lucide-vue-next";
+    import MaybeInertiaLink from "@/components/MaybeInertiaLink.vue";
 
     defineProps<{
         widget: Omit<FigureWidgetData, 'value'>,
@@ -15,10 +16,10 @@
             <CardHeader class="flex flex-row items-center gap-2 pb-2">
                 <CardTitle class="text-sm/tight font-medium">
                     <template v-if="widget.link">
-                        <a class="hover:underline" :href="widget.link">
+                        <MaybeInertiaLink class="hover:underline" :href="widget.link">
                             <span class="absolute inset-0"></span>
                             {{ widget.title }}
-                        </a>
+                        </MaybeInertiaLink>
                     </template>
                     <template v-else>
                         {{ widget.title }}
@@ -44,7 +45,6 @@
                     {{ value.data.evolution }}
                 </p>
             </template>
-<!--              {{ __('sharp::dashboard.widget.link_label') }} -->
         </CardContent>
     </Card>
 </template>

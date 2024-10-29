@@ -10,10 +10,12 @@
             <div class="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
                 <div class="flex h-14 items-center border-b border-transparent px-4 lg:h-[60px] lg:px-6">
                     <template v-if="$page.props.logo">
-                        <Logo />
+                        <div class="text-accent-foreground">
+                            <Logo />
+                        </div>
                     </template>
                     <template v-else>
-                        <SharpLogo class="h-4" />
+                        <SharpLogo class="h-4 text-accent-foreground" />
                     </template>
                 </div>
             </div>

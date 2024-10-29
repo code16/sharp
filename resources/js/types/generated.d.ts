@@ -182,13 +182,12 @@ export type EntityStateValueData = {
 export type FigureWidgetData = {
   value?: {
     key: string;
-    data: { figure: string; unit: string; evolution: string | null };
+    data: { figure: string; unit: string | null; evolution: string | null };
   };
   key: string;
   type: "figure";
   title: string | null;
   link: string | null;
-  icon: IconData | null;
 };
 export type FilterData =
   | CheckFilterData
@@ -694,7 +693,7 @@ export type PaginatorMetaData = {
   total: number | null;
 };
 export type PanelWidgetData = {
-  value?: { key: string; data: { [key: string]: any } };
+  value?: { key: string; data: { [key: string]: any }; html: string };
   key: string;
   type: "panel";
   template: string;

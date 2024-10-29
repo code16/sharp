@@ -14,6 +14,7 @@ final class PanelWidgetData extends Data
     #[TypeScriptType([
         'key' => 'string',
         'data' => 'array<string,mixed>',
+        'html' => 'string',
     ])]
     public array $value;
 
