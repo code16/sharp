@@ -77,6 +77,9 @@ This method will set the API key for geocoding only.
 
 This method will set the API key for maps only.
 
+### `setGoogleMapsMapId(string $mapId)`
+
+Google Maps API now requires a [Map ID](https://developers.google.com/maps/documentation/get-map-id) to use markers. It must be defined if maps provider is set to "gmaps".
 
 ## Formatter
 

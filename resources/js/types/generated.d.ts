@@ -397,14 +397,14 @@ export type FormFieldType =
   | "textarea"
   | "upload";
 export type FormGeolocationFieldData = {
-  value?: { lng: number; lat: number };
+  value?: { lat: number; lng: number } | null;
   key: string;
   type: "geolocation";
   geocoding: boolean;
   displayUnit: "DD" | "DMS";
   zoomLevel: number;
   mapsProvider:
-    | { name: "gmaps"; options: { apiKey: string } }
+    | { name: "gmaps"; options: { apiKey: string; mapId: string } }
     | { name: "osm"; options?: { tilesUrl: string } };
   geocodingProvider:
     | { name: "gmaps"; options: { apiKey: string } }
@@ -665,8 +665,8 @@ export type OrderedListWidgetData = {
   key: string;
   type: "list";
   title: string | null;
-  link: string | null;
   html: boolean;
+  link: string | null;
 };
 export type PageAlertData = {
   level: PageAlertLevel;
@@ -696,7 +696,6 @@ export type PanelWidgetData = {
   value?: { key: string; data: { [key: string]: any }; html: string };
   key: string;
   type: "panel";
-  template: string;
   title: string | null;
   link: string | null;
 };

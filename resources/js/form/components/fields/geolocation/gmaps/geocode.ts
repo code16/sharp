@@ -4,9 +4,10 @@ import { GeocodeParams, GeocodeResult } from "../types";
 
 let geocoder = null;
 
-export default function gmapsGeocode(params: GeocodeParams): Promise<GeocodeResult[]> {
+export default async function gmapsGeocode(params: GeocodeParams): Promise<GeocodeResult[]> {
     if(!geocoder) {
-        geocoder = new google.maps.Geocoder();
+        const { Geocoder } = await google.maps.importLibrary('geocoding') as google.maps.GeocodingLibrary;
+        geocoder = new Geocoder();
     }
     return new Promise((resolve, reject) => {
         geocoder.geocode(

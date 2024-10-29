@@ -12,7 +12,7 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScriptType;
 final class FormGeolocationFieldData extends Data
 {
     #[Optional]
-    #[TypeScriptType(['lng' => 'float', 'lat' => 'float'])]
+    #[LiteralTypeScriptType('{ lat: number, lng: number } | null')]
     public ?array $value;
 
     public function __construct(
@@ -23,7 +23,7 @@ final class FormGeolocationFieldData extends Data
         #[LiteralTypeScriptType('"DD" | "DMS"')]
         public string $displayUnit,
         public int $zoomLevel,
-        #[LiteralTypeScriptType('{ name: "gmaps", options: { apiKey: string } } | { name: "osm", options?: { tilesUrl: string } }')]
+        #[LiteralTypeScriptType('{ name: "gmaps", options: { apiKey: string, mapId: string } } | { name: "osm", options?: { tilesUrl: string } }')]
         public array $mapsProvider,
         #[LiteralTypeScriptType('{ name: "gmaps", options: { apiKey: string } } | { name: "osm" }')]
         public array $geocodingProvider,

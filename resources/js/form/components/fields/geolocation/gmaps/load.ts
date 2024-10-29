@@ -1,16 +1,15 @@
-import { loadGMapApi } from '@fawmi/vue-google-maps/src/load-google-maps';
+import { Loader } from "@googlemaps/js-api-loader";
 
 let loaded = false;
-export function loadGmaps(apiKey) {
+export function loadGmaps(apiKey: string) {
     if(!loaded) {
-        loadGMapApi({
-            v: 3,
-            key: apiKey,
-        });
         loaded = true;
 
-        return new Promise((resolve) => {
-            window['vueGoogleMapsInit'] = resolve
+        const loader = new Loader({
+            apiKey,
+            version: "quarterly",
+            // libraries: ["maps", "geocoding"],
         });
+        return loader.importLibrary('maps');
     }
 }

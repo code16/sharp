@@ -4,11 +4,11 @@
     import FormFieldLayout from "@/form/components/FormFieldLayout.vue";
     import { FormFieldProps } from "@/form/types";
 
-    defineProps<FormFieldProps<FormHtmlFieldData>>();
+    const props = defineProps<FormFieldProps<FormHtmlFieldData>>();
 </script>
 
 <template>
-    <FormFieldLayout v-bind="$props">
+    <FormFieldLayout v-bind="props">
         <div class="text-sm">
             <TemplateRenderer
                 :template="field.template"

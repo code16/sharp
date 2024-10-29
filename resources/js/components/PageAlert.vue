@@ -9,12 +9,16 @@
 </script>
 
 <template>
-    <Alert :variant="pageAlert.level === 'danger' ? 'destructive' : 'default'">
+    <Alert :variant="
+        pageAlert.level === 'danger' ? 'destructive'
+        : pageAlert.level === 'primary' ? 'primary'
+        : 'default'
+    ">
         <template v-if="pageAlert.level === 'danger'">
             <CircleAlert class="w-4 h-4"/>
         </template>
         <template v-else-if="pageAlert.level === 'warning'">
-            <TriangleAlert class="w-4 h-4" />
+            <TriangleAlert class="w-4 h-4 text-destructive" />
         </template>
         <template v-else>
             <Info class="w-4 h-4" />

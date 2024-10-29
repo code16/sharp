@@ -63,6 +63,13 @@ class SharpFormGeolocationField extends SharpFormField
 
         return $this;
     }
+    
+    public function setGoogleMapsMapId(string $mapId): self
+    {
+        $this->mapsProviderOptions['mapId'] = $mapId;
+
+        return $this;
+    }
 
     public function setZoomLevel(int $zoomLevel): self
     {
@@ -131,6 +138,7 @@ class SharpFormGeolocationField extends SharpFormField
             'initialPosition' => 'array|nullable',
             'boundaries' => 'array|nullable',
             'mapsProvider.name' => 'required|in:gmaps,osm',
+//            'mapsProvider.options.mapId' => 'required_if:mapsProvider.name,gmaps',
             'geocodingProvider.name' => 'required|in:gmaps,osm',
         ];
     }

@@ -56,9 +56,8 @@
     const extension = computed(() => props.value?.name?.match(/\.[0-9a-z]+$/i)[0]);
     const showEditModal = ref(false);
     const isTransformable = computed(() => {
-        const { field } = props;
-        return field.imageTransformable
-            && (!field.imageTransformableFileTypes || field.imageTransformableFileTypes?.includes(extension.value))
+        return props.field.imageTransformable
+            && (!props.field.imageTransformableFileTypes || props.field.imageTransformableFileTypes?.includes(extension.value))
             && props.value?.mime_type?.startsWith('image/');
     });
     const transformedImg = ref<string>();

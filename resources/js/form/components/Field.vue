@@ -28,7 +28,7 @@
         'check': Check,
         // 'date': DateInput,
         'editor': Editor,
-        // 'geolocation': Geolocation,
+        'geolocation': Geolocation,
         'html': Html,
         'list': List,
         // 'number': NumberInput,

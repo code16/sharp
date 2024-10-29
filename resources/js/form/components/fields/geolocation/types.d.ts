@@ -20,7 +20,9 @@ export type MapComponentProps = {
     markerPosition: FormGeolocationFieldData['value'] | null,
     center: FormGeolocationFieldData['value'] | null,
     maxBounds: Bounds | null,
+    bounds?: Bounds | null,
     zoom: number,
+    editable?: boolean,
 }
 
 export type EditableMapComponentProps = {
