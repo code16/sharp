@@ -12,8 +12,8 @@ $widgetsContainer->addWidget(
 
 The Panel needs a blade template to be rendered:
 
-### `setTemplate(View $template)`
-Pass a blade view path.
+### `setTemplate(View|string $template)`
+Pass a blade view path, or a blade content.
 
 ## Data valuation
 

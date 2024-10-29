@@ -26,7 +26,7 @@ it('gets dashboard widgets, layout and data', function () {
             $widgetsContainer
                 ->addWidget(
                     SharpPanelWidget::make('panel')
-                        ->setInlineTemplate('<b>test</b>')
+                        ->setTemplate('<b>test</b>')
                 )
                 ->addWidget(
                     SharpFigureWidget::make('figure')
@@ -70,7 +70,7 @@ it('gets dashboard widgets, layout and data', function () {
                 ->has('data.figure.data', fn (Assert $figure) => $figure
                     ->where('figure', '200')
                     ->where('unit', '€')
-                    ->where('evolution.value', '3%')
+                    ->where('evolution', '+3%')
                 )
                 ->etc()
             )
@@ -116,7 +116,10 @@ it('allows to configure a page alert with a closure as content', function () {
         {
             $this->setPanelData(
                 'panel',
-                ['month' => 'March']
+                [
+                    'name' => 'Albert Einstein',
+                    'month' => 'March'
+                ]
             );
         }
     });

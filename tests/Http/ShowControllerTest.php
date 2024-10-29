@@ -215,7 +215,7 @@ it('gets show data for an instance in a single show case', function () {
     $this->get('/sharp/s-show/single-person')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('show.data.name', 'Ernest Rutherford')
+            ->where('show.data.name.text', 'Ernest Rutherford')
         );
 });
 

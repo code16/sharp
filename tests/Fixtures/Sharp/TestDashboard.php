@@ -13,7 +13,7 @@ class TestDashboard extends SharpDashboard
     {
         $widgetsContainer->addWidget(
             SharpPanelWidget::make('panel')
-                ->setInlineTemplate('<b>test {{name}}</b>')
+                ->setTemplate('<b>test {{ $name }}</b>')
         );
     }
 

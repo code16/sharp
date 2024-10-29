@@ -234,7 +234,7 @@ it('handles panel widget data', function () {
         protected function buildWidgets(WidgetsContainer $widgetsContainer): void
         {
             $widgetsContainer->addWidget(
-                SharpPanelWidget::make('widget')->setInlineTemplate('<b>Hello {{user}}</b>'),
+                SharpPanelWidget::make('widget')->setTemplate('<b>Hello {{ $user }}</b>'),
             );
         }
 
@@ -251,6 +251,7 @@ it('handles panel widget data', function () {
                 'data' => [
                     'user' => 'John Wayne',
                 ],
+                'html' => '<b>Hello John Wayne</b>',
             ],
         ]);
 });
