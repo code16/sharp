@@ -5,7 +5,8 @@ namespace App\Sharp\Dashboard;
 use App\Models\Category;
 use App\Models\User;
 use App\Sharp\Dashboard\Commands\ExportStatsAsCsvCommand;
-use App\Sharp\Utils\Filters\AuthorFilter;
+use App\Sharp\Utils\Filters\CategoryFilter;
+use App\Sharp\Utils\Filters\PeriodFilter;
 use App\Sharp\Utils\Filters\PeriodRequiredFilter;
 use App\Sharp\Utils\Filters\StateFilter;
 use Carbon\Carbon;
@@ -75,10 +76,8 @@ class DemoDashboard extends SharpDashboard
             )
             ->addWidget(
                 SharpOrderedListWidget::make('list')
-                    ->setTitle('My list')
-                    ->buildItemLink(function (array $item) {
-                        return $item['url'] ?? null;
-                    })
+                    ->setTitle('Top 3 categories')
+                    ->buildItemLink(fn (array $item) => $item['url'] ?? null)
             );
     }
 
@@ -91,25 +90,24 @@ class DemoDashboard extends SharpDashboard
                         $row->addWidget(6, 'draft_panel')
                             ->addWidget(6, 'online_panel');
                     });
-//                    ->addRow(function (DashboardLayoutRow $row) {
-//                        $row->addWidget(3, 'list');
-//                    });
             })
             ->addSection('Stats', function (DashboardLayoutSection $section) {
                 $section
                     ->setKey('stats-section')
-                    ->addRow(function (DashboardLayoutRow $row) {
-                        $row->addWidget(6, 'authors_bar')
-                            ->addWidget(6, 'categories_pie');
-                    })
-                    ->addFullWidthWidget('visits_line');
+                    ->addRow(fn (DashboardLayoutRow $row) => $row
+                        ->addWidget(6, 'authors_bar')
+                        ->addWidget(6, 'categories_pie')
+                    )
+                    ->addFullWidthWidget('visits_line')
+                    ->addRow(fn (DashboardLayoutRow $row) => $row
+                        ->addWidget(3, 'list')
+                    );
             });
     }
 
     public function getFilters(): ?array
     {
         return [
-            AuthorFilter::class,
             'stats-section' => [
                 PeriodRequiredFilter::class,
             ],
@@ -143,25 +141,8 @@ class DemoDashboard extends SharpDashboard
         $this->setPieGraphDataSet();
         $this->setBarsGraphDataSet();
         $this->setLineGraphDataSet();
+        $this->setOrderedListDataSet();
         
-//        $this->setOrderedListData('list', [
-//            [
-//                'label' => 'Integer ante arcu, accumsan a, consectetuer eget, posuere ut, mauris. Praesent ut ligula non mi varius sagittis.',
-//                'count' => 12,
-//                'url' => '/',
-//            ],
-//            [
-//                'label' => 'Second item',
-//                'count' => 5,
-//                'url' => '/',
-//            ],
-//            [
-//                'label' => 'Third item',
-//                'count' => 8,
-//                'url' => '/',
-//            ],
-//        ]);
-
         $posts = DB::table('posts')
             ->select(DB::raw('state, count(*) as count'))
             ->groupBy('state')
@@ -224,12 +205,14 @@ class DemoDashboard extends SharpDashboard
     protected function setPieGraphDataSet(): void
     {
         Category::withCount([
-            'posts' => function (Builder $query) {
-                $query->whereBetween('published_at', [$this->getStartDate(), $this->getEndDate()]);
-            }, ])
-            ->limit(8)
-            ->orderBy('posts_count')
+            'posts' => fn (Builder $query) => $query
+                ->whereBetween('published_at', [
+                    $this->getStartDate(),
+                    $this->getEndDate()
+                ])
+            ])
             ->limit(5)
+            ->orderBy('posts_count', 'desc')
             ->get()
             ->each(function (Category $category) {
                 $this->addGraphDataSet(
@@ -239,6 +222,30 @@ class DemoDashboard extends SharpDashboard
                         ->setColor(static::nextColor()),
                 );
             });
+    }
+
+    protected function setOrderedListDataSet(): void
+    {
+        $this->setOrderedListData('list',
+            Category::withCount([
+                'posts' => function (Builder $query) {
+                    $query->whereBetween('published_at', [$this->getStartDate(), $this->getEndDate()]);
+                }])
+                ->orderBy('posts_count', 'desc')
+                ->limit(3)
+                ->get()
+                ->map(fn (Category $category) => [
+                    'label' => $category->name,
+                    'count' => $category->posts_count,
+                    'url' => LinkToEntityList::make('posts')
+                        ->addFilter(CategoryFilter::class, $category->id)
+                        ->addFilter(PeriodFilter::class, sprintf('%s..%s',
+                            $this->getStartDate()->format('Ymd'),
+                            $this->getEndDate()->format('Ymd'),
+                        ))
+                ])
+                ->toArray()
+        );
     }
 
     private static function nextColor(): string
