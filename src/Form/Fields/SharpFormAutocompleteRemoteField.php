@@ -2,10 +2,13 @@
 
 namespace Code16\Sharp\Form\Fields;
 
+use Closure;
 use Code16\Sharp\Form\Fields\Formatters\AutocompleteFormatter;
 use Code16\Sharp\Form\Fields\Utils\IsSharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\Utils\SharpFormAutocompleteCommonField;
 use Code16\Sharp\Utils\Fields\IsSharpFieldWithLocalization;
+use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Blade;
 
 class SharpFormAutocompleteRemoteField
     extends SharpFormField
@@ -19,6 +22,8 @@ class SharpFormAutocompleteRemoteField
     protected int $searchMinChars = 1;
     protected string $dataWrapper = '';
     protected int $debounceDelay = 300;
+    protected ?Closure $queryResultsCallback = null;
+    protected View|string $template;
 
     public static function make(string $key): self
     {
@@ -26,6 +31,29 @@ class SharpFormAutocompleteRemoteField
         $instance->mode = 'remote';
 
         return $instance;
+    }
+    
+    public function queryResultsUsing(Closure $closure): self
+    {
+        $this->queryResultsCallback = $closure;
+
+        return $this;
+    }
+    
+    public function setTemplate(View|string $template): self
+    {
+        $this->template = $template;
+        
+        return $this;
+    }
+    
+    public function render(array $data): string
+    {
+        if (is_string($this->template)) {
+            return Blade::render($this->template, $data);
+        }
+        
+        return $this->template->with($data)->render();
     }
 
     public function setRemoteEndpoint(string $remoteEndpoint): self
@@ -95,6 +123,31 @@ class SharpFormAutocompleteRemoteField
         $this->dataWrapper = $dataWrapper;
 
         return $this;
+    }
+    
+    public function dataWrapper(): string
+    {
+        return $this->dataWrapper;
+    }
+    
+    public function remoteEndpoint(): string
+    {
+        return $this->remoteEndpoint;
+    }
+    
+    public function remoteMethod(): string
+    {
+        return $this->remoteMethod;
+    }
+    
+    public function remoteSearchAttribute(): string
+    {
+        return $this->remoteSearchAttribute;
+    }
+    
+    public function getQueryResultsCallback(): ?Closure
+    {
+        return $this->queryResultsCallback;
     }
 
     protected function validationRules(): array
