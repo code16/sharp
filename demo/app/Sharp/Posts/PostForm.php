@@ -138,6 +138,7 @@ class PostForm extends SharpForm
                     ->setReadOnly(! auth()->user()->isAdmin())
                     ->setLabel('Author')
                     ->setRemoteEndpoint('/api/admin/users')
+//                    ->setTemplate('<div>{{$name}}</div><div><small>{{$email}}</small></div>')
                     ->setListItemInlineTemplate('<div>{{name}}</div><div><small>{{email}}</small></div>')
                     ->setResultItemInlineTemplate('<div>{{name}}</div><div><small>{{email}}</small></div>')
                     ->setHelpMessage('This field is only editable by admins.'),

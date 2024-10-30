@@ -3,9 +3,8 @@
 namespace Code16\Sharp\Http\Controllers\Api;
 
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteRemoteField;
-use Illuminate\Contracts\Http\Kernel;
-use Illuminate\Http\Client\Response;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Router;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Validation\ValidationException;
@@ -39,7 +38,22 @@ class ApiAutocompleteController extends ApiController
         if($callback = $field->getQueryResultsCallback()) {
             $data = $callback(request()->input('search'));
         } else {
-            if(str($field->remoteEndpoint())->startsWith('/')) {
+//            if($field->isExternalEndpoint()) {
+//                $pendingRequest = Http::createPendingRequest()
+//                    ->acceptJson()
+//                    ->throw()
+//                    ->withQueryParameters([
+//                        $field->remoteSearchAttribute() => request()->input('search'),
+//                    ]);
+//                if($field->remoteMethod() === 'POST') {
+//                    $apiResponse = $pendingRequest->post(request()->input('endpoint'));
+//                } else {
+//                    $apiResponse = $pendingRequest->get(request()->input('endpoint'));
+//                }
+//                $data = $apiResponse->json();
+//                app(Router::class)->getRoutes()->getRoutes()[0]->matches(Request::create(request()->input('endpoint')));
+
+//            } else {
                 $response = app()->handle(
                     tap(Request::create(
                         uri: url($field->remoteEndpoint()),
@@ -53,27 +67,15 @@ class ApiAutocompleteController extends ApiController
                     })
                 );
                 
-                $data = json_decode($response->getContent());
-            } else {
-                $pendingRequest = Http::createPendingRequest()
-                    ->acceptJson()
-                    ->throw()
-                    ->withQueryParameters([
-                        $field->remoteSearchAttribute() => request()->input('search'),
-                    ]);
-                if($field->remoteMethod() === 'POST') {
-                    $apiResponse = $pendingRequest->post(request()->input('endpoint'));
-                } else {
-                    $apiResponse = $pendingRequest->get(request()->input('endpoint'));
-                }
-                $data = $apiResponse->json();
-            }
+                $data = Arr::get(json_decode($response->getContent()), $field->dataWrapper() ?: null);
+//            }
         }
 
         return response()->json([
-            'data' => collect(Arr::get($data, $field->dataWrapper() ?: null))->map(fn ($item) => [
+            'data' => collect($data)->map(fn ($item) => [
                 ...$item,
                 '_html' => $field->render($item),
+//                '_html_result' => $field->render($item),
             ]),
         ]);
     }

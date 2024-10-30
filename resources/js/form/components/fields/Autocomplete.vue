@@ -1,336 +1,117 @@
 <script setup lang="ts">
+    import FormFieldLayout from "@/form/components/FormFieldLayout.vue";
+    import { FormFieldEmits, FormFieldProps } from "@/form/types";
+    import {
+        FormAutocompleteLocalFieldData,
+        FormAutocompleteRemoteFieldData,
+        FormTextFieldData,
+        SelectFilterData
+    } from "@/types";
+    import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+    import { ref } from "vue";
+    import { Button } from "@/components/ui/button";
     import { __ } from "@/utils/i18n";
+    import { Check, ChevronsUpDown } from 'lucide-vue-next';
+    import { cn } from "@/utils/cn";
+    import {
+        Command,
+        CommandEmpty,
+        CommandGroup,
+        CommandInput, CommandItem,
+        CommandList,
+        CommandSeparator
+    } from "@/components/ui/command";
+    import { Checkbox } from "@/components/ui/checkbox";
+    import { useDebounceFn } from "@vueuse/core";
+    import { route } from "@/utils/url";
+    import { api } from "@/api/api";
+    import { useParentForm } from "@/form/useParentForm";
+    import debounce from "lodash/debounce";
+
+    const props = defineProps<FormFieldProps<FormAutocompleteLocalFieldData | FormAutocompleteRemoteFieldData>>();
+    const emit = defineEmits<FormFieldEmits<FormAutocompleteLocalFieldData | FormAutocompleteRemoteFieldData>>();
+    const form = useParentForm();
+
+    const open = ref(false);
+    const searchTerm = ref('');
+    const results = ref([]);
+
+    const remoteSearch = debounce(async (term: string) => {
+        results.value = await api.get(route('code16.sharp.api.form.autocomplete.index', {
+            entityKey: form.entityKey,
+            autocompleteFieldKey: props.field.key,
+        }), {
+            params: {
+                endpoint: props.field.mode === 'remote' && props.field.remoteEndpoint,
+                search: term,
+            },
+        })
+            .then(response => response.data.data);
+    }, 300);
+
+    const search = useDebounceFn(async (term) => {
+        if(props.field.mode === 'remote') {
+            remoteSearch(term);
+        } else {
+
+        }
+    }, 300);
 </script>
 
 <template>
-    <div class="SharpAutocomplete" :class="classes">
-        <template v-if="ready">
-            <template v-if="overlayVisible">
-                <div class="form-control clearable SharpAutocomplete__result">
-                    <TemplateRenderer
-                        name="ResultItem"
-                        :template="resultItemTemplate"
-                        :template-data="resolveTemplateData(value)"
-                        :template-props="searchKeys"
-                    />
-                    <ClearButton @click="handleClearButtonClicked" />
+    <FormFieldLayout :field="props.field">
+        <Popover v-model:open="open">
+            <template v-if="props.value">
+                <div class="border border-input rounded-md p-2">
+                    <div v-html="props.value.toString()"></div>
                 </div>
             </template>
             <template v-else>
-                <Multiselect
-                    :id="id"
-                    class="SharpAutocomplete__multiselect form-control"
-                    :class="{
-                        'form-select': !this.isRemote,
-                        'SharpAutocomplete__multiselect--hide-dropdown': hideDropdown,
-                    }"
-                    :value="value"
-                    :options="suggestions"
-                    :track-by="itemIdAttribute"
-                    :internal-search="false"
-                    :placeholder="placeholder"
-                    :loading="isLoading"
-                    :multiple="multiple"
-                    :disabled="readOnly"
-                    :hide-selected="hideSelected"
-                    :allow-empty="allowEmpty"
-                    :preserve-search="preserveSearch"
-                    :show-pointer="showPointer"
-                    :searchable="searchable"
-                    :readonly="readOnly"
-                    :tabindex="readOnly ? -1 : 0"
-                    @search-change="updateSuggestions($event)"
-                    @select="handleSelect"
-                    @input="$emit('multiselect-input',$event)"
-                    @close="handleDropdownClose"
-                    @open="handleDropdownOpen"
-                    ref="multiselect"
-                >
-                    <template v-slot:clear>
-                        <template v-if="clearButtonVisible">
-                            <ClearButton @click="handleClearButtonClicked" />
-                        </template>
-                    </template>
-                    <template v-slot:singleLabel="{ option }">
-                        <TemplateRenderer
-                            name="ResultItem"
-                            :template="resultItemTemplate"
-                            :template-data="resolveTemplateData(option)"
-                            :template-props="searchKeys"
-                        />
-                    </template>
-                    <template v-slot:option="{ option }">
-                        <TemplateRenderer
-                            name="ListItem"
-                            :template="listItemTemplate"
-                            :template-data="resolveTemplateData(option)"
-                            :template-props="searchKeys"
-                        />
-                    </template>
-                    <template v-slot:loading>
-                        <Loading :visible="isLoading" small />
-                    </template>
-                    <template v-slot:noResult>
-                        {{ __('sharp::form.autocomplete.no_results_text') }}
-                    </template>
-                </multiselect>
+                <PopoverTrigger as-child>
+                    <Button variant="outline">
+                        {{ props.field.placeholder ?? __('sharp::form.multiselect.placeholder') }}
+                        <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                </PopoverTrigger>
             </template>
-        </template>
-    </div>
+            <PopoverContent :class="cn('p-0 w-[--radix-popover-trigger-width] min-w-[200px]')" align="start">
+                <Command
+                    v-model:searchTerm="searchTerm"
+                    @update:modelValue="$emit('input', $event as any)"
+                    @update:searchTerm="search($event)"
+                >
+                    <CommandInput :placeholder="__('sharp::form.multiselect.placeholder')" />
+                    <CommandList>
+                        <CommandEmpty>{{ __('sharp::form.autocomplete.no_results_text') }}</CommandEmpty>
+                        <CommandGroup>
+                            <template v-for="item in results" :key="item[props.field.itemIdAttribute]">
+                                <CommandItem
+                                    class="data-[state=checked]:bg-accent"
+                                    :value="item"
+                                    @select="$emit('input', item)"
+                                >
+                                    <div v-html="item._html"></div>
+                                </CommandItem>
+                            </template>
+                        </CommandGroup>
+
+<!--                        <template v-if="valuated">-->
+<!--                            <div class="sticky -bottom-px border-b border-transparent bg-popover">-->
+<!--                                <CommandSeparator />-->
+<!--                                <CommandGroup>-->
+<!--                                    <CommandItem-->
+<!--                                        :value="{ label: __('sharp::filters.select.reset') }"-->
+<!--                                        class="justify-center text-center"-->
+<!--                                        @select="$emit('input', null); open = false"-->
+<!--                                    >-->
+<!--                                        {{ __('sharp::filters.select.reset') }}-->
+<!--                                    </CommandItem>-->
+<!--                                </CommandGroup>-->
+<!--                            </div>-->
+<!--                        </template>-->
+                    </CommandList>
+                </Command>
+            </PopoverContent>
+        </Popover>
+    </FormFieldLayout>
 </template>
-
-<script lang="ts">
-    import debounce from 'lodash/debounce';
-    // import Multiselect from 'vue-multiselect';
-    import { CancelToken } from 'axios';
-    import { warn, logError } from '@/utils/log';
-    import { search } from '@/utils/search';
-    import { __ } from "@/utils/i18n";
-    import { TemplateRenderer } from '@/components';
-    import { Loading, ClearButton } from '@/components/ui';
-
-    import { getAutocompleteSuggestions } from "../../api";
-    import localize from '../../mixins/localize/Autocomplete';
-    import { setDefaultValue } from "../../util";
-    import Fuse from "fuse.js";
-
-
-    export default {
-        name: 'SharpAutocomplete',
-        components: {
-            Multiselect: { template: '<div></div>' }, // todo replace this
-            TemplateRenderer,
-            Loading,
-            ClearButton,
-        },
-
-        mixins: [localize],
-
-        props: {
-            id: String,
-            fieldKey: String,
-
-            value: [String, Number, Object, Array],
-
-            mode: String,
-            localValues: {
-                type: Array,
-                default:()=>[]
-            },
-            placeholder: {
-                type: String,
-                default: () => __('form.multiselect.placeholder')
-            },
-            remoteEndpoint: String,
-            remoteMethod: String,
-            remoteSearchAttribute: {
-                type: String,
-                default: 'query'
-            },
-            itemIdAttribute: {
-                type:String,
-                default: 'id'
-            },
-            searchMinChars: {
-                type: Number,
-                default: 1
-            },
-            searchKeys: {
-                type: Array,
-                default:()=>['value']
-            },
-            dataWrapper: String,
-            readOnly: Boolean,
-            listItemTemplate: String,
-            resultItemTemplate: String,
-            templateData: Object,
-            noResultItem: Boolean,
-            multiple: Boolean,
-            hideSelected: Boolean,
-            searchable: {
-                type: Boolean,
-                default: true,
-            },
-            allowEmpty: {
-                type: Boolean,
-                default: true
-            },
-            clearOnSelect: Boolean,
-            preserveSearch: {
-                type: Boolean,
-                default: true
-            },
-            showPointer: {
-                type:Boolean,
-                default:true
-            },
-            dynamicAttributes: Array,
-            debounceDelay: {
-                type: Number,
-                default: 400,
-            },
-            nowrap: Boolean,
-        },
-        data() {
-            return {
-                ready: false,
-                query: '',
-                suggestions: this.localValues,
-                opened: false,
-                isLoading: false,
-            }
-        },
-        watch: {
-            localValues() {
-                if(!this.isRemote) {
-                    this.updateLocalSuggestions(this.query);
-                }
-            },
-        },
-        computed: {
-            isRemote() {
-                return this.mode === 'remote';
-            },
-            hideDropdown() {
-                return this.isQueryTooShort;
-            },
-            isQueryTooShort() {
-                return this.isRemote && this.query.length < this.searchMinChars;
-            },
-            clearButtonVisible() {
-                return !!this.value && !this.opened;
-            },
-            classes() {
-                return {
-                    'SharpAutocomplete--remote': this.isRemote,
-                    'SharpAutocomplete--disabled': this.readOnly,
-                    'SharpAutocomplete--wrap': !this.nowrap,
-                };
-            },
-            overlayVisible() {
-                const isFormField = !!this.fieldKey;
-                return this.value && isFormField;
-            }
-        },
-        methods: {
-            updateSuggestions(query) {
-                this.query = query;
-                if(this.isQueryTooShort) {
-                    return;
-                }
-                if(this.isRemote) {
-                    this.isLoading = true;
-                    this.updateRemoteSuggestions(query);
-                }
-                else {
-                    this.updateLocalSuggestions(query);
-                }
-            },
-
-            updateLocalSuggestions(query) {
-                if(query.length >= this.searchMinChars) {
-                    this.suggestions = new Fuse(this.localValues, {
-                        caseSensitive: false,
-                        include: [],
-                        minMatchCharLength: 1,
-                        shouldSort: true,
-                        tokenize: true,
-                        matchAllTokens: false,
-                        findAllMatches: false,
-                        id: null,
-                        keys: ['value'],
-                        location: 0,
-                        threshold: 0.0,
-                        distance: 0,
-                        maxPatternLength: 64,
-                        keys: searchKeys,
-                    })
-                } else {
-                    this.suggestions = this.localValues;
-                }
-                this.suggestions = query.length >= this.searchMinChars
-                    ? search(this.localValues, query, { searchKeys: this.searchKeys })
-                    : this.localValues;
-            },
-            updateRemoteSuggestions(query) {
-                this.cancelSource?.cancel();
-                this.cancelSource = CancelToken.source();
-                return getAutocompleteSuggestions({
-                    url: this.remoteEndpoint,
-                    method: this.remoteMethod,
-                    locale: this.locale,
-                    searchAttribute: this.remoteSearchAttribute,
-                    dataWrapper: this.dataWrapper,
-                    fieldKey: this.fieldKey,
-                    query,
-                    cancelToken: this.cancelSource.token,
-                })
-                .then(suggestions => {
-                    this.suggestions = suggestions;
-                    this.scroll();
-                })
-                .finally(() => {
-                    this.isLoading = false;
-                });
-            },
-            scroll() {
-               // multiselectUpdateScroll(this);
-            },
-            handleSelect(value) {
-                this.$emit('input', value);
-            },
-            handleDropdownClose() {
-                this.opened = false;
-                this.$emit('close');
-            },
-            handleDropdownOpen() {
-                this.opened = true;
-                this.$emit('open');
-                this.scroll();
-            },
-            handleClearButtonClicked() {
-                this.$emit('input', null);
-                this.$nextTick(() => {
-                    this.$refs.multiselect.activate();
-                });
-            },
-            resolveTemplateData(option) {
-                return {
-                    ...this.templateData,
-                    ...this.localizedTemplateData(option),
-                }
-            },
-            itemMatchValue(localValue) {
-                // noinspection EqualityComparisonWithCoercionJS
-                return localValue[this.itemIdAttribute] == this.value[this.itemIdAttribute];
-            },
-            findLocalValue() {
-                if(!this.value || this.value[this.itemIdAttribute] == null) return null;
-                if(!this.localValues.some(this.itemMatchValue)) {
-                    logError(`Autocomplete (key: ${this.fieldKey}) can't find local value matching : ${JSON.stringify(this.value)}`);
-                    return null;
-                }
-                return this.localValues.find(this.itemMatchValue);
-            },
-            async setDefault() {
-                this.$emit('input', this.findLocalValue(), { force: true });
-                await this.$nextTick();
-                this.ready = true;
-            }
-        },
-        created() {
-            this.updateRemoteSuggestions = debounce(this.updateRemoteSuggestions, this.debounceDelay);
-
-            if(this.mode === 'local' && !this.searchKeys) {
-                warn(`Autocomplete (key: ${this.fieldKey}) has local mode but no searchKeys, default set to ['value']`);
-            }
-            if(this.isRemote) {
-                this.ready = true;
-            } else {
-                setDefaultValue(this, this.setDefault, {
-                    dependantAttributes: ['localValues'],
-                });
-            }
-        }
-    }
-</script>

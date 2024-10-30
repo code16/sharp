@@ -1,5 +1,6 @@
 <?php
 
+use Code16\Sharp\Http\Controllers\Api\ApiAutocompleteController;
 use Code16\Sharp\Http\Controllers\Api\ApiEntityListController;
 use Code16\Sharp\Http\Controllers\Api\ApiEntityListFiltersController;
 use Code16\Sharp\Http\Controllers\Api\ApiFormEditorUploadFormController;
@@ -91,4 +92,7 @@ Route::group([
 
     Route::post('/upload', [ApiFormUploadController::class, 'store'])
         ->name('code16.sharp.api.form.upload');
+    
+    Route::get('/autocomplete/{entityKey}/{autocompleteFieldKey}', [ApiAutocompleteController::class, 'index'])
+        ->name('code16.sharp.api.form.autocomplete.index');
 });
