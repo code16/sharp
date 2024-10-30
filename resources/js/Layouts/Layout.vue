@@ -51,7 +51,7 @@ provide('menuBoundary', menuBoundary);
 </script>
 
 <template>
-    <ConfigProvider :scroll-body="false">
+    <ConfigProvider>
         <div class="min-h-screen w-full md:grid-cols-[220px_1fr]" :class="[
             'min-[1244px]:grid-cols-[280px_1fr]', // collapse only before 1024px+220px to prevent EL layout shift
             showDesktopLeftNav ? 'md:grid' : 'xl:grid'

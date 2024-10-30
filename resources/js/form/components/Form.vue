@@ -103,25 +103,27 @@
         <component :is="inline ? 'div' : RootCard">
             <template v-if="!inline">
                 <CardHeader>
-                    <div class="flex items-start">
-                        <CardTitle class="flex-1">
+                    <div class="flex items-start gap-x-4">
+                        <CardTitle class="-mt-0.5 flex-1 truncate text-2xl/7">
                             <slot name="title" />
                         </CardTitle>
                         <template v-if="form.layout.tabbed && form.layout.tabs.length > 1">
                             <div>
-                                <div class="sm:hidden">
+                                <div class="@3xl/root-card:hidden">
                                     <Select v-model="selectedTabSlug">
                                         <SelectTrigger>
                                             <SelectValue />
                                         </SelectTrigger>
-                                        <template v-for="tab in form.layout.tabs">
-                                            <SelectItem :value="slugify(tab.title)">
-                                                {{ tab.title }}
-                                            </SelectItem>
-                                        </template>
+                                        <SelectContent>
+                                            <template v-for="tab in form.layout.tabs">
+                                                <SelectItem :value="slugify(tab.title)">
+                                                    {{ tab.title }}
+                                                </SelectItem>
+                                            </template>
+                                        </SelectContent>
                                     </Select>
                                 </div>
-                                <div class="hidden sm:block">
+                                <div class="hidden @3xl/root-card:block">
                                     <TabsList>
                                         <template v-for="tab in form.layout.tabs">
                                             <TabsTrigger :value="slugify(tab.title)">
@@ -136,8 +138,8 @@
                                     </TabsList>
                                 </div>
                             </div>
+                            <div class="flex-1 hidden @4xl/root-card:block"></div>
                         </template>
-                        <div class="flex-1"></div>
                     </div>
                 </CardHeader>
             </template>

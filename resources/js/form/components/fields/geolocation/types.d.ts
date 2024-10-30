@@ -24,12 +24,3 @@ export type MapComponentProps = {
     zoom: number,
     editable?: boolean,
 }
-
-export type EditableMapComponentProps = {
-    field: FormGeolocationFieldData,
-    markerPosition: FormGeolocationFieldData['value'] | null,
-    bounds: Bounds | null,
-    maxBounds: Bounds | null,
-    center: FormGeolocationFieldData['value'] | null,
-    zoom: number,
-}

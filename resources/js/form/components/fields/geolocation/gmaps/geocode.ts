@@ -1,11 +1,13 @@
 /// <reference types="@types/google.maps" />
 
 import { GeocodeParams, GeocodeResult } from "../types";
+import { loadGmaps } from "@/form/components/fields/geolocation/gmaps/load";
 
 let geocoder = null;
 
-export default async function gmapsGeocode(params: GeocodeParams): Promise<GeocodeResult[]> {
+export default async function gmapsGeocode(apiKey: string, params: GeocodeParams): Promise<GeocodeResult[]> {
     if(!geocoder) {
+        await loadGmaps(apiKey);
         const { Geocoder } = await google.maps.importLibrary('geocoding') as google.maps.GeocodingLibrary;
         geocoder = new Geocoder();
     }
