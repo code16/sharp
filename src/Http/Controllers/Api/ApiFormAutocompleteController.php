@@ -67,6 +67,9 @@ class ApiFormAutocompleteController extends ApiController
                 );
                 
                 $data = Arr::get(json_decode($response->getContent(), true), $field->dataWrapper() ?: null);
+                if($response->getStatusCode() >= 400) {
+                    abort($response);
+                }
 //            }
         }
 

@@ -25,7 +25,7 @@ trait SharpFormAutocompleteCommonField
         $resultItem = $this->resultItemTemplate
             ? ['_htmlResult' => $this->renderResultItem($item)]
             : [];
-
+    
         return [
             ...$item,
             '_html' => $this->listItemTemplate

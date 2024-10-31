@@ -45,6 +45,7 @@ return [
     'select.validation.max_selected' => 'Too many items selected (:max_selected max.)',
 
     'autocomplete.no_results_text' => 'No result found',
+    'autocomplete.placeholder' => 'Search...',
 
     'date.validation_error.format' => 'Invalid date format',
 
