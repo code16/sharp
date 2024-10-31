@@ -16,10 +16,10 @@ const defaultOptions: FuseOptions = {
     tokenize: true,
 }
 
-export function search(list: string[], query: string, { searchKeys }: { searchKeys: string[] }) {
+export function fuzzySearch<T>(list: T[], query: string, { searchKeys }: { searchKeys: string[] }) {
     const fuse = new Fuse(list, {
         ...defaultOptions,
         keys: searchKeys,
     });
-    return fuse.search(query);
+    return fuse.search<T>(query);
 }

@@ -40,8 +40,8 @@ class TestForm extends SharpSingleForm
                     ->setLocalized()
                     ->setLabel('Autocomplete local')
                     ->setLocalSearchKeys(['label'])
-                    ->setListItemInlineTemplate('{{label}}')
-                    ->setResultItemInlineTemplate('{{label}} ({{id}})')
+                    ->setListItemTemplate('{{ $label }}')
+                    ->setResultItemTemplate('{{ $label }} ({{ $id }})')
                     ->setLocalValues($this->options(true)),
             )
             ->addField(
@@ -61,8 +61,8 @@ class TestForm extends SharpSingleForm
                         SharpFormAutocompleteRemoteField::make('item')
                             ->setLabel('Passenger')
                             ->setPlaceholder('test')
-                            ->setListItemInlineTemplate('{{ name }}')
-                            ->setResultItemInlineTemplate('{{name}} ({{num}})')
+                            ->setListItemTemplate('{{ $name }}')
+                            ->setResultItemTemplate('{{ $name }} ({{ $num }})')
                             ->setRemoteEndpoint(url('/passengers')),
                     ),
             )

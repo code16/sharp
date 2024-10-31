@@ -1,6 +1,6 @@
 <?php
 
-use Code16\Sharp\Form\Fields\Formatters\AutocompleteFormatter;
+use Code16\Sharp\Form\Fields\Formatters\AutocompleteLocalFormatter;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteLocalField;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteRemoteField;
 use Illuminate\Support\Str;
@@ -9,27 +9,27 @@ it('allows to format local value to front', function () {
     $value = Str::random();
 
     // Front always need an object
-    $toFront = (new AutocompleteFormatter)
+    $toFront = (new AutocompleteLocalFormatter)
         ->toFront(SharpFormAutocompleteLocalField::make('text'), $value);
 
     expect($toFront)->toBe(['id' => $value]);
 
-    $toFront = (new AutocompleteFormatter)
+    $toFront = (new AutocompleteLocalFormatter)
         ->toFront(SharpFormAutocompleteLocalField::make('text')->setItemIdAttribute('num'), $value);
 
     expect($toFront)->toBe(['num' => $value]);
 
-    $toFront = (new AutocompleteFormatter)
+    $toFront = (new AutocompleteLocalFormatter)
         ->toFront(SharpFormAutocompleteLocalField::make('text'), ['id' => $value]);
 
     expect($toFront)->toBe(['id' => $value]);
 
-    $toFront = (new AutocompleteFormatter)
+    $toFront = (new AutocompleteLocalFormatter)
         ->toFront(SharpFormAutocompleteLocalField::make('text'), (object) ['id' => $value]);
 
     expect($toFront)->toBe(['id' => $value]);
 
-    $toFront = (new AutocompleteFormatter)->toFront(
+    $toFront = (new AutocompleteLocalFormatter)->toFront(
         SharpFormAutocompleteLocalField::make('text'),
         new class($value)
         {
@@ -53,7 +53,7 @@ it('allows to format remote value to front', function () {
         'label' => Str::random(),
     ];
 
-    $toFront = (new AutocompleteFormatter)->toFront(
+    $toFront = (new AutocompleteLocalFormatter)->toFront(
         SharpFormAutocompleteRemoteField::make('text'),
         $value,
     );
@@ -63,7 +63,7 @@ it('allows to format remote value to front', function () {
 
 it('allows to format null value to front', function () {
     expect(
-        (new AutocompleteFormatter)->toFront(
+        (new AutocompleteLocalFormatter)->toFront(
             SharpFormAutocompleteLocalField::make('text'),
             null,
         )
@@ -72,7 +72,7 @@ it('allows to format null value to front', function () {
 
 it('allows to format null value from front', function () {
     expect(
-        (new AutocompleteFormatter)->fromFront(
+        (new AutocompleteLocalFormatter)->fromFront(
             SharpFormAutocompleteLocalField::make('text'),
             'attribute',
             null,
@@ -89,7 +89,7 @@ it('allows to format local value from front', function () {
 
     // Back always need an id
     expect(
-        (new AutocompleteFormatter)->fromFront(
+        (new AutocompleteLocalFormatter)->fromFront(
             SharpFormAutocompleteLocalField::make('text'),
             'attribute',
             $value,

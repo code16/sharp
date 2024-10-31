@@ -3,12 +3,10 @@
 namespace Code16\Sharp\Form\Fields;
 
 use Closure;
-use Code16\Sharp\Form\Fields\Formatters\AutocompleteFormatter;
+use Code16\Sharp\Form\Fields\Formatters\AutocompleteRemoteFormatter;
 use Code16\Sharp\Form\Fields\Utils\IsSharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\Utils\SharpFormAutocompleteCommonField;
 use Code16\Sharp\Utils\Fields\IsSharpFieldWithLocalization;
-use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Blade;
 
 class SharpFormAutocompleteRemoteField
     extends SharpFormField
@@ -23,11 +21,10 @@ class SharpFormAutocompleteRemoteField
     protected string $dataWrapper = '';
     protected int $debounceDelay = 300;
     protected ?Closure $queryResultsCallback = null;
-    protected View|string $template;
 
     public static function make(string $key): self
     {
-        $instance = new static($key, static::FIELD_TYPE, new AutocompleteFormatter());
+        $instance = new static($key, static::FIELD_TYPE, new AutocompleteRemoteFormatter());
         $instance->mode = 'remote';
 
         return $instance;
@@ -38,22 +35,6 @@ class SharpFormAutocompleteRemoteField
         $this->queryResultsCallback = $closure;
 
         return $this;
-    }
-    
-    public function setTemplate(View|string $template): self
-    {
-        $this->template = $template;
-        
-        return $this;
-    }
-    
-    public function render(array $data): string
-    {
-        if (is_string($this->template)) {
-            return Blade::render($this->template, $data);
-        }
-        
-        return $this->template->with($data)->render();
     }
 
     public function setRemoteEndpoint(string $remoteEndpoint): self

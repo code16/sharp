@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Http\Controllers\Api;
 
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteRemoteField;
+use Code16\Sharp\Utils\Transformers\ArrayConverter;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Arr;
@@ -15,10 +16,10 @@ class ApiAutocompleteController extends ApiController
     {
         $entity = $this->entityManager->entityFor($entityKey);
         
-        sharp_check_ability(
-            'view',
-            $entityKey,
-        );
+//        sharp_check_ability(
+//            'view',
+//            $entityKey,
+//        );
         
         $form = $entity->getFormOrFail(sharp_normalize_entity_key($entityKey)[1]);
         
@@ -36,7 +37,7 @@ class ApiAutocompleteController extends ApiController
         ]);
         
         if($callback = $field->getQueryResultsCallback()) {
-            $data = $callback(request()->input('search'));
+            $data = collect($callback(request()->input('search')))->map(fn ($record) => ArrayConverter::modelToArray($record));
         } else {
 //            if($field->isExternalEndpoint()) {
 //                $pendingRequest = Http::createPendingRequest()
@@ -67,16 +68,12 @@ class ApiAutocompleteController extends ApiController
                     })
                 );
                 
-                $data = Arr::get(json_decode($response->getContent()), $field->dataWrapper() ?: null);
+                $data = Arr::get(json_decode($response->getContent(), true), $field->dataWrapper() ?: null);
 //            }
         }
 
         return response()->json([
-            'data' => collect($data)->map(fn ($item) => [
-                ...$item,
-                '_html' => $field->render($item),
-//                '_html_result' => $field->render($item),
-            ]),
+            'data' => collect($data)->map(fn ($item) => $field->itemWithRenderedTemplates($item)),
         ]);
     }
 }

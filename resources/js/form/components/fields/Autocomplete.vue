@@ -4,14 +4,12 @@
     import {
         FormAutocompleteLocalFieldData,
         FormAutocompleteRemoteFieldData,
-        FormTextFieldData,
-        SelectFilterData
     } from "@/types";
     import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
     import { ref } from "vue";
     import { Button } from "@/components/ui/button";
     import { __ } from "@/utils/i18n";
-    import { Check, ChevronsUpDown } from 'lucide-vue-next';
+    import { ChevronsUpDown, X } from 'lucide-vue-next';
     import { cn } from "@/utils/cn";
     import {
         Command,
@@ -21,12 +19,11 @@
         CommandList,
         CommandSeparator
     } from "@/components/ui/command";
-    import { Checkbox } from "@/components/ui/checkbox";
-    import { useDebounceFn } from "@vueuse/core";
     import { route } from "@/utils/url";
     import { api } from "@/api/api";
     import { useParentForm } from "@/form/useParentForm";
     import debounce from "lodash/debounce";
+    import { fuzzySearch } from "@/utils/search";
 
     const props = defineProps<FormFieldProps<FormAutocompleteLocalFieldData | FormAutocompleteRemoteFieldData>>();
     const emit = defineEmits<FormFieldEmits<FormAutocompleteLocalFieldData | FormAutocompleteRemoteFieldData>>();
@@ -36,39 +33,57 @@
     const searchTerm = ref('');
     const results = ref([]);
 
-    const remoteSearch = debounce(async (term: string) => {
+    const abort = new AbortController();
+    const remoteSearch = debounce(async (query: string) => {
         results.value = await api.get(route('code16.sharp.api.form.autocomplete.index', {
             entityKey: form.entityKey,
             autocompleteFieldKey: props.field.key,
         }), {
             params: {
                 endpoint: props.field.mode === 'remote' && props.field.remoteEndpoint,
-                search: term,
+                search: query,
             },
+            signal: abort.signal,
         })
             .then(response => response.data.data);
     }, 300);
 
-    const search = useDebounceFn(async (term) => {
+    function search(query: string) {
         if(props.field.mode === 'remote') {
-            remoteSearch(term);
+            if(query.length >= props.field.searchMinChars) {
+                remoteSearch(query);
+            }
         } else {
-
+            if(query.length > 0) {
+                results.value = fuzzySearch(props.field.localValues, query, { searchKeys: props.field.searchKeys });
+            }
         }
-    }, 300);
+    }
+
+    if(props.field.mode === 'local' && props.value) {
+        const localValue = props.field.localValues
+            .find(v => props.value[props.field.itemIdAttribute] == v[props.field.itemIdAttribute]);
+        console.log(localValue);
+        if(localValue) {
+            emit('input', localValue, { force: true });
+        }
+    }
 </script>
 
 <template>
     <FormFieldLayout :field="props.field">
         <Popover v-model:open="open">
             <template v-if="props.value">
-                <div class="border border-input rounded-md p-2">
-                    <div v-html="props.value.toString()"></div>
+                <div class="relative border border-input flex items-center rounded-md min-h-10 text-sm px-3 py-2">
+                    <div class="flex-1" v-html="props.value._htmlResult ?? props.value._html ?? props.value[props.field.itemIdAttribute]"></div>
+                    <Button class="absolute right-0 top-1/2 -translate-y-1/2"  variant="ghost" size="icon" @click="$emit('input', null)">
+                        <X class="size-4" />
+                    </Button>
                 </div>
             </template>
             <template v-else>
                 <PopoverTrigger as-child>
-                    <Button variant="outline">
+                    <Button class="w-full justify-between" variant="outline">
                         {{ props.field.placeholder ?? __('sharp::form.multiselect.placeholder') }}
                         <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>

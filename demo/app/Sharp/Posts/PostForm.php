@@ -4,6 +4,7 @@ namespace App\Sharp\Posts;
 
 use App\Models\Category;
 use App\Models\Post;
+use App\Models\User;
 use App\Sharp\Utils\Embeds\AuthorEmbed;
 use App\Sharp\Utils\Embeds\CodeEmbed;
 use App\Sharp\Utils\Embeds\RelatedPostEmbed;
@@ -138,9 +139,19 @@ class PostForm extends SharpForm
                     ->setReadOnly(! auth()->user()->isAdmin())
                     ->setLabel('Author')
                     ->setRemoteEndpoint('/api/admin/users')
-//                    ->setTemplate('<div>{{$name}}</div><div><small>{{$email}}</small></div>')
-                    ->setListItemInlineTemplate('<div>{{name}}</div><div><small>{{email}}</small></div>')
-                    ->setResultItemInlineTemplate('<div>{{name}}</div><div><small>{{email}}</small></div>')
+                    ->queryResultsUsing(function ($search) {
+                        $users = User::orderBy('name');
+                        
+                        foreach (explode(' ', trim($search)) as $word) {
+                            $users->where(function ($query) use ($word) {
+                                $query->orWhere('name', 'like', "%$word%")
+                                    ->orWhere('email', 'like', "%$word%");
+                            });
+                        }
+                        
+                        return $users->limit(10)->get();
+                    })
+                    ->setListItemTemplate('<div>{{ $name }}</div><div><small>{{ $email }}</small></div>')
                     ->setHelpMessage('This field is only editable by admins.'),
             ));
     }

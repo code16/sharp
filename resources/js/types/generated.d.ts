@@ -199,15 +199,28 @@ export type FilterValuesData = {
   default: { [key: string]: any };
   valuated: { [key: string]: boolean };
 };
+export type FormAutocompleteDynamicLocalValuesData = {
+  [key: string]:
+    | FormAutocompleteDynamicLocalValuesData
+    | Array<FormAutocompleteItemData>;
+};
+export type FormAutocompleteItemData = { [key: string]: any } & {
+  _html: string | null;
+  _htmlResult: string | null;
+};
 export type FormAutocompleteLocalFieldData = {
-  value: string | number | null | { [locale: string]: string | number | null };
+  value?:
+    | FormAutocompleteItemData
+    | { [locale: string]: FormAutocompleteItemData };
   key: string;
   type: "autocomplete";
   mode: "local";
   itemIdAttribute: string;
   listItemTemplate: string;
   resultItemTemplate: string;
-  localValues: Array<{ [key: string]: any }> | FormDynamicOptionsData;
+  localValues:
+    | Array<FormAutocompleteItemData>
+    | FormAutocompleteDynamicLocalValuesData;
   placeholder: string | null;
   templateData: { [key: string]: any } | null;
   searchKeys: Array<string> | null;
@@ -220,7 +233,9 @@ export type FormAutocompleteLocalFieldData = {
   extraStyle: string | null;
 };
 export type FormAutocompleteRemoteFieldData = {
-  value: string | number | null | { [locale: string]: string | number | null };
+  value?:
+    | FormAutocompleteItemData
+    | { [locale: string]: FormAutocompleteItemData };
   key: string;
   type: "autocomplete";
   mode: "remote";

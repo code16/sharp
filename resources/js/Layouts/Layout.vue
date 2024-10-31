@@ -41,6 +41,8 @@ import GlobalFilters from "@/filters/components/GlobalFilters.vue";
 import SharpLogoMini from '../../svg/logo-mini.svg';
 import ColorModeDropdownItems from "@/components/ColorModeDropdownItems.vue";
     import Icon from "@/components/ui/Icon.vue";
+    import Iframe from "@/form/components/fields/editor/extensions/iframe/Iframe";
+    import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 const dialogs = useDialogs();
 const menu = useMenu();
@@ -329,33 +331,45 @@ provide('menuBoundary', menuBoundary);
         <Notifications />
 
         <template v-for="dialog in dialogs" :key="dialog.id">
-            <AlertDialog
-                v-model:open="dialog.open"
-                @update:open="(open) => !open && window.setTimeout(() => dialog.onHidden(), 200)"
-            >
-                <AlertDialogContent :highlight-element="dialog.highlightElement">
-                    <AlertDialogHeader>
-                        <template v-if="dialog.title">
-                            <AlertDialogTitle>
-                                {{ dialog.title }}
-                            </AlertDialogTitle>
-                        </template>
-                        <AlertDialogDescription>
-                            {{ dialog.text }}
-                        </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <template v-if="!dialog.okOnly">
-                            <AlertDialogCancel>
-                                {{ __('sharp::modals.cancel_button') }}
-                            </AlertDialogCancel>
-                        </template>
-                        <AlertDialogAction :class="buttonVariants({ variant: dialog.okVariant })" @click="dialog.onOk()">
-                            {{ dialog.okTitle ?? __('sharp::modals.ok_button') }}
-                        </AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
+            <template v-if="dialog.isHtmlContent">
+                <Dialog
+                    v-model:open="dialog.open"
+                    @update:open="(open) => !open && window.setTimeout(() => dialog.onHidden(), 200)"
+                >
+                    <DialogContent class="max-w-5xl h-[90dvh]">
+                        <iframe class="size-full" :srcdoc="`<style>body,pre{margin:0}</style>${dialog.text}`"></iframe>
+                    </DialogContent>
+                </Dialog>
+            </template>
+            <template v-else>
+                <AlertDialog
+                    v-model:open="dialog.open"
+                    @update:open="(open) => !open && window.setTimeout(() => dialog.onHidden(), 200)"
+                >
+                    <AlertDialogContent :highlight-element="dialog.highlightElement">
+                        <AlertDialogHeader>
+                            <template v-if="dialog.title">
+                                <AlertDialogTitle>
+                                    {{ dialog.title }}
+                                </AlertDialogTitle>
+                            </template>
+                            <AlertDialogDescription class="break-all">
+                                {{ dialog.text }}
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <template v-if="!dialog.okOnly">
+                                <AlertDialogCancel>
+                                    {{ __('sharp::modals.cancel_button') }}
+                                </AlertDialogCancel>
+                            </template>
+                            <AlertDialogAction :class="buttonVariants({ variant: dialog.okVariant })" @click="dialog.onOk()">
+                                {{ dialog.okTitle ?? __('sharp::modals.ok_button') }}
+                            </AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
+            </template>
         </template>
     </ConfigProvider>
 </template>

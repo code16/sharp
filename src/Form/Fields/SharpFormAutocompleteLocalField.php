@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Form\Fields;
 
-use Code16\Sharp\Form\Fields\Formatters\AutocompleteFormatter;
+use Code16\Sharp\Form\Fields\Formatters\AutocompleteLocalFormatter;
 use Code16\Sharp\Form\Fields\Utils\IsSharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\Utils\SharpFormAutocompleteCommonField;
 use Code16\Sharp\Utils\Fields\IsSharpFieldWithLocalization;
@@ -19,7 +19,7 @@ class SharpFormAutocompleteLocalField
 
     public static function make(string $key): self
     {
-        $instance = new static($key, static::FIELD_TYPE, new AutocompleteFormatter());
+        $instance = new static($key, static::FIELD_TYPE, new AutocompleteLocalFormatter());
         $instance->mode = 'local';
 
         return $instance;
@@ -51,6 +51,11 @@ class SharpFormAutocompleteLocalField
 
         return $this;
     }
+    
+    public function localValues(): array
+    {
+        return $this->localValues;
+    }
 
     protected function validationRules(): array
     {
@@ -69,9 +74,9 @@ class SharpFormAutocompleteLocalField
             array_merge(
                 $this->toArrayBase(),
                 [
-                    'localValues' => $this->isLocal() && $this->dynamicAttributes
-                        ? self::formatDynamicOptions($this->localValues, count($this->dynamicAttributes[0]['path']))
-                        : ($this->isLocal() ? self::formatOptions($this->localValues, $this->itemIdAttribute) : []),
+                    'localValues' => $this->dynamicAttributes
+                        ? self::formatDynamicOptions($this->localValues, count($this->dynamicAttributes[0]['path']), $this->itemWithRenderedTemplates(...))
+                        : self::formatOptions($this->localValues, $this->itemIdAttribute, $this->itemWithRenderedTemplates(...)),
                     'searchKeys' => $this->localSearchKeys,
                 ],
             ),

@@ -279,6 +279,14 @@ declare module 'ziggy-js' {
         }
     ],
     "code16.sharp.api.form.upload": [],
+    "code16.sharp.api.form.autocomplete.index": [
+        {
+            "name": "entityKey"
+        },
+        {
+            "name": "autocompleteFieldKey"
+        }
+    ],
     "code16.sharp.login": [],
     "code16.sharp.login.post": [],
     "code16.sharp.login.2fa": [],

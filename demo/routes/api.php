@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth:sanctum')->get('/admin/users', function (Request $request) {
+Route::get('/admin/users', function (Request $request) {
     $users = User::orderBy('name');
 
     foreach (explode(' ', trim($request->query('query'))) as $word) {

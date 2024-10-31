@@ -13,8 +13,8 @@ use Spatie\TypeScriptTransformer\Attributes\Optional;
 final class FormAutocompleteRemoteFieldData extends Data
 {
     #[Optional]
-    #[LiteralTypeScriptType('string|number|null | { [locale:string]: string|number|null }')]
-    public int|string|array|null $value;
+    #[LiteralTypeScriptType('FormAutocompleteItemData | { [locale:string]: FormAutocompleteItemData }')]
+    public ?array $value;
 
     public function __construct(
         public string $key,
@@ -23,14 +23,14 @@ final class FormAutocompleteRemoteFieldData extends Data
         #[LiteralTypeScriptType('"remote"')]
         public string $mode,
         public string $itemIdAttribute,
-        public string $listItemTemplate,
-        public string $resultItemTemplate,
         public int $searchMinChars,
         public int $debounceDelay,
         public string $dataWrapper,
         public ?string $placeholder = null,
         #[LiteralTypeScriptType('{ [key:string]: any } | null')]
         public ?array $templateData = null,
+        public ?string $listItemTemplate = null,
+        public ?string $resultItemTemplate = null,
         /** @var array<string> */
         public ?array $searchKeys = null,
         public ?string $remoteEndpoint = null,

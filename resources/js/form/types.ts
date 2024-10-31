@@ -1,4 +1,5 @@
 import {
+    FormAutocompleteDynamicLocalValuesData,
     FormAutocompleteLocalFieldData,
     FormDynamicOptionsData,
     FormFieldData,
@@ -17,7 +18,7 @@ export type WithDynamicAttributesApplied<Data extends FormFieldData> =
     Data extends FormSelectFieldData
         ? Omit<FormSelectFieldData, 'options'> & { options: Exclude<FormSelectFieldData['options'], FormDynamicOptionsData> }
         : Data extends FormAutocompleteLocalFieldData
-            ? Omit<FormAutocompleteLocalFieldData, 'localValues'> & { localValues: Exclude<FormAutocompleteLocalFieldData['localValues'], FormDynamicOptionsData> }
+            ? Omit<FormAutocompleteLocalFieldData, 'localValues'> & { localValues: Exclude<FormAutocompleteLocalFieldData['localValues'], FormAutocompleteDynamicLocalValuesData> }
             : Data;
 
 export type FormFieldProps<Data extends FormFieldData = FormFieldData & { value: any }, Value = Data['value']> = {
