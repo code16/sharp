@@ -20,26 +20,6 @@ class AutocompleteLocalFormatter extends SharpFieldFormatter
         return is_null($value) || is_array($value)
             ? $value
             : [$field->itemIdAttribute() => $value];
-        
-//        if(is_null($value)) {
-//            return null;
-//        }
-//
-//        if(is_array($value)) {
-//            $selectedValue = isset($value[$field->itemIdAttribute()])
-//                ? collect($field->localValues())
-//                    ->firstWhere($field->itemIdAttribute(), $value[$field->itemIdAttribute()])
-//                : null;
-//        } else {
-//            $selectedValue = collect($field->localValues())->firstWhere($field->itemIdAttribute(), $value);
-//        }
-//
-//        return $selectedValue
-//            ? [
-//                ...$selectedValue,
-//                '_html' => $field->renderResultItem($selectedValue),
-//            ]
-//            : null;
     }
 
     public function fromFront(SharpFormField $field, string $attribute, $value)

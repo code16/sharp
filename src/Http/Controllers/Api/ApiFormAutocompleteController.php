@@ -5,12 +5,10 @@ namespace Code16\Sharp\Http\Controllers\Api;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteRemoteField;
 use Code16\Sharp\Utils\Transformers\ArrayConverter;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Router;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Validation\ValidationException;
 
-class ApiAutocompleteController extends ApiController
+class ApiFormAutocompleteController extends ApiController
 {
     public function index(string $entityKey, string $autocompleteFieldKey)
     {
@@ -25,7 +23,7 @@ class ApiAutocompleteController extends ApiController
         
         $field = $form->findFieldByKey($autocompleteFieldKey);
         
-        if(!$field instanceof SharpFormAutocompleteRemoteField) {
+        if (!$field instanceof SharpFormAutocompleteRemoteField) {
             throw ValidationException::withMessages([
                 'autocompleteFieldKey' => 'Unknown remote autocomplete field : '.$autocompleteFieldKey,
             ]);
@@ -33,10 +31,10 @@ class ApiAutocompleteController extends ApiController
         
         request()->validate([
             'endpoint' => ['nullable', 'starts_with:'.str($field->remoteEndpoint())->before('{{')],
-            'search' => ['required', 'string'],
+            'search' => ['nullable', 'string'],
         ]);
         
-        if($callback = $field->getQueryResultsCallback()) {
+        if ($callback = $field->getQueryResultsCallback()) {
             $data = collect($callback(request()->input('search')))->map(fn ($record) => ArrayConverter::modelToArray($record));
         } else {
 //            if($field->isExternalEndpoint()) {
@@ -57,7 +55,7 @@ class ApiAutocompleteController extends ApiController
 //            } else {
                 $response = app()->handle(
                     tap(Request::create(
-                        uri: url($field->remoteEndpoint()),
+                        uri: url($field->remoteEndpoint()), // TODO allow full URLs (route(...)) = check if route exists
                         method: $field->remoteMethod(),
                         parameters: [
                             $field->remoteSearchAttribute() => request()->input('search'),

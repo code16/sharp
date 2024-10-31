@@ -17,11 +17,11 @@ class AutocompleteRemoteFormatter extends SharpFieldFormatter
     {
         $value = ArrayConverter::modelToArray($value);
         
-        if(is_null($value)) {
+        if (is_null($value)) {
             return null;
         }
         
-        if(is_array($value)) {
+        if (is_array($value)) {
             return $field->itemWithRenderedTemplates($value);
         }
         

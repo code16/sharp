@@ -22,12 +22,16 @@ trait SharpFormAutocompleteCommonField
     
     public function itemWithRenderedTemplates(array $item): array
     {
+        $resultItem = $this->resultItemTemplate
+            ? ['_htmlResult' => $this->renderResultItem($item)]
+            : [];
+
         return [
             ...$item,
             '_html' => $this->listItemTemplate
                 ? $this->renderListItem($item)
                 : ($item['label'] ?? $item[$this->itemIdAttribute] ?? null),
-            '_htmlResult' => $this->resultItemTemplate ? $this->renderResultItem($item) : null,
+            ...$resultItem,
         ];
     }
 
@@ -70,13 +74,6 @@ trait SharpFormAutocompleteCommonField
         return $this->resultItemTemplate->with($data)->render();
     }
 
-    public function setAdditionalTemplateData(array $data): self
-    {
-        // TODO keep this ?
-        
-        return $this;
-    }
-
     public function isRemote(): bool
     {
         return $this->mode === 'remote';
@@ -97,8 +94,6 @@ trait SharpFormAutocompleteCommonField
         return [
             'mode' => 'required|in:local,remote',
             'itemIdAttribute' => 'required',
-//            'listItemTemplate' => 'required',
-//            'resultItemTemplate' => 'required',
             'templateData' => 'nullable|array',
         ];
     }
@@ -110,8 +105,6 @@ trait SharpFormAutocompleteCommonField
                 'mode' => $this->mode,
                 'placeholder' => $this->placeholder,
                 'itemIdAttribute' => $this->itemIdAttribute,
-                'listItemTemplate' => $this->listItemTemplate,
-                'resultItemTemplate' => $this->resultItemTemplate,
                 'localized' => $this->localized,
             ],
             $this->dynamicAttributes

@@ -20,15 +20,14 @@ trait SharpFormFieldWithOptions
 
         if (is_array($firstOption) && isset($firstOption[$idAttribute])) {
             // We assume that we already have ["id", "label"] in this case
-            return $options
-                ->when($format)->map($format)
-                ->all();
+            return $options->map($format)->values()->all();
         }
 
         // Simple [key => value] array case
         return $options
             ->map(fn ($label, $id) => compact('id', 'label'))
-            ->when($format)->map($format)
+            ->map($format)
+            ->values()
             ->all();
     }
 
@@ -38,6 +37,8 @@ trait SharpFormFieldWithOptions
             return [];
         }
 
+        $format ??= fn ($option) => $option;
+
         return collect($options)
             ->map(function ($values) use ($depth, $format) {
                 if ($depth > 1) {
@@ -46,7 +47,7 @@ trait SharpFormFieldWithOptions
 
                 return collect($values)
                     ->map(fn ($label, $id) => compact('id', 'label'))
-                    ->when($format)->map($format)
+                    ->map($format)
                     ->values()
                     ->all();
             })

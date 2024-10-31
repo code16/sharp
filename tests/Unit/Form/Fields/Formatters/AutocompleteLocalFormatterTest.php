@@ -2,7 +2,6 @@
 
 use Code16\Sharp\Form\Fields\Formatters\AutocompleteLocalFormatter;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteLocalField;
-use Code16\Sharp\Form\Fields\SharpFormAutocompleteRemoteField;
 use Illuminate\Support\Str;
 
 it('allows to format local value to front', function () {
@@ -45,20 +44,6 @@ it('allows to format local value to front', function () {
     );
 
     expect($toFront)->toEqual(['id' => $value]);
-});
-
-it('allows to format remote value to front', function () {
-    $value = [
-        'id' => Str::random(),
-        'label' => Str::random(),
-    ];
-
-    $toFront = (new AutocompleteLocalFormatter)->toFront(
-        SharpFormAutocompleteRemoteField::make('text'),
-        $value,
-    );
-
-    expect($toFront)->toEqual($value);
 });
 
 it('allows to format null value to front', function () {
