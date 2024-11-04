@@ -63,29 +63,6 @@ Default: false.
 
 This is only useful when using the `WithSharpFormEloquentUpdater` trait. You can define here the name of an numerical order attribute (typically: `order`), and it will be automatically updated in the `save()` process.
 
-### `setCollapsedItemInlineTemplate(string $template)`
-### `setCollapsedItemTemplatePath(string $template)`
-
-The UI for a `sortable` List is to add a "reorder" button, which swaps the list in a readonly state. But for big List items it can be useful to define a special template for this reordering state.
-For inline template, just write the template as a string, using placeholders for data like this: `{{var}}`.
-
-
-Example:
-
-```php
-$list->setCollapsedItemInlineTemplate(
-    'Foreground: <strong>{{color}}</strong>'
-)
-```
-
-For template path, give the relative path of a template file (stating in the views Laravel folder).
-The template will be [interpreted by Vue.js](https://vuejs.org/v2/guide/syntax.html), meaning you can add data placeholders, DOM structure but also directives, and anything that Vue will parse. For instance:
-
-```vue
-<div v-if="show">result is {{value}}</div>
-<div v-else>result is unknown</div>
-```
-
 ### `setRemovable(bool $removable = true)`
 
 Defines if items can be removed by the user.

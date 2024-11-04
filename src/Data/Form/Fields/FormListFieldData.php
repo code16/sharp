@@ -25,7 +25,6 @@ final class FormListFieldData extends Data
         #[LiteralTypeScriptType('{ [key:string]: FormFieldData }')]
         public array $itemFields,
         public string $addText,
-        public ?string $collapsedItemTemplate = null,
         public ?int $maxItemCount = null,
         public ?string $bulkUploadField = null,
         public ?int $bulkUploadLimit = null,

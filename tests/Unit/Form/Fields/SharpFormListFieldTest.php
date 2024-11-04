@@ -95,14 +95,6 @@ it('allows to define setBulkUploadFileCountLimitAtOnce', function () {
         ->toHaveKey('bulkUploadLimit', 8);
 });
 
-it('allows to define collapsedItemInlineTemplate', function () {
-    $formField = buildFakeListField()
-        ->setCollapsedItemInlineTemplate('template');
-
-    expect($formField->toArray())
-        ->toHaveKey('collapsedItemTemplate', 'template');
-});
-
 it('allows to add an itemField', function () {
     $formField = buildFakeListField()
         ->addItemField(
