@@ -139,7 +139,7 @@ class PostForm extends SharpForm
                     ->setReadOnly(! auth()->user()->isAdmin())
                     ->setLabel('Author')
                     ->setRemoteEndpoint('/api/admin/users')
-                    ->queryResultsUsing(function ($search) {
+                    ->queryResultsUsing(function ($search, $data) {
                         $users = User::orderBy('name');
                         
                         foreach (explode(' ', trim($search)) as $word) {

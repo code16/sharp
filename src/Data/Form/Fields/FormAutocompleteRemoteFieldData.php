@@ -25,19 +25,10 @@ final class FormAutocompleteRemoteFieldData extends Data
         public string $itemIdAttribute,
         public int $searchMinChars,
         public int $debounceDelay,
-        public string $dataWrapper,
+        public string $remoteEndpoint,
+        /** @var string[]|null */
+        public ?array $callbackLinkedFields = null,
         public ?string $placeholder = null,
-        #[LiteralTypeScriptType('{ [key:string]: any } | null')]
-        public ?array $templateData = null,
-        public ?string $listItemTemplate = null,
-        public ?string $resultItemTemplate = null,
-        /** @var array<string> */
-        public ?array $searchKeys = null,
-        public ?string $remoteEndpoint = null,
-        #[LiteralTypeScriptType('"GET" | "POST" | null')]
-        public ?string $remoteMethod = null,
-        public ?string $remoteSearchAttribute = null,
-        public ?bool $localized = null,
         /** @var DataCollection<FormDynamicAttributeData> */
         public ?DataCollection $dynamicAttributes = null,
         public ?string $label = null,

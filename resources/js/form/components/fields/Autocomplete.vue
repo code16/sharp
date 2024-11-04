@@ -35,33 +35,43 @@
     const results = ref([]);
 
     const abort = new AbortController();
-    const remoteSearch = debounce(async (query: string) => {
-        results.value = await api.get(route('code16.sharp.api.form.autocomplete.index', {
-            entityKey: form.entityKey,
-            autocompleteFieldKey: props.field.key,
-        }), {
-            params: {
-                endpoint: props.field.mode === 'remote' && props.field.remoteEndpoint,
-                search: query,
-            },
-            signal: abort.signal,
-        })
-            .then(response => response.data.data);
-    }, 200);
+    let timeout = null;
 
-    function search(query: string) {
+    function search(query: string, immediate?: boolean) {
         if(props.field.mode === 'remote') {
-            if(query.length >= props.field.searchMinChars) {
-                remoteSearch(query);
+            const field = props.field as FormAutocompleteRemoteFieldData;
+            clearTimeout(timeout);
+            if(query.length >= field.searchMinChars) {
+                timeout = setTimeout(async () => {
+                    results.value = await api.post(
+                        route('code16.sharp.api.form.autocomplete.index', {
+                            entityKey: form.entityKey,
+                            autocompleteFieldKey: field.key,
+                            endpoint: field.remoteEndpoint,
+                            search: query,
+                        }), {
+                            formData: field.callbackLinkedFields
+                                ? Object.fromEntries(
+                                    Object.entries(form.serializedData).filter(([fieldKey]) => field.callbackLinkedFields.includes(fieldKey))
+                                )
+                                : null,
+                        }, {
+                            signal: abort.signal,
+                        }
+                    )
+                        .then(response => response.data.data)
+                }, immediate ? 0 : props.field.debounceDelay)
             }
         } else {
-            results.value = !query.length ? props.field.localValues : fuzzySearch(props.field.localValues, query, { searchKeys: props.field.searchKeys });
+            results.value = !query.length
+                ? props.field.localValues
+                : fuzzySearch(props.field.localValues, query, { searchKeys: props.field.searchKeys });
         }
     }
 
     function onOpen() {
-        if((props.field.mode === 'remote' && props.field.searchMinChars === 0 || props.field.mode === 'local') && !searchTerm.value) {
-            search('');
+        if(!searchTerm.value && (props.field.mode === 'local' || props.field.searchMinChars === 0)) {
+            search('', true);
         }
     }
 

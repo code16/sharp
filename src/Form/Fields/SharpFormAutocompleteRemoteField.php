@@ -21,6 +21,7 @@ class SharpFormAutocompleteRemoteField
     protected string $dataWrapper = '';
     protected int $debounceDelay = 300;
     protected ?Closure $queryResultsCallback = null;
+    protected ?array $callbackLinkedFields = null;
 
     public static function make(string $key): self
     {
@@ -30,9 +31,10 @@ class SharpFormAutocompleteRemoteField
         return $instance;
     }
     
-    public function queryResultsUsing(Closure $closure): self
+    public function queryResultsUsing(Closure $closure, ?array $linkedFields = null): self
     {
         $this->queryResultsCallback = $closure;
+        $this->callbackLinkedFields = $linkedFields;
 
         return $this;
     }
@@ -136,11 +138,10 @@ class SharpFormAutocompleteRemoteField
         return array_merge(
             $this->validationRulesBase(),
             [
-                'remoteEndpoint' => 'required',
-                'remoteMethod' => 'required|in:GET,POST',
-                'remoteSearchAttribute' => 'required',
                 'searchMinChars' => 'required|integer',
                 'debounceDelay' => 'required|integer',
+                'callbackLinkedFields' => ['nullable','array'],
+                'callbackLinkedFields.*' => ['string'],
             ],
         );
     }
@@ -152,11 +153,9 @@ class SharpFormAutocompleteRemoteField
                 $this->toArrayBase(),
                 [
                     'remoteEndpoint' => $this->remoteEndpoint,
-                    'dataWrapper' => $this->dataWrapper,
-                    'remoteMethod' => $this->remoteMethod,
-                    'remoteSearchAttribute' => $this->remoteSearchAttribute,
                     'debounceDelay' => $this->debounceDelay,
                     'searchMinChars' => $this->searchMinChars,
+                    'callbackLinkedFields' => $this->callbackLinkedFields,
                 ],
             ),
         );
