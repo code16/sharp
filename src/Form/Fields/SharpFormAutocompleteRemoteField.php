@@ -137,6 +137,7 @@ class SharpFormAutocompleteRemoteField extends SharpFormField implements IsSharp
             [
                 'searchMinChars' => ['required', 'integer'],
                 'debounceDelay' => ['required', 'integer'],
+                'remoteEndpoint' => ['nullable', 'string'],
                 'callbackLinkedFields' => ['nullable', 'array'],
                 'callbackLinkedFields.*' => ['string'],
             ],

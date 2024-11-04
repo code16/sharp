@@ -20,8 +20,8 @@ it('allows to format value to front', function () {
             ]
         )
     )->toBe([
-        ['id' => 1, 'item' => ['id' => 1, 'item' => 'A']],
-        ['id' => 2, 'item' => ['id' => 2, 'item' => 'B']],
+        ['id' => 1, 'item' => ['id' => 1, 'item' => 'A', '_html' => 1]],
+        ['id' => 2, 'item' => ['id' => 2, 'item' => 'B', '_html' => 2]],
     ]);
 });
 

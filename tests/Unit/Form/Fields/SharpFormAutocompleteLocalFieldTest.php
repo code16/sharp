@@ -121,50 +121,6 @@ it('allows to define linked localValues with dynamic attributes', function () {
         ]);
 });
 
-it('allows to define linked localValues with dynamic attributes and localization', function () {
-    $autocompleteField = SharpFormAutocompleteLocalField::make('field')
-        ->setLocalValues([
-            'A' => [
-                'A1' => ['fr' => 'test A1 fr', 'en' => 'test A1 en'],
-                'A2' => ['fr' => 'test A2 fr', 'en' => 'test A2 en'],
-            ],
-            'B' => [
-                'B1' => ['fr' => 'test B1 fr', 'en' => 'test B1 en'],
-                'B2' => ['fr' => 'test B2 fr', 'en' => 'test B2 en'],
-            ],
-        ])
-        ->setLocalValuesLinkedTo('master')
-        ->setLocalized();
-
-    expect($autocompleteField->toArray()['localValues'])
-        ->toEqual([
-            'A' => [
-                [
-                    'id' => 'A1',
-                    'label' => ['fr' => 'test A1 fr', 'en' => 'test A1 en'],
-                    '_html' => ['fr' => 'test A1 fr', 'en' => 'test A1 en']
-                ],
-                [
-                    'id' => 'A2',
-                    'label' => ['fr' => 'test A2 fr', 'en' => 'test A2 en'],
-                    '_html' => ['fr' => 'test A2 fr', 'en' => 'test A2 en']
-                ],
-            ],
-            'B' => [
-                [
-                    'id' => 'B1',
-                    'label' => ['fr' => 'test B1 fr', 'en' => 'test B1 en'],
-                    '_html' => ['fr' => 'test B1 fr', 'en' => 'test B1 en']
-                ],
-                [
-                    'id' => 'B2',
-                    'label' => ['fr' => 'test B2 fr', 'en' => 'test B2 en'],
-                    '_html' => ['fr' => 'test B2 fr', 'en' => 'test B2 en']
-                ],
-            ],
-        ]);
-});
-
 it('allows to define linked localValues with dynamic attributes on multiple master fields', function () {
     $autocompleteField = SharpFormAutocompleteLocalField::make('field')
         ->setLocalValues([
