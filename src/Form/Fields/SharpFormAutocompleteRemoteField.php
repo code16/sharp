@@ -2,14 +2,12 @@
 
 namespace Code16\Sharp\Form\Fields;
 
-use Code16\Sharp\Form\Fields\Formatters\AutocompleteFormatter;
+use Closure;
+use Code16\Sharp\Form\Fields\Formatters\AutocompleteRemoteFormatter;
 use Code16\Sharp\Form\Fields\Utils\IsSharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\Utils\SharpFormAutocompleteCommonField;
-use Code16\Sharp\Utils\Fields\IsSharpFieldWithLocalization;
 
-class SharpFormAutocompleteRemoteField
-    extends SharpFormField
-    implements IsSharpFieldWithLocalization, IsSharpFormAutocompleteField
+class SharpFormAutocompleteRemoteField extends SharpFormField implements IsSharpFormAutocompleteField
 {
     use SharpFormAutocompleteCommonField;
 
@@ -19,13 +17,23 @@ class SharpFormAutocompleteRemoteField
     protected int $searchMinChars = 1;
     protected string $dataWrapper = '';
     protected int $debounceDelay = 300;
+    protected ?Closure $remoteCallback = null;
+    protected ?array $remoteCallbackLinkedFields = null;
 
     public static function make(string $key): self
     {
-        $instance = new static($key, static::FIELD_TYPE, new AutocompleteFormatter());
+        $instance = new static($key, static::FIELD_TYPE, new AutocompleteRemoteFormatter());
         $instance->mode = 'remote';
 
         return $instance;
+    }
+    
+    public function setRemoteCallback(Closure $closure, ?array $linkedFields = null): self
+    {
+        $this->remoteCallback = $closure;
+        $this->remoteCallbackLinkedFields = $linkedFields;
+
+        return $this;
     }
 
     public function setRemoteEndpoint(string $remoteEndpoint): self
@@ -82,6 +90,13 @@ class SharpFormAutocompleteRemoteField
 
         return $this;
     }
+    
+    public function allowEmptySearch(): self
+    {
+        $this->searchMinChars = 0;
+        
+        return $this;
+    }
 
     public function setDebounceDelayInMilliseconds(int $debounceDelay): self
     {
@@ -96,17 +111,42 @@ class SharpFormAutocompleteRemoteField
 
         return $this;
     }
+    
+    public function dataWrapper(): string
+    {
+        return $this->dataWrapper;
+    }
+    
+    public function remoteEndpoint(): string
+    {
+        return $this->remoteEndpoint;
+    }
+    
+    public function remoteMethod(): string
+    {
+        return $this->remoteMethod;
+    }
+    
+    public function remoteSearchAttribute(): string
+    {
+        return $this->remoteSearchAttribute;
+    }
+    
+    public function getRemoteCallback(): ?Closure
+    {
+        return $this->remoteCallback;
+    }
 
     protected function validationRules(): array
     {
         return array_merge(
             $this->validationRulesBase(),
             [
-                'remoteEndpoint' => 'required',
-                'remoteMethod' => 'required|in:GET,POST',
-                'remoteSearchAttribute' => 'required',
-                'searchMinChars' => 'required|integer',
-                'debounceDelay' => 'required|integer',
+                'searchMinChars' => ['required', 'integer'],
+                'debounceDelay' => ['required', 'integer'],
+                'remoteEndpoint' => ['nullable', 'string'],
+                'callbackLinkedFields' => ['nullable', 'array'],
+                'callbackLinkedFields.*' => ['string'],
             ],
         );
     }
@@ -118,11 +158,9 @@ class SharpFormAutocompleteRemoteField
                 $this->toArrayBase(),
                 [
                     'remoteEndpoint' => $this->remoteEndpoint,
-                    'dataWrapper' => $this->dataWrapper,
-                    'remoteMethod' => $this->remoteMethod,
-                    'remoteSearchAttribute' => $this->remoteSearchAttribute,
                     'debounceDelay' => $this->debounceDelay,
                     'searchMinChars' => $this->searchMinChars,
+                    'callbackLinkedFields' => $this->remoteCallbackLinkedFields,
                 ],
             ),
         );

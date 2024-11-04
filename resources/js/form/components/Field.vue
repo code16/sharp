@@ -24,7 +24,7 @@
     const form = useParentForm();
 
     const components: Record<FormFieldData['type'], Component> = {
-        // 'autocomplete': Autocomplete,
+        'autocomplete': Autocomplete,
         'check': Check,
         // 'date': DateInput,
         'editor': Editor,

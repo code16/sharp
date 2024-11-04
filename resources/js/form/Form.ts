@@ -116,7 +116,7 @@ export class Form implements FormData, CommandFormData {
         return this.allFieldsMeta.some(fieldMeta => fieldMeta.uploading);
     }
 
-    getMeta(fieldKey: string): FieldMeta | undefined {
+    getMeta(fieldKey: string) {
         return get(this.meta, fieldKey);
     }
 

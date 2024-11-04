@@ -10,6 +10,7 @@ export type RootAlertDialog = {
     okTitle?: string,
     okVariant?: 'destructive',
     isError?: boolean,
+    isHtmlContent?: boolean,
     okOnly?: boolean,
     onOk: () => void,
     onHidden: () => void,

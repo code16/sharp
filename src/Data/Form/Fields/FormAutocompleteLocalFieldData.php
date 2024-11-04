@@ -8,12 +8,13 @@ use Code16\Sharp\Data\Form\Fields\Common\FormConditionalDisplayData;
 use Code16\Sharp\Data\Form\Fields\Common\FormDynamicAttributeData;
 use Code16\Sharp\Enums\FormFieldType;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
+use Spatie\TypeScriptTransformer\Attributes\Optional;
 
 final class FormAutocompleteLocalFieldData extends Data
 {
     #[Optional]
-    #[LiteralTypeScriptType('string|number|null | { [locale:string]: string|number|null }')]
-    public int|string|array|null $value;
+    #[LiteralTypeScriptType('FormAutocompleteItemData | { [locale:string]: FormAutocompleteItemData }')]
+    public ?array $value;
 
     public function __construct(
         public string $key,
@@ -22,11 +23,11 @@ final class FormAutocompleteLocalFieldData extends Data
         #[LiteralTypeScriptType('"local"')]
         public string $mode,
         public string $itemIdAttribute,
-        public string $listItemTemplate,
-        public string $resultItemTemplate,
-        #[LiteralTypeScriptType('Array<{ [key:string]: any }> | FormDynamicOptionsData')]
+        #[LiteralTypeScriptType('Array<FormAutocompleteItemData> | FormAutocompleteDynamicLocalValuesData')]
         public array $localValues,
         public ?string $placeholder = null,
+        public ?string $listItemTemplate = null,
+        public ?string $resultItemTemplate = null,
         #[LiteralTypeScriptType('{ [key:string]: any } | null')]
         public ?array $templateData = null,
         /** @var array<string> */

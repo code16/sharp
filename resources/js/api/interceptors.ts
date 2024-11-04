@@ -1,6 +1,6 @@
 import { parseBlobJSONContent } from "@/utils/request";
 import { handleErrorAlert } from "./errors";
-import { Axios } from "axios";
+import { Axios, AxiosError, isCancel } from "axios";
 
 
 export function installInterceptors(api: Axios) {
@@ -23,17 +23,22 @@ export function installInterceptors(api: Axios) {
 
         },
         async error => {
-            const response = error.response;
-
-            if(response.data instanceof Blob && response.data.type === 'application/json') {
-                response.data = await parseBlobJSONContent(response.data);
+            if(isCancel(error)) {
+                return Promise.reject(error);
             }
+            if(error instanceof AxiosError) {
+                const response = error.response;
 
-            handleErrorAlert({
-                data: response.data,
-                status: response.status,
-                method: error.config.method,
-            });
+                if(response.data instanceof Blob && response.data.type === 'application/json') {
+                    response.data = await parseBlobJSONContent(response.data);
+                }
+
+                handleErrorAlert({
+                    data: response.data,
+                    status: response.status,
+                    method: error.config.method,
+                });
+            }
 
             return Promise.reject(error);
         }

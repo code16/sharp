@@ -45,6 +45,9 @@ return [
     'select.validation.max_selected' => 'Trop d’éléments sélectionnés (:max_selected max.)',
 
     'autocomplete.no_results_text' => 'Pas de résultats',
+    'autocomplete.loading' => 'Chargement...',
+    'autocomplete.query_too_short' => 'Entrez au moins 1 caractère pour rechercher|Entrez au moins :min_chars caractères pour rechercher',
+    'autocomplete.placeholder' => 'Rechercher...',
 
     'date.validation_error.format' => 'Format de date invalide',
 

@@ -8,11 +8,6 @@ export function getErrorMessage({ data, status }) {
 }
 
 export async function handleErrorAlert({ data, method, status }) {
-    const text = getErrorMessage({ data, status });
-    const title = __(`sharp::modals.api.${status}.title`) === `sharp::modals.api.${status}.title`
-        ? __(`sharp::modals.error.title`)
-        : __(`sharp::modals.api.${status}.title`);
-
     if(status === 404 && method === 'get' || status === 422) {
         return;
     }
@@ -21,6 +16,15 @@ export async function handleErrorAlert({ data, method, status }) {
     if(status === 401 || status === 419) {
         location.reload();
     } else {
-        showAlert(text, { title, isError: true });
+        const text = getErrorMessage({ data, status });
+        const title = __(`sharp::modals.api.${status}.title`) === `sharp::modals.api.${status}.title`
+            ? __(`sharp::modals.error.title`)
+            : __(`sharp::modals.api.${status}.title`);
+
+        if(typeof data === 'string') {
+            showAlert(data, { title, isError: true, isHtmlContent: true });
+        } else {
+            showAlert(text, { title, isError: true });
+        }
     }
 }

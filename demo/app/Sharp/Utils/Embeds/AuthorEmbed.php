@@ -36,8 +36,9 @@ class AuthorEmbed extends SharpFormEditorEmbed
                 SharpFormAutocompleteRemoteField::make('author')
                     ->setLabel('Author')
                     ->setRemoteEndpoint('/api/admin/users')
-                    ->setListItemInlineTemplate('<div>{{name}}</div><div><small>{{email}}</small></div>')
-                    ->setResultItemInlineTemplate('<div>{{name}}</div><div><small>{{email}}</small></div>'),
+                    ->setListItemTemplate('<div>{{name}}</div><div><small>{{email}}</small></div>')
+//                    ->setListItemInlineTemplate('<div>{{name}}</div><div><small>{{email}}</small></div>')
+//                    ->setResultItemInlineTemplate('<div>{{name}}</div><div><small>{{email}}</small></div>'),
             )
             ->addField(
                 SharpFormUploadField::make('picture')

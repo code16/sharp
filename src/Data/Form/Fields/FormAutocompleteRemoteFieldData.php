@@ -8,12 +8,13 @@ use Code16\Sharp\Data\Form\Fields\Common\FormConditionalDisplayData;
 use Code16\Sharp\Data\Form\Fields\Common\FormDynamicAttributeData;
 use Code16\Sharp\Enums\FormFieldType;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
+use Spatie\TypeScriptTransformer\Attributes\Optional;
 
 final class FormAutocompleteRemoteFieldData extends Data
 {
     #[Optional]
-    #[LiteralTypeScriptType('string|number|null | { [locale:string]: string|number|null }')]
-    public int|string|array|null $value;
+    #[LiteralTypeScriptType('FormAutocompleteItemData | { [locale:string]: FormAutocompleteItemData }')]
+    public ?array $value;
 
     public function __construct(
         public string $key,
@@ -22,21 +23,12 @@ final class FormAutocompleteRemoteFieldData extends Data
         #[LiteralTypeScriptType('"remote"')]
         public string $mode,
         public string $itemIdAttribute,
-        public string $listItemTemplate,
-        public string $resultItemTemplate,
         public int $searchMinChars,
         public int $debounceDelay,
-        public string $dataWrapper,
-        public ?string $placeholder = null,
-        #[LiteralTypeScriptType('{ [key:string]: any } | null')]
-        public ?array $templateData = null,
-        /** @var array<string> */
-        public ?array $searchKeys = null,
         public ?string $remoteEndpoint = null,
-        #[LiteralTypeScriptType('"GET" | "POST" | null')]
-        public ?string $remoteMethod = null,
-        public ?string $remoteSearchAttribute = null,
-        public ?bool $localized = null,
+        /** @var string[]|null */
+        public ?array $callbackLinkedFields = null,
+        public ?string $placeholder = null,
         /** @var DataCollection<FormDynamicAttributeData> */
         public ?DataCollection $dynamicAttributes = null,
         public ?string $label = null,
