@@ -59,11 +59,12 @@ class ApiFormAutocompleteController extends ApiController
                     cookies: request()->cookies->all(),
                 ), fn (Request $request) => $request->headers->set('Accept', 'application/json'))
             );
-
-            $data = Arr::get(json_decode($response->getContent(), true), $field->dataWrapper() ?: null);
+            
             if ($response->getStatusCode() >= 400) {
                 abort($response);
             }
+            
+            $data = Arr::get(json_decode($response->getContent(), true), $field->dataWrapper() ?: null);
         }
 
         return response()->json([

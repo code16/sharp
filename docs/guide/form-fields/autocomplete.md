@@ -66,6 +66,9 @@ SharpFormAutocompleteRemoteField::make('customer')
     }, linkedFields: ['country']);
 ```
 
+### `allowEmptySearch()`
+
+This method allows to call the endpoint / callback with empty search (on first click on the field for example). It's equivalent to `setSearchMinChars(0)`.
 
 ### `setSearchMinChars(int $searchMinChars)`
 

@@ -138,6 +138,7 @@ class PostForm extends SharpForm
                 SharpFormAutocompleteRemoteField::make('author_id')
                     ->setReadOnly(! auth()->user()->isAdmin())
                     ->setLabel('Author')
+                    ->allowEmptySearch()
                     ->setRemoteCallback(function ($search) {
                         $users = User::orderBy('name')->limit(10);
                         

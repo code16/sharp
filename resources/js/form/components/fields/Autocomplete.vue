@@ -168,7 +168,7 @@
                                         class="group/item"
                                         :value="item[props.field.itemIdAttribute]"
                                     >
-                                        <div class="hidden absolute top-0 -left-1 h-full border-l border-primary group-data-[state=checked]/item:block"></div>
+                                        <div class="hidden absolute top-0 -left-1 h-full border-l border-2 border-primary/50 group-data-[state=checked]/item:block"></div>
                                         <div v-html="item._html"></div>
                                     </CommandItem>
                                 </template>

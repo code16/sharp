@@ -90,6 +90,13 @@ class SharpFormAutocompleteRemoteField extends SharpFormField implements IsSharp
 
         return $this;
     }
+    
+    public function allowEmptySearch(): self
+    {
+        $this->searchMinChars = 0;
+        
+        return $this;
+    }
 
     public function setDebounceDelayInMilliseconds(int $debounceDelay): self
     {
