@@ -216,12 +216,12 @@ export type FormAutocompleteLocalFieldData = {
   type: "autocomplete";
   mode: "local";
   itemIdAttribute: string;
-  listItemTemplate: string;
-  resultItemTemplate: string;
   localValues:
     | Array<FormAutocompleteItemData>
     | FormAutocompleteDynamicLocalValuesData;
   placeholder: string | null;
+  listItemTemplate: string | null;
+  resultItemTemplate: string | null;
   templateData: { [key: string]: any } | null;
   searchKeys: Array<string> | null;
   localized: boolean | null;
@@ -240,18 +240,11 @@ export type FormAutocompleteRemoteFieldData = {
   type: "autocomplete";
   mode: "remote";
   itemIdAttribute: string;
-  listItemTemplate: string;
-  resultItemTemplate: string;
   searchMinChars: number;
   debounceDelay: number;
-  dataWrapper: string;
+  remoteEndpoint: string;
+  callbackLinkedFields: Array<string> | null;
   placeholder: string | null;
-  templateData: { [key: string]: any } | null;
-  searchKeys: Array<string> | null;
-  remoteEndpoint: string | null;
-  remoteMethod: "GET" | "POST" | null;
-  remoteSearchAttribute: string | null;
-  localized: boolean | null;
   dynamicAttributes: Array<FormDynamicAttributeData> | null;
   label: string | null;
   readOnly: boolean | null;

@@ -41,15 +41,15 @@ class TestForm extends SharpSingleForm
                     ->setLocalSearchKeys(['label'])
                     ->setListItemTemplate('{{ $label }}')
                     ->setResultItemTemplate('{{ $label }} ({{ $id }})')
-                    ->setLocalValues($this->options(true)),
+                    ->setLocalValues($this->options()),
             )
             ->addField(
                 SharpFormAutocompleteRemoteField::make('autocomplete_remote')
                     ->setLabel('Autocomplete remote')
                     ->setRemoteSearchAttribute('query')
-                    ->setListItemInlineTemplate('{{name}}')
-                    ->setResultItemInlineTemplate('{{name}} ({{num}})')
-                    ->setRemoteEndpoint(url('/passengers')),
+                    ->setListItemTemplate('{{ $name }}')
+                    ->setResultItemTemplate('{{ $name }} ({{ $num }})')
+                    ->setRemoteEndpoint('/api/admin/users'),
             )
             ->addField(
                 SharpFormAutocompleteListField::make('autocomplete_list')
@@ -208,25 +208,25 @@ class TestForm extends SharpSingleForm
                     ->setStep(.1),
             )
             ->addField(
-                SharpFormSelectField::make('select_dropdown', $this->options(true))
+                SharpFormSelectField::make('select_dropdown', $this->options())
                     ->setLabel('Select dropdown')
                     ->setMultiple()
                     ->setDisplayAsDropdown(),
             )
             ->addField(
-                SharpFormSelectField::make('select_list', $this->options(true))
+                SharpFormSelectField::make('select_list', $this->options())
                     ->setLabel('Select list')
                     ->setDisplayAsList(),
             )
             ->addField(
-                SharpFormSelectField::make('select_list_multiple', $this->options(true))
+                SharpFormSelectField::make('select_list_multiple', $this->options())
                     ->setLabel('Select list multiple')
                     ->setMultiple()
                     ->setDisplayAsList()
                     ->setMaxSelected(2),
             )
             ->addField(
-                SharpFormTagsField::make('tags', $this->options(true))
+                SharpFormTagsField::make('tags', $this->options())
                     ->setLabel('Tags')
                     ->setCreatable(true)
                     ->setCreateAttribute('label')
@@ -370,33 +370,19 @@ class TestForm extends SharpSingleForm
         return ['fr', 'en'];
     }
 
-    protected function options(bool $localized = false): array
+    protected function options(): array
     {
-        if (! $localized) {
-            return [
-                '1' => 'Option one',
-                '2' => 'Option two',
-                '3' => 'Option three',
-            ];
-        }
-
         return [
-            '1' => ['en' => 'Option one', 'fr' => 'Option un'],
-            '2' => ['en' => 'Option two', 'fr' => 'Option deux'],
-            '3' => ['en' => 'Option three', 'fr' => 'Option trois'],
-            '4' => ['en' => 'Option four', 'fr' => 'Option quatre'],
-            '5' => ['en' => 'Option five', 'fr' => 'Option cinq'],
-            '6' => ['en' => 'Option six', 'fr' => 'Option six'],
-            '7' => ['en' => 'Option seven', 'fr' => 'Option sept'],
-            '8' => ['en' => 'Option eight', 'fr' => 'Option huit'],
-            '9' => ['en' => 'Option nine', 'fr' => 'Option neuf'],
-            '10' => ['en' => 'Option ten', 'fr' => 'Option dix'],
-            '11' => ['en' => 'Option eleven', 'fr' => 'Option onze'],
-            '12' => ['en' => 'Option twelve', 'fr' => 'Option douze'],
-            '13' => ['en' => 'Option thirteen', 'fr' => 'Option treize'],
-            '14' => ['en' => 'Option fourteen', 'fr' => 'Option quatorze'],
-            '15' => ['en' => 'Option fifteen', 'fr' => 'Option quinze'],
-            '16' => ['en' => 'Option sixteen', 'fr' => 'Option seize'],
+            '1' => 'Option one',
+            '2' => 'Option two',
+            '3' => 'Option three',
+            '4' => 'Option four',
+            '5' => 'Option five',
+            '6' => 'Option six',
+            '7' => 'Option seven',
+            '8' => 'Option eight',
+            '9' => 'Option nine',
+            '10' => 'Option ten',
         ];
     }
 }

@@ -35,7 +35,22 @@ class ApiFormAutocompleteController extends ApiController
         ]);
         
         if ($callback = $field->getQueryResultsCallback()) {
-            $data = collect($callback(request()->input('search')))->map(fn ($record) => ArrayConverter::modelToArray($record));
+            $formData = request()->input('formData')
+                ? collect(request()->input('formData'))
+                    ->filter(fn ($value, $key) => in_array($key, $form->getDataKeys()))
+                    ->map(function ($value, $key) use ($form) {
+                        if (! $field = $form->findFieldByKey($key)) {
+                            return $value;
+                        }
+                        return $field
+                            ->formatter()
+                            ->setDataLocalizations($form->getDataLocalizations())
+                            ->fromFront($field, $key, $value);
+                    })
+                    ->toArray()
+                : null;
+            $data = collect($callback(request()->input('search'), $formData))
+                ->map(fn ($record) => ArrayConverter::modelToArray($record));
         } else {
 //            if($field->isExternalEndpoint()) {
 //                $pendingRequest = Http::createPendingRequest()
@@ -67,6 +82,9 @@ class ApiFormAutocompleteController extends ApiController
                 );
                 
                 $data = Arr::get(json_decode($response->getContent(), true), $field->dataWrapper() ?: null);
+                if($response->getStatusCode() >= 400) {
+                    abort($response);
+                }
 //            }
         }
 

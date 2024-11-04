@@ -2,6 +2,7 @@
     import FormFieldLayout from "@/form/components/FormFieldLayout.vue";
     import { FormFieldEmits, FormFieldProps } from "@/form/types";
     import {
+        FormAutocompleteItemData,
         FormAutocompleteLocalFieldData,
         FormAutocompleteRemoteFieldData,
     } from "@/types";
@@ -34,36 +35,54 @@
     const results = ref([]);
 
     const abort = new AbortController();
-    const remoteSearch = debounce(async (query: string) => {
-        results.value = await api.get(route('code16.sharp.api.form.autocomplete.index', {
-            entityKey: form.entityKey,
-            autocompleteFieldKey: props.field.key,
-        }), {
-            params: {
-                endpoint: props.field.mode === 'remote' && props.field.remoteEndpoint,
-                search: query,
-            },
-            signal: abort.signal,
-        })
-            .then(response => response.data.data);
-    }, 300);
+    let timeout = null;
 
-    function search(query: string) {
+    function search(query: string, immediate?: boolean) {
         if(props.field.mode === 'remote') {
-            if(query.length >= props.field.searchMinChars) {
-                remoteSearch(query);
+            const field = props.field as FormAutocompleteRemoteFieldData;
+            clearTimeout(timeout);
+            if(query.length >= field.searchMinChars) {
+                timeout = setTimeout(async () => {
+                    results.value = await api.post(
+                        route('code16.sharp.api.form.autocomplete.index', {
+                            entityKey: form.entityKey,
+                            autocompleteFieldKey: field.key,
+                            endpoint: field.remoteEndpoint,
+                            search: query,
+                        }), {
+                            formData: field.callbackLinkedFields
+                                ? Object.fromEntries(
+                                    Object.entries(form.serializedData).filter(([fieldKey]) => field.callbackLinkedFields.includes(fieldKey))
+                                )
+                                : null,
+                        }, {
+                            signal: abort.signal,
+                        }
+                    )
+                        .then(response => response.data.data)
+                }, immediate ? 0 : props.field.debounceDelay)
             }
         } else {
-            if(query.length > 0) {
-                results.value = fuzzySearch(props.field.localValues, query, { searchKeys: props.field.searchKeys });
-            }
+            results.value = !query.length
+                ? props.field.localValues
+                : fuzzySearch(props.field.localValues, query, { searchKeys: props.field.searchKeys });
         }
+    }
+
+    function onOpen() {
+        if(!searchTerm.value && (props.field.mode === 'local' || props.field.searchMinChars === 0)) {
+            search('', true);
+        }
+    }
+
+    function onSelect(result: FormAutocompleteItemData) {
+        emit('input', result);
+        open.value = false;
     }
 
     if(props.field.mode === 'local' && props.value) {
         const localValue = props.field.localValues
             .find(v => props.value[props.field.itemIdAttribute] == v[props.field.itemIdAttribute]);
-        console.log(localValue);
         if(localValue) {
             emit('input', localValue, { force: true });
         }
@@ -72,30 +91,33 @@
 
 <template>
     <FormFieldLayout :field="props.field">
-        <Popover v-model:open="open">
+        <Popover v-model:open="open" @update:open="$event ? onOpen() : null">
             <template v-if="props.value">
-                <div class="relative border border-input flex items-center rounded-md min-h-10 text-sm px-3 py-2">
-                    <div class="flex-1" v-html="props.value._htmlResult ?? props.value._html ?? props.value[props.field.itemIdAttribute]"></div>
-                    <Button class="absolute right-0 top-1/2 -translate-y-1/2"  variant="ghost" size="icon" @click="$emit('input', null)">
-                        <X class="size-4" />
-                    </Button>
-                </div>
+                <PopoverTrigger as-child>
+                    <div class="relative border border-input flex items-center rounded-md min-h-10 text-sm px-3 py-2">
+                        <div class="flex-1" @click.stop v-html="props.value._htmlResult ?? props.value._html ?? props.value[props.field.itemIdAttribute]"></div>
+                        <Button class="absolute right-0 h-[2.375rem] top-1/2 -translate-y-1/2"  variant="ghost" size="icon" @click="$emit('input', null)">
+                            <X class="size-4 opacity-50" />
+                        </Button>
+                    </div>
+                </PopoverTrigger>
             </template>
             <template v-else>
                 <PopoverTrigger as-child>
-                    <Button class="w-full justify-between" variant="outline">
-                        {{ props.field.placeholder ?? __('sharp::form.multiselect.placeholder') }}
-                        <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    <Button class="w-full justify-between text-muted-foreground px-3" variant="outline">
+                        {{ props.field.placeholder ?? __('sharp::form.autocomplete.placeholder') }}
+                        <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50 text-foreground" />
                     </Button>
                 </PopoverTrigger>
             </template>
+
             <PopoverContent :class="cn('p-0 w-[--radix-popover-trigger-width] min-w-[200px]')" align="start">
                 <Command
                     v-model:searchTerm="searchTerm"
-                    @update:modelValue="$emit('input', $event as any)"
+                    @update:modelValue="onSelect($event as any)"
                     @update:searchTerm="search($event)"
                 >
-                    <CommandInput :placeholder="__('sharp::form.multiselect.placeholder')" />
+                    <CommandInput  />
                     <CommandList>
                         <CommandEmpty>{{ __('sharp::form.autocomplete.no_results_text') }}</CommandEmpty>
                         <CommandGroup>
