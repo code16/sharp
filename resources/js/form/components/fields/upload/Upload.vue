@@ -34,6 +34,7 @@
         DropdownMenuTrigger
     } from "@/components/ui/dropdown-menu";
     import { MoreHorizontal } from "lucide-vue-next";
+    import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
     const props = defineProps<FormFieldProps<FormUploadFieldData> & { asEditorEmbed?: boolean }>();
 
@@ -60,8 +61,15 @@
             && (!props.field.imageTransformableFileTypes || props.field.imageTransformableFileTypes?.includes(extension.value))
             && props.value?.mime_type?.startsWith('image/');
     });
+
     const transformedImg = ref<string>();
     const uppyFile = ref<UppyFile>();
+    const isEditable = computed(() => {
+        return props.value
+            && (!uppyFile.value || !uppyFile.value.progress.uploadStarted || uppyFile.value.progress.uploadComplete)
+            && isTransformable.value
+            && !props.hasError;
+    });
     const uppy = new Uppy({
         id: props.fieldErrorKey,
         restrictions: {
@@ -257,8 +265,6 @@
         uppy.emit('cancel-all', { reason: 'user' });
         emit('uploading', false);
     });
-
-    const menuOpened = ref(false);
 </script>
 
 <template>
@@ -267,26 +273,44 @@
             <template v-if="value?.path || value?.uploaded || uppyFile">
                 <div :class="{ 'bg-background border border-input rounded-md p-4': !asEditorEmbed }">
                     <div class="flex">
-                        <template v-if="transformedImg ?? value?.thumbnail  ?? uppyFile?.preview">
-                            <img class="mr-4 object-contain"
-                                width="150"
-                                :src="transformedImg ?? value?.thumbnail ?? uppyFile.preview"
-                                alt=""
-                            >
+                        <template v-if="transformedImg ?? value?.thumbnail ?? uppyFile?.preview">
+                            <div class="mr-4 group/img relative rounded-md overflow-hidden">
+                                <img class="object-contain"
+                                    width="150"
+                                    :src="transformedImg ?? value?.thumbnail ?? uppyFile.preview"
+                                    alt=""
+                                >
+                                <template v-if="isEditable">
+                                    <button class="absolute grid place-content-center inset-0 bg-black/50 transition text-white text-xs font-medium opacity-0 group-hover/img:opacity-100" tabindex="-1" @click="onEdit">
+                                        {{ __('sharp::form.upload.edit_button') }}
+                                    </button>
+                                </template>
+                            </div>
                         </template>
                         <div class="flex-1 min-w-0">
                             <div class="text-sm font-medium truncate">
                                 <template v-if="value?.path">
-                                    <a class="hover:underline underline-offset-4"
-                                        :href="route('code16.sharp.download.show', {
-                                            entityKey: form.entityKey,
-                                            instanceId: form.instanceId,
-                                            disk: value.disk,
-                                            path: value.path,
-                                        })"
-                                        :download="value?.name?.split('/').at(-1)">
-                                        {{ value?.name?.split('/').at(-1) }}
-                                    </a>
+                                    <TooltipProvider>
+                                        <Tooltip :delay-duration="0" disable-hoverable-content>
+                                            <TooltipTrigger as-child>
+                                                <a class="hover:underline underline-offset-4"
+                                                    :href="route('code16.sharp.download.show', {
+                                                        entityKey: form.entityKey,
+                                                        instanceId: form.instanceId,
+                                                        disk: value.disk,
+                                                        path: value.path,
+                                                    })"
+                                                    :download="value?.name?.split('/').at(-1)"
+                                                >
+                                                    {{ value?.name?.split('/').at(-1) }}
+                                                </a>
+                                            </TooltipTrigger>
+
+                                            <TooltipContent class="pointer-events-none" :side-offset="10">
+                                                {{ __('sharp::form.upload.download_tooltip') }}
+                                            </TooltipContent>
+                                        </Tooltip>
+                                    </TooltipProvider>
                                 </template>
                                 <template v-else>
                                     {{ value?.name?.split('/').at(-1) ?? uppyFile?.name }}
@@ -358,7 +382,7 @@
                                         {{ __('sharp::form.upload.download_link') }}
                                     </DropdownMenuItem>
                                 </template>
-                                <template v-if="value && (!uppyFile || !uppyFile.progress.uploadStarted || uppyFile.progress.uploadComplete) && isTransformable && !hasError">
+                                <template v-if="isEditable">
                                     <DropdownMenuItem @click="onEdit">
                                         {{ __('sharp::form.upload.edit_button') }}
                                     </DropdownMenuItem>

@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Media;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\File;
 
 class MediaFactory extends Factory
 {
@@ -26,6 +27,7 @@ class MediaFactory extends Factory
             return [
                 'file_name' => sprintf("data/$destRelativePath/%s", basename($srcFullPath)),
                 'size' => filesize($srcFullPath),
+                'mime_type' => File::mimeType($srcFullPath),
             ];
         });
     }

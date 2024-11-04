@@ -30,6 +30,7 @@ return [
     'upload.remove_button' => 'Remove',
     'upload.edit_button' => 'Edit...',
     'upload.download_link' => 'Download',
+    'upload.download_tooltip' => 'Download the file',
     'upload.message.file_too_big' => 'The selected file is too big (max. :size)',
     'upload.message.bad_extension' => 'File extension is incorrect',
     'upload.edit_modal.description' => 'Use the mouse wheel to zoom. Drag to move the image or the crop area',
