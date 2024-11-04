@@ -17,8 +17,8 @@ class SharpFormAutocompleteRemoteField extends SharpFormField implements IsSharp
     protected int $searchMinChars = 1;
     protected string $dataWrapper = '';
     protected int $debounceDelay = 300;
-    protected ?Closure $queryResultsCallback = null;
-    protected ?array $callbackLinkedFields = null;
+    protected ?Closure $remoteCallback = null;
+    protected ?array $remoteCallbackLinkedFields = null;
 
     public static function make(string $key): self
     {
@@ -28,10 +28,10 @@ class SharpFormAutocompleteRemoteField extends SharpFormField implements IsSharp
         return $instance;
     }
     
-    public function queryResultsUsing(Closure $closure, ?array $linkedFields = null): self
+    public function setRemoteCallback(Closure $closure, ?array $linkedFields = null): self
     {
-        $this->queryResultsCallback = $closure;
-        $this->callbackLinkedFields = $linkedFields;
+        $this->remoteCallback = $closure;
+        $this->remoteCallbackLinkedFields = $linkedFields;
 
         return $this;
     }
@@ -125,9 +125,9 @@ class SharpFormAutocompleteRemoteField extends SharpFormField implements IsSharp
         return $this->remoteSearchAttribute;
     }
     
-    public function getQueryResultsCallback(): ?Closure
+    public function getRemoteCallback(): ?Closure
     {
-        return $this->queryResultsCallback;
+        return $this->remoteCallback;
     }
 
     protected function validationRules(): array
@@ -135,9 +135,9 @@ class SharpFormAutocompleteRemoteField extends SharpFormField implements IsSharp
         return array_merge(
             $this->validationRulesBase(),
             [
-                'searchMinChars' => 'required|integer',
-                'debounceDelay' => 'required|integer',
-                'callbackLinkedFields' => ['nullable','array'],
+                'searchMinChars' => ['required', 'integer'],
+                'debounceDelay' => ['required', 'integer'],
+                'callbackLinkedFields' => ['nullable', 'array'],
                 'callbackLinkedFields.*' => ['string'],
             ],
         );
@@ -152,7 +152,7 @@ class SharpFormAutocompleteRemoteField extends SharpFormField implements IsSharp
                     'remoteEndpoint' => $this->remoteEndpoint,
                     'debounceDelay' => $this->debounceDelay,
                     'searchMinChars' => $this->searchMinChars,
-                    'callbackLinkedFields' => $this->callbackLinkedFields,
+                    'callbackLinkedFields' => $this->remoteCallbackLinkedFields,
                 ],
             ),
         );
