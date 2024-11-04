@@ -227,11 +227,11 @@
                 </template>
             </CardContent>
             <template v-if="$slots.footer">
-                <UseElementBounding class="sticky z-30 -bottom-2 lg:-bottom-0" v-slot="{ bottom }">
+                <UseElementBounding class="sticky z-30 -bottom-2 lg:-bottom-0 pointer-events-none" v-slot="{ bottom }">
                     <CardFooter class="justify-end px-0">
-                        <div class="relative">
+                        <div class="relative pointer-events-auto">
                             <div class="bg-card absolute -inset-4 -bottom-6 lg:-inset-6 transition rounded-tl-lg border border-b-0 border-r-0 rounded-br-lg -z-10"
-                                :class="bottom >= window.innerHeight ? '' : 'border-transparent'" :data-b="[bottom,window.innerHeight]"></div>
+                                :class="bottom >= window.innerHeight ? '' : 'border-transparent'"></div>
                             <slot name="footer" />
                         </div>
                     </CardFooter>

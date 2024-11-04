@@ -96,7 +96,7 @@
     "moment": "^2.19.1",
     "nprogress": "^0.2.0",
     "qs": "^6.6.0",
-    "radix-vue": "^1.7.2",
+    "radix-vue": "^1.9.8",
     "sortablejs": "^1.15.2",
     "tailwind-merge": "^2.2.2",
     "tailwindcss-animate": "^1.0.7",

@@ -9,7 +9,7 @@
     import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
     import { ref } from "vue";
     import { Button } from "@/components/ui/button";
-    import { __ } from "@/utils/i18n";
+    import { __, trans_choice } from "@/utils/i18n";
     import { ChevronsUpDown, X } from 'lucide-vue-next';
     import { cn } from "@/utils/cn";
     import {
@@ -18,13 +18,12 @@
         CommandGroup,
         CommandInput, CommandItem,
         CommandList,
-        CommandSeparator
     } from "@/components/ui/command";
     import { route } from "@/utils/url";
     import { api } from "@/api/api";
     import { useParentForm } from "@/form/useParentForm";
-    import debounce from "lodash/debounce";
     import { fuzzySearch } from "@/utils/search";
+    import {  isCancel } from "axios";
 
     const props = defineProps<FormFieldProps<FormAutocompleteLocalFieldData | FormAutocompleteRemoteFieldData>>();
     const emit = defineEmits<FormFieldEmits<FormAutocompleteLocalFieldData | FormAutocompleteRemoteFieldData>>();
@@ -32,17 +31,28 @@
 
     const open = ref(false);
     const searchTerm = ref('');
-    const results = ref([]);
+    const results = ref<FormAutocompleteItemData[]>([]);
+    const loading = ref(false);
 
-    const abort = new AbortController();
+    let abortController: AbortController | null = null;
     let timeout = null;
+    let loadingTimeout = null;
 
     function search(query: string, immediate?: boolean) {
         if(props.field.mode === 'remote') {
             const field = props.field as FormAutocompleteRemoteFieldData;
             clearTimeout(timeout);
             if(query.length >= field.searchMinChars) {
+                if(!results.value.length) {
+                    loading.value = true;
+                }
                 timeout = setTimeout(async () => {
+                    clearTimeout(loadingTimeout);
+                    loadingTimeout = setTimeout(() => {
+                        loading.value = true;
+                    }, 200);
+                    abortController?.abort();
+                    abortController = new AbortController();
                     results.value = await api.post(
                         route('code16.sharp.api.form.autocomplete.index', {
                             entityKey: form.entityKey,
@@ -56,11 +66,25 @@
                                 )
                                 : null,
                         }, {
-                            signal: abort.signal,
+                            signal: abortController.signal,
                         }
                     )
+                        .then(response => {
+                            clearTimeout(loadingTimeout);
+                            loading.value = false;
+                            return response;
+                        }, (e) => {
+                            if(isCancel(e)) {
+                                clearTimeout(loadingTimeout);
+                            }
+                            return Promise.reject(e);
+                        })
                         .then(response => response.data.data)
+                    ;
                 }, immediate ? 0 : props.field.debounceDelay)
+            } else {
+                clearTimeout(timeout);
+                results.value = [];
             }
         } else {
             results.value = !query.length
@@ -75,14 +99,14 @@
         }
     }
 
-    function onSelect(result: FormAutocompleteItemData) {
-        emit('input', result);
+    function onSelect(id: string | number) {
+        emit('input', results.value.find(r => String(r[props.field.itemIdAttribute]) === String(id)));
         open.value = false;
     }
 
     if(props.field.mode === 'local' && props.value) {
         const localValue = props.field.localValues
-            .find(v => props.value[props.field.itemIdAttribute] == v[props.field.itemIdAttribute]);
+            .find(v => String(props.value[props.field.itemIdAttribute]) === String(v[props.field.itemIdAttribute]));
         if(localValue) {
             emit('input', localValue, { force: true });
         }
@@ -95,7 +119,9 @@
             <template v-if="props.value">
                 <PopoverTrigger as-child>
                     <div class="relative border border-input flex items-center rounded-md min-h-10 text-sm px-3 py-2">
-                        <div class="flex-1" @click.stop v-html="props.value._htmlResult ?? props.value._html ?? props.value[props.field.itemIdAttribute]"></div>
+                        <div class="flex-1"
+                            v-html="props.value._htmlResult ?? props.value._html ?? props.value[props.field.itemIdAttribute]"
+                        ></div>
                         <Button class="absolute right-0 h-[2.375rem] top-1/2 -translate-y-1/2"  variant="ghost" size="icon" @click="$emit('input', null)">
                             <X class="size-4 opacity-50" />
                         </Button>
@@ -111,26 +137,43 @@
                 </PopoverTrigger>
             </template>
 
-            <PopoverContent :class="cn('p-0 w-[--radix-popover-trigger-width] min-w-[200px]')" align="start">
+            <PopoverContent :class="cn('p-0 w-[--radix-popover-trigger-width] min-w-[200px]')" align="start" :avoid-collisions="false">
                 <Command
-                    v-model:searchTerm="searchTerm"
-                    @update:modelValue="onSelect($event as any)"
-                    @update:searchTerm="search($event)"
+                    :modelValue="value?.[props.field.itemIdAttribute]"
+                    v-model:search-term="searchTerm"
+                    :display-value="() => searchTerm"
+                    :reset-search-term-on-blur="false"
+                    @update:model-value="onSelect($event as any)"
+                    @update:search-term="search($event)"
                 >
-                    <CommandInput  />
+                    <CommandInput />
                     <CommandList>
-                        <CommandEmpty>{{ __('sharp::form.autocomplete.no_results_text') }}</CommandEmpty>
-                        <CommandGroup>
-                            <template v-for="item in results" :key="item[props.field.itemIdAttribute]">
-                                <CommandItem
-                                    class="data-[state=checked]:bg-accent"
-                                    :value="item"
-                                    @select="$emit('input', item)"
-                                >
-                                    <div v-html="item._html"></div>
-                                </CommandItem>
-                            </template>
-                        </CommandGroup>
+                        <template v-if="loading">
+                            <div class="py-6 text-center text-sm">
+                                {{ __('sharp::form.autocomplete.loading') }}
+                            </div>
+                        </template>
+                        <template v-else>
+                            <CommandEmpty>
+                                <template v-if="props.field.mode === 'remote' && searchTerm.length < props.field.searchMinChars">
+                                    {{ trans_choice('sharp::form.autocomplete.query_too_short', props.field.searchMinChars, { min_chars: props.field.searchMinChars }) }}
+                                </template>
+                                <template v-else>
+                                    {{ __('sharp::form.autocomplete.no_results_text') }}
+                                </template>
+                            </CommandEmpty>
+                            <CommandGroup>
+                                <template v-for="item in results" :key="item[props.field.itemIdAttribute]">
+                                    <CommandItem
+                                        class="group/item"
+                                        :value="item[props.field.itemIdAttribute]"
+                                    >
+                                        <div class="hidden absolute top-0 -left-1 h-full border-l border-primary group-data-[state=checked]/item:block"></div>
+                                        <div v-html="item._html"></div>
+                                    </CommandItem>
+                                </template>
+                            </CommandGroup>
+                        </template>
 
 <!--                        <template v-if="valuated">-->
 <!--                            <div class="sticky -bottom-px border-b border-transparent bg-popover">-->
