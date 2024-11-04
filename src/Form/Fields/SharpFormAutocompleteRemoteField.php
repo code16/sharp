@@ -6,11 +6,8 @@ use Closure;
 use Code16\Sharp\Form\Fields\Formatters\AutocompleteRemoteFormatter;
 use Code16\Sharp\Form\Fields\Utils\IsSharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\Utils\SharpFormAutocompleteCommonField;
-use Code16\Sharp\Utils\Fields\IsSharpFieldWithLocalization;
 
-class SharpFormAutocompleteRemoteField
-    extends SharpFormField
-    implements IsSharpFieldWithLocalization, IsSharpFormAutocompleteField
+class SharpFormAutocompleteRemoteField extends SharpFormField implements IsSharpFormAutocompleteField
 {
     use SharpFormAutocompleteCommonField;
 

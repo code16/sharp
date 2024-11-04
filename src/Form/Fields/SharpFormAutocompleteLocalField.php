@@ -5,12 +5,9 @@ namespace Code16\Sharp\Form\Fields;
 use Code16\Sharp\Form\Fields\Formatters\AutocompleteLocalFormatter;
 use Code16\Sharp\Form\Fields\Utils\IsSharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\Utils\SharpFormAutocompleteCommonField;
-use Code16\Sharp\Utils\Fields\IsSharpFieldWithLocalization;
 use Illuminate\Support\Collection;
 
-class SharpFormAutocompleteLocalField
-    extends SharpFormField
-    implements IsSharpFieldWithLocalization, IsSharpFormAutocompleteField
+class SharpFormAutocompleteLocalField extends SharpFormField implements IsSharpFormAutocompleteField
 {
     use SharpFormAutocompleteCommonField;
 

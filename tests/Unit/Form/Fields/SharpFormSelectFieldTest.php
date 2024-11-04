@@ -104,32 +104,6 @@ it('we can define options as a custom array', function () {
         ]);
 });
 
-it('we can define localized options', function () {
-    $formField = fakeSelectField([
-        '1' => ['en' => 'Option one', 'fr' => 'Option un'],
-        '2' => ['en' => 'Option two', 'fr' => 'Option deux'],
-    ])->setLocalized();
-
-    expect($formField->toArray())
-        ->toHaveKey('options', [
-            ['id' => '1', 'label' => ['en' => 'Option one', 'fr' => 'Option un']],
-            ['id' => '2', 'label' => ['en' => 'Option two', 'fr' => 'Option deux']],
-        ]);
-});
-
-it('we can define localized options with id label array', function () {
-    $formField = fakeSelectField([
-        ['id' => '1', 'label' => ['en' => 'Option one', 'fr' => 'Option un']],
-        ['id' => '2', 'label' => ['en' => 'Option two', 'fr' => 'Option deux']],
-    ])->setLocalized();
-
-    expect($formField->toArray())
-        ->toHaveKey('options', [
-            ['id' => '1', 'label' => ['en' => 'Option one', 'fr' => 'Option un']],
-            ['id' => '2', 'label' => ['en' => 'Option two', 'fr' => 'Option deux']],
-        ]);
-});
-
 it('we can define linked options with dynamic attributes', function () {
     $formField = fakeSelectField([
         'A' => [
@@ -151,31 +125,6 @@ it('we can define linked options with dynamic attributes', function () {
             'B' => [
                 ['id' => 'B1', 'label' => 'test B1'],
                 ['id' => 'B2', 'label' => 'test B2'],
-            ],
-        ]);
-});
-
-it('we can define linked options with dynamic attributes and localization', function () {
-    $formField = fakeSelectField([
-        'A' => [
-            'A1' => ['fr' => 'test A1 fr', 'en' => 'test A1 en'],
-            'A2' => ['fr' => 'test A2 fr', 'en' => 'test A2 en'],
-        ],
-        'B' => [
-            'B1' => ['fr' => 'test B1 fr', 'en' => 'test B1 en'],
-            'B2' => ['fr' => 'test B2 fr', 'en' => 'test B2 en'],
-        ],
-    ])->setOptionsLinkedTo('master')->setLocalized();
-
-    expect($formField->toArray())
-        ->toHaveKey('options', [
-            'A' => [
-                ['id' => 'A1', 'label' => ['fr' => 'test A1 fr', 'en' => 'test A1 en']],
-                ['id' => 'A2', 'label' => ['fr' => 'test A2 fr', 'en' => 'test A2 en']],
-            ],
-            'B' => [
-                ['id' => 'B1', 'label' => ['fr' => 'test B1 fr', 'en' => 'test B1 en']],
-                ['id' => 'B2', 'label' => ['fr' => 'test B2 fr', 'en' => 'test B2 en']],
             ],
         ]);
 });

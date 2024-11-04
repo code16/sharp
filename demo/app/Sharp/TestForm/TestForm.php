@@ -37,7 +37,6 @@ class TestForm extends SharpSingleForm
             )
             ->addField(
                 SharpFormAutocompleteLocalField::make('autocomplete_local')
-                    ->setLocalized()
                     ->setLabel('Autocomplete local')
                     ->setLocalSearchKeys(['label'])
                     ->setListItemTemplate('{{ $label }}')
@@ -210,20 +209,17 @@ class TestForm extends SharpSingleForm
             )
             ->addField(
                 SharpFormSelectField::make('select_dropdown', $this->options(true))
-                    ->setLocalized()
                     ->setLabel('Select dropdown')
                     ->setMultiple()
                     ->setDisplayAsDropdown(),
             )
             ->addField(
                 SharpFormSelectField::make('select_list', $this->options(true))
-                    ->setLocalized()
                     ->setLabel('Select list')
                     ->setDisplayAsList(),
             )
             ->addField(
                 SharpFormSelectField::make('select_list_multiple', $this->options(true))
-                    ->setLocalized()
                     ->setLabel('Select list multiple')
                     ->setMultiple()
                     ->setDisplayAsList()
@@ -231,7 +227,6 @@ class TestForm extends SharpSingleForm
             )
             ->addField(
                 SharpFormTagsField::make('tags', $this->options(true))
-                    ->setLocalized()
                     ->setLabel('Tags')
                     ->setCreatable(true)
                     ->setCreateAttribute('label')
