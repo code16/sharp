@@ -209,20 +209,17 @@ class TestForm extends SharpSingleForm
             )
             ->addField(
                 SharpFormSelectField::make('select_dropdown', $this->options())
-                    ->setLocalized()
                     ->setLabel('Select dropdown')
                     ->setMultiple()
                     ->setDisplayAsDropdown(),
             )
             ->addField(
                 SharpFormSelectField::make('select_list', $this->options())
-                    ->setLocalized()
                     ->setLabel('Select list')
                     ->setDisplayAsList(),
             )
             ->addField(
                 SharpFormSelectField::make('select_list_multiple', $this->options())
-                    ->setLocalized()
                     ->setLabel('Select list multiple')
                     ->setMultiple()
                     ->setDisplayAsList()
@@ -230,7 +227,6 @@ class TestForm extends SharpSingleForm
             )
             ->addField(
                 SharpFormTagsField::make('tags', $this->options())
-                    ->setLocalized()
                     ->setLabel('Tags')
                     ->setCreatable(true)
                     ->setCreateAttribute('label')

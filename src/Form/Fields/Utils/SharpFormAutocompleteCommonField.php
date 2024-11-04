@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Form\Fields\Utils;
 
-use Code16\Sharp\Utils\Fields\SharpFieldWithLocalization;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Blade;
 
@@ -10,7 +9,6 @@ trait SharpFormAutocompleteCommonField
 {
     use SharpFormFieldWithPlaceholder;
     use SharpFormFieldWithOptions;
-    use SharpFieldWithLocalization;
 
     const FIELD_TYPE = 'autocomplete';
 
@@ -25,7 +23,7 @@ trait SharpFormAutocompleteCommonField
         $resultItem = $this->resultItemTemplate
             ? ['_htmlResult' => $this->renderResultItem($item)]
             : [];
-    
+
         return [
             ...$item,
             '_html' => $this->listItemTemplate
@@ -105,7 +103,6 @@ trait SharpFormAutocompleteCommonField
                 'mode' => $this->mode,
                 'placeholder' => $this->placeholder,
                 'itemIdAttribute' => $this->itemIdAttribute,
-                'localized' => $this->localized,
             ],
             $this->dynamicAttributes
                 ? ['dynamicAttributes' => $this->dynamicAttributes]

@@ -6,11 +6,8 @@ use Closure;
 use Code16\Sharp\Form\Fields\Formatters\AutocompleteRemoteFormatter;
 use Code16\Sharp\Form\Fields\Utils\IsSharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\Utils\SharpFormAutocompleteCommonField;
-use Code16\Sharp\Utils\Fields\IsSharpFieldWithLocalization;
 
-class SharpFormAutocompleteRemoteField
-    extends SharpFormField
-    implements IsSharpFieldWithLocalization, IsSharpFormAutocompleteField
+class SharpFormAutocompleteRemoteField extends SharpFormField implements IsSharpFormAutocompleteField
 {
     use SharpFormAutocompleteCommonField;
 
@@ -20,8 +17,8 @@ class SharpFormAutocompleteRemoteField
     protected int $searchMinChars = 1;
     protected string $dataWrapper = '';
     protected int $debounceDelay = 300;
-    protected ?Closure $queryResultsCallback = null;
-    protected ?array $callbackLinkedFields = null;
+    protected ?Closure $remoteCallback = null;
+    protected ?array $remoteCallbackLinkedFields = null;
 
     public static function make(string $key): self
     {
@@ -31,10 +28,10 @@ class SharpFormAutocompleteRemoteField
         return $instance;
     }
     
-    public function queryResultsUsing(Closure $closure, ?array $linkedFields = null): self
+    public function setRemoteCallback(Closure $closure, ?array $linkedFields = null): self
     {
-        $this->queryResultsCallback = $closure;
-        $this->callbackLinkedFields = $linkedFields;
+        $this->remoteCallback = $closure;
+        $this->remoteCallbackLinkedFields = $linkedFields;
 
         return $this;
     }
@@ -128,9 +125,9 @@ class SharpFormAutocompleteRemoteField
         return $this->remoteSearchAttribute;
     }
     
-    public function getQueryResultsCallback(): ?Closure
+    public function getRemoteCallback(): ?Closure
     {
-        return $this->queryResultsCallback;
+        return $this->remoteCallback;
     }
 
     protected function validationRules(): array
@@ -138,9 +135,10 @@ class SharpFormAutocompleteRemoteField
         return array_merge(
             $this->validationRulesBase(),
             [
-                'searchMinChars' => 'required|integer',
-                'debounceDelay' => 'required|integer',
-                'callbackLinkedFields' => ['nullable','array'],
+                'searchMinChars' => ['required', 'integer'],
+                'debounceDelay' => ['required', 'integer'],
+                'remoteEndpoint' => ['nullable', 'string'],
+                'callbackLinkedFields' => ['nullable', 'array'],
                 'callbackLinkedFields.*' => ['string'],
             ],
         );
@@ -155,7 +153,7 @@ class SharpFormAutocompleteRemoteField
                     'remoteEndpoint' => $this->remoteEndpoint,
                     'debounceDelay' => $this->debounceDelay,
                     'searchMinChars' => $this->searchMinChars,
-                    'callbackLinkedFields' => $this->callbackLinkedFields,
+                    'callbackLinkedFields' => $this->remoteCallbackLinkedFields,
                 ],
             ),
         );

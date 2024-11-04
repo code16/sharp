@@ -42,7 +42,7 @@ trait SharpFormFieldWithOptions
         return collect($options)
             ->map(function ($values) use ($depth, $format) {
                 if ($depth > 1) {
-                    return self::formatDynamicOptions($values, $depth - 1);
+                    return self::formatDynamicOptions($values, $depth - 1, $format);
                 }
 
                 return collect($values)

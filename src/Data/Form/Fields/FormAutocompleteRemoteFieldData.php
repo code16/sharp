@@ -25,7 +25,7 @@ final class FormAutocompleteRemoteFieldData extends Data
         public string $itemIdAttribute,
         public int $searchMinChars,
         public int $debounceDelay,
-        public string $remoteEndpoint,
+        public ?string $remoteEndpoint = null,
         /** @var string[]|null */
         public ?array $callbackLinkedFields = null,
         public ?string $placeholder = null,

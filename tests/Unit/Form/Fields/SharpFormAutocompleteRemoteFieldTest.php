@@ -1,6 +1,5 @@
 <?php
 
-use Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteRemoteField;
 
 it('sets default values for remote autocomplete', function () {
@@ -12,12 +11,9 @@ it('sets default values for remote autocomplete', function () {
             'key' => 'field',
             'type' => 'autocomplete',
             'mode' => 'remote',
-            'remoteMethod' => 'GET',
             'remoteEndpoint' => '/endpoint',
             'itemIdAttribute' => 'id',
             'searchMinChars' => 1,
-            'remoteSearchAttribute' => 'query',
-            'dataWrapper' => '',
             'debounceDelay' => 300,
         ]);
 });
@@ -29,9 +25,7 @@ it('allows to define remote endpoint attributes', function () {
         ->setRemoteSearchAttribute('attribute');
 
     expect($autocompleteField->toArray())
-        ->toHaveKey('remoteMethod', 'POST')
-        ->toHaveKey('remoteEndpoint', '/another/endpoint')
-        ->toHaveKey('remoteSearchAttribute', 'attribute');
+        ->toHaveKey('remoteEndpoint', '/another/endpoint');
 });
 
 it('allows to define searchMinChars', function () {
@@ -50,22 +44,6 @@ it('allows to define debounceDelay', function () {
 
     expect($autocompleteField->toArray())
         ->toHaveKey('debounceDelay', 500);
-});
-
-it('allows to define setDataWrapper', function () {
-    $autocompleteField = SharpFormAutocompleteRemoteField::make('field')
-        ->setRemoteEndpoint('/endpoint')
-        ->setDataWrapper('test');
-
-    expect($autocompleteField->toArray())
-        ->toHaveKey('dataWrapper', 'test');
-});
-
-it('disallows to define a remote autocomplete without remoteEndpoint', function () {
-    $this->expectException(SharpFormFieldValidationException::class);
-
-    SharpFormAutocompleteRemoteField::make('field')
-        ->toArray();
 });
 
 it('allows to define linked remote endpoint with dynamic attributes', function () {
