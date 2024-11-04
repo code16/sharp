@@ -3,7 +3,6 @@
 namespace Code16\Sharp\Form\Fields;
 
 use Code16\Sharp\Form\Fields\Formatters\ListFormatter;
-use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithTemplates;
 
 class SharpFormListField extends SharpFormField
 {

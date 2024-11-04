@@ -97,7 +97,7 @@ it('ignores SharpFormHtmlField fields', function () {
 
         public function buildFormFields(FieldsContainer $formFields): void
         {
-            $formFields->addField(SharpFormHtmlField::make('name')->setInlineTemplate('HTML'));
+            $formFields->addField(SharpFormHtmlField::make('name')->setTemplate('HTML'));
         }
 
         public function update($id, array $data)

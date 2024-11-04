@@ -104,7 +104,7 @@ class TestForm extends SharpSingleForm
             ->addField(
                 SharpFormHtmlField::make('html')
                     ->setLabel('Html')
-                    ->setInlineTemplate('Your name is <strong>{{name}}</strong>'),
+                    ->setTemplate('Your name is <strong>{{ $name }}</strong>'),
             )
             ->addField(
                 SharpFormListField::make('list')

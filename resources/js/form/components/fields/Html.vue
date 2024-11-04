@@ -1,5 +1,4 @@
 <script setup lang="ts" >
-    import { TemplateRenderer } from '@/components';
     import { FormHtmlFieldData } from "@/types";
     import FormFieldLayout from "@/form/components/FormFieldLayout.vue";
     import { FormFieldProps } from "@/form/types";
@@ -9,11 +8,7 @@
 
 <template>
     <FormFieldLayout v-bind="props">
-        <div class="text-sm">
-            <TemplateRenderer
-                :template="field.template"
-                :template-data="value"
-            />
+        <div class="text-sm" v-html="props.value">
         </div>
     </FormFieldLayout>
 </template>

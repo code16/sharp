@@ -24,7 +24,12 @@ abstract class AbstractPostBlockForm extends SharpForm
         $formFields
             ->addField(
                 SharpFormHtmlField::make('type')
-                    ->setInlineTemplate('Post block type: <strong>{{name}}</strong><div class="small" v-if="help">{{help}}</div>'),
+                    ->setTemplate(<<<'blade'
+                        Post block type: <strong>{{ $name }}</strong>
+                        @if($help)
+                            <div><small>{{ $help }}</small></div>
+                        @endif'
+                    blade),
             );
 
         if ($field = $this->getContentField()) {

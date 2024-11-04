@@ -130,7 +130,7 @@ it('returns configured show fields', function () {
         public function buildShowFields(FieldsContainer $showFields): void
         {
             $showFields->addField(SharpShowTextField::make('name'))
-                ->addField(SharpShowHtmlField::make('bio')->setInlineTemplate('<div></div>'));
+                ->addField(SharpShowHtmlField::make('bio')->setTemplate('<div></div>'));
         }
     });
 
@@ -154,7 +154,7 @@ it('returns configured show layout', function () {
         public function buildShowFields(FieldsContainer $showFields): void
         {
             $showFields->addField(SharpShowTextField::make('name'))
-                ->addField(SharpShowHtmlField::make('bio')->setInlineTemplate('<div></div>'));
+                ->addField(SharpShowHtmlField::make('bio')->setTemplate('<div></div>'));
         }
 
         public function buildShowLayout(ShowLayout $showLayout): void

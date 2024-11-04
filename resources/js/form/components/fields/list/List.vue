@@ -73,8 +73,8 @@
     });
 
     let itemKeyIndex = 0;
-    const itemKey = Symbol('itemKey');
-    const errorIndex = Symbol('errorIndex');
+    const itemKey = Symbol('itemKey') as unknown as string;
+    const errorIndex = Symbol('errorIndex') as unknown as string;
 
     watch(() => form.errors, () => {
         emit('input', props.value?.map(((item, index) => ({ ...item, [errorIndex]: index }))));

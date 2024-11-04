@@ -121,7 +121,7 @@ class ComposeEmailWithPostsWizardCommand extends EntityWizardCommand
         $formFields
             ->addField(
                 SharpFormHtmlField::make('message')
-                    ->setInlineTemplate('<div style="max-height: 100px; overflow: auto; border: 1px solid #ddd; padding: 10px 15px; font-size: .85em;" v-html="text"></div>')
+                    ->setTemplate('<div style="max-height: 100px; overflow: auto; border: 1px solid #ddd; padding: 10px 15px; font-size: .85em;">{!! $text !!}</div>')
                     ->setLabel('Message'),
             )
             ->addField(
