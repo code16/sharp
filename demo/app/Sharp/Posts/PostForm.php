@@ -138,18 +138,17 @@ class PostForm extends SharpForm
                 SharpFormAutocompleteRemoteField::make('author_id')
                     ->setReadOnly(! auth()->user()->isAdmin())
                     ->setLabel('Author')
-                    ->setRemoteEndpoint('/api/admin/users')
-                    ->setRemoteCallback(function ($search, $data) {
-                        $users = User::orderBy('name');
+                    ->setRemoteCallback(function ($search) {
+                        $users = User::orderBy('name')->limit(10);
                         
                         foreach (explode(' ', trim($search)) as $word) {
-                            $users->where(function ($query) use ($word) {
-                                $query->orWhere('name', 'like', "%$word%")
-                                    ->orWhere('email', 'like', "%$word%");
-                            });
+                            $users->where(fn ($query) => $query
+                                ->where('name', 'like', "%$word%")
+                                ->orWhere('email', 'like', "%$word%")
+                            );
                         }
                         
-                        return $users->limit(10)->get();
+                        return $users->get();
                     })
                     ->setListItemTemplate('<div>{{ $name }}</div><div><small>{{ $email }}</small></div>')
                     ->setHelpMessage('This field is only editable by admins.'),
