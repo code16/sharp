@@ -22,7 +22,6 @@ final class EmbedData extends Data
         public ?IconData $icon,
         /** @var string[] */
         public array $attributes,
-        public string $template,
         /** @var DataCollection<string,FormFieldData> */
         public DataCollection $fields,
     ) {}

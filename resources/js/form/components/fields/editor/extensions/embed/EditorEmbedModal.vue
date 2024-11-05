@@ -12,7 +12,7 @@
         editor: Editor
     }>();
     const parentForm = useParentForm();
-    const currentModalEmbed = ref<{ id: string, embed: EmbedData, form: Form } | null>(null);
+    const currentModalEmbed = ref<{ id?: string, embed: EmbedData, form: Form } | null>(null);
     const embedManager = useParentEditor().embedManager;
 
     async function postForm(data: EmbedData['value']) {
@@ -22,7 +22,7 @@
             data
         );
 
-        if(!currentModalEmbed.value.id) {
+        if(currentModalEmbed.value.id == null) {
             props.editor.commands.insertEmbed({ id, embed: currentModalEmbed.value.embed });
         }
 

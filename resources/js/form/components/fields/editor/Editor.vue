@@ -2,7 +2,7 @@
     import { __ } from "@/utils/i18n";
     import { vSticky } from "@/directives/sticky";
     import { FormEditorFieldData } from "@/types";
-    import { provide, ref, watch } from "vue";
+    import { provide, ref, useTemplateRef, watch } from "vue";
     import { Editor } from "@tiptap/vue-3";
     import debounce from 'lodash/debounce';
     import { EditorContent } from '@tiptap/vue-3';
@@ -25,7 +25,6 @@
     import EditorUploadModal from "@/form/components/fields/editor/extensions/upload/EditorUploadModal.vue";
     import EditorEmbedModal from "@/form/components/fields/editor/extensions/embed/EditorEmbedModal.vue";
     import FormFieldLayout from "@/form/components/FormFieldLayout.vue";
-    import { Card } from "@/components/ui/card";
     import EditorAttributes from "@/form/components/fields/editor/EditorAttributes.vue";
     import { cn } from "@/utils/cn";
 
@@ -162,7 +161,7 @@
                         :editor="editor"
                         v-bind="$props"
                         @upload="uploadModal.open()"
-                        @embed="embed => embedModal.open({ embed })"
+                        @embed="(embed) => embedModal.open({ embed })"
                     />
                 </div>
             </template>
