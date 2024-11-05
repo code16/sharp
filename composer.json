@@ -25,6 +25,7 @@
         "dms/phpunit-arraysubset-asserts": "^0.4|^0.5",
         "doctrine/dbal": "^3.5",
         "friendsofphp/php-cs-fixer": "^3.8",
+        "laravel/pint": "^1.18",
         "mockery/mockery": "^1.5.0",
         "nunomaduro/collision": "^7.0|^8.0",
         "orchestra/testbench": "^8.0|^9.0",

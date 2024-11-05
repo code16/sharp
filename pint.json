@@ -3,12 +3,12 @@
     "rules": {
         "class_attributes_separation": {
             "elements": {
-                "const": "only_if_meta",
-                "property": "only_if_meta",
+                "const": "none",
+                "property": "none",
                 "trait_import": "none"
             }
         },
-        "single_trait_insert_per_statement": false,
+        "single_trait_insert_per_statement": true,
         "new_with_parentheses": {
             "named_class": true,
             "anonymous_class": true
