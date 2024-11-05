@@ -1,0 +1,15 @@
+{
+    "preset": "laravel",
+    "rules": {
+        "class_attributes_separation": {
+            "const": "only_if_meta",
+            "property": "only_if_meta",
+            "trait_import": "none"
+        },
+        "single_trait_insert_per_statement": false,
+        "new_with_parentheses": {
+            "named_class": true,
+            "anonymous_class": true
+        }
+    }
+}
