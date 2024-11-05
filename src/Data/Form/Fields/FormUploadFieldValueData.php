@@ -28,6 +28,5 @@ final class FormUploadFieldValueData extends Data
         #[Optional]
         #[LiteralTypeScriptType('File')]
         public $nativeFile = null,
-    ) {
-    }
+    ) {}
 }

@@ -9,14 +9,12 @@ class SharpFileValidation
 {
     use Conditionable;
 
-    protected function __construct(protected File $baseRule)
-    {
-    }
+    protected function __construct(protected File $baseRule) {}
 
     public static function make(): static
     {
         return new static(
-            new class extends File
+            new class() extends File
             {
                 public function toArray(): array
                 {

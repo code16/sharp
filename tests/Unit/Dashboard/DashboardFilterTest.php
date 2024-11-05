@@ -4,12 +4,12 @@ use Code16\Sharp\Dashboard\Filters\DashboardSelectFilter;
 use Code16\Sharp\Tests\Unit\Dashboard\Fakes\FakeSharpDashboard;
 
 it('handles dashboard filters config', function () {
-    $dashboard = new class extends FakeSharpDashboard
+    $dashboard = new class() extends FakeSharpDashboard
     {
         public function getFilters(): ?array
         {
             return [
-                new class extends DashboardSelectFilter
+                new class() extends DashboardSelectFilter
                 {
                     public function buildFilterConfig(): void
                     {
@@ -51,12 +51,12 @@ it('handles dashboard filters config', function () {
 });
 
 it('handles dashboard section based filters config', function () {
-    $dashboard = new class extends FakeSharpDashboard
+    $dashboard = new class() extends FakeSharpDashboard
     {
         public function getFilters(): ?array
         {
             return [
-                new class extends DashboardSelectFilter
+                new class() extends DashboardSelectFilter
                 {
                     public function values(): array
                     {
@@ -64,7 +64,7 @@ it('handles dashboard section based filters config', function () {
                     }
                 },
                 'section-1' => [
-                    new class extends DashboardSelectFilter
+                    new class() extends DashboardSelectFilter
                     {
                         public function values(): array
                         {

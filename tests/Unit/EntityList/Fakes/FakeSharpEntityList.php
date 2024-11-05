@@ -8,13 +8,9 @@ use Illuminate\Contracts\Support\Arrayable;
 
 class FakeSharpEntityList extends SharpEntityList
 {
-    public function buildList(EntityListFieldsContainer $fields): void
-    {
-    }
+    public function buildList(EntityListFieldsContainer $fields): void {}
 
-    public function buildListConfig(): void
-    {
-    }
+    public function buildListConfig(): void {}
 
     public function getListData(): array|Arrayable
     {

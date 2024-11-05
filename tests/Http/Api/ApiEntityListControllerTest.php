@@ -16,7 +16,7 @@ beforeEach(function () {
 it('allows to reorder instances', function () {
     $this->withoutExceptionHandling();
 
-    $list = new class extends PersonList
+    $list = new class() extends PersonList
     {
         public array $reorderedInstances = [];
 
@@ -25,9 +25,7 @@ it('allows to reorder instances', function () {
             $this->configureReorderable(
                 new class($this->reorderedInstances) implements ReorderHandler
                 {
-                    public function __construct(public array &$reorderedInstances)
-                    {
-                    }
+                    public function __construct(public array &$reorderedInstances) {}
 
                     public function reorder(array $ids): void
                     {
@@ -51,7 +49,7 @@ it('allows to reorder instances', function () {
 });
 
 it('allows to delete an instance in the entity list if delete method is implemented', function () {
-    $list = new class extends PersonList
+    $list = new class() extends PersonList
     {
         public ?int $deletedInstance = null;
 
@@ -76,7 +74,7 @@ it('delegates deletion to the show page if it exists', function () {
 
     fakeListFor('person', new PersonList());
 
-    $show = new class extends PersonShow
+    $show = new class() extends PersonShow
     {
         public ?int $deletedInstance = null;
 
@@ -96,7 +94,7 @@ it('delegates deletion to the show page if it exists', function () {
 });
 
 it('checks if the entity list allows deletion', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         public function delete(mixed $id): void
         {
@@ -104,7 +102,7 @@ it('checks if the entity list allows deletion', function () {
         }
     });
 
-    fakePolicyFor('person', new class extends SharpEntityPolicy
+    fakePolicyFor('person', new class() extends SharpEntityPolicy
     {
         public function delete($user, $instanceId): bool
         {
@@ -124,7 +122,7 @@ it('throws an exception if delete is not implemented and there is no show', func
 });
 
 it('gets list data as JSON in an EEL case', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         public function getListData(): array|Arrayable
         {
@@ -146,7 +144,7 @@ it('gets list data as JSON in an EEL case', function () {
 });
 
 it('gets paginated data if wanted as JSON in an EEL case', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         public function getListData(): array|Arrayable
         {

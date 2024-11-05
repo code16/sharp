@@ -19,7 +19,7 @@ trait HandlesCommandForm
         return [
             'fields' => $formFields,
             'layout' => $commandHandler->formLayout(),
-            'data' =>  $formData ? $commandHandler->applyFormatters($formData) : null,
+            'data' => $formData ? $commandHandler->applyFormatters($formData) : null,
             'pageAlert' => $commandHandler->pageAlert($formData),
             'config' => [
                 'title' => $commandHandler->getFormModalTitle($formData) ?? $commandHandler->label(),

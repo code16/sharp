@@ -67,7 +67,7 @@ it('updates the id attribute when updating a related item in a hasMany relation 
 })->group('eloquent');
 
 it('calls the optional getDefaultAttributesFor method on an item creation', function () {
-    $marie = new class extends Person
+    $marie = new class() extends Person
     {
         protected $table = 'people';
 

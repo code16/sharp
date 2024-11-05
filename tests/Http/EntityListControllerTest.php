@@ -20,7 +20,7 @@ beforeEach(function () {
 });
 
 it('gets list data for an entity', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         public function getListData(): array|Arrayable
         {
@@ -42,7 +42,7 @@ it('gets list data for an entity', function () {
 });
 
 it('gets paginated data if wanted', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         public function getListData(): array|Arrayable
         {
@@ -75,7 +75,7 @@ it('gets paginated data if wanted', function () {
 });
 
 it('allows to search for items', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         public function getListData(): array|Arrayable
         {
@@ -114,7 +114,7 @@ it('allows to search for items', function () {
 });
 
 it('filters out data which is not displayed', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         public function getListData(): array|Arrayable
         {
@@ -132,7 +132,7 @@ it('filters out data which is not displayed', function () {
 });
 
 it('gets containers and layout', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         public function buildList(EntityListFieldsContainer $fields): void
         {
@@ -176,7 +176,7 @@ it('gets containers and layout', function () {
 
 it('gets config', function () {
     $this->withoutExceptionHandling();
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         public function buildListConfig(): void
         {
@@ -199,7 +199,7 @@ it('gets config', function () {
 });
 
 it('gets authorizations of each instance', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         public function getListData(): array|Arrayable
         {
@@ -211,7 +211,7 @@ it('gets authorizations of each instance', function () {
         }
     });
 
-    fakePolicyFor('person', new class extends SharpEntityPolicy
+    fakePolicyFor('person', new class() extends SharpEntityPolicy
     {
         public function view($user, $instanceId): bool
         {
@@ -238,7 +238,7 @@ it('gets authorizations of each instance', function () {
 
 it('gets multiforms if configured', function () {
     $this->withoutExceptionHandling();
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         public function getListData(): array|Arrayable
         {
@@ -346,7 +346,7 @@ it('handles hasShowPage in config', function () {
 it('allows to configure a page alert', function () {
     $this->withoutExceptionHandling();
 
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         public function buildPageAlert(PageAlert $pageAlert): void
         {
@@ -368,7 +368,7 @@ it('allows to configure a page alert', function () {
 });
 
 it('allows to configure a page alert with a closure as content', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         public function buildPageAlert(PageAlert $pageAlert): void
         {

@@ -13,9 +13,7 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScriptType;
 )]
 final class FilterData extends Data
 {
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public static function from(array $filter): Data
     {

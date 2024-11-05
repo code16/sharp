@@ -19,8 +19,7 @@ final class DashboardData extends Data
         public array $data,
         public FilterValuesData $filterValues,
         public ?PageAlertData $pageAlert = null,
-    ) {
-    }
+    ) {}
 
     public static function from(array $dashboard): self
     {

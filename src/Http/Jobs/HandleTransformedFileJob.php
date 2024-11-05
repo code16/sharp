@@ -12,14 +12,15 @@ use Intervention\Image\ImageManager;
 
 class HandleTransformedFileJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
 
     public function __construct(
         public string $disk,
         public string $filePath,
         public array $transformFilters,
-    ) {
-    }
+    ) {}
 
     public function handle(ImageManager $imageManager): void
     {

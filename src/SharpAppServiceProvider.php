@@ -17,9 +17,7 @@ abstract class SharpAppServiceProvider extends ServiceProvider
         $this->configureSharp(app(SharpConfigBuilder::class));
     }
 
-    protected function declareAccessGate(): void
-    {
-    }
+    protected function declareAccessGate(): void {}
 
     abstract protected function configureSharp(SharpConfigBuilder $config): void;
 }

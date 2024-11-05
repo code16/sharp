@@ -12,8 +12,8 @@ use Illuminate\Support\Str;
 
 class EditorEmbedsFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
 {
-    use FormatsHtmlContent;
     use FormatsEditorEmbeds;
+    use FormatsHtmlContent;
 
     /**
      * @param  SharpFormEditorField  $field
@@ -57,8 +57,7 @@ class EditorEmbedsFormatter extends SharpFieldFormatter implements FormatsAfterU
                                         }
 
                                         // other field types have already been formatted, so we pass value through
-                                        return new class extends AbstractSimpleFormatter {
-                                        };
+                                        return new class() extends AbstractSimpleFormatter {};
                                     })
                                     ->setInstanceId($this->instanceId)
                                     ->fromFront($field, $fieldKey, $fieldValue);

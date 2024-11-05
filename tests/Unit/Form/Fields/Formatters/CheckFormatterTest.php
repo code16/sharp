@@ -4,7 +4,7 @@ use Code16\Sharp\Form\Fields\Formatters\CheckFormatter;
 use Code16\Sharp\Form\Fields\SharpFormCheckField;
 
 it('allows to format value to front', function () {
-    $formatter = new CheckFormatter;
+    $formatter = new CheckFormatter();
     $field = SharpFormCheckField::make('check', 'text');
 
     expect($formatter->toFront($field, true))->toBeTrue()
@@ -14,7 +14,7 @@ it('allows to format value to front', function () {
 });
 
 it('allows to format value from front', function () {
-    $formatter = new CheckFormatter;
+    $formatter = new CheckFormatter();
     $field = SharpFormCheckField::make('check', 'text');
     $attribute = 'attribute';
 

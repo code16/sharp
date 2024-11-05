@@ -12,8 +12,7 @@ final class DashboardLayoutSectionData extends Data
         public string $title,
         /** @var array<DataCollection<DashboardLayoutWidgetData>> */
         public array $rows,
-    ) {
-    }
+    ) {}
 
     public static function from(array $section): self
     {

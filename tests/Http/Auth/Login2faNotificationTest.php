@@ -8,7 +8,7 @@ use Code16\Sharp\Tests\Fixtures\User;
 use Illuminate\Support\Facades\Notification;
 
 beforeEach(function () {
-    auth()->extend('sharp', fn() => new TestAuthGuard());
+    auth()->extend('sharp', fn () => new TestAuthGuard());
 
     sharp()->config()->addEntity('person', PersonEntity::class)
         ->setAuthCustomGuard('sharp')
@@ -50,7 +50,8 @@ it('logs in the user after successful 2fa code validation', function () {
     Notification::fake();
 
     sharp()->config()->enable2faCustom(
-        new class extends Sharp2faNotificationHandler {
+        new class() extends Sharp2faNotificationHandler
+        {
             protected function generateRandomCode(): int
             {
                 return 123456;

@@ -3,7 +3,7 @@
 use Code16\Sharp\Config\SharpConfigBuilder;
 use Code16\Sharp\Config\SharpLegacyConfigBuilder;
 
-beforeEach(function() {
+beforeEach(function () {
     // Force legacy config handling
     app()->bind(SharpConfigBuilder::class, SharpLegacyConfigBuilder::class);
 });
@@ -11,7 +11,7 @@ beforeEach(function() {
 it('allows to set and get a config value in legacy form', function () {
     config()->set('sharp', [
         'name' => 'Test project',
-        'custom_url_segment' => 'test-sharp'
+        'custom_url_segment' => 'test-sharp',
     ]);
 
     expect(sharp()->config()->get('name'))->toBe('Test project')

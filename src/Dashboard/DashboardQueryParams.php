@@ -8,12 +8,11 @@ use Code16\Sharp\Utils\Filters\HasFiltersInQuery;
 class DashboardQueryParams
 {
     use HasFiltersInQuery;
-    
+
     public function __construct(
         protected FilterContainer $filterContainer,
         protected array $filterValues = [],
-    ) {
-    }
+    ) {}
 
     public function fillWithRequest(): self
     {

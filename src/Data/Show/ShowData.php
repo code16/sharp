@@ -22,8 +22,7 @@ final class ShowData extends Data
         /** @var string[] */
         public ?array $locales,
         public ?PageAlertData $pageAlert = null,
-    ) {
-    }
+    ) {}
 
     public static function from(array $show): self
     {

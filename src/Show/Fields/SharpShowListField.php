@@ -37,7 +37,7 @@ class SharpShowListField extends SharpShowField
             ->where('key', $key)
             ->first();
     }
-    
+
     public function itemFields(): Collection
     {
         return collect($this->itemFields);

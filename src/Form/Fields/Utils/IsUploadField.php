@@ -8,7 +8,7 @@ interface IsUploadField
 {
     public function setMaxFileSize(float $maxFileSizeInMB): self;
 
-    public function setImageCropRatio(string $ratio = null, ?array $transformableFileTypes = null): self;
+    public function setImageCropRatio(?string $ratio = null, ?array $transformableFileTypes = null): self;
 
     public function setImageOptimize(bool $imageOptimize = true): self;
 

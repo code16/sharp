@@ -14,7 +14,7 @@ class SharpDefaultEloquentImpersonationHandler extends SharpImpersonationHandler
         return $userModelClassName::query()
             ->orderBy($loginAttribute)
             ->get()
-            ->mapWithKeys(fn($user) => [$user->id => $user->$loginAttribute])
+            ->mapWithKeys(fn ($user) => [$user->id => $user->$loginAttribute])
             ->all();
     }
 }

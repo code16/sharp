@@ -90,7 +90,7 @@ it('returns prohibited actions with a show or form get request', function () {
 });
 
 it('returns prohibited actions with a list get request', function () {
-    fakeListFor('person', new class extends FakeSharpEntityList
+    fakeListFor('person', new class() extends FakeSharpEntityList
     {
         public function getListData(): array|Arrayable
         {
@@ -118,7 +118,7 @@ it('returns prohibited actions with a list get request', function () {
 });
 
 it('allow access by default', function () {
-    fakeListFor('person', new class extends FakeSharpEntityList
+    fakeListFor('person', new class() extends FakeSharpEntityList
     {
         public function getListData(): array|Arrayable
         {
@@ -198,7 +198,7 @@ it('checks the main entity prohibited actions in case of a sub entity', function
 it('handles custom auth check', function () {
     $this->app['config']->set(
         'sharp.auth.check_handler',
-        fn () => new class implements SharpAuthenticationCheckHandler
+        fn () => new class() implements SharpAuthenticationCheckHandler
         {
             public function check($user): bool
             {

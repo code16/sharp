@@ -30,7 +30,7 @@ final class EntityListQueryParamsData extends Data
     ) {
         $this->additional($filters);
     }
-    
+
     public static function from(array $query): self
     {
         return new self(...$query);

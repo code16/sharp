@@ -20,7 +20,7 @@ class HandleSharpErrors
         if ($response->exception instanceof ValidationException) {
             return $response;
         }
-        
+
         if (isset($response->exception) && ! ($response->exception instanceof SharpException)) {
             return (
                 new SharpException(

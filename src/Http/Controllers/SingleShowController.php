@@ -46,7 +46,7 @@ class SingleShowController extends SharpProtectedController
                 'delete' => $this->sharpAuthorizationManager->isAllowed('delete', $entityKey),
             ],
         ]);
-        
+
         $this->addPreloadHeadersForShowEntityLists($payload);
 
         return Inertia::render('Show/Show', [

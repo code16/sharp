@@ -29,12 +29,12 @@ class SharpContext
             ? app($handlerClassOrKey)->getKey()
             : $handlerClassOrKey;
 
-        return session()->get('_sharp_retained_filter_' . $key);
+        return session()->get('_sharp_retained_filter_'.$key);
     }
 
     public function breadcrumb(): SharpBreadcrumb
     {
-        if (!isset($this->breadcrumb)) {
+        if (! isset($this->breadcrumb)) {
             $this->breadcrumb = app(SharpBreadcrumb::class);
         }
 

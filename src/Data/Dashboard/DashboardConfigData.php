@@ -11,8 +11,7 @@ final class DashboardConfigData extends Data
     public function __construct(
         public ?ConfigCommandsData $commands = null,
         public ?ConfigFiltersData $filters = null,
-    ) {
-    }
+    ) {}
 
     public static function from(array $config): self
     {

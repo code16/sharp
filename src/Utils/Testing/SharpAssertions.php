@@ -23,7 +23,7 @@ trait SharpAssertions
                     'code16.sharp.show.delete', [
                         $this->buildCurrentParentUri(['list', $entityKey]),
                         $entityKey,
-                        $instanceId
+                        $instanceId,
                     ]
                 ),
             );
@@ -65,7 +65,7 @@ trait SharpAssertions
                     'code16.sharp.form.update', [
                         $this->buildCurrentParentUri(['list', $entityKey]),
                         $entityKey,
-                        $instanceId
+                        $instanceId,
                     ]
                 ),
                 $data,

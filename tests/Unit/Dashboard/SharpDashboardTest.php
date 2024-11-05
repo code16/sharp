@@ -14,7 +14,7 @@ use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\PageAlerts\PageAlert;
 
 it('returns widgets', function () {
-    $dashboard = new class extends FakeSharpDashboard
+    $dashboard = new class() extends FakeSharpDashboard
     {
         protected function buildWidgets(WidgetsContainer $widgetsContainer): void
         {
@@ -42,7 +42,7 @@ it('returns widgets', function () {
 });
 
 it('allows to build a layout without section', function () {
-    $dashboard = new class extends FakeSharpDashboard
+    $dashboard = new class() extends FakeSharpDashboard
     {
         protected function buildWidgets(WidgetsContainer $widgetsContainer): void
         {
@@ -84,7 +84,7 @@ it('allows to build a layout without section', function () {
 });
 
 it('allows to build a layout with sections', function () {
-    $dashboard = new class extends FakeSharpDashboard
+    $dashboard = new class() extends FakeSharpDashboard
     {
         protected function buildWidgets(WidgetsContainer $widgetsContainer): void
         {
@@ -139,7 +139,7 @@ it('allows to build a layout with sections', function () {
 });
 
 it('handles graph widget data', function () {
-    $dashboard = new class extends FakeSharpDashboard
+    $dashboard = new class() extends FakeSharpDashboard
     {
         protected function buildWidgets(WidgetsContainer $widgetsContainer): void
         {
@@ -179,7 +179,7 @@ it('handles graph widget data', function () {
 });
 
 it('handles graph widget data with multiple datasets', function () {
-    $dashboard = new class extends FakeSharpDashboard
+    $dashboard = new class() extends FakeSharpDashboard
     {
         protected function buildWidgets(WidgetsContainer $widgetsContainer): void
         {
@@ -229,7 +229,7 @@ it('handles graph widget data with multiple datasets', function () {
 });
 
 it('handles panel widget data', function () {
-    $dashboard = new class extends FakeSharpDashboard
+    $dashboard = new class() extends FakeSharpDashboard
     {
         protected function buildWidgets(WidgetsContainer $widgetsContainer): void
         {
@@ -257,7 +257,7 @@ it('handles panel widget data', function () {
 });
 
 it('handles ordered list widget data', function () {
-    $dashboard = new class extends FakeSharpDashboard
+    $dashboard = new class() extends FakeSharpDashboard
     {
         protected function buildWidgets(WidgetsContainer $widgetsContainer): void
         {
@@ -303,7 +303,7 @@ it('handles ordered list widget data', function () {
 });
 
 it('handles ordered list widget item url', function () {
-    $dashboard = new class extends FakeSharpDashboard
+    $dashboard = new class() extends FakeSharpDashboard
     {
         protected function buildWidgets(WidgetsContainer $widgetsContainer): void
         {
@@ -372,7 +372,7 @@ it('handles ordered list widget item url', function () {
 });
 
 it('allows to configure a page alert', function () {
-    $dashboard = new class extends FakeSharpDashboard
+    $dashboard = new class() extends FakeSharpDashboard
     {
         public function buildPageAlert(PageAlert $pageAlert): void
         {

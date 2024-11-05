@@ -58,7 +58,7 @@ class SharpFormUploadField extends SharpFormField implements IsUploadField
         return $this;
     }
 
-    public function setImageCropRatio(string $ratio = null, ?array $transformableFileTypes = null): self
+    public function setImageCropRatio(?string $ratio = null, ?array $transformableFileTypes = null): self
     {
         if ($ratio) {
             $ratio = explode(':', $ratio);
@@ -235,7 +235,7 @@ class SharpFormUploadField extends SharpFormField implements IsUploadField
     }
 
     /** @deprecated use setImageCropRatio()  */
-    public function setCropRatio(string $ratio = null, ?array $transformableFileTypes = null): self
+    public function setCropRatio(?string $ratio = null, ?array $transformableFileTypes = null): self
     {
         return $this->setImageCropRatio($ratio, $transformableFileTypes);
     }

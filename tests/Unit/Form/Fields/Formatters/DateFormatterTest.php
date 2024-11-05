@@ -5,7 +5,7 @@ use Code16\Sharp\Form\Fields\Formatters\DateFormatter;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
 
 it('allows to format datetime value to front', function () {
-    $formatter = new DateFormatter;
+    $formatter = new DateFormatter();
     $field = SharpFormDateField::make('date');
     $field->setHasDate();
     $field->setHasTime();
@@ -16,7 +16,7 @@ it('allows to format datetime value to front', function () {
 });
 
 it('allows to format date only value to front', function () {
-    $formatter = new DateFormatter;
+    $formatter = new DateFormatter();
     $field = SharpFormDateField::make('date');
     $field->setHasDate();
     $field->setHasTime(false);
@@ -27,7 +27,7 @@ it('allows to format date only value to front', function () {
 });
 
 it('allows to format time only value to front', function () {
-    $formatter = new DateFormatter;
+    $formatter = new DateFormatter();
     $field = SharpFormDateField::make('date');
     $field->setHasDate(false);
     $field->setHasTime(true);
@@ -38,7 +38,7 @@ it('allows to format time only value to front', function () {
 });
 
 it('allows to format datetime value from front', function () {
-    $formatter = new DateFormatter;
+    $formatter = new DateFormatter();
     $field = SharpFormDateField::make('date');
     $field->setHasDate();
     $field->setHasTime();
@@ -48,7 +48,7 @@ it('allows to format datetime value from front', function () {
 });
 
 it('allows to format date only value from front', function () {
-    $formatter = new DateFormatter;
+    $formatter = new DateFormatter();
     $field = SharpFormDateField::make('date');
     $field->setHasDate();
     $field->setHasTime(false);
@@ -60,7 +60,7 @@ it('allows to format date only value from front', function () {
 });
 
 it('allows to format time only value from front', function () {
-    $formatter = new DateFormatter;
+    $formatter = new DateFormatter();
     $field = SharpFormDateField::make('date');
     $field->setHasDate(false);
     $field->setHasTime();
@@ -72,7 +72,7 @@ it('allows to format time only value from front', function () {
 });
 
 it('handles timezone from front', function () {
-    $formatter = new DateFormatter;
+    $formatter = new DateFormatter();
     $field = SharpFormDateField::make('date');
     $field->setHasTime();
 
@@ -86,7 +86,7 @@ it('handles timezone from front', function () {
 });
 
 it('set seconds to zero', function () {
-    $formatter = new DateFormatter;
+    $formatter = new DateFormatter();
     $field = SharpFormDateField::make('date');
     $field->setHasDate();
     $field->setHasTime();

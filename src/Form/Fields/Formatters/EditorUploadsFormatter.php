@@ -9,8 +9,8 @@ use Code16\Sharp\Utils\Fields\Formatters\FormatsHtmlContent;
 
 class EditorUploadsFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
 {
-    use FormatsHtmlContent;
     use FormatsEditorUploads;
+    use FormatsHtmlContent;
 
     /**
      * @param  SharpFormEditorField  $field

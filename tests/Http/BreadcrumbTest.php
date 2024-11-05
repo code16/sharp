@@ -99,7 +99,7 @@ it('uses labels defined for entities in the config', function () {
 });
 
 it('uses custom labels on leaves if configured, based on unformatted data', function () {
-    fakeShowFor('person', new class extends PersonShow
+    fakeShowFor('person', new class() extends PersonShow
     {
         public function buildShowConfig(): void
         {
@@ -110,7 +110,7 @@ it('uses custom labels on leaves if configured, based on unformatted data', func
         {
             return $this->transform([
                 'id' => 1,
-                'name' => 'Marie Curie'
+                'name' => 'Marie Curie',
             ]);
         }
     });
@@ -132,4 +132,3 @@ it('uses custom labels on leaves if configured, based on unformatted data', func
             ->where('show.data.name', ['text' => 'Marie Curie'])
         );
 });
-

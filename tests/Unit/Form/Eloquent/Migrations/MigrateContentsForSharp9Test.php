@@ -23,7 +23,7 @@ it('Migrate <x-sharp-image> for sharp 9', function () {
         'content' => '<x-sharp-image name="name.jpg" disk="local" path="data/Posts/1/name.jpg" filter-crop="0.5,0.5,0.4,0.4" filter-rotate="90"></x-sharp-image>',
     ]);
 
-    $migration = new class extends Migration
+    $migration = new class() extends Migration
     {
         use MigrateEditorContentsForSharp9;
 
@@ -59,7 +59,7 @@ it('Migrate <x-sharp-file> for sharp 9', function () {
         'content' => '<x-sharp-file name="name.pdf" disk="local" path="data/Posts/1/name.pdf"></x-sharp-file>',
     ]);
 
-    $migration = new class extends Migration
+    $migration = new class() extends Migration
     {
         use MigrateEditorContentsForSharp9;
 
@@ -91,7 +91,7 @@ it('Should not throw if file does not exists', function () {
         'content' => '<x-sharp-file name="name.pdf" disk="local" path="data/Posts/1/name.pdf"></x-sharp-file>',
     ]);
 
-    $migration = new class extends Migration
+    $migration = new class() extends Migration
     {
         use MigrateEditorContentsForSharp9;
 

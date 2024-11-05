@@ -11,16 +11,16 @@ use DOMElement;
 trait FormatsEditorUploads
 {
     use FormatsHtmlContent;
-    
+
     protected function formatEditorUploadsToFront(IsSharpFieldWithEmbeds&IsSharpFieldWithLocalization $field, $value): array
     {
         $uploads = [];
 
         $text = $this->maybeLocalized($field, $value, function (string $content) use (&$uploads) {
-            if(!str_contains($content, '<x-sharp-image') && !str_contains($content, '<x-sharp-file')) {
+            if (! str_contains($content, '<x-sharp-image') && ! str_contains($content, '<x-sharp-file')) {
                 return $content;
             }
-            
+
             $domDocument = $this->parseHtml($content);
 
             foreach ($this->getUploadElements($domDocument) as $element) {

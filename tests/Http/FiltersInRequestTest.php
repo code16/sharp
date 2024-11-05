@@ -15,12 +15,12 @@ beforeEach(function () {
 
 it('filters instances of an entity list', function () {
     $this->withoutExceptionHandling();
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getFilters(): ?array
         {
             return [
-                new class extends EntityListSelectFilter
+                new class() extends EntityListSelectFilter
                 {
                     public function buildFilterConfig(): void
                     {
@@ -60,12 +60,12 @@ it('filters instances of an entity list', function () {
 });
 
 it('uses the default value of a required filter if no value was sent', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getFilters(): ?array
         {
             return [
-                new class extends EntityListSelectRequiredFilter
+                new class() extends EntityListSelectRequiredFilter
                 {
                     public function buildFilterConfig(): void
                     {
@@ -111,12 +111,12 @@ it('uses the default value of a required filter if no value was sent', function 
 
 it('handles multiple filter values', function () {
     $this->withoutExceptionHandling();
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getFilters(): ?array
         {
             return [
-                new class extends EntityListSelectMultipleFilter
+                new class() extends EntityListSelectMultipleFilter
                 {
                     public function buildFilterConfig(): void
                     {
@@ -157,12 +157,12 @@ it('handles multiple filter values', function () {
 });
 
 it('saves retained filters in the session when set', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getFilters(): ?array
         {
             return [
-                new class extends EntityListSelectFilter
+                new class() extends EntityListSelectFilter
                 {
                     public function buildFilterConfig(): void
                     {
@@ -195,7 +195,7 @@ it('saves retained filters in the session when set', function () {
     });
 
     expect(session()->all())->not->toHaveKey('_sharp_retained_filter_job');
-    
+
     $this
         ->withoutExceptionHandling()
         ->post(route('code16.sharp.list.filters.store', ['entityKey' => 'person']), [
@@ -205,7 +205,7 @@ it('saves retained filters in the session when set', function () {
         ])
         ->assertSessionHasNoErrors()
         ->assertRedirect('/sharp/s-list/person?filter_job=physicist');
-    
+
     expect(session('_sharp_retained_filter_job'))->toBe('physicist');
 
     // Second call: filter should be valued
@@ -227,7 +227,7 @@ it('saves retained filters in the session when set', function () {
                 ['id' => 2, 'name' => 'Louis Pasteur'],
             ])
         );
-    
+
     // reset retained filter value
     $this
         ->post(route('code16.sharp.list.filters.store', ['entityKey' => 'person']), [
@@ -237,7 +237,7 @@ it('saves retained filters in the session when set', function () {
         ])
         ->assertSessionHasNoErrors()
         ->assertRedirect('/sharp/s-list/person');
-    
+
     $this
         ->get('/sharp/s-list/person')
         ->assertOk()
@@ -250,12 +250,12 @@ it('saves retained filters in the session when set', function () {
 });
 
 it('handles retained multiple filter', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getFilters(): ?array
         {
             return [
-                new class extends EntityListSelectMultipleFilter
+                new class() extends EntityListSelectMultipleFilter
                 {
                     public function buildFilterConfig(): void
                     {
@@ -276,7 +276,7 @@ it('handles retained multiple filter', function () {
     });
 
     expect(session()->all())->not->toHaveKey('_sharp_retained_filter_job');
-    
+
     $this
         ->post(route('code16.sharp.list.filters.store', ['entityKey' => 'person']), [
             'filterValues' => [
@@ -285,7 +285,7 @@ it('handles retained multiple filter', function () {
         ])
         ->assertSessionHasNoErrors()
         ->assertRedirect('/sharp/s-list/person?filter_job='.urlencode('physicist,physician'));
-    
+
     // Call to retain the filter on session
     $this
         ->get('/sharp/s-list/person?filter_job=physicist,physician')
@@ -295,12 +295,12 @@ it('handles retained multiple filter', function () {
 });
 
 it('handles retained required filter', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getFilters(): ?array
         {
             return [
-                new class extends EntityListSelectRequiredFilter
+                new class() extends EntityListSelectRequiredFilter
                 {
                     public function buildFilterConfig(): void
                     {
@@ -346,7 +346,7 @@ it('handles retained required filter', function () {
                 ['id' => 1, 'name' => 'Marie Curie'],
             ])
         );
-    
+
     $this
         ->post(route('code16.sharp.list.filters.store', ['entityKey' => 'person']), [
             'filterValues' => [
@@ -375,7 +375,7 @@ it('handles retained required filter', function () {
                 ['id' => 2, 'name' => 'Louis Pasteur'],
             ])
         );
-    
+
     $this
         ->post(route('code16.sharp.list.filters.store', ['entityKey' => 'person']), [
             'filterValues' => [

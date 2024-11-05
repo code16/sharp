@@ -15,6 +15,5 @@ final class FormEditorFieldUploadData extends Data
         ])]
         public array $fields,
         public FormLayoutData $layout,
-    ) {
-    }
+    ) {}
 }

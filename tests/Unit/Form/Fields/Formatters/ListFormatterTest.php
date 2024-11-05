@@ -14,7 +14,7 @@ it('allows to format value to front', function () {
 
     $data = getListFormatterData();
 
-    $this->assertEquals($data, (new ListFormatter)->toFront($field, $data));
+    $this->assertEquals($data, (new ListFormatter())->toFront($field, $data));
 });
 
 it('ignores non configured values when formatting to front', function () {
@@ -28,7 +28,7 @@ it('ignores non configured values when formatting to front', function () {
 
     $this->assertEquals(
         $expectedData,
-        (new ListFormatter)->toFront($field, $data)
+        (new ListFormatter())->toFront($field, $data)
     );
 });
 
@@ -40,7 +40,7 @@ it('allows to format value from front', function () {
 
     $data = getListFormatterData();
 
-    $this->assertEquals($data, (new ListFormatter)->fromFront($field, $attribute, $data));
+    $this->assertEquals($data, (new ListFormatter())->fromFront($field, $attribute, $data));
 });
 
 it('non configured values are ignored when formatting from front', function () {
@@ -53,12 +53,13 @@ it('non configured values are ignored when formatting from front', function () {
         ->map(fn ($item) => Arr::except($item, 'job'))
         ->all();
 
-    $this->assertEquals($expectedData, (new ListFormatter)->fromFront($field, $attribute, $data));
+    $this->assertEquals($expectedData, (new ListFormatter())->fromFront($field, $attribute, $data));
 });
 
 it('executes formatter on each field', function () {
     $field = SharpFormListField::make('list')
-        ->addItemField(SharpFormTextField::make('job')->setFormatter(new class extends SharpFieldFormatter {
+        ->addItemField(SharpFormTextField::make('job')->setFormatter(new class() extends SharpFieldFormatter
+        {
             public function toFront(SharpFormField $field, $value)
             {
                 return strtoupper($value);
@@ -68,23 +69,23 @@ it('executes formatter on each field', function () {
                 return strtolower($value);
             }
         }));
-    
+
     $data = [
         ['id' => 1, 'job' => 'Developer'],
         ['id' => 2, 'job' => 'Designer'],
     ];
-    expect((new ListFormatter)->toFront($field, $data))->toBe([
+    expect((new ListFormatter())->toFront($field, $data))->toBe([
         ['id' => 1, 'job' => 'DEVELOPER'],
         ['id' => 2, 'job' => 'DESIGNER'],
     ]);
-    expect((new ListFormatter)->fromFront($field, 'list', $data))->toBe([
+    expect((new ListFormatter())->fromFront($field, 'list', $data))->toBe([
         ['id' => 1, 'job' => 'developer'],
         ['id' => 2, 'job' => 'designer'],
     ]);
 });
 
 it('allows to configure the id attribute', function () {
-    $formatter = new ListFormatter;
+    $formatter = new ListFormatter();
     $field = SharpFormListField::make('list')
         ->setItemIdAttribute('number')
         ->addItemField(SharpFormTextField::make('name'))
@@ -101,7 +102,7 @@ it('allows to configure the id attribute', function () {
 });
 
 it('non valuated values are initialized to null when formatting to front', function () {
-    $formatter = new ListFormatter;
+    $formatter = new ListFormatter();
     $field = SharpFormListField::make('list')
         ->addItemField(SharpFormTextField::make('name'))
         ->addItemField(SharpFormTextField::make('job'));
@@ -114,7 +115,7 @@ it('non valuated values are initialized to null when formatting to front', funct
 });
 
 it('allows to format sub value to front', function () {
-    $formatter = new ListFormatter;
+    $formatter = new ListFormatter();
     $field = SharpFormListField::make('list')
         ->addItemField(SharpFormTextField::make('mother:name'));
 

@@ -16,8 +16,7 @@ final class ShowConfigData extends Data
         public ?string $titleAttribute = null,
         public ?string $breadcrumbAttribute = null,
         public ?EntityStateData $state = null,
-    ) {
-    }
+    ) {}
 
     public static function from(array $config): self
     {

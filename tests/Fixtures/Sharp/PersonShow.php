@@ -16,9 +16,7 @@ class PersonShow extends SharpShow
         $showFields->addField(SharpShowTextField::make('name'));
     }
 
-    public function buildShowConfig(): void
-    {
-    }
+    public function buildShowConfig(): void {}
 
     public function buildShowLayout(ShowLayout $showLayout): void
     {
@@ -36,7 +34,5 @@ class PersonShow extends SharpShow
         return ['name' => 'John Wayne', 'job' => 'actor', 'state' => 'active'];
     }
 
-    public function delete($id): void
-    {
-    }
+    public function delete($id): void {}
 }

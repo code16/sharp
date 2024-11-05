@@ -77,7 +77,7 @@ it('returns transformed and formatted data of an embed', function () {
 });
 
 it('does not show an embed without entity permission', function () {
-    fakePolicyFor('person', new class extends SharpEntityPolicy
+    fakePolicyFor('person', new class() extends SharpEntityPolicy
     {
         public function entity($user): bool
         {
@@ -99,7 +99,7 @@ it('does not show an embed without entity permission', function () {
 });
 
 it('does not show an embed without view permission', function () {
-    fakePolicyFor('person', new class extends SharpEntityPolicy
+    fakePolicyFor('person', new class() extends SharpEntityPolicy
     {
         public function view($user, $instanceId): bool
         {

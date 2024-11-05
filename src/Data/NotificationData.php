@@ -11,6 +11,5 @@ final class NotificationData extends Data
         public NotificationLevel $level,
         public ?string $message,
         public bool $autoHide,
-    ) {
-    }
+    ) {}
 }

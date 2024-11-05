@@ -21,8 +21,7 @@ final class CommandData extends Data
         public array|bool $authorization,
         public ?InstanceSelectionMode $instance_selection = null,
         public ?bool $primary = null,
-    ) {
-    }
+    ) {}
 
     public static function from(array $command): self
     {

@@ -10,21 +10,21 @@ use Code16\Sharp\Utils\Fields\IsSharpFieldWithLocalization;
 trait FormatsLocalizedValue
 {
     protected ?array $dataLocalizations = null;
-    
+
     public function setDataLocalizations(array $dataLocalizations): static
     {
         $this->dataLocalizations = $dataLocalizations;
-        
+
         return $this;
     }
-    
+
     /**
      * @param  ?Closure<string>  $transformContent
      */
     protected function maybeLocalized(SharpFormField|SharpShowField $field, array|string|null $value, ?Closure $transformContent = null): array|string|null
     {
         $transformContent ??= fn ($value) => $value;
-        
+
         if ($field instanceof IsSharpFieldWithLocalization && $field->isLocalized()) {
             return collect([
                 ...collect($this->dataLocalizations ?? [])->mapWithKeys(fn ($locale) => [$locale => null]),
@@ -33,7 +33,7 @@ trait FormatsLocalizedValue
                 ->map(fn ($content) => $content !== null ? $transformContent($content) : null)
                 ->toArray();
         }
-        
+
         return $value === null ? null : $transformContent($value);
     }
 }

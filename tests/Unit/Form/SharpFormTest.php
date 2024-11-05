@@ -9,7 +9,7 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\PageAlerts\PageAlert;
 
 it('returns form fields', function () {
-    $form = new class extends FakeSharpForm
+    $form = new class() extends FakeSharpForm
     {
         public function buildFormFields(FieldsContainer $formFields): void
         {
@@ -28,7 +28,7 @@ it('returns form fields', function () {
 });
 
 it('returns form layout', function () {
-    $form = new class extends FakeSharpForm
+    $form = new class() extends FakeSharpForm
     {
         public function buildFormFields(FieldsContainer $formFields): void
         {
@@ -72,7 +72,7 @@ it('returns form layout', function () {
 });
 
 it('gets an instance', function () {
-    $form = new class extends FakeSharpForm
+    $form = new class() extends FakeSharpForm
     {
         public function find($id): array
         {
@@ -112,7 +112,7 @@ it('handles single forms', function () {
 });
 
 it('allows to declare setDisplayShowPageAfterCreation in config', function () {
-    $sharpForm = new class extends FakeSharpForm
+    $sharpForm = new class() extends FakeSharpForm
     {
         public function buildFormConfig(): void
         {
@@ -131,7 +131,7 @@ it('allows to declare setDisplayShowPageAfterCreation in config', function () {
 });
 
 it('allows to declare a page alert', function () {
-    $sharpForm = new class extends FakeSharpForm
+    $sharpForm = new class() extends FakeSharpForm
     {
         public function buildPageAlert(PageAlert $pageAlert): void
         {

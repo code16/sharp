@@ -8,10 +8,10 @@ use Code16\Sharp\Utils\Fields\IsSharpFieldWithLocalization;
 use Code16\Sharp\Utils\Fields\SharpFieldWithEmbeds;
 use Code16\Sharp\Utils\Fields\SharpFieldWithLocalization;
 
-class SharpShowTextField extends SharpShowField implements IsSharpFieldWithLocalization, IsSharpFieldWithEmbeds
+class SharpShowTextField extends SharpShowField implements IsSharpFieldWithEmbeds, IsSharpFieldWithLocalization
 {
-    use SharpFieldWithLocalization;
     use SharpFieldWithEmbeds;
+    use SharpFieldWithLocalization;
 
     const FIELD_TYPE = 'text';
 

@@ -14,9 +14,7 @@ class ApiEmbedsControllerTestSimpleEmbed extends SharpFormEditorEmbed
         $this->configureTagName('x-test');
     }
 
-    public function buildFormFields(FieldsContainer $formFields): void
-    {
-    }
+    public function buildFormFields(FieldsContainer $formFields): void {}
 
     public function updateContent(array $data = []): array
     {

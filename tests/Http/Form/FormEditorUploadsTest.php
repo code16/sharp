@@ -22,7 +22,7 @@ beforeEach(function () {
 });
 
 it('can post a newly uploaded file in editor, create case', function () {
-    fakeFormFor('person', $form = new class extends FakeSharpForm
+    fakeFormFor('person', $form = new class() extends FakeSharpForm
     {
         use WithSharpFormEloquentUpdater;
 
@@ -109,7 +109,7 @@ it('can post a newly uploaded file in editor, create case', function () {
 it('can post a newly uploaded file in editor, update case', function () {
     Person::create(['bio' => '']);
 
-    fakeFormFor('person', $form = new class extends FakeSharpForm
+    fakeFormFor('person', $form = new class() extends FakeSharpForm
     {
         use WithSharpFormEloquentUpdater;
 
@@ -196,7 +196,7 @@ it('can post a newly uploaded file in editor, update case', function () {
 });
 
 it('can post an embed with upload, create case', function () {
-    fakeFormFor('person', new class extends FakeSharpForm
+    fakeFormFor('person', new class() extends FakeSharpForm
     {
         use WithSharpFormEloquentUpdater;
 
@@ -225,7 +225,7 @@ it('can post an embed with upload, create case', function () {
 
     $editorXEmbedData = $this
         ->postJson(route('code16.sharp.api.embed.instance.form.update', [
-            (new FormEditorUploadsTestEmbed)->key(),
+            (new FormEditorUploadsTestEmbed())->key(),
             'person',
             1,
         ]), [
@@ -239,7 +239,7 @@ it('can post an embed with upload, create case', function () {
                 '<x-embed data-key="0"></x-embed>',
             ),
             'embeds' => [
-                (new FormEditorUploadsTestEmbed)->key() => [
+                (new FormEditorUploadsTestEmbed())->key() => [
                     [
                         'file' => $editorXEmbedData['file'],
                     ],

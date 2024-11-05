@@ -4,7 +4,7 @@ use Code16\Sharp\Form\Fields\Formatters\TagsFormatter;
 use Code16\Sharp\Form\Fields\SharpFormTagsField;
 
 it('allows to format ids to front', function () {
-    $formatter = new TagsFormatter;
+    $formatter = new TagsFormatter();
     $field = SharpFormTagsField::make('tags', [
         1 => 'red',
         2 => 'blue',
@@ -15,7 +15,7 @@ it('allows to format ids to front', function () {
 });
 
 it('allows to format objects to front', function () {
-    $formatter = new TagsFormatter;
+    $formatter = new TagsFormatter();
     $field = SharpFormTagsField::make('tags', [
         1 => 'red',
         2 => 'blue',
@@ -32,7 +32,7 @@ it('allows to format objects to front', function () {
 });
 
 it('allows to format arrays to front', function () {
-    $formatter = new TagsFormatter;
+    $formatter = new TagsFormatter();
     $field = SharpFormTagsField::make('tags', [
         1 => 'red',
         2 => 'blue',
@@ -49,7 +49,7 @@ it('allows to format arrays to front', function () {
 });
 
 it('allows to format objects to front with a defined id attribute', function () {
-    $formatter = new TagsFormatter;
+    $formatter = new TagsFormatter();
     $field = SharpFormTagsField::make('tags', [
         1 => 'red',
         2 => 'blue',
@@ -67,7 +67,7 @@ it('allows to format objects to front with a defined id attribute', function () 
 });
 
 it('allows to format value from front', function () {
-    $formatter = new TagsFormatter;
+    $formatter = new TagsFormatter();
     $attribute = 'attribute';
     $field = SharpFormTagsField::make('tags', [
         1 => 'red',
@@ -79,7 +79,7 @@ it('allows to format value from front', function () {
 });
 
 it('we strip non configured values from front', function () {
-    $formatter = new TagsFormatter;
+    $formatter = new TagsFormatter();
     $attribute = 'attribute';
     $field = SharpFormTagsField::make('tags', [
         1 => 'red',
@@ -92,7 +92,7 @@ it('we strip non configured values from front', function () {
 });
 
 it('we handle creatable attribute from front', function () {
-    $formatter = new TagsFormatter;
+    $formatter = new TagsFormatter();
     $attribute = 'attribute';
     $field = SharpFormTagsField::make('tags', [
         1 => 'red',
@@ -107,7 +107,7 @@ it('we handle creatable attribute from front', function () {
 });
 
 it('we strip null ids if creatable attribute is false from front', function () {
-    $formatter = new TagsFormatter;
+    $formatter = new TagsFormatter();
     $attribute = 'attribute';
     $field = SharpFormTagsField::make('tags', [
         1 => 'red',
@@ -122,7 +122,7 @@ it('we strip null ids if creatable attribute is false from front', function () {
 });
 
 it('we handle id attribute from front', function () {
-    $formatter = new TagsFormatter;
+    $formatter = new TagsFormatter();
     $attribute = 'attribute';
     $field = SharpFormTagsField::make('tags', [
         1 => 'red',
@@ -135,7 +135,7 @@ it('we handle id attribute from front', function () {
 });
 
 it('we handle id and creatable attribute from front', function () {
-    $formatter = new TagsFormatter;
+    $formatter = new TagsFormatter();
     $attribute = 'attribute';
     $field = SharpFormTagsField::make('tags', [
         1 => 'red',
@@ -152,7 +152,7 @@ it('we handle id and creatable attribute from front', function () {
 });
 
 it('we handle additional create attributes from front', function () {
-    $formatter = new TagsFormatter;
+    $formatter = new TagsFormatter();
     $attribute = 'attribute';
     $field = SharpFormTagsField::make('tags', [
         1 => 'red',

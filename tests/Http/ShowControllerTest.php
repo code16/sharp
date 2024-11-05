@@ -23,7 +23,7 @@ beforeEach(function () {
 });
 
 it('gets formatted show data for an instance', function () {
-    fakeShowFor('person', new class extends PersonShow
+    fakeShowFor('person', new class() extends PersonShow
     {
         public function find($id): array
         {
@@ -41,7 +41,7 @@ it('gets formatted show data for an instance', function () {
 });
 
 it('gets formatted show data even without data transformation', function () {
-    fakeShowFor('person', new class extends PersonShow
+    fakeShowFor('person', new class() extends PersonShow
     {
         public function find($id): array
         {
@@ -59,7 +59,7 @@ it('gets formatted show data even without data transformation', function () {
 });
 
 it('filters out data which is not a field', function () {
-    fakeShowFor('person', new class extends PersonShow
+    fakeShowFor('person', new class() extends PersonShow
     {
         public function buildShowFields(FieldsContainer $showFields): void
         {
@@ -84,7 +84,7 @@ it('filters out data which is not a field', function () {
 });
 
 it('gets attribute for entity state if defined', function () {
-    fakeShowFor('person', new class extends PersonShow
+    fakeShowFor('person', new class() extends PersonShow
     {
         public function buildShowFields(FieldsContainer $showFields): void
         {
@@ -93,11 +93,9 @@ it('gets attribute for entity state if defined', function () {
 
         public function buildShowConfig(): void
         {
-            $this->configureEntityState('status', new class extends EntityState
+            $this->configureEntityState('status', new class() extends EntityState
             {
-                protected function buildStates(): void
-                {
-                }
+                protected function buildStates(): void {}
 
                 protected function updateState($instanceId, string $stateId): array
                 {
@@ -125,7 +123,7 @@ it('gets attribute for entity state if defined', function () {
 
 it('returns configured show fields', function () {
     $this->withoutExceptionHandling();
-    fakeShowFor('person', new class extends PersonShow
+    fakeShowFor('person', new class() extends PersonShow
     {
         public function buildShowFields(FieldsContainer $showFields): void
         {
@@ -149,7 +147,7 @@ it('returns configured show fields', function () {
 });
 
 it('returns configured show layout', function () {
-    fakeShowFor('person', new class extends PersonShow
+    fakeShowFor('person', new class() extends PersonShow
     {
         public function buildShowFields(FieldsContainer $showFields): void
         {
@@ -184,7 +182,7 @@ it('returns configured show layout', function () {
 });
 
 it('returns show configuration', function () {
-    fakeShowFor('person', new class extends PersonShow
+    fakeShowFor('person', new class() extends PersonShow
     {
         public function buildShowConfig(): void
         {
@@ -202,7 +200,7 @@ it('returns show configuration', function () {
 it('gets show data for an instance in a single show case', function () {
     sharp()->config()->addEntity('single-person', SinglePersonEntity::class);
 
-    fakeShowFor('single-person', new class extends PersonSingleShow
+    fakeShowFor('single-person', new class() extends PersonSingleShow
     {
         public function findSingle(): array
         {
@@ -220,7 +218,7 @@ it('gets show data for an instance in a single show case', function () {
 });
 
 it('allows instance deletion from the show', function () {
-    $personShow = new class extends PersonShow
+    $personShow = new class() extends PersonShow
     {
         public bool $wasDeleted = false;
 
@@ -248,12 +246,12 @@ it('disallows instance deletion without authorization', function () {
 });
 
 it('returns commands authorization in config', function () {
-    fakeShowFor('person', new class extends PersonShow
+    fakeShowFor('person', new class() extends PersonShow
     {
         public function getInstanceCommands(): array
         {
             return [
-                new class extends InstanceCommand
+                new class() extends InstanceCommand
                 {
                     public function label(): ?string
                     {
@@ -288,7 +286,7 @@ it('returns commands authorization in config', function () {
 });
 
 it('returns the valuated multiform attribute if configured', function () {
-    fakeShowFor('person', new class extends PersonShow
+    fakeShowFor('person', new class() extends PersonShow
     {
         public function buildShowConfig(): void
         {
@@ -321,7 +319,7 @@ it('returns the valuated multiform attribute if configured', function () {
 });
 
 it('allows to configure a page alert', function () {
-    fakeShowFor('person', new class extends PersonShow
+    fakeShowFor('person', new class() extends PersonShow
     {
         public function buildPageAlert(PageAlert $pageAlert): void
         {
@@ -343,7 +341,7 @@ it('allows to configure a page alert', function () {
 });
 
 it('allows to configure a page alert with a closure as content', function () {
-    fakeShowFor('person', new class extends PersonShow
+    fakeShowFor('person', new class() extends PersonShow
     {
         public function buildPageAlert(PageAlert $pageAlert): void
         {
@@ -377,7 +375,7 @@ it('allows to configure a page alert with a closure as content', function () {
 it('passes through transformers to return show data for an instance', function () {
     $this->withoutExceptionHandling();
 
-    fakeShowFor('person', new class extends PersonShow
+    fakeShowFor('person', new class() extends PersonShow
     {
         public function find($id): array
         {

@@ -41,7 +41,7 @@ it('handles the {id} segment of the file path', function () {
 });
 
 it('optimizes uploaded images if configured', function () {
-    $optimizer = new class
+    $optimizer = new class()
     {
         public bool $wasOptimized = false;
 

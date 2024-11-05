@@ -23,8 +23,8 @@ trait MigrateEditorContentsForSharp9
         $rows = $query
             ->tap(function (Builder $query) use ($contentColumns) {
                 collect($contentColumns)->each(fn ($column) => $query
-                        ->orWhere($column, 'like', '%<x-sharp-image%')
-                        ->orWhere($column, 'like', '%<x-sharp-file%')
+                    ->orWhere($column, 'like', '%<x-sharp-image%')
+                    ->orWhere($column, 'like', '%<x-sharp-file%')
                 );
             })
             ->get();

@@ -8,7 +8,7 @@ abstract class CheckFilter extends Filter
     {
         return (bool) $value;
     }
-    
+
     public function toQueryParam($value): mixed
     {
         return $value;

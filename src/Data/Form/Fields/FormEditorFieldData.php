@@ -19,7 +19,7 @@ final class FormEditorFieldData extends Data
 
     #[Optional]
     #[LiteralTypeScriptType(FormEditorFieldData::VALUE_TS_TYPE)]
-    public array|null $value;
+    public ?array $value;
 
     public function __construct(
         public string $key,
@@ -44,8 +44,7 @@ final class FormEditorFieldData extends Data
         public ?string $helpMessage = null,
         public ?string $extraStyle = null,
         public ?bool $localized = null,
-    ) {
-    }
+    ) {}
 
     public static function from(array $field): self
     {

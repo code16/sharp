@@ -141,14 +141,14 @@ class PostForm extends SharpForm
                     ->allowEmptySearch()
                     ->setRemoteCallback(function ($search) {
                         $users = User::orderBy('name')->limit(10);
-                        
+
                         foreach (explode(' ', trim($search)) as $word) {
                             $users->where(fn ($query) => $query
                                 ->where('name', 'like', "%$word%")
                                 ->orWhere('email', 'like', "%$word%")
                             );
                         }
-                        
+
                         return $users->get();
                     })
                     ->setListItemTemplate('<div>{{ $name }}</div><div><small>{{ $email }}</small></div>')

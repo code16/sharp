@@ -10,6 +10,7 @@ abstract class Data implements Arrayable
 {
     /** @var ReflectionParameter[][] */
     protected static array $constructorParameterCache = [];
+
     protected array $additionalAttributes = [];
 
     public static function collection($payload): DataCollection
@@ -65,7 +66,7 @@ abstract class Data implements Arrayable
         $values = [];
 
         foreach (static::$constructorParameterCache[$class] as $parameter) {
-            if($parameter->isVariadic()) {
+            if ($parameter->isVariadic()) {
                 continue;
             }
             if ($parameter->isOptional() && $parameter->getDefaultValue() === null && $this->{$parameter->name} === null) {

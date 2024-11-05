@@ -6,9 +6,7 @@ use Intervention\Image\Interfaces\ImageInterface;
 
 class FitModifier extends ThumbnailModifier
 {
-    public function __construct(private readonly int $width, private readonly int $height)
-    {
-    }
+    public function __construct(private readonly int $width, private readonly int $height) {}
 
     public function apply(ImageInterface $image): ImageInterface
     {

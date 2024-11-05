@@ -3,7 +3,6 @@
 namespace Code16\Sharp\Data\Show\Fields;
 
 use Code16\Sharp\Data\Data;
-use Illuminate\Support\Arr;
 use Spatie\TypeScriptTransformer\Attributes\Optional;
 
 final class ShowCustomFieldData extends Data

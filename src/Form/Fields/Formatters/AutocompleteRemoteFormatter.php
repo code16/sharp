@@ -9,22 +9,21 @@ use Code16\Sharp\Utils\Transformers\ArrayConverter;
 class AutocompleteRemoteFormatter extends SharpFieldFormatter
 {
     /**
-     * @param SharpFormAutocompleteRemoteField $field
-     * @param $value
+     * @param  SharpFormAutocompleteRemoteField  $field
      * @return array|null
      */
     public function toFront(SharpFormField $field, $value)
     {
         $value = ArrayConverter::modelToArray($value);
-        
+
         if (is_null($value)) {
             return null;
         }
-        
+
         if (is_array($value)) {
             return $field->itemWithRenderedTemplates($value);
         }
-        
+
         return [$field->itemIdAttribute() => $value];
     }
 

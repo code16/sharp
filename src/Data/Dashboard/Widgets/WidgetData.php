@@ -14,9 +14,7 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScriptType;
 )]
 final class WidgetData extends Data
 {
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public static function from(array $widget): Data
     {

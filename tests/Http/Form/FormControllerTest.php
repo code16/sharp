@@ -22,7 +22,7 @@ beforeEach(function () {
 });
 
 it('gets form data for an instance', function () {
-    fakeFormFor('person', new class extends PersonForm
+    fakeFormFor('person', new class() extends PersonForm
     {
         public function find($id): array
         {
@@ -40,7 +40,7 @@ it('gets form data for an instance', function () {
 });
 
 it('gets form initial data for an entity in creation', function () {
-    fakeFormFor('person', new class extends PersonForm
+    fakeFormFor('person', new class() extends PersonForm
     {
         public function create(): array
         {
@@ -58,7 +58,7 @@ it('gets form initial data for an entity in creation', function () {
 });
 
 it('filters out data which is not a field', function () {
-    fakeFormFor('person', new class extends PersonForm
+    fakeFormFor('person', new class() extends PersonForm
     {
         public function buildFormFields(FieldsContainer $formFields): void
         {
@@ -83,7 +83,7 @@ it('filters out data which is not a field', function () {
 });
 
 it('returns configured form fields', function () {
-    fakeFormFor('person', new class extends PersonForm
+    fakeFormFor('person', new class() extends PersonForm
     {
         public function buildFormFields(FieldsContainer $formFields): void
         {
@@ -107,7 +107,7 @@ it('returns configured form fields', function () {
 });
 
 it('returns configured form layout', function () {
-    fakeFormFor('person', new class extends PersonForm
+    fakeFormFor('person', new class() extends PersonForm
     {
         public function buildFormFields(FieldsContainer $formFields): void
         {
@@ -144,7 +144,7 @@ it('returns configured form layout', function () {
 });
 
 it('returns form configuration', function () {
-    fakeFormFor('person', new class extends PersonForm
+    fakeFormFor('person', new class() extends PersonForm
     {
         public function buildFormConfig(): void
         {
@@ -184,7 +184,7 @@ it('redirects to the show after an update', function () {
 });
 
 it('creates an instance and redirect to the show if configured', function () {
-    fakeFormFor('person', new class extends PersonForm
+    fakeFormFor('person', new class() extends PersonForm
     {
         public function buildFormConfig(): void
         {
@@ -200,7 +200,7 @@ it('creates an instance and redirect to the show if configured', function () {
 });
 
 it('validates an instance before store and update with the rules() method', function () {
-    fakeFormFor('person', new class extends PersonForm
+    fakeFormFor('person', new class() extends PersonForm
     {
         public function rules(): array
         {
@@ -222,7 +222,7 @@ it('validates an instance before store and update with the rules() method', func
 });
 
 it('validates an instance before store and update with a validate() call', function () {
-    fakeFormFor('person', new class extends PersonForm
+    fakeFormFor('person', new class() extends PersonForm
     {
         public function update($id, array $data)
         {
@@ -244,7 +244,7 @@ it('validates an instance before store and update with a validate() call', funct
 });
 
 it('formats data before validation', function () {
-    fakeFormFor('person', new class extends PersonForm
+    fakeFormFor('person', new class() extends PersonForm
     {
         public function buildFormFields(FieldsContainer $formFields): void
         {
@@ -265,7 +265,7 @@ it('formats data before validation', function () {
 });
 
 it('handles application exception as 417', function () {
-    fakeFormFor('person', new class extends PersonForm
+    fakeFormFor('person', new class() extends PersonForm
     {
         public function find($id): array
         {
@@ -281,7 +281,7 @@ it('handles application exception as 417', function () {
 it('gets form data for an instance in a single form case', function () {
     sharp()->config()->addEntity('single-person', SinglePersonEntity::class);
 
-    fakeFormFor('single-person', new class extends PersonSingleForm
+    fakeFormFor('single-person', new class() extends PersonSingleForm
     {
         public function findSingle(): array
         {
@@ -313,7 +313,7 @@ it('gets form data for an instance of a sub entity (multiforms case)', function 
         ->entityFor('person')
         ->setMultiforms([
             'nobelized' => [
-                new class extends PersonForm
+                new class() extends PersonForm
                 {
                     public function find($id): array
                     {
@@ -327,7 +327,7 @@ it('gets form data for an instance of a sub entity (multiforms case)', function 
                 'With Nobel prize',
             ],
             'nope' => [
-                new class extends PersonForm
+                new class() extends PersonForm
                 {
                     public function find($id): array
                     {
@@ -358,7 +358,7 @@ it('gets form data for an instance of a sub entity (multiforms case)', function 
 it('allows to configure a page alert', function () {
     $this->withoutExceptionHandling();
 
-    fakeFormFor('person', new class extends PersonForm
+    fakeFormFor('person', new class() extends PersonForm
     {
         public function buildPageAlert(PageAlert $pageAlert): void
         {
@@ -380,7 +380,7 @@ it('allows to configure a page alert', function () {
 });
 
 it('allows to configure a page alert with a closure as content', function () {
-    fakeFormFor('person', new class extends PersonForm
+    fakeFormFor('person', new class() extends PersonForm
     {
         public function buildPageAlert(PageAlert $pageAlert): void
         {
@@ -412,7 +412,7 @@ it('allows to configure a page alert with a closure as content', function () {
 });
 
 it('allows to use the legacy validation', function () {
-    fakeFormFor('person', new class extends PersonForm
+    fakeFormFor('person', new class() extends PersonForm
     {
         protected string $formValidatorClass = \Code16\Sharp\Tests\Fixtures\Sharp\PersonLegacyValidator::class;
     });

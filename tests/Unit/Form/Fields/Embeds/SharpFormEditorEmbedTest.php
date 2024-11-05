@@ -15,9 +15,7 @@ it('sets default values in config', function () {
             );
         }
 
-        public function updateContent(array $data = []): array
-        {
-        }
+        public function updateContent(array $data = []): array {}
 
         public function buildEmbedConfig(): void
         {
@@ -51,9 +49,7 @@ it('allows to configure tag', function () {
             );
         }
 
-        public function updateContent(array $data = []): array
-        {
-        }
+        public function updateContent(array $data = []): array {}
 
         public function buildEmbedConfig(): void
         {
@@ -77,9 +73,7 @@ it('allows to configure label', function () {
             );
         }
 
-        public function updateContent(array $data = []): array
-        {
-        }
+        public function updateContent(array $data = []): array {}
 
         public function buildEmbedConfig(): void
         {
@@ -104,9 +98,7 @@ it('allows to configure form template', function () {
             );
         }
 
-        public function updateContent(array $data = []): array
-        {
-        }
+        public function updateContent(array $data = []): array {}
 
         public function buildEmbedConfig(): void
         {
@@ -131,9 +123,7 @@ it('allows to configure show template', function () {
             );
         }
 
-        public function updateContent(array $data = []): array
-        {
-        }
+        public function updateContent(array $data = []): array {}
 
         public function buildEmbedConfig(): void
         {
@@ -160,9 +150,7 @@ it('allows to configure icon', function () {
             );
         }
 
-        public function updateContent(array $data = []): array
-        {
-        }
+        public function updateContent(array $data = []): array {}
 
         public function buildEmbedConfig(): void
         {

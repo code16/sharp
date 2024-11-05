@@ -6,7 +6,7 @@ use Code16\Sharp\Utils\Layout\LayoutColumn;
 
 class FormLayoutColumn extends LayoutColumn implements HasLayout
 {
-    public function withFieldset(string $name, \Closure $callback = null): self
+    public function withFieldset(string $name, ?\Closure $callback = null): self
     {
         $fieldset = new FormLayoutFieldset($name);
 

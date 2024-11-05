@@ -6,9 +6,7 @@ class EntityListStateField implements IsEntityListField
 {
     use HasCommonEntityListFieldAttributes;
 
-    private function __construct()
-    {
-    }
+    private function __construct() {}
 
     public static function make(): static
     {

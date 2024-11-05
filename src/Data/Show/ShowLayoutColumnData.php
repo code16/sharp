@@ -11,8 +11,7 @@ final class ShowLayoutColumnData extends Data
         public int $size,
         /** @var array<array<LayoutFieldData>> */
         public array $fields,
-    ) {
-    }
+    ) {}
 
     public static function from(array $column): self
     {

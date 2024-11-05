@@ -10,8 +10,7 @@ final class EntityStateData extends Data
         public DataCollection $values,
         /** @var bool|array<string|int> */
         public mixed $authorization,
-    ) {
-    }
+    ) {}
 
     public static function from(array $state): self
     {

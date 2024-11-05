@@ -14,8 +14,7 @@ final class FormDynamicAttributeData extends Data
         /** @var array<string> */
         public ?array $path = null,
         public ?string $default = null,
-    ) {
-    }
+    ) {}
 
     public static function from(array $dynamicAttribute): self
     {

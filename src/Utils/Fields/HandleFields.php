@@ -70,7 +70,7 @@ trait HandleFields
 
     final public function applyFormatters(?array $attributes): ?array
     {
-        if (!$attributes) {
+        if (! $attributes) {
             return null;
         }
 

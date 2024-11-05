@@ -10,8 +10,7 @@ final class ShowLayoutData extends Data
     public function __construct(
         /** @var DataCollection<int, ShowLayoutSectionData> */
         public DataCollection $sections,
-    ) {
-    }
+    ) {}
 
     public static function from(array $layout): self
     {

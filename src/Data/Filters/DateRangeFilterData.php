@@ -22,8 +22,7 @@ final class DateRangeFilterData extends Data
         public string $displayFormat,
         #[LiteralTypeScriptType('Array<{ key:string, label:string }>|null')]
         public ?array $presets,
-    ) {
-    }
+    ) {}
 
     public static function from(array $filter): self
     {

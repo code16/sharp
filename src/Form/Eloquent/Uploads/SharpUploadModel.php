@@ -74,7 +74,7 @@ class SharpUploadModel extends Model
         ]);
     }
 
-    public function thumbnail(int $width = null, int $height = null, array $modifiers = []): string|Thumbnail|null
+    public function thumbnail(?int $width = null, ?int $height = null, array $modifiers = []): string|Thumbnail|null
     {
         if (empty(func_get_args())) {
             return new Thumbnail($this);

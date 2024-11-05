@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Storage;
 it('allows to update a simple attribute', function () {
     $person = Person::create(['name' => 'Marie Curry']);
 
-    $form = new class extends FakeSharpForm
+    $form = new class() extends FakeSharpForm
     {
         use WithSharpFormEloquentUpdater;
 
@@ -39,7 +39,7 @@ it('allows to update a simple attribute', function () {
 })->group('eloquent');
 
 it('allows to store a new instance', function () {
-    $form = new class extends FakeSharpForm
+    $form = new class() extends FakeSharpForm
     {
         use WithSharpFormEloquentUpdater;
 
@@ -64,7 +64,7 @@ it('allows to store a new instance', function () {
 it('ignores undeclared fields', function () {
     $person = Person::create(['name' => 'Marie Curie', 'age' => 21]);
 
-    $form = new class extends FakeSharpForm
+    $form = new class() extends FakeSharpForm
     {
         use WithSharpFormEloquentUpdater;
 
@@ -91,7 +91,7 @@ it('ignores undeclared fields', function () {
 it('ignores SharpFormHtmlField fields', function () {
     $person = Person::create(['name' => 'Marie Curie', 'age' => 21]);
 
-    $form = new class extends FakeSharpForm
+    $form = new class() extends FakeSharpForm
     {
         use WithSharpFormEloquentUpdater;
 
@@ -118,7 +118,7 @@ it('ignores SharpFormHtmlField fields', function () {
 it('allows to manually ignore a field', function () {
     $person = Person::create(['name' => 'Niels Bohr', 'age' => 21]);
 
-    $form = new class extends FakeSharpForm
+    $form = new class() extends FakeSharpForm
     {
         use WithSharpFormEloquentUpdater;
 
@@ -148,7 +148,7 @@ it('allows to manually ignore a field', function () {
 it('allows to manually ignore multiple field', function () {
     $person = Person::create(['name' => 'Niels Bohr', 'age' => 21]);
 
-    $form = new class extends FakeSharpForm
+    $form = new class() extends FakeSharpForm
     {
         use WithSharpFormEloquentUpdater;
 
@@ -179,7 +179,7 @@ it('allows to update a belongsTo attribute', function () {
     $pierre = Person::create(['name' => 'Pierre Curie']);
     $marie = Person::create(['name' => 'Marie Curie']);
 
-    $form = new class extends FakeSharpForm
+    $form = new class() extends FakeSharpForm
     {
         use WithSharpFormEloquentUpdater;
 
@@ -209,7 +209,7 @@ it('allows to update an hasOne attribute', function () {
     $director = Person::create(['name' => 'Jean']);
     $marie = Person::create(['name' => 'Marie Curie']);
 
-    $form = new class extends FakeSharpForm
+    $form = new class() extends FakeSharpForm
     {
         use WithSharpFormEloquentUpdater;
 
@@ -239,7 +239,7 @@ it('allows to update an hasMany attribute, creating new instances if needed', fu
     $marie = Person::create(['name' => 'Marie Curie']);
     $collaborator = Person::create(['name' => 'Arthur', 'chief_id' => $marie->id]);
 
-    $form = new class extends FakeSharpForm
+    $form = new class() extends FakeSharpForm
     {
         use WithSharpFormEloquentUpdater;
 
@@ -284,7 +284,7 @@ it('allows to update a belongsToMany attribute', function () {
     $marie = Person::create(['name' => 'Marie Curie']);
     $colleague = Person::create(['name' => 'Niels Bohr']);
 
-    $form = new class extends FakeSharpForm
+    $form = new class() extends FakeSharpForm
     {
         use WithSharpFormEloquentUpdater;
 
@@ -320,7 +320,7 @@ it('allows to update a belongsToMany attribute', function () {
 it('allows to create a new related in a belongsToMany attribute', function () {
     $marie = Person::create(['name' => 'Marie Curie']);
 
-    $form = new class extends FakeSharpForm
+    $form = new class() extends FakeSharpForm
     {
         use WithSharpFormEloquentUpdater;
 
@@ -361,7 +361,7 @@ it('handles the order attribute in a hasMany relation in both update and creatio
     $marie = Person::create(['name' => 'Marie Curie']);
     $collaborator = Person::create(['name' => 'Arthur', 'chief_id' => $marie->id, 'order' => 1]);
 
-    $form = new class extends FakeSharpForm
+    $form = new class() extends FakeSharpForm
     {
         use WithSharpFormEloquentUpdater;
 
@@ -409,7 +409,7 @@ it('handles the order attribute in a hasMany relation in both update and creatio
 it('allows to update a morphOne attribute', function () {
     $marie = Person::create(['name' => 'Marie Curie']);
 
-    $form = new class extends FakeSharpForm
+    $form = new class() extends FakeSharpForm
     {
         use WithSharpFormEloquentUpdater;
 
@@ -436,7 +436,7 @@ it('allows to update a morphOne attribute', function () {
 it('allows to update a morphMany attribute', function () {
     $marie = Person::create(['name' => 'Marie Curie']);
 
-    $form = new class extends FakeSharpForm
+    $form = new class() extends FakeSharpForm
     {
         use WithSharpFormEloquentUpdater;
 
@@ -481,7 +481,7 @@ it('handles the {id} placeholder of uploads in update case', function () {
     Storage::fake('local');
     $marie = Person::create(['name' => 'Marie Curie']);
 
-    $form = new class extends FakeSharpForm
+    $form = new class() extends FakeSharpForm
     {
         use WithSharpFormEloquentUpdater;
 
@@ -535,7 +535,7 @@ it('handles the {id} placeholder of uploads in update case', function () {
 it('handles the {id} placeholder of uploads in create case', function () {
     Storage::fake('local');
 
-    $form = new class extends FakeSharpForm
+    $form = new class() extends FakeSharpForm
     {
         use WithSharpFormEloquentUpdater;
 
@@ -584,7 +584,7 @@ it('handles the {id} placeholder of uploads in create case', function () {
 it('handles the {id} placeholder of Editor’s embedded uploads in create case', function () {
     Storage::fake('local');
 
-    $form = new class extends FakeSharpForm
+    $form = new class() extends FakeSharpForm
     {
         use WithSharpFormEloquentUpdater;
 
@@ -647,7 +647,7 @@ it('handles the relation separator in a belongsTo case', function () {
     $marie = Person::create(['name' => 'Marie Curry', 'age' => 21]);
     $pierre = Person::create(['name' => 'Arthur', 'partner_id' => $marie->id]);
 
-    $form = new class extends FakeSharpForm
+    $form = new class() extends FakeSharpForm
     {
         use WithSharpFormEloquentUpdater;
 
@@ -683,7 +683,7 @@ it('handles the relation separator in a hasOne case', function () {
     $marie = Person::create(['name' => 'Marie Curie']);
     $director = Person::create(['name' => 'Arthur', 'age' => 6, 'chief_id' => $marie->id]);
 
-    $form = new class extends FakeSharpForm
+    $form = new class() extends FakeSharpForm
     {
         use WithSharpFormEloquentUpdater;
 
@@ -718,7 +718,7 @@ it('handles the relation separator in a hasOne case', function () {
 it('handles the relation separator in a hasOne creation case', function () {
     $marie = Person::create(['name' => 'Marie Curie']);
 
-    $form = new class extends FakeSharpForm
+    $form = new class() extends FakeSharpForm
     {
         use WithSharpFormEloquentUpdater;
 

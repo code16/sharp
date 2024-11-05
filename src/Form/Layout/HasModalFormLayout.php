@@ -11,7 +11,6 @@ trait HasModalFormLayout
 {
     /**
      * @param  (\Closure(FormLayoutColumn):void)  $buildFormLayout
-     * @return array|null
      */
     protected function modalFormLayout(\Closure $buildFormLayout): ?array
     {

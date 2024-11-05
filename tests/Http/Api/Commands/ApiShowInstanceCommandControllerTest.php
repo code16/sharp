@@ -15,12 +15,12 @@ beforeEach(function () {
 it('allows to call an info instance command from a show', function () {
     sharp()->config()->addEntity('person', PersonEntity::class);
 
-    fakeShowFor('person', new class extends PersonShow
+    fakeShowFor('person', new class() extends PersonShow
     {
         public function getInstanceCommands(): ?array
         {
             return [
-                'cmd' => new class extends InstanceCommand
+                'cmd' => new class() extends InstanceCommand
                 {
                     public function label(): ?string
                     {
@@ -47,12 +47,12 @@ it('allows to call an info instance command from a show', function () {
 it('allows to call an info instance command from a single show', function () {
     sharp()->config()->addEntity('person', SinglePersonEntity::class);
 
-    fakeShowFor('person', new class extends SinglePersonShow
+    fakeShowFor('person', new class() extends SinglePersonShow
     {
         public function getInstanceCommands(): ?array
         {
             return [
-                'cmd' => new class extends InstanceCommand
+                'cmd' => new class() extends InstanceCommand
                 {
                     public function label(): ?string
                     {
@@ -79,18 +79,18 @@ it('allows to call an info instance command from a single show', function () {
 it('gets form and initialize form data in an instance command of a show', function () {
     sharp()->config()->addEntity('person', PersonEntity::class);
 
-    fakeShowFor('person', new class extends PersonShow
+    fakeShowFor('person', new class() extends PersonShow
     {
         public function getInstanceCommands(): ?array
         {
             return [
-                'cmd' => new class extends InstanceCommand
+                'cmd' => new class() extends InstanceCommand
                 {
                     public function label(): ?string
                     {
                         return 'instance';
                     }
-                    
+
                     public function buildCommandConfig(): void
                     {
                         $this->configureFormModalTitle(fn ($data) => "Edit {$data['name']}")
@@ -169,18 +169,18 @@ it('gets form and initialize form data in an instance command of a show', functi
 it('gets form and initialize form data in an instance command of a single show', function () {
     sharp()->config()->addEntity('person', SinglePersonEntity::class);
 
-    fakeShowFor('person', new class extends SinglePersonShow
+    fakeShowFor('person', new class() extends SinglePersonShow
     {
         public function getInstanceCommands(): ?array
         {
             return [
-                'single_cmd' => new class extends InstanceCommand
+                'single_cmd' => new class() extends InstanceCommand
                 {
                     public function label(): ?string
                     {
                         return 'instance';
                     }
-                    
+
                     public function buildCommandConfig(): void
                     {
                         $this->configureFormModalTitle(fn ($data) => "Edit {$data['name']}")

@@ -160,7 +160,7 @@ function fakeResponse()
 
             if ($parameters) {
                 $this->postedData = $parameters;
-            } elseif($content) {
+            } elseif ($content) {
                 $this->postedData = json_decode($content);
             } else {
                 $this->postedData = null;

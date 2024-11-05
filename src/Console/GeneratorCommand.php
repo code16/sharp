@@ -9,6 +9,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use ReflectionClass;
+
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\search;
 use function Laravel\Prompts\select;
@@ -292,7 +293,7 @@ class GeneratorCommand extends Command
             default: 'Regular',
         );
 
-        [$entityPath, $entityKey] = match($entityType) {
+        [$entityPath, $entityKey] = match ($entityType) {
             'Regular' => $this->generateRegularEntity(),
             'Single' => $this->generateSingleEntity(),
             'Dashboard' => $this->generateDashboardEntity(),
@@ -473,14 +474,14 @@ class GeneratorCommand extends Command
             } else {
                 $model = search(
                     'Looking for the related model',
-                    fn(string $value) => strlen($value) > 0
+                    fn (string $value) => strlen($value) > 0
                         ? $this->getModelsList(base_path($this->namespaceToPath($modelNamespace)), $value)
                         : []
                 );
                 $model = $modelNamespace.'\\'.$model;
             }
 
-            if (!class_exists($model)) {
+            if (! class_exists($model)) {
                 $this->components->error(sprintf('Sorry the model class [%s] cannot be found', $model));
                 exit(1);
             }
@@ -507,7 +508,7 @@ class GeneratorCommand extends Command
         $this->call(
             'sharp:make:entity-list',
             collect(['name' => $pluralName.'\\'.$name.'EntityList'])
-                ->when($model ?? null, fn($args) => $args->put('--model', $model))
+                ->when($model ?? null, fn ($args) => $args->put('--model', $model))
                 ->toArray()
         );
 
@@ -517,7 +518,7 @@ class GeneratorCommand extends Command
             $this->call(
                 'sharp:make:form',
                 collect(['name' => $pluralName.'\\'.$name.'Form'])
-                    ->when($model ?? null, fn($args) => $args->put('--model', $model))
+                    ->when($model ?? null, fn ($args) => $args->put('--model', $model))
                     ->toArray()
             );
 
@@ -528,7 +529,7 @@ class GeneratorCommand extends Command
             $this->call(
                 'sharp:make:show-page',
                 collect(['name' => $pluralName.'\\'.$name.'Show'])
-                    ->when($model ?? null, fn($args) => $args->put('--model', $model))
+                    ->when($model ?? null, fn ($args) => $args->put('--model', $model))
                     ->toArray()
             );
 
@@ -631,7 +632,7 @@ class GeneratorCommand extends Command
                 ['', '', ''],
                 $class->getRealPath()
             ))
-            ->filter(fn ($class) => !$search || Str::contains($class, $search))
+            ->filter(fn ($class) => ! $search || Str::contains($class, $search))
             ->values()
             ->toArray();
     }
@@ -644,7 +645,7 @@ class GeneratorCommand extends Command
                 ['', ''],
                 $class,
             ))
-            ->filter(fn ($class) => !$search || Str::contains($class, $search))
+            ->filter(fn ($class) => ! $search || Str::contains($class, $search))
             ->values()
             ->toArray();
     }

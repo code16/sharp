@@ -11,11 +11,9 @@ class PreviewPostCommand extends InstanceCommand
     {
         return 'Preview post';
     }
-    
-    public function buildCommandConfig(): void
-    {
-    }
-    
+
+    public function buildCommandConfig(): void {}
+
     public function execute(mixed $instanceId, array $data = []): array
     {
         return $this->view('sharp.post-preview', [

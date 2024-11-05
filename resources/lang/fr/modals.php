@@ -3,8 +3,8 @@
 return [
     'api.401.title' => 'Non identifié',
     'api.403.title' => 'Non autorisé',
-    
-    'confirm.title'  => 'Confirmation',
+
+    'confirm.title' => 'Confirmation',
     'confirm.ok_button' => 'Confirmer',
     'confirm.delete.ok_button' => 'Supprimer',
     'confirm.delete.title' => 'Confirmez la suppression',

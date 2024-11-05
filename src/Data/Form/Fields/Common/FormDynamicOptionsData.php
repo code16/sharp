@@ -11,6 +11,4 @@ use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 #[LiteralTypeScriptType('{ 
     [key:string]: FormDynamicOptionsData | Array<{ id: string|number, label: string }> 
 }')]
-final class FormDynamicOptionsData extends Data
-{
-}
+final class FormDynamicOptionsData extends Data {}

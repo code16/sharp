@@ -21,8 +21,7 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
         protected bool $withThumbnails = true,
         protected int $thumbnailWidth = 200,
         protected int $thumbnailHeight = 200
-    ) {
-    }
+    ) {}
 
     public function dynamicInstance(): self
     {

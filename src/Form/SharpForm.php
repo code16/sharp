@@ -14,12 +14,12 @@ use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 abstract class SharpForm
 {
-    use WithCustomTransformers;
-    use HandleFormFields;
-    use HandlePageAlertMessage;
     use HandleCustomBreadcrumb;
+    use HandleFormFields;
     use HandleLocalizedFields;
+    use HandlePageAlertMessage;
     use HandleValidation;
+    use WithCustomTransformers;
 
     protected ?FormLayout $formLayout = null;
     protected bool $displayShowPageAfterCreation = false;
@@ -79,9 +79,7 @@ abstract class SharpForm
         return $this->update(null, $data);
     }
 
-    public function buildFormConfig(): void
-    {
-    }
+    public function buildFormConfig(): void {}
 
     protected function configureDisplayShowPageAfterCreation(bool $displayShowPage = true): self
     {

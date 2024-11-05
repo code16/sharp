@@ -16,8 +16,7 @@ class SharpTagsTransformer implements SharpAttributeTransformer
     public function __construct(
         protected string $labelAttribute,
         protected ?int $labelLimit = 30,
-    ) {
-    }
+    ) {}
 
     public function setFilterLink(string $entityKey, string $filter, ?string $idAttribute = 'id'): self
     {
@@ -37,7 +36,7 @@ class SharpTagsTransformer implements SharpAttributeTransformer
         if (! $instance->$attribute instanceof Arrayable) {
             throw new SharpException("[$attribute] must be an array");
         }
-        
+
         return view('sharp::transformers.tags', [
             'tags' => collect($instance->$attribute)
                 ->map(fn ($tag) => [
@@ -46,7 +45,7 @@ class SharpTagsTransformer implements SharpAttributeTransformer
                         ? LinkToEntityList::make($this->linkEntityKey)
                             ->addFilter($this->linkFilter, $tag->{$this->linkIdAttribute})
                             ->renderAsUrl()
-                        : null
+                        : null,
                 ]),
             'labelLimit' => $this->labelLimit,
         ])->render();

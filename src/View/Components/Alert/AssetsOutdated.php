@@ -7,9 +7,7 @@ use Illuminate\View\View;
 
 class AssetsOutdated extends Component
 {
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public function isAssetsOutdated(): bool
     {

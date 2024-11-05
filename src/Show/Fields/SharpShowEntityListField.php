@@ -130,7 +130,7 @@ class SharpShowEntityListField extends SharpShowField
                 'showSearchField' => $this->showSearchField,
                 'showCount' => $this->showCount,
                 'hiddenCommands' => $this->hiddenCommands,
-                'hiddenFilters' => sizeof($this->hiddenFilters)
+                'hiddenFilters' => count($this->hiddenFilters)
                     ? collect($this->hiddenFilters)
                         ->map(function ($value) {
                             // Filter value can be a Closure

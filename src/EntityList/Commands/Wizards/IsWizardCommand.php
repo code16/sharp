@@ -98,13 +98,9 @@ trait IsWizardCommand
         }
     }
 
-    protected function buildFormLayoutForFirstStep(FormLayoutColumn &$column): void
-    {
-    }
+    protected function buildFormLayoutForFirstStep(FormLayoutColumn &$column): void {}
 
-    protected function buildFormLayoutForStep(string $step, FormLayoutColumn &$column): void
-    {
-    }
+    protected function buildFormLayoutForStep(string $step, FormLayoutColumn &$column): void {}
 
     /**
      * Override the default checkFormIsBuilt() in Wizard case, to check the form

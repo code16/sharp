@@ -30,7 +30,7 @@ Route::group([
     // EEL
     Route::get('/list/{entityKey}', [EntityListController::class, 'show'])
         ->name('code16.sharp.api.list');
-    
+
     Route::post('/list/{entityKey}/filters', [ApiEntityListFiltersController::class, 'store'])
         ->name('code16.sharp.api.list.filters.store');
 
@@ -92,7 +92,7 @@ Route::group([
 
     Route::post('/upload', [ApiFormUploadController::class, 'store'])
         ->name('code16.sharp.api.form.upload');
-    
+
     Route::post('/form/autocomplete/{entityKey}/{autocompleteFieldKey}', [ApiFormAutocompleteController::class, 'index'])
         ->name('code16.sharp.api.form.autocomplete.index');
 });

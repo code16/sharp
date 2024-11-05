@@ -10,7 +10,8 @@ use Illuminate\Session\TokenMismatchException;
 
 class SharpTokenMismatchException extends \Exception
 {
-    public function __construct(TokenMismatchException $previous) {
+    public function __construct(TokenMismatchException $previous)
+    {
         parent::__construct($previous->getMessage(), 0, $previous);
     }
 
@@ -18,14 +19,14 @@ class SharpTokenMismatchException extends \Exception
     {
         session()->flash('status', __('sharp::errors.419.status_displayed_in_login_page'));
         session()->flash('status_level', SessionStatusLevel::Error->value);
-        
+
         if ($request->routeIs('code16.sharp.api.*')) {
             // redirect on the front side
             return response()->json([
                 'message' => $this->getMessage(),
             ], 419);
         }
-        
+
         return redirect()->back();
     }
 

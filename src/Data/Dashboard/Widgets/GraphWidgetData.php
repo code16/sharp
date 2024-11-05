@@ -40,8 +40,7 @@ final class GraphWidgetData extends Data
             'horizontal' => 'boolean',
         ])]
         public ?array $options = null,
-    ) {
-    }
+    ) {}
 
     public static function from(array $widget): self
     {

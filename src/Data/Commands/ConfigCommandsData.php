@@ -11,8 +11,7 @@ final class ConfigCommandsData extends Data
 {
     public function __construct(
         protected array $commands,
-    ) {
-    }
+    ) {}
 
     public static function from(array $configCommands): self
     {

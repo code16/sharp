@@ -8,6 +8,5 @@ final class EntityStateValueData extends Data
         public int|string $value,
         public string $label,
         public string $color,
-    ) {
-    }
+    ) {}
 }

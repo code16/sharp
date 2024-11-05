@@ -17,7 +17,7 @@ beforeEach(function () {
 it('adds the locales array if configured to the form', function () {
     $this->withoutExceptionHandling();
 
-    fakeFormFor('person', new class extends FakeSharpForm
+    fakeFormFor('person', new class() extends FakeSharpForm
     {
         public function buildFormFields(FieldsContainer $formFields): void
         {
@@ -52,7 +52,7 @@ it('adds the locales array if configured to the form', function () {
 });
 
 it('does not add the locales array if not configured', function () {
-    fakeFormFor('person', new class extends FakeSharpForm
+    fakeFormFor('person', new class() extends FakeSharpForm
     {
         public function buildFormFields(FieldsContainer $formFields): void
         {
@@ -76,7 +76,7 @@ it('does not add the locales array if not configured', function () {
 });
 
 it('does not add the locales array if configured but there is no localized field', function () {
-    fakeFormFor('person', new class extends FakeSharpForm
+    fakeFormFor('person', new class() extends FakeSharpForm
     {
         public function buildFormFields(FieldsContainer $formFields): void
         {
@@ -104,7 +104,7 @@ it('does not add the locales array if configured but there is no localized field
 });
 
 it('adds the locales array if configured in a form list field', function () {
-    fakeFormFor('person', new class extends FakeSharpForm
+    fakeFormFor('person', new class() extends FakeSharpForm
     {
         public function buildFormFields(FieldsContainer $formFields): void
         {
@@ -142,7 +142,7 @@ it('adds the locales array if configured in a form list field', function () {
 
 it('adds the locales array if configured in the show', function () {
     $this->withoutExceptionHandling();
-    fakeShowFor('person', new class extends FakeSharpShow
+    fakeShowFor('person', new class() extends FakeSharpShow
     {
         public function buildShowFields(FieldsContainer $showFields): void
         {

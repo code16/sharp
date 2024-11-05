@@ -27,7 +27,5 @@ class PersonSingleForm extends SharpSingleForm
         return [];
     }
 
-    protected function updateSingle(array $data)
-    {
-    }
+    protected function updateSingle(array $data) {}
 }

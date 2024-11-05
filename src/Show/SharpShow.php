@@ -15,13 +15,13 @@ use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 abstract class SharpShow
 {
-    use WithCustomTransformers;
-    use HandleFields;
-    use HandleEntityState;
-    use HandleInstanceCommands;
-    use HandlePageAlertMessage;
     use HandleCustomBreadcrumb;
+    use HandleEntityState;
+    use HandleFields;
+    use HandleInstanceCommands;
     use HandleLocalizedFields;
+    use HandlePageAlertMessage;
+    use WithCustomTransformers;
 
     protected ?ShowLayout $showLayout = null;
     protected ?string $multiformAttribute = null;

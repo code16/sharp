@@ -14,12 +14,11 @@ trait PreloadsShowEntityLists
     {
         $payload->fields->whereInstanceOf(ShowEntityListFieldData::class)
             ->each(function (ShowEntityListFieldData $entityListField) use ($payload) {
-                $section = $payload->layout->sections->firstWhere(fn (ShowLayoutSectionData $section) =>
-                    collect($section->columns->map(fn (ShowLayoutColumnData $column) => $column->fields))
-                        ->flatten(2)
-                        ->firstWhere('key', $entityListField->key)
+                $section = $payload->layout->sections->firstWhere(fn (ShowLayoutSectionData $section) => collect($section->columns->map(fn (ShowLayoutColumnData $column) => $column->fields))
+                    ->flatten(2)
+                    ->firstWhere('key', $entityListField->key)
                 );
-                if ($section && !$section->collapsable) {
+                if ($section && ! $section->collapsable) {
                     app(AddLinkHeadersForPreloadedRequests::class)->preload($entityListField->endpointUrl);
                 }
             });

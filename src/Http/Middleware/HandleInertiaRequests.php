@@ -19,9 +19,7 @@ class HandleInertiaRequests extends Middleware
 {
     protected $rootView = 'sharp::app';
 
-    public function __construct(protected Filesystem $filesystem)
-    {
-    }
+    public function __construct(protected Filesystem $filesystem) {}
 
     public function share(Request $request)
     {
@@ -54,7 +52,7 @@ class HandleInertiaRequests extends Middleware
                 ])
                     ->map(function ($group) {
                         return collect(__($group, [], app()->getFallbackLocale()))
-                            ->mapWithKeys(fn($value, $key) => ["$group.$key" => __("$group.$key")]);
+                            ->mapWithKeys(fn ($value, $key) => ["$group.$key" => __("$group.$key")]);
                     })
                     ->collapse()
                     ->toArray();
@@ -72,7 +70,7 @@ class HandleInertiaRequests extends Middleware
             ],
             'logo' => LogoData::optional(transform(
                 sharp()->config()->get('theme.logo_url'),
-                fn($url) => $url ? [
+                fn ($url) => $url ? [
                     'svg' => str($url)->startsWith('/') && str($url)->endsWith('.svg') && $this->filesystem->exists(public_path($url))
                         ? $this->filesystem->get(public_path($url))
                         : null,
@@ -83,8 +81,8 @@ class HandleInertiaRequests extends Middleware
                 ? GlobalFiltersData::from(app(GlobalFilters::class)->toArray())
                 : null,
             ...auth()->check() ? [
-                'menu' => fn() => MenuData::from(app(SharpMenuManager::class)),
-                'auth' => fn() => [
+                'menu' => fn () => MenuData::from(app(SharpMenuManager::class)),
+                'auth' => fn () => [
                     'user' => UserData::from(auth()->user()),
                 ],
             ] : [],

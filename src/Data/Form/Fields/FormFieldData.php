@@ -26,9 +26,7 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScriptType;
 )]
 final class FormFieldData extends Data
 {
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public static function from(array $field): Data
     {
@@ -36,7 +34,7 @@ final class FormFieldData extends Data
         $field['conditionalDisplay'] = FormConditionalDisplayData::optional($field['conditionalDisplay'] ?? null);
 
         return match ($field['type']) {
-            FormFieldType::Autocomplete => match($field['mode']) {
+            FormFieldType::Autocomplete => match ($field['mode']) {
                 'remote' => FormAutocompleteRemoteFieldData::from($field),
                 'local' => FormAutocompleteLocalFieldData::from($field),
             },

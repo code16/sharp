@@ -10,7 +10,7 @@ beforeEach(function () {
 
 function setTestAuthGuard(): void
 {
-    auth()->extend('sharp', fn() => new TestAuthGuard());
+    auth()->extend('sharp', fn () => new TestAuthGuard());
     config()->set('auth.guards.sharp', ['driver' => 'sharp', 'provider' => 'users']);
     sharp()->config()->setAuthCustomGuard('sharp');
 }
@@ -116,7 +116,8 @@ it('allows users to logout', function () {
 
 it('allows custom auth guard', function () {
     auth()->extend('test', function () {
-        return new class implements \Illuminate\Contracts\Auth\Guard {
+        return new class() implements \Illuminate\Contracts\Auth\Guard
+        {
             protected $user;
 
             public function check()
@@ -139,9 +140,7 @@ it('allows custom auth guard', function () {
                 return $this->user->id;
             }
 
-            public function validate(array $credentials = [])
-            {
-            }
+            public function validate(array $credentials = []) {}
 
             public function hasUser()
             {
@@ -159,9 +158,9 @@ it('allows custom auth guard', function () {
 
     $this->app['config']->set(
         'auth.guards.test', [
-        'driver' => 'test',
-        'provider' => 'users',
-    ]);
+            'driver' => 'test',
+            'provider' => 'users',
+        ]);
 
     login(new User(['name' => 'ok']));
 

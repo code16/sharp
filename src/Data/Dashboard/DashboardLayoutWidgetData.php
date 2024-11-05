@@ -9,8 +9,7 @@ final class DashboardLayoutWidgetData extends Data
     public function __construct(
         public int $size,
         public string $key
-    ) {
-    }
+    ) {}
 
     public static function from(array $layoutWidget): self
     {

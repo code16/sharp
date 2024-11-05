@@ -22,8 +22,7 @@ class FormEditorUploadForm
 
     public function __construct(
         protected SharpFormEditorUpload $editorUpload
-    ) {
-    }
+    ) {}
 
     protected function buildFormFields(FieldsContainer $formFields): void
     {

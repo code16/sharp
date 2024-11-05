@@ -49,6 +49,7 @@ class EloquentModelUpdater
         foreach ($data as $attribute => $value) {
             if ($this->isRelationship($instance, $attribute)) {
                 $this->relationships[$attribute] = $value;
+
                 continue;
             }
 

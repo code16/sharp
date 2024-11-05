@@ -33,8 +33,7 @@ final class ShowEntityListFieldData extends Data
         public ?string $label = null,
         /** @var array<string, mixed> */
         public ?array $hiddenFilters = null,
-    ) {
-    }
+    ) {}
 
     public static function from(array $field): self
     {

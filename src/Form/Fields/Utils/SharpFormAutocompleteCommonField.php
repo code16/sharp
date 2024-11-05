@@ -7,8 +7,8 @@ use Illuminate\Support\Facades\Blade;
 
 trait SharpFormAutocompleteCommonField
 {
-    use SharpFormFieldWithPlaceholder;
     use SharpFormFieldWithOptions;
+    use SharpFormFieldWithPlaceholder;
 
     const FIELD_TYPE = 'autocomplete';
 
@@ -17,7 +17,7 @@ trait SharpFormAutocompleteCommonField
     protected ?array $dynamicAttributes = null;
     protected View|string|null $listItemTemplate = null;
     protected View|string|null $resultItemTemplate = null;
-    
+
     public function itemWithRenderedTemplates(array $item): array
     {
         $resultItem = $this->resultItemTemplate
@@ -39,36 +39,36 @@ trait SharpFormAutocompleteCommonField
 
         return $this;
     }
-    
+
     public function setListItemTemplate(View|string $template): self
     {
         $this->listItemTemplate = $template;
-        
+
         return $this;
     }
-    
+
     public function setResultItemTemplate(View|string $template): self
     {
         $this->resultItemTemplate = $template;
-        
+
         return $this;
     }
-    
+
     public function renderListItem(array $data): string
     {
         if (is_string($this->listItemTemplate)) {
             return Blade::render($this->listItemTemplate, $data);
         }
-        
+
         return $this->listItemTemplate->with($data)->render();
     }
-    
+
     public function renderResultItem(array $data): string
     {
         if (is_string($this->resultItemTemplate)) {
             return Blade::render($this->resultItemTemplate, $data);
         }
-        
+
         return $this->resultItemTemplate->with($data)->render();
     }
 

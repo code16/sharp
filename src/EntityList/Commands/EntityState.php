@@ -19,7 +19,7 @@ abstract class EntityState extends InstanceCommand
         return $this->states;
     }
 
-    protected function addState(string $key, string $label, string $color = null): self
+    protected function addState(string $key, string $label, ?string $color = null): self
     {
         $this->states[$key] = [$label, $color];
 
@@ -36,7 +36,7 @@ abstract class EntityState extends InstanceCommand
         throw new SharpInvalidConfigException('Info return type is not supported for a state.');
     }
 
-    protected function download(string $filePath, string $fileName = null, string $diskName = null): array
+    protected function download(string $filePath, ?string $fileName = null, ?string $diskName = null): array
     {
         throw new SharpInvalidConfigException('Download return type is not supported for a state.');
     }

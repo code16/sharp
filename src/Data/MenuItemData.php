@@ -19,8 +19,7 @@ final class MenuItemData extends Data
         /** @var DataCollection<MenuItemData> */
         public ?DataCollection $children = null,
         public bool $isCollapsible = false,
-    ) {
-    }
+    ) {}
 
     public static function from(SharpMenuItem $item)
     {

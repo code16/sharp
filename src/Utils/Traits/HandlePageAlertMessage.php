@@ -17,7 +17,5 @@ trait HandlePageAlertMessage
         return $this->pageAlert->toArray();
     }
 
-    protected function buildPageAlert(PageAlert $pageAlert): void
-    {
-    }
+    protected function buildPageAlert(PageAlert $pageAlert): void {}
 }

@@ -10,8 +10,7 @@ final class ConfigFiltersData extends Data
 {
     public function __construct(
         protected array $filters,
-    ) {
-    }
+    ) {}
 
     public static function from(array $configFilters): self
     {

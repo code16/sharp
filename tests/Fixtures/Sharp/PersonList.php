@@ -31,7 +31,5 @@ class PersonList extends SharpEntityList
             );
     }
 
-    public function buildListConfig(): void
-    {
-    }
+    public function buildListConfig(): void {}
 }

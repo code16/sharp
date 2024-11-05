@@ -14,7 +14,6 @@ use App\Sharp\Utils\Filters\PeriodFilter;
 use App\Sharp\Utils\Filters\StateFilter;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
-use Code16\Sharp\EntityList\Fields\EntityListFilterField;
 use Code16\Sharp\EntityList\Fields\EntityListStateField;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
@@ -37,7 +36,7 @@ class PostList extends SharpEntityList
             ->addField(
                 EntityListField::make('title')
                     ->setLabel('Title')
-//                    ->setWidth(.2)
+                //                    ->setWidth(.2)
             )
             ->addField(
                 EntityListStateField::make()
@@ -52,7 +51,7 @@ class PostList extends SharpEntityList
             ->addField(
                 EntityListField::make('categories')
                     ->setLabel('Categories')
-//                    ->setWidth(.2)
+                //                    ->setWidth(.2)
             )
             ->addField(
                 EntityListField::make('published_at')
@@ -73,7 +72,7 @@ class PostList extends SharpEntityList
 
     protected function buildPageAlert(PageAlert $pageAlert): void
     {
-        if (!auth()->user()->isAdmin()) {
+        if (! auth()->user()->isAdmin()) {
             $pageAlert
                 ->setMessage('As an editor, you can only edit your posts; you can see other posts except those which are still in draft.')
                 ->setLevelSecondary();
@@ -146,7 +145,7 @@ class PostList extends SharpEntityList
                             ->each(function ($categoryId) use ($builder) {
                                 $builder->orWhereHas(
                                     'categories',
-                                    fn(Builder $builder) => $builder->where('categories.id', $categoryId)
+                                    fn (Builder $builder) => $builder->where('categories.id', $categoryId)
                                 );
                             });
                     });

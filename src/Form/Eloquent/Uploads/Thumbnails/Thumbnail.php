@@ -235,12 +235,12 @@ class Thumbnail
         };
     }
 
-    private function resolveThumbnailPath(int $width = null, int $height = null): string
+    private function resolveThumbnailPath(?int $width = null, ?int $height = null): string
     {
         $thumbDirNameAppender = sprintf(
             '%s%s_q-%s',
             $this->transformationFilters ? '_'.md5(serialize($this->transformationFilters)) : '',
-            sizeof($this->modifiers) ? '_'.md5(serialize($this->modifiers)) : '',
+            count($this->modifiers) ? '_'.md5(serialize($this->modifiers)) : '',
             $this->quality
         );
 

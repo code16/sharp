@@ -21,8 +21,7 @@ final class CommandFormData extends Data
         /** @var array<string> */
         public ?array $locales = null,
         public ?PageAlertData $pageAlert = null,
-    ) {
-    }
+    ) {}
 
     public static function from(array $form): self
     {

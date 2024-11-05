@@ -11,6 +11,5 @@ final class EntityListAuthorizationsData extends Data
         public array $delete,
         public bool $create,
         public bool $reorder,
-    ) {
-    }
+    ) {}
 }

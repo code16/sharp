@@ -25,10 +25,10 @@ trait BuildsFiltersConfigArray
                             'key' => $filterHandler->getKey(),
                             'label' => $filterHandler->getLabel(),
                         ];
-                        
+
                         if ($filterHandler instanceof SelectFilter) {
                             $multiple = $filterHandler instanceof SelectMultipleFilter;
-                            
+
                             $filterConfigData += [
                                 'type' => 'select',
                                 'multiple' => $multiple,
@@ -55,7 +55,7 @@ trait BuildsFiltersConfigArray
                                 'type' => 'check',
                             ];
                         }
-                        
+
                         return $filterConfigData;
                     });
             })
@@ -63,7 +63,7 @@ trait BuildsFiltersConfigArray
             ->toArray()
             ?: null;
     }
-    
+
     protected function isHiddenFilter(Filter $handler): bool
     {
         return $handler instanceof HiddenFilter;

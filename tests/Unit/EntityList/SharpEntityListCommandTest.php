@@ -6,21 +6,19 @@ use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\Unit\EntityList\Fakes\FakeSharpEntityList;
 
 it('returns commands config', function () {
-    $list = new class extends FakeSharpEntityList
+    $list = new class() extends FakeSharpEntityList
     {
         public function getEntityCommands(): ?array
         {
             return [
-                'entityCommand' => new class extends EntityCommand
+                'entityCommand' => new class() extends EntityCommand
                 {
                     public function label(): string
                     {
                         return 'My Entity Command';
                     }
 
-                    public function execute(array $data = []): array
-                    {
-                    }
+                    public function execute(array $data = []): array {}
                 },
             ];
         }
@@ -28,16 +26,14 @@ it('returns commands config', function () {
         public function getInstanceCommands(): ?array
         {
             return [
-                'instanceCommand' => new class extends InstanceCommand
+                'instanceCommand' => new class() extends InstanceCommand
                 {
                     public function label(): string
                     {
                         return 'My Instance Command';
                     }
 
-                    public function execute($instanceId, array $data = []): array
-                    {
-                    }
+                    public function execute($instanceId, array $data = []): array {}
                 },
             ];
         }
@@ -77,12 +73,12 @@ it('returns commands config', function () {
 });
 
 it('handles confirmation on a command', function () {
-    $list = new class extends FakeSharpEntityList
+    $list = new class() extends FakeSharpEntityList
     {
         public function getEntityCommands(): ?array
         {
             return [
-                'entityCommand' => new class extends EntityCommand
+                'entityCommand' => new class() extends EntityCommand
                 {
                     public function label(): string
                     {
@@ -94,9 +90,7 @@ it('handles confirmation on a command', function () {
                         $this->configureConfirmationText('Sure?');
                     }
 
-                    public function execute(array $data = []): array
-                    {
-                    }
+                    public function execute(array $data = []): array {}
                 },
             ];
         }
@@ -111,12 +105,12 @@ it('handles confirmation on a command', function () {
 });
 
 it('allows to declare instance selection mode on a command', function () {
-    $list = new class extends FakeSharpEntityList
+    $list = new class() extends FakeSharpEntityList
     {
         public function getEntityCommands(): ?array
         {
             return [
-                'command_required' => new class extends EntityCommand
+                'command_required' => new class() extends EntityCommand
                 {
                     public function label(): string
                     {
@@ -128,11 +122,9 @@ it('allows to declare instance selection mode on a command', function () {
                         $this->configureInstanceSelectionRequired();
                     }
 
-                    public function execute(array $data = []): array
-                    {
-                    }
+                    public function execute(array $data = []): array {}
                 },
-                'command_allowed' => new class extends EntityCommand
+                'command_allowed' => new class() extends EntityCommand
                 {
                     public function label(): string
                     {
@@ -144,11 +136,9 @@ it('allows to declare instance selection mode on a command', function () {
                         $this->configureInstanceSelectionAllowed();
                     }
 
-                    public function execute(array $data = []): array
-                    {
-                    }
+                    public function execute(array $data = []): array {}
                 },
-                'command_none' => new class extends EntityCommand
+                'command_none' => new class() extends EntityCommand
                 {
                     public function label(): string
                     {
@@ -160,9 +150,7 @@ it('allows to declare instance selection mode on a command', function () {
                         $this->configureInstanceSelectionNone();
                     }
 
-                    public function execute(array $data = []): array
-                    {
-                    }
+                    public function execute(array $data = []): array {}
                 },
             ];
         }
@@ -176,12 +164,12 @@ it('allows to declare instance selection mode on a command', function () {
 });
 
 it('allows to define a form to a command', function () {
-    $list = new class extends FakeSharpEntityList
+    $list = new class() extends FakeSharpEntityList
     {
         public function getEntityCommands(): ?array
         {
             return [
-                'entityCommand' => new class extends EntityCommand
+                'entityCommand' => new class() extends EntityCommand
                 {
                     public function label(): string
                     {
@@ -198,9 +186,7 @@ it('allows to define a form to a command', function () {
                         $column->withField('message');
                     }
 
-                    public function execute(array $data = []): array
-                    {
-                    }
+                    public function execute(array $data = []): array {}
                 },
             ];
         }
@@ -212,12 +198,12 @@ it('allows to define a form to a command', function () {
 });
 
 it('handles authorization in an entity command', function () {
-    $list = new class extends FakeSharpEntityList
+    $list = new class() extends FakeSharpEntityList
     {
         public function getEntityCommands(): ?array
         {
             return [
-                'entityCommand' => new class extends EntityCommand
+                'entityCommand' => new class() extends EntityCommand
                 {
                     public function label(): string
                     {
@@ -229,9 +215,7 @@ it('handles authorization in an entity command', function () {
                         return false;
                     }
 
-                    public function execute(array $data = []): array
-                    {
-                    }
+                    public function execute(array $data = []): array {}
                 },
             ];
         }
@@ -243,12 +227,12 @@ it('handles authorization in an entity command', function () {
 });
 
 it('handles authorization in an instance command', function () {
-    $list = new class extends FakeSharpEntityList
+    $list = new class() extends FakeSharpEntityList
     {
         public function getInstanceCommands(): ?array
         {
             return [
-                'command' => new class extends InstanceCommand
+                'command' => new class() extends InstanceCommand
                 {
                     public function label(): string
                     {
@@ -260,9 +244,7 @@ it('handles authorization in an instance command', function () {
                         return $instanceId < 3;
                     }
 
-                    public function execute($instanceId, array $data = []): array
-                    {
-                    }
+                    public function execute($instanceId, array $data = []): array {}
                 },
             ];
         }
@@ -283,12 +265,12 @@ it('handles authorization in an instance command', function () {
 });
 
 it('allows to define a description on a command', function () {
-    $list = new class extends FakeSharpEntityList
+    $list = new class() extends FakeSharpEntityList
     {
         public function getEntityCommands(): ?array
         {
             return [
-                'entityCommand' => new class extends EntityCommand
+                'entityCommand' => new class() extends EntityCommand
                 {
                     public function label(): string
                     {
@@ -300,9 +282,7 @@ it('allows to define a description on a command', function () {
                         $this->configureDescription('My Entity Command description');
                     }
 
-                    public function execute(array $data = []): array
-                    {
-                    }
+                    public function execute(array $data = []): array {}
                 },
             ];
         }
@@ -314,51 +294,45 @@ it('allows to define a description on a command', function () {
 });
 
 it('allows to define separators in instance commands', function () {
-    $list = new class extends FakeSharpEntityList
+    $list = new class() extends FakeSharpEntityList
     {
         public function getInstanceCommands(): ?array
         {
             return [
-                'command-1' => new class extends InstanceCommand
+                'command-1' => new class() extends InstanceCommand
                 {
                     public function label(): string
                     {
                         return '';
                     }
 
-                    public function execute($instanceId, array $data = []): array
-                    {
-                    }
+                    public function execute($instanceId, array $data = []): array {}
                 },
-                'command-2' => new class extends InstanceCommand
+                'command-2' => new class() extends InstanceCommand
                 {
                     public function label(): string
                     {
                         return '';
                     }
 
-                    public function execute($instanceId, array $data = []): array
-                    {
-                    }
+                    public function execute($instanceId, array $data = []): array {}
                 },
                 '---',
-                'command-3' => new class extends InstanceCommand
+                'command-3' => new class() extends InstanceCommand
                 {
                     public function label(): string
                     {
                         return '';
                     }
 
-                    public function execute($instanceId, array $data = []): array
-                    {
-                    }
+                    public function execute($instanceId, array $data = []): array {}
                 },
             ];
         }
     };
 
     $list->buildListConfig();
-    
+
     expect($list->listConfig()['commands']['instance'])->toHaveCount(2)
         ->and($list->listConfig()['commands']['instance'][0][0]['key'])->toEqual('command-1')
         ->and($list->listConfig()['commands']['instance'][0][1]['key'])->toEqual('command-2')
@@ -366,51 +340,45 @@ it('allows to define separators in instance commands', function () {
 });
 
 it('allows to define separators in entity commands', function () {
-    $list = new class extends FakeSharpEntityList
+    $list = new class() extends FakeSharpEntityList
     {
         public function getEntityCommands(): ?array
         {
             return [
-                'command-1' => new class extends EntityCommand
+                'command-1' => new class() extends EntityCommand
                 {
                     public function label(): string
                     {
                         return '';
                     }
 
-                    public function execute(array $data = []): array
-                    {
-                    }
+                    public function execute(array $data = []): array {}
                 },
                 '---',
-                'command-2' => new class extends EntityCommand
+                'command-2' => new class() extends EntityCommand
                 {
                     public function label(): string
                     {
                         return '';
                     }
 
-                    public function execute(array $data = []): array
-                    {
-                    }
+                    public function execute(array $data = []): array {}
                 },
-                'command-3' => new class extends EntityCommand
+                'command-3' => new class() extends EntityCommand
                 {
                     public function label(): string
                     {
                         return '';
                     }
 
-                    public function execute(array $data = []): array
-                    {
-                    }
+                    public function execute(array $data = []): array {}
                 },
             ];
         }
     };
 
     $list->buildListConfig();
-    
+
     expect($list->listConfig()['commands']['entity'])->toHaveCount(2)
         ->and($list->listConfig()['commands']['entity'][0][0]['key'])->toEqual('command-1')
         ->and($list->listConfig()['commands']['entity'][1][0]['key'])->toEqual('command-2')
@@ -418,32 +386,28 @@ it('allows to define separators in entity commands', function () {
 });
 
 it('allows to declare an entity command as primary', function () {
-    $list = new class extends FakeSharpEntityList
+    $list = new class() extends FakeSharpEntityList
     {
         public function getEntityCommands(): ?array
         {
             return [
-                'entity' => new class extends EntityCommand
+                'entity' => new class() extends EntityCommand
                 {
                     public function label(): string
                     {
                         return 'My Entity Command';
                     }
 
-                    public function execute(array $data = []): array
-                    {
-                    }
+                    public function execute(array $data = []): array {}
                 },
-                'primary-entity' => new class extends EntityCommand
+                'primary-entity' => new class() extends EntityCommand
                 {
                     public function label(): string
                     {
                         return 'My Primary Entity Command';
                     }
 
-                    public function execute(array $data = []): array
-                    {
-                    }
+                    public function execute(array $data = []): array {}
                 },
             ];
         }

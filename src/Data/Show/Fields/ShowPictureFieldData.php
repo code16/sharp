@@ -17,8 +17,7 @@ final class ShowPictureFieldData extends Data
         #[LiteralTypeScriptType('"'.ShowFieldType::Picture->value.'"')]
         public ShowFieldType $type,
         public bool $emptyVisible,
-    ) {
-    }
+    ) {}
 
     public static function from(array $field): self
     {

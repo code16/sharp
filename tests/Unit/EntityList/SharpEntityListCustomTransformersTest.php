@@ -9,7 +9,7 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 it('returns an array version of a model collection', function () {
-    $list = new class extends FakeSharpEntityList
+    $list = new class() extends FakeSharpEntityList
     {
         public function getListData(): array|Arrayable
         {
@@ -28,7 +28,7 @@ it('returns an array version of a model collection', function () {
 });
 
 it('handles paginated models', function () {
-    $list = new class extends FakeSharpEntityList
+    $list = new class() extends FakeSharpEntityList
     {
         public function getListData(): array|Arrayable
         {
@@ -55,7 +55,7 @@ it('handles paginated models', function () {
 });
 
 it('handles the relation separator', function () {
-    $list = new class extends FakeSharpEntityList
+    $list = new class() extends FakeSharpEntityList
     {
         public function buildList($fields): void
         {
@@ -79,7 +79,7 @@ it('handles the relation separator', function () {
 });
 
 it('allows to define a custom transformer as a closure', function () {
-    $list = new class extends FakeSharpEntityList
+    $list = new class() extends FakeSharpEntityList
     {
         public function getListData(): array|Arrayable
         {
@@ -99,12 +99,12 @@ it('allows to define a custom transformer as a closure', function () {
 });
 
 it('allows to define a custom transformer as an instance', function () {
-    $list = new class extends FakeSharpEntityList
+    $list = new class() extends FakeSharpEntityList
     {
         public function getListData(): array|Arrayable
         {
             return $this
-                ->setCustomTransformer('name', new class implements SharpAttributeTransformer
+                ->setCustomTransformer('name', new class() implements SharpAttributeTransformer
                 {
                     public function apply($value, $instance = null, $attribute = null)
                     {
@@ -125,7 +125,7 @@ it('allows to define a custom transformer as an instance', function () {
 });
 
 it('handles the relation separator with a custom transformer', function () {
-    $list = new class extends FakeSharpEntityList
+    $list = new class() extends FakeSharpEntityList
     {
         public function buildList(EntityListFieldsContainer $fields): void
         {

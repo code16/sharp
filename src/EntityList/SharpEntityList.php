@@ -7,20 +7,18 @@ use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\Traits\HandleEntityCommands;
 use Code16\Sharp\EntityList\Traits\HandleEntityState;
 use Code16\Sharp\EntityList\Traits\HandleInstanceCommands;
-use Code16\Sharp\Utils\Filters\FilterContainer;
 use Code16\Sharp\Utils\Filters\HandleFilters;
 use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Pagination\AbstractPaginator;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 
 abstract class SharpEntityList
 {
-    use HandleFilters;
-    use HandleEntityState;
     use HandleEntityCommands;
+    use HandleEntityState;
+    use HandleFilters;
     use HandleInstanceCommands;
     use HandlePageAlertMessage;
     use WithCustomTransformers;
@@ -47,7 +45,7 @@ abstract class SharpEntityList
             search: ($query['search'] ?? null) ? urldecode($query['search']) : null,
             specificIds: $query['ids'] ?? [],
         ));
-        
+
         return $this;
     }
 
@@ -63,7 +61,7 @@ abstract class SharpEntityList
         $this->checkListIsBuilt();
 
         return $this->fieldsContainer
-            ->getFields(shouldHaveStateField: !!$this->entityStateAttribute)
+            ->getFields(shouldHaveStateField: (bool) $this->entityStateAttribute)
             ->toArray();
     }
 
@@ -192,9 +190,7 @@ abstract class SharpEntityList
     /**
      * Build list config.
      */
-    public function buildListConfig(): void
-    {
-    }
+    public function buildListConfig(): void {}
 
     /**
      * Return all entity commands in an array of class names or instances.
@@ -224,9 +220,7 @@ abstract class SharpEntityList
      * Delete the given instance. Do not implement this method if you want to delegate
      * the deletion responsibility to the Show Page (then implement it there).
      */
-    public function delete(mixed $id): void
-    {
-    }
+    public function delete(mixed $id): void {}
 
     /**
      * Build list fields and layout.

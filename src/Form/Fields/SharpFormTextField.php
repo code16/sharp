@@ -10,9 +10,9 @@ use Code16\Sharp\Utils\Fields\SharpFieldWithLocalization;
 
 class SharpFormTextField extends SharpFormField implements IsSharpFieldWithLocalization
 {
-    use SharpFormFieldWithPlaceholder;
-    use SharpFormFieldWithMaxLength;
     use SharpFieldWithLocalization;
+    use SharpFormFieldWithMaxLength;
+    use SharpFormFieldWithPlaceholder;
 
     const FIELD_TYPE = 'text';
 
@@ -20,7 +20,7 @@ class SharpFormTextField extends SharpFormField implements IsSharpFieldWithLocal
 
     public static function make(string $key): self
     {
-        return new static($key, static::FIELD_TYPE, new TextFormatter);
+        return new static($key, static::FIELD_TYPE, new TextFormatter());
     }
 
     public function setInputTypeText(): self

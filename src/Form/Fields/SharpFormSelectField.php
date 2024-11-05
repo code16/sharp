@@ -23,7 +23,7 @@ class SharpFormSelectField extends SharpFormField
 
     public static function make(string $key, array $options): self
     {
-        $instance = new static($key, static::FIELD_TYPE, new SelectFormatter);
+        $instance = new static($key, static::FIELD_TYPE, new SelectFormatter());
         $instance->options = $options;
 
         return $instance;

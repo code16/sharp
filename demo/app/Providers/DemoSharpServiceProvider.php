@@ -33,7 +33,7 @@ class DemoSharpServiceProvider extends SharpAppServiceProvider
             ->addEntity('test', TestEntity::class)
             ->when(
                 auth()->id() === 1,
-                fn(SharpConfigBuilder $config) => $config->addGlobalFilter(DummyGlobalFilter::class)
+                fn (SharpConfigBuilder $config) => $config->addGlobalFilter(DummyGlobalFilter::class)
             )
             ->configureUploadsThumbnailCreation(uploadModelClass: Media::class)
             ->setSharpMenu(SharpMenu::class)

@@ -9,7 +9,7 @@ use Code16\Sharp\Utils\Transformers\ArrayConverter;
 class SelectFormatter extends SharpFieldFormatter
 {
     /**
-     * @param SharpFormSelectField $field
+     * @param  SharpFormSelectField  $field
      */
     public function toFront(SharpFormField $field, $value)
     {

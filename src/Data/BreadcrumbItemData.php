@@ -10,6 +10,5 @@ final class BreadcrumbItemData extends Data
         public ?string $documentTitleLabel,
         public string $entityKey,
         public string $url,
-    ) {
-    }
+    ) {}
 }

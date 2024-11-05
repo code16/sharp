@@ -21,8 +21,7 @@ final class PaginatorMetaData extends Data
         public ?int $last_page = null,
         public ?string $last_page_url = null,
         public ?int $total = null,
-    ) {
-    }
+    ) {}
 
     /**
      * Filter the Paginator array in case of a new property is added in the future (which will throw).

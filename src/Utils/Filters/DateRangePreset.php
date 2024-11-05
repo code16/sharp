@@ -11,19 +11,18 @@ final class DateRangePreset implements Arrayable
         protected Carbon $start,
         protected Carbon $end,
         protected string $label,
-    ) {
-    }
-    
+    ) {}
+
     public function getStart(): Carbon
     {
         return $this->start;
     }
-    
+
     public function getEnd(): Carbon
     {
         return $this->end;
     }
-    
+
     public function toArray()
     {
         return [

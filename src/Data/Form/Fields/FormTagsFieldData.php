@@ -27,8 +27,7 @@ final class FormTagsFieldData extends Data
         public ?FormConditionalDisplayData $conditionalDisplay = null,
         public ?string $helpMessage = null,
         public ?string $extraStyle = null,
-    ) {
-    }
+    ) {}
 
     public static function from(array $field): self
     {

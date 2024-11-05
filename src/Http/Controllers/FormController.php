@@ -50,7 +50,7 @@ class FormController extends SharpProtectedController
         ]);
     }
 
-    public function edit(string $parentUri, string $entityKey, string $instanceId = null)
+    public function edit(string $parentUri, string $entityKey, ?string $instanceId = null)
     {
         $entity = $this->entityManager->entityFor($entityKey);
 
@@ -79,7 +79,7 @@ class FormController extends SharpProtectedController
         ]);
     }
 
-    public function update(string $parentUri, string $entityKey, string $instanceId = null)
+    public function update(string $parentUri, string $entityKey, ?string $instanceId = null)
     {
         sharp_check_ability('update', $entityKey, $instanceId);
 

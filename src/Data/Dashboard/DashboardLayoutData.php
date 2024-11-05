@@ -10,8 +10,7 @@ final class DashboardLayoutData extends Data
     public function __construct(
         /** @var DataCollection<DashboardLayoutSectionData> */
         public DataCollection $sections,
-    ) {
-    }
+    ) {}
 
     public static function from(array $layout): self
     {

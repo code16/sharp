@@ -4,7 +4,7 @@ use Code16\Sharp\Form\Fields\Formatters\SelectFormatter;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
 
 it('allows to format value to front', function () {
-    $formatter = new SelectFormatter;
+    $formatter = new SelectFormatter();
     $field = SharpFormSelectField::make('select', [
         1 => 'red',
         2 => 'blue',
@@ -15,7 +15,7 @@ it('allows to format value to front', function () {
 });
 
 it('allows to format a multiple value to front', function () {
-    $formatter = new SelectFormatter;
+    $formatter = new SelectFormatter();
     $field = SharpFormSelectField::make('select', [
         1 => 'red',
         2 => 'blue',
@@ -26,7 +26,7 @@ it('allows to format a multiple value to front', function () {
 });
 
 it('allows to format a multiple array value to front', function () {
-    $formatter = new SelectFormatter;
+    $formatter = new SelectFormatter();
     $field = SharpFormSelectField::make('select', [
         1 => 'red',
         2 => 'blue',
@@ -39,7 +39,7 @@ it('allows to format a multiple array value to front', function () {
 });
 
 it('allows to format a multiple object value to front', function () {
-    $formatter = new SelectFormatter;
+    $formatter = new SelectFormatter();
     $field = SharpFormSelectField::make('select', [
         1 => 'red',
         2 => 'blue',
@@ -53,7 +53,7 @@ it('allows to format a multiple object value to front', function () {
 });
 
 it('allows to format a multiple object with toArray value to front', function () {
-    $formatter = new SelectFormatter;
+    $formatter = new SelectFormatter();
     $field = SharpFormSelectField::make('select', [
         1 => 'red',
         2 => 'blue',
@@ -61,14 +61,14 @@ it('allows to format a multiple object with toArray value to front', function ()
         ->setMultiple();
 
     $this->assertEquals([1, 2], $formatter->toFront($field, [
-        new class
+        new class()
         {
             public function toArray()
             {
                 return ['id' => 1, 'label' => 'A'];
             }
         },
-        new class
+        new class()
         {
             public function toArray()
             {
@@ -79,7 +79,7 @@ it('allows to format a multiple object with toArray value to front', function ()
 });
 
 it('allows to define idAttribute for a multiple array value to front', function () {
-    $formatter = new SelectFormatter;
+    $formatter = new SelectFormatter();
     $field = SharpFormSelectField::make('select', [
         1 => 'red',
         2 => 'blue',
@@ -93,7 +93,7 @@ it('allows to define idAttribute for a multiple array value to front', function 
 });
 
 it('allows to format value from front', function () {
-    $formatter = new SelectFormatter;
+    $formatter = new SelectFormatter();
     $attribute = 'attribute';
     $field = SharpFormSelectField::make('select', [
         1 => 'red',
@@ -105,7 +105,7 @@ it('allows to format value from front', function () {
 });
 
 it('allows to format a multiple value from front', function () {
-    $formatter = new SelectFormatter;
+    $formatter = new SelectFormatter();
     $attribute = 'attribute';
     $field = SharpFormSelectField::make('select', [
         1 => 'red',
@@ -117,7 +117,7 @@ it('allows to format a multiple value from front', function () {
 });
 
 it('allows to define idAttribute for a multiple array value from front', function () {
-    $formatter = new SelectFormatter;
+    $formatter = new SelectFormatter();
     $field = SharpFormSelectField::make('select', [
         1 => 'red',
         2 => 'blue',

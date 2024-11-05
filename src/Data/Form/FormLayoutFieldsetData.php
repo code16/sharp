@@ -11,8 +11,7 @@ final class FormLayoutFieldsetData extends Data
         public string $legend,
         /** @var array<array<LayoutFieldData>> */
         public array $fields,
-    ) {
-    }
+    ) {}
 
     public static function from(array $fieldset): self
     {

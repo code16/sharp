@@ -13,7 +13,7 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\PageAlerts\PageAlert;
 
 it('allows to add an EEL to the layout', function () {
-    $sharpShow = new class extends FakeSharpShow
+    $sharpShow = new class() extends FakeSharpShow
     {
         public function buildShowFields(FieldsContainer $showFields): void
         {
@@ -58,7 +58,7 @@ it('allows to add an EEL to the layout', function () {
 });
 
 it('allows to declare a collapsable section', function () {
-    $sharpShow = new class extends FakeSharpShow
+    $sharpShow = new class() extends FakeSharpShow
     {
         public function buildShowFields(FieldsContainer $showFields): void
         {
@@ -106,7 +106,7 @@ it('allows to declare a collapsable section', function () {
 });
 
 it('allows to declare a collapsable EEL with a boolean', function () {
-    $sharpShow = new class extends FakeSharpShow
+    $sharpShow = new class() extends FakeSharpShow
     {
         public function buildShowFields(FieldsContainer $showFields): void
         {
@@ -126,7 +126,7 @@ it('allows to declare a collapsable EEL with a boolean', function () {
 });
 
 it('allows to define a custom key to a section', function () {
-    $sharpShow = new class extends FakeSharpShow
+    $sharpShow = new class() extends FakeSharpShow
     {
         public function buildShowFields(FieldsContainer $showFields): void
         {
@@ -151,7 +151,7 @@ it('allows to define a custom key to a section', function () {
 });
 
 it('allows to declare a multiformAttribute', function () {
-    $sharpShow = new class extends FakeSharpShow
+    $sharpShow = new class() extends FakeSharpShow
     {
         public function buildShowConfig(): void
         {
@@ -166,7 +166,7 @@ it('allows to declare a multiformAttribute', function () {
 });
 
 it('allows to declare a page alert', function () {
-    $sharpShow = new class extends FakeSharpShow
+    $sharpShow = new class() extends FakeSharpShow
     {
         public function buildPageAlert(PageAlert $pageAlert): void
         {
@@ -184,7 +184,7 @@ it('allows to declare a page alert', function () {
 });
 
 it('allow to declare a simple page title field', function () {
-    $sharpShow = new class extends FakeSharpShow
+    $sharpShow = new class() extends FakeSharpShow
     {
         public function buildShowConfig(): void
         {
@@ -210,7 +210,7 @@ it('allow to declare a simple page title field', function () {
 });
 
 it('allow to declare a localized page title field', function () {
-    $sharpShow = new class extends FakeSharpShow
+    $sharpShow = new class() extends FakeSharpShow
     {
         public function buildShowConfig(): void
         {
@@ -239,12 +239,12 @@ it('returns isSingle in config for single shows', function () {
 });
 
 it('allows to configure show instance command in sections', function () {
-    $show = new class extends FakeSharpShow
+    $show = new class() extends FakeSharpShow
     {
         public function getInstanceCommands(): ?array
         {
             return [
-                'cmd1' => new class extends InstanceCommand
+                'cmd1' => new class() extends InstanceCommand
                 {
                     public function label(): ?string
                     {
@@ -257,7 +257,7 @@ it('allows to configure show instance command in sections', function () {
                     }
                 },
                 'my-section' => [
-                    'cmd2' => new class extends InstanceCommand
+                    'cmd2' => new class() extends InstanceCommand
                     {
                         public function label(): ?string
                         {

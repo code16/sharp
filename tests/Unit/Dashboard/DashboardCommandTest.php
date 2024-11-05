@@ -5,21 +5,19 @@ use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\Unit\Dashboard\Fakes\FakeSharpDashboard;
 
 it('returns list commands config of a dashboard', function () {
-    $dashboard = new class extends FakeSharpDashboard
+    $dashboard = new class() extends FakeSharpDashboard
     {
         public function getDashboardCommands(): ?array
         {
             return [
-                'dashboardCommand' => new class extends DashboardCommand
+                'dashboardCommand' => new class() extends DashboardCommand
                 {
                     public function label(): string
                     {
                         return 'My Dashboard Command';
                     }
 
-                    public function execute(array $data = []): array
-                    {
-                    }
+                    public function execute(array $data = []): array {}
                 },
             ];
         }
@@ -40,34 +38,30 @@ it('returns list commands config of a dashboard', function () {
 });
 
 it('handles list section placed commands config of a dashboard', function () {
-    $dashboard = new class extends FakeSharpDashboard
+    $dashboard = new class() extends FakeSharpDashboard
     {
         public function getDashboardCommands(): ?array
         {
             return [
                 'section-1' => [
-                    'dashboardSectionCommand' => new class extends DashboardCommand
+                    'dashboardSectionCommand' => new class() extends DashboardCommand
                     {
                         public function label(): string
                         {
                             return 'My Dashboard Command';
                         }
 
-                        public function execute(array $data = []): array
-                        {
-                        }
+                        public function execute(array $data = []): array {}
                     },
                 ],
-                'dashboardCommand' => new class extends DashboardCommand
+                'dashboardCommand' => new class() extends DashboardCommand
                 {
                     public function label(): string
                     {
                         return 'Another Dashboard Command';
                     }
 
-                    public function execute(array $data = []): array
-                    {
-                    }
+                    public function execute(array $data = []): array {}
                 },
             ];
         }
@@ -82,12 +76,12 @@ it('handles list section placed commands config of a dashboard', function () {
 });
 
 it('allows to define that the dashboard command has a form', function () {
-    $dashboard = new class extends FakeSharpDashboard
+    $dashboard = new class() extends FakeSharpDashboard
     {
         public function getDashboardCommands(): ?array
         {
             return [
-                'dashboardCommand' => new class extends DashboardCommand
+                'dashboardCommand' => new class() extends DashboardCommand
                 {
                     public function label(): string
                     {
@@ -99,9 +93,7 @@ it('allows to define that the dashboard command has a form', function () {
                         $formFields->addField(SharpFormTextField::make('message'));
                     }
 
-                    public function execute(array $data = []): array
-                    {
-                    }
+                    public function execute(array $data = []): array {}
                 },
             ];
         }

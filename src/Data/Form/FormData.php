@@ -22,8 +22,7 @@ final class FormData extends Data
         /** @var array<string> */
         public array $locales,
         public ?PageAlertData $pageAlert = null,
-    ) {
-    }
+    ) {}
 
     public static function from(array $form): self
     {

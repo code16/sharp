@@ -22,8 +22,7 @@ final class ShowListFieldData extends Data
         public ?string $label,
         /** @var DataCollection<string,ShowFieldData> */
         public DataCollection $itemFields,
-    ) {
-    }
+    ) {}
 
     public static function from(array $list): self
     {

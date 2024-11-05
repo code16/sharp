@@ -10,9 +10,9 @@ use Code16\Sharp\Utils\Fields\SharpFieldWithLocalization;
 
 class SharpFormTextareaField extends SharpFormField implements IsSharpFieldWithLocalization
 {
-    use SharpFormFieldWithPlaceholder;
-    use SharpFormFieldWithMaxLength;
     use SharpFieldWithLocalization;
+    use SharpFormFieldWithMaxLength;
+    use SharpFormFieldWithPlaceholder;
 
     const FIELD_TYPE = 'textarea';
 
@@ -20,7 +20,7 @@ class SharpFormTextareaField extends SharpFormField implements IsSharpFieldWithL
 
     public static function make(string $key): self
     {
-        return new static($key, static::FIELD_TYPE, new TextareaFormatter);
+        return new static($key, static::FIELD_TYPE, new TextareaFormatter());
     }
 
     public function setRowCount(int $rows): self

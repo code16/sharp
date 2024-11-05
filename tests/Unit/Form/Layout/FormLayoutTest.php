@@ -4,7 +4,7 @@ use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Tests\Unit\Form\Fakes\FakeSharpForm;
 
 it('allows to add a tab', function () {
-    $form = new class extends FakeSharpForm
+    $form = new class() extends FakeSharpForm
     {
         public function buildFormLayout(FormLayout $formLayout): void
         {
@@ -17,7 +17,7 @@ it('allows to add a tab', function () {
 });
 
 it('allows to add a column', function () {
-    $form = new class extends FakeSharpForm
+    $form = new class() extends FakeSharpForm
     {
         public function buildFormLayout(FormLayout $formLayout): void
         {
@@ -30,7 +30,7 @@ it('allows to add a column', function () {
 });
 
 it('allows to see layout as array', function () {
-    $form = new class extends FakeSharpForm
+    $form = new class() extends FakeSharpForm
     {
         public function buildFormLayout(FormLayout $formLayout): void
         {
@@ -41,7 +41,7 @@ it('allows to see layout as array', function () {
     expect($form->formLayout()['tabs'][0])
         ->toEqual(['title' => 'label', 'columns' => []]);
 
-    $form2 = new class extends FakeSharpForm
+    $form2 = new class() extends FakeSharpForm
     {
         public function buildFormLayout(FormLayout $formLayout): void
         {
@@ -54,7 +54,7 @@ it('allows to see layout as array', function () {
 });
 
 it('allows to set tabbed to false', function () {
-    $form = new class extends FakeSharpForm
+    $form = new class() extends FakeSharpForm
     {
         public function buildFormLayout(FormLayout $formLayout): void
         {

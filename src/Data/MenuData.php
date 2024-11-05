@@ -12,12 +12,11 @@ final class MenuData extends Data
         public DataCollection $items,
         public UserMenuData $userMenu,
         public bool $isVisible,
-    ) {
-    }
+    ) {}
 
     public static function from(SharpMenuManager $menuManager): self
     {
-        return new static(
+        return new self(
             items: MenuItemData::collection(
                 $menuManager
                     ->getItems()

@@ -14,17 +14,16 @@ use Code16\Sharp\Utils\Fields\IsSharpFieldWithLocalization;
 use Code16\Sharp\Utils\Fields\SharpFieldWithEmbeds;
 use Code16\Sharp\Utils\Fields\SharpFieldWithLocalization;
 
-class SharpFormEditorField extends SharpFormField implements IsSharpFieldWithLocalization, IsSharpFieldWithEmbeds
+class SharpFormEditorField extends SharpFormField implements IsSharpFieldWithEmbeds, IsSharpFieldWithLocalization
 {
-    use SharpFormFieldWithPlaceholder;
-    use SharpFieldWithLocalization;
     use SharpFieldWithEmbeds;
+    use SharpFieldWithLocalization;
     use SharpFormFieldWithMaxLength {
         setMaxLength as protected parentSetMaxLength;
     }
+    use SharpFormFieldWithPlaceholder;
 
     const FIELD_TYPE = 'editor';
-
     const B = FormEditorToolbarButton::Bold;
     const I = FormEditorToolbarButton::Italic;
     const HIGHLIGHT = FormEditorToolbarButton::Highlight;
@@ -68,7 +67,7 @@ class SharpFormEditorField extends SharpFormField implements IsSharpFieldWithLoc
         return new static($key, static::FIELD_TYPE, new EditorFormatter());
     }
 
-    public function setHeight(int $height, int|null $maxHeight = null): self
+    public function setHeight(int $height, ?int $maxHeight = null): self
     {
         $this->minHeight = $height;
         // Spec maxHeight:
@@ -166,8 +165,8 @@ class SharpFormEditorField extends SharpFormField implements IsSharpFieldWithLoc
         return collect($this->toolbar)
             ->map(function (FormEditorToolbarButton|string $button) {
                 if (is_string($button) && class_exists($button)) {
-                    if($embed = $this->getAllowedEmbed($button)) {
-                        if(!$embed->toConfigArray(true)['icon']) {
+                    if ($embed = $this->getAllowedEmbed($button)) {
+                        if (! $embed->toConfigArray(true)['icon']) {
                             throw new SharpInvalidConfigException(
                                 sprintf('%s ("%s") : %s must have an icon to be in the toolbar',
                                     class_basename($this),
@@ -176,10 +175,10 @@ class SharpFormEditorField extends SharpFormField implements IsSharpFieldWithLoc
                                 )
                             );
                         }
-                        
+
                         return 'embed:'.$embed->key();
                     }
-                    
+
                     throw new SharpInvalidConfigException(
                         sprintf('%s ("%s") : %s must be present in ->allowEmbeds() array to have it in the toolbar',
                             class_basename($this),

@@ -5,7 +5,7 @@ use Code16\Sharp\Tests\Unit\Form\Fakes\FakeSharpForm;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 it('allows to add a field', function () {
-    $form = new class extends FakeSharpForm
+    $form = new class() extends FakeSharpForm
     {
         public function buildFormFields(FieldsContainer $formFields): void
         {
@@ -18,7 +18,7 @@ it('allows to add a field', function () {
 });
 
 it('allows to see fields as array', function () {
-    $form = new class extends FakeSharpForm
+    $form = new class() extends FakeSharpForm
     {
         public function buildFormFields(FieldsContainer $formFields): void
         {

@@ -12,8 +12,7 @@ final class FormConditionalDisplayData extends Data
         public string $operator,
         #[LiteralTypeScriptType('Array<{ key: string, values: string|boolean|Array<string> }>')]
         public array $fields,
-    ) {
-    }
+    ) {}
 
     public static function from(array $dynamicAttribute): self
     {

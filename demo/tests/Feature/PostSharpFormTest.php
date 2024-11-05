@@ -174,7 +174,7 @@ class PostSharpFormTest extends TestCase
         $publishedPost = Post::factory()
             ->for(User::factory(), 'author')
             ->create([
-                'state' => 'draft'
+                'state' => 'draft',
             ]);
 
         $this

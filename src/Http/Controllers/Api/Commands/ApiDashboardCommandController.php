@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Http\Controllers\Api\Commands;
 
-use Code16\Sharp\Dashboard\DashboardQueryParams;
 use Code16\Sharp\Dashboard\SharpDashboard;
 use Code16\Sharp\Data\Commands\CommandFormData;
 use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
@@ -11,8 +10,8 @@ use Code16\Sharp\Utils\Uploads\SharpUploadManager;
 
 class ApiDashboardCommandController extends ApiController
 {
-    use HandlesCommandReturn;
     use HandlesCommandForm;
+    use HandlesCommandReturn;
 
     public function __construct(
         private readonly SharpUploadManager $uploadManager,

@@ -27,8 +27,7 @@ final class ShowFileFieldData extends Data
         public ShowFieldType $type,
         public bool $emptyVisible,
         public ?string $label,
-    ) {
-    }
+    ) {}
 
     public static function from(array $field): self
     {

@@ -13,8 +13,8 @@ use Illuminate\Support\Arr;
 
 abstract class SharpDashboard
 {
-    use HandleFilters;
     use HandleDashboardCommands;
+    use HandleFilters;
     use HandlePageAlertMessage;
 
     protected bool $dashboardBuilt = false;
@@ -35,7 +35,7 @@ abstract class SharpDashboard
 
         return $this;
     }
-    
+
     final public function widgets(): array
     {
         $this->checkDashboardIsBuilt();
@@ -68,9 +68,7 @@ abstract class SharpDashboard
     /**
      * Build config if necessary.
      */
-    public function buildDashboardConfig(): void
-    {
-    }
+    public function buildDashboardConfig(): void {}
 
     /**
      * Return all filters in an array of class names or instances.

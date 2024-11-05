@@ -107,7 +107,7 @@ class EntityListController extends SharpProtectedController
         return collect($forms)
             ->map(fn ($value, $key) => [
                 'key' => $key,
-                'label' => is_array($value) && sizeof($value) > 1 ? $value[1] : $key,
+                'label' => is_array($value) && count($value) > 1 ? $value[1] : $key,
                 'instances' => collect($listItems)
                     ->where($listConfig['multiformAttribute'], $key)
                     ->pluck($listConfig['instanceIdAttribute'])

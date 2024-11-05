@@ -12,25 +12,24 @@ use Illuminate\Support\Collection;
 class FilterContainer
 {
     use BuildsFiltersConfigArray;
-    use HandlesFiltersInSession;
     use HandlesFiltersInQueryParams;
+    use HandlesFiltersInSession;
     use ProvidesFilterValuesToFront;
-    
+
     protected ?Collection $filterHandlers = null;
-    
+
     public function __construct(
         protected ?array $baseFilters = null,
-    ) {
-    }
-    
+    ) {}
+
     public function getFilterHandlers(): Collection
     {
         if ($this->filterHandlers === null) {
             $this->filterHandlers = collect($this->baseFilters)
-                
+
                 // First get filters which are section-based (dashboard only)...
                 ->filter(fn ($value, $index) => is_array($value))
-                
+
                 // ... and merge filters set for the whole page
                 ->merge(
                     [
@@ -38,7 +37,7 @@ class FilterContainer
                             ->filter(fn ($value, $index) => ! is_array($value)),
                     ]
                 )
-                
+
                 ->map(function ($handlers) {
                     return collect($handlers)
                         ->map(function ($filterHandlerOrClassName) {
@@ -53,7 +52,7 @@ class FilterContainer
                             } else {
                                 $filterHandler = $filterHandlerOrClassName;
                             }
-                            
+
                             if (! $filterHandler instanceof Filter) {
                                 throw new SharpException(sprintf(
                                     'Handler class for filter [%s] must implement a sub-interface of [%s]',
@@ -61,17 +60,17 @@ class FilterContainer
                                     Filter::class
                                 ));
                             }
-                            
+
                             $filterHandler->buildFilterConfig();
-                            
+
                             return $filterHandler;
                         });
                 });
         }
-        
+
         return $this->filterHandlers;
     }
-    
+
     public function findFilterHandler(string $filterFullClassNameOrKey): ?Filter
     {
         return $this
@@ -81,15 +80,16 @@ class FilterContainer
                 if (class_exists($filterFullClassNameOrKey)) {
                     return $filter instanceof $filterFullClassNameOrKey;
                 }
+
                 return $filter->getKey() === $filterFullClassNameOrKey;
             })
             ->first();
     }
-    
+
     public function formatSelectFilterValues(SelectFilter $handler): array
     {
         $values = $handler->values();
-        
+
         if (! is_array(collect($values)->first())) {
             return collect($values)
                 ->map(function ($label, $id) {
@@ -98,10 +98,10 @@ class FilterContainer
                 ->values()
                 ->all();
         }
-        
+
         return $values;
     }
-    
+
     public function getCurrentFilterValues(?array $query): array
     {
         return [
@@ -110,7 +110,7 @@ class FilterContainer
             ...$this->getFilterValuesFromQueryParams($query),
         ];
     }
-    
+
     public function getDefaultFilterValues(): Collection
     {
         return $this->getFilterHandlers()

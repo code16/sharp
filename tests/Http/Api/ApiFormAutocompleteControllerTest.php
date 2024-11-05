@@ -13,7 +13,7 @@ beforeEach(function () {
 });
 
 it('allows to call an functional endpoint for a remote autocomplete field', function () {
-    fakeFormFor('person', new class extends PersonForm
+    fakeFormFor('person', new class() extends PersonForm
     {
         public function buildFormFields(FieldsContainer $formFields): void
         {
@@ -36,21 +36,21 @@ it('allows to call an functional endpoint for a remote autocomplete field', func
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
             'entityKey' => 'person',
-            'autocompleteFieldKey' => 'autocomplete_field'
+            'autocompleteFieldKey' => 'autocomplete_field',
         ]), [
             'endpoint' => '/my/endpoint',
-            'search' => 'my search'
+            'search' => 'my search',
         ])
         ->assertOk()
         ->assertJson([
             'data' => [
                 ['id' => 1, 'label' => 'John'],
-            ]
+            ],
         ]);
 });
 
 it('allows to call a closure for a remote autocomplete field', function () {
-    fakeFormFor('person', new class extends PersonForm
+    fakeFormFor('person', new class() extends PersonForm
     {
         public function buildFormFields(FieldsContainer $formFields): void
         {
@@ -70,20 +70,20 @@ it('allows to call a closure for a remote autocomplete field', function () {
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
             'entityKey' => 'person',
-            'autocompleteFieldKey' => 'autocomplete_field'
+            'autocompleteFieldKey' => 'autocomplete_field',
         ]), [
-            'search' => 'my search'
+            'search' => 'my search',
         ])
         ->assertOk()
         ->assertJson([
             'data' => [
                 ['id' => 1, 'label' => 'John'],
-            ]
+            ],
         ]);
 });
 
 it('allows to specify linked field passed to the closure', function () {
-    fakeFormFor('person', new class extends PersonForm
+    fakeFormFor('person', new class() extends PersonForm
     {
         public function buildFormFields(FieldsContainer $formFields): void
         {
@@ -108,23 +108,23 @@ it('allows to specify linked field passed to the closure', function () {
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
             'entityKey' => 'person',
-            'autocompleteFieldKey' => 'autocomplete_field'
+            'autocompleteFieldKey' => 'autocomplete_field',
         ]), [
             'search' => 'my search',
             'formData' => [
                 'name' => 'John',
-            ]
+            ],
         ])
         ->assertOk()
         ->assertJson([
             'data' => [
                 ['id' => 1, 'label' => 'John'],
-            ]
+            ],
         ]);
 });
 
 it('formats autocomplete results as an array, and handle data wrapper', function () {
-    fakeFormFor('person', new class extends PersonForm
+    fakeFormFor('person', new class() extends PersonForm
     {
         public function buildFormFields(FieldsContainer $formFields): void
         {
@@ -139,30 +139,30 @@ it('formats autocomplete results as an array, and handle data wrapper', function
 
     Route::get('/my/endpoint', fn () => [
         'wrapper' => [
-            (object)['id' => 1, 'label' => 'John'],
-            (object)['id' => 2, 'label' => 'Jane'],
-        ]
+            (object) ['id' => 1, 'label' => 'John'],
+            (object) ['id' => 2, 'label' => 'Jane'],
+        ],
     ]);
 
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
             'entityKey' => 'person',
-            'autocompleteFieldKey' => 'autocomplete_field'
+            'autocompleteFieldKey' => 'autocomplete_field',
         ]), [
             'endpoint' => '/my/endpoint',
-            'search' => 'my search'
+            'search' => 'my search',
         ])
         ->assertOk()
         ->assertJson([
             'data' => [
                 ['id' => 1, 'label' => 'John'],
                 ['id' => 2, 'label' => 'Jane'],
-            ]
+            ],
         ]);
 });
 
 it('renders autocomplete results with template', function () {
-    fakeFormFor('person', new class extends PersonForm
+    fakeFormFor('person', new class() extends PersonForm
     {
         public function buildFormFields(FieldsContainer $formFields): void
         {
@@ -183,24 +183,24 @@ it('renders autocomplete results with template', function () {
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
             'entityKey' => 'person',
-            'autocompleteFieldKey' => 'autocomplete_field'
+            'autocompleteFieldKey' => 'autocomplete_field',
         ]), [
             'endpoint' => '/my/endpoint',
-            'search' => 'my search'
+            'search' => 'my search',
         ])
         ->assertOk()
         ->assertJson([
             'data' => [
                 ['id' => 1, 'name' => 'John', 'job' => 'actor', '_html' => 'John, actor'],
                 ['id' => 2, 'name' => 'Jane', 'job' => 'producer', '_html' => 'Jane, producer'],
-            ]
+            ],
         ]);
 });
 
 it('fails if field is missing', function () {
     $this->withoutExceptionHandling();
 
-    fakeFormFor('person', new class extends PersonForm
+    fakeFormFor('person', new class() extends PersonForm
     {
         public function buildFormFields(FieldsContainer $formFields): void
         {
@@ -213,14 +213,14 @@ it('fails if field is missing', function () {
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
             'entityKey' => 'person',
-            'autocompleteFieldKey' => 'autocomplete_field'
+            'autocompleteFieldKey' => 'autocomplete_field',
         ]));
 })->expectException(\Code16\Sharp\Exceptions\SharpInvalidConfigException::class);
 
 it('fails if field is not a remote autocomplete field', function () {
     $this->withoutExceptionHandling();
 
-    fakeFormFor('person', new class extends PersonForm
+    fakeFormFor('person', new class() extends PersonForm
     {
         public function buildFormFields(FieldsContainer $formFields): void
         {
@@ -233,14 +233,14 @@ it('fails if field is not a remote autocomplete field', function () {
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
             'entityKey' => 'person',
-            'autocompleteFieldKey' => 'name'
+            'autocompleteFieldKey' => 'name',
         ]));
 })->expectException(\Code16\Sharp\Exceptions\SharpInvalidConfigException::class);
 
 it('validates that the sent remote endpoint is the same that was defined in the autocomplete field', function () {
     $this->withoutExceptionHandling();
 
-    fakeFormFor('person', new class extends PersonForm
+    fakeFormFor('person', new class() extends PersonForm
     {
         public function buildFormFields(FieldsContainer $formFields): void
         {
@@ -255,15 +255,15 @@ it('validates that the sent remote endpoint is the same that was defined in the 
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
             'entityKey' => 'person',
-            'autocompleteFieldKey' => 'autocomplete_field'
+            'autocompleteFieldKey' => 'autocomplete_field',
         ]), [
             'endpoint' => '/another/endpoint',
-            'search' => 'my search'
+            'search' => 'my search',
         ]);
 })->expectException(\Code16\Sharp\Exceptions\SharpInvalidConfigException::class);
 
 it('allows full and relative remote endpoint', function () {
-    fakeFormFor('person', new class extends PersonForm
+    fakeFormFor('person', new class() extends PersonForm
     {
         public function buildFormFields(FieldsContainer $formFields): void
         {
@@ -283,31 +283,31 @@ it('allows full and relative remote endpoint', function () {
 
     Route::post('/my/endpoint', fn () => []);
 
-    foreach(['/my/endpoint', url('/my/endpoint')] as $endpoint) {
+    foreach (['/my/endpoint', url('/my/endpoint')] as $endpoint) {
         $this
             ->postJson(route('code16.sharp.api.form.autocomplete.index', [
                 'entityKey' => 'person',
-                'autocompleteFieldKey' => 'autocomplete_field'
+                'autocompleteFieldKey' => 'autocomplete_field',
             ]), [
                 'endpoint' => $endpoint,
-                'search' => 'my search'
+                'search' => 'my search',
             ])
             ->assertOk();
 
         $this
             ->postJson(route('code16.sharp.api.form.autocomplete.index', [
                 'entityKey' => 'person',
-                'autocompleteFieldKey' => 'autocomplete_full_field'
+                'autocompleteFieldKey' => 'autocomplete_full_field',
             ]), [
                 'endpoint' => $endpoint,
-                'search' => 'my search'
+                'search' => 'my search',
             ])
             ->assertOk();
     }
 });
 
 it('allows dynamic remote endpoint', function () {
-    fakeFormFor('person', new class extends PersonForm
+    fakeFormFor('person', new class() extends PersonForm
     {
         public function buildFormFields(FieldsContainer $formFields): void
         {
@@ -324,10 +324,10 @@ it('allows dynamic remote endpoint', function () {
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
             'entityKey' => 'person',
-            'autocompleteFieldKey' => 'autocomplete_field'
+            'autocompleteFieldKey' => 'autocomplete_field',
         ]), [
             'endpoint' => url('/my/test/endpoint'),
-            'search' => 'my search'
+            'search' => 'my search',
         ])
         ->assertOk();
 });
@@ -335,7 +335,7 @@ it('allows dynamic remote endpoint', function () {
 it('won’t allow external remote endpoint', function () {
     $this->withoutExceptionHandling();
 
-    fakeFormFor('person', new class extends PersonForm
+    fakeFormFor('person', new class() extends PersonForm
     {
         public function buildFormFields(FieldsContainer $formFields): void
         {
@@ -350,9 +350,9 @@ it('won’t allow external remote endpoint', function () {
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
             'entityKey' => 'person',
-            'autocompleteFieldKey' => 'autocomplete_field'
+            'autocompleteFieldKey' => 'autocomplete_field',
         ]), [
             'endpoint' => 'https://google.fr',
-            'search' => 'my search'
+            'search' => 'my search',
         ]);
 })->expectException(\Code16\Sharp\Exceptions\SharpInvalidConfigException::class);

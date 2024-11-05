@@ -48,7 +48,7 @@ class SharpFormAutocompleteLocalField extends SharpFormField implements IsSharpF
 
         return $this;
     }
-    
+
     public function localValues(): array
     {
         return $this->localValues;

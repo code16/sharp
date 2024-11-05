@@ -25,8 +25,7 @@ final class EntityListData extends Data
         public ?EntityListQueryParamsData $query,
         public ?PaginatorMetaData $meta = null,
         public ?PageAlertData $pageAlert = null,
-    ) {
-    }
+    ) {}
 
     public static function from(array $entityList): self
     {

@@ -34,7 +34,7 @@ it('allows to create a belongsTo relation', function () {
 })->group('eloquent');
 
 it('sets default attributes when creating a belongsTo relation', function () {
-    $pierre = new class extends Person
+    $pierre = new class() extends Person
     {
         protected $table = 'people';
 

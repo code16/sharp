@@ -27,8 +27,7 @@ final class ShowTextFieldData extends Data
         /** @var DataCollection<string, EmbedData> */
         public ?DataCollection $embeds = null,
         public ?string $label = null,
-    ) {
-    }
+    ) {}
 
     public static function from(array $field): self
     {

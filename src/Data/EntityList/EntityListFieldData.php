@@ -16,6 +16,5 @@ final class EntityListFieldData extends Data
         public bool $hideOnXS,
         #[Optional]
         public ?bool $html = null,
-    ) {
-    }
+    ) {}
 }

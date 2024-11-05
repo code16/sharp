@@ -10,7 +10,7 @@ abstract class SelectMultipleFilter extends SelectFilter
     {
         return $value ? explode(',', $value) : [];
     }
-    
+
     public function toQueryParam($value): ?string
     {
         return $value ? implode(',', Arr::wrap($value)) : null;

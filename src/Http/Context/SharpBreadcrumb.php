@@ -19,7 +19,7 @@ class SharpBreadcrumb
     public function setCurrentInstanceLabel(?string $label): self
     {
         $this->currentInstanceLabel = $label;
-        
+
         return $this;
     }
 
@@ -35,7 +35,7 @@ class SharpBreadcrumb
                     $item->type,
                     isset($item->instance) ? "{$item->key}/{$item->instance}" : $item->key,
                 );
-                $isLeaf = $index === sizeof($this->breadcrumbItems()) - 1;
+                $isLeaf = $index === count($this->breadcrumbItems()) - 1;
 
                 return [
                     'type' => $this->getFrontTypeNameFor($item->type),
@@ -86,7 +86,7 @@ class SharpBreadcrumb
 
     public function breadcrumbItems(): Collection
     {
-        if (!isset($this->breadcrumbItems)) {
+        if (! isset($this->breadcrumbItems)) {
             $this->buildBreadcrumbFromRequest();
         }
 
@@ -172,9 +172,9 @@ class SharpBreadcrumb
         if (! $isLeaf) {
             return null;
         }
-        
+
         $previousItem = $this->breadcrumbItems()[$item->depth - 1] ?? null;
-        
+
         return match ($item->type) {
             's-show' => trans('sharp::breadcrumb.show', [
                 'entity' => $this->getEntityLabelForInstance($item, $isLeaf),
@@ -196,7 +196,7 @@ class SharpBreadcrumb
     private function getEntityLabelForInstance(BreadcrumbItem $item, bool $isLeaf): string
     {
         $cacheKey = "sharp.breadcrumb.{$item->key}.{$item->type}.{$item->instance}";
-        
+
         if ($item->isForm() && ($cached = Cache::get("sharp.breadcrumb.{$item->key}.s-show.{$item->instance}"))) {
             return $cached;
         }

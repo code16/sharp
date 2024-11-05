@@ -178,7 +178,7 @@ class SharpConfigBuilder
         return $this;
     }
 
-    public function enableGlobalSearch(SharpSearchEngine|string $engine, string $placeholder = null): self
+    public function enableGlobalSearch(SharpSearchEngine|string $engine, ?string $placeholder = null): self
     {
         $this->config['search'] = [
             'enabled' => true,
@@ -246,7 +246,7 @@ class SharpConfigBuilder
         return $this;
     }
 
-    public function enableImpersonation(SharpImpersonationHandler|string $handler = null): self
+    public function enableImpersonation(SharpImpersonationHandler|string|null $handler = null): self
     {
         $this->config['auth']['impersonate'] = [
             'enabled' => true,
@@ -397,7 +397,7 @@ class SharpConfigBuilder
             $config = $this->config;
 
             foreach ($parts as $part) {
-                if (!isset($config[$part])) {
+                if (! isset($config[$part])) {
                     return null;
                 }
 

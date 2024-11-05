@@ -37,11 +37,11 @@ final class GlobalFilters implements Arrayable
                         return [$handler->getKey() => $handler->currentValue()];
                     })
                     ->toArray(),
-                'valuated' => [] // not needed here
+                'valuated' => [], // not needed here
             ],
         ];
     }
-    
+
     public function findFilter(string $key): ?Filter
     {
         return $this->filterContainer()->findFilterHandler($key);

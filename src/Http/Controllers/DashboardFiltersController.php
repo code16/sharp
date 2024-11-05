@@ -2,9 +2,7 @@
 
 namespace Code16\Sharp\Http\Controllers;
 
-use Code16\Sharp\Data\Dashboard\DashboardData;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
-use Inertia\Inertia;
 
 class DashboardFiltersController extends SharpProtectedController
 {
@@ -20,9 +18,9 @@ class DashboardFiltersController extends SharpProtectedController
 
         $dashboard = $this->entityManager->entityFor($dashboardKey)->getViewOrFail();
         $dashboard->buildDashboardConfig();
-        
+
         $dashboard->filterContainer()->putRetainedFilterValuesInSession(request()->input('filterValues'));
-        
+
         return redirect()->route('code16.sharp.dashboard', [
             'dashboardKey' => $dashboardKey,
             ...(request()->input('query') ?? []),

@@ -31,14 +31,14 @@ abstract class SharpShowField
     {
         return $this->formatter;
     }
-    
+
     public function setFormatter(SharpShowFieldFormatter $formatter): self
     {
         $this->formatter = $formatter;
 
         return $this;
     }
-    
+
     public function key(): string
     {
         return $this->key;

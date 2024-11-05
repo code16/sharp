@@ -3,7 +3,7 @@
 use Code16\Sharp\Show\Fields\SharpShowEntityListField;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 
-beforeEach(function() {
+beforeEach(function () {
     sharp()->config()->addEntity('entityKey', PersonEntity::class);
 });
 

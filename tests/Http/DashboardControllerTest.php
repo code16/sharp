@@ -19,7 +19,7 @@ beforeEach(function () {
 });
 
 it('gets dashboard widgets, layout and data', function () {
-    fakeShowFor('stats', new class extends SharpDashboard
+    fakeShowFor('stats', new class() extends SharpDashboard
     {
         protected function buildWidgets(WidgetsContainer $widgetsContainer): void
         {
@@ -79,7 +79,7 @@ it('gets dashboard widgets, layout and data', function () {
 
 it('allows to configure a page alert', function () {
     $this->withoutExceptionHandling();
-    fakeShowFor('stats', new class extends TestDashboard
+    fakeShowFor('stats', new class() extends TestDashboard
     {
         public function buildPageAlert(PageAlert $pageAlert): void
         {
@@ -101,7 +101,7 @@ it('allows to configure a page alert', function () {
 });
 
 it('allows to configure a page alert with a closure as content', function () {
-    fakeShowFor('stats', new class extends TestDashboard
+    fakeShowFor('stats', new class() extends TestDashboard
     {
         public function buildPageAlert(PageAlert $pageAlert): void
         {
@@ -118,7 +118,7 @@ it('allows to configure a page alert with a closure as content', function () {
                 'panel',
                 [
                     'name' => 'Albert Einstein',
-                    'month' => 'March'
+                    'month' => 'March',
                 ]
             );
         }

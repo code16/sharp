@@ -11,7 +11,7 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 it('gets fields with layout', function () {
-    $list = new class extends FakeSharpEntityList
+    $list = new class() extends FakeSharpEntityList
     {
         public function buildList(EntityListFieldsContainer $fields): void
         {
@@ -37,7 +37,7 @@ it('gets fields with layout', function () {
 });
 
 it('allows to set fields width as a legacy 12-based grid', function () {
-    $list = new class extends FakeSharpEntityList
+    $list = new class() extends FakeSharpEntityList
     {
         public function buildList(EntityListFieldsContainer $fields): void
         {
@@ -52,7 +52,7 @@ it('allows to set fields width as a legacy 12-based grid', function () {
 });
 
 it('allows to set fields width as a floats', function () {
-    $list = new class extends FakeSharpEntityList
+    $list = new class() extends FakeSharpEntityList
     {
         public function buildList(EntityListFieldsContainer $fields): void
         {
@@ -67,7 +67,7 @@ it('allows to set fields width as a floats', function () {
 });
 
 it('allows to set fields width as a percentage string', function () {
-    $list = new class extends FakeSharpEntityList
+    $list = new class() extends FakeSharpEntityList
     {
         public function buildList(EntityListFieldsContainer $fields): void
         {
@@ -87,9 +87,7 @@ it('throws an exception on invalid values for fields width', function ($invalidW
 
     $list = new class($invalidWidth) extends FakeSharpEntityList
     {
-        public function __construct(private $invalidWidth)
-        {
-        }
+        public function __construct(private $invalidWidth) {}
 
         public function buildList(EntityListFieldsContainer $fields): void
         {
@@ -102,7 +100,7 @@ it('throws an exception on invalid values for fields width', function ($invalidW
 })->with(['foo', '101', '-1', -1, 101, 1.5, -.2]);
 
 it('allows to hide a column on small screens', function () {
-    $list = new class extends FakeSharpEntityList
+    $list = new class() extends FakeSharpEntityList
     {
         public function buildList(EntityListFieldsContainer $fields): void
         {
@@ -126,7 +124,7 @@ it('allows to hide a column on small screens', function () {
 });
 
 it('allows to configure a column to fill left space', function () {
-    $list = new class extends FakeSharpEntityList
+    $list = new class() extends FakeSharpEntityList
     {
         public function buildList(EntityListFieldsContainer $fields): void
         {
@@ -145,7 +143,7 @@ it('allows to configure a column to fill left space', function () {
 });
 
 it('returns list data', function () {
-    $list = new class extends FakeSharpEntityList
+    $list = new class() extends FakeSharpEntityList
     {
         public function getListData(): array
         {
@@ -170,7 +168,7 @@ it('returns list data', function () {
 });
 
 it('can return paginated data', function () {
-    $list = new class extends FakeSharpEntityList
+    $list = new class() extends FakeSharpEntityList
     {
         public function getListData(): array|Arrayable
         {
@@ -207,7 +205,7 @@ it('can return paginated data', function () {
 });
 
 it('returns list config', function () {
-    $list = new class extends FakeSharpEntityList
+    $list = new class() extends FakeSharpEntityList
     {
         public function buildListConfig(): void
         {
@@ -233,7 +231,7 @@ it('returns list config', function () {
 });
 
 it('allows to configure a page alert', function () {
-    $list = new class extends FakeSharpEntityList
+    $list = new class() extends FakeSharpEntityList
     {
         public function buildPageAlert(PageAlert $pageAlert): void
         {
@@ -251,7 +249,7 @@ it('allows to configure a page alert', function () {
 });
 
 it('allows to configure the deletion action to disallow it', function () {
-    $list = new class extends FakeSharpEntityList
+    $list = new class() extends FakeSharpEntityList
     {
         public function buildListConfig(): void
         {
@@ -265,7 +263,7 @@ it('allows to configure the deletion action to disallow it', function () {
 });
 
 it('allows to configure the deletion action confirmation text', function () {
-    $list = new class extends FakeSharpEntityList
+    $list = new class() extends FakeSharpEntityList
     {
         public function buildListConfig(): void
         {
@@ -280,15 +278,13 @@ it('allows to configure the deletion action confirmation text', function () {
 });
 
 it('allows to configure a reorder handler', function () {
-    $list = new class extends FakeSharpEntityList
+    $list = new class() extends FakeSharpEntityList
     {
         public function buildListConfig(): void
         {
-            $this->configureReorderable(new class implements ReorderHandler
+            $this->configureReorderable(new class() implements ReorderHandler
             {
-                public function reorder(array $ids): void
-                {
-                }
+                public function reorder(array $ids): void {}
             });
         }
     };

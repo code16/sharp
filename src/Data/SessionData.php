@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Data;
 
-
 use Code16\Sharp\Enums\SessionStatusLevel;
 
 final class SessionData extends Data
@@ -12,8 +11,7 @@ final class SessionData extends Data
         public ?string $status = null,
         public ?string $status_title = null,
         public ?SessionStatusLevel $status_level = null,
-    ) {
-    }
+    ) {}
 
     public static function from(array $session): self
     {

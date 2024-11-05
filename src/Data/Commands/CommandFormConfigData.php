@@ -10,8 +10,7 @@ final class CommandFormConfigData extends Data
         public ?string $title = null,
         public ?string $description = null,
         public ?string $buttonLabel = null,
-    ) {
-    }
+    ) {}
 
     public static function from(array $config): self
     {

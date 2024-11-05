@@ -7,11 +7,11 @@ use Code16\Sharp\Tests\Unit\EntityList\Fakes\FakeEntityState;
 use Code16\Sharp\Tests\Unit\EntityList\Fakes\FakeSharpEntityList;
 
 it('gets list entity state config', function () {
-    $list = new class extends FakeSharpEntityList
+    $list = new class() extends FakeSharpEntityList
     {
         public function buildListConfig(): void
         {
-            $this->configureEntityState('_state', new class extends FakeEntityState
+            $this->configureEntityState('_state', new class() extends FakeEntityState
             {
                 protected function buildStates(): void
                 {
@@ -35,7 +35,7 @@ it('gets list entity state config', function () {
 });
 
 it('adds the entity state attribute to the entity data', function () {
-    $list = new class extends FakeSharpEntityList
+    $list = new class() extends FakeSharpEntityList
     {
         public function buildList($fields): void
         {
@@ -44,7 +44,7 @@ it('adds the entity state attribute to the entity data', function () {
 
         public function buildListConfig(): void
         {
-            $this->configureEntityState('state', new class extends FakeEntityState
+            $this->configureEntityState('state', new class() extends FakeEntityState
             {
                 protected function buildStates(): void
                 {
@@ -72,11 +72,11 @@ it('adds the entity state attribute to the entity data', function () {
 });
 
 it('handles authorization in a state', function () {
-    $list = new class extends FakeSharpEntityList
+    $list = new class() extends FakeSharpEntityList
     {
         public function buildListConfig(): void
         {
-            $this->configureEntityState('_state', new class extends FakeEntityState
+            $this->configureEntityState('_state', new class() extends FakeEntityState
             {
                 protected function buildStates(): void
                 {
@@ -113,11 +113,11 @@ it('handles authorization in a state', function () {
 });
 
 it('allows to add state field as a specific column', function () {
-    $list = new class extends FakeSharpEntityList
+    $list = new class() extends FakeSharpEntityList
     {
         public function buildListConfig(): void
         {
-            $this->configureEntityState('my_state', new class extends FakeEntityState
+            $this->configureEntityState('my_state', new class() extends FakeEntityState
             {
                 protected function buildStates(): void
                 {
@@ -126,7 +126,7 @@ it('allows to add state field as a specific column', function () {
                 }
             });
         }
-        
+
         public function buildList(EntityListFieldsContainer $fields): void
         {
             $fields
@@ -135,9 +135,9 @@ it('allows to add state field as a specific column', function () {
                 ->addField(EntityListField::make('age'));
         }
     };
-    
+
     $list->buildListConfig();
-    
+
     expect($list->fields())->toEqual([
         [
             'type' => 'text',
@@ -164,16 +164,16 @@ it('allows to add state field as a specific column', function () {
             'html' => true,
             'width' => null,
             'hideOnXS' => false,
-        ]
+        ],
     ]);
 });
 
 it('sends state field as last column if state configured and not declared as a column', function () {
-    $list = new class extends FakeSharpEntityList
+    $list = new class() extends FakeSharpEntityList
     {
         public function buildListConfig(): void
         {
-            $this->configureEntityState('my_state', new class extends FakeEntityState
+            $this->configureEntityState('my_state', new class() extends FakeEntityState
             {
                 protected function buildStates(): void
                 {
@@ -191,7 +191,7 @@ it('sends state field as last column if state configured and not declared as a c
                 ->addField(EntityListField::make('picture'));
         }
     };
-    
+
     $list->buildListConfig();
 
     expect($list->fields())->toHaveCount(4)
@@ -204,4 +204,3 @@ it('sends state field as last column if state configured and not declared as a c
             'hideOnXS' => false,
         ]);
 });
-

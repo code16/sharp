@@ -16,8 +16,7 @@ final class EmbedFormData extends Data
         /** @var DataCollection<string,FormFieldData> */
         public DataCollection $fields,
         public FormLayoutData $layout,
-    ) {
-    }
+    ) {}
 
     public static function from(array $form): self
     {

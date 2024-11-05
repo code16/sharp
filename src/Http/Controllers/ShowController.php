@@ -49,11 +49,11 @@ class ShowController extends SharpProtectedController
                 'delete' => $this->sharpAuthorizationManager->isAllowed('delete', $entityKey, $instanceId),
             ],
         ]);
-        
+
         if ($breadcrumbAttr = $showData[$payload->config->breadcrumbAttribute] ?? false) {
             sharp()->context()->breadcrumb()->setCurrentInstanceLabel($breadcrumbAttr);
         }
-        
+
         $this->addPreloadHeadersForShowEntityLists($payload);
 
         return Inertia::render('Show/Show', [

@@ -13,7 +13,7 @@ trait HasFieldRows
     protected array $rows = [];
 
     /** @deprecated use withField() or withListField() instead */
-    public function withSingleField(string $fieldKey, \Closure $subLayoutCallback = null): self
+    public function withSingleField(string $fieldKey, ?\Closure $subLayoutCallback = null): self
     {
         if ($subLayoutCallback) {
             return $this->withListField($fieldKey, $subLayoutCallback);
@@ -52,7 +52,7 @@ trait HasFieldRows
         return $this;
     }
 
-    public function insertSingleFieldAt(int $index, string $fieldKey, \Closure $subLayoutCallback = null): self
+    public function insertSingleFieldAt(int $index, string $fieldKey, ?\Closure $subLayoutCallback = null): self
     {
         $rows = collect($this->rows);
         $rows->splice($index, 0, [[$this->newLayoutField($fieldKey, $subLayoutCallback)]]);
@@ -94,10 +94,10 @@ trait HasFieldRows
     public function hasFields(): bool
     {
         return collect($this->rows)
-                ->firstWhere(fn ($row) => sizeof($row) > 0) !== null;
+            ->firstWhere(fn ($row) => count($row) > 0) !== null;
     }
 
-    protected function newLayoutField(string $fieldKey, \Closure $subLayoutCallback = null): LayoutField
+    protected function newLayoutField(string $fieldKey, ?\Closure $subLayoutCallback = null): LayoutField
     {
         return new FormLayoutField($fieldKey, $subLayoutCallback);
     }

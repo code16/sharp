@@ -15,12 +15,12 @@ beforeEach(function () {
 });
 
 it('allows to call an info entity command', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getEntityCommands(): ?array
         {
             return [
-                'cmd' => new class extends EntityCommand
+                'cmd' => new class() extends EntityCommand
                 {
                     public function label(): ?string
                     {
@@ -45,12 +45,12 @@ it('allows to call an info entity command', function () {
 });
 
 it('allows to call a reload entity command', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getEntityCommands(): ?array
         {
             return [
-                'cmd' => new class extends EntityCommand
+                'cmd' => new class() extends EntityCommand
                 {
                     public function label(): ?string
                     {
@@ -74,12 +74,12 @@ it('allows to call a reload entity command', function () {
 });
 
 it('allows to call a view entity command', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getEntityCommands(): ?array
         {
             return [
-                'cmd' => new class extends EntityCommand
+                'cmd' => new class() extends EntityCommand
                 {
                     public function label(): ?string
                     {
@@ -103,18 +103,18 @@ it('allows to call a view entity command', function () {
 });
 
 it('allows to call a html instance command', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getEntityCommands(): ?array
         {
             return [
-                'cmd' => new class extends EntityCommand
+                'cmd' => new class() extends EntityCommand
                 {
                     public function label(): ?string
                     {
                         return 'my command';
                     }
-                    
+
                     public function execute(array $data = []): array
                     {
                         return $this->html('Hello world');
@@ -123,7 +123,7 @@ it('allows to call a html instance command', function () {
             ];
         }
     });
-    
+
     $this->postJson(route('code16.sharp.api.list.command.entity', ['person', 'cmd']))
         ->assertOk()
         ->assertJson([
@@ -132,12 +132,12 @@ it('allows to call a html instance command', function () {
 });
 
 it('allows to call a refresh entity command', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getEntityCommands(): ?array
         {
             return [
-                'cmd' => new class extends EntityCommand
+                'cmd' => new class() extends EntityCommand
                 {
                     public function label(): ?string
                     {
@@ -176,12 +176,12 @@ it('allows to call a refresh entity command', function () {
 });
 
 it('allows to call a form entity command and it handles 422', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getEntityCommands(): ?array
         {
             return [
-                'cmd' => new class extends EntityCommand
+                'cmd' => new class() extends EntityCommand
                 {
                     public function label(): ?string
                     {
@@ -223,12 +223,12 @@ it('allows to call a form entity command and it handles 422', function () {
 });
 
 it('allows to validate posted data with the rules() method', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getEntityCommands(): ?array
         {
             return [
-                'cmd' => new class extends EntityCommand
+                'cmd' => new class() extends EntityCommand
                 {
                     public function label(): ?string
                     {
@@ -273,12 +273,12 @@ it('allows to validate posted data with the rules() method', function () {
 });
 
 it('allows to call a download entity command', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getEntityCommands(): ?array
         {
             return [
-                'cmd' => new class extends EntityCommand
+                'cmd' => new class() extends EntityCommand
                 {
                     public function label(): ?string
                     {
@@ -308,12 +308,12 @@ it('allows to call a download entity command', function () {
 });
 
 it('allows to call a streamDownload entity command', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getEntityCommands(): ?array
         {
             return [
-                'cmd' => new class extends EntityCommand
+                'cmd' => new class() extends EntityCommand
                 {
                     public function label(): ?string
                     {
@@ -339,12 +339,12 @@ it('allows to call a streamDownload entity command', function () {
 });
 
 it('returns an applicative exception as a 417 as always', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getEntityCommands(): ?array
         {
             return [
-                'cmd' => new class extends EntityCommand
+                'cmd' => new class() extends EntityCommand
                 {
                     public function label(): ?string
                     {
@@ -369,12 +369,12 @@ it('returns an applicative exception as a 417 as always', function () {
 });
 
 it('allows to access to the full query in an entity command', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getEntityCommands(): ?array
         {
             return [
-                'cmd' => new class extends EntityCommand
+                'cmd' => new class() extends EntityCommand
                 {
                     public function label(): ?string
                     {
@@ -403,12 +403,12 @@ it('allows to access to the full query in an entity command', function () {
 });
 
 it('provides selected ids in a bulk command', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getEntityCommands(): ?array
         {
             return [
-                'cmd' => new class extends EntityCommand
+                'cmd' => new class() extends EntityCommand
                 {
                     public function label(): ?string
                     {
@@ -440,12 +440,12 @@ it('provides selected ids in a bulk command', function () {
 });
 
 it('disallows to call an unauthorized entity command', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getEntityCommands(): ?array
         {
             return [
-                'entity_unauthorized' => new class extends EntityCommand
+                'entity_unauthorized' => new class() extends EntityCommand
                 {
                     public function label(): ?string
                     {
@@ -473,12 +473,12 @@ it('disallows to call an unauthorized entity command', function () {
 
 it('returns the form fields of the entity command and build a basic layout if missing', function () {
     $this->withoutExceptionHandling();
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getEntityCommands(): ?array
         {
             return [
-                'cmd' => new class extends EntityCommand
+                'cmd' => new class() extends EntityCommand
                 {
                     public function label(): ?string
                     {
@@ -532,12 +532,12 @@ it('returns the form fields of the entity command and build a basic layout if mi
 });
 
 it('allows to configure a page alert on an entity command', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getEntityCommands(): ?array
         {
             return [
-                'cmd' => new class extends EntityCommand
+                'cmd' => new class() extends EntityCommand
                 {
                     public function label(): ?string
                     {
@@ -550,12 +550,12 @@ it('allows to configure a page alert on an entity command', function () {
                             ->setLevelInfo()
                             ->setMessage('My page alert');
                     }
-                    
+
                     public function buildFormFields(FieldsContainer $formFields): void
                     {
                         $formFields->addField(SharpFormTextField::make('name'));
                     }
-                    
+
                     public function execute(array $data = []): array
                     {
                         return $this->reload();
@@ -578,12 +578,12 @@ it('allows to configure a page alert on an entity command', function () {
 });
 
 it('handles localized form of the entity command', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getEntityCommands(): ?array
         {
             return [
-                'cmd' => new class extends EntityCommand
+                'cmd' => new class() extends EntityCommand
                 {
                     public function label(): ?string
                     {
@@ -626,18 +626,18 @@ it('handles localized form of the entity command', function () {
 });
 
 it('allows to initialize form data in an entity command', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getEntityCommands(): ?array
         {
             return [
-                'cmd' => new class extends EntityCommand
+                'cmd' => new class() extends EntityCommand
                 {
                     public function label(): ?string
                     {
                         return 'entity';
                     }
-                    
+
                     public function buildCommandConfig(): void
                     {
                         $this->configureFormModalTitle(fn ($data) => "Edit {$data['name']}")

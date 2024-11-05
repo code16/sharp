@@ -6,7 +6,7 @@ use Illuminate\Support\Str;
 
 it('allows to format value to front', function () {
     $value = Str::random();
-    
+
     expect(
         (new HtmlFormatter())->toFront(
             SharpFormHtmlField::make('html')->setTemplate('<b>{{ $text }}</b>'),
@@ -18,7 +18,7 @@ it('allows to format value to front', function () {
 
 it('allows to format value with view to front', function () {
     $value = Str::random();
-    
+
     expect(
         (new HtmlFormatter())->toFront(
             SharpFormHtmlField::make('html')->setTemplate(view('fixtures::test')),

@@ -60,7 +60,7 @@ class PostShow extends SharpShow
             ->addField(
                 SharpShowEntityListField::make('blocks')
                     ->setLabel('Blocks')
-                    ->hideFilterWithValue('post', fn($instanceId) => $instanceId)
+                    ->hideFilterWithValue('post', fn ($instanceId) => $instanceId)
             );
     }
 
@@ -147,7 +147,7 @@ class PostShow extends SharpShow
             })
             ->setCustomTransformer('categories', function ($value, Post $instance) {
                 return $instance->categories
-                    ->map(fn($category) => LinkToShowPage::make('categories', $category->id)
+                    ->map(fn ($category) => LinkToShowPage::make('categories', $category->id)
                         ->renderAsText($category->name))
                     ->implode(', ');
             })

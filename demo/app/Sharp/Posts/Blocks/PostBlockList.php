@@ -36,7 +36,7 @@ class PostBlockList extends SharpEntityList
     protected function getFilters(): ?array
     {
         return [
-            HiddenFilter::make('post')
+            HiddenFilter::make('post'),
         ];
     }
 

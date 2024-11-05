@@ -17,7 +17,7 @@ abstract class SharpFormAutocompleteField
         return match ($mode) {
             'local' => SharpFormAutocompleteLocalField::make($key),
             'remote' => SharpFormAutocompleteRemoteField::make($key),
-            default => throw new SharpInvalidConfigException('Invalid autocomplete mode:' . $mode),
+            default => throw new SharpInvalidConfigException('Invalid autocomplete mode:'.$mode),
         };
     }
 }

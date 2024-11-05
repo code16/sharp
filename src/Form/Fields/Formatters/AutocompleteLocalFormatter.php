@@ -9,14 +9,13 @@ use Code16\Sharp\Utils\Transformers\ArrayConverter;
 class AutocompleteLocalFormatter extends SharpFieldFormatter
 {
     /**
-     * @param SharpFormAutocompleteLocalField $field
-     * @param $value
+     * @param  SharpFormAutocompleteLocalField  $field
      * @return array|null
      */
     public function toFront(SharpFormField $field, $value)
     {
         $value = ArrayConverter::modelToArray($value);
-        
+
         return is_null($value) || is_array($value)
             ? $value
             : [$field->itemIdAttribute() => $value];

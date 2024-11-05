@@ -12,12 +12,12 @@ beforeEach(function () {
 });
 
 it('allows to call an info dashboard command', function () {
-    fakeShowFor('dashboard', new class extends TestDashboard
+    fakeShowFor('dashboard', new class() extends TestDashboard
     {
         public function getDashboardCommands(): ?array
         {
             return [
-                'info' => new class extends DashboardCommand
+                'info' => new class() extends DashboardCommand
                 {
                     public function label(): ?string
                     {
@@ -44,24 +44,24 @@ it('allows to call an info dashboard command', function () {
 });
 
 it('allows to initialize form data in a dashboard command', function () {
-    fakeShowFor('dashboard', new class extends TestDashboard
+    fakeShowFor('dashboard', new class() extends TestDashboard
     {
         public function getDashboardCommands(): ?array
         {
             return [
-                'command_with_init_data' => new class extends DashboardCommand
+                'command_with_init_data' => new class() extends DashboardCommand
                 {
                     public function label(): ?string
                     {
                         return 'entity';
                     }
-                    
+
                     public function buildCommandConfig(): void
                     {
                         $this->configureFormModalTitle(fn ($data) => "Edit {$data['name']}")
                             ->configureFormModalDescription('Custom description');
                     }
-                    
+
                     public function buildFormFields(FieldsContainer $formFields): void
                     {
                         $formFields->addField(SharpFormTextField::make('name')->setLocalized());

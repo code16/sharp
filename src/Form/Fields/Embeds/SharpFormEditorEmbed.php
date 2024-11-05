@@ -20,9 +20,9 @@ abstract class SharpFormEditorEmbed
 {
     use HandleFields;
     use HandlePageAlertMessage;
-    use WithCustomTransformers;
     use HandleValidation;
     use HasModalFormLayout;
+    use WithCustomTransformers;
 
     protected ?string $label = null;
     protected ?string $tagName = null;
@@ -59,9 +59,7 @@ abstract class SharpFormEditorEmbed
         return $config;
     }
 
-    public function buildEmbedConfig(): void
-    {
-    }
+    public function buildEmbedConfig(): void {}
 
     /**
      * Must return all the data needed by the templates.
@@ -90,9 +88,7 @@ abstract class SharpFormEditorEmbed
     /**
      * Build the optional Embed form layout.
      */
-    public function buildFormLayout(FormLayoutColumn &$column): void
-    {
-    }
+    public function buildFormLayout(FormLayoutColumn &$column): void {}
 
     final public function formLayout(): ?array
     {
@@ -121,8 +117,7 @@ abstract class SharpFormEditorEmbed
                 if ($field instanceof SharpFormListField) {
                     $field->formatter()->formatItemFieldUsing(function (SharpFormField $itemField) {
                         if ($itemField instanceof SharpFormUploadField) {
-                            return new class extends AbstractSimpleFormatter {
-                            };
+                            return new class() extends AbstractSimpleFormatter {};
                         }
 
                         return $itemField->formatter();

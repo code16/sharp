@@ -11,6 +11,4 @@ use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 #[LiteralTypeScriptType('{
     [key:string]: FormAutocompleteDynamicLocalValuesData | Array<FormAutocompleteItemData>
 }')]
-final class FormAutocompleteDynamicLocalValuesData extends Data
-{
-}
+final class FormAutocompleteDynamicLocalValuesData extends Data {}

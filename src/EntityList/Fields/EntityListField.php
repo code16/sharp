@@ -32,7 +32,7 @@ class EntityListField implements IsEntityListField
     {
         return $this;
     }
-    
+
     /**
      * @deprecated
      */

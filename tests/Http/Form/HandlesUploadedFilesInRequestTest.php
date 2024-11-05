@@ -22,7 +22,7 @@ beforeEach(function () {
 });
 
 it('dispatches HandlePostedFilesJob on update and on create if needed', function () {
-    fakeFormFor('person', new class extends PersonForm
+    fakeFormFor('person', new class() extends PersonForm
     {
         public function buildFormFields(FieldsContainer $formFields): void
         {
@@ -75,7 +75,7 @@ it('dispatches HandlePostedFilesJob on update and on create if needed', function
 });
 
 it('dispatches HandlePostedFilesJob for editors on update and on create if needed', function () {
-    fakeFormFor('person', new class extends PersonForm
+    fakeFormFor('person', new class() extends PersonForm
     {
         public function buildFormFields(FieldsContainer $formFields): void
         {
@@ -146,7 +146,7 @@ it('dispatches HandlePostedFilesJob for editors on update and on create if neede
 });
 
 it('dispatches HandlePostedFilesJob for lists on update and on create if needed', function () {
-    fakeFormFor('person', new class extends PersonForm
+    fakeFormFor('person', new class() extends PersonForm
     {
         public function buildFormFields(FieldsContainer $formFields): void
         {
@@ -213,7 +213,7 @@ it('dispatches HandlePostedFilesJob for lists on update and on create if needed'
 });
 
 it('does not dispatch HandlePostedFilesJob if not needed', function () {
-    fakeFormFor('person', new class extends PersonForm
+    fakeFormFor('person', new class() extends PersonForm
     {
         public function buildFormFields(FieldsContainer $formFields): void
         {
@@ -285,9 +285,7 @@ it('does not dispatch HandlePostedFilesJob if not needed', function () {
 it('handles isTransformOriginal to transform the image on a newly uploaded file', function ($transformKeepOriginal) {
     fakeFormFor('person', new class($transformKeepOriginal) extends PersonForm
     {
-        public function __construct(private bool $transformKeepOriginal)
-        {
-        }
+        public function __construct(private bool $transformKeepOriginal) {}
 
         public function buildFormFields(FieldsContainer $formFields): void
         {
@@ -349,9 +347,7 @@ it('handles isTransformOriginal to transform the image on a newly uploaded file'
 it('handles isTransformOriginal to transform the image on an existing file', function ($transformKeepOriginal) {
     fakeFormFor('person', new class($transformKeepOriginal) extends PersonForm
     {
-        public function __construct(private bool $transformKeepOriginal)
-        {
-        }
+        public function __construct(private bool $transformKeepOriginal) {}
 
         public function buildFormFields(FieldsContainer $formFields): void
         {
@@ -402,7 +398,7 @@ it('handles isTransformOriginal to transform the image on an existing file', fun
 ]);
 
 it('pushes jobs on right queue / connections', function () {
-    fakeFormFor('person', new class extends PersonForm
+    fakeFormFor('person', new class() extends PersonForm
     {
         public function buildFormFields(FieldsContainer $formFields): void
         {

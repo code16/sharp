@@ -4,7 +4,7 @@ use Code16\Sharp\Form\Fields\Formatters\NumberFormatter;
 use Code16\Sharp\Form\Fields\SharpFormNumberField;
 
 it('allows to format value to front', function () {
-    $formatter = new NumberFormatter;
+    $formatter = new NumberFormatter();
     $field = SharpFormNumberField::make('number');
 
     expect($formatter->toFront($field, 10))->toEqual(10)
@@ -14,7 +14,7 @@ it('allows to format value to front', function () {
 });
 
 it('allows to format value from front', function () {
-    $formatter = new NumberFormatter;
+    $formatter = new NumberFormatter();
     $field = SharpFormNumberField::make('number');
 
     expect($formatter->fromFront($field, 'attr', 10))->toEqual(10)

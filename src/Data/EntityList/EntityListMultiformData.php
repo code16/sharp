@@ -11,6 +11,5 @@ final class EntityListMultiformData extends Data
         public string $label,
         /** @var array<int|string> */
         public array $instances,
-    ) {
-    }
+    ) {}
 }

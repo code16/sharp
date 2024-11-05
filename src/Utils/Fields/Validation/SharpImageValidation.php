@@ -10,7 +10,7 @@ class SharpImageValidation extends SharpFileValidation
     public static function make(): static
     {
         return new static(
-            new class extends ImageFile
+            new class() extends ImageFile
             {
                 public function toArray(): array
                 {

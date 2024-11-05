@@ -23,7 +23,7 @@ abstract class DateRangeFilter extends Filter
 
         return $this;
     }
-    
+
     final public function configureShowPresets(bool $showPresets = true): self
     {
         $this->showPresets = $showPresets;
@@ -40,16 +40,16 @@ abstract class DateRangeFilter extends Filter
     {
         return $this->isMondayFirst;
     }
-    
+
     /**
      * @return array<string, DateRangePreset>
      */
     final public function getPresets(): array
     {
-        if(!$this->showPresets) {
+        if (! $this->showPresets) {
             return [];
         }
-        
+
         return [
             'today' => new DateRangePreset(
                 Carbon::today(), Carbon::today(),
@@ -65,49 +65,50 @@ abstract class DateRangeFilter extends Filter
             'last_year' => new DateRangePreset(Carbon::today()->subYear()->startOfYear(), Carbon::today()->subYear()->endOfYear(), 'Last year'),
         ];
     }
-    
+
     /**
      * @internal
      */
     final public function fromQueryParam($value): ?array
     {
-        if(!$value) {
+        if (! $value) {
             return null;
         }
-        
+
         [$start, $end] = explode('..', $value);
         $start = Carbon::createFromFormat('Ymd', $start)->startOfDay();
         $end = Carbon::createFromFormat('Ymd', $end)->endOfDay();
         $presetKey = collect($this->getPresets())
             ->search(fn (DateRangePreset $preset) => $preset->getStart()->isSameDay($start) && $preset->getEnd()->isSameDay($end));
-        
+
         return [
             'start' => $start,
             'end' => $end,
             'preset' => $presetKey ?: null,
         ];
     }
-    
+
     /**
      * @internal
      */
     final public function toQueryParam($value): ?string
     {
-        if(!$value) {
+        if (! $value) {
             return null;
         }
-        
-        if(isset($value['preset'])) {
-            if($preset = $this->getPresets()[$value['preset']] ?? null) {
+
+        if (isset($value['preset'])) {
+            if ($preset = $this->getPresets()[$value['preset']] ?? null) {
                 return sprintf(
                     '%s..%s',
                     $preset->getStart()->format('Ymd'),
                     $preset->getEnd()->format('Ymd'),
                 );
             }
+
             return null;
         }
-        
+
         return sprintf(
             '%s..%s',
             Carbon::parse($value['start'])->format('Ymd'),

@@ -13,7 +13,7 @@ it('returns result on a valid search', function () {
     $this->withoutExceptionHandling();
 
     sharp()->config()->enableGlobalSearch(
-        new class extends SharpSearchEngine
+        new class() extends SharpSearchEngine
         {
             public function searchFor(array $terms): void
             {
@@ -48,7 +48,7 @@ it('returns result on a valid search', function () {
 
 it('allows to configure a custom empty state label', function () {
     sharp()->config()->enableGlobalSearch(
-        new class extends SharpSearchEngine
+        new class() extends SharpSearchEngine
         {
             public function searchFor(array $terms): void
             {
@@ -72,7 +72,7 @@ it('allows to configure a custom empty state label', function () {
 
 it('allows to configure hide when empty', function () {
     sharp()->config()->enableGlobalSearch(
-        new class extends SharpSearchEngine
+        new class() extends SharpSearchEngine
         {
             public function searchFor(array $terms): void
             {
@@ -96,7 +96,7 @@ it('allows to configure hide when empty', function () {
 
 it('raises validation errors', function () {
     sharp()->config()->enableGlobalSearch(
-        new class extends SharpSearchEngine
+        new class() extends SharpSearchEngine
         {
             public function searchFor(array $terms): void
             {
@@ -128,9 +128,9 @@ it('raises validation errors', function () {
 
 it('handles multiple result sets', function () {
     $this->withoutExceptionHandling();
-    
+
     sharp()->config()->enableGlobalSearch(
-        new class extends SharpSearchEngine
+        new class() extends SharpSearchEngine
         {
             public function searchFor(array $terms): void
             {
@@ -180,7 +180,7 @@ it('handles multiple result sets', function () {
 
 it('allows multiple search terms', function () {
     sharp()->config()->enableGlobalSearch(
-        new class extends SharpSearchEngine
+        new class() extends SharpSearchEngine
         {
             public function searchFor(array $terms): void
             {

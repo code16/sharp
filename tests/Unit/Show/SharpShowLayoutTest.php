@@ -6,7 +6,7 @@ use Code16\Sharp\Show\Layout\ShowLayoutSection;
 use Code16\Sharp\Tests\Unit\Show\Fakes\FakeSharpShow;
 
 it('handles sections', function () {
-    $show = new class extends FakeSharpShow
+    $show = new class() extends FakeSharpShow
     {
         public function buildShowLayout(ShowLayout $showLayout): void
         {
@@ -18,7 +18,7 @@ it('handles sections', function () {
 });
 
 it('handles columns in sections', function () {
-    $show = new class extends FakeSharpShow
+    $show = new class() extends FakeSharpShow
     {
         public function buildShowLayout(ShowLayout $showLayout): void
         {
@@ -33,7 +33,7 @@ it('handles columns in sections', function () {
 });
 
 it('handles fields in columns', function () {
-    $show = new class extends FakeSharpShow
+    $show = new class() extends FakeSharpShow
     {
         public function buildShowLayout(ShowLayout $showLayout): void
         {
@@ -54,7 +54,7 @@ it('handles fields in columns', function () {
 });
 
 it('handles fields with layout', function () {
-    $show = new class extends FakeSharpShow
+    $show = new class() extends FakeSharpShow
     {
         public function buildShowLayout(ShowLayout $showLayout): void
         {

@@ -13,15 +13,9 @@ class FakeSharpForm extends SharpForm
         return [];
     }
 
-    public function update(mixed $id, array $data)
-    {
-    }
+    public function update(mixed $id, array $data) {}
 
-    public function buildFormFields(FieldsContainer $formFields): void
-    {
-    }
+    public function buildFormFields(FieldsContainer $formFields): void {}
 
-    public function buildFormLayout(FormLayout $formLayout): void
-    {
-    }
+    public function buildFormLayout(FormLayout $formLayout): void {}
 }

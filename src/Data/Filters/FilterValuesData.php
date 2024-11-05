@@ -5,7 +5,6 @@ namespace Code16\Sharp\Data\Filters;
 use Code16\Sharp\Data\Data;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 
-
 final class FilterValuesData extends Data
 {
     public function __construct(
@@ -15,8 +14,7 @@ final class FilterValuesData extends Data
         public array $default,
         #[LiteralTypeScriptType('{ [key: string]: boolean }')]
         public array $valuated,
-    ) {
-    }
+    ) {}
 
     public static function from(array $filterValues): self
     {

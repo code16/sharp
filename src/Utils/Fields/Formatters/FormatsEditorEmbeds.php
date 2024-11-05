@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 trait FormatsEditorEmbeds
 {
     use FormatsHtmlContent;
-    
+
     protected function formatEditorEmbedsToFront(IsSharpFieldWithLocalization $field, $value): array
     {
         if (! count($field->embeds())) {

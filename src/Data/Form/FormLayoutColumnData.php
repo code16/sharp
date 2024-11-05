@@ -11,8 +11,7 @@ final class FormLayoutColumnData extends Data
         public int $size,
         /** @var array<array<LayoutFieldData | FormLayoutFieldsetData>> */
         public array $fields,
-    ) {
-    }
+    ) {}
 
     public static function from(array $column): self
     {

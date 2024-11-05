@@ -66,7 +66,7 @@ return [
             'display_app_name' => true,
             // 'logo_url' => '/img/sharp/login-icon.png',
             'message_blade_path' => 'sharp/_login-page-message',
-            
+
             /** @internal */
             'prefill' => [
                 'login' => 'admin@example.org',

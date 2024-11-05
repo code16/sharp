@@ -8,8 +8,8 @@ it('allows to format value to front', function () {
     $field = SharpShowListField::make('list')
         ->addItemField(SharpShowTextField::make('name'))
         ->addItemField(SharpShowTextField::make('job'));
-    
-    expect((new ListFormatter)->toFront($field, [
+
+    expect((new ListFormatter())->toFront($field, [
         ['id' => 1, 'name' => 'John Doe', 'job' => 'Developer'],
         ['id' => 2, 'name' => 'Jane Doe', 'job' => 'Designer'],
     ]))

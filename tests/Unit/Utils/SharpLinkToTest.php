@@ -146,7 +146,7 @@ it('allows to generate a link to an entity list with a filter', function () {
 });
 
 it('allows to generate a link to an entity list with a filter classname', function () {
-    $filter = new class extends SelectFilter
+    $filter = new class() extends SelectFilter
     {
         public function buildFilterConfig(): void
         {

@@ -24,8 +24,7 @@ final class PanelWidgetData extends Data
         public WidgetType $type,
         public ?string $title = null,
         public ?string $link = null,
-    ) {
-    }
+    ) {}
 
     public static function from(array $widget): self
     {

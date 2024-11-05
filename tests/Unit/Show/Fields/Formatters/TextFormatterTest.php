@@ -86,7 +86,7 @@ it('allows to format a text with uploads to front', function () {
 });
 
 it('allows to format embeds with uploads to front', function () {
-    $formatter = (new TextFormatter);
+    $formatter = (new TextFormatter());
     $field = SharpShowTextField::make('md')
         ->allowEmbeds([EditorFormatterTestEmbed::class]);
 

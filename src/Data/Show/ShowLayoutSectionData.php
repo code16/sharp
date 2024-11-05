@@ -13,8 +13,7 @@ final class ShowLayoutSectionData extends Data
         public bool $collapsable,
         /** @var DataCollection<int, ShowLayoutColumnData> */
         public DataCollection $columns
-    ) {
-    }
+    ) {}
 
     public static function from(array $section): self
     {

@@ -28,13 +28,13 @@ class CreateUploadsMigration extends Command
     protected function writeMigration($name, $table)
     {
         $file = pathinfo(
-            $this->creator->create($name, $this->getMigrationPath(), $table, true,),
+            $this->creator->create($name, $this->getMigrationPath(), $table, true),
             PATHINFO_FILENAME
         );
 
         $this->line("<info>Created Migration:</info> {$file}");
     }
-    
+
     protected function getMigrationPath()
     {
         return $this->laravel->databasePath().DIRECTORY_SEPARATOR.'migrations';

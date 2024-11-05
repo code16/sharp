@@ -21,7 +21,7 @@ it('allows to get form update state from request', function () {
 
 it('allows to get form creation state from request', function () {
     // We have to define "child" as a non-single form
-    app()->bind('child_entity', fn () => new class extends SharpEntity {});
+    app()->bind('child_entity', fn () => new class() extends SharpEntity {});
     sharp()->config()->addEntity('child', 'child_entity');
 
     $this->fakeBreadcrumbWithUrl('/sharp/s-list/person/s-show/person/1/s-form/child');
@@ -95,12 +95,12 @@ it('allow to retrieve retained filters value in the context', function () {
     sharp()->config()->addEntity('person', PersonEntity::class);
     login();
 
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getFilters(): ?array
         {
             return [
-                new class extends EntityListSelectFilter
+                new class() extends EntityListSelectFilter
                 {
                     public function buildFilterConfig(): void
                     {

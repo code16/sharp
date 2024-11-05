@@ -9,8 +9,7 @@ final class UserData extends Data
     public function __construct(
         public ?string $name,
         public ?string $email,
-    ) {
-    }
+    ) {}
 
     public static function from(Authenticatable $user): self
     {

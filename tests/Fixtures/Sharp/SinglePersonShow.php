@@ -16,9 +16,7 @@ class SinglePersonShow extends SharpSingleShow
         $showFields->addField(SharpShowTextField::make('name'));
     }
 
-    public function buildShowConfig(): void
-    {
-    }
+    public function buildShowConfig(): void {}
 
     public function buildShowLayout(ShowLayout $showLayout): void
     {

@@ -13,7 +13,7 @@ trait ProvidesFilterValuesToFront
     {
         $defaultValues = $this->getDefaultFilterValues();
         $currentValues = $this->getCurrentFilterValues($query);
-        
+
         return [
             'default' => $this->getFilterHandlers()
                 ->flatten()
@@ -22,7 +22,7 @@ trait ProvidesFilterValuesToFront
                         $handler->getKey() => $this->formatFilterValueForFront(
                             $handler,
                             $defaultValues[$handler->getKey()] ?? null
-                        )
+                        ),
                     ];
                 })
                 ->toArray(),
@@ -33,7 +33,7 @@ trait ProvidesFilterValuesToFront
                         $handler->getKey() => $this->formatFilterValueForFront(
                             $handler,
                             $currentValues[$handler->getKey()] ?? null
-                        )
+                        ),
                     ];
                 })
                 ->toArray(),
@@ -43,11 +43,12 @@ trait ProvidesFilterValuesToFront
                 ->mapWithKeys(function (Filter $handler) use ($currentValues, $defaultValues) {
                     $current = $currentValues[$handler->getKey()] ?? null;
                     $default = $defaultValues[$handler->getKey()] ?? null;
-                    if($handler instanceof SelectMultipleFilter) {
+                    if ($handler instanceof SelectMultipleFilter) {
                         $current = is_array($current) ? Arr::sort($current) : [];
                         $default = is_array($default) ? Arr::sort($default) : [];
                     }
                     $isValuated = (string) $handler->toQueryParam($current) !== (string) $handler->toQueryParam($default);
+
                     return [
                         $handler->getKey() => $isValuated,
                     ];
@@ -55,7 +56,7 @@ trait ProvidesFilterValuesToFront
                 ->toArray(),
         ];
     }
-    
+
     protected function formatFilterValueForFront(Filter $handler, mixed $value)
     {
         if ($value && $handler instanceof DateRangeFilter) {
@@ -65,6 +66,7 @@ trait ProvidesFilterValuesToFront
                 'preset' => $value['preset'] ?? null,
             ];
         }
+
         return $value;
     }
 }

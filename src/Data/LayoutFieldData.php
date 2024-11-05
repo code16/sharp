@@ -10,8 +10,7 @@ final class LayoutFieldData extends Data
         public int $sizeXS,
         /** @var array<array<LayoutFieldData>> */
         public ?array $item = null,
-    ) {
-    }
+    ) {}
 
     public static function from(array $field): self
     {

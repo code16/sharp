@@ -22,8 +22,7 @@ final class EntityListConfigData extends Data
         public ?ConfigFiltersData $filters = null,
         public ?ConfigCommandsData $commands = null,
         public ?EntityStateData $state = null,
-    ) {
-    }
+    ) {}
 
     public static function from(array $config)
     {

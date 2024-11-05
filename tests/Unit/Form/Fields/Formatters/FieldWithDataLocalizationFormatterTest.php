@@ -56,7 +56,7 @@ it('adds missing locales when formatting a localized text value from front in a 
 
     $this->assertEquals(
         ['fr' => $value, 'en' => null, 'es' => null],
-        (new TextareaFormatter)
+        (new TextareaFormatter())
             ->setDataLocalizations(['fr', 'en', 'es'])
             ->fromFront(
                 SharpFormTextareaField::make('text')->setLocalized(),
@@ -86,7 +86,7 @@ it('adds missing locales when formatting a localized text value from front in an
 
     $this->assertEquals(
         ['fr' => $value, 'en' => null, 'es' => null],
-        (new EditorFormatter)
+        (new EditorFormatter())
             ->setDataLocalizations(['fr', 'en', 'es'])
             ->fromFront(
                 SharpFormEditorField::make('md')->setLocalized(),
@@ -101,7 +101,7 @@ it('formats locales when formatting a localized text value from front in an edit
 
     $this->assertEquals(
         ['fr' => null, 'en' => $value, 'es' => null],
-        (new EditorFormatter)
+        (new EditorFormatter())
             ->setDataLocalizations(['fr', 'en', 'es'])
             ->fromFront(
                 SharpFormEditorField::make('md')->setLocalized(),

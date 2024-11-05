@@ -17,9 +17,9 @@ abstract class Command
 {
     use HandleFormFields;
     use HandlePageAlertMessage;
-    use WithCustomTransformers;
     use HandleValidation;
     use HasModalFormLayout;
+    use WithCustomTransformers;
 
     protected int $groupIndex = 0;
     protected ?string $commandKey = null;
@@ -68,7 +68,7 @@ abstract class Command
             'html' => view($bladeView, $params)->render(),
         ];
     }
-    
+
     protected function html(string $htmlContent): array
     {
         return [
@@ -77,7 +77,7 @@ abstract class Command
         ];
     }
 
-    protected function download(string $filePath, string $fileName = null, string $diskName = null): array
+    protected function download(string $filePath, ?string $fileName = null, ?string $diskName = null): array
     {
         return [
             'action' => CommandAction::Download->value,
@@ -107,11 +107,11 @@ abstract class Command
 
         return $this;
     }
-    
+
     final protected function configureFormModalDescription(string|Closure $formModalDescription): self
     {
         $this->formModalDescription = $formModalDescription;
-        
+
         return $this;
     }
 
@@ -154,7 +154,7 @@ abstract class Command
     {
         return $this->confirmationTitle;
     }
-    
+
     final public function getConfirmationDescription(): ?string
     {
         return $this->confirmationDescription;
@@ -171,7 +171,7 @@ abstract class Command
             ? $callback($formData)
             : $this->formModalTitle;
     }
-    
+
     final public function getFormModalDescription(?array $formData): ?string
     {
         return ($callback = $this->formModalDescription) instanceof Closure
@@ -187,23 +187,17 @@ abstract class Command
     /**
      * Build the optional Command config with configure... methods.
      */
-    public function buildCommandConfig(): void
-    {
-    }
+    public function buildCommandConfig(): void {}
 
     /**
      * Build the optional Command form.
      */
-    public function buildFormFields(FieldsContainer $formFields): void
-    {
-    }
+    public function buildFormFields(FieldsContainer $formFields): void {}
 
     /**
      * Build the optional Command form layout.
      */
-    public function buildFormLayout(FormLayoutColumn &$column): void
-    {
-    }
+    public function buildFormLayout(FormLayoutColumn &$column): void {}
 
     final public function form(): array
     {

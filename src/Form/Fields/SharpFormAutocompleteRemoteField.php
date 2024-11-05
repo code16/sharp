@@ -27,7 +27,7 @@ class SharpFormAutocompleteRemoteField extends SharpFormField implements IsSharp
 
         return $instance;
     }
-    
+
     public function setRemoteCallback(Closure $closure, ?array $linkedFields = null): self
     {
         $this->remoteCallback = $closure;
@@ -46,7 +46,7 @@ class SharpFormAutocompleteRemoteField extends SharpFormField implements IsSharp
     public function setDynamicRemoteEndpoint(string $dynamicRemoteEndpoint, array $defaultValues = []): self
     {
         $this->remoteEndpoint = $dynamicRemoteEndpoint;
-        
+
         $this->dynamicAttributes = [
             [
                 'name' => 'remoteEndpoint',
@@ -90,11 +90,11 @@ class SharpFormAutocompleteRemoteField extends SharpFormField implements IsSharp
 
         return $this;
     }
-    
+
     public function allowEmptySearch(): self
     {
         $this->searchMinChars = 0;
-        
+
         return $this;
     }
 
@@ -111,27 +111,27 @@ class SharpFormAutocompleteRemoteField extends SharpFormField implements IsSharp
 
         return $this;
     }
-    
+
     public function dataWrapper(): string
     {
         return $this->dataWrapper;
     }
-    
+
     public function remoteEndpoint(): string
     {
         return $this->remoteEndpoint;
     }
-    
+
     public function remoteMethod(): string
     {
         return $this->remoteMethod;
     }
-    
+
     public function remoteSearchAttribute(): string
     {
         return $this->remoteSearchAttribute;
     }
-    
+
     public function getRemoteCallback(): ?Closure
     {
         return $this->remoteCallback;

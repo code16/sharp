@@ -13,19 +13,21 @@ trait HandlesFiltersInQueryParams
             ->flatten()
             ->mapWithKeys(function (Filter $handler) use ($query) {
                 $value = $handler->fromQueryParam($query['filter_'.$handler->getKey()] ?? null);
+
                 return [
                     $handler->getKey() => $value,
                 ];
             })
             ->whereNotNull();
     }
-    
+
     public function getQueryParamsFromFilterValues(array $filterValues): Collection
     {
         return $this->getFilterHandlers()
             ->flatten()
             ->mapWithKeys(function (Filter $handler) use ($filterValues) {
                 $value = $handler->toQueryParam($filterValues[$handler->getKey()] ?? null);
+
                 return [
                     'filter_'.$handler->getKey() => $value,
                 ];

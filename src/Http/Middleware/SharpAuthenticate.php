@@ -16,26 +16,26 @@ class SharpAuthenticate extends BaseAuthenticate
         $this->authenticate($request, $guards);
 
         if (Gate::has('viewSharp')) {
-            if (!Gate::allows('viewSharp')) {
+            if (! Gate::allows('viewSharp')) {
                 $this->unauthenticated($request, $guards);
             }
         } elseif ($checkHandler = config('sharp.auth.check_handler')) {
-            if (!instanciate($checkHandler)->check(auth()->guard($guards[0] ?? null)->user())) {
+            if (! instanciate($checkHandler)->check(auth()->guard($guards[0] ?? null)->user())) {
                 $this->unauthenticated($request, $guards);
             }
         }
 
         return $next($request);
     }
-    
+
     protected function unauthenticated($request, array $guards)
     {
         session()->flash('status', session()->get('status', __('sharp::errors.401.status_displayed_in_login_page')));
         session()->flash('status_level', SessionStatusLevel::Error->value);
-        
+
         parent::unauthenticated($request, $guards);
     }
-    
+
     protected function redirectTo(Request $request)
     {
         if ($loginPageUrl = sharp()->config()->get('auth.login_page_url')) {

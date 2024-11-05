@@ -11,7 +11,7 @@ it('allows to format remote value to front', function () {
         'age' => 42,
     ];
 
-    $toFront = (new AutocompleteRemoteFormatter)
+    $toFront = (new AutocompleteRemoteFormatter())
         ->toFront(
             SharpFormAutocompleteRemoteField::make('text')
                 ->setListItemTemplate('{{ $name }}, {{ $age }}')
@@ -37,7 +37,7 @@ it('allows to format remote value from front', function () {
 
     // Back always need an id
     expect(
-        (new AutocompleteRemoteFormatter)->fromFront(
+        (new AutocompleteRemoteFormatter())->fromFront(
             SharpFormAutocompleteRemoteField::make('text'),
             'attribute',
             $value,

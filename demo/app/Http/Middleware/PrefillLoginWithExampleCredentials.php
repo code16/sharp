@@ -14,7 +14,7 @@ class PrefillLoginWithExampleCredentials
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if($request->routeIs('code16.sharp.login')) {
+        if ($request->routeIs('code16.sharp.login')) {
             Inertia::share([
                 'prefill' => [
                     'login' => 'admin@example.org',
@@ -22,7 +22,7 @@ class PrefillLoginWithExampleCredentials
                 ],
             ]);
         }
-        
+
         return $next($request);
     }
 }

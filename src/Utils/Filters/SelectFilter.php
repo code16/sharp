@@ -56,12 +56,12 @@ abstract class SelectFilter extends Filter
 
         return $this;
     }
-    
+
     public function fromQueryParam($value): mixed
     {
         return $value;
     }
-    
+
     public function toQueryParam($value): mixed
     {
         return $value;

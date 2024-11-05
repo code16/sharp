@@ -10,9 +10,9 @@ use Illuminate\Support\Collection;
 
 class TextFormatter extends SharpShowFieldFormatter
 {
-    use FormatsEditorUploads;
     use FormatsEditorEmbeds;
-    
+    use FormatsEditorUploads;
+
     /**
      * @param  SharpShowTextField  $field
      */

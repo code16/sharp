@@ -76,9 +76,7 @@ trait WithCustomTransformers
     {
         return new class($closure) implements SharpAttributeTransformer
         {
-            public function __construct(private Closure $closure)
-            {
-            }
+            public function __construct(private Closure $closure) {}
 
             public function apply($value, $instance = null, $attribute = null)
             {

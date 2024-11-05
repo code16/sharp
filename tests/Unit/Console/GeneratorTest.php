@@ -9,7 +9,7 @@ beforeEach(function () {
 });
 
 it('can generate a new full sharp entity from console and we can create, display, update and delete an item', function () {
-    if(file_exists(base_path('app/Sharp/Entities/ClosedPeriodEntity.php'))) {
+    if (file_exists(base_path('app/Sharp/Entities/ClosedPeriodEntity.php'))) {
         unlink(base_path('app/Sharp/Entities/ClosedPeriodEntity.php'));
     }
 

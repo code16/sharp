@@ -5,7 +5,6 @@ namespace App\Sharp\Authors\Commands;
 use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
-use Code16\Sharp\Utils\PageAlerts\PageAlert;
 
 class InviteUserCommand extends EntityCommand
 {

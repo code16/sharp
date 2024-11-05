@@ -89,10 +89,10 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
 
     protected function normalizeFromFront(?array $value, ?array $formatted = null): ?array
     {
-        if($value === null) {
+        if ($value === null) {
             return null;
         }
-        
+
         return collect([
             'file_name' => $formatted['file_name'] ?? $value['path'],
             'size' => $formatted['size'] ?? $value['size'] ?? null,

@@ -8,7 +8,7 @@ use Code16\Sharp\Form\Fields\SharpFormTextField;
 class TextFormatter extends AbstractSimpleFormatter
 {
     /**
-     * @param SharpFormTextField $field
+     * @param  SharpFormTextField  $field
      */
     public function fromFront(SharpFormField $field, string $attribute, $value)
     {

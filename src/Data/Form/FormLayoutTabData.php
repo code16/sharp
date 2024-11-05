@@ -11,8 +11,7 @@ final class FormLayoutTabData extends Data
         public string $title,
         /** @var DataCollection<FormLayoutColumnData> */
         public DataCollection $columns,
-    ) {
-    }
+    ) {}
 
     public static function from(array $tab): self
     {

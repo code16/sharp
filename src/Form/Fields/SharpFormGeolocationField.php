@@ -63,7 +63,7 @@ class SharpFormGeolocationField extends SharpFormField
 
         return $this;
     }
-    
+
     public function setGoogleMapsMapId(string $mapId): self
     {
         $this->mapsProviderOptions['mapId'] = $mapId;
@@ -138,7 +138,7 @@ class SharpFormGeolocationField extends SharpFormField
             'initialPosition' => 'array|nullable',
             'boundaries' => 'array|nullable',
             'mapsProvider.name' => 'required|in:gmaps,osm',
-//            'mapsProvider.options.mapId' => 'required_if:mapsProvider.name,gmaps',
+            //            'mapsProvider.options.mapId' => 'required_if:mapsProvider.name,gmaps',
             'geocodingProvider.name' => 'required|in:gmaps,osm',
         ];
     }

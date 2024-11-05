@@ -21,13 +21,13 @@ Route::group([
 
     Route::get('/s-dashboard/{dashboardKey}', [DashboardController::class, 'show'])
         ->name('code16.sharp.dashboard');
-    
+
     Route::post('/s-dashboard/{dashboardKey}', [DashboardFiltersController::class, 'store'])
         ->name('code16.sharp.dashboard.filters.store');
 
     Route::get('/s-list/{entityKey}', [EntityListController::class, 'show'])
         ->name('code16.sharp.list');
-    
+
     Route::post('/s-list/{entityKey}/filters', [EntityListFiltersController::class, 'store'])
         ->name('code16.sharp.list.filters.store');
 

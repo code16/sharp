@@ -37,11 +37,11 @@ class DemoDashboard extends SharpDashboard
         '#274754',
         '#e8c468',
         '#f4a462',
-//        '#3B82F6',
-//        '#064E3B',
-//        '#EC4899',
-//        '#78350F',
-//        '#9CA3AF',
+        //        '#3B82F6',
+        //        '#064E3B',
+        //        '#EC4899',
+        //        '#78350F',
+        //        '#9CA3AF',
     ];
     private static int $colorsIndex = 0;
 
@@ -151,7 +151,7 @@ class DemoDashboard extends SharpDashboard
         $this->setLineGraphDataSet();
         $this->setOrderedListDataSet();
         $this->setCustomPanelDataSet();
-        
+
         $posts = DB::table('posts')
             ->select(DB::raw('state, count(*) as count'))
             ->groupBy('state')
@@ -217,9 +217,9 @@ class DemoDashboard extends SharpDashboard
             'posts' => fn (Builder $query) => $query
                 ->whereBetween('published_at', [
                     $this->getStartDate(),
-                    $this->getEndDate()
-                ])
-            ])
+                    $this->getEndDate(),
+                ]),
+        ])
             ->limit(5)
             ->orderBy('posts_count', 'desc')
             ->get()
@@ -251,7 +251,7 @@ class DemoDashboard extends SharpDashboard
                         ->addFilter(PeriodFilter::class, sprintf('%s..%s',
                             $this->getStartDate()->format('Ymd'),
                             $this->getEndDate()->format('Ymd'),
-                        ))
+                        )),
                 ])
                 ->toArray()
         );

@@ -17,7 +17,7 @@ it('handles belongsTo', function () {
         'partner_id' => $marie->id,
     ]);
 
-    $form = new class extends FakeSharpForm
+    $form = new class() extends FakeSharpForm
     {
         public function find(mixed $id): array
         {
@@ -41,7 +41,7 @@ it('handles hasOne', function () {
         'chief_id' => $marie->id,
     ]);
 
-    $form = new class extends FakeSharpForm
+    $form = new class() extends FakeSharpForm
     {
         public function find(mixed $id): array
         {
@@ -69,7 +69,7 @@ it('handles hasMany', function () {
         'chief_id' => $marie->id,
     ]);
 
-    $form = new class extends FakeSharpForm
+    $form = new class() extends FakeSharpForm
     {
         public function find(mixed $id): array
         {
@@ -101,7 +101,7 @@ it('handles belongsToMany', function () {
         $colleague2->id,
     ]);
 
-    $form = new class extends FakeSharpForm
+    $form = new class() extends FakeSharpForm
     {
         public function find(mixed $id): array
         {
@@ -119,7 +119,7 @@ it('handles morphOne', function () {
     $marie = Person::create(['name' => 'Marie Curie']);
     $marie->photo()->create(['file' => 'photo.jpg']);
 
-    $form = new class extends FakeSharpForm
+    $form = new class() extends FakeSharpForm
     {
         public function find(mixed $id): array
         {
@@ -136,7 +136,7 @@ it('handles morphMany', function () {
     $marie->pictures()->create(['file' => 'pic-1.jpg']);
     $marie->pictures()->create(['file' => 'pic-2.jpg']);
 
-    $form = new class extends FakeSharpForm
+    $form = new class() extends FakeSharpForm
     {
         public function find(mixed $id): array
         {
@@ -154,7 +154,7 @@ it('handles the relation separator', function () {
     $marie = Person::create(['name' => 'Marie Curie']);
     $pierre = Person::create(['name' => 'Pierre Curie', 'partner_id' => $marie->id]);
 
-    $form = new class extends FakeSharpForm
+    $form = new class() extends FakeSharpForm
     {
         public function buildFormFields(FieldsContainer $formFields): void
         {
@@ -176,7 +176,7 @@ it('handles the relation separator', function () {
 it('allows to use a closure as a custom transformer', function () {
     $marie = Person::create(['name' => 'Marie Curie']);
 
-    $form = new class extends FakeSharpForm
+    $form = new class() extends FakeSharpForm
     {
         public function find(mixed $id): array
         {
@@ -193,12 +193,12 @@ it('allows to use a closure as a custom transformer', function () {
 it('allows to use applyIfAttributeIsMissing in a custom transformer', function () {
     $person = Person::create(['name' => 'Marie Curie']);
 
-    $form = new class extends FakeSharpForm
+    $form = new class() extends FakeSharpForm
     {
         public function find(mixed $id): array
         {
             return $this
-                ->setCustomTransformer('slug', new class implements SharpAttributeTransformer
+                ->setCustomTransformer('slug', new class() implements SharpAttributeTransformer
                 {
                     public function apply($value, $instance = null, $attribute = null)
                     {
@@ -210,7 +210,7 @@ it('allows to use applyIfAttributeIsMissing in a custom transformer', function (
                         return false;
                     }
                 })
-                ->setCustomTransformer('force_slug', new class implements SharpAttributeTransformer
+                ->setCustomTransformer('force_slug', new class() implements SharpAttributeTransformer
                 {
                     public function apply($value, $instance = null, $attribute = null)
                     {
@@ -231,7 +231,7 @@ it('allows to use add a custom transformer for a field in a list', function () {
     Person::create(['name' => 'Arthur', 'chief_id' => $marie->id]);
     Person::create(['name' => 'Jeanne', 'chief_id' => $marie->id]);
 
-    $form = new class extends FakeSharpForm
+    $form = new class() extends FakeSharpForm
     {
         public function buildFormFields(FieldsContainer $formFields): void
         {

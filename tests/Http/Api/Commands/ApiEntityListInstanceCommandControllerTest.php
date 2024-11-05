@@ -15,12 +15,12 @@ beforeEach(function () {
 });
 
 it('allows to call an info instance command', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getInstanceCommands(): ?array
         {
             return [
-                'instance_info' => new class extends InstanceCommand
+                'instance_info' => new class() extends InstanceCommand
                 {
                     public function label(): ?string
                     {
@@ -45,12 +45,12 @@ it('allows to call an info instance command', function () {
 });
 
 it('allows to call a reload instance command', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getInstanceCommands(): ?array
         {
             return [
-                'instance_reload' => new class extends InstanceCommand
+                'instance_reload' => new class() extends InstanceCommand
                 {
                     public function label(): ?string
                     {
@@ -74,12 +74,12 @@ it('allows to call a reload instance command', function () {
 });
 
 it('allows to call a view instance command', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getInstanceCommands(): ?array
         {
             return [
-                'instance_view' => new class extends InstanceCommand
+                'instance_view' => new class() extends InstanceCommand
                 {
                     public function label(): ?string
                     {
@@ -103,18 +103,18 @@ it('allows to call a view instance command', function () {
 });
 
 it('allows to call a html instance command', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getInstanceCommands(): ?array
         {
             return [
-                'instance_html' => new class extends InstanceCommand
+                'instance_html' => new class() extends InstanceCommand
                 {
                     public function label(): ?string
                     {
                         return 'my command';
                     }
-                    
+
                     public function execute($instanceId, array $data = []): array
                     {
                         return $this->html('Hello world');
@@ -123,7 +123,7 @@ it('allows to call a html instance command', function () {
             ];
         }
     });
-    
+
     $this->postJson(route('code16.sharp.api.list.command.instance', ['person', 'instance_html', 1]))
         ->assertOk()
         ->assertJson([
@@ -131,14 +131,13 @@ it('allows to call a html instance command', function () {
         ]);
 });
 
-
 it('allows to call a refresh instance command', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getInstanceCommands(): ?array
         {
             return [
-                'instance_refresh' => new class extends InstanceCommand
+                'instance_refresh' => new class() extends InstanceCommand
                 {
                     public function label(): ?string
                     {
@@ -177,12 +176,12 @@ it('allows to call a refresh instance command', function () {
 });
 
 it('allows to call a form instance command and it handles 422', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getInstanceCommands(): ?array
         {
             return [
-                'instance_form' => new class extends InstanceCommand
+                'instance_form' => new class() extends InstanceCommand
                 {
                     public function label(): ?string
                     {
@@ -224,12 +223,12 @@ it('allows to call a form instance command and it handles 422', function () {
 });
 
 it('allows to call a download instance command', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getInstanceCommands(): ?array
         {
             return [
-                'instance_download' => new class extends InstanceCommand
+                'instance_download' => new class() extends InstanceCommand
                 {
                     public function label(): ?string
                     {
@@ -259,12 +258,12 @@ it('allows to call a download instance command', function () {
 });
 
 it('allows to call a streamDownload instance command', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getInstanceCommands(): ?array
         {
             return [
-                'instance_streamDownload' => new class extends InstanceCommand
+                'instance_streamDownload' => new class() extends InstanceCommand
                 {
                     public function label(): ?string
                     {
@@ -290,12 +289,12 @@ it('allows to call a streamDownload instance command', function () {
 });
 
 it('returns an applicative exception as a 417 as always', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getInstanceCommands(): ?array
         {
             return [
-                'instance_417' => new class extends InstanceCommand
+                'instance_417' => new class() extends InstanceCommand
                 {
                     public function label(): ?string
                     {
@@ -320,12 +319,12 @@ it('returns an applicative exception as a 417 as always', function () {
 });
 
 it('disallows to call an unauthorized instance command', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getInstanceCommands(): ?array
         {
             return [
-                'instance_unauthorized' => new class extends InstanceCommand
+                'instance_unauthorized' => new class() extends InstanceCommand
                 {
                     public function label(): ?string
                     {
@@ -356,12 +355,12 @@ it('disallows to call an unauthorized instance command', function () {
 });
 
 it('returns the form of the instance command', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getInstanceCommands(): ?array
         {
             return [
-                'instance_form' => new class extends InstanceCommand
+                'instance_form' => new class() extends InstanceCommand
                 {
                     public function label(): ?string
                     {
@@ -415,12 +414,12 @@ it('returns the form of the instance command', function () {
 });
 
 it('allows to configure a page alert on an instance command', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getInstanceCommands(): ?array
         {
             return [
-                'cmd' => new class extends InstanceCommand
+                'cmd' => new class() extends InstanceCommand
                 {
                     public function label(): ?string
                     {
@@ -433,7 +432,7 @@ it('allows to configure a page alert on an instance command', function () {
                             ->setLevelInfo()
                             ->setMessage('My page alert');
                     }
-                    
+
                     public function buildFormFields(FieldsContainer $formFields): void
                     {
                         $formFields->addField(SharpFormTextField::make('name'));
@@ -460,12 +459,12 @@ it('allows to configure a page alert on an instance command', function () {
 });
 
 it('handles localized form of the instance command', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getInstanceCommands(): ?array
         {
             return [
-                'instance_form_localized' => new class extends InstanceCommand
+                'instance_form_localized' => new class() extends InstanceCommand
                 {
                     public function label(): ?string
                     {
@@ -508,18 +507,18 @@ it('handles localized form of the instance command', function () {
 });
 
 it('allows to initialize form data in an instance command', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getInstanceCommands(): ?array
         {
             return [
-                'instance_with_init_data' => new class extends InstanceCommand
+                'instance_with_init_data' => new class() extends InstanceCommand
                 {
                     public function label(): ?string
                     {
                         return 'my command';
                     }
-                    
+
                     public function buildCommandConfig(): void
                     {
                         $this->configureFormModalTitle(fn ($data) => "Edit {$data['name']}")

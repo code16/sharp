@@ -36,7 +36,7 @@ class LoginRequest extends FormRequest
 
         $remember = sharp()->config()->get('auth.suggest_remember_me') && $this->boolean('remember');
 
-        if (!$this->attemptToLogin($remember)) {
+        if (! $this->attemptToLogin($remember)) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
@@ -78,7 +78,7 @@ class LoginRequest extends FormRequest
             return;
         }
 
-        if (!RateLimiter::tooManyAttempts(
+        if (! RateLimiter::tooManyAttempts(
             $this->throttleKey(),
             sharp()->config()->get('auth.rate_limiting.max_attempts'))
         ) {

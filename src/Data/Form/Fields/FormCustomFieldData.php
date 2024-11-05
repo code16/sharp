@@ -4,7 +4,6 @@ namespace Code16\Sharp\Data\Form\Fields;
 
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\Form\Fields\Common\FormConditionalDisplayData;
-use Illuminate\Support\Arr;
 use Spatie\TypeScriptTransformer\Attributes\Optional;
 
 final class FormCustomFieldData extends Data

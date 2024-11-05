@@ -19,6 +19,5 @@ final class CommandResponseData extends Data
 {
     public function __construct(
         public CommandAction $action,
-    ) {
-    }
+    ) {}
 }

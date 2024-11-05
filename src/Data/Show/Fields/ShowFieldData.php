@@ -16,9 +16,7 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScriptType;
 )]
 final class ShowFieldData extends Data
 {
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public static function from(array $field): Data
     {

@@ -13,7 +13,7 @@ final class EmbedData extends Data
 {
     #[Optional]
     #[LiteralTypeScriptType('FormData["data"] & { slot: string }')]
-    public array|null $value;
+    public ?array $value;
 
     public function __construct(
         public string $key,
@@ -25,8 +25,7 @@ final class EmbedData extends Data
         public string $template,
         /** @var DataCollection<string,FormFieldData> */
         public DataCollection $fields,
-    ) {
-    }
+    ) {}
 
     public static function from(array $embed): self
     {

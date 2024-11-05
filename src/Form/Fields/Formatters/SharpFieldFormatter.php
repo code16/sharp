@@ -8,7 +8,7 @@ use Code16\Sharp\Utils\Fields\Formatters\FormatsLocalizedValue;
 abstract class SharpFieldFormatter
 {
     use FormatsLocalizedValue;
-    
+
     protected ?string $instanceId = null;
 
     public function setInstanceId(?string $instanceId): static

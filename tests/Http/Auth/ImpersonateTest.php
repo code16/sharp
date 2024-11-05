@@ -42,9 +42,7 @@ it('displays impersonatable users from a custom handler', function () {
 
     sharp()->config()->enableImpersonation(new class($users) extends SharpImpersonationHandler
     {
-        public function __construct(private readonly array $users)
-        {
-        }
+        public function __construct(private readonly array $users) {}
 
         public function enabled(): bool
         {
@@ -97,9 +95,7 @@ it('does not display impersonatable users if impersonation is not enabled', func
 
     sharp()->config()->enableImpersonation(new class($users) extends SharpImpersonationHandler
     {
-        public function __construct(private readonly array $users)
-        {
-        }
+        public function __construct(private readonly array $users) {}
 
         public function getUsers(): array
         {

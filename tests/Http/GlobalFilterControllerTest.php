@@ -8,7 +8,7 @@ beforeEach(function () {
     login();
 
     sharp()->config()->addGlobalFilter(
-        new class extends GlobalRequiredFilter
+        new class() extends GlobalRequiredFilter
         {
             public function buildFilterConfig(): void
             {

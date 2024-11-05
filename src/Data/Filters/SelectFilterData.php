@@ -18,8 +18,8 @@ final class SelectFilterData extends Data
         public ?string $label,
         #[LiteralTypeScriptType('"'.FilterType::Select->value.'"')]
         public FilterType $type,
-//        /** @var int|string|array<int|string> */
-//        public mixed $default,
+        //        /** @var int|string|array<int|string> */
+        //        public mixed $default,
         public bool $multiple,
         public bool $required,
         #[LiteralTypeScriptType('Array<{ id:string|number } & { [key: string]: any }>')]
@@ -29,8 +29,7 @@ final class SelectFilterData extends Data
         /** string[] */
         public array $searchKeys,
         public string $template,
-    ) {
-    }
+    ) {}
 
     public static function from(array $filter): self
     {

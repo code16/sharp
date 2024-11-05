@@ -12,12 +12,12 @@ beforeEach(function () {
 });
 
 it('displays first step form on the first call of a wizard entity command', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getEntityCommands(): ?array
         {
             return [
-                'wizard' => new class extends EntityWizardCommand
+                'wizard' => new class() extends EntityWizardCommand
                 {
                     public function label(): ?string
                     {
@@ -71,12 +71,12 @@ it('displays first step form on the first call of a wizard entity command', func
 });
 
 it('allows to post first step of a wizard entity command', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getEntityCommands(): ?array
         {
             return [
-                'wizard' => new class extends EntityWizardCommand
+                'wizard' => new class() extends EntityWizardCommand
                 {
                     protected function getKey(): string
                     {
@@ -121,12 +121,12 @@ it('allows to post first step of a wizard entity command', function () {
 });
 
 it('allows to check if context is valid', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getEntityCommands(): ?array
         {
             return [
-                'wizard' => new class extends EntityWizardCommand
+                'wizard' => new class() extends EntityWizardCommand
                 {
                     protected function getKey(): string
                     {
@@ -138,9 +138,7 @@ it('allows to check if context is valid', function () {
                         return 'my command';
                     }
 
-                    public function buildFormFieldsForFirstStep(FieldsContainer $formFields): void
-                    {
-                    }
+                    public function buildFormFieldsForFirstStep(FieldsContainer $formFields): void {}
 
                     protected function executeFirstStep(array $data): array
                     {
@@ -217,12 +215,12 @@ it('allows to check if context is valid', function () {
 });
 
 it('allows to post second step of a wizard entity command', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getEntityCommands(): ?array
         {
             return [
-                'wizard' => new class extends EntityWizardCommand
+                'wizard' => new class() extends EntityWizardCommand
                 {
                     protected function getKey(): string
                     {
@@ -285,12 +283,12 @@ it('allows to post second step of a wizard entity command', function () {
 });
 
 it('allows to define a global method for step execution', function () {
-    fakeListFor('person', new class extends PersonList
+    fakeListFor('person', new class() extends PersonList
     {
         protected function getEntityCommands(): ?array
         {
             return [
-                'wizard' => new class extends EntityWizardCommand
+                'wizard' => new class() extends EntityWizardCommand
                 {
                     protected function getKey(): string
                     {

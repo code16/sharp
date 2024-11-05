@@ -11,8 +11,7 @@ final class FormLayoutData extends Data
         public bool $tabbed,
         /** @var DataCollection<FormLayoutTabData> */
         public DataCollection $tabs,
-    ) {
-    }
+    ) {}
 
     public static function from(array $config): self
     {

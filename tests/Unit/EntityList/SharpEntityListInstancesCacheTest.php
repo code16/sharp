@@ -15,9 +15,7 @@ beforeEach(function () {
 it('caches array of entities at transform stage', function () {
     $list = new class($this->people) extends FakeSharpEntityList
     {
-        public function __construct(private readonly array $people)
-        {
-        }
+        public function __construct(private readonly array $people) {}
 
         public function getListData(): array|Arrayable
         {
@@ -35,9 +33,7 @@ it('caches array of entities at transform stage', function () {
 it('caches collection of entities at transform stage', function () {
     $list = new class($this->people) extends FakeSharpEntityList
     {
-        public function __construct(private readonly array $people)
-        {
-        }
+        public function __construct(private readonly array $people) {}
 
         public function getListData(): array|Arrayable
         {
@@ -55,9 +51,7 @@ it('caches collection of entities at transform stage', function () {
 it('caches paginated entities at transform stage', function () {
     $list = new class($this->people) extends FakeSharpEntityList
     {
-        public function __construct(private readonly array $people)
-        {
-        }
+        public function __construct(private readonly array $people) {}
 
         public function getListData(): array|Arrayable
         {
@@ -114,9 +108,9 @@ it('callback is called in case of missing entity', function () {
     $list->data();
 
     expect(sharp()->context()->findListInstance(
-            12,
-            fn ($id) => $id == 12 ? new Person(['id' => 12, 'name' => 'test']) : null
-        ))
+        12,
+        fn ($id) => $id == 12 ? new Person(['id' => 12, 'name' => 'test']) : null
+    ))
         ->name
         ->toEqual('test');
 });

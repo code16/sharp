@@ -12,7 +12,7 @@ class ListFormatter extends SharpShowFieldFormatter
             ->map(function ($item) use ($field) {
                 // we take all values to include the id attributes (to preserve actual behavior)
                 $itemArray = [...$item];
-                
+
                 $field
                     ->itemFields()
                     ->each(function ($itemField) use ($item, &$itemArray) {

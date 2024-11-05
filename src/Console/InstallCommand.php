@@ -65,7 +65,7 @@ class InstallCommand extends Command
 
         $this->addSharpMenuToServiceProvider();
 
-        $this->components->twoColumnDetail('Menu', $this->getSharpRootNamespace() . '\\SharpMenu.php');
+        $this->components->twoColumnDetail('Menu', $this->getSharpRootNamespace().'\\SharpMenu.php');
     }
 
     private function getSharpRootNamespace(): string
@@ -90,8 +90,9 @@ class InstallCommand extends Command
 
     private function replaceFileContent(string $targetFilePath, string $search, string $replace): void
     {
-        if (!file_exists($targetFilePath)) {
+        if (! file_exists($targetFilePath)) {
             $this->error("File not found: [$targetFilePath]");
+
             return;
         }
 

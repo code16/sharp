@@ -9,7 +9,7 @@ use Code16\Sharp\Utils\StringUtil;
 class EntityListQueryParams
 {
     use HasFiltersInQuery;
-    
+
     public function __construct(
         protected FilterContainer $filterContainer,
         protected array $filterValues = [],
@@ -18,8 +18,7 @@ class EntityListQueryParams
         protected ?int $page = null,
         protected ?string $search = null,
         protected array $specificIds = [],
-    ) {
-    }
+    ) {}
 
     public function getPage(): ?int
     {

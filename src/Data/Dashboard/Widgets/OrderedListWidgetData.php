@@ -23,8 +23,7 @@ final class OrderedListWidgetData extends Data
         public ?string $title,
         public bool $html,
         public ?string $link = null,
-    ) {
-    }
+    ) {}
 
     public static function from(array $widget): self
     {

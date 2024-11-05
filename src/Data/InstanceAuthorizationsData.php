@@ -9,8 +9,7 @@ final class InstanceAuthorizationsData extends Data
         public bool $create,
         public bool $update,
         public bool $delete,
-    ) {
-    }
+    ) {}
 
     public static function from(array $authorizations): self
     {

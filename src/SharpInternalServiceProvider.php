@@ -76,7 +76,7 @@ class SharpInternalServiceProvider extends ServiceProvider
         Blade::component(Content::class, 'sharp-content');
         Blade::component(File::class, 'sharp-file');
         Blade::component(Image::class, 'sharp-image');
-        
+
         $this->registerViewExceptionMapper();
 
         if (config('sharp.locale')) {
@@ -96,13 +96,13 @@ class SharpInternalServiceProvider extends ServiceProvider
         $this->app->singleton(SharpUtil::class);
         $this->app->singleton(
             SharpConfigBuilder::class,
-            fn() => file_exists(config_path('sharp.php'))
+            fn () => file_exists(config_path('sharp.php'))
                 ? new SharpLegacyConfigBuilder()
                 : new SharpConfigBuilder()
         );
         $this->app->singleton(
             ImageManager::class,
-            fn() => new ImageManager(sharp()->config()->get('uploads.image_driver'))
+            fn () => new ImageManager(sharp()->config()->get('uploads.image_driver'))
         );
         $this->app->singleton(AddLinkHeadersForPreloadedRequests::class);
 
@@ -115,7 +115,7 @@ class SharpInternalServiceProvider extends ServiceProvider
 
         $this->app->bind(
             Sharp2faHandler::class,
-            fn() => match (sharp()->config()->get('auth.2fa.handler')) {
+            fn () => match (sharp()->config()->get('auth.2fa.handler')) {
                 'notification' => app(Sharp2faNotificationHandler::class),
                 'totp' => app(Sharp2faEloquentDefaultTotpHandler::class),
                 default => sharp()->config()->get('auth.2fa.handler'),
@@ -164,19 +164,20 @@ class SharpInternalServiceProvider extends ServiceProvider
             MenuMakeCommand::class,
         ]);
     }
-    
+
     protected function registerViewExceptionMapper(): void
     {
         $handler = $this->app->make(ExceptionHandler::class);
-        
+
         if (! method_exists($handler, 'map')) {
             return;
         }
-        
+
         $handler->map(function (TokenMismatchException $exception) {
-            if(request()->routeIs('code16.sharp.*')) {
+            if (request()->routeIs('code16.sharp.*')) {
                 return new SharpTokenMismatchException($exception);
             }
+
             return $exception;
         });
     }

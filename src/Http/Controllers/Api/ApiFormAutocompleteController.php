@@ -19,10 +19,10 @@ class ApiFormAutocompleteController extends ApiController
 
         if ($field === null) {
             throw new SharpInvalidConfigException('Remote autocomplete field '.$autocompleteFieldKey.' was not found in form.');
-        } elseif (!$field instanceof SharpFormAutocompleteRemoteField) {
-            throw new SharpInvalidConfigException('The field '.$autocompleteFieldKey. ' is not a remote autocomplete field.');
+        } elseif (! $field instanceof SharpFormAutocompleteRemoteField) {
+            throw new SharpInvalidConfigException('The field '.$autocompleteFieldKey.' is not a remote autocomplete field.');
         }
-        
+
         if ($callback = $field->getRemoteCallback()) {
             $formData = request()->input('formData')
                 ? collect(request()->input('formData'))
@@ -31,6 +31,7 @@ class ApiFormAutocompleteController extends ApiController
                         if (! $field = $form->findFieldByKey($key)) {
                             return $value;
                         }
+
                         return $field
                             ->formatter()
                             ->setDataLocalizations($form->getDataLocalizations())
@@ -59,11 +60,11 @@ class ApiFormAutocompleteController extends ApiController
                     cookies: request()->cookies->all(),
                 ), fn (Request $request) => $request->headers->set('Accept', 'application/json'))
             );
-            
+
             if ($response->getStatusCode() >= 400) {
                 abort($response);
             }
-            
+
             $data = Arr::get(json_decode($response->getContent(), true), $field->dataWrapper() ?: null);
         }
 
@@ -87,7 +88,7 @@ class ApiFormAutocompleteController extends ApiController
         preg_match(
             '#'.str()
                 ->of(preg_quote($fieldEndpoint))
-                ->replaceMatches('#\\\\{\\\\{(.*)\\\\}\\\\}#', '(.*)') .'#im',
+                ->replaceMatches('#\\\\{\\\\{(.*)\\\\}\\\\}#', '(.*)').'#im',
             $requestEndpoint
         ) ?: throw new SharpInvalidConfigException('The endpoint is not a valid internal route.');
     }

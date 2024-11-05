@@ -14,7 +14,7 @@ beforeEach(function () {
 });
 
 it('allows to format a text value to front', function () {
-    $formatter = new EditorFormatter;
+    $formatter = new EditorFormatter();
     $field = SharpFormEditorField::make('md');
     $value = Str::random()."\n\n".Str::random();
 
@@ -31,7 +31,7 @@ it('allows to format a text value from front', function () {
 
     $this->assertEquals(
         $value,
-        (new EditorFormatter)->fromFront(
+        (new EditorFormatter())->fromFront(
             SharpFormEditorField::make('md'),
             'attribute',
             ['text' => $value],
@@ -40,7 +40,7 @@ it('allows to format a text value from front', function () {
 });
 
 it('allows to format a text with uploads to front', function () {
-    $formatter = new EditorFormatter;
+    $formatter = new EditorFormatter();
     $field = SharpFormEditorField::make('md')
         ->allowUploads(SharpFormEditorUpload::make());
 
@@ -101,7 +101,7 @@ it('allows to format a text with uploads to front', function () {
 });
 
 it('allows to format text with uploads from front', function () {
-    $formatter = (new EditorFormatter)->setInstanceId(1);
+    $formatter = (new EditorFormatter())->setInstanceId(1);
     $field = SharpFormEditorField::make('md')
         ->allowUploads(SharpFormEditorUpload::make()->setStorageBasePath('data/Posts/{id}'));
 
@@ -171,7 +171,7 @@ it('allows to format text with uploads from front', function () {
 });
 
 it('allows to format embeds with uploads to front', function () {
-    $formatter = (new EditorFormatter)->setInstanceId(1);
+    $formatter = (new EditorFormatter())->setInstanceId(1);
     $field = SharpFormEditorField::make('md')
         ->allowEmbeds([EditorFormatterTestEmbed::class]);
 
@@ -217,7 +217,7 @@ it('allows to format embeds with uploads to front', function () {
 });
 
 it('allows to format embeds with uploads from front', function () {
-    $formatter = (new EditorFormatter)->setInstanceId(1);
+    $formatter = (new EditorFormatter())->setInstanceId(1);
     $field = SharpFormEditorField::make('md')
         ->allowEmbeds([EditorFormatterTestEmbed::class]);
 
@@ -259,7 +259,7 @@ it('allows to format a unicode text value from front', function () {
 
     $this->assertEquals(
         $value,
-        (new EditorFormatter)->fromFront(
+        (new EditorFormatter())->fromFront(
             SharpFormEditorField::make('md'),
             'attribute',
             ['text' => $value],

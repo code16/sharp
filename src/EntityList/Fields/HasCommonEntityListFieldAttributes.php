@@ -56,8 +56,8 @@ trait HasCommonEntityListFieldAttributes
             );
 
             return $width <= 12
-                ? round($width / 12 * 100) . '%' // legacy 1-12 col width
-                : $width . '%';
+                ? round($width / 12 * 100).'%' // legacy 1-12 col width
+                : $width.'%';
         }
 
         if (is_float($width)) {
@@ -66,7 +66,7 @@ trait HasCommonEntityListFieldAttributes
                 new SharpInvalidConfigException('Column width must be between 0 and 1 when a float is passed.')
             );
 
-            return ($width*100) . '%';
+            return ($width * 100).'%';
         }
 
         $width = str_replace(' ', '', $width);
@@ -77,7 +77,7 @@ trait HasCommonEntityListFieldAttributes
         );
 
         return str($width)
-            ->unless(str($width)->endsWith('%'), fn($str) => $str->append('%'))
+            ->unless(str($width)->endsWith('%'), fn ($str) => $str->append('%'))
             ->toString();
     }
 }

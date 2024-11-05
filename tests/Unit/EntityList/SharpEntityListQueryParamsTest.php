@@ -54,7 +54,7 @@ function buildParams($p = 1, $s = '', $sb = null, $sd = null, $filters = null): 
         {
             $filterContainer = new FilterContainer(
                 collect($f)
-                    ->map (function ($value, $key) {
+                    ->map(function ($value, $key) {
                         if (str($value)->contains('..')) {
                             return new class($key) extends DateRangeFilter
                             {
@@ -64,7 +64,7 @@ function buildParams($p = 1, $s = '', $sb = null, $sd = null, $filters = null): 
                                 }
                             };
                         }
-                        
+
                         if (str($value)->contains(',')) {
                             return new class($key) extends SelectMultipleFilter
                             {
@@ -78,19 +78,19 @@ function buildParams($p = 1, $s = '', $sb = null, $sd = null, $filters = null): 
                                 }
                             };
                         }
-                        
+
                         return HiddenFilter::make($key);
                     })
                     ->values()
                     ->toArray()
             );
-            
+
             parent::__construct(
                 filterContainer: $filterContainer,
                 filterValues: [
                     ...$filterContainer->getFilterValuesFromQueryParams(
                         collect($f)->mapWithKeys(fn ($v, $k) => ["filter_$k" => $v])->toArray()
-                    )
+                    ),
                 ],
                 sortedBy: $sb,
                 sortedDir: $sd,
