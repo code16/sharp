@@ -6,12 +6,29 @@ use Illuminate\Support\Str;
 
 it('allows to format value to front', function () {
     $value = Str::random();
+    
+    expect(
+        (new HtmlFormatter())->toFront(
+            SharpFormHtmlField::make('html')->setTemplate('<b>{{ $text }}</b>'),
+            ['text' => $value]
+        )
+    )
+        ->toEqual("<b>$value</b>");
+});
 
-    $this->assertEquals($value, (new HtmlFormatter())->toFront(SharpFormHtmlField::make('html'), $value));
+it('allows to format value with view to front', function () {
+    $value = Str::random();
+    
+    expect(
+        (new HtmlFormatter())->toFront(
+            SharpFormHtmlField::make('html')->setTemplate(view('fixtures::test')),
+            ['text' => $value]
+        )
+    )
+        ->toContain("<b>$value</b>");
 });
 
 it('allows to format value from front', function () {
-    $this->assertNull(
-        (new HtmlFormatter())->fromFront(SharpFormHtmlField::make('html'), 'attribute', Str::random()),
-    );
+    expect((new HtmlFormatter())->fromFront(SharpFormHtmlField::make('html'), 'attribute', Str::random()))
+        ->toBeNull();
 });

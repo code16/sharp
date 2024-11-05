@@ -86,7 +86,7 @@ trait Activate2faViaTotpWizardCommandTrait
             ->addField(
                 SharpFormHtmlField::make('qr')
                     ->setLabel(trans('sharp::auth.2fa.totp.commands.activate.qrcode_field_label'))
-                    ->setInlineTemplate('<div style="text-align: center; margin: 1em 0;" v-html="svg"></div>')
+                    ->setTemplate('<div style="text-align: center; margin: 1em 0;">{!! $svg !!}</div>')
             )
             ->addField(
                 SharpFormTextField::make('code')

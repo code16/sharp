@@ -2,7 +2,7 @@
 
 use Code16\Sharp\EntityList\Commands\EntityState;
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
-use Code16\Sharp\Show\Fields\SharpShowHtmlField;
+use Code16\Sharp\Show\Fields\SharpShowPictureField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
 use Code16\Sharp\Show\Layout\ShowLayout;
 use Code16\Sharp\Show\Layout\ShowLayoutColumn;
@@ -130,7 +130,7 @@ it('returns configured show fields', function () {
         public function buildShowFields(FieldsContainer $showFields): void
         {
             $showFields->addField(SharpShowTextField::make('name'))
-                ->addField(SharpShowHtmlField::make('bio')->setInlineTemplate('<div></div>'));
+                ->addField(SharpShowPictureField::make('picture'));
         }
     });
 
@@ -141,8 +141,8 @@ it('returns configured show fields', function () {
                 ->where('type', 'text')
                 ->etc()
             )
-            ->has('show.fields.bio', fn (Assert $page) => $page
-                ->where('type', 'html')
+            ->has('show.fields.picture', fn (Assert $page) => $page
+                ->where('type', 'picture')
                 ->etc()
             )
         );
@@ -154,7 +154,7 @@ it('returns configured show layout', function () {
         public function buildShowFields(FieldsContainer $showFields): void
         {
             $showFields->addField(SharpShowTextField::make('name'))
-                ->addField(SharpShowHtmlField::make('bio')->setInlineTemplate('<div></div>'));
+                ->addField(SharpShowPictureField::make('picture'));
         }
 
         public function buildShowLayout(ShowLayout $showLayout): void
@@ -163,7 +163,7 @@ it('returns configured show layout', function () {
                 ->addSection('test', function (ShowLayoutSection $section) {
                     return $section->addColumn(6, function (ShowLayoutColumn $column) {
                         return $column->withField('name')
-                            ->withField('bio');
+                            ->withField('picture');
                     });
                 });
         }
@@ -177,7 +177,7 @@ it('returns configured show layout', function () {
             ->has('show.layout.sections.0.columns.0', fn (Assert $page) => $page
                 ->where('size', 6)
                 ->where('fields.0.0.key', 'name')
-                ->where('fields.1.0.key', 'bio')
+                ->where('fields.1.0.key', 'picture')
                 ->etc()
             )
         );
