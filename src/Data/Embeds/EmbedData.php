@@ -12,7 +12,7 @@ use Spatie\TypeScriptTransformer\Attributes\Optional;
 final class EmbedData extends Data
 {
     #[Optional]
-    #[LiteralTypeScriptType('FormData["data"] & { slot: string }')]
+    #[LiteralTypeScriptType('FormData["data"] & { slot: string, _html: string }')]
     public ?array $value;
 
     public function __construct(

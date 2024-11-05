@@ -102,7 +102,7 @@ export type DateRangeFilterValueData = {
   preset: string | null;
 };
 export type EmbedData = {
-  value?: FormData["data"] & { slot: string };
+  value?: FormData["data"] & { slot: string; _html: string };
   key: string;
   label: string;
   tag: string;
@@ -242,7 +242,7 @@ export type FormAutocompleteRemoteFieldData = {
   itemIdAttribute: string;
   searchMinChars: number;
   debounceDelay: number;
-  remoteEndpoint: string;
+  remoteEndpoint: string | null;
   callbackLinkedFields: Array<string> | null;
   placeholder: string | null;
   dynamicAttributes: Array<FormDynamicAttributeData> | null;
@@ -432,8 +432,6 @@ export type FormHtmlFieldData = {
   value?: { [key: string]: any } | null;
   key: string;
   type: "html";
-  template: string;
-  templateData: { [key: string]: any } | null;
   label: string | null;
   readOnly: boolean | null;
   conditionalDisplay: FormConditionalDisplayData | null;
@@ -468,7 +466,6 @@ export type FormListFieldData = {
   itemIdAttribute: string;
   itemFields: { [key: string]: FormFieldData };
   addText: string;
-  collapsedItemTemplate: string | null;
   maxItemCount: number | null;
   bulkUploadField: string | null;
   bulkUploadLimit: number | null;
@@ -718,7 +715,6 @@ export type SelectFilterData = {
   master: boolean;
   searchable: boolean;
   searchKeys: Array<any>;
-  template: string;
 };
 export type SessionData = {
   _token: string;
@@ -770,7 +766,6 @@ export type ShowEntityListFieldData = {
 export type ShowFieldData =
   | ShowEntityListFieldData
   | ShowFileFieldData
-  | ShowHtmlFieldData
   | ShowListFieldData
   | ShowPictureFieldData
   | ShowTextFieldData;
@@ -794,14 +789,6 @@ export type ShowFileFieldData = {
   type: "file";
   emptyVisible: boolean;
   label: string | null;
-};
-export type ShowHtmlFieldData = {
-  value?: { [key: string]: any };
-  key: string;
-  type: "html";
-  emptyVisible: boolean;
-  template: string;
-  templateData: { [key: string]: any } | null;
 };
 export type ShowLayoutColumnData = {
   size: number;

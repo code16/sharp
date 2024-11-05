@@ -5,6 +5,9 @@
             {
                 "path": "tests/Fixtures/resources/views",
                 "namespace": "fixtures"
+            },
+            {
+                "path": "demo/resources/views"
             }
         ]
     }

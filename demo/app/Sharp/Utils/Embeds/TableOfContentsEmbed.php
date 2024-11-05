@@ -11,10 +11,12 @@ class TableOfContentsEmbed extends SharpFormEditorEmbed
     {
         $this->configureLabel('Table of contents')
             ->configureTagName('x-table-of-contents')
-            ->configureFormInlineTemplate('<em>- Table of contents -</em>');
+            ->configureTemplate('<em>- Table of contents -</em>');
     }
 
     public function buildFormFields(FieldsContainer $formFields): void {}
 
-    public function updateContent(array $data = []): array {}
+    public function updateContent(array $data = []): array {
+        return [];
+    }
 }

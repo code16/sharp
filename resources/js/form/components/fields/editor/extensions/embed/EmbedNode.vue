@@ -1,7 +1,6 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
     import { Button } from '@/components/ui/button';
-    import EmbedRenderer from '@/content/components/EmbedRenderer.vue';
     import NodeRenderer from "../../NodeRenderer.vue";
     import EmbedFormModal from "./EmbedFormModal.vue";
     import { Form } from "@/form/Form";
@@ -31,11 +30,8 @@
     <NodeRenderer class="editor__node embed-node" :node="node">
         <div class="card">
             <div class="card-body">
-                <EmbedRenderer
-                    class="embed-node__template"
-                    :data="embedData"
-                    :embed="extension.options.embed"
-                />
+                <div v-html="embedData._html"></div>
+
                 <div class="mt-3">
                     <div class="row row-cols-auto gx-2">
                         <template v-if="extension.options.embed.attributes.length">

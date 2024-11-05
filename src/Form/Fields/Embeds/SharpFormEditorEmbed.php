@@ -14,7 +14,10 @@ use Code16\Sharp\Utils\Icons\IconManager;
 use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
 use Code16\Sharp\Utils\Traits\HandleValidation;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
+use Illuminate\View\View;
 
 abstract class SharpFormEditorEmbed
 {
@@ -27,20 +30,16 @@ abstract class SharpFormEditorEmbed
     protected ?string $label = null;
     protected ?string $tagName = null;
     protected ?string $icon = null;
-    protected array $templates = [];
+    protected string|View|null $showTemplate = null;
+    protected string|View|null $formTemplate = null;
 
     public function toConfigArray(bool $isForm): array
     {
-        if (! $template = $this->templates[$isForm ? 'form' : 'show'] ?? ($this->templates['form'] ?? null)) {
-            $template = 'Empty template';
-        }
-
         $config = [
             'key' => $this->key(),
             'label' => $this->label ?: Str::snake(class_basename(get_class($this))),
             'tag' => $this->tagName(),
             'attributes' => collect($this->fields())->keys()->toArray(),
-            'template' => $template,
             'icon' => app(IconManager::class)->iconToArray($this->icon),
             'fields' => $this->fields(),
         ];
@@ -50,7 +49,6 @@ abstract class SharpFormEditorEmbed
             'label' => ['required'],
             'tag' => ['required', 'regex:/^[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*$/'],
             'attributes' => ['array'],
-            'template' => ['required'],
         ], [
             'attributes.required' => 'Your Embed should at least have one form field',
             'tag.regex' => 'the tag name should only contain letters, figures and carets',
@@ -160,38 +158,54 @@ abstract class SharpFormEditorEmbed
 
         return $this;
     }
-
-    final protected function configureFormInlineTemplate(string $template): self
+    
+    final protected function configureTemplate(string|View $template): self
     {
-        return $this->setTemplate($template, 'form');
-    }
-
-    final protected function configureShowInlineTemplate(string $template): self
-    {
-        return $this->setTemplate($template, 'show');
-    }
-
-    final protected function configureFormTemplatePath(string $templatePath): self
-    {
-        return $this->setTemplate(
-            file_get_contents(resource_path('views/'.$templatePath)),
-            'form',
-        );
-    }
-
-    final protected function configureShowTemplatePath(string $templatePath): self
-    {
-        return $this->setTemplate(
-            file_get_contents(resource_path('views/'.$templatePath)),
-            'show',
-        );
-    }
-
-    private function setTemplate(string $template, string $key): self
-    {
-        $this->templates[$key] = $template;
-
+        $this->formTemplate = $template;
+        $this->showTemplate = $template;
+        
         return $this;
+    }
+    
+    final protected function configureFormTemplate(string|View $template): self
+    {
+        $this->formTemplate = $template;
+        
+        return $this;
+    }
+    
+    final protected function configureShowTemplate(string|View $template): self
+    {
+        $this->showTemplate = $template;
+        
+        return $this;
+    }
+    
+    final public function transformDataWithRenderedTemplate(array $data, bool $isForm): array
+    {
+        $data = $this->transformDataForTemplate($data, $isForm);
+        
+        return [
+            ...$data,
+            '_html' => $this->renderTemplate($data, $isForm),
+        ];
+    }
+    
+    private function renderTemplate(array $data, bool $isForm): string
+    {
+        $template = $isForm ? $this->formTemplate : $this->showTemplate;
+        
+        if(!$template) {
+            return 'Empty template';
+        }
+        
+        if(isset($data['slot'])) {
+            $data['slot'] = new HtmlString($data['slot']);
+        }
+        
+        return is_string($template)
+            ? Blade::render($template, $data)
+            : $template->with($data)->render();
     }
 
     final public function key(): string
