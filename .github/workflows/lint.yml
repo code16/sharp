@@ -2,8 +2,9 @@ name: Fix Code Style
 
 on:
   push:
-    - main
-#    - 9.0
+    branches:
+      - main
+#      - 9.0
   workflow_dispatch:
 jobs:
   lint:
