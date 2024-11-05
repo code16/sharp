@@ -7,6 +7,7 @@ use Code16\Sharp\Form\Layout\HasFieldRows;
 abstract class LayoutColumn
 {
     use HasFieldRows;
+
     protected int $size;
 
     public function __construct(int $size)

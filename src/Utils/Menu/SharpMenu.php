@@ -8,6 +8,7 @@ use Illuminate\Support\Collection;
 abstract class SharpMenu
 {
     use HasSharpMenuItems;
+
     protected ?SharpMenuUserMenu $userMenu = null;
     private bool $visible = true;
 

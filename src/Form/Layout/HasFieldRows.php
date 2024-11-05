@@ -8,6 +8,7 @@ use Illuminate\Support\Traits\Conditionable;
 trait HasFieldRows
 {
     use Conditionable;
+
     protected array $rows = [];
 
     public function withSingleField(string $fieldKey, ?\Closure $subLayoutCallback = null): self

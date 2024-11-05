@@ -15,6 +15,7 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 abstract class AbstractPostBlockForm extends SharpForm
 {
     use WithSharpFormEloquentUpdater;
+
     protected static string $postBlockType = 'none';
     protected static string $postBlockHelpText = '';
 

@@ -7,6 +7,7 @@ use Code16\Sharp\Form\Fields\Formatters\DateFormatter;
 class SharpFormDateField extends SharpFormField
 {
     const FIELD_TYPE = 'date';
+
     protected bool $hasDate = true;
     protected bool $hasTime = false;
     protected bool $mondayFirst = true;

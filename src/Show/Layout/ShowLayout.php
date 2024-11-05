@@ -8,6 +8,7 @@ use Illuminate\Support\Traits\Conditionable;
 class ShowLayout implements HasLayout
 {
     use Conditionable;
+
     protected array $sections = [];
 
     final public function addSection(string $label, ?\Closure $callback = null): self

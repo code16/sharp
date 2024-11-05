@@ -12,7 +12,8 @@ use Tests\TestCase;
 
 class PostSharpFormTest extends TestCase
 {
-    use DatabaseMigrations, SharpAssertions;
+    use DatabaseMigrations;
+    use SharpAssertions;
 
     /** @test */
     public function we_can_get_a_valid_post_update_form()

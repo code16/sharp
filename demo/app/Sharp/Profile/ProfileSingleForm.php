@@ -14,6 +14,7 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 class ProfileSingleForm extends SharpSingleForm
 {
     use WithSharpFormEloquentUpdater;
+
     protected ?string $formValidatorClass = MyProfileValidator::class;
 
     public function buildFormFields(FieldsContainer $formFields): void

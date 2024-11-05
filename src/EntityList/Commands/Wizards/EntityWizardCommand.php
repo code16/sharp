@@ -7,7 +7,8 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 abstract class EntityWizardCommand extends EntityCommand
 {
-    use IsEntityWizardCommand, IsWizardCommand;
+    use IsEntityWizardCommand;
+    use IsWizardCommand;
 
     abstract protected function buildFormFieldsForFirstStep(FieldsContainer $formFields): void;
 }

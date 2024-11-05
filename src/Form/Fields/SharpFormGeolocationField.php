@@ -7,6 +7,7 @@ use Code16\Sharp\Form\Fields\Formatters\GeolocationFormatter;
 class SharpFormGeolocationField extends SharpFormField
 {
     const FIELD_TYPE = 'geolocation';
+
     protected string $displayUnit = 'DMS';
     protected bool $geocoding = false;
     protected int $zoomLevel = 10;

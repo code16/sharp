@@ -9,6 +9,7 @@ use Symfony\Component\Console\Input\InputOption;
 class FormMakeCommand extends GeneratorCommand
 {
     use WithModel;
+
     protected $name = 'sharp:make:form';
     protected $description = 'Create a new Form class';
     protected $type = 'SharpForm';

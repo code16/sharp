@@ -18,6 +18,7 @@ class SharpFormEditorField extends SharpFormField
     }
     use SharpFormFieldWithPlaceholder;
     use SharpFormFieldWithUpload;
+
     const FIELD_TYPE = 'editor';
     const B = 'bold';
     const I = 'italic';
@@ -42,6 +43,7 @@ class SharpFormEditorField extends SharpFormField
     const SUP = 'superscript';
     const UNDO = 'undo';
     const REDO = 'redo';
+
     protected int $minHeight = 200;
     protected ?int $maxHeight = null;
     protected array $toolbar = [

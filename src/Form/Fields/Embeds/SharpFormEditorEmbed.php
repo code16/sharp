@@ -13,10 +13,11 @@ use Illuminate\Support\Str;
 
 abstract class SharpFormEditorEmbed
 {
-    use HandleFields,
-        HandlePageAlertMessage,
-        HandleValidation,
-        WithCustomTransformers;
+    use HandleFields;
+    use HandlePageAlertMessage;
+    use HandleValidation;
+    use WithCustomTransformers;
+
     protected ?string $label = null;
     protected ?string $tagName = null;
     protected array $templates = [];

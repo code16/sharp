@@ -5,6 +5,7 @@ namespace Code16\Sharp\Show\Fields;
 class SharpShowListField extends SharpShowField
 {
     const FIELD_TYPE = 'list';
+
     protected ?string $label = null;
     protected array $itemFields = [];
 

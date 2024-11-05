@@ -7,6 +7,7 @@ use Code16\Sharp\Form\Fields\Formatters\CheckFormatter;
 class SharpFormCheckField extends SharpFormField
 {
     const FIELD_TYPE = 'check';
+
     protected string $text;
 
     public static function make(string $key, string $text): self

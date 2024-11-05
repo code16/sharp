@@ -17,12 +17,13 @@ use Illuminate\Support\Collection;
 
 abstract class SharpEntityList
 {
-    use HandleEntityCommands,
-        HandleEntityState,
-        HandleFilters,
-        HandleInstanceCommands,
-        HandlePageAlertMessage,
-        WithCustomTransformers;
+    use HandleEntityCommands;
+    use HandleEntityState;
+    use HandleFilters;
+    use HandleInstanceCommands;
+    use HandlePageAlertMessage;
+    use WithCustomTransformers;
+
     private ?EntityListFieldsContainer $fieldsContainer = null;
     private ?EntityListFieldsLayout $fieldsLayout = null;
     private ?EntityListFieldsLayout $xsFieldsLayout = null;

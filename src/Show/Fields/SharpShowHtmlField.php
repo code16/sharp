@@ -11,7 +11,9 @@ class SharpShowHtmlField extends SharpShowField
         setInlineTemplate as protected parentSetInlineTemplate;
         template as protected parentTemplate;
     }
+
     const FIELD_TYPE = 'html';
+
     protected ?string $label = null;
 
     public static function make(string $key): SharpShowHtmlField

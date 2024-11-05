@@ -8,7 +8,9 @@ use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithDataLocalization;
 class SharpFormTagsField extends SharpFormField
 {
     use SharpFormFieldWithDataLocalization;
+
     const FIELD_TYPE = 'tags';
+
     protected bool $creatable = false;
     protected string $createText = 'Create';
     protected ?string $createAttribute = null;

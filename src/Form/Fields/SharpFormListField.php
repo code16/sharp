@@ -8,7 +8,9 @@ use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithTemplates;
 class SharpFormListField extends SharpFormField
 {
     use SharpFormFieldWithTemplates;
+
     const FIELD_TYPE = 'list';
+
     protected bool $addable = false;
     protected bool $sortable = false;
     protected bool $removable = false;

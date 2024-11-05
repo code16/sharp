@@ -12,6 +12,7 @@ class SharpFormHtmlField extends SharpFormField
         setInlineTemplate as protected parentSetInlineTemplate;
         template as protected parentTemplate;
     }
+
     const FIELD_TYPE = 'html';
 
     public static function make(string $key): self

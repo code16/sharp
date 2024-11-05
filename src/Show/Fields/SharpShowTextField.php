@@ -7,9 +7,11 @@ use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithEmbeds;
 
 class SharpShowTextField extends SharpShowField
 {
-    use SharpFormFieldWithDataLocalization,
-        SharpFormFieldWithEmbeds;
+    use SharpFormFieldWithDataLocalization;
+    use SharpFormFieldWithEmbeds;
+
     const FIELD_TYPE = 'text';
+
     protected ?string $label = null;
     protected ?int $collapseToWordCount = null;
     protected bool $html = true;

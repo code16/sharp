@@ -8,5 +8,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Media extends SharpUploadModel
 {
     use HasFactory;
+
     protected $table = 'medias';
 }

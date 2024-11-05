@@ -8,6 +8,7 @@ use Code16\Sharp\Utils\StringUtil;
 class EntityListQueryParams
 {
     use HasFiltersInQuery;
+
     protected ?int $page;
     protected ?string $search = null;
     protected ?string $sortedBy = null;

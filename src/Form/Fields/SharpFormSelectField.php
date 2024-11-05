@@ -8,8 +8,11 @@ use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithOptions;
 
 class SharpFormSelectField extends SharpFormField
 {
-    use SharpFormFieldWithDataLocalization, SharpFormFieldWithOptions;
+    use SharpFormFieldWithDataLocalization;
+    use SharpFormFieldWithOptions;
+
     const FIELD_TYPE = 'select';
+
     protected array $options;
     protected bool $multiple = false;
     protected bool $clearable = false;

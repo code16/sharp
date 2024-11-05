@@ -12,10 +12,11 @@ use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 abstract class Command
 {
-    use HandleFormFields,
-        HandlePageAlertMessage,
-        HandleValidation,
-        WithCustomTransformers;
+    use HandleFormFields;
+    use HandlePageAlertMessage;
+    use HandleValidation;
+    use WithCustomTransformers;
+
     protected int $groupIndex = 0;
     protected ?string $commandKey = null;
     private ?string $formModalTitle = null;

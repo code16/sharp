@@ -29,6 +29,7 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 class PostForm extends SharpForm
 {
     use WithSharpFormEloquentUpdater;
+
     protected ?string $formValidatorClass = PostValidator::class;
 
     public function buildFormFields(FieldsContainer $formFields): void

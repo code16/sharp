@@ -9,6 +9,7 @@ use Illuminate\Support\Traits\Conditionable;
 class FieldsContainer
 {
     use Conditionable;
+
     protected array $fields = [];
 
     public function addField(SharpFormField|SharpShowField $field): self

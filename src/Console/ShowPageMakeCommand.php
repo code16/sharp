@@ -9,6 +9,7 @@ use Symfony\Component\Console\Input\InputOption;
 class ShowPageMakeCommand extends GeneratorCommand
 {
     use WithModel;
+
     protected $name = 'sharp:make:show-page';
     protected $description = 'Create a new Show Page class';
     protected $type = 'SharpShow';

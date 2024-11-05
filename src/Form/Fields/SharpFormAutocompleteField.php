@@ -11,13 +11,18 @@ use Illuminate\Support\Collection;
 
 class SharpFormAutocompleteField extends SharpFormField
 {
-    use SharpFormFieldWithDataLocalization, SharpFormFieldWithOptions,
-        SharpFormFieldWithPlaceholder, SharpFormFieldWithTemplates;
+    use SharpFormFieldWithDataLocalization;
+    use SharpFormFieldWithOptions;
+    use SharpFormFieldWithPlaceholder;
+    use SharpFormFieldWithTemplates;
+
     const FIELD_TYPE = 'autocomplete';
+
     protected string $mode;
 
     /** @var Collection|array */
     protected $localValues = [];
+
     protected array $localSearchKeys = ['value'];
     protected string $remoteMethod = 'GET';
     protected ?string $remoteEndpoint = null;

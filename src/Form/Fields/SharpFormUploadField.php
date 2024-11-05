@@ -8,6 +8,7 @@ use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithUpload;
 class SharpFormUploadField extends SharpFormField
 {
     use SharpFormFieldWithUpload;
+
     const FIELD_TYPE = 'upload';
 
     public static function make(string $key): self

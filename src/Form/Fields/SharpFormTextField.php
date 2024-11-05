@@ -9,8 +9,12 @@ use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
 
 class SharpFormTextField extends SharpFormField
 {
-    use SharpFormFieldWithDataLocalization, SharpFormFieldWithMaxLength, SharpFormFieldWithPlaceholder;
+    use SharpFormFieldWithDataLocalization;
+    use SharpFormFieldWithMaxLength;
+    use SharpFormFieldWithPlaceholder;
+
     const FIELD_TYPE = 'text';
+
     protected string $inputType = 'text';
 
     public static function make(string $key): self

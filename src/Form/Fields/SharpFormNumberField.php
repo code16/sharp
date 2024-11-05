@@ -8,7 +8,9 @@ use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
 class SharpFormNumberField extends SharpFormField
 {
     use SharpFormFieldWithPlaceholder;
+
     const FIELD_TYPE = 'number';
+
     protected ?float $min = null;
     protected ?float $max = null;
     protected float $step = 1;

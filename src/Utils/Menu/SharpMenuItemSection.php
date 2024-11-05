@@ -5,6 +5,7 @@ namespace Code16\Sharp\Utils\Menu;
 class SharpMenuItemSection extends SharpMenuItem
 {
     use HasSharpMenuItems;
+
     protected bool $collapsible = true;
 
     public function __construct(protected string $label) {}

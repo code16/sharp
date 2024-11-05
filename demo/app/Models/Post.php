@@ -15,7 +15,9 @@ use Spatie\Translatable\HasTranslations;
 
 class Post extends Model
 {
-    use HasFactory, HasTranslations;
+    use HasFactory;
+    use HasTranslations;
+
     public array $translatable = [
         'title',
         'content',

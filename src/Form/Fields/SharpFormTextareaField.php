@@ -9,8 +9,12 @@ use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
 
 class SharpFormTextareaField extends SharpFormField
 {
-    use SharpFormFieldWithDataLocalization, SharpFormFieldWithMaxLength, SharpFormFieldWithPlaceholder;
+    use SharpFormFieldWithDataLocalization;
+    use SharpFormFieldWithMaxLength;
+    use SharpFormFieldWithPlaceholder;
+
     const FIELD_TYPE = 'textarea';
+
     protected ?int $rows = null;
 
     public static function make(string $key): self

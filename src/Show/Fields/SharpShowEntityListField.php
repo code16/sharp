@@ -7,6 +7,7 @@ use Code16\Sharp\Utils\Filters\Filter;
 class SharpShowEntityListField extends SharpShowField
 {
     const FIELD_TYPE = 'entityList';
+
     protected string $entityListKey;
     protected array $hiddenFilters = [];
     protected array $hiddenCommands = [

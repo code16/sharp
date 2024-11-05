@@ -8,6 +8,7 @@ use Illuminate\Support\Traits\Conditionable;
 class EntityListFieldsContainer
 {
     use Conditionable;
+
     protected array $fields = [];
 
     final public function addField(EntityListField $field): self
