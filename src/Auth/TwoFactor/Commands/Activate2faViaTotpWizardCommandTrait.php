@@ -71,7 +71,7 @@ trait Activate2faViaTotpWizardCommandTrait
                     new SvgImageBackEnd
                 )
             ))
-            ->writeString($this->get2faHandler()->setUser(auth()->user())->getQRCodeUrl());
+                ->writeString($this->get2faHandler()->setUser(auth()->user())->getQRCodeUrl());
 
         return [
             'qr' => [

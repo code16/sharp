@@ -26,9 +26,7 @@ class SharpEntityListStateTest extends SharpTestCase
                         $this->addState('test2', 'Test 2', 'red');
                     }
 
-                    protected function updateState($instanceId, $stateId): array
-                    {
-                    }
+                    protected function updateState($instanceId, $stateId): array {}
                 });
             }
         };
@@ -100,9 +98,7 @@ class SharpEntityListStateTest extends SharpTestCase
                         $this->addState(false, 'Test 2', 'red');
                     }
 
-                    protected function updateState($instanceId, $stateId): array
-                    {
-                    }
+                    protected function updateState($instanceId, $stateId): array {}
                 });
             }
         };
@@ -139,9 +135,7 @@ class SharpEntityListStateTest extends SharpTestCase
                         return $instanceId < 3;
                     }
 
-                    protected function updateState($instanceId, $stateId): array
-                    {
-                    }
+                    protected function updateState($instanceId, $stateId): array {}
                 });
             }
         };
@@ -172,7 +166,5 @@ class SharpEntityListTestState extends EntityState
         $this->addState('test2', 'Test 2', 'red');
     }
 
-    protected function updateState($instanceId, $stateId): array
-    {
-    }
+    protected function updateState($instanceId, $stateId): array {}
 }

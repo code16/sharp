@@ -7,7 +7,7 @@ use Code16\Sharp\Form\SharpSingleForm;
 
 class FormController extends ApiController
 {
-    public function edit(string $entityKey, string $instanceId = null)
+    public function edit(string $entityKey, ?string $instanceId = null)
     {
         sharp_check_ability(
             $this->entityManager->entityFor($entityKey)->hasShow() ? 'update' : 'view',
@@ -56,7 +56,7 @@ class FormController extends ApiController
         );
     }
 
-    public function update(string $entityKey, string $instanceId = null)
+    public function update(string $entityKey, ?string $instanceId = null)
     {
         sharp_check_ability('update', $entityKey, $instanceId);
 

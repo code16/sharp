@@ -8,9 +8,13 @@ use Illuminate\Support\Collection;
 class LinkToEntityList extends SharpLinkTo
 {
     protected array $filters = [];
+
     protected ?string $searchText = null;
+
     protected ?string $sortAttribute = null;
+
     protected ?string $sortDir = null;
+
     protected ?array $fullQuerystring = null;
 
     public static function make(string $entityKey): self

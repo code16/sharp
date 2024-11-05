@@ -458,7 +458,7 @@ class SharpDashboardTest extends SharpTestCase
         {
             public function buildDashboardConfig(): void
             {
-                $this->configurePageAlert('alert', static::$pageAlertLevelDanger);
+                $this->configurePageAlert('alert', self::$pageAlertLevelDanger);
             }
         };
 

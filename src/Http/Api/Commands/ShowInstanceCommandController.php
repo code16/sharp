@@ -7,7 +7,7 @@ use Code16\Sharp\Show\SharpSingleShow;
 
 class ShowInstanceCommandController extends ApiController
 {
-    use HandleCommandReturn, HandleCommandForm;
+    use HandleCommandForm, HandleCommandReturn;
 
     public function show(string $entityKey, string $commandKey, mixed $instanceId = null)
     {

@@ -138,7 +138,5 @@ class PersonSharpEntityListAgeRequiredFilter extends EntityListSelectRequiredFil
 
 class PersonSharpEntityListReorderHandler implements ReorderHandler
 {
-    public function reorder(array $ids): void
-    {
-    }
+    public function reorder(array $ids): void {}
 }

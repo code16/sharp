@@ -9,7 +9,7 @@ use Code16\Sharp\Http\Api\ApiController;
 
 class DashboardCommandController extends ApiController
 {
-    use HandleCommandReturn, HandleCommandForm;
+    use HandleCommandForm, HandleCommandReturn;
 
     public function show(string $entityKey, string $commandKey)
     {
@@ -47,7 +47,7 @@ class DashboardCommandController extends ApiController
             $handler->buildCommandConfig();
 
             if (! $handler->authorize()) {
-                throw new SharpAuthorizationException();
+                throw new SharpAuthorizationException;
             }
 
             $handler->initQueryParams(DashboardQueryParams::create()->fillWithRequest());

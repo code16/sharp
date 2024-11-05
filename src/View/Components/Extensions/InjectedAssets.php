@@ -92,7 +92,6 @@ class InjectedAssets extends Component
      * Get the asset file type.
      *
      * @param  string  $assetPath
-     * @return string
      */
     protected function getAssetFileType($assetPath): string
     {
@@ -106,7 +105,6 @@ class InjectedAssets extends Component
      *
      * @param  string  $strategy
      * @param  string  $assetPath
-     * @return string
      */
     protected function getAssetPathWithStrategyApplied($strategy, $assetPath): string
     {
@@ -127,7 +125,6 @@ class InjectedAssets extends Component
     /**
      * Get the strategy to render the assets.
      *
-     * @return string
      *
      * @throws SharpInvalidAssetRenderStrategy
      */

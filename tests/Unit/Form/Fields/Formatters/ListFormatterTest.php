@@ -131,9 +131,6 @@ class ListFormatterTest extends SharpTestCase
         ], $formatter->toFront($field, $data));
     }
 
-    /**
-     * @return array
-     */
     protected function getData(): array
     {
         return [

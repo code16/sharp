@@ -10,9 +10,13 @@ class EntityListQueryParams
     use HasFiltersInQuery;
 
     protected ?int $page;
+
     protected ?string $search = null;
+
     protected ?string $sortedBy = null;
+
     protected ?string $sortedDir = null;
+
     protected array $specificIds = [];
 
     public static function create(): static

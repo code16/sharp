@@ -12,7 +12,7 @@ class AutocompleteListFormatterTest extends SharpTestCase
     /** @test */
     public function we_can_format_value_to_front()
     {
-        $formatter = new AutocompleteListFormatter();
+        $formatter = new AutocompleteListFormatter;
         $field = SharpFormAutocompleteListField::make('list')
             ->setItemField(SharpFormAutocompleteField::make('item', 'remote')
                 ->setRemoteEndpoint('/endpoint'),
@@ -31,7 +31,7 @@ class AutocompleteListFormatterTest extends SharpTestCase
     /** @test */
     public function we_can_format_value_from_front()
     {
-        $formatter = new AutocompleteListFormatter();
+        $formatter = new AutocompleteListFormatter;
         $field = SharpFormAutocompleteListField::make('list')
             ->setItemField(SharpFormAutocompleteField::make('item', 'remote')
                 ->setRemoteEndpoint('/endpoint'),

@@ -18,7 +18,7 @@ class FileUtilTest extends SharpTestCase
     /** @test */
     public function we_keep_the_file_name_if_it_is_the_first_one()
     {
-        $fileUtil = new FileUtil();
+        $fileUtil = new FileUtil;
 
         $this->assertEquals(
             'test.txt',
@@ -29,7 +29,7 @@ class FileUtilTest extends SharpTestCase
     /** @test */
     public function we_add_a_number_suffix_if_needed()
     {
-        $fileUtil = new FileUtil();
+        $fileUtil = new FileUtil;
 
         mkdir(storage_path('app/tmp/'));
         touch(storage_path('app/tmp/test.txt'));
@@ -50,7 +50,7 @@ class FileUtilTest extends SharpTestCase
     /** @test */
     public function we_normalize_file_name()
     {
-        $fileUtil = new FileUtil();
+        $fileUtil = new FileUtil;
 
         $this->assertEquals(
             'test.txt',

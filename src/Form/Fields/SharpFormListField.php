@@ -12,15 +12,25 @@ class SharpFormListField extends SharpFormField
     const FIELD_TYPE = 'list';
 
     protected bool $addable = false;
+
     protected bool $sortable = false;
+
     protected bool $removable = false;
+
     protected string $addText;
+
     protected string $itemIdAttribute = 'id';
+
     protected ?string $orderAttribute = null;
+
     protected ?int $maxItemCount = null;
+
     protected array $itemFields = [];
+
     protected bool $allowBulkUpload = false;
+
     private ?string $bulkUploadItemFieldKey = null;
+
     private int $bulkUploadFileCountLimit = 10;
 
     public static function make(string $key): self
@@ -63,7 +73,7 @@ class SharpFormListField extends SharpFormField
         return $this;
     }
 
-    public function setMaxItemCount(int $maxItemCount = null): self
+    public function setMaxItemCount(?int $maxItemCount = null): self
     {
         if ($maxItemCount === null) {
             return $this->setMaxItemCountUnlimited();

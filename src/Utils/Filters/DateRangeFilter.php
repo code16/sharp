@@ -5,6 +5,7 @@ namespace Code16\Sharp\Utils\Filters;
 abstract class DateRangeFilter extends Filter
 {
     private string $dateFormat = 'YYYY-MM-DD';
+
     private bool $isMondayFirst = true;
 
     final public function configureDateFormat(string $dateFormat): self

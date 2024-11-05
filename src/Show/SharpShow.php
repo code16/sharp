@@ -15,23 +15,26 @@ use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 abstract class SharpShow
 {
-    use WithCustomTransformers,
-        HandleFields,
+    use HandleCustomBreadcrumb,
         HandleEntityState,
+        HandleFields,
         HandleInstanceCommands,
+        HandleLocalizedFields,
         HandlePageAlertMessage,
-        HandleCustomBreadcrumb,
-        HandleLocalizedFields;
+        WithCustomTransformers;
 
     protected ?ShowLayout $showLayout = null;
+
     protected ?string $multiformAttribute = null;
+
     protected ?SharpShowTextField $pageTitleField = null;
+
     protected ?string $deleteConfirmationText = null;
 
     final public function showLayout(): array
     {
         if ($this->showLayout === null) {
-            $this->showLayout = new ShowLayout();
+            $this->showLayout = new ShowLayout;
             $this->buildShowLayout($this->showLayout);
         }
 

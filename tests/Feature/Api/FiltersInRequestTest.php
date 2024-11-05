@@ -99,7 +99,7 @@ class FiltersInRequestTest extends BaseApiTestCase
         app()->bind(
             PersonSharpEntityList::class,
             function () {
-                return new class() extends PersonSharpEntityList
+                return new class extends PersonSharpEntityList
                 {
                     public function getFilters(): array
                     {
@@ -112,7 +112,7 @@ class FiltersInRequestTest extends BaseApiTestCase
         );
 
         $this->buildTheWorld();
-        $key = (new FiltersInRequestTestRetainedActiveFilter())->getKey();
+        $key = (new FiltersInRequestTestRetainedActiveFilter)->getKey();
 
         $this->assertFalse((bool) session("_sharp_retained_filter_$key"));
 
@@ -129,7 +129,7 @@ class FiltersInRequestTest extends BaseApiTestCase
         app()->bind(
             PersonSharpEntityList::class,
             function () {
-                return new class() extends PersonSharpEntityList
+                return new class extends PersonSharpEntityList
                 {
                     public function getListData(): array|Arrayable
                     {
@@ -203,7 +203,7 @@ class FiltersInRequestTest extends BaseApiTestCase
         app()->bind(
             PersonSharpEntityList::class,
             function () {
-                return new class() extends PersonSharpEntityList
+                return new class extends PersonSharpEntityList
                 {
                     public function getListData(): array|Arrayable
                     {
@@ -266,7 +266,7 @@ class FiltersInRequestTest extends BaseApiTestCase
         app()->bind(
             PersonSharpEntityList::class,
             function () {
-                return new class() extends PersonSharpEntityList
+                return new class extends PersonSharpEntityList
                 {
                     public function getListData(): array|Arrayable
                     {

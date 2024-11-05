@@ -19,7 +19,7 @@ abstract class EntityState extends InstanceCommand
         return $this->states;
     }
 
-    protected function addState(string $key, string $label, string $color = null): self
+    protected function addState(string $key, string $label, ?string $color = null): self
     {
         $this->states[$key] = [$label, $color];
 
@@ -38,8 +38,6 @@ abstract class EntityState extends InstanceCommand
 
     /**
      * @param  mixed  $instanceId
-     * @param  array  $data
-     * @return array
      *
      * @throws SharpInvalidEntityStateException
      */
@@ -64,7 +62,6 @@ abstract class EntityState extends InstanceCommand
 
     /**
      * @param  mixed  $instanceId
-     * @param  string  $stateId
      * @return mixed
      */
     abstract protected function updateState($instanceId, string $stateId): array;

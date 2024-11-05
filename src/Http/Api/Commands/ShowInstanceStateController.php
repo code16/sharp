@@ -17,7 +17,7 @@ class ShowInstanceStateController extends ApiController
 
         if (! $stateHandler->authorize()
             || ! $stateHandler->authorizeFor($instanceId)) {
-            throw new SharpAuthorizationException();
+            throw new SharpAuthorizationException;
         }
 
         return $this->returnCommandResult(

@@ -10,9 +10,7 @@ class Sharp2faDefaultNotification extends Notification implements ShouldQueue
 {
     use \Illuminate\Bus\Queueable;
 
-    public function __construct(public string $code)
-    {
-    }
+    public function __construct(public string $code) {}
 
     public function via($notifiable)
     {

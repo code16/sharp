@@ -15,14 +15,20 @@ use Intervention\Image\ImageManager;
 class Thumbnail
 {
     protected ImageManager $imageManager;
+
     protected FilesystemManager $storage;
+
     protected SharpUploadModel $uploadModel;
+
     protected int $quality = 90;
+
     protected bool $appendTimestamp = false;
+
     protected ?Closure $afterClosure = null;
+
     protected ?array $transformationFilters = null;
 
-    public function __construct(SharpUploadModel $model, ImageManager $imageManager = null, FilesystemManager $storage = null)
+    public function __construct(SharpUploadModel $model, ?ImageManager $imageManager = null, ?FilesystemManager $storage = null)
     {
         $this->uploadModel = $model;
         $this->imageManager = $imageManager ?: app(ImageManager::class);
@@ -50,7 +56,7 @@ class Thumbnail
         return $this;
     }
 
-    public function setTransformationFilters(array $transformationFilters = null): self
+    public function setTransformationFilters(?array $transformationFilters = null): self
     {
         $this->transformationFilters = $transformationFilters;
 
@@ -66,7 +72,7 @@ class Thumbnail
         $thumbnailDisk = $this->storage->disk(config('sharp.uploads.thumbnails_disk', 'public'));
 
         $thumbDirNameAppender = ($this->transformationFilters ? '_'.md5(serialize($this->transformationFilters)) : '')
-            .(sizeof($filters) ? '_'.md5(serialize($filters)) : '')
+            .(count($filters) ? '_'.md5(serialize($filters)) : '')
             ."_q-$this->quality";
 
         $thumbnailPath = sprintf(

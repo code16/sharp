@@ -60,11 +60,7 @@ abstract class FormFieldsTestForm extends SharpForm
         return false;
     }
 
-    public function delete($id): void
-    {
-    }
+    public function delete($id): void {}
 
-    public function buildFormLayout(FormLayout $formLayout): void
-    {
-    }
+    public function buildFormLayout(FormLayout $formLayout): void {}
 }

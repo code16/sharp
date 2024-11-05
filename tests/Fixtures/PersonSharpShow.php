@@ -28,9 +28,7 @@ class PersonSharpShow extends SharpShow
                     return 'Label';
                 }
 
-                public function execute($instanceId, array $data = []): array
-                {
-                }
+                public function execute($instanceId, array $data = []): array {}
 
                 public function authorizeFor($instanceId): bool
                 {
@@ -51,9 +49,7 @@ class PersonSharpShow extends SharpShow
                     $this->addState('active', 'Label', 'blue');
                 }
 
-                protected function updateState($instanceId, $stateId): array
-                {
-                }
+                protected function updateState($instanceId, $stateId): array {}
 
                 public function authorizeFor($instanceId): bool
                 {
@@ -78,7 +74,5 @@ class PersonSharpShow extends SharpShow
         return ['name' => 'John Wayne', 'job' => 'actor', 'state' => 'active'];
     }
 
-    public function delete($id): void
-    {
-    }
+    public function delete($id): void {}
 }

@@ -18,6 +18,7 @@ use Illuminate\Support\Str;
 class AppendBreadcrumb
 {
     protected CurrentSharpRequest $currentSharpRequest;
+
     protected ?object $data = null;
 
     public function __construct(CurrentSharpRequest $currentSharpRequest)
@@ -49,7 +50,7 @@ class AppendBreadcrumb
                         $item->type,
                         isset($item->instance) ? "{$item->key}/{$item->instance}" : $item->key,
                     );
-                    $isLeaf = $index === sizeof($breadcrumb) - 1;
+                    $isLeaf = $index === count($breadcrumb) - 1;
 
                     return [
                         'type' => $this->getFrontTypeNameFor($item->type),

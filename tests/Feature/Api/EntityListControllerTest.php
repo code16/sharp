@@ -133,7 +133,7 @@ class EntityListControllerTest extends BaseApiTestCase
     /** @test */
     public function we_can_get_notifications()
     {
-        (new PersonSharpForm())->notify('title')
+        (new PersonSharpForm)->notify('title')
             ->setLevelSuccess()
             ->setDetail('body')
             ->setAutoHide(false);
@@ -151,8 +151,8 @@ class EntityListControllerTest extends BaseApiTestCase
             ->assertOk()
             ->assertJsonMissing(['alert']);
 
-        (new PersonSharpForm())->notify('title1');
-        (new PersonSharpForm())->notify('title2');
+        (new PersonSharpForm)->notify('title1');
+        (new PersonSharpForm)->notify('title2');
 
         $this->json('get', '/sharp/api/list/person')
             ->assertOk()
@@ -302,9 +302,7 @@ class EntityListControllerTest extends BaseApiTestCase
 
 class PersonSharpEntityListWithDeletion extends PersonSharpEntityList
 {
-    public function delete(mixed $id): void
-    {
-    }
+    public function delete(mixed $id): void {}
 }
 
 // Just an empty list impl to be sure we don't call delete on it
@@ -326,7 +324,5 @@ class PersonSharpShowWithoutDeletion extends PersonSharpShow
 
 class PersonSharpFormWithDeletion extends PersonSharpForm
 {
-    public function delete(mixed $id): void
-    {
-    }
+    public function delete(mixed $id): void {}
 }

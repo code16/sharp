@@ -12,8 +12,11 @@ class SharpFormNumberField extends SharpFormField
     const FIELD_TYPE = 'number';
 
     protected ?float $min = null;
+
     protected ?float $max = null;
+
     protected float $step = 1;
+
     protected bool $showControls = false;
 
     public static function make(string $key): self

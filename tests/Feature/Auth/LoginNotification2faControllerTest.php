@@ -15,7 +15,7 @@ class LoginNotification2faControllerTest extends BaseApiTestCase
     {
         parent::setUp();
 
-        auth()->extend('sharp', fn () => new TestAuthGuard());
+        auth()->extend('sharp', fn () => new TestAuthGuard);
         $this->app['config']->set(
             'auth.guards.sharp', [
                 'driver' => 'sharp',

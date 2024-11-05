@@ -5,11 +5,14 @@ namespace Code16\Sharp\Utils\Layout;
 abstract class LayoutField
 {
     protected string $fieldKey;
+
     protected int $size = 12;
+
     protected int $sizeXS = 12;
+
     protected array $itemLayout = [];
 
-    public function __construct(string $fieldKey, \Closure $subLayoutCallback = null)
+    public function __construct(string $fieldKey, ?\Closure $subLayoutCallback = null)
     {
         if (strpos($fieldKey, '|')) {
             [$this->fieldKey, $sizes] = explode('|', $fieldKey);

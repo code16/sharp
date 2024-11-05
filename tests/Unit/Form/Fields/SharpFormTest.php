@@ -119,23 +119,13 @@ class SharpFormTest extends SharpTestCase
 
 abstract class SharpFormTestForm extends SharpForm
 {
-    public function find($id): array
-    {
-    }
+    public function find($id): array {}
 
-    public function update($id, array $data): bool
-    {
-    }
+    public function update($id, array $data): bool {}
 
-    public function delete($id): void
-    {
-    }
+    public function delete($id): void {}
 
-    public function buildFormFields(FieldsContainer $formFields): void
-    {
-    }
+    public function buildFormFields(FieldsContainer $formFields): void {}
 
-    public function buildFormLayout(FormLayout $formLayout): void
-    {
-    }
+    public function buildFormLayout(FormLayout $formLayout): void {}
 }

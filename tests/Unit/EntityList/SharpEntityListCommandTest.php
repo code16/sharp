@@ -27,9 +27,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                             return 'My Entity Command';
                         }
 
-                        public function execute(array $data = []): array
-                        {
-                        }
+                        public function execute(array $data = []): array {}
                     },
                 ];
             }
@@ -44,9 +42,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                             return 'My Instance Command';
                         }
 
-                        public function execute($instanceId, array $data = []): array
-                        {
-                        }
+                        public function execute($instanceId, array $data = []): array {}
                     },
                 ];
             }
@@ -124,9 +120,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                             $this->configureConfirmationText('Sure?');
                         }
 
-                        public function execute(array $data = []): array
-                        {
-                        }
+                        public function execute(array $data = []): array {}
                     },
                 ];
             }
@@ -157,9 +151,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                             $this->configureInstanceSelectionRequired();
                         }
 
-                        public function execute(array $data = []): array
-                        {
-                        }
+                        public function execute(array $data = []): array {}
                     },
                     'command_allowed' => new class extends EntityCommand
                     {
@@ -173,9 +165,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                             $this->configureInstanceSelectionAllowed();
                         }
 
-                        public function execute(array $data = []): array
-                        {
-                        }
+                        public function execute(array $data = []): array {}
                     },
                     'command_none' => new class extends EntityCommand
                     {
@@ -189,9 +179,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                             $this->configureInstanceSelectionNone();
                         }
 
-                        public function execute(array $data = []): array
-                        {
-                        }
+                        public function execute(array $data = []): array {}
                     },
                 ];
             }
@@ -229,9 +217,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                             $column->withSingleField('message');
                         }
 
-                        public function execute(array $data = []): array
-                        {
-                        }
+                        public function execute(array $data = []): array {}
                     },
                 ];
             }
@@ -262,9 +248,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                             $this->configureFormModalTitle('My title');
                         }
 
-                        public function execute(array $data = []): array
-                        {
-                        }
+                        public function execute(array $data = []): array {}
                     },
                 ];
             }
@@ -295,9 +279,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                             return false;
                         }
 
-                        public function execute(array $data = []): array
-                        {
-                        }
+                        public function execute(array $data = []): array {}
                     },
                 ];
             }
@@ -328,9 +310,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                             return $instanceId < 3;
                         }
 
-                        public function execute($instanceId, array $data = []): array
-                        {
-                        }
+                        public function execute($instanceId, array $data = []): array {}
                     },
                 ];
             }
@@ -365,9 +345,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                             $this->configureDescription('My Entity Command description');
                         }
 
-                        public function execute(array $data = []): array
-                        {
-                        }
+                        public function execute(array $data = []): array {}
                     },
                 ];
             }
@@ -393,9 +371,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                             return '';
                         }
 
-                        public function execute($instanceId, array $data = []): array
-                        {
-                        }
+                        public function execute($instanceId, array $data = []): array {}
                     },
                     'command-2' => new class extends InstanceCommand
                     {
@@ -404,9 +380,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                             return '';
                         }
 
-                        public function execute($instanceId, array $data = []): array
-                        {
-                        }
+                        public function execute($instanceId, array $data = []): array {}
                     },
                     '---',
                     'command-3' => new class extends InstanceCommand
@@ -416,9 +390,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                             return '';
                         }
 
-                        public function execute($instanceId, array $data = []): array
-                        {
-                        }
+                        public function execute($instanceId, array $data = []): array {}
                     },
                 ];
             }
@@ -446,9 +418,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                             return '';
                         }
 
-                        public function execute(array $data = []): array
-                        {
-                        }
+                        public function execute(array $data = []): array {}
                     },
                     '---',
                     'command-2' => new class extends EntityCommand
@@ -458,9 +428,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                             return '';
                         }
 
-                        public function execute(array $data = []): array
-                        {
-                        }
+                        public function execute(array $data = []): array {}
                     },
                     'command-3' => new class extends EntityCommand
                     {
@@ -469,9 +437,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                             return '';
                         }
 
-                        public function execute(array $data = []): array
-                        {
-                        }
+                        public function execute(array $data = []): array {}
                     },
                 ];
             }
@@ -499,9 +465,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                             return 'My Entity Command';
                         }
 
-                        public function execute(array $data = []): array
-                        {
-                        }
+                        public function execute(array $data = []): array {}
                     },
                     'primary-entity' => new class extends EntityCommand
                     {
@@ -510,9 +474,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                             return 'My Primary Entity Command';
                         }
 
-                        public function execute(array $data = []): array
-                        {
-                        }
+                        public function execute(array $data = []): array {}
                     },
                 ];
             }
@@ -537,7 +499,5 @@ class SharpEntityListCommandTestCommand extends EntityCommand
         return 'My Entity Command';
     }
 
-    public function execute(array $data = []): array
-    {
-    }
+    public function execute(array $data = []): array {}
 }

@@ -9,17 +9,24 @@ class SharpFormDateField extends SharpFormField
     const FIELD_TYPE = 'date';
 
     protected bool $hasDate = true;
+
     protected bool $hasTime = false;
+
     protected bool $mondayFirst = true;
+
     protected string $minTime = '00:00';
+
     protected string $maxTime = '23:59';
+
     protected int $stepTime = 30;
+
     protected ?string $displayFormat = null;
+
     protected ?string $language = null;
 
     public static function make(string $key): self
     {
-        $field = new static($key, static::FIELD_TYPE, new DateFormatter());
+        $field = new static($key, static::FIELD_TYPE, new DateFormatter);
         $field->language = app()->getLocale();
 
         return $field;
@@ -72,7 +79,7 @@ class SharpFormDateField extends SharpFormField
         return $this;
     }
 
-    public function setDisplayFormat(string $displayFormat = null): self
+    public function setDisplayFormat(?string $displayFormat = null): self
     {
         $this->displayFormat = $displayFormat;
 

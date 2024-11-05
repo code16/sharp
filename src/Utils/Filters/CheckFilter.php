@@ -2,6 +2,4 @@
 
 namespace Code16\Sharp\Utils\Filters;
 
-abstract class CheckFilter extends Filter
-{
-}
+abstract class CheckFilter extends Filter {}

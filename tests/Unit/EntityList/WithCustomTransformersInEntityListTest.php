@@ -21,7 +21,7 @@ class WithCustomTransformersInEntityListTest extends SharpEloquentBaseTestCase
         Person::create(['name' => 'John Wayne']);
         Person::create(['name' => 'Mary Wayne']);
 
-        $list = new WithCustomTransformersTestList();
+        $list = new WithCustomTransformersTestList;
 
         $this->assertArraySubset(
             [['name' => 'John Wayne'], ['name' => 'Mary Wayne']],
@@ -39,7 +39,7 @@ class WithCustomTransformersInEntityListTest extends SharpEloquentBaseTestCase
         {
             public function getListData(): array|Arrayable
             {
-                return $this->transform(DB::table((new Person())->getTable())->get());
+                return $this->transform(DB::table((new Person)->getTable())->get());
             }
         };
 
@@ -62,7 +62,7 @@ class WithCustomTransformersInEntityListTest extends SharpEloquentBaseTestCase
         {
             public function getListData(): array|Arrayable
             {
-                return $this->transform(DB::table((new Person())->getTable())->paginate(2));
+                return $this->transform(DB::table((new Person)->getTable())->paginate(2));
             }
         };
 
@@ -176,7 +176,7 @@ class WithCustomTransformersInEntityListTest extends SharpEloquentBaseTestCase
             public function getListData(): array|Arrayable
             {
                 return $this
-                    ->setCustomTransformer('name', new UppercaseTransformer())
+                    ->setCustomTransformer('name', new UppercaseTransformer)
                     ->transform(Person::all());
             }
         };
@@ -197,17 +197,11 @@ class WithCustomTransformersTestList extends SharpEntityList
         return $this->transform(Person::all());
     }
 
-    public function buildListFields(EntityListFieldsContainer $fieldsContainer): void
-    {
-    }
+    public function buildListFields(EntityListFieldsContainer $fieldsContainer): void {}
 
-    public function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
-    {
-    }
+    public function buildListLayout(EntityListFieldsLayout $fieldsLayout): void {}
 
-    public function buildListConfig(): void
-    {
-    }
+    public function buildListConfig(): void {}
 }
 
 class UppercaseTransformer implements SharpAttributeTransformer
@@ -215,8 +209,6 @@ class UppercaseTransformer implements SharpAttributeTransformer
     /**
      * Transform a model attribute to array (json-able).
      *
-     * @param  $value
-     * @param  $instance
      * @param  string  $attribute
      * @return mixed
      */

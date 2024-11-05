@@ -9,9 +9,7 @@ use Intervention\Image\Image;
  */
 abstract class ThumbnailFilter
 {
-    public function __construct(protected array $params)
-    {
-    }
+    public function __construct(protected array $params) {}
 
     public function resized()
     {

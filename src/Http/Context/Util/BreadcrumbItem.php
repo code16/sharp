@@ -7,8 +7,11 @@ use Code16\Sharp\Utils\Entities\SharpEntityManager;
 class BreadcrumbItem
 {
     public string $type;
+
     public string $key;
+
     public ?string $instance = null;
+
     public int $depth = 0;
 
     public function __construct(string $type, string $key)

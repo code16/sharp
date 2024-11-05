@@ -8,8 +8,6 @@ use Code16\Sharp\Utils\Transformers\ArrayConverter;
 class TagsFormatter extends SharpFieldFormatter
 {
     /**
-     * @param  SharpFormField  $field
-     * @param  $value
      * @return array
      */
     public function toFront(SharpFormField $field, $value)
@@ -30,9 +28,6 @@ class TagsFormatter extends SharpFieldFormatter
     }
 
     /**
-     * @param  SharpFormField  $field
-     * @param  string  $attribute
-     * @param  $value
      * @return array
      */
     public function fromFront(SharpFormField $field, string $attribute, $value)

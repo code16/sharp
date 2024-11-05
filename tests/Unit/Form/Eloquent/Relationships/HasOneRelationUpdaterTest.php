@@ -14,7 +14,7 @@ class HasOneRelationUpdaterTest extends SharpEloquentBaseTestCase
         $mother = Person::create(['name' => 'Jane Wayne']);
         $son = Person::create(['name' => 'John Wayne']);
 
-        $updater = new HasOneRelationUpdater();
+        $updater = new HasOneRelationUpdater;
 
         $updater->update($mother, 'elderSon', $son->id);
 
@@ -29,7 +29,7 @@ class HasOneRelationUpdaterTest extends SharpEloquentBaseTestCase
     {
         $mother = Person::create(['name' => 'Jane Wayne']);
 
-        $updater = new HasOneRelationUpdater();
+        $updater = new HasOneRelationUpdater;
 
         $updater->update($mother, 'elderSon:name', 'John Wayne');
 

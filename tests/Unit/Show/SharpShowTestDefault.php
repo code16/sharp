@@ -191,7 +191,7 @@ class SharpShowTest extends SharpTestCase
         {
             public function buildShowConfig(): void
             {
-                $this->configurePageAlert('template', static::$pageAlertLevelWarning, 'test-key');
+                $this->configurePageAlert('template', self::$pageAlertLevelWarning, 'test-key');
             }
         };
 
@@ -306,8 +306,7 @@ class SharpShowTest extends SharpTestCase
     /** @test */
     public function single_shows_have_are_declared_in_config()
     {
-        $sharpShow = new class extends BaseSharpSingleShowTestDefault {
-        };
+        $sharpShow = new class extends BaseSharpSingleShowTestDefault {};
 
         $this->assertArraySubset(
             [

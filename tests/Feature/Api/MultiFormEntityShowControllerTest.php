@@ -74,7 +74,5 @@ class PersonWithMultiformSharpShow extends SharpShow
         });
     }
 
-    public function delete(mixed $id): void
-    {
-    }
+    public function delete(mixed $id): void {}
 }

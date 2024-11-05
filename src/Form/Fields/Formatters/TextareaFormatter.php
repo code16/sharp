@@ -2,6 +2,4 @@
 
 namespace Code16\Sharp\Form\Fields\Formatters;
 
-class TextareaFormatter extends TextFormatter
-{
-}
+class TextareaFormatter extends TextFormatter {}

@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 trait IsWizardCommand
 {
     protected ?WizardCommandContext $wizardCommandContext = null;
+
     private string $key;
 
     protected function getWizardContext(): WizardCommandContext
@@ -17,7 +18,7 @@ trait IsWizardCommand
         if (! $this->wizardCommandContext) {
             $this->wizardCommandContext = session()->get(sprintf('CWC.%s.%s', get_class($this), $this->getKey()));
             if (! $this->wizardCommandContext) {
-                $this->wizardCommandContext = new WizardCommandContext();
+                $this->wizardCommandContext = new WizardCommandContext;
             }
         }
 
@@ -80,7 +81,7 @@ trait IsWizardCommand
         // You can either implement this method and test $step (quick for small commands)
         // or leave this and implement for each step buildFormFieldsForStepXXX
         // where XXX is the camel cased name of your step
-        throw new SharpMethodNotImplementedException();
+        throw new SharpMethodNotImplementedException;
     }
 
     public function buildFormLayout(FormLayoutColumn &$column): void
@@ -97,11 +98,7 @@ trait IsWizardCommand
         }
     }
 
-    protected function buildFormLayoutForFirstStep(FormLayoutColumn &$column): void
-    {
-    }
+    protected function buildFormLayoutForFirstStep(FormLayoutColumn &$column): void {}
 
-    protected function buildFormLayoutForStep(string $step, FormLayoutColumn &$column): void
-    {
-    }
+    protected function buildFormLayoutForStep(string $step, FormLayoutColumn &$column): void {}
 }

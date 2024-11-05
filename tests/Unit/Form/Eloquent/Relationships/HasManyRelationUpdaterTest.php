@@ -14,7 +14,7 @@ class HasManyRelationUpdaterTest extends SharpEloquentBaseTestCase
         $mother = Person::create(['name' => 'Jane Wayne']);
         $son1 = Person::create(['name' => 'A', 'mother_id' => $mother->id]);
 
-        $updater = new HasManyRelationUpdater();
+        $updater = new HasManyRelationUpdater;
 
         $updater->update($mother, 'sons', [[
             'id' => $son1->id,
@@ -33,7 +33,7 @@ class HasManyRelationUpdaterTest extends SharpEloquentBaseTestCase
     {
         $mother = Person::create(['name' => 'Jane Wayne']);
 
-        $updater = new HasManyRelationUpdater();
+        $updater = new HasManyRelationUpdater;
 
         $updater->update($mother, 'sons', [[
             'id' => null,
@@ -51,7 +51,7 @@ class HasManyRelationUpdaterTest extends SharpEloquentBaseTestCase
     {
         $mother = Person::create(['name' => 'Jane Wayne']);
 
-        (new HasManyRelationUpdater())->update($mother, 'sons', [[
+        (new HasManyRelationUpdater)->update($mother, 'sons', [[
             'id' => 'ABC', // Set a invalid id here to ensure it will be unset
             'name' => 'John Wayne',
         ]]);
@@ -65,7 +65,7 @@ class HasManyRelationUpdaterTest extends SharpEloquentBaseTestCase
     {
         $mother = PersonWithFixedId::create(['name' => 'Jane Wayne']);
 
-        (new HasManyRelationUpdater())->update($mother, 'sons', [[
+        (new HasManyRelationUpdater)->update($mother, 'sons', [[
             'id' => 123,
             'name' => 'John Wayne',
         ]]);
@@ -91,7 +91,7 @@ class HasManyRelationUpdaterTest extends SharpEloquentBaseTestCase
         $mother->name = 'Jane Wayne';
         $mother->save();
 
-        $updater = new HasManyRelationUpdater();
+        $updater = new HasManyRelationUpdater;
 
         $updater->update($mother, 'sons', [[
             'id' => null, 'name' => 'John Wayne',
@@ -111,7 +111,7 @@ class HasManyRelationUpdaterTest extends SharpEloquentBaseTestCase
         $son1 = Person::create(['name' => 'John Wayne', 'mother_id' => $mother->id]);
         $son2 = Person::create(['name' => 'Mary Wayne', 'mother_id' => $mother->id]);
 
-        $updater = new HasManyRelationUpdater();
+        $updater = new HasManyRelationUpdater;
 
         $updater->update($mother, 'sons', [[
             'id' => $son1->id, 'name' => 'John Wayne',
@@ -127,6 +127,7 @@ class HasManyRelationUpdaterTest extends SharpEloquentBaseTestCase
 class PersonWithFixedId extends Person
 {
     protected $table = 'people';
+
     public $incrementing = false;
 
     public function sons()

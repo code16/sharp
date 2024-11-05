@@ -7,14 +7,23 @@ use Closure;
 trait SharpFormFieldWithUpload
 {
     protected ?float $maxFileSize = null;
+
     protected ?array $cropRatio = null;
+
     protected ?array $transformableFileTypes = null;
+
     protected string $storageDisk = 'local';
+
     protected string|Closure $storageBasePath = 'data';
+
     protected bool $transformable = true;
+
     protected ?bool $transformKeepOriginal = null;
+
     protected bool $compactThumbnail = false;
+
     protected bool $shouldOptimizeImage = false;
+
     protected string|array|null $fileFilter = null;
 
     public function setMaxFileSize(float $maxFileSizeInMB): self
@@ -24,7 +33,7 @@ trait SharpFormFieldWithUpload
         return $this;
     }
 
-    public function setCropRatio(string $ratio = null, ?array $transformableFileTypes = null): self
+    public function setCropRatio(?string $ratio = null, ?array $transformableFileTypes = null): self
     {
         if ($ratio) {
             $this->cropRatio = explode(':', $ratio);

@@ -2,6 +2,4 @@
 
 namespace Code16\Sharp\Form\Eloquent\Relationships;
 
-class MorphToManyRelationUpdater extends BelongsToManyRelationUpdater
-{
-}
+class MorphToManyRelationUpdater extends BelongsToManyRelationUpdater {}

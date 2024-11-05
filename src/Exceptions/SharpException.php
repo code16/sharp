@@ -2,6 +2,4 @@
 
 namespace Code16\Sharp\Exceptions;
 
-class SharpException extends \Exception
-{
-}
+class SharpException extends \Exception {}

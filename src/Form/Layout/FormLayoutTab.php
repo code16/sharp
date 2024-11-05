@@ -5,6 +5,7 @@ namespace Code16\Sharp\Form\Layout;
 class FormLayoutTab implements HasLayout
 {
     protected string $title;
+
     protected array $columns = [];
 
     public function __construct(string $title)
@@ -12,7 +13,7 @@ class FormLayoutTab implements HasLayout
         $this->title = $title;
     }
 
-    public function addColumn(int $size, \Closure $callback = null): self
+    public function addColumn(int $size, ?\Closure $callback = null): self
     {
         $column = $this->addColumnLayout(new FormLayoutColumn($size));
 

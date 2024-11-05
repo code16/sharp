@@ -9,13 +9,21 @@ class SharpFormGeolocationField extends SharpFormField
     const FIELD_TYPE = 'geolocation';
 
     protected string $displayUnit = 'DMS';
+
     protected bool $geocoding = false;
+
     protected int $zoomLevel = 10;
+
     protected ?array $boundaries = null;
+
     protected ?array $initialPosition = null;
+
     protected string $mapsProvider = 'gmaps';
+
     protected string $geocodingProvider = 'gmaps';
+
     protected array $mapsProviderOptions = [];
+
     protected array $geocodingProviderOptions = [];
 
     public static function make(string $key): self

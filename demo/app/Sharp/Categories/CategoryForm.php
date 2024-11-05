@@ -47,7 +47,7 @@ class CategoryForm extends SharpForm
     {
         $category = $id
             ? Category::findOrFail($id)
-            : new Category();
+            : new Category;
 
         $this->save($category, $data);
 

@@ -123,7 +123,7 @@ class ShowInstanceCommandPersonSharpShow extends PersonSharpShow
     public function getInstanceCommands(): ?array
     {
         return [
-            'instance_info' => new class() extends InstanceCommand
+            'instance_info' => new class extends InstanceCommand
             {
                 public function label(): string
                 {
@@ -135,7 +135,7 @@ class ShowInstanceCommandPersonSharpShow extends PersonSharpShow
                     return $this->info('ok');
                 }
             },
-            'instance_with_init_data' => new class() extends InstanceCommand
+            'instance_with_init_data' => new class extends InstanceCommand
             {
                 public function label(): string
                 {
@@ -155,9 +155,7 @@ class ShowInstanceCommandPersonSharpShow extends PersonSharpShow
                     ];
                 }
 
-                public function execute($instanceId, array $data = []): array
-                {
-                }
+                public function execute($instanceId, array $data = []): array {}
             },
         ];
     }
@@ -168,7 +166,7 @@ class ShowInstanceCommandPersonSharpSingleShow extends PersonSharpSingleShow
     public function getInstanceCommands(): ?array
     {
         return [
-            'instance_info' => new class() extends SingleInstanceCommand
+            'instance_info' => new class extends SingleInstanceCommand
             {
                 public function label(): string
                 {
@@ -180,7 +178,7 @@ class ShowInstanceCommandPersonSharpSingleShow extends PersonSharpSingleShow
                     return $this->info('ok');
                 }
             },
-            'instance_with_init_data' => new class() extends SingleInstanceCommand
+            'instance_with_init_data' => new class extends SingleInstanceCommand
             {
                 public function label(): string
                 {
@@ -200,9 +198,7 @@ class ShowInstanceCommandPersonSharpSingleShow extends PersonSharpSingleShow
                     ];
                 }
 
-                public function executeSingle(array $data = []): array
-                {
-                }
+                public function executeSingle(array $data = []): array {}
             },
         ];
     }

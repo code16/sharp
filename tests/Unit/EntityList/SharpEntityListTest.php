@@ -266,7 +266,7 @@ class SharpEntityListTest extends SharpTestCase
         {
             public function buildListConfig(): void
             {
-                $this->configurePageAlert('alert', static::$pageAlertLevelDanger);
+                $this->configurePageAlert('alert', self::$pageAlertLevelDanger);
             }
         };
 

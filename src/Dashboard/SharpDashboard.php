@@ -15,18 +15,26 @@ use Illuminate\Support\Collection;
 
 abstract class SharpDashboard
 {
-    use HandleFilters,
-        HandleDashboardCommands,
+    use HandleDashboardCommands,
+        HandleFilters,
         HandlePageAlertMessage;
 
     protected bool $dashboardBuilt = false;
+
     protected array $graphWidgetDataSets = [];
+
     protected array $panelWidgetsData = [];
+
     protected array $figureWidgetsData = [];
+
     protected array $orderedListWidgetsData = [];
+
     protected ?array $pageAlertData = null;
+
     protected ?DashboardQueryParams $queryParams;
+
     protected ?DashboardLayout $dashboardLayout = null;
+
     protected ?WidgetsContainer $widgetsContainer = null;
 
     final public function init(): self
@@ -58,7 +66,7 @@ abstract class SharpDashboard
     final public function widgetsContainer(): WidgetsContainer
     {
         if ($this->widgetsContainer === null) {
-            $this->widgetsContainer = new WidgetsContainer();
+            $this->widgetsContainer = new WidgetsContainer;
         }
 
         return $this->widgetsContainer;
@@ -67,7 +75,7 @@ abstract class SharpDashboard
     final public function widgetsLayout(): array
     {
         if ($this->dashboardLayout === null) {
-            $this->dashboardLayout = new DashboardLayout();
+            $this->dashboardLayout = new DashboardLayout;
             $this->buildDashboardLayout($this->dashboardLayout);
         }
 
@@ -77,9 +85,7 @@ abstract class SharpDashboard
     /**
      * Build config if necessary.
      */
-    public function buildDashboardConfig(): void
-    {
-    }
+    public function buildDashboardConfig(): void {}
 
     /**
      * Return all filters in an array of class names or instances.

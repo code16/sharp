@@ -29,9 +29,6 @@ class CreateUploadsMigration extends Command
 
     /**
      * Create a new migration install command instance.
-     *
-     * @param  UploadsMigrationCreator  $creator
-     * @param  Composer  $composer
      */
     public function __construct(UploadsMigrationCreator $creator, Composer $composer)
     {

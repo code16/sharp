@@ -17,25 +17,37 @@ use Illuminate\Support\Collection;
 
 abstract class SharpEntityList
 {
-    use HandleFilters,
+    use HandleEntityCommands,
         HandleEntityState,
-        HandleEntityCommands,
+        HandleFilters,
         HandleInstanceCommands,
         HandlePageAlertMessage,
         WithCustomTransformers;
 
     private ?EntityListFieldsContainer $fieldsContainer = null;
+
     private ?EntityListFieldsLayout $fieldsLayout = null;
+
     private ?EntityListFieldsLayout $xsFieldsLayout = null;
+
     protected ?EntityListQueryParams $queryParams;
+
     protected string $instanceIdAttribute = 'id';
+
     protected ?string $multiformAttribute = null;
+
     protected bool $searchable = false;
+
     protected bool $paginated = false;
+
     protected ?ReorderHandler $reorderHandler = null;
+
     protected ?string $defaultSort = null;
+
     protected ?string $defaultSortDir = null;
+
     protected bool $deleteHidden = false;
+
     protected ?string $deleteConfirmationText = null;
 
     final public function initQueryParams(): self
@@ -222,7 +234,7 @@ abstract class SharpEntityList
     private function checkListIsBuilt(): void
     {
         if ($this->fieldsContainer === null) {
-            $this->fieldsContainer = new EntityListFieldsContainer();
+            $this->fieldsContainer = new EntityListFieldsContainer;
             $this->buildList($this->fieldsContainer);
         }
     }
@@ -237,9 +249,7 @@ abstract class SharpEntityList
     /**
      * Build list config.
      */
-    public function buildListConfig(): void
-    {
-    }
+    public function buildListConfig(): void {}
 
     /**
      * Return all entity commands in an array of class names or instances.
@@ -277,9 +287,7 @@ abstract class SharpEntityList
      * Delete the given instance. Do not implement this method if you want to delegate
      * the deletion responsibility to the Show Page (then implement it there).
      */
-    public function delete(mixed $id): void
-    {
-    }
+    public function delete(mixed $id): void {}
 
     /**
      * Retrieve all rows data as an array.
@@ -293,12 +301,12 @@ abstract class SharpEntityList
     {
         // This default implementation is there to avoid breaking changes;
         // it will be removed in the next major version of Sharp.
-        $this->fieldsContainer = new EntityListFieldsContainer();
+        $this->fieldsContainer = new EntityListFieldsContainer;
         $this->buildListFields($this->fieldsContainer);
 
-        $fieldsLayout = new EntityListFieldsLayout();
+        $fieldsLayout = new EntityListFieldsLayout;
         $this->buildListLayout($fieldsLayout);
-        $xsFieldsLayout = new EntityListFieldsLayout();
+        $xsFieldsLayout = new EntityListFieldsLayout;
         $this->buildListLayoutForSmallScreens($xsFieldsLayout);
 
         $this->fieldsContainer
@@ -332,25 +340,19 @@ abstract class SharpEntityList
      *
      * @deprecated use buildList instead
      */
-    protected function buildListFields(EntityListFieldsContainer $fieldsContainer): void
-    {
-    }
+    protected function buildListFields(EntityListFieldsContainer $fieldsContainer): void {}
 
     /**
      * Build list layout.
      *
      * @deprecated use buildList instead
      */
-    protected function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
-    {
-    }
+    protected function buildListLayout(EntityListFieldsLayout $fieldsLayout): void {}
 
     /**
      * Build layout for small screen. Optional, only if needed.
      *
      * @deprecated use buildList instead
      */
-    protected function buildListLayoutForSmallScreens(EntityListFieldsLayout $fieldsLayout): void
-    {
-    }
+    protected function buildListLayoutForSmallScreens(EntityListFieldsLayout $fieldsLayout): void {}
 }

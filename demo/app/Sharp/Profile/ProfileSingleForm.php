@@ -61,7 +61,7 @@ class ProfileSingleForm extends SharpSingleForm
     public function findSingle(): array
     {
         return $this
-            ->setCustomTransformer('avatar', new SharpUploadModelFormAttributeTransformer())
+            ->setCustomTransformer('avatar', new SharpUploadModelFormAttributeTransformer)
             ->transform(auth()->user());
     }
 

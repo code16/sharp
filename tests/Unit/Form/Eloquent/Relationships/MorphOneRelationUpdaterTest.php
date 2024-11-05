@@ -14,7 +14,7 @@ class MorphOneRelationUpdaterTest extends SharpEloquentBaseTestCase
     {
         $person = Person::create(['name' => 'John Wayne']);
 
-        $updater = new MorphOneRelationUpdater();
+        $updater = new MorphOneRelationUpdater;
 
         $updater->update($person, 'picture:file', 'test.jpg');
 
@@ -33,7 +33,7 @@ class MorphOneRelationUpdaterTest extends SharpEloquentBaseTestCase
             'file' => 'old.jpg',
         ]);
 
-        $updater = new MorphOneRelationUpdater();
+        $updater = new MorphOneRelationUpdater;
 
         $updater->update($person, 'picture:file', 'test.jpg');
 
@@ -49,7 +49,7 @@ class MorphOneRelationUpdaterTest extends SharpEloquentBaseTestCase
     {
         $person = Person::create(['name' => 'John Wayne']);
 
-        $updater = new MorphOneRelationUpdater();
+        $updater = new MorphOneRelationUpdater;
 
         $updater->update($person, 'picture:file', null);
 

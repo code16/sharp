@@ -9,7 +9,7 @@ use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
 
 class SharpFormTextField extends SharpFormField
 {
-    use SharpFormFieldWithPlaceholder, SharpFormFieldWithMaxLength, SharpFormFieldWithDataLocalization;
+    use SharpFormFieldWithDataLocalization, SharpFormFieldWithMaxLength, SharpFormFieldWithPlaceholder;
 
     const FIELD_TYPE = 'text';
 

@@ -15,8 +15,11 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
     use UsesSharpUploadModel;
 
     protected bool $withThumbnails;
+
     protected int $thumbnailWidth;
+
     protected int $thumbnailHeight;
+
     private bool $dynamicSharpUploadModel = false;
 
     public function __construct(bool $withThumbnails = true, int $thumbnailWidth = 200, int $thumbnailHeight = 200)
@@ -36,8 +39,6 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
     /**
      * Transform a model attribute to array (json-able).
      *
-     * @param  $value
-     * @param  $instance
      * @param  string  $attribute
      * @return mixed
      */

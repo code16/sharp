@@ -6,9 +6,7 @@ use PragmaRX\Google2FA\Google2FA;
 
 class GoogleTotpEngine implements Sharp2faTotpEngine
 {
-    public function __construct(protected Google2FA $google2fa)
-    {
-    }
+    public function __construct(protected Google2FA $google2fa) {}
 
     public function verify(string $code, string $secret): bool
     {

@@ -28,9 +28,7 @@ abstract class SharpTestCase extends TestCase
                     return true;
                 }
 
-                public function check(string $ability, string $entityKey, ?string $instanceId = null): void
-                {
-                }
+                public function check(string $ability, string $entityKey, ?string $instanceId = null): void {}
             };
         });
     }

@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 class SharpUploadModel extends Model
 {
     protected $guarded = [];
+
     protected $casts = [
         'custom_properties' => 'array',
         'size' => 'integer',
@@ -73,7 +74,7 @@ class SharpUploadModel extends Model
         ]);
     }
 
-    public function thumbnail(int $width = null, int $height = null, array $customFilters = []): ?string
+    public function thumbnail(?int $width = null, ?int $height = null, array $customFilters = []): ?string
     {
         return (new Thumbnail($this))
             ->setTransformationFilters($this->filters ?: null)

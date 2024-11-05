@@ -12,7 +12,7 @@ class SharpFormEditorEmbedTest extends SharpTestCase
     /** @test */
     public function default_values_are_set_in_config()
     {
-        $defaultEmbed = new DefaultFakeSharpFormEditorEmbed();
+        $defaultEmbed = new DefaultFakeSharpFormEditorEmbed;
         $defaultEmbed->buildEmbedConfig();
 
         $this->assertEquals(
@@ -30,7 +30,7 @@ class SharpFormEditorEmbedTest extends SharpTestCase
     /** @test */
     public function we_can_configure_tag()
     {
-        $defaultEmbed = new class() extends DefaultFakeSharpFormEditorEmbed
+        $defaultEmbed = new class extends DefaultFakeSharpFormEditorEmbed
         {
             public function buildEmbedConfig(): void
             {
@@ -49,7 +49,7 @@ class SharpFormEditorEmbedTest extends SharpTestCase
     /** @test */
     public function we_can_configure_label()
     {
-        $defaultEmbed = new class() extends DefaultFakeSharpFormEditorEmbed
+        $defaultEmbed = new class extends DefaultFakeSharpFormEditorEmbed
         {
             public function buildEmbedConfig(): void
             {
@@ -69,7 +69,7 @@ class SharpFormEditorEmbedTest extends SharpTestCase
     /** @test */
     public function we_can_configure_form_template()
     {
-        $defaultEmbed = new class() extends DefaultFakeSharpFormEditorEmbed
+        $defaultEmbed = new class extends DefaultFakeSharpFormEditorEmbed
         {
             public function buildEmbedConfig(): void
             {
@@ -89,7 +89,7 @@ class SharpFormEditorEmbedTest extends SharpTestCase
     /** @test */
     public function we_can_configure_show_template()
     {
-        $defaultEmbed = new class() extends DefaultFakeSharpFormEditorEmbed
+        $defaultEmbed = new class extends DefaultFakeSharpFormEditorEmbed
         {
             public function buildEmbedConfig(): void
             {
@@ -121,7 +121,5 @@ class DefaultFakeSharpFormEditorEmbed extends SharpFormEditorEmbed
         );
     }
 
-    public function updateContent(array $data = []): array
-    {
-    }
+    public function updateContent(array $data = []): array {}
 }

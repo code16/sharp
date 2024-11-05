@@ -9,8 +9,6 @@ use Illuminate\Http\Request;
 class AppendNotifications
 {
     /**
-     * @param  Request  $request
-     * @param  Closure  $next
      * @return JsonResponse
      */
     public function handle(Request $request, Closure $next)

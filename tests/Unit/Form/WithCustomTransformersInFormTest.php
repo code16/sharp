@@ -23,7 +23,7 @@ class WithCustomTransformersInFormTest extends SharpEloquentBaseTestCase
             'name' => 'John Wayne',
         ]);
 
-        $form = new WithCustomTransformersTestForm();
+        $form = new WithCustomTransformersTestForm;
 
         $this->assertArraySubset([
             'name' => 'John Wayne',
@@ -42,7 +42,7 @@ class WithCustomTransformersInFormTest extends SharpEloquentBaseTestCase
             public function find($id): array
             {
                 return $this->transform(
-                    DB::table((new Person())->getTable())->where(['id' => $id])->first(),
+                    DB::table((new Person)->getTable())->where(['id' => $id])->first(),
                 );
             }
         };
@@ -64,7 +64,7 @@ class WithCustomTransformersInFormTest extends SharpEloquentBaseTestCase
             'mother_id' => $mother->id,
         ]);
 
-        $form = new WithCustomTransformersTestForm();
+        $form = new WithCustomTransformersTestForm;
 
         $this->assertArraySubset([
             'mother_id' => $person->mother_id,
@@ -85,7 +85,7 @@ class WithCustomTransformersInFormTest extends SharpEloquentBaseTestCase
             'mother_id' => $mother->id,
         ]);
 
-        $form = new WithCustomTransformersTestForm();
+        $form = new WithCustomTransformersTestForm;
 
         $this->assertArraySubset(
             [
@@ -112,7 +112,7 @@ class WithCustomTransformersInFormTest extends SharpEloquentBaseTestCase
             'mother_id' => $mother->id,
         ]);
 
-        $form = new WithCustomTransformersTestForm();
+        $form = new WithCustomTransformersTestForm;
 
         $this->assertArraySubset([
             'sons' => [
@@ -142,7 +142,7 @@ class WithCustomTransformersInFormTest extends SharpEloquentBaseTestCase
             $person2->id, $person3->id,
         ]);
 
-        $form = new WithCustomTransformersTestForm();
+        $form = new WithCustomTransformersTestForm;
 
         $this->assertArraySubset([
             'friends' => [
@@ -159,7 +159,7 @@ class WithCustomTransformersInFormTest extends SharpEloquentBaseTestCase
         $person = Person::create(['name' => 'John Wayne']);
         $person->picture()->create(['file' => 'test.jpg']);
 
-        $form = new WithCustomTransformersTestForm();
+        $form = new WithCustomTransformersTestForm;
 
         $this->assertArraySubset(
             [
@@ -175,7 +175,7 @@ class WithCustomTransformersInFormTest extends SharpEloquentBaseTestCase
         $person = Person::create(['name' => 'John Wayne']);
         $person->pictures()->create(['file' => 'test.jpg']);
 
-        $form = new WithCustomTransformersTestForm();
+        $form = new WithCustomTransformersTestForm;
 
         $this->assertArraySubset(
             [
@@ -222,7 +222,7 @@ class WithCustomTransformersInFormTest extends SharpEloquentBaseTestCase
             'name' => 'John Wayne',
         ]);
 
-        $form = new WithCustomTransformersTestForm();
+        $form = new WithCustomTransformersTestForm;
         $form->setCustomTransformer('name', function ($name) {
             return strtoupper($name);
         });
@@ -360,17 +360,11 @@ class WithCustomTransformersTestForm extends SharpForm
         return false;
     }
 
-    public function delete($id): void
-    {
-    }
+    public function delete($id): void {}
 
-    public function buildFormLayout(FormLayout $formLayout): void
-    {
-    }
+    public function buildFormLayout(FormLayout $formLayout): void {}
 
-    public function buildFormFields(FieldsContainer $formFields): void
-    {
-    }
+    public function buildFormFields(FieldsContainer $formFields): void {}
 }
 
 class SharpAttributeUppercaseTransformer implements SharpAttributeTransformer

@@ -34,7 +34,7 @@ class LoginTotp2faControllerTest extends BaseApiTestCase
             }
         );
 
-        auth()->extend('sharp', fn () => new TestAuthGuard());
+        auth()->extend('sharp', fn () => new TestAuthGuard);
         $this->app['config']->set(
             'auth.guards.sharp', [
                 'driver' => 'sharp',
@@ -54,17 +54,11 @@ class LoginTotp2faControllerTest extends BaseApiTestCase
                         return true;
                     }
 
-                    public function activate2faForUser(): void
-                    {
-                    }
+                    public function activate2faForUser(): void {}
 
-                    public function deactivate2faForUser(): void
-                    {
-                    }
+                    public function deactivate2faForUser(): void {}
 
-                    protected function saveUserSecretAndRecoveryCodes($user, string $encryptedSecret, string $encryptedRecoveryCodes): void
-                    {
-                    }
+                    protected function saveUserSecretAndRecoveryCodes($user, string $encryptedSecret, string $encryptedRecoveryCodes): void {}
 
                     protected function getUserEncryptedSecret($userId): string
                     {

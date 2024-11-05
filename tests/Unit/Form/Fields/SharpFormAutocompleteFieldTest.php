@@ -377,7 +377,6 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
 
     /**
      * @param  string  $remoteEndpoint
-     * @param  array  $defaultValues
      * @return SharpFormAutocompleteField
      */
     private function getDefaultDynamicRemoteAutocomplete($remoteEndpoint, array $defaultValues = [])

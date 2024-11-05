@@ -8,7 +8,9 @@ use Symfony\Component\Console\Input\InputOption;
 class EntityListFilterMakeCommand extends GeneratorCommand
 {
     protected $name = 'sharp:make:entity-list-filter';
+
     protected $description = 'Create a new Entity List Filter class';
+
     protected $type = 'EntityListFilter';
 
     protected function getStub()

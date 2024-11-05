@@ -25,9 +25,7 @@ class DashboardCommandTest extends SharpTestCase
                             return 'My Dashboard Command';
                         }
 
-                        public function execute(array $data = []): array
-                        {
-                        }
+                        public function execute(array $data = []): array {}
                     },
                 ];
             }
@@ -66,9 +64,7 @@ class DashboardCommandTest extends SharpTestCase
                                 return 'My Dashboard Command';
                             }
 
-                            public function execute(array $data = []): array
-                            {
-                            }
+                            public function execute(array $data = []): array {}
                         },
                     ],
                     'dashboardCommand' => new class extends DashboardCommand
@@ -78,9 +74,7 @@ class DashboardCommandTest extends SharpTestCase
                             return 'Another Dashboard Command';
                         }
 
-                        public function execute(array $data = []): array
-                        {
-                        }
+                        public function execute(array $data = []): array {}
                     },
                 ];
             }
@@ -117,9 +111,7 @@ class DashboardCommandTest extends SharpTestCase
                             $formFields->addField(SharpFormTextField::make('message'));
                         }
 
-                        public function execute(array $data = []): array
-                        {
-                        }
+                        public function execute(array $data = []): array {}
                     },
                 ];
             }

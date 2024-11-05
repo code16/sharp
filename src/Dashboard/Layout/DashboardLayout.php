@@ -22,7 +22,7 @@ class DashboardLayout implements HasLayout
     {
         $row = $this
             ->getLonelySection()
-            ->addRowLayout(new DashboardLayoutRow());
+            ->addRowLayout(new DashboardLayoutRow);
 
         $callback($row);
 
@@ -38,7 +38,7 @@ class DashboardLayout implements HasLayout
 
     private function getLonelySection(): DashboardLayoutSection
     {
-        if (! sizeof($this->sections)) {
+        if (! count($this->sections)) {
             return $this->addSectionLayout(new DashboardLayoutSection(''));
         }
 

@@ -10,8 +10,7 @@ class ResultLink
         protected SharpLinkTo $link,
         protected string $label,
         protected ?string $detail = null
-    ) {
-    }
+    ) {}
 
     public function toArray(): array
     {

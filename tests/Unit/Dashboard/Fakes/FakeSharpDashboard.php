@@ -8,15 +8,9 @@ use Code16\Sharp\Dashboard\Widgets\WidgetsContainer;
 
 class FakeSharpDashboard extends SharpDashboard
 {
-    protected function buildWidgets(WidgetsContainer $widgetsContainer): void
-    {
-    }
+    protected function buildWidgets(WidgetsContainer $widgetsContainer): void {}
 
-    protected function buildDashboardLayout(DashboardLayout $dashboardLayout): void
-    {
-    }
+    protected function buildDashboardLayout(DashboardLayout $dashboardLayout): void {}
 
-    protected function buildWidgetsData(): void
-    {
-    }
+    protected function buildWidgetsData(): void {}
 }

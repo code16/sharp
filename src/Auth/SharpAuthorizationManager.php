@@ -11,9 +11,7 @@ class SharpAuthorizationManager
 {
     private array $cachedPolicies = [];
 
-    public function __construct(protected SharpEntityManager $entityManager, protected Gate $gate)
-    {
-    }
+    public function __construct(protected SharpEntityManager $entityManager, protected Gate $gate) {}
 
     public function isAllowed(string $ability, string $entityKey, ?string $instanceId = null): bool
     {

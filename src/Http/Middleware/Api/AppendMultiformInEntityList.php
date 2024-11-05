@@ -10,9 +10,7 @@ use Illuminate\Http\Request;
 
 class AppendMultiformInEntityList
 {
-    public function __construct(protected SharpEntityManager $sharpEntityManager)
-    {
-    }
+    public function __construct(protected SharpEntityManager $sharpEntityManager) {}
 
     public function handle(Request $request, Closure $next)
     {
@@ -45,13 +43,13 @@ class AppendMultiformInEntityList
 
                 return [
                     'key' => $key,
-                    'label' => is_array($value) && sizeof($value) > 1 ? $value[1] : $key,
+                    'label' => is_array($value) && count($value) > 1 ? $value[1] : $key,
                     'instances' => $instanceIds,
                 ];
             })
             ->keyBy('key');
 
-        if (sizeof($subFormKeys)) {
+        if (count($subFormKeys)) {
             $jsonData->forms = $subFormKeys;
             $jsonResponse->setData($jsonData);
         }

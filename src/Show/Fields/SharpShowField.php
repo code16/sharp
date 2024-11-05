@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\Validator;
 abstract class SharpShowField
 {
     public string $key;
+
     protected string $type;
+
     protected bool $emptyVisible = false;
 
     protected function __construct(string $key, string $type)
@@ -45,7 +47,6 @@ abstract class SharpShowField
     /**
      * Throw an exception in case of invalid attribute value.
      *
-     * @param  array  $properties
      *
      * @throws SharpShowFieldValidationException
      */
