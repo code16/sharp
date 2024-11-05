@@ -65,7 +65,6 @@ abstract class SharpShowField
     /**
      * Throw an exception in case of invalid attribute value.
      *
-     * @param  array  $properties
      *
      * @throws SharpShowFieldValidationException
      */

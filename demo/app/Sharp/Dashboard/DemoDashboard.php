@@ -275,7 +275,7 @@ class DemoDashboard extends SharpDashboard
 
     private static function nextColor(): string
     {
-        if (static::$colorsIndex >= sizeof(static::$colors)) {
+        if (static::$colorsIndex >= count(static::$colors)) {
             static::$colorsIndex = 0;
         }
 

@@ -12,9 +12,7 @@ class SharpMenuItemLink extends SharpMenuItem
     protected ?string $entityKey = null;
     protected ?string $url = null;
 
-    public function __construct(protected ?string $label, protected ?string $icon)
-    {
-    }
+    public function __construct(protected ?string $label, protected ?string $icon) {}
 
     public function setEntity(string $entityKey): self
     {

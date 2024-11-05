@@ -1,0 +1,17 @@
+{
+    "preset": "laravel",
+    "rules": {
+        "class_attributes_separation": {
+            "elements": {
+                "const": "none",
+                "property": "none",
+                "trait_import": "none"
+            }
+        },
+        "single_trait_insert_per_statement": true,
+        "new_with_parentheses": {
+            "named_class": true,
+            "anonymous_class": true
+        }
+    }
+}

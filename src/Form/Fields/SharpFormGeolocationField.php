@@ -20,7 +20,7 @@ class SharpFormGeolocationField extends SharpFormField
 
     public static function make(string $key): self
     {
-        return new static($key, static::FIELD_TYPE, new GeolocationFormatter);
+        return new static($key, static::FIELD_TYPE, new GeolocationFormatter());
     }
 
     public function setDisplayUnitDegreesMinutesSeconds(): self

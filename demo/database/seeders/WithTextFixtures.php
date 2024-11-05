@@ -23,7 +23,6 @@ trait WithTextFixtures
         'Too bad',
         'Inspirational',
     ];
-
     protected static array $titlesFR = [
         'Sa mère lui avait toujours appris',
         "C'était un expert, mais pas dans une discipline",
@@ -55,7 +54,6 @@ trait WithTextFixtures
         'La chaise était assise dans le coin où elle se trouvait',
         'Ça ne va pas du tout',
     ];
-
     protected static array $titlesEN = [
         'His mother had always taught him',
         'He was an expert but not in a discipline',
@@ -87,7 +85,6 @@ trait WithTextFixtures
         'The chair sat in the corner where it had been',
         "Things aren't going well at all",
     ];
-
     protected static array $paragraphsFR = [
         "Sa mère lui avait toujours appris à ne jamais se considérer meilleur que les autres. Il avait essayé de vivre selon cette devise. Il n'a jamais méprisé ceux qui avaient moins de chance ou qui avaient moins d'argent que lui. Mais la stupidité du groupe de personnes à qui il parlait l'a fait changer d'avis.",
         "C'était un expert, mais pas dans une discipline que tout le monde pouvait pleinement apprécier. Il savait comment tenir le cône juste pour que la crème glacée molle du serveur tombe dedans à l'angle précis pour former un cône parfait à chaque fois. Il avait fallu des années pour le perfectionner et il pouvait maintenant le faire sans même y penser.",
@@ -120,7 +117,6 @@ trait WithTextFixtures
         "La chaise était assise dans le coin où elle se trouvait depuis plus de 25 ans. La seule différence était qu'il y avait quelqu'un qui y était assis. Depuis combien de temps s'était-il passé quelqu'un avait fait ça ? Dix ans ou plus, imagina-t-il. Pourtant, on ne pouvait nier la présence dans la chaise maintenant.",
         "Les choses ne vont pas bien du tout avec maman aujourd'hui. Elle est juste une nouille molle et veut dormir tout le temps. J'espère vraiment que les choses iront mieux bientôt.",
     ];
-
     protected static array $paragraphsEN = [
         "His mother had always taught him not to ever think of himself as better than others. He'd tried to live by this motto. He never looked down on those who were less fortunate or who had less money than him. But the stupidity of the group of people he was talking to made him change his mind.",
         'He was an expert but not in a discipline that anyone could fully appreciate. He knew how to hold the cone just right so that the soft server ice-cream fell into it at the precise angle to form a perfect cone each and every time. It had taken years to perfect and he could now do it without even putting any thought behind it.',

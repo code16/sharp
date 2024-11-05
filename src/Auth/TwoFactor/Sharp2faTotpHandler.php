@@ -11,9 +11,7 @@ abstract class Sharp2faTotpHandler implements Sharp2faHandler
 {
     protected $user = null;
 
-    public function __construct(protected Sharp2faTotpEngine $engine)
-    {
-    }
+    public function __construct(protected Sharp2faTotpEngine $engine) {}
 
     public function generateCode(bool $remember = false): void
     {

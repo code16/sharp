@@ -50,9 +50,7 @@ abstract class AbstractPostBlockForm extends SharpForm
             });
     }
 
-    public function buildFormConfig(): void
-    {
-    }
+    public function buildFormConfig(): void {}
 
     public function find($id): array
     {
@@ -104,11 +102,7 @@ abstract class AbstractPostBlockForm extends SharpForm
             ->setRowCount(6);
     }
 
-    protected function buildAdditionalFields(FieldsContainer $formFields): void
-    {
-    }
+    protected function buildAdditionalFields(FieldsContainer $formFields): void {}
 
-    protected function addAdditionalFieldsToLayout(FormLayoutColumn $column): void
-    {
-    }
+    protected function addAdditionalFieldsToLayout(FormLayoutColumn $column): void {}
 }

@@ -12,9 +12,7 @@ class SearchResultSet
     protected array $validationErrors = [];
     protected bool $hideWhenEmpty = false;
 
-    public function __construct(protected string $label, protected ?string $icon = null)
-    {
-    }
+    public function __construct(protected string $label, protected ?string $icon = null) {}
 
     final public function addResultLink(SharpLinkTo $link, string $label, ?string $detail = null): ResultLink
     {

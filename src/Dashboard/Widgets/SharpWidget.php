@@ -70,9 +70,9 @@ abstract class SharpWidget
                 'title' => $this->title,
                 'link' => $this->link,
             ])
-            ->merge($childArray)
-            ->filter(fn ($value) => $value !== null)
-            ->all(),
+                ->merge($childArray)
+                ->filter(fn ($value) => $value !== null)
+                ->all(),
             fn ($array) => $this->validate($array)
         );
     }

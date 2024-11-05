@@ -15,7 +15,7 @@ Sharp intends to provide a clean solution to the following needs:
 - display, search, sort or filter data;
 - execute custom commands on one instance, a selection or all instances;
 - handle authorizations and validation;
-- all without write a line of front code, and using a clean API in the PHP app.
+- all without writing a line of front code, and using a clean API in the PHP app.
 
 Sharp needs Laravel 8+ and PHP 8.0+.
 

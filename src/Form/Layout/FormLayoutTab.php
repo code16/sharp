@@ -12,7 +12,7 @@ class FormLayoutTab implements HasLayout
         $this->title = $title;
     }
 
-    public function addColumn(int $size, \Closure $callback = null): self
+    public function addColumn(int $size, ?\Closure $callback = null): self
     {
         $column = $this->addColumnLayout(new FormLayoutColumn($size));
 

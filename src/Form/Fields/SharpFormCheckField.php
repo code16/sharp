@@ -12,7 +12,7 @@ class SharpFormCheckField extends SharpFormField
 
     public static function make(string $key, string $text): self
     {
-        $instance = new static($key, static::FIELD_TYPE, new CheckFormatter);
+        $instance = new static($key, static::FIELD_TYPE, new CheckFormatter());
         $instance->text = $text;
 
         return $instance;

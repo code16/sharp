@@ -13,8 +13,7 @@ class MenuSection extends Component
     public function __construct(
         public SharpMenuItemSection $item,
         public ?string $currentEntityKey = null,
-    ) {
-    }
+    ) {}
 
     public function hasCurrentItem(): bool
     {

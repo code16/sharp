@@ -2,6 +2,4 @@
 
 namespace Code16\Sharp\Exceptions;
 
-class SharpInvalidConfigException extends SharpException
-{
-}
+class SharpInvalidConfigException extends SharpException {}

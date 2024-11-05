@@ -18,7 +18,7 @@ class SharpFormTagsField extends SharpFormField
 
     public static function make(string $key, array $options): self
     {
-        $instance = new static($key, static::FIELD_TYPE, new TagsFormatter);
+        $instance = new static($key, static::FIELD_TYPE, new TagsFormatter());
 
         $instance->options = collect($options)
             ->map(function ($label, $id) {

@@ -22,7 +22,7 @@ class SharpFormListField extends SharpFormField
 
     public static function make(string $key): self
     {
-        return new static($key, static::FIELD_TYPE, new ListFormatter);
+        return new static($key, static::FIELD_TYPE, new ListFormatter());
     }
 
     public function setAddable(bool $addable = true): self
@@ -60,7 +60,7 @@ class SharpFormListField extends SharpFormField
         return $this;
     }
 
-    public function setMaxItemCount(int $maxItemCount = null): self
+    public function setMaxItemCount(?int $maxItemCount = null): self
     {
         if ($maxItemCount === null) {
             return $this->setMaxItemCountUnlimited();

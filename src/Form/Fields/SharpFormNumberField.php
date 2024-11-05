@@ -18,7 +18,7 @@ class SharpFormNumberField extends SharpFormField
 
     public static function make(string $key): self
     {
-        return new static($key, static::FIELD_TYPE, new NumberFormatter);
+        return new static($key, static::FIELD_TYPE, new NumberFormatter());
     }
 
     public function setMin(float $min): self

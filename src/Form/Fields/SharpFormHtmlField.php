@@ -14,7 +14,7 @@ class SharpFormHtmlField extends SharpFormField
     
     public static function make(string $key): self
     {
-        return new static($key, static::FIELD_TYPE, new HtmlFormatter);
+        return new static($key, static::FIELD_TYPE, new HtmlFormatter());
     }
     
     public function setTemplate(View|string $template): self

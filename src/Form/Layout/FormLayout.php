@@ -11,7 +11,7 @@ class FormLayout implements HasLayout
     protected array $tabs = [];
     protected bool $tabbed = true;
 
-    final public function addTab(string $label, \Closure $callback = null): self
+    final public function addTab(string $label, ?\Closure $callback = null): self
     {
         $tab = $this->addTabLayout(new FormLayoutTab($label));
 
@@ -22,7 +22,7 @@ class FormLayout implements HasLayout
         return $this;
     }
 
-    final public function addColumn(int $size, \Closure $callback = null): self
+    final public function addColumn(int $size, ?\Closure $callback = null): self
     {
         $column = $this
             ->getLonelyTab()
@@ -58,7 +58,7 @@ class FormLayout implements HasLayout
 
     private function getLonelyTab(): FormLayoutTab
     {
-        if (! sizeof($this->tabs)) {
+        if (! count($this->tabs)) {
             $this->addTabLayout(new FormLayoutTab('one'));
         }
 

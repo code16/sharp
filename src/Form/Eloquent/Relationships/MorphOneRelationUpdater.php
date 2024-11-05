@@ -2,6 +2,4 @@
 
 namespace Code16\Sharp\Form\Eloquent\Relationships;
 
-class MorphOneRelationUpdater extends HasOneRelationUpdater
-{
-}
+class MorphOneRelationUpdater extends HasOneRelationUpdater {}

@@ -10,9 +10,7 @@ class Sharp2faDefaultNotification extends Notification implements ShouldQueue
 {
     use \Illuminate\Bus\Queueable;
 
-    public function __construct(public string $code)
-    {
-    }
+    public function __construct(public string $code) {}
 
     public function via($notifiable)
     {
@@ -21,7 +19,7 @@ class Sharp2faDefaultNotification extends Notification implements ShouldQueue
 
     public function toMail($notifiable)
     {
-        return (new MailMessage)
+        return (new MailMessage())
             ->subject(trans('sharp::auth.2fa.notification.mail_subject'))
             ->line(trans('sharp::auth.2fa.notification.mail_body'))
             ->line($this->code);

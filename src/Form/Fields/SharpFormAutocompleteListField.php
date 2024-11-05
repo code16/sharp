@@ -9,7 +9,7 @@ class SharpFormAutocompleteListField extends SharpFormListField
 {
     public static function make(string $key): self
     {
-        return new static($key, static::FIELD_TYPE, new AutocompleteListFormatter);
+        return new static($key, static::FIELD_TYPE, new AutocompleteListFormatter());
     }
 
     public function setItemField(IsSharpFormAutocompleteField $field): self
