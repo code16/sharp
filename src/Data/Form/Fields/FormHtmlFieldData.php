@@ -18,9 +18,6 @@ final class FormHtmlFieldData extends Data
         public string $key,
         #[LiteralTypeScriptType('"'.FormFieldType::Html->value.'"')]
         public FormFieldType $type,
-        public string $template,
-        /** @var array<string, mixed> */
-        public ?array $templateData = null,
         public ?string $label = null,
         public ?bool $readOnly = null,
         public ?FormConditionalDisplayData $conditionalDisplay = null,

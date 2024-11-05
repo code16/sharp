@@ -11,14 +11,17 @@ it('allows to define inline template', function () {
         ->toEqual([
             'key' => 'html',
             'type' => 'html',
-            'template' => '<b>test</b>',
         ]);
 });
 
-it('ensures that inline template is mandatory', function () {
-    $defaultFormField = SharpFormHtmlField::make('html');
-
-    $this->expectException(SharpFormFieldValidationException::class);
-    $defaultFormField->toArray();
+it('allows to define view template', function () {
+    $defaultFormField = SharpFormHtmlField::make('html')
+        ->setTemplate(view('fixtures::test'));
+    
+    expect($defaultFormField->toArray())
+        ->toEqual([
+            'key' => 'html',
+            'type' => 'html',
+        ]);
 });
 

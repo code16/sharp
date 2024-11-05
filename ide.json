@@ -1,0 +1,11 @@
+{
+    "$schema": "https://laravel-ide.com/schema/laravel-ide-v2.json",
+    "view": {
+        "paths": [
+            {
+                "path": "tests/Fixtures/resources/views",
+                "namespace": "fixtures"
+            }
+        ]
+    }
+}

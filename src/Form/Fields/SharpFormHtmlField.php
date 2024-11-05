@@ -17,11 +17,6 @@ class SharpFormHtmlField extends SharpFormField
         return new static($key, static::FIELD_TYPE, new HtmlFormatter);
     }
     
-    public function toArray(): array
-    {
-        return parent::buildArray([]);
-    }
-    
     public function setTemplate(View|string $template): self
     {
         $this->template = $template;
@@ -36,5 +31,10 @@ class SharpFormHtmlField extends SharpFormField
         }
         
         return $this->template->with($data)->render();
+    }
+    
+    public function toArray(): array
+    {
+        return parent::buildArray([]);
     }
 }
