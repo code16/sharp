@@ -13,6 +13,7 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 class PostBlockVisualsForm extends AbstractPostBlockForm
 {
     protected static string $postBlockType = 'visuals';
+
     protected ?string $formValidatorClass = PostBlockVisualsValidator::class;
 
     protected function getContentField(): ?SharpFormField
@@ -60,6 +61,6 @@ class PostBlockVisualsForm extends AbstractPostBlockForm
 
     protected function addCustomTransformers(): self
     {
-        return $this->setCustomTransformer('files', new SharpUploadModelFormAttributeTransformer());
+        return $this->setCustomTransformer('files', new SharpUploadModelFormAttributeTransformer);
     }
 }

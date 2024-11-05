@@ -160,14 +160,12 @@ class SmallPersonSharpForm extends SharpForm
         return $id;
     }
 
-    public function delete($id): void
-    {
-    }
+    public function delete($id): void {}
 
     protected function getFormValidatorClass(): ?string
     {
         return app(SharpEntityManager::class)
-                ->entityFor('person')
+            ->entityFor('person')
             ->multiformValidatorsForTest['small'] ?? null;
     }
 }
@@ -188,7 +186,7 @@ class BigPersonSharpForm extends SmallPersonSharpForm
     protected function getFormValidatorClass(): ?string
     {
         return app(SharpEntityManager::class)
-                ->entityFor('person')
+            ->entityFor('person')
                 ->multiformValidatorsForTest['big'] ?? null;
     }
 }

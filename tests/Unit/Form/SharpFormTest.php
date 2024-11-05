@@ -78,14 +78,12 @@ class SharpFormTest extends SharpTestCase
                         SharpFormTextField::make('delayed')
                             ->setFormatter(new class extends SharpFieldFormatter
                             {
-                                public function toFront(SharpFormField $field, $value)
-                                {
-                                }
+                                public function toFront(SharpFormField $field, $value) {}
 
                                 public function fromFront(SharpFormField $field, string $attribute, $value)
                                 {
                                     if (! $this->instanceId) {
-                                        throw new SharpFormFieldFormattingMustBeDelayedException();
+                                        throw new SharpFormFieldFormattingMustBeDelayedException;
                                     }
 
                                     return $value.'-'.$this->instanceId;
@@ -132,13 +130,11 @@ class SharpFormTest extends SharpTestCase
                     SharpFormTextField::make('delayed')
                         ->setFormatter(new class extends SharpFieldFormatter
                         {
-                            public function toFront(SharpFormField $field, $value)
-                            {
-                            }
+                            public function toFront(SharpFormField $field, $value) {}
 
                             public function fromFront(SharpFormField $field, string $attribute, $value)
                             {
-                                throw new SharpFormFieldFormattingMustBeDelayedException();
+                                throw new SharpFormFieldFormattingMustBeDelayedException;
                             }
                         }),
                 );
@@ -154,8 +150,7 @@ class SharpFormTest extends SharpTestCase
     /** @test */
     public function single_forms_are_declared_in_config()
     {
-        $sharpForm = new class extends BaseSharpSingleForm {
-        };
+        $sharpForm = new class extends BaseSharpSingleForm {};
 
         $sharpForm->buildFormConfig();
 
@@ -194,42 +189,24 @@ class SharpFormTest extends SharpTestCase
 
 class BaseSharpForm extends SharpForm
 {
-    public function find($id): array
-    {
-    }
+    public function find($id): array {}
 
-    public function update($id, array $data)
-    {
-    }
+    public function update($id, array $data) {}
 
-    public function delete($id): void
-    {
-    }
+    public function delete($id): void {}
 
-    public function buildFormFields(FieldsContainer $formFields): void
-    {
-    }
+    public function buildFormFields(FieldsContainer $formFields): void {}
 
-    public function buildFormLayout(FormLayout $formLayout): void
-    {
-    }
+    public function buildFormLayout(FormLayout $formLayout): void {}
 }
 
 class BaseSharpSingleForm extends SharpSingleForm
 {
-    public function buildFormFields(FieldsContainer $formFields): void
-    {
-    }
+    public function buildFormFields(FieldsContainer $formFields): void {}
 
-    public function buildFormLayout(FormLayout $formLayout): void
-    {
-    }
+    public function buildFormLayout(FormLayout $formLayout): void {}
 
-    protected function findSingle()
-    {
-    }
+    protected function findSingle() {}
 
-    protected function updateSingle(array $data)
-    {
-    }
+    protected function updateSingle(array $data) {}
 }

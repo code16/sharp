@@ -4,6 +4,4 @@ namespace Code16\Sharp\Exceptions\Form;
 
 use Code16\Sharp\Exceptions\SharpException;
 
-class SharpApplicativeException extends SharpException
-{
-}
+class SharpApplicativeException extends SharpException {}

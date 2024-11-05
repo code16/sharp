@@ -14,21 +14,24 @@ use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 abstract class SharpForm
 {
-    use WithCustomTransformers,
+    use HandleCustomBreadcrumb,
         HandleFormFields,
+        HandleLocalizedFields,
         HandlePageAlertMessage,
-        HandleCustomBreadcrumb,
-        HandleLocalizedFields;
+        WithCustomTransformers;
 
     protected ?FormLayout $formLayout = null;
+
     protected bool $displayShowPageAfterCreation = false;
+
     protected ?string $deleteConfirmationText = null;
+
     protected ?string $formValidatorClass = null;
 
     final public function formLayout(): array
     {
         if ($this->formLayout === null) {
-            $this->formLayout = new FormLayout();
+            $this->formLayout = new FormLayout;
             $this->buildFormLayout($this->formLayout);
         }
 
@@ -74,7 +77,7 @@ abstract class SharpForm
             )
             ->all();
 
-        return sizeof($data) ? $data : null;
+        return count($data) ? $data : null;
     }
 
     final public function validateRequest(string $entityKey): void
@@ -85,9 +88,7 @@ abstract class SharpForm
         }
     }
 
-    public function buildFormConfig(): void
-    {
-    }
+    public function buildFormConfig(): void {}
 
     /**
      * @deprecated
@@ -209,9 +210,7 @@ abstract class SharpForm
      * @deprecated
      * Use delete() in Show Page or in Entity List. Will be removed in v9.
      */
-    public function delete(mixed $id): void
-    {
-    }
+    public function delete(mixed $id): void {}
 
     /**
      * Build form fields.

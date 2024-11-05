@@ -8,13 +8,13 @@ use Illuminate\Support\Facades\Route;
 
 class AuthenticationTest extends BaseApiTestCase
 {
-//    protected function setUp(): void
-//    {
-//        parent::setUp();
-//
-//        // Have to define a "login" route in Laravel 11
-//        Route::get('/test-login', fn () => 'ok')->name('login');
-//    }
+    //    protected function setUp(): void
+    //    {
+    //        parent::setUp();
+    //
+    //        // Have to define a "login" route in Laravel 11
+    //        Route::get('/test-login', fn () => 'ok')->name('login');
+    //    }
 
     /** @test */
     public function unauthenticated_user_wont_pass_on_an_api_call()
@@ -86,9 +86,6 @@ class AuthenticationTest extends BaseApiTestCase
         $this->json('get', '/sharp/api/list/person')->assertStatus(401);
     }
 
-    /**
-     * @return AuthenticationTestGuard
-     */
     protected function configureCustomAuthGuard(): AuthenticationTestGuard
     {
         $authGuard = new AuthenticationTestGuard(true);
@@ -115,9 +112,7 @@ class AuthenticationTest extends BaseApiTestCase
 
 class AuthenticationTestGuard implements \Illuminate\Contracts\Auth\Guard
 {
-    public function __construct(private bool $isValid)
-    {
-    }
+    public function __construct(private bool $isValid) {}
 
     public function check()
     {
@@ -131,7 +126,7 @@ class AuthenticationTestGuard implements \Illuminate\Contracts\Auth\Guard
 
     public function user()
     {
-        return $this->isValid ? new User() : null;
+        return $this->isValid ? new User : null;
     }
 
     public function id()
@@ -144,9 +139,7 @@ class AuthenticationTestGuard implements \Illuminate\Contracts\Auth\Guard
         return true;
     }
 
-    public function setUser(Authenticatable $user)
-    {
-    }
+    public function setUser(Authenticatable $user) {}
 
     public function hasUser()
     {
@@ -158,13 +151,9 @@ class AuthenticationTestGuard implements \Illuminate\Contracts\Auth\Guard
         $this->isValid = false;
     }
 
-    public function authenticate()
-    {
-    }
+    public function authenticate() {}
 
-    public function logout()
-    {
-    }
+    public function logout() {}
 }
 
 class AuthenticationTestCheckHandler

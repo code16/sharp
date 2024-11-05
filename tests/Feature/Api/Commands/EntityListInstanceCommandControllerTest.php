@@ -197,7 +197,7 @@ class EntityListInstanceCommandPersonSharpEntityList extends PersonSharpEntityLi
     public function getInstanceCommands(): ?array
     {
         return [
-            'instance_info' => new class() extends InstanceCommand
+            'instance_info' => new class extends InstanceCommand
             {
                 public function label(): string
                 {
@@ -209,7 +209,7 @@ class EntityListInstanceCommandPersonSharpEntityList extends PersonSharpEntityLi
                     return $this->info('ok');
                 }
             },
-            'instance_refresh' => new class() extends InstanceCommand
+            'instance_refresh' => new class extends InstanceCommand
             {
                 public function label(): string
                 {
@@ -221,7 +221,7 @@ class EntityListInstanceCommandPersonSharpEntityList extends PersonSharpEntityLi
                     return $this->refresh(1);
                 }
             },
-            'instance_link' => new class() extends InstanceCommand
+            'instance_link' => new class extends InstanceCommand
             {
                 public function label(): string
                 {
@@ -233,7 +233,7 @@ class EntityListInstanceCommandPersonSharpEntityList extends PersonSharpEntityLi
                     return $this->link('/link/out');
                 }
             },
-            'instance_unauthorized_odd_id' => new class() extends InstanceCommand
+            'instance_unauthorized_odd_id' => new class extends InstanceCommand
             {
                 public function label(): string
                 {
@@ -250,7 +250,7 @@ class EntityListInstanceCommandPersonSharpEntityList extends PersonSharpEntityLi
                     return $this->reload();
                 }
             },
-            'instance_form' => new class() extends InstanceCommand
+            'instance_form' => new class extends InstanceCommand
             {
                 public function label(): string
                 {
@@ -262,11 +262,9 @@ class EntityListInstanceCommandPersonSharpEntityList extends PersonSharpEntityLi
                     $formFields->addField(SharpFormTextField::make('name'));
                 }
 
-                public function execute($instanceId, array $data = []): array
-                {
-                }
+                public function execute($instanceId, array $data = []): array {}
             },
-            'instance_form_localized' => new class() extends InstanceCommand
+            'instance_form_localized' => new class extends InstanceCommand
             {
                 public function label(): string
                 {
@@ -278,16 +276,14 @@ class EntityListInstanceCommandPersonSharpEntityList extends PersonSharpEntityLi
                     $formFields->addField(SharpFormTextField::make('name'));
                 }
 
-                public function execute($instanceId, array $data = []): array
-                {
-                }
+                public function execute($instanceId, array $data = []): array {}
 
                 public function getDataLocalizations(): array
                 {
                     return ['fr', 'en', 'it'];
                 }
             },
-            'instance_global_message' => new class() extends InstanceCommand
+            'instance_global_message' => new class extends InstanceCommand
             {
                 public function label(): string
                 {
@@ -304,11 +300,9 @@ class EntityListInstanceCommandPersonSharpEntityList extends PersonSharpEntityLi
                     $formFields->addField(SharpFormTextField::make('name'));
                 }
 
-                public function execute($instanceId, array $data = []): array
-                {
-                }
+                public function execute($instanceId, array $data = []): array {}
             },
-            'instance_with_init_data' => new class() extends InstanceCommand
+            'instance_with_init_data' => new class extends InstanceCommand
             {
                 public function label(): string
                 {
@@ -328,9 +322,7 @@ class EntityListInstanceCommandPersonSharpEntityList extends PersonSharpEntityLi
                     ];
                 }
 
-                public function execute($instanceId, array $data = []): array
-                {
-                }
+                public function execute($instanceId, array $data = []): array {}
             },
         ];
     }

@@ -15,11 +15,13 @@ abstract class SharpFormEditorEmbed
 {
     use HandleFields,
         HandlePageAlertMessage,
-        WithCustomTransformers,
-        HandleValidation;
+        HandleValidation,
+        WithCustomTransformers;
 
     protected ?string $label = null;
+
     protected ?string $tagName = null;
+
     protected array $templates = [];
 
     public function toConfigArray(bool $isForm): array
@@ -50,9 +52,7 @@ abstract class SharpFormEditorEmbed
         return $config;
     }
 
-    public function buildEmbedConfig(): void
-    {
-    }
+    public function buildEmbedConfig(): void {}
 
     /**
      * Must return all the data needed by the templates.
@@ -81,9 +81,7 @@ abstract class SharpFormEditorEmbed
     /**
      * Build the optional Embed form layout.
      */
-    public function buildFormLayout(FormLayoutColumn &$column): void
-    {
-    }
+    public function buildFormLayout(FormLayoutColumn &$column): void {}
 
     final public function formLayout(): ?array
     {

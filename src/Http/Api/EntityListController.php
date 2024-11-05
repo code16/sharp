@@ -45,7 +45,7 @@ class EntityListController extends ApiController
         ]);
     }
 
-    public function delete(string $entityKey, string $instanceId = null)
+    public function delete(string $entityKey, ?string $instanceId = null)
     {
         sharp_check_ability('delete', $entityKey, $instanceId);
 

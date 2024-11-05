@@ -8,9 +8,7 @@ class SharpMenuItemSection extends SharpMenuItem
 
     protected bool $collapsible = true;
 
-    public function __construct(protected string $label)
-    {
-    }
+    public function __construct(protected string $label) {}
 
     public function getLabel(): string
     {

@@ -11,7 +11,7 @@ class ShowLayout implements HasLayout
 
     protected array $sections = [];
 
-    final public function addSection(string $label, \Closure $callback = null): self
+    final public function addSection(string $label, ?\Closure $callback = null): self
     {
         $section = new ShowLayoutSection($label);
         $this->sections[] = $section;

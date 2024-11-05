@@ -10,9 +10,13 @@ use Illuminate\View\Component;
 class Menu extends Component
 {
     public string $title;
+
     public ?string $currentEntityKey;
+
     public ?SharpMenuItemLink $currentEntityItem;
+
     public bool $hasGlobalFilters;
+
     public bool $isVisible = true;
 
     public function __construct(private SharpMenuManager $menuManager)
@@ -22,7 +26,7 @@ class Menu extends Component
         $this->currentEntityItem = $this->currentEntityKey
             ? $this->menuManager->getEntityMenuItem($this->currentEntityKey)
             : null;
-        $this->hasGlobalFilters = sizeof(value(config('sharp.global_filters')) ?? []) > 0;
+        $this->hasGlobalFilters = count(value(config('sharp.global_filters')) ?? []) > 0;
         $this->isVisible = $this->menuManager->menu()?->isVisible() ?? true;
     }
 

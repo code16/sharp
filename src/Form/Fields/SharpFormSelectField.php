@@ -8,18 +8,26 @@ use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithOptions;
 
 class SharpFormSelectField extends SharpFormField
 {
-    use SharpFormFieldWithOptions, SharpFormFieldWithDataLocalization;
+    use SharpFormFieldWithDataLocalization, SharpFormFieldWithOptions;
 
     const FIELD_TYPE = 'select';
 
     protected array $options;
+
     protected bool $multiple = false;
+
     protected bool $clearable = false;
+
     protected ?int $maxSelected = null;
+
     protected string $display = 'list';
+
     protected string $idAttribute = 'id';
+
     protected bool $inline = false;
+
     protected bool $showSelectAll = false;
+
     protected ?array $dynamicAttributes = null;
 
     public static function make(string $key, array $options): self

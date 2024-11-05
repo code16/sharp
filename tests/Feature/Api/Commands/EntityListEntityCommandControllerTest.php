@@ -327,7 +327,7 @@ class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList
     public function getEntityCommands(): ?array
     {
         return [
-            'entity_info' => new class() extends EntityCommand
+            'entity_info' => new class extends EntityCommand
             {
                 public function label(): string
                 {
@@ -339,7 +339,7 @@ class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList
                     return $this->info('ok');
                 }
             },
-            'entity_reload' => new class() extends EntityCommand
+            'entity_reload' => new class extends EntityCommand
             {
                 public function label(): string
                 {
@@ -351,7 +351,7 @@ class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList
                     return $this->reload();
                 }
             },
-            'entity_view' => new class() extends EntityCommand
+            'entity_view' => new class extends EntityCommand
             {
                 public function label(): string
                 {
@@ -363,7 +363,7 @@ class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList
                     return $this->view('welcome');
                 }
             },
-            'entity_refresh' => new class() extends EntityCommand
+            'entity_refresh' => new class extends EntityCommand
             {
                 public function label(): string
                 {
@@ -375,7 +375,7 @@ class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList
                     return $this->refresh([1, 2]);
                 }
             },
-            'entity_exception' => new class() extends EntityCommand
+            'entity_exception' => new class extends EntityCommand
             {
                 public function label(): string
                 {
@@ -387,7 +387,7 @@ class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList
                     throw new SharpApplicativeException('error');
                 }
             },
-            'entity_form' => new class() extends EntityCommand
+            'entity_form' => new class extends EntityCommand
             {
                 public function label(): string
                 {
@@ -406,7 +406,7 @@ class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList
                     return $this->reload();
                 }
             },
-            'entity_global_message' => new class() extends EntityCommand
+            'entity_global_message' => new class extends EntityCommand
             {
                 public function label(): string
                 {
@@ -423,11 +423,9 @@ class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList
                     $formFields->addField(SharpFormTextField::make('name'));
                 }
 
-                public function execute(array $data = []): array
-                {
-                }
+                public function execute(array $data = []): array {}
             },
-            'entity_form_localized' => new class() extends EntityCommand
+            'entity_form_localized' => new class extends EntityCommand
             {
                 public function label(): string
                 {
@@ -439,16 +437,14 @@ class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList
                     $formFields->addField(SharpFormTextField::make('name'));
                 }
 
-                public function execute(array $data = []): array
-                {
-                }
+                public function execute(array $data = []): array {}
 
                 public function getDataLocalizations(): array
                 {
                     return ['fr', 'en', 'it'];
                 }
             },
-            'entity_download' => new class() extends EntityCommand
+            'entity_download' => new class extends EntityCommand
             {
                 public function label(): string
                 {
@@ -463,7 +459,7 @@ class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList
                     return $this->download('pdf/account.pdf', 'account.pdf', 'files');
                 }
             },
-            'entity_streamDownload' => new class() extends EntityCommand
+            'entity_streamDownload' => new class extends EntityCommand
             {
                 public function label(): string
                 {
@@ -475,7 +471,7 @@ class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList
                     return $this->streamDownload('content', 'stream.txt');
                 }
             },
-            'entity_download_no_disk' => new class() extends EntityCommand
+            'entity_download_no_disk' => new class extends EntityCommand
             {
                 public function label(): string
                 {
@@ -490,7 +486,7 @@ class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList
                     return $this->download('pdf/account.pdf');
                 }
             },
-            'entity_unauthorized' => new class() extends EntityCommand
+            'entity_unauthorized' => new class extends EntityCommand
             {
                 public function label(): string
                 {
@@ -507,7 +503,7 @@ class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList
                     return $this->reload();
                 }
             },
-            'entity_params' => new class() extends EntityCommand
+            'entity_params' => new class extends EntityCommand
             {
                 public function label(): string
                 {
@@ -519,7 +515,7 @@ class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList
                     return $this->info($this->queryParams->sortedBy().$this->queryParams->sortedDir());
                 }
             },
-            'entity_bulk' => new class() extends EntityCommand
+            'entity_bulk' => new class extends EntityCommand
             {
                 public function label(): string
                 {
@@ -536,7 +532,7 @@ class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList
                     return $this->info(implode('-', $this->selectedIds()));
                 }
             },
-            'entity_with_init_data' => new class() extends EntityCommand
+            'entity_with_init_data' => new class extends EntityCommand
             {
                 public function label(): string
                 {
@@ -556,9 +552,7 @@ class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList
                     ];
                 }
 
-                public function execute(array $data = []): array
-                {
-                }
+                public function execute(array $data = []): array {}
             },
         ];
     }

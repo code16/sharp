@@ -14,7 +14,7 @@ class BelongsToManyRelationUpdaterTest extends SharpEloquentBaseTestCase
         $person1 = Person::create(['name' => 'A']);
         $person2 = Person::create(['name' => 'B']);
 
-        $updater = new BelongsToManyRelationUpdater();
+        $updater = new BelongsToManyRelationUpdater;
 
         $updater->update($person1, 'friends', [
             ['id' => $person2->id],
@@ -39,7 +39,7 @@ class BelongsToManyRelationUpdaterTest extends SharpEloquentBaseTestCase
             ['id' => $person2->id],
         ]);
 
-        $updater = new BelongsToManyRelationUpdater();
+        $updater = new BelongsToManyRelationUpdater;
 
         $updater->update($person1, 'friends', [
             ['id' => $person3->id],
@@ -61,7 +61,7 @@ class BelongsToManyRelationUpdaterTest extends SharpEloquentBaseTestCase
     {
         $person1 = Person::create(['name' => 'A']);
 
-        $updater = new BelongsToManyRelationUpdater();
+        $updater = new BelongsToManyRelationUpdater;
 
         $updater->update($person1, 'friends', [
             ['id' => null, 'name' => 'John Wayne'],

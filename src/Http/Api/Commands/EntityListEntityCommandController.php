@@ -10,7 +10,7 @@ use Code16\Sharp\Http\Api\ApiController;
 
 class EntityListEntityCommandController extends ApiController
 {
-    use HandleCommandReturn, HandleCommandForm;
+    use HandleCommandForm, HandleCommandReturn;
 
     public function show(string $entityKey, string $commandKey)
     {
@@ -51,7 +51,7 @@ class EntityListEntityCommandController extends ApiController
         $commandHandler->initQueryParams(EntityListQueryParams::create()->fillWithRequest());
 
         if (! $commandHandler->authorize()) {
-            throw new SharpAuthorizationException();
+            throw new SharpAuthorizationException;
         }
 
         return $commandHandler;

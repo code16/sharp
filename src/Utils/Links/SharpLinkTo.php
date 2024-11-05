@@ -5,6 +5,7 @@ namespace Code16\Sharp\Utils\Links;
 abstract class SharpLinkTo
 {
     protected string $entityKey;
+
     protected string $tooltip = '';
 
     protected function __construct(string $entityKey)

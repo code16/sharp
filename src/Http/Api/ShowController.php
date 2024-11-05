@@ -7,7 +7,7 @@ use Code16\Sharp\Show\SharpSingleShow;
 
 class ShowController extends ApiController
 {
-    public function show(string $entityKey, string $instanceId = null)
+    public function show(string $entityKey, ?string $instanceId = null)
     {
         sharp_check_ability('view', $entityKey, $instanceId);
 

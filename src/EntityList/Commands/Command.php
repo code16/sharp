@@ -14,14 +14,19 @@ abstract class Command
 {
     use HandleFormFields,
         HandlePageAlertMessage,
-        WithCustomTransformers,
-        HandleValidation;
+        HandleValidation,
+        WithCustomTransformers;
 
     protected int $groupIndex = 0;
+
     protected ?string $commandKey = null;
+
     private ?string $formModalTitle = null;
+
     private ?string $formModalButtonLabel = null;
+
     private ?string $confirmationText = null;
+
     private ?string $description = null;
 
     protected function info(string $message): array
@@ -62,7 +67,7 @@ abstract class Command
             'html' => view($bladeView, $params)->render(),
         ];
     }
-    
+
     protected function html(string $htmlContent): array
     {
         return [
@@ -71,7 +76,7 @@ abstract class Command
         ];
     }
 
-    protected function download(string $filePath, string $fileName = null, string $diskName = null): array
+    protected function download(string $filePath, ?string $fileName = null, ?string $diskName = null): array
     {
         return [
             'action' => 'download',
@@ -159,23 +164,17 @@ abstract class Command
     /**
      * Build the optional Command config with configure... methods.
      */
-    public function buildCommandConfig(): void
-    {
-    }
+    public function buildCommandConfig(): void {}
 
     /**
      * Build the optional Command form.
      */
-    public function buildFormFields(FieldsContainer $formFields): void
-    {
-    }
+    public function buildFormFields(FieldsContainer $formFields): void {}
 
     /**
      * Build the optional Command form layout.
      */
-    public function buildFormLayout(FormLayoutColumn &$column): void
-    {
-    }
+    public function buildFormLayout(FormLayoutColumn &$column): void {}
 
     final public function commandFormConfig(): ?array
     {

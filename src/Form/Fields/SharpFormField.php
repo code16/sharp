@@ -9,16 +9,24 @@ use Illuminate\Support\Facades\Validator;
 abstract class SharpFormField
 {
     public string $key;
+
     protected ?string $label = null;
+
     protected string $type;
+
     protected ?string $helpMessage = null;
+
     protected string $conditionalDisplayOperator = 'and';
+
     protected array $conditionalDisplayFields = [];
+
     protected ?bool $readOnly = null;
+
     protected ?string $extraStyle = null;
+
     protected ?SharpFieldFormatter $formatter;
 
-    protected function __construct(string $key, string $type, SharpFieldFormatter $formatter = null)
+    protected function __construct(string $key, string $type, ?SharpFieldFormatter $formatter = null)
     {
         $this->key = $key;
         $this->type = $type;
@@ -91,8 +99,6 @@ abstract class SharpFormField
 
     /**
      * Create the properties array for the field, using parent::buildArray().
-     *
-     * @return array
      */
     abstract public function toArray(): array;
 
@@ -119,7 +125,6 @@ abstract class SharpFormField
     /**
      * Throw an exception in case of invalid attribute value.
      *
-     * @param  array  $properties
      *
      * @throws SharpFormFieldValidationException
      */
@@ -166,7 +171,7 @@ abstract class SharpFormField
 
     private function buildConditionalDisplayArray(): ?array
     {
-        if (! sizeof($this->conditionalDisplayFields)) {
+        if (! count($this->conditionalDisplayFields)) {
             return null;
         }
 

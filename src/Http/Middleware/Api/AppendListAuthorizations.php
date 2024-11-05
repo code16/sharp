@@ -9,9 +9,7 @@ use Illuminate\Http\Request;
 
 class AppendListAuthorizations
 {
-    public function __construct(protected SharpAuthorizationManager $sharpAuthorizationManager)
-    {
-    }
+    public function __construct(protected SharpAuthorizationManager $sharpAuthorizationManager) {}
 
     public function handle(Request $request, Closure $next)
     {

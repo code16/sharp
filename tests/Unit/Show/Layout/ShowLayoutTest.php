@@ -113,15 +113,9 @@ abstract class ShowLayoutTestShow extends SharpShow
         return [];
     }
 
-    public function buildShowFields(FieldsContainer $showFields): void
-    {
-    }
+    public function buildShowFields(FieldsContainer $showFields): void {}
 
-    public function buildShowLayout(ShowLayout $showLayout): void
-    {
-    }
+    public function buildShowLayout(ShowLayout $showLayout): void {}
 
-    public function delete(mixed $id): void
-    {
-    }
+    public function delete(mixed $id): void {}
 }

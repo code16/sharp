@@ -11,7 +11,9 @@ class ShowPageMakeCommand extends GeneratorCommand
     use WithModel;
 
     protected $name = 'sharp:make:show-page';
+
     protected $description = 'Create a new Show Page class';
+
     protected $type = 'SharpShow';
 
     protected function buildClass($name)

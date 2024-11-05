@@ -17,7 +17,7 @@ class LangController extends Controller
         $lang = $request->has('locale') ? $request->input('locale') : app()->getLocale();
         $version = sharp_version();
 
-        $strings = Cache::rememberForever("sharp.lang.$lang.$version.js", function () use($lang) {
+        $strings = Cache::rememberForever("sharp.lang.$lang.$version.js", function () use ($lang) {
             $localizationStrings = [];
             $files = [
                 'action_bar',
@@ -30,7 +30,7 @@ class LangController extends Controller
             ];
 
             collect($files)
-                ->map(function (string $filename) use($lang) {
+                ->map(function (string $filename) use ($lang) {
                     return collect(trans("sharp-front::$filename", [], $lang))
                         ->mapWithKeys(function ($value, $key) use ($filename) {
                             return ["$filename.$key" => $value];

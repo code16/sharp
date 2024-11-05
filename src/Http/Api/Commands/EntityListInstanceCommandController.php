@@ -6,7 +6,7 @@ use Code16\Sharp\Http\Api\ApiController;
 
 class EntityListInstanceCommandController extends ApiController
 {
-    use HandleCommandReturn, HandleCommandForm;
+    use HandleCommandForm, HandleCommandReturn;
 
     public function show(string $entityKey, string $commandKey, mixed $instanceId)
     {

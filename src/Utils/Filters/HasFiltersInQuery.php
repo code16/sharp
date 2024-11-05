@@ -53,7 +53,7 @@ trait HasFiltersInQuery
         return $this;
     }
 
-    protected function fillFilterWithRequest(array $query = null): void
+    protected function fillFilterWithRequest(?array $query = null): void
     {
         collect($query)
             ->filter(function ($value, $name) {

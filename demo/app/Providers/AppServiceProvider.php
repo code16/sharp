@@ -11,7 +11,7 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->register(SharpServiceProvider::class);
-//        $this->app->bind(SharpUploadModel::class, Media::class)
+        //        $this->app->bind(SharpUploadModel::class, Media::class)
 
         $this->app->bind(SharpViteComponent::class, function () {
             return new SharpViteComponent(hotFile: base_path('../resources/assets/dist/hot'));

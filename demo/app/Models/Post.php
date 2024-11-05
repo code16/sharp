@@ -21,7 +21,9 @@ class Post extends Model
         'title',
         'content',
     ];
+
     protected $guarded = [];
+
     protected $casts = [
         'published_at' => 'datetime',
         'state' => PostState::class,

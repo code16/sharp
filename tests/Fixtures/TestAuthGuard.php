@@ -30,9 +30,7 @@ class TestAuthGuard implements Guard, StatefulGuard
         return $this->hasUser() ? 1 : null;
     }
 
-    public function validate(array $credentials = [])
-    {
-    }
+    public function validate(array $credentials = []) {}
 
     public function setUser(Authenticatable $user)
     {
@@ -71,17 +69,11 @@ class TestAuthGuard implements Guard, StatefulGuard
         $this->setUser($user);
     }
 
-    public function loginUsingId($id, $remember = false)
-    {
-    }
+    public function loginUsingId($id, $remember = false) {}
 
-    public function onceUsingId($id)
-    {
-    }
+    public function onceUsingId($id) {}
 
-    public function viaRemember()
-    {
-    }
+    public function viaRemember() {}
 
     public function logout()
     {

@@ -8,7 +8,7 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 abstract class DashboardWizardCommand extends DashboardCommand
 {
-    use IsWizardCommand, IsEntityWizardCommand;
+    use IsEntityWizardCommand, IsWizardCommand;
 
     abstract protected function buildFormFieldsForFirstStep(FieldsContainer $formFields): void;
 }

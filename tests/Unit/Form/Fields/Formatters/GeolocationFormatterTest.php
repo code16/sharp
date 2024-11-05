@@ -11,7 +11,7 @@ class GeolocationFormatterTest extends SharpTestCase
     /** @test */
     public function we_can_format_value_to_front()
     {
-        $formatter = new GeolocationFormatter();
+        $formatter = new GeolocationFormatter;
         $field = SharpFormGeolocationField::make('geo');
 
         $this->assertEquals(['lat' => 12.3, 'lng' => 24.5], $formatter->toFront($field, '12.3,24.5'));
@@ -23,7 +23,7 @@ class GeolocationFormatterTest extends SharpTestCase
     /** @test */
     public function we_can_format_value_from_front()
     {
-        $formatter = new GeolocationFormatter();
+        $formatter = new GeolocationFormatter;
         $attribute = 'attribute';
         $field = SharpFormGeolocationField::make('geo');
 

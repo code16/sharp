@@ -11,7 +11,7 @@ trait HasFieldRows
 
     protected array $rows = [];
 
-    public function withSingleField(string $fieldKey, \Closure $subLayoutCallback = null): self
+    public function withSingleField(string $fieldKey, ?\Closure $subLayoutCallback = null): self
     {
         $this->addRowLayout([
             $this->newLayoutField($fieldKey, $subLayoutCallback),
@@ -32,7 +32,7 @@ trait HasFieldRows
         return $this;
     }
 
-    public function insertSingleFieldAt(int $index, string $fieldKey, \Closure $subLayoutCallback = null): self
+    public function insertSingleFieldAt(int $index, string $fieldKey, ?\Closure $subLayoutCallback = null): self
     {
         $rows = collect($this->rows);
         $rows->splice($index, 0, [[$this->newLayoutField($fieldKey, $subLayoutCallback)]]);
@@ -74,7 +74,7 @@ trait HasFieldRows
         ];
     }
 
-    protected function newLayoutField(string $fieldKey, \Closure $subLayoutCallback = null): LayoutField
+    protected function newLayoutField(string $fieldKey, ?\Closure $subLayoutCallback = null): LayoutField
     {
         return new FormLayoutField($fieldKey, $subLayoutCallback);
     }

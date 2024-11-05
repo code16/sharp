@@ -72,7 +72,7 @@ class EntityCommandTestSharpDashboard extends SharpDashboard
     public function getDashboardCommands(): ?array
     {
         return [
-            'dashboard_info' => new class() extends DashboardCommand
+            'dashboard_info' => new class extends DashboardCommand
             {
                 public function label(): string
                 {
@@ -84,7 +84,7 @@ class EntityCommandTestSharpDashboard extends SharpDashboard
                     return $this->info('ok');
                 }
             },
-            'dashboard_form' => new class() extends DashboardCommand
+            'dashboard_form' => new class extends DashboardCommand
             {
                 public function label(): string
                 {
@@ -104,9 +104,7 @@ class EntityCommandTestSharpDashboard extends SharpDashboard
                     ];
                 }
 
-                public function execute(array $data = []): array
-                {
-                }
+                public function execute(array $data = []): array {}
             },
         ];
     }

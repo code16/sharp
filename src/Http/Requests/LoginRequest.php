@@ -62,7 +62,7 @@ class LoginRequest extends FormRequest
                 if ($handler->isEnabledFor($guard->user())) {
                     $handler->setUser($guard->user())->generateCode($remember);
 
-                    throw new SharpAuthenticationNeeds2faException();
+                    throw new SharpAuthenticationNeeds2faException;
                 }
 
                 // 2fa is not enabled for this user, we can proceed with the login

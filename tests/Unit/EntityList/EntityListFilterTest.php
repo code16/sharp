@@ -543,9 +543,7 @@ class SharpEntityListTestRequiredFilter extends EntityListSelectRequiredFilter
     }
 }
 
-class SharpEntityListDateRangeTestFilter extends EntityListDateRangeFilter
-{
-}
+class SharpEntityListDateRangeTestFilter extends EntityListDateRangeFilter {}
 
 class SharpEntityListDateRangeRequiredTestFilter extends \Code16\Sharp\EntityList\Filters\EntityListDateRangeRequiredFilter
 {
@@ -555,6 +553,4 @@ class SharpEntityListDateRangeRequiredTestFilter extends \Code16\Sharp\EntityLis
     }
 }
 
-class SharpEntityListTestCheckFilter extends \Code16\Sharp\EntityList\Filters\EntityListCheckFilter
-{
-}
+class SharpEntityListTestCheckFilter extends \Code16\Sharp\EntityList\Filters\EntityListCheckFilter {}

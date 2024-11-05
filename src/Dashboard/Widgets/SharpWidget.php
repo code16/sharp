@@ -9,8 +9,11 @@ use Illuminate\Support\Facades\Validator;
 abstract class SharpWidget
 {
     protected string $key;
+
     protected string $type;
+
     protected ?string $title = null;
+
     protected ?string $link = null;
 
     protected function __construct(string $key, string $type)
@@ -70,9 +73,9 @@ abstract class SharpWidget
                 'title' => $this->title,
                 'link' => $this->link,
             ])
-            ->merge($childArray)
-            ->filter(fn ($value) => $value !== null)
-            ->all(),
+                ->merge($childArray)
+                ->filter(fn ($value) => $value !== null)
+                ->all(),
             fn ($array) => $this->validate($array)
         );
     }

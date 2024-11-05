@@ -14,14 +14,14 @@ class HtmlFormatterTest extends SharpTestCase
     {
         $value = Str::random();
 
-        $this->assertEquals($value, (new HtmlFormatter())->toFront(SharpFormHtmlField::make('html'), $value));
+        $this->assertEquals($value, (new HtmlFormatter)->toFront(SharpFormHtmlField::make('html'), $value));
     }
 
     /** @test */
     public function we_can_format_value_from_front()
     {
         $this->assertNull(
-            (new HtmlFormatter())->fromFront(SharpFormHtmlField::make('html'), 'attribute', Str::random()),
+            (new HtmlFormatter)->fromFront(SharpFormHtmlField::make('html'), 'attribute', Str::random()),
         );
     }
 }

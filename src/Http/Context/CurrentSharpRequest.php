@@ -71,7 +71,7 @@ class CurrentSharpRequest
         );
     }
 
-    public function getUrlOfPreviousBreadcrumbItem(string $type = null): string
+    public function getUrlOfPreviousBreadcrumbItem(?string $type = null): string
     {
         $breadcrumb = $this->breadcrumb()->slice(0, -1);
         if ($type) {
@@ -159,7 +159,7 @@ class CurrentSharpRequest
 
     private function buildBreadcrumb(): void
     {
-        $this->breadcrumb = new Collection();
+        $this->breadcrumb = new Collection;
         $segments = $this->getSegmentsFromRequest();
         $depth = 0;
 

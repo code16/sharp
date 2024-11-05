@@ -5,7 +5,9 @@ namespace Code16\Sharp\Utils\Filters;
 abstract class Filter
 {
     protected ?string $customKey = null;
+
     protected ?string $label = null;
+
     protected bool $retainInSession = false;
 
     public function getKey(): string
@@ -44,7 +46,5 @@ abstract class Filter
         return $this;
     }
 
-    public function buildFilterConfig(): void
-    {
-    }
+    public function buildFilterConfig(): void {}
 }

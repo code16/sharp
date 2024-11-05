@@ -8,19 +8,11 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class BaseSharpShowTestDefault extends SharpShow
 {
-    public function find($id): array
-    {
-    }
+    public function find($id): array {}
 
-    public function buildShowFields(FieldsContainer $showFields): void
-    {
-    }
+    public function buildShowFields(FieldsContainer $showFields): void {}
 
-    public function buildShowLayout(ShowLayout $showLayout): void
-    {
-    }
+    public function buildShowLayout(ShowLayout $showLayout): void {}
 
-    public function delete(mixed $id): void
-    {
-    }
+    public function delete(mixed $id): void {}
 }

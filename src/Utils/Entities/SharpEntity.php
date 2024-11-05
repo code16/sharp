@@ -10,9 +10,13 @@ use Code16\Sharp\Show\SharpShow;
 abstract class SharpEntity extends BaseSharpEntity
 {
     protected bool $isSingle = false;
+
     protected ?string $list = null;
+
     protected ?string $form = null;
+
     protected ?string $show = null;
+
     protected array $prohibitedActions = [];
 
     final public function getListOrFail(): SharpEntityList

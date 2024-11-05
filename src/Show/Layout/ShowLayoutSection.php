@@ -7,8 +7,11 @@ use Code16\Sharp\Form\Layout\HasLayout;
 class ShowLayoutSection implements HasLayout
 {
     protected ?string $title = null;
+
     protected array $columns = [];
+
     protected bool $collapsable = false;
+
     protected ?string $sectionKey = null;
 
     public function __construct(string $title)
@@ -16,7 +19,7 @@ class ShowLayoutSection implements HasLayout
         $this->title = $title;
     }
 
-    public function addColumn(int $size, \Closure $callback = null): self
+    public function addColumn(int $size, ?\Closure $callback = null): self
     {
         $column = $this->addColumnLayout(new ShowLayoutColumn($size));
 

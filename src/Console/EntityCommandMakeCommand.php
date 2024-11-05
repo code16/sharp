@@ -8,7 +8,9 @@ use Symfony\Component\Console\Input\InputOption;
 class EntityCommandMakeCommand extends GeneratorCommand
 {
     protected $name = 'sharp:make:entity-command';
+
     protected $description = 'Create a new Entity List Command class';
+
     protected $type = 'EntityCommand';
 
     protected function getStub()

@@ -37,6 +37,7 @@ class DemoDashboard extends SharpDashboard
         '#78350F',
         '#9CA3AF',
     ];
+
     private static int $colorsIndex = 0;
 
     protected function buildWidgets(WidgetsContainer $widgetsContainer): void
@@ -213,7 +214,7 @@ class DemoDashboard extends SharpDashboard
 
     private static function nextColor(): string
     {
-        if (static::$colorsIndex >= sizeof(static::$colors)) {
+        if (static::$colorsIndex >= count(static::$colors)) {
             static::$colorsIndex = 0;
         }
 

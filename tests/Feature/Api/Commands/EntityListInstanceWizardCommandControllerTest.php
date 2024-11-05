@@ -144,7 +144,7 @@ class InstanceWizardCommandTestPersonSharpEntityList extends PersonSharpEntityLi
     public function getInstanceCommands(): ?array
     {
         return [
-            'instance_wizard' => new class() extends InstanceWizardCommand
+            'instance_wizard' => new class extends InstanceWizardCommand
             {
                 protected function getKey(): string
                 {
@@ -197,7 +197,7 @@ class InstanceWizardCommandTestPersonSharpEntityList extends PersonSharpEntityLi
                         return $this->info('ok step 3');
                     }
 
-                    throw new SharpApplicativeException();
+                    throw new SharpApplicativeException;
                 }
             },
         ];

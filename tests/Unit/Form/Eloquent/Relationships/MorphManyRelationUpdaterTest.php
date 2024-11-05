@@ -13,7 +13,7 @@ class MorphManyRelationUpdaterTest extends SharpEloquentBaseTestCase
     {
         $person = Person::create(['name' => 'John Wayne']);
 
-        $updater = new MorphManyRelationUpdater();
+        $updater = new MorphManyRelationUpdater;
 
         $updater->update($person, 'pictures', [[
             'id' => null,
@@ -35,7 +35,7 @@ class MorphManyRelationUpdaterTest extends SharpEloquentBaseTestCase
             'file' => 'old.jpg',
         ]);
 
-        $updater = new MorphManyRelationUpdater();
+        $updater = new MorphManyRelationUpdater;
 
         $updater->update($person, 'pictures', [[
             'id' => $person->pictures->first()->id,

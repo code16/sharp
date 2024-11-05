@@ -59,7 +59,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpEloquentBaseTestCase
     {
         $person = Person::create(['name' => 'John Wayne']);
 
-        $form = new WithSharpFormEloquentUpdaterTestForm();
+        $form = new WithSharpFormEloquentUpdaterTestForm;
 
         $form->updateInstance($person->id, ['id' => 1200, 'job' => 'Actor']);
 
@@ -468,15 +468,9 @@ class WithSharpFormEloquentUpdaterTestForm extends SharpForm
         return $this->save($instance, $data);
     }
 
-    public function delete($id): void
-    {
-    }
+    public function delete($id): void {}
 
-    public function buildFormLayout(FormLayout $formLayout): void
-    {
-    }
+    public function buildFormLayout(FormLayout $formLayout): void {}
 
-    public function buildFormFields(FieldsContainer $formFields): void
-    {
-    }
+    public function buildFormFields(FieldsContainer $formFields): void {}
 }

@@ -5,6 +5,7 @@ namespace Code16\Sharp\Dashboard\Widgets;
 class SharpBarGraphWidget extends SharpGraphWidget
 {
     protected bool $horizontal = false;
+
     protected bool $displayHorizontalAxisAsTimeline = false;
 
     public static function make(string $key): SharpBarGraphWidget

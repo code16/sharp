@@ -11,7 +11,7 @@ class EntityListFieldsLayout
 {
     protected array $columns = [];
 
-    final public function addColumn(string $key, int $size = null): self
+    final public function addColumn(string $key, ?int $size = null): self
     {
         $this->columns[$key] = ($size ?: 'fill');
 
@@ -25,7 +25,7 @@ class EntityListFieldsLayout
 
     final public function hasColumns(): bool
     {
-        return sizeof($this->columns) > 0;
+        return count($this->columns) > 0;
     }
 
     final public function getColumns(): Collection

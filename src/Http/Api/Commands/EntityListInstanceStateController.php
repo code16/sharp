@@ -17,7 +17,7 @@ class EntityListInstanceStateController extends ApiController
 
         if (! $list->entityStateHandler()->authorize()
             || ! $list->entityStateHandler()->authorizeFor($instanceId)) {
-            throw new SharpAuthorizationException();
+            throw new SharpAuthorizationException;
         }
 
         return $this->returnCommandResult(

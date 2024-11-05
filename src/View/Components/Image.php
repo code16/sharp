@@ -14,7 +14,9 @@ class Image extends Component
     use UsesSharpUploadModel;
 
     public ?SharpUploadModel $fileModel = null;
+
     public ?FilesystemAdapter $disk = null;
+
     public bool $exists = false;
 
     public function __construct(

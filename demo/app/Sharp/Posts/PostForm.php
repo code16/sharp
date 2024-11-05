@@ -188,8 +188,8 @@ class PostForm extends SharpForm
             ->setCustomTransformer('author_id', function ($value, Post $instance) {
                 return $instance->author;
             })
-            ->setCustomTransformer('cover', new SharpUploadModelFormAttributeTransformer())
-            ->setCustomTransformer('attachments[document]', new SharpUploadModelFormAttributeTransformer())
+            ->setCustomTransformer('cover', new SharpUploadModelFormAttributeTransformer)
+            ->setCustomTransformer('attachments[document]', new SharpUploadModelFormAttributeTransformer)
             ->transform(Post::with('cover', 'attachments', 'categories')->findOrFail($id));
     }
 

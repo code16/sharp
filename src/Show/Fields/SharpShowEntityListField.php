@@ -9,16 +9,24 @@ class SharpShowEntityListField extends SharpShowField
     const FIELD_TYPE = 'entityList';
 
     protected string $entityListKey;
+
     protected array $hiddenFilters = [];
+
     protected array $hiddenCommands = [
         'entity' => [],
         'instance' => [],
     ];
+
     protected bool $showEntityState = true;
+
     protected bool $showReorderButton = true;
+
     protected bool $showCreateButton = true;
+
     protected bool $showSearchField = true;
+
     protected bool $showCount = false;
+
     protected ?string $label = null;
 
     public static function make(string $key, ?string $entityListKey = null): SharpShowEntityListField
@@ -128,7 +136,7 @@ class SharpShowEntityListField extends SharpShowField
             'showSearchField' => $this->showSearchField,
             'showCount' => $this->showCount,
             'hiddenCommands' => $this->hiddenCommands,
-            'hiddenFilters' => sizeof($this->hiddenFilters)
+            'hiddenFilters' => count($this->hiddenFilters)
                 ? collect($this->hiddenFilters)
                     ->map(function ($value) {
                         // Filter value can be a Closure

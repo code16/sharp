@@ -8,7 +8,7 @@ class FormLayoutColumn extends LayoutColumn implements HasLayout
 {
     protected array $fieldsets = [];
 
-    public function withFieldset(string $name, \Closure $callback = null): self
+    public function withFieldset(string $name, ?\Closure $callback = null): self
     {
         $fieldset = new FormLayoutFieldset($name);
 

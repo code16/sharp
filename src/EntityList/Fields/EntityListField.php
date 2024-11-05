@@ -5,16 +5,22 @@ namespace Code16\Sharp\EntityList\Fields;
 class EntityListField
 {
     public string $key;
+
     protected string $label = '';
+
     protected bool $sortable = false;
+
     protected bool $html = true;
+
     protected ?int $width;
+
     protected int|bool|null $widthXs;
+
     protected bool $hideOnXs = false;
 
     public static function make(string $key): self
     {
-        $instance = new static();
+        $instance = new static;
         $instance->key = $key;
 
         return $instance;

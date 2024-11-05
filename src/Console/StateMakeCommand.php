@@ -10,7 +10,9 @@ use Symfony\Component\Console\Input\InputOption;
 class StateMakeCommand extends GeneratorCommand
 {
     protected $name = 'sharp:make:entity-state';
+
     protected $description = 'Create a new Entity State class';
+
     protected $type = 'EntityState';
 
     protected function buildClass($name)
