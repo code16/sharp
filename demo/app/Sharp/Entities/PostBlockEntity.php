@@ -12,9 +12,7 @@ use Code16\Sharp\Utils\Entities\SharpEntity;
 class PostBlockEntity extends SharpEntity
 {
     protected ?string $list = PostBlockList::class;
-
     protected ?string $policy = PostBlockPolicy::class;
-
     protected string $label = 'Block';
 
     public function getMultiforms(): array

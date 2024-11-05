@@ -13,30 +13,19 @@ class SharpFormAutocompleteField extends SharpFormField
 {
     use SharpFormFieldWithDataLocalization, SharpFormFieldWithOptions,
         SharpFormFieldWithPlaceholder, SharpFormFieldWithTemplates;
-
     const FIELD_TYPE = 'autocomplete';
-
     protected string $mode;
 
     /** @var Collection|array */
     protected $localValues = [];
-
     protected array $localSearchKeys = ['value'];
-
     protected string $remoteMethod = 'GET';
-
     protected ?string $remoteEndpoint = null;
-
     protected string $remoteSearchAttribute = 'query';
-
     protected string $itemIdAttribute = 'id';
-
     protected int $searchMinChars = 1;
-
     protected ?array $dynamicAttributes = null;
-
     protected string $dataWrapper = '';
-
     protected int $debounceDelay = 300;
 
     /**
@@ -45,7 +34,7 @@ class SharpFormAutocompleteField extends SharpFormField
      */
     public static function make(string $key, string $mode): self
     {
-        $instance = new static($key, static::FIELD_TYPE, new AutocompleteFormatter);
+        $instance = new static($key, static::FIELD_TYPE, new AutocompleteFormatter());
         $instance->mode = $mode;
 
         return $instance;

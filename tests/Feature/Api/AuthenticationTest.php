@@ -126,7 +126,7 @@ class AuthenticationTestGuard implements \Illuminate\Contracts\Auth\Guard
 
     public function user()
     {
-        return $this->isValid ? new User : null;
+        return $this->isValid ? new User() : null;
     }
 
     public function id()

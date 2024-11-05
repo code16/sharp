@@ -10,13 +10,9 @@ use Illuminate\View\Component;
 class Menu extends Component
 {
     public string $title;
-
     public ?string $currentEntityKey;
-
     public ?SharpMenuItemLink $currentEntityItem;
-
     public bool $hasGlobalFilters;
-
     public bool $isVisible = true;
 
     public function __construct(private SharpMenuManager $menuManager)

@@ -15,7 +15,7 @@ class LoginNotification2faControllerTest extends BaseApiTestCase
     {
         parent::setUp();
 
-        auth()->extend('sharp', fn () => new TestAuthGuard);
+        auth()->extend('sharp', fn () => new TestAuthGuard());
         $this->app['config']->set(
             'auth.guards.sharp', [
                 'driver' => 'sharp',
@@ -76,7 +76,7 @@ class LoginNotification2faControllerTest extends BaseApiTestCase
         Notification::fake();
 
         $this->app['config']->set(
-            'sharp.auth.2fa.handler', new class extends Sharp2faNotificationHandler
+            'sharp.auth.2fa.handler', new class() extends Sharp2faNotificationHandler
             {
                 protected function generateRandomCode(): int
                 {

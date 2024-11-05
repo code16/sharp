@@ -32,7 +32,7 @@ class SharpUploadModelFormAttributeTransformerTest extends SharpEloquentBaseTest
         $picturable = Picturable::create();
         $upload = $this->createSharpUploadModel($this->createImage(), $picturable);
 
-        $transformer = new SharpUploadModelFormAttributeTransformer;
+        $transformer = new SharpUploadModelFormAttributeTransformer();
 
         $this->assertEquals(
             [
@@ -65,7 +65,7 @@ class SharpUploadModelFormAttributeTransformerTest extends SharpEloquentBaseTest
         ];
         $upload->save();
 
-        $transformer = new SharpUploadModelFormAttributeTransformer;
+        $transformer = new SharpUploadModelFormAttributeTransformer();
 
         $this->assertEquals(
             [
@@ -98,7 +98,7 @@ class SharpUploadModelFormAttributeTransformerTest extends SharpEloquentBaseTest
         $upload = $this->createSharpUploadModel($this->createImage(), $picturable);
         $upload2 = $this->createSharpUploadModel($this->createImage(), $picturable);
 
-        $transformer = new SharpUploadModelFormAttributeTransformer;
+        $transformer = new SharpUploadModelFormAttributeTransformer();
 
         $this->assertEquals(
             [
@@ -148,7 +148,7 @@ class SharpUploadModelFormAttributeTransformerTest extends SharpEloquentBaseTest
         $upload->filters = $filters;
         $upload->save();
 
-        $transformer = new SharpUploadModelFormAttributeTransformer;
+        $transformer = new SharpUploadModelFormAttributeTransformer();
 
         $this->assertEquals(
             [
@@ -189,7 +189,7 @@ class SharpUploadModelFormAttributeTransformerTest extends SharpEloquentBaseTest
             'filters' => [],
         ];
 
-        $transformer = (new SharpUploadModelFormAttributeTransformer)->dynamicInstance();
+        $transformer = (new SharpUploadModelFormAttributeTransformer())->dynamicInstance();
 
         $this->assertEquals(
             [

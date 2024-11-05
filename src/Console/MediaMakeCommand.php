@@ -8,9 +8,7 @@ use Symfony\Component\Console\Input\InputOption;
 class MediaMakeCommand extends GeneratorCommand
 {
     protected $name = 'sharp:make:media';
-
     protected $description = 'Create the media model for sharp uploads';
-
     protected $type = 'Media model';
 
     protected function getStub()

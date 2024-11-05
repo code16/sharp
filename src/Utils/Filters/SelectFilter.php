@@ -5,11 +5,8 @@ namespace Code16\Sharp\Utils\Filters;
 abstract class SelectFilter extends Filter
 {
     private bool $isMaster = false;
-
     private bool $isSearchable = false;
-
     private array $searchKeys = ['label'];
-
     private string $template = '{{label}}';
 
     final public function isMaster(): bool

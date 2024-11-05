@@ -8,26 +8,18 @@ use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithDataLocalization;
 class SharpFormTagsField extends SharpFormField
 {
     use SharpFormFieldWithDataLocalization;
-
     const FIELD_TYPE = 'tags';
-
     protected bool $creatable = false;
-
     protected string $createText = 'Create';
-
     protected ?string $createAttribute = null;
-
     protected string $idAttribute = 'id';
-
     protected ?int $maxTagCount = null;
-
     protected array $options = [];
-
     protected array $createAdditionalAttributes = [];
 
     public static function make(string $key, array $options): self
     {
-        $instance = new static($key, static::FIELD_TYPE, new TagsFormatter);
+        $instance = new static($key, static::FIELD_TYPE, new TagsFormatter());
 
         $instance->options = collect($options)
             ->map(function ($label, $id) {

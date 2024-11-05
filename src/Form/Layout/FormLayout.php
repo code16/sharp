@@ -7,9 +7,7 @@ use Illuminate\Support\Traits\Conditionable;
 class FormLayout implements HasLayout
 {
     use Conditionable;
-
     protected array $tabs = [];
-
     protected bool $tabbed = true;
 
     final public function addTab(string $label, ?\Closure $callback = null): self

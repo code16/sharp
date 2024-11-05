@@ -15,17 +15,11 @@ use Intervention\Image\ImageManager;
 class Thumbnail
 {
     protected ImageManager $imageManager;
-
     protected FilesystemManager $storage;
-
     protected SharpUploadModel $uploadModel;
-
     protected int $quality = 90;
-
     protected bool $appendTimestamp = false;
-
     protected ?Closure $afterClosure = null;
-
     protected ?array $transformationFilters = null;
 
     public function __construct(SharpUploadModel $model, ?ImageManager $imageManager = null, ?FilesystemManager $storage = null)

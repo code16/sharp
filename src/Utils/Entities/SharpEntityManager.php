@@ -28,7 +28,7 @@ class SharpEntityManager
         if (isset($entity)) {
             if (! app()->bound($entity)) {
                 app()->singleton($entity, function () use ($entity, $entityKey) {
-                    return (new $entity)->setEntityKey($entityKey);
+                    return (new $entity())->setEntityKey($entityKey);
                 });
             }
 

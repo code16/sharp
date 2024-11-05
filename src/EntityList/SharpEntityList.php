@@ -23,31 +23,18 @@ abstract class SharpEntityList
         HandleInstanceCommands,
         HandlePageAlertMessage,
         WithCustomTransformers;
-
     private ?EntityListFieldsContainer $fieldsContainer = null;
-
     private ?EntityListFieldsLayout $fieldsLayout = null;
-
     private ?EntityListFieldsLayout $xsFieldsLayout = null;
-
     protected ?EntityListQueryParams $queryParams;
-
     protected string $instanceIdAttribute = 'id';
-
     protected ?string $multiformAttribute = null;
-
     protected bool $searchable = false;
-
     protected bool $paginated = false;
-
     protected ?ReorderHandler $reorderHandler = null;
-
     protected ?string $defaultSort = null;
-
     protected ?string $defaultSortDir = null;
-
     protected bool $deleteHidden = false;
-
     protected ?string $deleteConfirmationText = null;
 
     final public function initQueryParams(): self
@@ -234,7 +221,7 @@ abstract class SharpEntityList
     private function checkListIsBuilt(): void
     {
         if ($this->fieldsContainer === null) {
-            $this->fieldsContainer = new EntityListFieldsContainer;
+            $this->fieldsContainer = new EntityListFieldsContainer();
             $this->buildList($this->fieldsContainer);
         }
     }
@@ -301,12 +288,12 @@ abstract class SharpEntityList
     {
         // This default implementation is there to avoid breaking changes;
         // it will be removed in the next major version of Sharp.
-        $this->fieldsContainer = new EntityListFieldsContainer;
+        $this->fieldsContainer = new EntityListFieldsContainer();
         $this->buildListFields($this->fieldsContainer);
 
-        $fieldsLayout = new EntityListFieldsLayout;
+        $fieldsLayout = new EntityListFieldsLayout();
         $this->buildListLayout($fieldsLayout);
-        $xsFieldsLayout = new EntityListFieldsLayout;
+        $xsFieldsLayout = new EntityListFieldsLayout();
         $this->buildListLayoutForSmallScreens($xsFieldsLayout);
 
         $this->fieldsContainer

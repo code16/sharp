@@ -7,7 +7,6 @@ use Code16\Sharp\Form\Fields\SharpFormField;
 abstract class SharpFieldFormatter
 {
     protected ?string $instanceId = null;
-
     protected ?array $dataLocalizations = null;
 
     public function setInstanceId(?string $instanceId): self

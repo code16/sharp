@@ -16,7 +16,7 @@ class MarkdownAttributeTransformerTest extends SharpTestCase
 
         $this->assertEquals(
             "<p>some basic <em>markdown</em> <strong>test</strong></p>\n",
-            (new MarkdownAttributeTransformer)->apply($object->text, $object, 'text'),
+            (new MarkdownAttributeTransformer())->apply($object->text, $object, 'text'),
         );
     }
 }

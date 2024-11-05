@@ -16,17 +16,11 @@ abstract class Command
         HandlePageAlertMessage,
         HandleValidation,
         WithCustomTransformers;
-
     protected int $groupIndex = 0;
-
     protected ?string $commandKey = null;
-
     private ?string $formModalTitle = null;
-
     private ?string $formModalButtonLabel = null;
-
     private ?string $confirmationText = null;
-
     private ?string $description = null;
 
     protected function info(string $message): array

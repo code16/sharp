@@ -12,7 +12,6 @@ use Illuminate\Support\Str;
 trait HandleInstanceCommands
 {
     use CommonCommandUtils;
-
     private ?Collection $instanceCommandHandlers = null;
 
     /**

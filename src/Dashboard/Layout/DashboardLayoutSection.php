@@ -7,14 +7,13 @@ use Closure;
 class DashboardLayoutSection
 {
     protected array $rows = [];
-
     protected ?string $sectionKey = null;
 
     public function __construct(protected string $title) {}
 
     final public function addRow(Closure $callback): self
     {
-        $row = new DashboardLayoutRow;
+        $row = new DashboardLayoutRow();
         $callback($row);
         $this->rows[] = $row;
 

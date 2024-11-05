@@ -21,7 +21,7 @@ class WithCustomTransformersInEntityListTest extends SharpEloquentBaseTestCase
         Person::create(['name' => 'John Wayne']);
         Person::create(['name' => 'Mary Wayne']);
 
-        $list = new WithCustomTransformersTestList;
+        $list = new WithCustomTransformersTestList();
 
         $this->assertArraySubset(
             [['name' => 'John Wayne'], ['name' => 'Mary Wayne']],
@@ -35,11 +35,11 @@ class WithCustomTransformersInEntityListTest extends SharpEloquentBaseTestCase
         Person::create(['name' => 'John Wayne']);
         Person::create(['name' => 'Mary Wayne']);
 
-        $list = new class extends WithCustomTransformersTestList
+        $list = new class() extends WithCustomTransformersTestList
         {
             public function getListData(): array|Arrayable
             {
-                return $this->transform(DB::table((new Person)->getTable())->get());
+                return $this->transform(DB::table((new Person())->getTable())->get());
             }
         };
 
@@ -58,11 +58,11 @@ class WithCustomTransformersInEntityListTest extends SharpEloquentBaseTestCase
         Person::create(['name' => 'D']);
         Person::create(['name' => 'E']);
 
-        $list = new class extends WithCustomTransformersTestList
+        $list = new class() extends WithCustomTransformersTestList
         {
             public function getListData(): array|Arrayable
             {
-                return $this->transform(DB::table((new Person)->getTable())->paginate(2));
+                return $this->transform(DB::table((new Person())->getTable())->paginate(2));
             }
         };
 
@@ -81,7 +81,7 @@ class WithCustomTransformersInEntityListTest extends SharpEloquentBaseTestCase
         Person::create(['name' => 'D']);
         Person::create(['name' => 'E']);
 
-        $list = new class extends WithCustomTransformersTestList
+        $list = new class() extends WithCustomTransformersTestList
         {
             public function getListData(): array|Arrayable
             {
@@ -102,7 +102,7 @@ class WithCustomTransformersInEntityListTest extends SharpEloquentBaseTestCase
         Person::create(['name' => 'Mary Wayne', 'mother_id' => $mother->id]);
         Person::create(['name' => 'John Wayne']);
 
-        $list = new class extends WithCustomTransformersTestList
+        $list = new class() extends WithCustomTransformersTestList
         {
             public function buildListFields(EntityListFieldsContainer $fieldsContainer): void
             {
@@ -127,7 +127,7 @@ class WithCustomTransformersInEntityListTest extends SharpEloquentBaseTestCase
     {
         Person::create(['name' => 'John Wayne']);
 
-        $list = new class extends WithCustomTransformersTestList
+        $list = new class() extends WithCustomTransformersTestList
         {
             public function getListData(): array|Arrayable
             {
@@ -150,7 +150,7 @@ class WithCustomTransformersInEntityListTest extends SharpEloquentBaseTestCase
     {
         Person::create(['name' => 'John Wayne']);
 
-        $list = new class extends WithCustomTransformersTestList
+        $list = new class() extends WithCustomTransformersTestList
         {
             public function getListData(): array|Arrayable
             {
@@ -171,12 +171,12 @@ class WithCustomTransformersInEntityListTest extends SharpEloquentBaseTestCase
     {
         Person::create(['name' => 'John Wayne']);
 
-        $list = new class extends WithCustomTransformersTestList
+        $list = new class() extends WithCustomTransformersTestList
         {
             public function getListData(): array|Arrayable
             {
                 return $this
-                    ->setCustomTransformer('name', new UppercaseTransformer)
+                    ->setCustomTransformer('name', new UppercaseTransformer())
                     ->transform(Person::all());
             }
         };

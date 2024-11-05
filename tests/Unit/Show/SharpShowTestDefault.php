@@ -18,7 +18,7 @@ class SharpShowTest extends SharpTestCase
     /** @test */
     public function we_can_add_an_entity_list_section_to_the_layout()
     {
-        $sharpShow = new class extends BaseSharpShowTestDefault
+        $sharpShow = new class() extends BaseSharpShowTestDefault
         {
             public function buildShowFields(FieldsContainer $showFields): void
             {
@@ -65,7 +65,7 @@ class SharpShowTest extends SharpTestCase
     /** @test */
     public function we_can_declare_a_collapsable_section()
     {
-        $sharpShow = new class extends BaseSharpShowTestDefault
+        $sharpShow = new class() extends BaseSharpShowTestDefault
         {
             public function buildShowFields(FieldsContainer $showFields): void
             {
@@ -117,7 +117,7 @@ class SharpShowTest extends SharpTestCase
     /** @test */
     public function we_can_define_a_collapsable_entity_list_section_with_a_boolean()
     {
-        $sharpShow = new class extends BaseSharpShowTestDefault
+        $sharpShow = new class() extends BaseSharpShowTestDefault
         {
             public function buildShowFields(FieldsContainer $showFields): void
             {
@@ -139,7 +139,7 @@ class SharpShowTest extends SharpTestCase
     /** @test */
     public function we_can_define_a_custom_key_to_a_section()
     {
-        $sharpShow = new class extends BaseSharpShowTestDefault
+        $sharpShow = new class() extends BaseSharpShowTestDefault
         {
             public function buildShowFields(FieldsContainer $showFields): void
             {
@@ -166,7 +166,7 @@ class SharpShowTest extends SharpTestCase
     /** @test */
     public function we_can_declare_a_multiformAttribute()
     {
-        $sharpShow = new class extends BaseSharpShowTestDefault
+        $sharpShow = new class() extends BaseSharpShowTestDefault
         {
             public function buildShowConfig(): void
             {
@@ -187,7 +187,7 @@ class SharpShowTest extends SharpTestCase
     /** @test */
     public function we_can_declare_a_global_message_field()
     {
-        $sharpShow = new class extends BaseSharpShowTestDefault
+        $sharpShow = new class() extends BaseSharpShowTestDefault
         {
             public function buildShowConfig(): void
             {
@@ -216,7 +216,7 @@ class SharpShowTest extends SharpTestCase
     /** @test */
     public function we_can_associate_data_to_a_global_message_field()
     {
-        $sharpShow = new class extends BaseSharpShowTestDefault
+        $sharpShow = new class() extends BaseSharpShowTestDefault
         {
             public function buildShowConfig(): void
             {
@@ -244,7 +244,7 @@ class SharpShowTest extends SharpTestCase
     /** @test */
     public function we_can_declare_a_simple_page_title_field()
     {
-        $sharpShow = new class extends BaseSharpShowTestDefault
+        $sharpShow = new class() extends BaseSharpShowTestDefault
         {
             public function buildShowConfig(): void
             {
@@ -277,7 +277,7 @@ class SharpShowTest extends SharpTestCase
     /** @test */
     public function we_can_declare_a_localized_page_title_field()
     {
-        $sharpShow = new class extends BaseSharpShowTestDefault
+        $sharpShow = new class() extends BaseSharpShowTestDefault
         {
             public function buildShowConfig(): void
             {
@@ -306,7 +306,7 @@ class SharpShowTest extends SharpTestCase
     /** @test */
     public function single_shows_have_are_declared_in_config()
     {
-        $sharpShow = new class extends BaseSharpSingleShowTestDefault {};
+        $sharpShow = new class() extends BaseSharpSingleShowTestDefault {};
 
         $this->assertArraySubset(
             [

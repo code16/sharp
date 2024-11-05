@@ -12,7 +12,7 @@ class FormLayoutTest extends SharpTestCase
     /** @test */
     public function we_can_add_a_tab()
     {
-        $form = new class extends FormLayoutTestForm
+        $form = new class() extends FormLayoutTestForm
         {
             public function buildFormLayout(FormLayout $formLayout): void
             {
@@ -26,7 +26,7 @@ class FormLayoutTest extends SharpTestCase
     /** @test */
     public function we_can_add_a_column()
     {
-        $form = new class extends FormLayoutTestForm
+        $form = new class() extends FormLayoutTestForm
         {
             public function buildFormLayout(FormLayout $formLayout): void
             {
@@ -40,7 +40,7 @@ class FormLayoutTest extends SharpTestCase
     /** @test */
     public function we_can_see_layout_as_array()
     {
-        $form = new class extends FormLayoutTestForm
+        $form = new class() extends FormLayoutTestForm
         {
             public function buildFormLayout(FormLayout $formLayout): void
             {
@@ -53,7 +53,7 @@ class FormLayoutTest extends SharpTestCase
             $form->formLayout()['tabs'][0],
         );
 
-        $form2 = new class extends FormLayoutTestForm
+        $form2 = new class() extends FormLayoutTestForm
         {
             public function buildFormLayout(FormLayout $formLayout): void
             {
@@ -74,7 +74,7 @@ class FormLayoutTest extends SharpTestCase
     /** @test */
     public function we_can_set_tabbed_to_false()
     {
-        $form = new class extends FormLayoutTestForm
+        $form = new class() extends FormLayoutTestForm
         {
             public function buildFormLayout(FormLayout $formLayout): void
             {

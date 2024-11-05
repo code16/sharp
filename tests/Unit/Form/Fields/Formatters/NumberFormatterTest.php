@@ -11,7 +11,7 @@ class NumberFormatterTest extends SharpTestCase
     /** @test */
     public function we_can_format_value_to_front()
     {
-        $formatter = new NumberFormatter;
+        $formatter = new NumberFormatter();
         $field = SharpFormNumberField::make('number');
 
         $this->assertEquals(10, $formatter->toFront($field, 10));
@@ -23,7 +23,7 @@ class NumberFormatterTest extends SharpTestCase
     /** @test */
     public function we_can_format_value_from_front()
     {
-        $formatter = new NumberFormatter;
+        $formatter = new NumberFormatter();
         $attribute = 'attribute';
         $field = SharpFormNumberField::make('number');
 

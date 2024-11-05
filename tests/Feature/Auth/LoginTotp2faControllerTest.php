@@ -15,7 +15,7 @@ class LoginTotp2faControllerTest extends BaseApiTestCase
 
         $this->app->bind(
             Sharp2faTotpEngine::class,
-            fn () => new class implements Sharp2faTotpEngine
+            fn () => new class() implements Sharp2faTotpEngine
             {
                 public function verify(string $code, string $secret): bool
                 {
@@ -34,7 +34,7 @@ class LoginTotp2faControllerTest extends BaseApiTestCase
             }
         );
 
-        auth()->extend('sharp', fn () => new TestAuthGuard);
+        auth()->extend('sharp', fn () => new TestAuthGuard());
         $this->app['config']->set(
             'auth.guards.sharp', [
                 'driver' => 'sharp',

@@ -19,7 +19,7 @@ class Sharp2faDefaultNotification extends Notification implements ShouldQueue
 
     public function toMail($notifiable)
     {
-        return (new MailMessage)
+        return (new MailMessage())
             ->subject(trans('sharp::auth.2fa.notification.mail_subject'))
             ->line(trans('sharp::auth.2fa.notification.mail_body'))
             ->line($this->code);

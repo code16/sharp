@@ -16,14 +16,11 @@ use Spatie\Translatable\HasTranslations;
 class Post extends Model
 {
     use HasFactory, HasTranslations;
-
     public array $translatable = [
         'title',
         'content',
     ];
-
     protected $guarded = [];
-
     protected $casts = [
         'published_at' => 'datetime',
         'state' => PostState::class,

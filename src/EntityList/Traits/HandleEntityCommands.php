@@ -10,7 +10,6 @@ use Illuminate\Support\Str;
 trait HandleEntityCommands
 {
     protected ?Collection $entityCommandHandlers = null;
-
     protected ?string $primaryEntityCommandKey = null;
 
     protected function configurePrimaryEntityCommand(string $commandKeyOrClassName): self

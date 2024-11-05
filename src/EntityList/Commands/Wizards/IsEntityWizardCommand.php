@@ -29,7 +29,7 @@ trait IsEntityWizardCommand
         // You can either implement this method and test $step (quick for small commands)
         // or leave this and implement for each step executeStepXXX
         // where XXX is the camel cased name of your step
-        throw new SharpMethodNotImplementedException;
+        throw new SharpMethodNotImplementedException();
     }
 
     protected function initialData(): array

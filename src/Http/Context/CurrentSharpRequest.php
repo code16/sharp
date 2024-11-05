@@ -159,7 +159,7 @@ class CurrentSharpRequest
 
     private function buildBreadcrumb(): void
     {
-        $this->breadcrumb = new Collection;
+        $this->breadcrumb = new Collection();
         $segments = $this->getSegmentsFromRequest();
         $depth = 0;
 

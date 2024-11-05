@@ -23,7 +23,7 @@ class EditorFormatterTest extends SharpTestCase
     /** @test */
     public function we_can_format_a_text_value_to_front()
     {
-        $formatter = new EditorFormatter;
+        $formatter = new EditorFormatter();
         $field = SharpFormEditorField::make('md');
         $value = Str::random()."\n\n".Str::random();
 
@@ -42,7 +42,7 @@ class EditorFormatterTest extends SharpTestCase
 
         $this->assertEquals(
             $value,
-            (new EditorFormatter)->fromFront(
+            (new EditorFormatter())->fromFront(
                 SharpFormEditorField::make('md'),
                 'attribute',
                 ['text' => $value],
@@ -59,7 +59,7 @@ class EditorFormatterTest extends SharpTestCase
 
         $this->assertEquals(
             $value,
-            (new EditorFormatter)->fromFront(
+            (new EditorFormatter())->fromFront(
                 SharpFormEditorField::make('md'),
                 'attribute',
                 ['text' => $value],
@@ -71,7 +71,7 @@ class EditorFormatterTest extends SharpTestCase
     public function we_store_newly_uploaded_files_from_front()
     {
         app()->bind(UploadFormatter::class, function () {
-            return new class extends UploadFormatter
+            return new class() extends UploadFormatter
             {
                 public function fromFront(SharpFormField $field, string $attribute, $value): ?array
                 {
@@ -99,7 +99,7 @@ class EditorFormatterTest extends SharpTestCase
                 Some content text after
             EOT;
 
-        $result = (new EditorFormatter)
+        $result = (new EditorFormatter())
             ->fromFront(
                 SharpFormEditorField::make('md')
                     ->setStorageDisk('local')
@@ -144,7 +144,7 @@ class EditorFormatterTest extends SharpTestCase
     public function we_store_newly_uploaded_files_in_a_localized_field_from_front()
     {
         app()->bind(UploadFormatter::class, function () {
-            return new class extends UploadFormatter
+            return new class() extends UploadFormatter
             {
                 public function fromFront(SharpFormField $field, string $attribute, $value): ?array
                 {
@@ -174,7 +174,7 @@ class EditorFormatterTest extends SharpTestCase
                 Some content text after
             EOT;
 
-        $result = (new EditorFormatter)
+        $result = (new EditorFormatter())
             ->fromFront(
                 SharpFormEditorField::make('md')
                     ->setLocalized()

@@ -5,7 +5,6 @@ namespace Code16\Sharp\Form\Layout;
 class FormLayoutTab implements HasLayout
 {
     protected string $title;
-
     protected array $columns = [];
 
     public function __construct(string $title)

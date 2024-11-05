@@ -22,19 +22,15 @@ abstract class SharpShow
         HandleLocalizedFields,
         HandlePageAlertMessage,
         WithCustomTransformers;
-
     protected ?ShowLayout $showLayout = null;
-
     protected ?string $multiformAttribute = null;
-
     protected ?SharpShowTextField $pageTitleField = null;
-
     protected ?string $deleteConfirmationText = null;
 
     final public function showLayout(): array
     {
         if ($this->showLayout === null) {
-            $this->showLayout = new ShowLayout;
+            $this->showLayout = new ShowLayout();
             $this->buildShowLayout($this->showLayout);
         }
 

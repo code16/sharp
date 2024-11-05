@@ -12,7 +12,7 @@ class DateFormatterTest extends SharpTestCase
     /** @test */
     public function we_can_format_datetime_value_to_front()
     {
-        $formatter = new DateFormatter;
+        $formatter = new DateFormatter();
         $field = SharpFormDateField::make('date');
         $field->setHasDate();
         $field->setHasTime();
@@ -25,7 +25,7 @@ class DateFormatterTest extends SharpTestCase
     /** @test */
     public function we_can_format_date_only_value_to_front()
     {
-        $formatter = new DateFormatter;
+        $formatter = new DateFormatter();
         $field = SharpFormDateField::make('date');
         $field->setHasDate();
         $field->setHasTime(false);
@@ -38,7 +38,7 @@ class DateFormatterTest extends SharpTestCase
     /** @test */
     public function we_can_format_time_only_value_to_front()
     {
-        $formatter = new DateFormatter;
+        $formatter = new DateFormatter();
         $field = SharpFormDateField::make('date');
         $field->setHasDate(false);
         $field->setHasTime(true);
@@ -51,7 +51,7 @@ class DateFormatterTest extends SharpTestCase
     /** @test */
     public function we_can_format_datetime_value_from_front()
     {
-        $formatter = new DateFormatter;
+        $formatter = new DateFormatter();
         $field = SharpFormDateField::make('date');
         $field->setHasDate();
         $field->setHasTime();
@@ -63,7 +63,7 @@ class DateFormatterTest extends SharpTestCase
     /** @test */
     public function we_can_format_date_only_value_from_front()
     {
-        $formatter = new DateFormatter;
+        $formatter = new DateFormatter();
         $field = SharpFormDateField::make('date');
         $field->setHasDate();
         $field->setHasTime(false);
@@ -76,7 +76,7 @@ class DateFormatterTest extends SharpTestCase
     /** @test */
     public function we_can_format_time_only_value_from_front()
     {
-        $formatter = new DateFormatter;
+        $formatter = new DateFormatter();
         $field = SharpFormDateField::make('date');
         $field->setHasDate(false);
         $field->setHasTime();
@@ -89,7 +89,7 @@ class DateFormatterTest extends SharpTestCase
     /** @test */
     public function we_handle_timezone_from_front()
     {
-        $formatter = new DateFormatter;
+        $formatter = new DateFormatter();
         $field = SharpFormDateField::make('date');
         $field->setHasTime();
         $attribute = 'attribute';
@@ -104,7 +104,7 @@ class DateFormatterTest extends SharpTestCase
     /** @test */
     public function we_set_seconds_to_zero()
     {
-        $formatter = new DateFormatter;
+        $formatter = new DateFormatter();
         $field = SharpFormDateField::make('date');
         $field->setHasDate();
         $field->setHasTime();

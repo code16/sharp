@@ -8,7 +8,6 @@ use Code16\Sharp\Exceptions\SharpInvalidEntityKeyException;
 abstract class SharpDashboardEntity extends BaseSharpEntity
 {
     protected bool $isDashboard = true;
-
     protected ?string $view = null;
 
     final public function getViewOrFail(): SharpDashboard

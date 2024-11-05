@@ -7,7 +7,6 @@ use Code16\Sharp\EntityList\Commands\ReorderHandler;
 class SimpleEloquentReorderHandler implements ReorderHandler
 {
     protected string $idAttribute = 'id';
-
     protected string $orderAttribute = 'order';
 
     public function __construct(private string $modelClassName) {}

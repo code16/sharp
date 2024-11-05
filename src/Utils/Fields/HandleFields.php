@@ -8,13 +8,12 @@ use Code16\Sharp\Show\Fields\SharpShowField;
 trait HandleFields
 {
     protected ?FieldsContainer $fieldsContainer = null;
-
     protected bool $formBuilt = false;
 
     final public function fieldsContainer(): FieldsContainer
     {
         if ($this->fieldsContainer === null) {
-            $this->fieldsContainer = new FieldsContainer;
+            $this->fieldsContainer = new FieldsContainer();
         }
 
         return $this->fieldsContainer;

@@ -13,7 +13,6 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 class CategoryForm extends SharpForm
 {
     use WithSharpFormEloquentUpdater;
-
     protected ?string $formValidatorClass = CategoryValidator::class;
 
     public function buildFormFields(FieldsContainer $formFields): void
@@ -47,7 +46,7 @@ class CategoryForm extends SharpForm
     {
         $category = $id
             ? Category::findOrFail($id)
-            : new Category;
+            : new Category();
 
         $this->save($category, $data);
 

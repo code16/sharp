@@ -7,7 +7,6 @@ use Code16\Sharp\EntityList\Commands\EntityState;
 trait HandleEntityState
 {
     protected ?string $entityStateAttribute = null;
-
     protected ?EntityState $entityStateHandler = null;
 
     protected function configureEntityState(string $stateAttribute, $stateHandlerOrClassName): self

@@ -11,7 +11,7 @@ class SharpShowCommandTest extends SharpTestCase
     /** @test */
     public function we_can_configure_show_instance_command_in_sections()
     {
-        $show = new class extends BaseSharpShowTestDefault
+        $show = new class() extends BaseSharpShowTestDefault
         {
             public function getInstanceCommands(): ?array
             {
@@ -56,7 +56,7 @@ class SharpShowCommandTest extends SharpTestCase
     /** @test */
     public function we_can_configure_show_instance_command_in_sections_with_custom_keys()
     {
-        $show = new class extends BaseSharpShowTestDefault
+        $show = new class() extends BaseSharpShowTestDefault
         {
             public function getInstanceCommands(): ?array
             {

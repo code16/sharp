@@ -10,9 +10,7 @@ use Symfony\Component\Console\Input\InputOption;
 class ReorderHandlerMakeCommand extends GeneratorCommand
 {
     protected $name = 'sharp:make:reorder-handler';
-
     protected $description = 'Create a new Reorder Handler class';
-
     protected $type = 'ReorderHandler';
 
     protected function buildClass($name)

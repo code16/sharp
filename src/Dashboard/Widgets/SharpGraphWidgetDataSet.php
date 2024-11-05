@@ -7,9 +7,7 @@ use Illuminate\Support\Collection;
 class SharpGraphWidgetDataSet
 {
     protected array $values;
-
     protected ?string $label = null;
-
     protected ?string $color = null;
 
     protected function __construct(array|Collection $values)

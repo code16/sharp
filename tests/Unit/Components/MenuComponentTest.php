@@ -19,7 +19,7 @@ class MenuComponentTest extends SharpTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->actingAs(new User);
+        $this->actingAs(new User());
         $this->disableSharpAuthorizationChecks();
     }
 
@@ -29,7 +29,7 @@ class MenuComponentTest extends SharpTestCase
         $this->app['config']
             ->set(
                 'sharp.menu',
-                new class extends SharpMenu
+                new class() extends SharpMenu
                 {
                     public function build(): SharpMenu
                     {
@@ -58,7 +58,7 @@ class MenuComponentTest extends SharpTestCase
         $this->app['config']
             ->set(
                 'sharp.menu',
-                new class extends SharpMenu
+                new class() extends SharpMenu
                 {
                     public function build(): SharpMenu
                     {
@@ -88,7 +88,7 @@ class MenuComponentTest extends SharpTestCase
         $this->app['config']
             ->set(
                 'sharp.menu',
-                new class extends SharpMenu
+                new class() extends SharpMenu
                 {
                     public function build(): SharpMenu
                     {
@@ -125,7 +125,7 @@ class MenuComponentTest extends SharpTestCase
         $this->app['config']
             ->set(
                 'sharp.menu',
-                new class extends SharpMenu
+                new class() extends SharpMenu
                 {
                     public function build(): SharpMenu
                     {
@@ -157,7 +157,7 @@ class MenuComponentTest extends SharpTestCase
         $this->app['config']
             ->set(
                 'sharp.menu',
-                new class extends SharpMenu
+                new class() extends SharpMenu
                 {
                     public function build(): SharpMenu
                     {
@@ -188,7 +188,7 @@ class MenuComponentTest extends SharpTestCase
         $this->app['config']
             ->set(
                 'sharp.menu',
-                new class extends SharpMenu
+                new class() extends SharpMenu
                 {
                     public function build(): SharpMenu
                     {
@@ -226,7 +226,7 @@ class MenuComponentTest extends SharpTestCase
         $this->app['config']
             ->set(
                 'sharp.menu',
-                new class extends SharpMenu
+                new class() extends SharpMenu
                 {
                     public function build(): SharpMenu
                     {
@@ -255,7 +255,7 @@ class MenuComponentTest extends SharpTestCase
         $this->app['config']
             ->set(
                 'sharp.menu',
-                new class extends SharpMenu
+                new class() extends SharpMenu
                 {
                     public function build(): SharpMenu
                     {

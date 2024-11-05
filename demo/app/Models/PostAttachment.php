@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 class PostAttachment extends Model
 {
     use HasFactory;
-
     protected $guarded = [];
 
     public function post(): BelongsTo

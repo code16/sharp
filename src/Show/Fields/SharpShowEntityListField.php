@@ -7,26 +7,17 @@ use Code16\Sharp\Utils\Filters\Filter;
 class SharpShowEntityListField extends SharpShowField
 {
     const FIELD_TYPE = 'entityList';
-
     protected string $entityListKey;
-
     protected array $hiddenFilters = [];
-
     protected array $hiddenCommands = [
         'entity' => [],
         'instance' => [],
     ];
-
     protected bool $showEntityState = true;
-
     protected bool $showReorderButton = true;
-
     protected bool $showCreateButton = true;
-
     protected bool $showSearchField = true;
-
     protected bool $showCount = false;
-
     protected ?string $label = null;
 
     public static function make(string $key, ?string $entityListKey = null): SharpShowEntityListField

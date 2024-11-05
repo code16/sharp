@@ -29,7 +29,6 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 class PostForm extends SharpForm
 {
     use WithSharpFormEloquentUpdater;
-
     protected ?string $formValidatorClass = PostValidator::class;
 
     public function buildFormFields(FieldsContainer $formFields): void
@@ -188,8 +187,8 @@ class PostForm extends SharpForm
             ->setCustomTransformer('author_id', function ($value, Post $instance) {
                 return $instance->author;
             })
-            ->setCustomTransformer('cover', new SharpUploadModelFormAttributeTransformer)
-            ->setCustomTransformer('attachments[document]', new SharpUploadModelFormAttributeTransformer)
+            ->setCustomTransformer('cover', new SharpUploadModelFormAttributeTransformer())
+            ->setCustomTransformer('attachments[document]', new SharpUploadModelFormAttributeTransformer())
             ->transform(Post::with('cover', 'attachments', 'categories')->findOrFail($id));
     }
 

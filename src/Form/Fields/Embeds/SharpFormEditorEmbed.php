@@ -17,11 +17,8 @@ abstract class SharpFormEditorEmbed
         HandlePageAlertMessage,
         HandleValidation,
         WithCustomTransformers;
-
     protected ?string $label = null;
-
     protected ?string $tagName = null;
-
     protected array $templates = [];
 
     public function toConfigArray(bool $isForm): array

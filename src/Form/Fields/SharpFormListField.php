@@ -8,34 +8,22 @@ use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithTemplates;
 class SharpFormListField extends SharpFormField
 {
     use SharpFormFieldWithTemplates;
-
     const FIELD_TYPE = 'list';
-
     protected bool $addable = false;
-
     protected bool $sortable = false;
-
     protected bool $removable = false;
-
     protected string $addText;
-
     protected string $itemIdAttribute = 'id';
-
     protected ?string $orderAttribute = null;
-
     protected ?int $maxItemCount = null;
-
     protected array $itemFields = [];
-
     protected bool $allowBulkUpload = false;
-
     private ?string $bulkUploadItemFieldKey = null;
-
     private int $bulkUploadFileCountLimit = 10;
 
     public static function make(string $key): self
     {
-        return new static($key, static::FIELD_TYPE, new ListFormatter);
+        return new static($key, static::FIELD_TYPE, new ListFormatter());
     }
 
     public function setAddable(bool $addable = true): self

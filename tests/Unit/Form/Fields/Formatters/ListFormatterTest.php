@@ -13,7 +13,7 @@ class ListFormatterTest extends SharpTestCase
     /** @test */
     public function we_can_format_value_to_front()
     {
-        $formatter = new ListFormatter;
+        $formatter = new ListFormatter();
         $field = SharpFormListField::make('list')
             ->addItemField(SharpFormTextField::make('name'))
             ->addItemField(SharpFormTextField::make('job'));
@@ -26,7 +26,7 @@ class ListFormatterTest extends SharpTestCase
     /** @test */
     public function non_configured_values_are_ignored_when_formatting_to_front()
     {
-        $formatter = new ListFormatter;
+        $formatter = new ListFormatter();
         $field = SharpFormListField::make('list')
             ->addItemField(SharpFormTextField::make('name'));
 
@@ -40,7 +40,7 @@ class ListFormatterTest extends SharpTestCase
     /** @test */
     public function we_can_format_value_from_front()
     {
-        $formatter = new ListFormatter;
+        $formatter = new ListFormatter();
         $attribute = 'attribute';
         $field = SharpFormListField::make('list')
             ->addItemField(SharpFormTextField::make('name'))
@@ -54,7 +54,7 @@ class ListFormatterTest extends SharpTestCase
     /** @test */
     public function non_configured_values_are_ignored_when_formatting_from_front()
     {
-        $formatter = new ListFormatter;
+        $formatter = new ListFormatter();
         $attribute = 'attribute';
         $field = SharpFormListField::make('list')
             ->addItemField(SharpFormTextField::make('name'));
@@ -69,7 +69,7 @@ class ListFormatterTest extends SharpTestCase
     /** @test */
     public function we_can_configure_the_id_attribute()
     {
-        $formatter = new ListFormatter;
+        $formatter = new ListFormatter();
         $field = SharpFormListField::make('list')
             ->setItemIdAttribute('number')
             ->addItemField(SharpFormTextField::make('name'))
@@ -87,7 +87,7 @@ class ListFormatterTest extends SharpTestCase
     /** @test */
     public function non_valuated_values_are_initialized_to_null_when_formatting_to_front()
     {
-        $formatter = new ListFormatter;
+        $formatter = new ListFormatter();
         $field = SharpFormListField::make('list')
             ->addItemField(SharpFormTextField::make('name'))
             ->addItemField(SharpFormTextField::make('job'));
@@ -102,7 +102,7 @@ class ListFormatterTest extends SharpTestCase
     /** @test */
     public function we_can_format_sub_value_to_front()
     {
-        $formatter = new ListFormatter;
+        $formatter = new ListFormatter();
         $field = SharpFormListField::make('list')
             ->addItemField(SharpFormTextField::make('mother:name'));
 

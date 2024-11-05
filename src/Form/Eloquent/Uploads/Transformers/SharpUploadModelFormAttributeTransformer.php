@@ -13,13 +13,9 @@ use Illuminate\Support\Str;
 class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransformer
 {
     use UsesSharpUploadModel;
-
     protected bool $withThumbnails;
-
     protected int $thumbnailWidth;
-
     protected int $thumbnailHeight;
-
     private bool $dynamicSharpUploadModel = false;
 
     public function __construct(bool $withThumbnails = true, int $thumbnailWidth = 200, int $thumbnailHeight = 200)

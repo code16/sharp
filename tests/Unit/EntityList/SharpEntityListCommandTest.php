@@ -15,12 +15,12 @@ class SharpEntityListCommandTest extends SharpTestCase
     /** @test */
     public function we_can_get_list_commands_config_with_an_instance()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function getEntityCommands(): ?array
             {
                 return [
-                    'entityCommand' => new class extends EntityCommand
+                    'entityCommand' => new class() extends EntityCommand
                     {
                         public function label(): string
                         {
@@ -35,7 +35,7 @@ class SharpEntityListCommandTest extends SharpTestCase
             public function getInstanceCommands(): ?array
             {
                 return [
-                    'instanceCommand' => new class extends InstanceCommand
+                    'instanceCommand' => new class() extends InstanceCommand
                     {
                         public function label(): string
                         {
@@ -85,7 +85,7 @@ class SharpEntityListCommandTest extends SharpTestCase
     /** @test */
     public function we_can_get_list_entity_command_config_with_a_class()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function getEntityCommands(): ?array
             {
@@ -103,12 +103,12 @@ class SharpEntityListCommandTest extends SharpTestCase
     /** @test */
     public function we_can_ask_for_a_confirmation_on_a_command()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function getEntityCommands(): ?array
             {
                 return [
-                    'entityCommand' => new class extends EntityCommand
+                    'entityCommand' => new class() extends EntityCommand
                     {
                         public function label(): string
                         {
@@ -134,12 +134,12 @@ class SharpEntityListCommandTest extends SharpTestCase
     /** @test */
     public function we_can_declare_instance_selection_mode_on_a_command()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function getEntityCommands(): ?array
             {
                 return [
-                    'command_required' => new class extends EntityCommand
+                    'command_required' => new class() extends EntityCommand
                     {
                         public function label(): string
                         {
@@ -153,7 +153,7 @@ class SharpEntityListCommandTest extends SharpTestCase
 
                         public function execute(array $data = []): array {}
                     },
-                    'command_allowed' => new class extends EntityCommand
+                    'command_allowed' => new class() extends EntityCommand
                     {
                         public function label(): string
                         {
@@ -167,7 +167,7 @@ class SharpEntityListCommandTest extends SharpTestCase
 
                         public function execute(array $data = []): array {}
                     },
-                    'command_none' => new class extends EntityCommand
+                    'command_none' => new class() extends EntityCommand
                     {
                         public function label(): string
                         {
@@ -195,12 +195,12 @@ class SharpEntityListCommandTest extends SharpTestCase
     /** @test */
     public function we_can_define_that_a_command_has_a_form()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function getEntityCommands(): ?array
             {
                 return [
-                    'entityCommand' => new class extends EntityCommand
+                    'entityCommand' => new class() extends EntityCommand
                     {
                         public function label(): string
                         {
@@ -231,12 +231,12 @@ class SharpEntityListCommandTest extends SharpTestCase
     /** @test */
     public function we_can_define_a_form_modal_title_on_a_command()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function getEntityCommands(): ?array
             {
                 return [
-                    'entityCommand' => new class extends EntityCommand
+                    'entityCommand' => new class() extends EntityCommand
                     {
                         public function label(): string
                         {
@@ -262,12 +262,12 @@ class SharpEntityListCommandTest extends SharpTestCase
     /** @test */
     public function we_can_handle_authorization_in_an_entity_command()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function getEntityCommands(): ?array
             {
                 return [
-                    'entityCommand' => new class extends EntityCommand
+                    'entityCommand' => new class() extends EntityCommand
                     {
                         public function label(): string
                         {
@@ -293,12 +293,12 @@ class SharpEntityListCommandTest extends SharpTestCase
     /** @test */
     public function we_can_handle_authorization_in_an_instance_command()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function getInstanceCommands(): ?array
             {
                 return [
-                    'command' => new class extends InstanceCommand
+                    'command' => new class() extends InstanceCommand
                     {
                         public function label(): string
                         {
@@ -328,12 +328,12 @@ class SharpEntityListCommandTest extends SharpTestCase
     /** @test */
     public function we_can_define_a_description_on_a_command()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function getEntityCommands(): ?array
             {
                 return [
-                    'entityCommand' => new class extends EntityCommand
+                    'entityCommand' => new class() extends EntityCommand
                     {
                         public function label(): string
                         {
@@ -359,12 +359,12 @@ class SharpEntityListCommandTest extends SharpTestCase
     /** @test */
     public function we_can_define_separators_in_instance_commands()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function getInstanceCommands(): ?array
             {
                 return [
-                    'command-1' => new class extends InstanceCommand
+                    'command-1' => new class() extends InstanceCommand
                     {
                         public function label(): string
                         {
@@ -373,7 +373,7 @@ class SharpEntityListCommandTest extends SharpTestCase
 
                         public function execute($instanceId, array $data = []): array {}
                     },
-                    'command-2' => new class extends InstanceCommand
+                    'command-2' => new class() extends InstanceCommand
                     {
                         public function label(): string
                         {
@@ -383,7 +383,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                         public function execute($instanceId, array $data = []): array {}
                     },
                     '---',
-                    'command-3' => new class extends InstanceCommand
+                    'command-3' => new class() extends InstanceCommand
                     {
                         public function label(): string
                         {
@@ -406,12 +406,12 @@ class SharpEntityListCommandTest extends SharpTestCase
     /** @test */
     public function we_can_define_separators_in_entity_commands()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function getEntityCommands(): ?array
             {
                 return [
-                    'command-1' => new class extends EntityCommand
+                    'command-1' => new class() extends EntityCommand
                     {
                         public function label(): string
                         {
@@ -421,7 +421,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                         public function execute(array $data = []): array {}
                     },
                     '---',
-                    'command-2' => new class extends EntityCommand
+                    'command-2' => new class() extends EntityCommand
                     {
                         public function label(): string
                         {
@@ -430,7 +430,7 @@ class SharpEntityListCommandTest extends SharpTestCase
 
                         public function execute(array $data = []): array {}
                     },
-                    'command-3' => new class extends EntityCommand
+                    'command-3' => new class() extends EntityCommand
                     {
                         public function label(): string
                         {
@@ -453,12 +453,12 @@ class SharpEntityListCommandTest extends SharpTestCase
     /** @test */
     public function we_can_declare_an_entity_command_as_primary()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function getEntityCommands(): ?array
             {
                 return [
-                    'entity' => new class extends EntityCommand
+                    'entity' => new class() extends EntityCommand
                     {
                         public function label(): string
                         {
@@ -467,7 +467,7 @@ class SharpEntityListCommandTest extends SharpTestCase
 
                         public function execute(array $data = []): array {}
                     },
-                    'primary-entity' => new class extends EntityCommand
+                    'primary-entity' => new class() extends EntityCommand
                     {
                         public function label(): string
                         {

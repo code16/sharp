@@ -20,7 +20,7 @@ class SharpDashboardTest extends SharpTestCase
     /** @test */
     public function we_can_get_widgets()
     {
-        $dashboard = new class extends FakeSharpDashboard
+        $dashboard = new class() extends FakeSharpDashboard
         {
             protected function buildWidgets(WidgetsContainer $widgetsContainer): void
             {
@@ -53,7 +53,7 @@ class SharpDashboardTest extends SharpTestCase
     /** @test */
     public function we_can_get_widgets_layout_without_section()
     {
-        $dashboard = new class extends FakeSharpDashboard
+        $dashboard = new class() extends FakeSharpDashboard
         {
             protected function buildWidgets(WidgetsContainer $widgetsContainer): void
             {
@@ -98,7 +98,7 @@ class SharpDashboardTest extends SharpTestCase
     /** @test */
     public function we_can_get_widgets_layout_with_sections()
     {
-        $dashboard = new class extends FakeSharpDashboard
+        $dashboard = new class() extends FakeSharpDashboard
         {
             protected function buildWidgets(WidgetsContainer $widgetsContainer): void
             {
@@ -156,7 +156,7 @@ class SharpDashboardTest extends SharpTestCase
     /** @test */
     public function we_can_get_graph_widget_data()
     {
-        $dashboard = new class extends FakeSharpDashboard
+        $dashboard = new class() extends FakeSharpDashboard
         {
             protected function buildWidgets(WidgetsContainer $widgetsContainer): void
             {
@@ -200,7 +200,7 @@ class SharpDashboardTest extends SharpTestCase
     /** @test */
     public function we_can_get_graph_widget_data_with_multiple_datasets()
     {
-        $dashboard = new class extends FakeSharpDashboard
+        $dashboard = new class() extends FakeSharpDashboard
         {
             protected function buildWidgets(WidgetsContainer $widgetsContainer): void
             {
@@ -254,7 +254,7 @@ class SharpDashboardTest extends SharpTestCase
     /** @test */
     public function we_can_get_panel_widget_data()
     {
-        $dashboard = new class extends FakeSharpDashboard
+        $dashboard = new class() extends FakeSharpDashboard
         {
             protected function buildWidgets(WidgetsContainer $widgetsContainer): void
             {
@@ -285,7 +285,7 @@ class SharpDashboardTest extends SharpTestCase
     /** @test */
     public function we_can_get_ordered_list_widget_data()
     {
-        $dashboard = new class extends FakeSharpDashboard
+        $dashboard = new class() extends FakeSharpDashboard
         {
             protected function buildWidgets(WidgetsContainer $widgetsContainer): void
             {
@@ -335,7 +335,7 @@ class SharpDashboardTest extends SharpTestCase
     /** @test */
     public function we_can_get_ordered_list_widget_item_url()
     {
-        $dashboard = new class extends FakeSharpDashboard
+        $dashboard = new class() extends FakeSharpDashboard
         {
             protected function buildWidgets(WidgetsContainer $widgetsContainer): void
             {
@@ -408,7 +408,7 @@ class SharpDashboardTest extends SharpTestCase
     /** @test */
     public function we_can_configure_a_global_message_field_without_data()
     {
-        $dashboard = new class extends FakeSharpDashboard
+        $dashboard = new class() extends FakeSharpDashboard
         {
             public function buildDashboardConfig(): void
             {
@@ -428,7 +428,7 @@ class SharpDashboardTest extends SharpTestCase
     /** @test */
     public function we_can_configure_a_global_message_field_with_template_data()
     {
-        $dashboard = new class extends FakeSharpDashboard
+        $dashboard = new class() extends FakeSharpDashboard
         {
             public function buildDashboardConfig(): void
             {
@@ -454,7 +454,7 @@ class SharpDashboardTest extends SharpTestCase
     /** @test */
     public function we_can_configure_a_global_message_field_with_alert_level()
     {
-        $dashboard = new class extends FakeSharpDashboard
+        $dashboard = new class() extends FakeSharpDashboard
         {
             public function buildDashboardConfig(): void
             {

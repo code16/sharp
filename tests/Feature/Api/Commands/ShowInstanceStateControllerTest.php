@@ -80,7 +80,7 @@ class ShowInstanceStatePersonSharpShow extends PersonSharpShow
 {
     public function buildShowConfig(): void
     {
-        $this->configureEntityState('state', new class extends EntityState
+        $this->configureEntityState('state', new class() extends EntityState
         {
             protected function buildStates(): void
             {
@@ -107,7 +107,7 @@ class ShowInstanceStatePersonSharpSingleShow extends PersonSharpSingleShow
 {
     public function buildShowConfig(): void
     {
-        $this->setEntityState('state', new class extends SingleEntityState
+        $this->setEntityState('state', new class() extends SingleEntityState
         {
             protected function buildStates(): void
             {

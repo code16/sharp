@@ -9,11 +9,8 @@ use Symfony\Component\Console\Input\InputOption;
 class EntityListMakeCommand extends GeneratorCommand
 {
     use WithModel;
-
     protected $name = 'sharp:make:entity-list';
-
     protected $description = 'Create a new Entity List class';
-
     protected $type = 'SharpEntityList';
 
     protected function buildClass($name)

@@ -7,9 +7,7 @@ use Illuminate\Console\GeneratorCommand;
 class DashboardMakeCommand extends GeneratorCommand
 {
     protected $name = 'sharp:make:dashboard';
-
     protected $description = 'Create a new Dashboard';
-
     protected $type = 'Dashboard';
 
     protected function getStub()

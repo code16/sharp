@@ -7,28 +7,19 @@ use Code16\Sharp\Form\Fields\Formatters\GeolocationFormatter;
 class SharpFormGeolocationField extends SharpFormField
 {
     const FIELD_TYPE = 'geolocation';
-
     protected string $displayUnit = 'DMS';
-
     protected bool $geocoding = false;
-
     protected int $zoomLevel = 10;
-
     protected ?array $boundaries = null;
-
     protected ?array $initialPosition = null;
-
     protected string $mapsProvider = 'gmaps';
-
     protected string $geocodingProvider = 'gmaps';
-
     protected array $mapsProviderOptions = [];
-
     protected array $geocodingProviderOptions = [];
 
     public static function make(string $key): self
     {
-        return new static($key, static::FIELD_TYPE, new GeolocationFormatter);
+        return new static($key, static::FIELD_TYPE, new GeolocationFormatter());
     }
 
     public function setDisplayUnitDegreesMinutesSeconds(): self

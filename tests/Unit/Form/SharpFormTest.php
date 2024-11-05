@@ -20,7 +20,7 @@ class SharpFormTest extends SharpTestCase
     /** @test */
     public function we_get_formatted_data_in_creation_with_the_default_create_function()
     {
-        $sharpForm = new class extends BaseSharpForm
+        $sharpForm = new class() extends BaseSharpForm
         {
             public function buildFormFields(FieldsContainer $formFields): void
             {
@@ -42,7 +42,7 @@ class SharpFormTest extends SharpTestCase
     /** @test */
     public function we_get_formatted_data_in_creation_with_the_default_create_function_with_subclasses()
     {
-        $sharpForm = new class extends BaseSharpForm
+        $sharpForm = new class() extends BaseSharpForm
         {
             public function buildFormFields(FieldsContainer $formFields): void
             {
@@ -64,7 +64,7 @@ class SharpFormTest extends SharpTestCase
     /** @test */
     public function if_the_field_formatter_needs_it_we_can_delay_its_execution_after_first_save()
     {
-        $sharpForm = new class extends BaseSharpForm
+        $sharpForm = new class() extends BaseSharpForm
         {
             public $instance;
 
@@ -76,14 +76,14 @@ class SharpFormTest extends SharpTestCase
                     )
                     ->addField(
                         SharpFormTextField::make('delayed')
-                            ->setFormatter(new class extends SharpFieldFormatter
+                            ->setFormatter(new class() extends SharpFieldFormatter
                             {
                                 public function toFront(SharpFormField $field, $value) {}
 
                                 public function fromFront(SharpFormField $field, string $attribute, $value)
                                 {
                                     if (! $this->instanceId) {
-                                        throw new SharpFormFieldFormattingMustBeDelayedException;
+                                        throw new SharpFormFieldFormattingMustBeDelayedException();
                                     }
 
                                     return $value.'-'.$this->instanceId;
@@ -122,19 +122,19 @@ class SharpFormTest extends SharpTestCase
     /** @test */
     public function an_exception_is_raised_if_we_try_to_delay_but_the_update_does_not_return_the_instance_id()
     {
-        $sharpForm = new class extends BaseSharpForm
+        $sharpForm = new class() extends BaseSharpForm
         {
             public function buildFormFields(FieldsContainer $formFields): void
             {
                 $formFields->addField(
                     SharpFormTextField::make('delayed')
-                        ->setFormatter(new class extends SharpFieldFormatter
+                        ->setFormatter(new class() extends SharpFieldFormatter
                         {
                             public function toFront(SharpFormField $field, $value) {}
 
                             public function fromFront(SharpFormField $field, string $attribute, $value)
                             {
-                                throw new SharpFormFieldFormattingMustBeDelayedException;
+                                throw new SharpFormFieldFormattingMustBeDelayedException();
                             }
                         }),
                 );
@@ -150,7 +150,7 @@ class SharpFormTest extends SharpTestCase
     /** @test */
     public function single_forms_are_declared_in_config()
     {
-        $sharpForm = new class extends BaseSharpSingleForm {};
+        $sharpForm = new class() extends BaseSharpSingleForm {};
 
         $sharpForm->buildFormConfig();
 
@@ -167,7 +167,7 @@ class SharpFormTest extends SharpTestCase
     /** @test */
     public function we_can_declare_setDisplayShowPageAfterCreation_in_config()
     {
-        $sharpForm = new class extends BaseSharpForm
+        $sharpForm = new class() extends BaseSharpForm
         {
             public function buildFormConfig(): void
             {

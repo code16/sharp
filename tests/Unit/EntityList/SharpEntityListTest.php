@@ -15,7 +15,7 @@ class SharpEntityListTest extends SharpTestCase
     /** @test */
     public function we_can_get_containers()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function buildListFields(EntityListFieldsContainer $fieldsContainer): void
             {
@@ -42,7 +42,7 @@ class SharpEntityListTest extends SharpTestCase
     /** @test */
     public function we_can_get_layout()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function buildListFields(EntityListFieldsContainer $fieldsContainer): void
             {
@@ -64,7 +64,7 @@ class SharpEntityListTest extends SharpTestCase
     /** @test */
     public function we_can_define_a_layout_for_small_screens()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function buildListFields(EntityListFieldsContainer $fieldsContainer): void
             {
@@ -86,7 +86,7 @@ class SharpEntityListTest extends SharpTestCase
     /** @test */
     public function we_can_configure_a_column_to_fill_left_space()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function buildListFields(EntityListFieldsContainer $fieldsContainer): void
             {
@@ -108,7 +108,7 @@ class SharpEntityListTest extends SharpTestCase
     /** @test */
     public function we_can_get_list_data()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function getListData(): array
             {
@@ -144,7 +144,7 @@ class SharpEntityListTest extends SharpTestCase
     /** @test */
     public function we_can_get_paginated_list_data()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function getListData(): array|Arrayable
             {
@@ -185,7 +185,7 @@ class SharpEntityListTest extends SharpTestCase
     /** @test */
     public function we_can_get_list_config()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function buildListConfig(): void
             {
@@ -216,7 +216,7 @@ class SharpEntityListTest extends SharpTestCase
     /** @test */
     public function we_can_configure_a_global_message_field_without_data()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function buildListConfig(): void
             {
@@ -236,7 +236,7 @@ class SharpEntityListTest extends SharpTestCase
     /** @test */
     public function we_can_configure_a_global_message_field_with_template_data()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function buildListConfig(): void
             {
@@ -262,7 +262,7 @@ class SharpEntityListTest extends SharpTestCase
     /** @test */
     public function we_can_configure_a_global_message_field_with_alert_level()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function buildListConfig(): void
             {
@@ -281,7 +281,7 @@ class SharpEntityListTest extends SharpTestCase
     /** @test */
     public function we_can_configure_the_deletion_action_to_disallow_it()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function buildListConfig(): void
             {
@@ -297,7 +297,7 @@ class SharpEntityListTest extends SharpTestCase
     /** @test */
     public function we_can_configure_the_deletion_action_confirmation_text()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function buildListConfig(): void
             {

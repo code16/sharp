@@ -13,7 +13,7 @@ class SharpEntityListDeprecatedLayoutTest extends SharpTestCase
     /** @test */
     public function we_can_get_layout_in_the_deprecated_way()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function buildListFields(EntityListFieldsContainer $fieldsContainer): void
             {
@@ -44,7 +44,7 @@ class SharpEntityListDeprecatedLayoutTest extends SharpTestCase
     /** @test */
     public function we_can_define_a_layout_for_small_screens_in_the_deprecated_way()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function buildListFields(EntityListFieldsContainer $fieldsContainer): void
             {
@@ -80,7 +80,7 @@ class SharpEntityListDeprecatedLayoutTest extends SharpTestCase
     /** @test */
     public function we_can_configure_a_column_to_fill_left_space_in_the_deprecated_way()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function buildListFields(EntityListFieldsContainer $fieldsContainer): void
             {

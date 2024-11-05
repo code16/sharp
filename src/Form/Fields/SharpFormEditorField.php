@@ -18,59 +18,32 @@ class SharpFormEditorField extends SharpFormField
     }
     use SharpFormFieldWithPlaceholder;
     use SharpFormFieldWithUpload;
-
     const FIELD_TYPE = 'editor';
-
     const B = 'bold';
-
     const I = 'italic';
-
     const HIGHLIGHT = 'highlight';
-
     const SMALL = 'small';
-
     const UL = 'bullet-list';
-
     const OL = 'ordered-list';
-
     const SEPARATOR = '|';
-
     const A = 'link';
-
     const H1 = 'heading-1';
-
     const H2 = 'heading-2';
-
     const H3 = 'heading-3';
-
     const CODE = 'code';
-
     const QUOTE = 'blockquote';
-
     const UPLOAD_IMAGE = 'upload-image';
-
     const UPLOAD = 'upload';
-
     const HR = 'horizontal-rule';
-
     const TABLE = 'table';
-
     const IFRAME = 'iframe';
-
     const RAW_HTML = 'html';
-
     const CODE_BLOCK = 'code-block';
-
     const SUP = 'superscript';
-
     const UNDO = 'undo';
-
     const REDO = 'redo';
-
     protected int $minHeight = 200;
-
     protected ?int $maxHeight = null;
-
     protected array $toolbar = [
         self::B, self::I,
         self::SEPARATOR,
@@ -78,18 +51,14 @@ class SharpFormEditorField extends SharpFormField
         self::SEPARATOR,
         self::A,
     ];
-
     protected bool $showToolbar = true;
-
     protected bool $renderAsMarkdown = false;
-
     protected bool $withoutParagraphs = false;
-
     protected bool $showCharacterCount = false;
 
     public static function make(string $key): self
     {
-        return new static($key, static::FIELD_TYPE, new EditorFormatter);
+        return new static($key, static::FIELD_TYPE, new EditorFormatter());
     }
 
     public function setHeight(int $height, ?int $maxHeight = null): self

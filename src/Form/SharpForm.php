@@ -19,19 +19,15 @@ abstract class SharpForm
         HandleLocalizedFields,
         HandlePageAlertMessage,
         WithCustomTransformers;
-
     protected ?FormLayout $formLayout = null;
-
     protected bool $displayShowPageAfterCreation = false;
-
     protected ?string $deleteConfirmationText = null;
-
     protected ?string $formValidatorClass = null;
 
     final public function formLayout(): array
     {
         if ($this->formLayout === null) {
-            $this->formLayout = new FormLayout;
+            $this->formLayout = new FormLayout();
             $this->buildFormLayout($this->formLayout);
         }
 

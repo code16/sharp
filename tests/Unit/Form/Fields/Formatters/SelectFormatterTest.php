@@ -11,7 +11,7 @@ class SelectFormatterTest extends SharpTestCase
     /** @test */
     public function we_can_format_value_to_front()
     {
-        $formatter = new SelectFormatter;
+        $formatter = new SelectFormatter();
         $field = SharpFormSelectField::make('select', $this->getSelectData());
 
         $this->assertEquals(1, $formatter->toFront($field, 1));
@@ -21,7 +21,7 @@ class SelectFormatterTest extends SharpTestCase
     /** @test */
     public function we_can_format_a_multiple_value_to_front()
     {
-        $formatter = new SelectFormatter;
+        $formatter = new SelectFormatter();
         $field = SharpFormSelectField::make('select', $this->getSelectData())
             ->setMultiple();
 
@@ -31,7 +31,7 @@ class SelectFormatterTest extends SharpTestCase
     /** @test */
     public function we_can_format_a_multiple_array_value_to_front()
     {
-        $formatter = new SelectFormatter;
+        $formatter = new SelectFormatter();
         $field = SharpFormSelectField::make('select', $this->getSelectData())
             ->setMultiple();
 
@@ -43,7 +43,7 @@ class SelectFormatterTest extends SharpTestCase
     /** @test */
     public function we_can_format_a_multiple_object_value_to_front()
     {
-        $formatter = new SelectFormatter;
+        $formatter = new SelectFormatter();
         $field = SharpFormSelectField::make('select', $this->getSelectData())
             ->setMultiple();
 
@@ -56,19 +56,19 @@ class SelectFormatterTest extends SharpTestCase
     /** @test */
     public function we_can_format_a_multiple_object_with_toArray_value_to_front()
     {
-        $formatter = new SelectFormatter;
+        $formatter = new SelectFormatter();
         $field = SharpFormSelectField::make('select', $this->getSelectData())
             ->setMultiple();
 
         $this->assertEquals([1, 2], $formatter->toFront($field, [
-            new class
+            new class()
             {
                 public function toArray()
                 {
                     return ['id' => 1, 'label' => 'A'];
                 }
             },
-            new class
+            new class()
             {
                 public function toArray()
                 {
@@ -81,7 +81,7 @@ class SelectFormatterTest extends SharpTestCase
     /** @test */
     public function we_can_define_idAttribute_for_a_multiple_array_value_to_front()
     {
-        $formatter = new SelectFormatter;
+        $formatter = new SelectFormatter();
         $field = SharpFormSelectField::make('select', $this->getSelectData())
             ->setMultiple()
             ->setIdAttribute('number');
@@ -94,7 +94,7 @@ class SelectFormatterTest extends SharpTestCase
     /** @test */
     public function we_can_format_value_from_front()
     {
-        $formatter = new SelectFormatter;
+        $formatter = new SelectFormatter();
         $attribute = 'attribute';
         $field = SharpFormSelectField::make('select', $this->getSelectData());
 
@@ -105,7 +105,7 @@ class SelectFormatterTest extends SharpTestCase
     /** @test */
     public function we_can_format_a_multiple_value_from_front()
     {
-        $formatter = new SelectFormatter;
+        $formatter = new SelectFormatter();
         $attribute = 'attribute';
         $field = SharpFormSelectField::make('select', $this->getSelectData())
             ->setMultiple();
@@ -116,7 +116,7 @@ class SelectFormatterTest extends SharpTestCase
     /** @test */
     public function we_can_define_idAttribute_for_a_multiple_array_value_from_front()
     {
-        $formatter = new SelectFormatter;
+        $formatter = new SelectFormatter();
         $field = SharpFormSelectField::make('select', $this->getSelectData())
             ->setMultiple()
             ->setIdAttribute('number');

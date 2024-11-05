@@ -10,14 +10,12 @@ use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
 class SharpFormTextField extends SharpFormField
 {
     use SharpFormFieldWithDataLocalization, SharpFormFieldWithMaxLength, SharpFormFieldWithPlaceholder;
-
     const FIELD_TYPE = 'text';
-
     protected string $inputType = 'text';
 
     public static function make(string $key): self
     {
-        return new static($key, static::FIELD_TYPE, new TextFormatter);
+        return new static($key, static::FIELD_TYPE, new TextFormatter());
     }
 
     public function setInputTypeText(): self

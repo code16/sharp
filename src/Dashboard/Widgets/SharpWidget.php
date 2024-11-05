@@ -9,11 +9,8 @@ use Illuminate\Support\Facades\Validator;
 abstract class SharpWidget
 {
     protected string $key;
-
     protected string $type;
-
     protected ?string $title = null;
-
     protected ?string $link = null;
 
     protected function __construct(string $key, string $type)

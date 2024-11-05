@@ -22,7 +22,7 @@ class DashboardLayout implements HasLayout
     {
         $row = $this
             ->getLonelySection()
-            ->addRowLayout(new DashboardLayoutRow);
+            ->addRowLayout(new DashboardLayoutRow());
 
         $callback($row);
 

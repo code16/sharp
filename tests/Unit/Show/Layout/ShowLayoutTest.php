@@ -14,7 +14,7 @@ class ShowLayoutTest extends SharpTestCase
     /** @test */
     public function we_can_add_a_section()
     {
-        $show = new class extends ShowLayoutTestShow
+        $show = new class() extends ShowLayoutTestShow
         {
             public function buildShowLayout(ShowLayout $showLayout): void
             {
@@ -28,7 +28,7 @@ class ShowLayoutTest extends SharpTestCase
     /** @test */
     public function we_can_add_a_column_to_a_section()
     {
-        $show = new class extends ShowLayoutTestShow
+        $show = new class() extends ShowLayoutTestShow
         {
             public function buildShowLayout(ShowLayout $showLayout): void
             {
@@ -45,7 +45,7 @@ class ShowLayoutTest extends SharpTestCase
     /** @test */
     public function we_can_add_a_field_to_a_column()
     {
-        $show = new class extends ShowLayoutTestShow
+        $show = new class() extends ShowLayoutTestShow
         {
             public function buildShowLayout(ShowLayout $showLayout): void
             {
@@ -71,7 +71,7 @@ class ShowLayoutTest extends SharpTestCase
     /** @test */
     public function we_can_add_a_field_with_layout_to_a_column()
     {
-        $show = new class extends ShowLayoutTestShow
+        $show = new class() extends ShowLayoutTestShow
         {
             public function buildShowLayout(ShowLayout $showLayout): void
             {

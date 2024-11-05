@@ -8,20 +8,15 @@ use Code16\Sharp\Utils\StringUtil;
 class EntityListQueryParams
 {
     use HasFiltersInQuery;
-
     protected ?int $page;
-
     protected ?string $search = null;
-
     protected ?string $sortedBy = null;
-
     protected ?string $sortedDir = null;
-
     protected array $specificIds = [];
 
     public static function create(): static
     {
-        return new static;
+        return new static();
     }
 
     public function getPage(): ?int

@@ -21,7 +21,7 @@ class UploadFormatterTest extends SharpTestCase
     /** @test */
     public function we_can_format_value_to_front()
     {
-        $formatter = new UploadFormatter;
+        $formatter = new UploadFormatter();
 
         $field = SharpFormUploadField::make('upload');
         $this->assertEquals(
@@ -46,7 +46,7 @@ class UploadFormatterTest extends SharpTestCase
     /** @test */
     public function we_ignore_not_existing_file_from_front()
     {
-        $formatter = new UploadFormatter;
+        $formatter = new UploadFormatter();
         $field = SharpFormUploadField::make('upload');
 
         $this->assertEquals(
@@ -80,7 +80,7 @@ class UploadFormatterTest extends SharpTestCase
                 'disk' => 'local',
                 'filters' => null,
             ],
-            (new UploadFormatter)
+            (new UploadFormatter())
                 ->fromFront(
                     $field,
                     'attribute',
@@ -107,7 +107,7 @@ class UploadFormatterTest extends SharpTestCase
 
         $this->expectException(SharpFormFieldFormattingMustBeDelayedException::class);
 
-        (new UploadFormatter)->fromFront(
+        (new UploadFormatter())->fromFront(
             $field,
             'attribute',
             [
@@ -130,7 +130,7 @@ class UploadFormatterTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['file_name' => 'data/Test/50/image.jpg'],
-            (new UploadFormatter)->setInstanceId(50)->fromFront(
+            (new UploadFormatter())->setInstanceId(50)->fromFront(
                 $field,
                 'attribute',
                 [
@@ -153,7 +153,7 @@ class UploadFormatterTest extends SharpTestCase
         \Mockery::mock('alias:\Spatie\ImageOptimizer\OptimizerChainFactory')
             ->shouldReceive('create')
             ->once()
-            ->andReturn(new class
+            ->andReturn(new class()
             {
                 public function optimize()
                 {
@@ -165,7 +165,7 @@ class UploadFormatterTest extends SharpTestCase
             ->shouldOptimizeImage()
             ->setStorageDisk('local');
 
-        (new UploadFormatter)->fromFront($field, 'attribute', [
+        (new UploadFormatter())->fromFront($field, 'attribute', [
             'name' => 'image.jpg',
             'uploaded' => true,
         ]);
@@ -182,7 +182,7 @@ class UploadFormatterTest extends SharpTestCase
             ->setTransformable(true, false)
             ->setStorageBasePath('data/Test');
 
-        $result = (new UploadFormatter)
+        $result = (new UploadFormatter())
             ->fromFront(
                 $field,
                 'attribute',
@@ -228,7 +228,7 @@ class UploadFormatterTest extends SharpTestCase
                 'disk' => 'local',
                 'size' => 6467,
             ],
-            (new UploadFormatter)
+            (new UploadFormatter())
                 ->fromFront(
                     $field,
                     'attribute',
@@ -282,7 +282,7 @@ class UploadFormatterTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['file_name' => '/some/updated/path/image.jpg'],
-            (new UploadFormatter)->fromFront(
+            (new UploadFormatter())->fromFront(
                 $field,
                 'attribute',
                 [
@@ -309,7 +309,7 @@ class UploadFormatterTest extends SharpTestCase
 
         $this->assertEquals(
             $value,
-            (new UploadFormatter)
+            (new UploadFormatter())
                 ->setAlwaysReturnFullObject()
                 ->fromFront(
                     $field,
@@ -346,7 +346,7 @@ class UploadFormatterTest extends SharpTestCase
 
         $this->assertEquals(
             $value,
-            (new UploadFormatter)
+            (new UploadFormatter())
                 ->setAlwaysReturnFullObject()
                 ->fromFront(
                     $field,

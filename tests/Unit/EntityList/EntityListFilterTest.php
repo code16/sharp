@@ -14,12 +14,12 @@ class EntityListFilterTest extends SharpTestCase
     /** @test */
     public function we_can_get_get_filters_config_with_a_key()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function getFilters(): array
             {
                 return [
-                    new class extends EntityListSelectFilter
+                    new class() extends EntityListSelectFilter
                     {
                         public function buildFilterConfig(): void
                         {
@@ -66,7 +66,7 @@ class EntityListFilterTest extends SharpTestCase
     /** @test */
     public function we_can_get_get_filters_config_with_a_class_name()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function getFilters(): array
             {
@@ -87,12 +87,12 @@ class EntityListFilterTest extends SharpTestCase
     /** @test */
     public function we_can_get_section_based_filters_config()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function getFilters(): ?array
             {
                 return [
-                    new class extends EntityListSelectFilter
+                    new class() extends EntityListSelectFilter
                     {
                         public function values(): array
                         {
@@ -100,7 +100,7 @@ class EntityListFilterTest extends SharpTestCase
                         }
                     },
                     'section-1' => [
-                        new class extends EntityListSelectFilter
+                        new class() extends EntityListSelectFilter
                         {
                             public function values(): array
                             {
@@ -134,7 +134,7 @@ class EntityListFilterTest extends SharpTestCase
     /** @test */
     public function a_list_filter_can_be_multiple()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function getFilters(): array
             {
@@ -153,7 +153,7 @@ class EntityListFilterTest extends SharpTestCase
     /** @test */
     public function a_list_filter_can_be_required()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function getFilters(): array
             {
@@ -171,12 +171,12 @@ class EntityListFilterTest extends SharpTestCase
     /** @test */
     public function we_can_define_a_label_for_the_filter()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function getFilters(): array
             {
                 return [
-                    new class extends SharpEntityListTestFilter
+                    new class() extends SharpEntityListTestFilter
                     {
                         public function buildFilterConfig(): void
                         {
@@ -195,12 +195,12 @@ class EntityListFilterTest extends SharpTestCase
     /** @test */
     public function we_can_define_that_a_filter_is_master()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function getFilters(): array
             {
                 return [
-                    new class extends SharpEntityListTestFilter
+                    new class() extends SharpEntityListTestFilter
                     {
                         public function buildFilterConfig(): void
                         {
@@ -219,12 +219,12 @@ class EntityListFilterTest extends SharpTestCase
     /** @test */
     public function we_can_define_that_a_filter_is_searchable()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function getFilters(): array
             {
                 return [
-                    new class extends SharpEntityListTestFilter
+                    new class() extends SharpEntityListTestFilter
                     {
                         public function buildFilterConfig(): void
                         {
@@ -244,12 +244,12 @@ class EntityListFilterTest extends SharpTestCase
     /** @test */
     public function we_can_define_searchKeys_on_a_filter()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function getFilters(): array
             {
                 return [
-                    new class extends SharpEntityListTestFilter
+                    new class() extends SharpEntityListTestFilter
                     {
                         public function buildFilterConfig(): void
                         {
@@ -269,12 +269,12 @@ class EntityListFilterTest extends SharpTestCase
     /** @test */
     public function we_can_define_an_inline_template_for_a_filter()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function getFilters(): array
             {
                 return [
-                    new class extends SharpEntityListTestFilter
+                    new class() extends SharpEntityListTestFilter
                     {
                         public function buildFilterConfig(): void
                         {
@@ -308,12 +308,12 @@ class EntityListFilterTest extends SharpTestCase
     /** @test */
     public function we_can_define_that_a_filter_is_retained_and_sets_its_default_value()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function getFilters(): array
             {
                 return [
-                    new class extends SharpEntityListTestFilter
+                    new class() extends SharpEntityListTestFilter
                     {
                         public function buildFilterConfig(): void
                         {
@@ -335,12 +335,12 @@ class EntityListFilterTest extends SharpTestCase
     /** @test */
     public function a_required_and_retained_filters_returns_retained_value_as_its_default_value()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function getFilters(): array
             {
                 return [
-                    new class extends SharpEntityListTestRequiredFilter
+                    new class() extends SharpEntityListTestRequiredFilter
                     {
                         public function buildFilterConfig(): void
                         {
@@ -367,12 +367,12 @@ class EntityListFilterTest extends SharpTestCase
     /** @test */
     public function date_range_filter_retained_value_is_formatted()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function getFilters(): array
             {
                 return [
-                    new class extends SharpEntityListDateRangeTestFilter
+                    new class() extends SharpEntityListDateRangeTestFilter
                     {
                         public function buildFilterConfig(): void
                         {
@@ -400,7 +400,7 @@ class EntityListFilterTest extends SharpTestCase
     /** @test */
     public function we_can_get_list_date_range_filters_config_with_a_class_name()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function getFilters(): array
             {
@@ -423,7 +423,7 @@ class EntityListFilterTest extends SharpTestCase
     /** @test */
     public function a_date_range_filter_can_be_required()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function getFilters(): array
             {
@@ -446,12 +446,12 @@ class EntityListFilterTest extends SharpTestCase
     /** @test */
     public function we_can_define_a_date_display_format_for_a_date_range_filter()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function getFilters(): array
             {
                 return [
-                    new class extends SharpEntityListDateRangeTestFilter
+                    new class() extends SharpEntityListDateRangeTestFilter
                     {
                         public function buildFilterConfig(): void
                         {
@@ -473,12 +473,12 @@ class EntityListFilterTest extends SharpTestCase
     /** @test */
     public function we_can_define_the_monday_first_attribute_for_a_date_range_filter()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function getFilters(): array
             {
                 return [
-                    new class extends SharpEntityListDateRangeTestFilter
+                    new class() extends SharpEntityListDateRangeTestFilter
                     {
                         public function buildFilterConfig(): void
                         {
@@ -497,7 +497,7 @@ class EntityListFilterTest extends SharpTestCase
     /** @test */
     public function we_can_define_a_check_filter()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function getFilters(): array
             {

@@ -35,7 +35,7 @@ abstract class BaseApiTestCase extends SharpTestCase
 
     protected function login()
     {
-        $this->actingAs(new User);
+        $this->actingAs(new User());
     }
 
     protected function buildTheWorld(bool $singleShow = false): void

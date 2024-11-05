@@ -14,7 +14,6 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 class ProfileSingleForm extends SharpSingleForm
 {
     use WithSharpFormEloquentUpdater;
-
     protected ?string $formValidatorClass = MyProfileValidator::class;
 
     public function buildFormFields(FieldsContainer $formFields): void
@@ -61,7 +60,7 @@ class ProfileSingleForm extends SharpSingleForm
     public function findSingle(): array
     {
         return $this
-            ->setCustomTransformer('avatar', new SharpUploadModelFormAttributeTransformer)
+            ->setCustomTransformer('avatar', new SharpUploadModelFormAttributeTransformer())
             ->transform(auth()->user());
     }
 

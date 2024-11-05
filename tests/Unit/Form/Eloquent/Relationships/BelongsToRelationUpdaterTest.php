@@ -14,7 +14,7 @@ class BelongsToRelationUpdaterTest extends SharpEloquentBaseTestCase
         $mother = Person::create(['name' => 'Jane Wayne']);
         $person = Person::create(['name' => 'John Wayne']);
 
-        $updater = new BelongsToRelationUpdater;
+        $updater = new BelongsToRelationUpdater();
 
         $updater->update($person, 'mother', $mother->id);
 
@@ -29,7 +29,7 @@ class BelongsToRelationUpdaterTest extends SharpEloquentBaseTestCase
     {
         $person = Person::create(['name' => 'John Wayne']);
 
-        $updater = new BelongsToRelationUpdater;
+        $updater = new BelongsToRelationUpdater();
         $updater->update($person, 'mother:name', 'Jane Wayne');
 
         $this->assertCount(2, Person::all());
@@ -47,7 +47,7 @@ class BelongsToRelationUpdaterTest extends SharpEloquentBaseTestCase
     {
         $person = PersonWithDefaultAttributes::create(['name' => 'John Wayne']);
 
-        $updater = new BelongsToRelationUpdater;
+        $updater = new BelongsToRelationUpdater();
         $updater->update($person, 'mother:name', 'Jane Wayne');
 
         $this->assertDatabaseHas('people', [

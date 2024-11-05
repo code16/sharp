@@ -99,7 +99,7 @@ class FiltersInRequestTest extends BaseApiTestCase
         app()->bind(
             PersonSharpEntityList::class,
             function () {
-                return new class extends PersonSharpEntityList
+                return new class() extends PersonSharpEntityList
                 {
                     public function getFilters(): array
                     {
@@ -112,7 +112,7 @@ class FiltersInRequestTest extends BaseApiTestCase
         );
 
         $this->buildTheWorld();
-        $key = (new FiltersInRequestTestRetainedActiveFilter)->getKey();
+        $key = (new FiltersInRequestTestRetainedActiveFilter())->getKey();
 
         $this->assertFalse((bool) session("_sharp_retained_filter_$key"));
 
@@ -129,7 +129,7 @@ class FiltersInRequestTest extends BaseApiTestCase
         app()->bind(
             PersonSharpEntityList::class,
             function () {
-                return new class extends PersonSharpEntityList
+                return new class() extends PersonSharpEntityList
                 {
                     public function getListData(): array|Arrayable
                     {
@@ -203,7 +203,7 @@ class FiltersInRequestTest extends BaseApiTestCase
         app()->bind(
             PersonSharpEntityList::class,
             function () {
-                return new class extends PersonSharpEntityList
+                return new class() extends PersonSharpEntityList
                 {
                     public function getListData(): array|Arrayable
                     {
@@ -233,7 +233,7 @@ class FiltersInRequestTest extends BaseApiTestCase
         );
 
         $this->buildTheWorld();
-        $key = (new FiltersInRequestTestRetainedAgeMultipleFilter)->getKey();
+        $key = (new FiltersInRequestTestRetainedAgeMultipleFilter())->getKey();
 
         // First call to retain the filter on session
         $this->getJson("/sharp/api/list/person?filter_$key=30,32");
@@ -266,7 +266,7 @@ class FiltersInRequestTest extends BaseApiTestCase
         app()->bind(
             PersonSharpEntityList::class,
             function () {
-                return new class extends PersonSharpEntityList
+                return new class() extends PersonSharpEntityList
                 {
                     public function getListData(): array|Arrayable
                     {
@@ -294,7 +294,7 @@ class FiltersInRequestTest extends BaseApiTestCase
         );
 
         $this->buildTheWorld();
-        $key = (new FiltersInRequestTestRetainedAgeRequiredFilter)->getKey();
+        $key = (new FiltersInRequestTestRetainedAgeRequiredFilter())->getKey();
 
         // First call to retain the filter on session (default is 2)
         $this->getJson("/sharp/api/list/person?filter_$key=30");

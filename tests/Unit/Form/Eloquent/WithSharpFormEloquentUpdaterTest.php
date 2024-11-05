@@ -20,7 +20,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpEloquentBaseTestCase
     {
         $person = Person::create(['name' => 'John Wayne']);
 
-        $form = new class extends WithSharpFormEloquentUpdaterTestForm
+        $form = new class() extends WithSharpFormEloquentUpdaterTestForm
         {
             public function buildFormFields(FieldsContainer $formFields): void
             {
@@ -39,7 +39,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpEloquentBaseTestCase
     /** @test */
     public function we_can_store_a_new_instance()
     {
-        $form = new class extends WithSharpFormEloquentUpdaterTestForm
+        $form = new class() extends WithSharpFormEloquentUpdaterTestForm
         {
             public function buildFormFields(FieldsContainer $formFields): void
             {
@@ -59,7 +59,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpEloquentBaseTestCase
     {
         $person = Person::create(['name' => 'John Wayne']);
 
-        $form = new WithSharpFormEloquentUpdaterTestForm;
+        $form = new WithSharpFormEloquentUpdaterTestForm();
 
         $form->updateInstance($person->id, ['id' => 1200, 'job' => 'Actor']);
 
@@ -74,7 +74,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpEloquentBaseTestCase
     {
         $person = Person::create(['name' => 'A', 'age' => 21]);
 
-        $form = new class extends WithSharpFormEloquentUpdaterTestForm
+        $form = new class() extends WithSharpFormEloquentUpdaterTestForm
         {
             public function update($id, array $data)
             {
@@ -103,7 +103,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpEloquentBaseTestCase
     {
         $person = Person::create(['name' => 'A', 'age' => 21]);
 
-        $form = new class extends WithSharpFormEloquentUpdaterTestForm
+        $form = new class() extends WithSharpFormEloquentUpdaterTestForm
         {
             public function update($id, array $data)
             {
@@ -133,7 +133,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpEloquentBaseTestCase
         $mother = Person::create(['name' => 'Jane Wayne']);
         $person = Person::create(['name' => 'John Wayne']);
 
-        $form = new class extends WithSharpFormEloquentUpdaterTestForm
+        $form = new class() extends WithSharpFormEloquentUpdaterTestForm
         {
             public function buildFormFields(FieldsContainer $formFields): void
             {
@@ -155,7 +155,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpEloquentBaseTestCase
         $mother = Person::create(['name' => 'Jane Wayne']);
         $son = Person::create(['name' => 'John Wayne']);
 
-        $form = new class extends WithSharpFormEloquentUpdaterTestForm
+        $form = new class() extends WithSharpFormEloquentUpdaterTestForm
         {
             public function buildFormFields(FieldsContainer $formFields): void
             {
@@ -179,7 +179,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpEloquentBaseTestCase
         $mother = Person::create(['name' => 'Jane Wayne']);
         $son = Person::create(['name' => 'AAA', 'mother_id' => $mother->id]);
 
-        $form = new class extends WithSharpFormEloquentUpdaterTestForm
+        $form = new class() extends WithSharpFormEloquentUpdaterTestForm
         {
             public function buildFormFields(FieldsContainer $formFields): void
             {
@@ -215,7 +215,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpEloquentBaseTestCase
         $person1 = Person::create(['name' => 'John Ford']);
         $person2 = Person::create(['name' => 'John Wayne']);
 
-        $form = new class extends WithSharpFormEloquentUpdaterTestForm
+        $form = new class() extends WithSharpFormEloquentUpdaterTestForm
         {
             public function buildFormFields(FieldsContainer $formFields): void
             {
@@ -244,7 +244,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpEloquentBaseTestCase
     {
         $person1 = Person::create(['name' => 'John Ford']);
 
-        $form = new class extends WithSharpFormEloquentUpdaterTestForm
+        $form = new class() extends WithSharpFormEloquentUpdaterTestForm
         {
             public function buildFormFields(FieldsContainer $formFields): void
             {
@@ -279,7 +279,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpEloquentBaseTestCase
     {
         $mother = Person::create(['name' => 'Jane Wayne']);
 
-        $form = new class extends WithSharpFormEloquentUpdaterTestForm
+        $form = new class() extends WithSharpFormEloquentUpdaterTestForm
         {
             public function buildFormFields(FieldsContainer $formFields): void
             {
@@ -318,7 +318,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpEloquentBaseTestCase
         $son = Person::create(['name' => 'B', 'order' => 30, 'mother_id' => $mother->id]);
         $daughter = Person::create(['name' => 'C', 'order' => 50, 'mother_id' => $mother->id]);
 
-        $form = new class extends WithSharpFormEloquentUpdaterTestForm
+        $form = new class() extends WithSharpFormEloquentUpdaterTestForm
         {
             public function buildFormFields(FieldsContainer $formFields): void
             {
@@ -353,7 +353,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpEloquentBaseTestCase
     {
         $person = Person::create(['name' => 'John Wayne']);
 
-        $form = new class extends WithSharpFormEloquentUpdaterTestForm
+        $form = new class() extends WithSharpFormEloquentUpdaterTestForm
         {
             public function buildFormFields(FieldsContainer $formFields): void
             {
@@ -376,7 +376,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpEloquentBaseTestCase
         $mother = Person::create(['name' => 'AAA']);
         $son = Person::create(['name' => 'John Wayne', 'mother_id' => $mother->id]);
 
-        $form = new class extends WithSharpFormEloquentUpdaterTestForm
+        $form = new class() extends WithSharpFormEloquentUpdaterTestForm
         {
             public function buildFormFields(FieldsContainer $formFields): void
             {
@@ -403,7 +403,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpEloquentBaseTestCase
         $mother = Person::create(['name' => 'Jane Wayne']);
         $son = Person::create(['name' => 'AAA', 'mother_id' => $mother->id]);
 
-        $form = new class extends WithSharpFormEloquentUpdaterTestForm
+        $form = new class() extends WithSharpFormEloquentUpdaterTestForm
         {
             public function buildFormFields(FieldsContainer $formFields): void
             {
@@ -430,7 +430,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpEloquentBaseTestCase
     {
         $mother = Person::create(['name' => 'Jane Wayne']);
 
-        $form = new class extends WithSharpFormEloquentUpdaterTestForm
+        $form = new class() extends WithSharpFormEloquentUpdaterTestForm
         {
             public function buildFormFields(FieldsContainer $formFields): void
             {
@@ -463,7 +463,7 @@ class WithSharpFormEloquentUpdaterTestForm extends SharpForm
 
     public function update($id, array $data)
     {
-        $instance = $id ? Person::findOrFail($id) : new Person;
+        $instance = $id ? Person::findOrFail($id) : new Person();
 
         return $this->save($instance, $data);
     }

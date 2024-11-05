@@ -11,12 +11,12 @@ class DashboardFilterTest extends SharpTestCase
     /** @test */
     public function we_can_get_dashboard_filters_config()
     {
-        $dashboard = new class extends FakeSharpDashboard
+        $dashboard = new class() extends FakeSharpDashboard
         {
             public function getFilters(): ?array
             {
                 return [
-                    new class extends DashboardSelectFilter
+                    new class() extends DashboardSelectFilter
                     {
                         public function buildFilterConfig(): void
                         {
@@ -63,12 +63,12 @@ class DashboardFilterTest extends SharpTestCase
     /** @test */
     public function we_can_get_dashboard_section_based_filters_config()
     {
-        $dashboard = new class extends FakeSharpDashboard
+        $dashboard = new class() extends FakeSharpDashboard
         {
             public function getFilters(): ?array
             {
                 return [
-                    new class extends DashboardSelectFilter
+                    new class() extends DashboardSelectFilter
                     {
                         public function values(): array
                         {
@@ -76,7 +76,7 @@ class DashboardFilterTest extends SharpTestCase
                         }
                     },
                     'section-1' => [
-                        new class extends DashboardSelectFilter
+                        new class() extends DashboardSelectFilter
                         {
                             public function values(): array
                             {

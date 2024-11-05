@@ -7,7 +7,6 @@ use Closure;
 class LinkToShowPage extends SharpLinkTo
 {
     protected string $instanceId;
-
     protected BreadcrumbBuilder $breadcrumbBuilder;
 
     public static function make(string $entityKey, string $instanceId): self
@@ -20,7 +19,7 @@ class LinkToShowPage extends SharpLinkTo
 
     public function withBreadcrumb(Closure $closure): self
     {
-        $this->breadcrumbBuilder = $closure(new BreadcrumbBuilder);
+        $this->breadcrumbBuilder = $closure(new BreadcrumbBuilder());
 
         return $this;
     }

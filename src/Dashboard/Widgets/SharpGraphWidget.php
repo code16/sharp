@@ -5,13 +5,9 @@ namespace Code16\Sharp\Dashboard\Widgets;
 abstract class SharpGraphWidget extends SharpWidget
 {
     protected ?string $display = null;
-
     protected array $ratio = [16, 9];
-
     protected ?int $height = null;
-
     protected bool $showLegend = true;
-
     protected bool $minimal = false;
 
     public function setRatio(string $ratio): self

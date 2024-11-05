@@ -30,7 +30,7 @@ class GlobalFiltersTest extends BaseApiTestCase
         );
 
         // Second call with a value in session
-        $key = (new GlobalFiltersTestGlobalRequiredFilter)->getKey();
+        $key = (new GlobalFiltersTestGlobalRequiredFilter())->getKey();
         $value = Str::random();
         session()->put("_sharp_retained_global_filter_$key", $value);
 
@@ -48,7 +48,7 @@ class GlobalFiltersTest extends BaseApiTestCase
         $this->buildTheWorld();
 
         config()->set('sharp.global_filters', [GlobalFiltersTestGlobalRequiredFilter::class]);
-        $key = (new GlobalFiltersTestGlobalRequiredFilter)->getKey();
+        $key = (new GlobalFiltersTestGlobalRequiredFilter())->getKey();
 
         $this
             ->postJson("/sharp/api/filters/$key", ['value' => 5])
@@ -80,7 +80,7 @@ class GlobalFiltersTest extends BaseApiTestCase
         $this->buildTheWorld();
 
         config()->set('sharp.global_filters.test', GlobalFiltersTestGlobalRequiredFilter::class);
-        $key = (new GlobalFiltersTestGlobalRequiredFilter)->getKey();
+        $key = (new GlobalFiltersTestGlobalRequiredFilter())->getKey();
 
         $this
             ->postJson("/sharp/api/filters/$key", ['value' => 20])
@@ -108,7 +108,7 @@ class GlobalFiltersTest extends BaseApiTestCase
                 'filters' => [
                     '_root' => [
                         [
-                            'key' => (new GlobalFiltersTestGlobalRequiredFilter)->getKey(),
+                            'key' => (new GlobalFiltersTestGlobalRequiredFilter())->getKey(),
                             'multiple' => false,
                             'required' => true,
                             'default' => app(GlobalFiltersTestGlobalRequiredFilter::class)->defaultValue(),

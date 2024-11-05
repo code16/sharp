@@ -11,7 +11,6 @@ use Illuminate\Support\Str;
 trait HandleDashboardCommands
 {
     use CommonCommandUtils;
-
     protected ?Collection $dashboardCommandHandlers = null;
 
     /**

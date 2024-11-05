@@ -17,11 +17,8 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 class UploadFormatter extends SharpFieldFormatter
 {
     protected FilesystemManager $filesystem;
-
     protected FileUtil $fileUtil;
-
     protected ImageManager $imageManager;
-
     private bool $alwaysReturnFullObject = false;
 
     public function __construct()
@@ -134,7 +131,7 @@ class UploadFormatter extends SharpFieldFormatter
                 // Well, we need the instance id for the storage path, and we are
                 // in a store() case. Let's delay this formatter, it will be
                 // called again after a first save() on the model.
-                throw new SharpFormFieldFormattingMustBeDelayedException;
+                throw new SharpFormFieldFormattingMustBeDelayedException();
             }
 
             $basePath = str_replace('{id}', $this->instanceId, $basePath);

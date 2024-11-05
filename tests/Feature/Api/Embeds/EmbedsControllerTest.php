@@ -150,7 +150,6 @@ class PersonWithEmbedsForm extends PersonSharpForm
 class EmbedsControllerTestEmbed extends SharpFormEditorEmbed
 {
     public static string $key = 'Code16.Sharp.Tests.Feature.Api.Embeds.EmbedsControllerTestEmbed';
-
     public static string $templateTransformMode = 'none';
 
     public function buildEmbedConfig(): void

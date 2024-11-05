@@ -170,7 +170,7 @@ class SharpLinkToTest extends SharpTestCase
     /** @test */
     public function we_can_generate_a_link_to_an_entity_list_with_a_filter_classname()
     {
-        $filter = new class extends SelectFilter
+        $filter = new class() extends SelectFilter
         {
             public function buildFilterConfig(): void
             {

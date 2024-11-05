@@ -9,13 +9,9 @@ class SharpShowTextField extends SharpShowField
 {
     use SharpFormFieldWithDataLocalization,
         SharpFormFieldWithEmbeds;
-
     const FIELD_TYPE = 'text';
-
     protected ?string $label = null;
-
     protected ?int $collapseToWordCount = null;
-
     protected bool $html = true;
 
     public static function make(string $key): SharpShowTextField

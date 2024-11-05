@@ -7,7 +7,6 @@ use Code16\Sharp\EntityList\EntityListQueryParams;
 abstract class EntityCommand extends Command
 {
     protected ?EntityListQueryParams $queryParams = null;
-
     protected ?string $instanceSelectionMode = null;
 
     public function type(): string

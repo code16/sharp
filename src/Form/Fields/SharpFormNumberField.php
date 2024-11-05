@@ -8,20 +8,15 @@ use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
 class SharpFormNumberField extends SharpFormField
 {
     use SharpFormFieldWithPlaceholder;
-
     const FIELD_TYPE = 'number';
-
     protected ?float $min = null;
-
     protected ?float $max = null;
-
     protected float $step = 1;
-
     protected bool $showControls = false;
 
     public static function make(string $key): self
     {
-        return new static($key, static::FIELD_TYPE, new NumberFormatter);
+        return new static($key, static::FIELD_TYPE, new NumberFormatter());
     }
 
     public function setMin(float $min): self

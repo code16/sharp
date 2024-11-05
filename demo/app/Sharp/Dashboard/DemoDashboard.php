@@ -37,7 +37,6 @@ class DemoDashboard extends SharpDashboard
         '#78350F',
         '#9CA3AF',
     ];
-
     private static int $colorsIndex = 0;
 
     protected function buildWidgets(WidgetsContainer $widgetsContainer): void

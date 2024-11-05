@@ -13,7 +13,7 @@ class SharpFormTest extends SharpTestCase
     /** @test */
     public function we_can_get_fields()
     {
-        $form = new class extends SharpFormTestForm
+        $form = new class() extends SharpFormTestForm
         {
             public function buildFormFields(FieldsContainer $formFields): void
             {
@@ -36,7 +36,7 @@ class SharpFormTest extends SharpTestCase
     /** @test */
     public function we_can_get_layout()
     {
-        $form = new class extends SharpFormTestForm
+        $form = new class() extends SharpFormTestForm
         {
             public function buildFormFields(FieldsContainer $formFields): void
             {
@@ -89,7 +89,7 @@ class SharpFormTest extends SharpTestCase
     /** @test */
     public function we_can_get_instance()
     {
-        $form = new class extends SharpFormTestForm
+        $form = new class() extends SharpFormTestForm
         {
             public function find($id): array
             {

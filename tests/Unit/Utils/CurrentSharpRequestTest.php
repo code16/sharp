@@ -26,7 +26,7 @@ class CurrentSharpRequestTest extends SharpTestCase
     {
         // We have to define "child" as a non-single form
         $this->app->bind('child_entity', function () {
-            return new class extends SharpEntity {};
+            return new class() extends SharpEntity {};
         });
         $this->app['config']->set('sharp.entities.child', 'child_entity');
 

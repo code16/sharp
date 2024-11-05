@@ -31,8 +31,8 @@ class MarkdownAttributeTransformer implements SharpAttributeTransformer
                 'soft_break' => $this->nl2br ? '<br>' : "\n",
             ],
         ]);
-        $environment->addExtension(new CommonMarkCoreExtension);
-        $environment->addExtension(new TableExtension);
+        $environment->addExtension(new CommonMarkCoreExtension());
+        $environment->addExtension(new TableExtension());
 
         $converter = new MarkdownConverter($environment);
 

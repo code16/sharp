@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 class SharpUploadModel extends Model
 {
     protected $guarded = [];
-
     protected $casts = [
         'custom_properties' => 'array',
         'size' => 'integer',

@@ -7,19 +7,12 @@ use Code16\Sharp\Utils\Entities\SharpEntity;
 class PersonEntity extends SharpEntity
 {
     public ?string $validatorForTest = null;
-
     public array $multiformValidatorsForTest = [];
-
     public array $multiformForTest = [];
-
     protected string $entityKey = 'person';
-
     protected string $label = 'person';
-
     protected ?string $list = PersonSharpEntityList::class;
-
     protected ?string $form = PersonSharpForm::class;
-
     protected ?string $show = PersonSharpShow::class;
 
     public function setList(string $list): self

@@ -18,7 +18,7 @@ class SearchTest extends BaseApiTestCase
     /** @test */
     public function we_can_search_and_get_results()
     {
-        config()->set('sharp.search.engine', fn () => new class extends SharpSearchEngine
+        config()->set('sharp.search.engine', fn () => new class() extends SharpSearchEngine
         {
             public function searchFor(array $terms): void
             {
@@ -54,7 +54,7 @@ class SearchTest extends BaseApiTestCase
     /** @test */
     public function we_can_configure_a_custom_empty_state_label()
     {
-        config()->set('sharp.search.engine', fn () => new class extends SharpSearchEngine
+        config()->set('sharp.search.engine', fn () => new class() extends SharpSearchEngine
         {
             public function searchFor(array $terms): void
             {
@@ -78,7 +78,7 @@ class SearchTest extends BaseApiTestCase
     /** @test */
     public function we_can_configure_a_hide_when_empty()
     {
-        config()->set('sharp.search.engine', fn () => new class extends SharpSearchEngine
+        config()->set('sharp.search.engine', fn () => new class() extends SharpSearchEngine
         {
             public function searchFor(array $terms): void
             {
@@ -102,7 +102,7 @@ class SearchTest extends BaseApiTestCase
     /** @test */
     public function we_can_raise_validation_errors()
     {
-        config()->set('sharp.search.engine', fn () => new class extends SharpSearchEngine
+        config()->set('sharp.search.engine', fn () => new class() extends SharpSearchEngine
         {
             public function searchFor(array $terms): void
             {
@@ -134,7 +134,7 @@ class SearchTest extends BaseApiTestCase
     /** @test */
     public function we_can_get_multiple_result_sets()
     {
-        config()->set('sharp.search.engine', fn () => new class extends SharpSearchEngine
+        config()->set('sharp.search.engine', fn () => new class() extends SharpSearchEngine
         {
             public function searchFor(array $terms): void
             {
@@ -178,7 +178,7 @@ class SearchTest extends BaseApiTestCase
     /** @test */
     public function search_terms_are_handled()
     {
-        config()->set('sharp.search.engine', fn () => new class extends SharpSearchEngine
+        config()->set('sharp.search.engine', fn () => new class() extends SharpSearchEngine
         {
             public function searchFor(array $terms): void
             {

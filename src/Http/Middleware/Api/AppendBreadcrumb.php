@@ -18,7 +18,6 @@ use Illuminate\Support\Str;
 class AppendBreadcrumb
 {
     protected CurrentSharpRequest $currentSharpRequest;
-
     protected ?object $data = null;
 
     public function __construct(CurrentSharpRequest $currentSharpRequest)

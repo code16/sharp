@@ -208,7 +208,7 @@ class FormControllerTest extends BaseApiTestCase
         app()->bind(
             PersonSharpForm::class,
             function () {
-                return new class extends PersonSharpForm
+                return new class() extends PersonSharpForm
                 {
                     protected bool $displayShowPageAfterCreation = true;
                 };
@@ -289,6 +289,5 @@ class FormControllerTest extends BaseApiTestCase
 class CarTestEntity extends SharpEntity
 {
     protected ?string $form = PersonSharpForm::class;
-
     protected ?string $show = PersonSharpShow::class;
 }

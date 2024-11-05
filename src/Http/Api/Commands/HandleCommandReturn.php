@@ -46,7 +46,7 @@ trait HandleCommandReturn
         $commandHandler->buildCommandConfig();
 
         if (! $commandHandler->authorize() || ! $commandHandler->authorizeFor($instanceId)) {
-            throw new SharpAuthorizationException;
+            throw new SharpAuthorizationException();
         }
 
         return $commandHandler;

@@ -14,11 +14,11 @@ class SharpEntityListStateTest extends SharpTestCase
     /** @test */
     public function we_can_get_list_entity_state_config_with_an_instance()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function buildListConfig(): void
             {
-                $this->configureEntityState('_state', new class extends EntityState
+                $this->configureEntityState('_state', new class() extends EntityState
                 {
                     protected function buildStates(): void
                     {
@@ -47,7 +47,7 @@ class SharpEntityListStateTest extends SharpTestCase
     /** @test */
     public function we_can_get_list_entity_state_config_with_a_class_name()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function buildListConfig(): void
             {
@@ -71,7 +71,7 @@ class SharpEntityListStateTest extends SharpTestCase
     /** @test */
     public function entity_state_attribute_is_added_the_entity_data()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function getListData(): array|Arrayable
             {
@@ -90,7 +90,7 @@ class SharpEntityListStateTest extends SharpTestCase
 
             public function buildListConfig(): void
             {
-                $this->configureEntityState('state', new class extends EntityState
+                $this->configureEntityState('state', new class() extends EntityState
                 {
                     protected function buildStates(): void
                     {
@@ -119,11 +119,11 @@ class SharpEntityListStateTest extends SharpTestCase
     /** @test */
     public function we_can_handle_authorization_in_a_state()
     {
-        $list = new class extends SharpEntityDefaultTestList
+        $list = new class() extends SharpEntityDefaultTestList
         {
             public function buildListConfig(): void
             {
-                $this->configureEntityState('_state', new class extends EntityState
+                $this->configureEntityState('_state', new class() extends EntityState
                 {
                     protected function buildStates(): void
                     {

@@ -142,7 +142,7 @@ class EntityWizardCommandTestPersonSharpEntityList extends PersonSharpEntityList
     public function getEntityCommands(): ?array
     {
         return [
-            'entity_wizard' => new class extends EntityWizardCommand
+            'entity_wizard' => new class() extends EntityWizardCommand
             {
                 protected function getKey(): string
                 {
@@ -195,7 +195,7 @@ class EntityWizardCommandTestPersonSharpEntityList extends PersonSharpEntityList
                         return $this->info('ok step 3');
                     }
 
-                    throw new SharpApplicativeException;
+                    throw new SharpApplicativeException();
                 }
             },
         ];

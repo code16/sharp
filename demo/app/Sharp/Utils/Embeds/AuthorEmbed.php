@@ -55,7 +55,7 @@ class AuthorEmbed extends SharpFormEditorEmbed
 
                 return $user?->name;
             })
-            ->setCustomTransformer('picture', (new SharpUploadModelFormAttributeTransformer)->dynamicInstance())
+            ->setCustomTransformer('picture', (new SharpUploadModelFormAttributeTransformer())->dynamicInstance())
             ->transformForTemplate($data);
     }
 
@@ -69,7 +69,7 @@ class AuthorEmbed extends SharpFormEditorEmbed
                     ? Arr::only($user, ['id', 'name', 'email'])
                     : null;
             })
-            ->setCustomTransformer('picture', (new SharpUploadModelFormAttributeTransformer)->dynamicInstance())
+            ->setCustomTransformer('picture', (new SharpUploadModelFormAttributeTransformer())->dynamicInstance())
             ->transform($data);
     }
 

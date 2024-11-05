@@ -21,7 +21,7 @@ class PersonSharpShow extends SharpShow
     public function getInstanceCommands(): ?array
     {
         return [
-            'test_command' => new class extends InstanceCommand
+            'test_command' => new class() extends InstanceCommand
             {
                 public function label(): string
                 {
@@ -42,7 +42,7 @@ class PersonSharpShow extends SharpShow
     public function buildShowConfig(): void
     {
         $this
-            ->configureEntityState('state', new class extends EntityState
+            ->configureEntityState('state', new class() extends EntityState
             {
                 protected function buildStates(): void
                 {

@@ -8,9 +8,7 @@ use Symfony\Component\Console\Input\InputOption;
 class InstanceCommandMakeCommand extends GeneratorCommand
 {
     protected $name = 'sharp:make:instance-command';
-
     protected $description = 'Create a new instance Command class';
-
     protected $type = 'InstanceCommand';
 
     protected function getStub()

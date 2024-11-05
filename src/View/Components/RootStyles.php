@@ -9,9 +9,7 @@ use NumberFormatter;
 class RootStyles extends Component
 {
     public string $primaryColor;
-
     public string $primaryColorLuminosity;
-
     public array $primaryColorHSL;
 
     public function __construct()

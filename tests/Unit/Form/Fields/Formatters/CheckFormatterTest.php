@@ -11,7 +11,7 @@ class CheckFormatterTest extends SharpTestCase
     /** @test */
     public function we_can_format_value_to_front()
     {
-        $formatter = new CheckFormatter;
+        $formatter = new CheckFormatter();
         $field = SharpFormCheckField::make('check', 'text');
 
         $this->assertTrue($formatter->toFront($field, true));
@@ -24,7 +24,7 @@ class CheckFormatterTest extends SharpTestCase
     /** @test */
     public function we_can_format_value_from_front()
     {
-        $formatter = new CheckFormatter;
+        $formatter = new CheckFormatter();
         $field = SharpFormCheckField::make('check', 'text');
         $attribute = 'attribute';
 

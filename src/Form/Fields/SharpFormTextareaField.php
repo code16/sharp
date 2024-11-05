@@ -10,14 +10,12 @@ use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
 class SharpFormTextareaField extends SharpFormField
 {
     use SharpFormFieldWithDataLocalization, SharpFormFieldWithMaxLength, SharpFormFieldWithPlaceholder;
-
     const FIELD_TYPE = 'textarea';
-
     protected ?int $rows = null;
 
     public static function make(string $key): self
     {
-        return new static($key, static::FIELD_TYPE, new TextareaFormatter);
+        return new static($key, static::FIELD_TYPE, new TextareaFormatter());
     }
 
     public function setRowCount(int $rows): self

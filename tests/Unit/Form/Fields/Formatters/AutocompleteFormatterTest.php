@@ -17,27 +17,27 @@ class AutocompleteFormatterTest extends SharpTestCase
         $value = Str::random();
 
         // Front always need an object
-        $this->assertEquals(['id' => $value], (new AutocompleteFormatter)->toFront(
+        $this->assertEquals(['id' => $value], (new AutocompleteFormatter())->toFront(
             SharpFormAutocompleteField::make('text', 'local'),
             $value,
         ));
 
-        $this->assertEquals(['num' => $value], (new AutocompleteFormatter)->toFront(
+        $this->assertEquals(['num' => $value], (new AutocompleteFormatter())->toFront(
             SharpFormAutocompleteField::make('text', 'local')->setItemIdAttribute('num'),
             $value,
         ));
 
-        $this->assertEquals(['id' => $value], (new AutocompleteFormatter)->toFront(
+        $this->assertEquals(['id' => $value], (new AutocompleteFormatter())->toFront(
             SharpFormAutocompleteField::make('text', 'local'),
             ['id' => $value],
         ));
 
-        $this->assertEquals(['id' => $value], (new AutocompleteFormatter)->toFront(
+        $this->assertEquals(['id' => $value], (new AutocompleteFormatter())->toFront(
             SharpFormAutocompleteField::make('text', 'local'),
             (object) ['id' => $value],
         ));
 
-        $this->assertEquals(['id' => $value], (new AutocompleteFormatter)->toFront(
+        $this->assertEquals(['id' => $value], (new AutocompleteFormatter())->toFront(
             SharpFormAutocompleteField::make('text', 'local'),
             new class($value)
             {
@@ -62,7 +62,7 @@ class AutocompleteFormatterTest extends SharpTestCase
             'label' => Str::random(),
         ];
 
-        $this->assertEquals($value, (new AutocompleteFormatter)->toFront(
+        $this->assertEquals($value, (new AutocompleteFormatter())->toFront(
             SharpFormAutocompleteField::make('text', 'remote'),
             $value,
         ));
@@ -71,7 +71,7 @@ class AutocompleteFormatterTest extends SharpTestCase
     /** @test */
     public function we_can_format_null_value_to_front()
     {
-        $this->assertNull((new AutocompleteFormatter)->toFront(
+        $this->assertNull((new AutocompleteFormatter())->toFront(
             SharpFormAutocompleteField::make('text', 'local'),
             null,
         ));
@@ -81,7 +81,7 @@ class AutocompleteFormatterTest extends SharpTestCase
     public function we_can_format_null_value_from_front()
     {
         $this->assertNull(
-            (new AutocompleteFormatter)->fromFront(
+            (new AutocompleteFormatter())->fromFront(
                 SharpFormAutocompleteField::make('text', 'local'),
                 'attribute',
                 null,
@@ -101,7 +101,7 @@ class AutocompleteFormatterTest extends SharpTestCase
         // Back always need an id
         $this->assertEquals(
             $value['id'],
-            (new AutocompleteFormatter)->fromFront(
+            (new AutocompleteFormatter())->fromFront(
                 SharpFormAutocompleteField::make('text', 'local'),
                 'attribute',
                 $value,

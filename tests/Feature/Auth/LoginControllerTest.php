@@ -11,7 +11,7 @@ class LoginControllerTest extends BaseApiTestCase
     {
         parent::setUp();
 
-        auth()->extend('sharp', fn () => new TestAuthGuard);
+        auth()->extend('sharp', fn () => new TestAuthGuard());
         $this->app['config']->set('sharp.auth.guard', 'sharp');
         $this->app['config']->set(
             'auth.guards.sharp', [

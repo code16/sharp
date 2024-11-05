@@ -11,7 +11,7 @@ class TagsFormatterTest extends SharpTestCase
     /** @test */
     public function we_can_format_ids_to_front()
     {
-        $formatter = new TagsFormatter;
+        $formatter = new TagsFormatter();
         $field = SharpFormTagsField::make('tags', $this->getTagsData());
 
         $this->assertEquals([['id' => 1]], $formatter->toFront($field, 1));
@@ -21,7 +21,7 @@ class TagsFormatterTest extends SharpTestCase
     /** @test */
     public function we_can_format_objects_to_front()
     {
-        $formatter = new TagsFormatter;
+        $formatter = new TagsFormatter();
         $field = SharpFormTagsField::make('tags', $this->getTagsData());
 
         $this->assertEquals(
@@ -37,7 +37,7 @@ class TagsFormatterTest extends SharpTestCase
     /** @test */
     public function we_can_format_arrays_to_front()
     {
-        $formatter = new TagsFormatter;
+        $formatter = new TagsFormatter();
         $field = SharpFormTagsField::make('tags', $this->getTagsData());
 
         $this->assertEquals(
@@ -53,7 +53,7 @@ class TagsFormatterTest extends SharpTestCase
     /** @test */
     public function we_can_format_objects_to_front_with_a_defined_id_attribute()
     {
-        $formatter = new TagsFormatter;
+        $formatter = new TagsFormatter();
         $field = SharpFormTagsField::make('tags', $this->getTagsData())
             ->setIdAttribute('number');
 
@@ -70,7 +70,7 @@ class TagsFormatterTest extends SharpTestCase
     /** @test */
     public function we_can_format_value_from_front()
     {
-        $formatter = new TagsFormatter;
+        $formatter = new TagsFormatter();
         $attribute = 'attribute';
         $field = SharpFormTagsField::make('tags', $this->getTagsData());
 
@@ -81,7 +81,7 @@ class TagsFormatterTest extends SharpTestCase
     /** @test */
     public function we_strip_non_configured_values_from_front()
     {
-        $formatter = new TagsFormatter;
+        $formatter = new TagsFormatter();
         $attribute = 'attribute';
         $field = SharpFormTagsField::make('tags', $this->getTagsData());
 
@@ -93,7 +93,7 @@ class TagsFormatterTest extends SharpTestCase
     /** @test */
     public function we_handle_creatable_attribute_from_front()
     {
-        $formatter = new TagsFormatter;
+        $formatter = new TagsFormatter();
         $attribute = 'attribute';
         $field = SharpFormTagsField::make('tags', $this->getTagsData())
             ->setCreatable()
@@ -107,7 +107,7 @@ class TagsFormatterTest extends SharpTestCase
     /** @test */
     public function we_strip_null_ids_if_creatable_attribute_is_false_from_front()
     {
-        $formatter = new TagsFormatter;
+        $formatter = new TagsFormatter();
         $attribute = 'attribute';
         $field = SharpFormTagsField::make('tags', $this->getTagsData())
             ->setCreatable(false)
@@ -121,7 +121,7 @@ class TagsFormatterTest extends SharpTestCase
     /** @test */
     public function we_handle_id_attribute_from_front()
     {
-        $formatter = new TagsFormatter;
+        $formatter = new TagsFormatter();
         $attribute = 'attribute';
         $field = SharpFormTagsField::make('tags', $this->getTagsData())
             ->setIdAttribute('number');
@@ -133,7 +133,7 @@ class TagsFormatterTest extends SharpTestCase
     /** @test */
     public function we_handle_id_and_creatable_attribute_from_front()
     {
-        $formatter = new TagsFormatter;
+        $formatter = new TagsFormatter();
         $attribute = 'attribute';
         $field = SharpFormTagsField::make('tags', $this->getTagsData())
             ->setIdAttribute('number')
@@ -149,7 +149,7 @@ class TagsFormatterTest extends SharpTestCase
     /** @test */
     public function we_handle_additional_create_attributes_from_front()
     {
-        $formatter = new TagsFormatter;
+        $formatter = new TagsFormatter();
         $attribute = 'attribute';
         $field = SharpFormTagsField::make('tags', $this->getTagsData())
             ->setCreatable()

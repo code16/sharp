@@ -8,11 +8,8 @@ use Code16\Sharp\Exceptions\SharpException;
 abstract class BaseSharpEntity
 {
     protected bool $isDashboard = false;
-
     protected string $entityKey = 'entity';
-
     protected ?string $policy = null;
-
     protected string $label = 'entity';
 
     final public function setEntityKey(string $entityKey): self
@@ -25,7 +22,7 @@ abstract class BaseSharpEntity
     final public function getPolicyOrDefault(): SharpEntityPolicy
     {
         if (! $policy = $this->getPolicy()) {
-            return new SharpEntityPolicy;
+            return new SharpEntityPolicy();
         }
 
         if (is_string($policy)) {

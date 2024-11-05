@@ -13,12 +13,12 @@ class DashboardCommandTest extends SharpTestCase
     /** @test */
     public function we_can_get_list_commands_config_of_a_dashboard()
     {
-        $dashboard = new class extends FakeSharpDashboard
+        $dashboard = new class() extends FakeSharpDashboard
         {
             public function getDashboardCommands(): ?array
             {
                 return [
-                    'dashboardCommand' => new class extends DashboardCommand
+                    'dashboardCommand' => new class() extends DashboardCommand
                     {
                         public function label(): string
                         {
@@ -51,13 +51,13 @@ class DashboardCommandTest extends SharpTestCase
     /** @test */
     public function we_can_get_list_section_placed_commands_config_of_a_dashboard()
     {
-        $dashboard = new class extends FakeSharpDashboard
+        $dashboard = new class() extends FakeSharpDashboard
         {
             public function getDashboardCommands(): ?array
             {
                 return [
                     'section-1' => [
-                        'dashboardSectionCommand' => new class extends DashboardCommand
+                        'dashboardSectionCommand' => new class() extends DashboardCommand
                         {
                             public function label(): string
                             {
@@ -67,7 +67,7 @@ class DashboardCommandTest extends SharpTestCase
                             public function execute(array $data = []): array {}
                         },
                     ],
-                    'dashboardCommand' => new class extends DashboardCommand
+                    'dashboardCommand' => new class() extends DashboardCommand
                     {
                         public function label(): string
                         {
@@ -94,12 +94,12 @@ class DashboardCommandTest extends SharpTestCase
     /** @test */
     public function we_can_define_that_the_dashboard_command_has_a_form()
     {
-        $dashboard = new class extends FakeSharpDashboard
+        $dashboard = new class() extends FakeSharpDashboard
         {
             public function getDashboardCommands(): ?array
             {
                 return [
-                    'dashboardCommand' => new class extends DashboardCommand
+                    'dashboardCommand' => new class() extends DashboardCommand
                     {
                         public function label(): string
                         {

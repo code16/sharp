@@ -8,7 +8,6 @@ use Code16\Sharp\Utils\Links\SharpLinkTo;
 class SharpOrderedListWidget extends SharpWidget
 {
     protected ?Closure $itemLinkBuilderClosure = null;
-
     protected bool $html = false;
 
     public static function make(string $key): self

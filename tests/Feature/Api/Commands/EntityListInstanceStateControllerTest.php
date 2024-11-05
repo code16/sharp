@@ -128,7 +128,7 @@ class EntityListInstanceStatePersonSharpEntityList extends PersonSharpEntityList
 {
     public function buildListConfig(): void
     {
-        $this->configureEntityState('state', new class extends EntityState
+        $this->configureEntityState('state', new class() extends EntityState
         {
             protected function buildStates(): void
             {

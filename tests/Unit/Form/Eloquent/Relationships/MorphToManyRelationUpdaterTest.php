@@ -35,7 +35,7 @@ class MorphToManyRelationUpdaterTest extends SharpEloquentBaseTestCase
         $person = TaggablePerson::create(['name' => 'A']);
         $tag = Tag::create(['name' => 'A']);
 
-        $updater = new MorphToManyRelationUpdater;
+        $updater = new MorphToManyRelationUpdater();
 
         $updater->update($person, 'tags', [
             ['id' => $tag->id],
@@ -59,7 +59,7 @@ class MorphToManyRelationUpdaterTest extends SharpEloquentBaseTestCase
             ['id' => $oldTag->id],
         ]);
 
-        $updater = new MorphToManyRelationUpdater;
+        $updater = new MorphToManyRelationUpdater();
 
         $updater->update($person, 'tags', [
             ['id' => $newTag->id],
@@ -83,7 +83,7 @@ class MorphToManyRelationUpdaterTest extends SharpEloquentBaseTestCase
     {
         $person = TaggablePerson::create(['name' => 'A']);
 
-        $updater = new MorphToManyRelationUpdater;
+        $updater = new MorphToManyRelationUpdater();
 
         $updater->update($person, 'tags', [
             ['id' => null, 'name' => 'Z'],
