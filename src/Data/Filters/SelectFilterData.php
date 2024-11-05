@@ -22,13 +22,12 @@ final class SelectFilterData extends Data
         //        public mixed $default,
         public bool $multiple,
         public bool $required,
-        #[LiteralTypeScriptType('Array<{ id:string|number } & { [key: string]: any }>')]
+        #[LiteralTypeScriptType('Array<{ id: string|number } & { [key: string]: any }>')]
         public array $values,
         public bool $master,
         public bool $searchable,
         /** string[] */
         public array $searchKeys,
-        public string $template,
     ) {}
 
     public static function from(array $filter): self

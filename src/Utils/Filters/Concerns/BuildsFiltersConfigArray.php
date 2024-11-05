@@ -37,7 +37,6 @@ trait BuildsFiltersConfigArray
                                 'master' => $filterHandler->isMaster(),
                                 'searchable' => $filterHandler->isSearchable(),
                                 'searchKeys' => $filterHandler->getSearchKeys(),
-                                'template' => $filterHandler->getTemplate(),
                             ];
                         } elseif ($filterHandler instanceof DateRangeFilter) {
                             $filterConfigData += [

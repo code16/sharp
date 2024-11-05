@@ -50,7 +50,6 @@ it('allows to configure filters with a key', function () {
                     'master' => false,
                     'searchable' => false,
                     'searchKeys' => ['label'],
-                    'template' => '{{label}}',
                 ],
             ],
         ]);
@@ -289,40 +288,6 @@ it('allows to define searchKeys on a filter', function () {
     $list->buildListConfig();
 
     expect($list->listConfig()['filters']['_root'][0]['searchKeys'])->toEqual(['a', 'b']);
-});
-
-it('allows to define an inline template for a filter', function () {
-    $list = new class() extends FakeSharpEntityList
-    {
-        public function getFilters(): array
-        {
-            return [
-                new class() extends EntityListSelectFilter
-                {
-                    public function buildFilterConfig(): void
-                    {
-                        $this->configureTemplate('{{letter}} {{maj}}');
-                    }
-
-                    public function values(): array
-                    {
-                        return [
-                            ['id' => 1, 'letter' => 'a', 'maj' => 'A'],
-                            ['id' => 2, 'letter' => 'b', 'maj' => 'B'],
-                        ];
-                    }
-                },
-            ];
-        }
-    };
-
-    $list->buildListConfig();
-
-    expect($list->listConfig()['filters']['_root'][0]['template'])->toEqual('{{letter}} {{maj}}')
-        ->and($list->listConfig()['filters']['_root'][0]['values'])->toEqual([
-            ['id' => 1, 'letter' => 'a', 'maj' => 'A'],
-            ['id' => 2, 'letter' => 'b', 'maj' => 'B'],
-        ]);
 });
 
 it('allows to declare a filter as retained and to set its default value', function () {

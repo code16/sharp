@@ -209,50 +209,6 @@ public function buildFilterConfig(): void
 }
 ```
 
-## Filter template
-
-Sometimes you need your select filter results to be a little more than a label. For this, configure a template (similar to form fields with templates):
-
-```php
-public function buildFilterConfig(): void
-{
-    $this->configureTemplate('<div>{{label}}</div><div><small>{{detail}}</small></div>');
-}
-```
-
-You can also, for more control, return a view here.
-
-The template will be [interpreted by Vue.js](https://vuejs.org/v2/guide/syntax.html), meaning you can add data placeholders, DOM structure but also directives, and anything that Vue will parse. It's the same as [Autocomplete's templates](form-fields/autocomplete.md).
-
-You'll need also to change your `values()` function, returning more than an `[{id}=>{value}]` array. For instance:
-
-```php
-public function values()
-{
-    return ProductCategory::orderBy('label')
-        ->get()
-        ->map(function ($category) {
-            return [
-                'id' => $category->id,
-                'label' => $category->label,
-                'detail' => $category->detail_text
-            ];
-        });
-}
-```
-
-Note that **the label attribute is mandatory**: it is used for the result display of the filter.
-
-Finally, if your filter is also searchable, you'll need to configure attributes which should be searched in the template:
-
-```php
-public function buildFilterConfig(): void
-{
-    $this->configureSearchable()
-        ->configureSearchKeys(['label', 'detail']);
-}
-```
-
 ## Check filter
 
 In case of a filter that is just a matter on true / false ("only show admins" for example), just make your filter class extend `Code16\Sharp\EntityList\Filters\EntityListCheckFilter`.

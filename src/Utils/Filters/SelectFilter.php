@@ -7,7 +7,6 @@ abstract class SelectFilter extends Filter
     private bool $isMaster = false;
     private bool $isSearchable = false;
     private array $searchKeys = ['label'];
-    private string $template = '{{label}}';
 
     final public function isMaster(): bool
     {
@@ -24,11 +23,6 @@ abstract class SelectFilter extends Filter
         return $this->searchKeys;
     }
 
-    final public function getTemplate(): string
-    {
-        return $this->template;
-    }
-
     final public function configureSearchable(bool $isSearchable = true): self
     {
         $this->isSearchable = $isSearchable;
@@ -39,13 +33,6 @@ abstract class SelectFilter extends Filter
     final public function configureSearchKeys(array $searchKeys): self
     {
         $this->searchKeys = $searchKeys;
-
-        return $this;
-    }
-
-    final public function configureTemplate(string $template): self
-    {
-        $this->template = $template;
 
         return $this;
     }

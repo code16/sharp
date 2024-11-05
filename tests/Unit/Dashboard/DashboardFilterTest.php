@@ -44,7 +44,6 @@ it('handles dashboard filters config', function () {
                     'master' => false,
                     'searchable' => false,
                     'searchKeys' => ['label'],
-                    'template' => '{{label}}',
                 ],
             ],
         ]);
