@@ -4,6 +4,7 @@ namespace Code16\Sharp\Http\Controllers\Api;
 
 use Code16\Sharp\Exceptions\SharpInvalidConfigException;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteRemoteField;
+use Code16\Sharp\Http\Controllers\Api\Embeds\HandleEmbed;
 use Code16\Sharp\Utils\Transformers\ArrayConverter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -11,11 +12,18 @@ use Illuminate\Support\Facades\Route;
 
 class ApiFormAutocompleteController extends ApiController
 {
-    public function index(string $entityKey, string $autocompleteFieldKey)
+    use HandleEmbed;
+    
+    public function index(string $entityKey, string $autocompleteFieldKey, ?string $embedKey = null)
     {
-        $entity = $this->entityManager->entityFor($entityKey);
-        $form = $entity->getFormOrFail(sharp_normalize_entity_key($entityKey)[1]);
-        $field = $form->findFieldByKey($autocompleteFieldKey);
+        if($embedKey) {
+            $formOrEmbed = $this->getEmbedFromKey($embedKey);
+        } else {
+            $entity = $this->entityManager->entityFor($entityKey);
+            $formOrEmbed = $entity->getFormOrFail(sharp_normalize_entity_key($entityKey)[1]);
+        }
+        
+        $field = $formOrEmbed->findFieldByKey($autocompleteFieldKey);
 
         if ($field === null) {
             throw new SharpInvalidConfigException('Remote autocomplete field '.$autocompleteFieldKey.' was not found in form.');
@@ -26,15 +34,15 @@ class ApiFormAutocompleteController extends ApiController
         if ($callback = $field->getRemoteCallback()) {
             $formData = request()->input('formData')
                 ? collect(request()->input('formData'))
-                    ->filter(fn ($value, $key) => in_array($key, $form->getDataKeys()))
-                    ->map(function ($value, $key) use ($form) {
-                        if (! $field = $form->findFieldByKey($key)) {
+                    ->filter(fn ($value, $key) => in_array($key, $formOrEmbed->getDataKeys()))
+                    ->map(function ($value, $key) use ($formOrEmbed) {
+                        if (! $field =  $formOrEmbed->findFieldByKey($key)) {
                             return $value;
                         }
 
                         return $field
                             ->formatter()
-                            ->setDataLocalizations($form->getDataLocalizations())
+                            ->setDataLocalizations($formOrEmbed->getDataLocalizations())
                             ->fromFront($field, $key, $value);
                     })
                     ->toArray()

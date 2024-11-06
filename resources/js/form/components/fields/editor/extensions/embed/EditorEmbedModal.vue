@@ -51,7 +51,7 @@
         modalEmbed.value = {
             id,
             embed,
-            form: new Form(embedForm, parentForm.entityKey, parentForm.instanceId),
+            form: new Form(embedForm, parentForm.entityKey, parentForm.instanceId, embed.key),
         }
         modalOpen.value = true;
     }

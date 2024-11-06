@@ -57,6 +57,7 @@
                         route('code16.sharp.api.form.autocomplete.index', {
                             entityKey: form.entityKey,
                             autocompleteFieldKey: field.key,
+                            embedKey: form.embedKey,
                             endpoint: field.remoteEndpoint,
                             search: query,
                         }), {

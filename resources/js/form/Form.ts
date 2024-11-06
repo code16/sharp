@@ -39,11 +39,13 @@ export class Form implements FormData, CommandFormData {
 
     entityKey: string;
     instanceId: string | number;
+    embedKey?: string;
 
-    constructor(data: FormData | EmbedFormData, entityKey: string, instanceId: string | number) {
+    constructor(data: FormData | EmbedFormData, entityKey: string, instanceId: string | number, embedKey?: string) {
         Object.assign(this, data);
         this.entityKey = entityKey;
         this.instanceId = instanceId;
+        this.embedKey = embedKey;
         this.serializedData = this.data;
     }
 
