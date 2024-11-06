@@ -43,7 +43,7 @@
 
         loading.value = true;
 
-        return postFn(form.data)
+        return postFn(form.serializedData)
             .catch(error => {
                 console.log('handled', error);
                 if (error.response?.status === 422) {
@@ -143,7 +143,7 @@
                     </div>
                 </CardHeader>
             </template>
-            <CardContent :class="inline ? 'p-0' : ''">
+            <CardContent :class="inline ? '!p-0' : ''">
                 <template v-if="form.pageAlert">
                     <PageAlert
                         class="mb-3"

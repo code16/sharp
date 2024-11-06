@@ -42,6 +42,6 @@ class ApiEmbedsFormController extends Controller
             $embed->formatRequestData(request()->all())
         );
 
-        return $embed->transformDataForTemplate($data, true);
+        return $embed->transformDataWithRenderedTemplate($data, isForm: true);
     }
 }

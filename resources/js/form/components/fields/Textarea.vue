@@ -9,8 +9,8 @@
     const props = defineProps<FormFieldProps<FormTextareaFieldData>>();
     const emit = defineEmits<FormFieldEmits<FormTextareaFieldData>>();
 
-    function onInput(e) {
-        const value = normalizeText(e.target.value);
+    function onInput(textareaValue: string) {
+        const value = normalizeText(textareaValue);
         const error = validateTextField(value, {
             maxlength: props.field.maxLength,
         });

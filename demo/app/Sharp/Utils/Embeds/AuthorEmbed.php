@@ -19,7 +19,7 @@ class AuthorEmbed extends SharpFormEditorEmbed
         $this
             ->configureLabel('Author')
             ->configureTagName('x-author')
-            ->configureFormTemplatePath('sharp/templates/author_embed.vue');
+            ->configureTemplate(view('sharp.templates.author-embed'));
     }
 
     protected function buildPageAlert(PageAlert $pageAlert): void

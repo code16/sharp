@@ -2,7 +2,7 @@
     import { __ } from "@/utils/i18n";
     import { vSticky } from "@/directives/sticky";
     import { FormEditorFieldData } from "@/types";
-    import { provide, ref, watch } from "vue";
+    import { provide, ref, useTemplateRef, watch } from "vue";
     import { Editor } from "@tiptap/vue-3";
     import debounce from 'lodash/debounce';
     import { EditorContent } from '@tiptap/vue-3';
@@ -25,7 +25,6 @@
     import EditorUploadModal from "@/form/components/fields/editor/extensions/upload/EditorUploadModal.vue";
     import EditorEmbedModal from "@/form/components/fields/editor/extensions/embed/EditorEmbedModal.vue";
     import FormFieldLayout from "@/form/components/FormFieldLayout.vue";
-    import { Card } from "@/components/ui/card";
     import EditorAttributes from "@/form/components/fields/editor/EditorAttributes.vue";
     import { cn } from "@/utils/cn";
 
@@ -162,15 +161,14 @@
                         :editor="editor"
                         v-bind="$props"
                         @upload="uploadModal.open()"
-                        @embed="embed => embedModal.open({ embed })"
+                        @embed="(embed) => embedModal.open({ embed })"
                     />
                 </div>
             </template>
 
-
             <EditorAttributes
                 :class="cn(
-                    'min-h-20 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+                    'min-h-20 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>p]:mb-4 [&>:last-child]:mb-0',
                     {
                         'min-h-[--min-height]': field.minHeight,
                         'max-h-[--max-height]': field.maxHeight,

@@ -32,7 +32,6 @@ it('sets default values in config', function () {
             'tag' => 'x-default-fake-sharp-form-editor-embed',
             'attributes' => ['text'],
             'icon' => null,
-            'template' => 'Empty template',
         ])
         ->and($defaultEmbed->toConfigArray(true))
         ->toHaveKey('fields.text')
@@ -88,6 +87,40 @@ it('allows to configure label', function () {
         ->toEqual('Some Label');
 });
 
+it('allows to configure both form & shows template', function () {
+    $defaultEmbed = new class() extends SharpFormEditorEmbed
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(
+                SharpFormTextField::make('text')
+            );
+        }
+        
+        public function updateContent(array $data = []): array {}
+        
+        public function buildEmbedConfig(): void
+        {
+            $this->configureTagName('my-tag')
+                ->configureTemplate('{{ $text }}');
+        }
+    };
+    
+    $defaultEmbed->buildEmbedConfig();
+    
+    expect($defaultEmbed->transformDataWithRenderedTemplate(['id' => 1, 'text' => 'Test'], isForm: false))->toEqual([
+        'id' => 1,
+        'text' => 'Test',
+        '_html' => 'Test',
+    ]);
+    
+    expect($defaultEmbed->transformDataWithRenderedTemplate(['id' => 1, 'text' => 'Test'], isForm: true))->toEqual([
+        'id' => 1,
+        'text' => 'Test',
+        '_html' => 'Test',
+    ]);
+});
+
 it('allows to configure form template', function () {
     $defaultEmbed = new class() extends SharpFormEditorEmbed
     {
@@ -103,14 +136,23 @@ it('allows to configure form template', function () {
         public function buildEmbedConfig(): void
         {
             $this->configureTagName('my-tag')
-                ->configureFormInlineTemplate('{{text}}');
+                ->configureFormTemplate('{{ $text }}');
         }
     };
 
     $defaultEmbed->buildEmbedConfig();
-
-    expect($defaultEmbed->toConfigArray(true)['template'])
-        ->toEqual('{{text}}');
+    
+    expect($defaultEmbed->transformDataWithRenderedTemplate(['id' => 1, 'text' => 'Test'], isForm: false))->toEqual([
+        'id' => 1,
+        'text' => 'Test',
+        '_html' => 'Empty template',
+    ]);
+    
+    expect($defaultEmbed->transformDataWithRenderedTemplate(['id' => 1, 'text' => 'Test'], isForm: true))->toEqual([
+        'id' => 1,
+        'text' => 'Test',
+        '_html' => 'Test',
+    ]);
 });
 
 it('allows to configure show template', function () {
@@ -128,16 +170,23 @@ it('allows to configure show template', function () {
         public function buildEmbedConfig(): void
         {
             $this->configureTagName('my-tag')
-                ->configureShowInlineTemplate('show {{text}}');
+                ->configureShowTemplate('{{ $text }}');
         }
     };
 
     $defaultEmbed->buildEmbedConfig();
-
-    expect($defaultEmbed->toConfigArray(false)['template'])
-        ->toEqual('show {{text}}')
-        ->and($defaultEmbed->toConfigArray(true)['template'])
-        ->toEqual('Empty template');
+    
+    expect($defaultEmbed->transformDataWithRenderedTemplate(['id' => 1, 'text' => 'Test'], isForm: false))->toEqual([
+        'id' => 1,
+        'text' => 'Test',
+        '_html' => 'Test',
+    ]);
+    
+    expect($defaultEmbed->transformDataWithRenderedTemplate(['id' => 1, 'text' => 'Test'], isForm: true))->toEqual([
+        'id' => 1,
+        'text' => 'Test',
+        '_html' => 'Empty template',
+    ]);
 });
 
 it('allows to configure icon', function () {

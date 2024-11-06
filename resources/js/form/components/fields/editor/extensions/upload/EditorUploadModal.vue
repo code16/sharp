@@ -8,7 +8,6 @@
     import { Editor } from "@tiptap/vue-3";
     import { __ } from "@/utils/i18n";
     import { useParentEditor } from "@/form/components/fields/editor/useParentEditor";
-    import EmbedFormModal from "@/form/components/fields/editor/extensions/embed/EmbedFormModal.vue";
 
     const props = defineProps<{
         field: FormEditorFieldData,
@@ -61,19 +60,19 @@
 <template>
     <input class="hidden" type="file" :accept="props.field.uploads.fields.file.allowedExtensions.join(',')" @change="onInputChange" ref="input">
 
-    <EmbedFormModal
-        :visible="!!currentModalUpload"
-        :form="currentModalUpload?.form"
-        :post="postForm"
-        @cancel="currentModalUpload = null"
-    >
-        <template v-slot:title>
-            <template v-if="currentModalUpload?.id">
-                {{ __('sharp::form.editor.dialogs.upload.title.new') }}
-            </template>
-            <template v-else>
-                {{ __('sharp::form.editor.dialogs.upload.title.update') }}
-            </template>
-        </template>
-    </EmbedFormModal>
+<!--    <EmbedFormModal-->
+<!--        :visible="!!currentModalUpload"-->
+<!--        :form="currentModalUpload?.form"-->
+<!--        :post="postForm"-->
+<!--        @cancel="currentModalUpload = null"-->
+<!--    >-->
+<!--        <template v-slot:title>-->
+<!--            <template v-if="currentModalUpload?.id">-->
+<!--                {{ __('sharp::form.editor.dialogs.upload.title.new') }}-->
+<!--            </template>-->
+<!--            <template v-else>-->
+<!--                {{ __('sharp::form.editor.dialogs.upload.title.update') }}-->
+<!--            </template>-->
+<!--        </template>-->
+<!--    </EmbedFormModal>-->
 </template>

@@ -2,8 +2,10 @@
 
 namespace Code16\Sharp\Utils\Fields\Formatters;
 
+use Code16\Sharp\Form\Fields\Formatters\EditorEmbedsFormatter;
 use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Utils\Fields\IsSharpFieldWithLocalization;
+use Code16\Sharp\Utils\Fields\SharpFieldWithEmbeds;
 use DOMAttr;
 use Illuminate\Support\Str;
 
@@ -11,6 +13,9 @@ trait FormatsEditorEmbeds
 {
     use FormatsHtmlContent;
 
+    /**
+     * @param  SharpFieldWithEmbeds&IsSharpFieldWithLocalization  $field
+     */
     protected function formatEditorEmbedsToFront(IsSharpFieldWithLocalization $field, $value): array
     {
         if (! count($field->embeds())) {
@@ -38,7 +43,10 @@ trait FormatsEditorEmbeds
                                 : null;
                         })
                         ->pipe(function ($collection) use ($embed) {
-                            return $embed->transformDataForTemplate($collection->toArray(), true);
+                            return $embed->transformDataWithRenderedTemplate(
+                                $collection->toArray(),
+                                isForm: $this instanceof EditorEmbedsFormatter
+                            );
                         });
 
                     // remove all attributes as not needed by the front
