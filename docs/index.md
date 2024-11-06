@@ -16,8 +16,6 @@ hero:
 ---
 
 <div class="content">
-<div class="content-container">
-<div class="vp-doc">
 
 Sharp is a content management framework built for Laravel, a toolset which provides help to build a CMS section in a website, with some rules in mind:
 - the public website **should not have any knowledge of the CMS** — the CMS is a part of the system, not the center of it. In fact, removing the CMS should not have any effect on the project.
@@ -91,6 +89,4 @@ A Sharp instance for a demo project is available online here: **[sharp.code16.fr
 
 (Data of this demo is reset each hour) 
 
-</div>
-</div>
 </div>
