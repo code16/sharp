@@ -108,7 +108,6 @@ export type EmbedData = {
   tag: string;
   icon: IconData | null;
   attributes: Array<string>;
-  template: string;
   fields: { [key: string]: FormFieldData };
 };
 export type EmbedFormData = {
@@ -334,7 +333,7 @@ export type FormEditorFieldData = {
   markdown: boolean;
   inline: boolean;
   showCharacterCount: boolean;
-  uploads: FormEditorFieldUploadData;
+  uploads: FormEditorFieldUploadData | null;
   embeds: { [embedKey: string]: EmbedData };
   toolbar: Array<FormEditorToolbarButton>;
   maxHeight: number | null;

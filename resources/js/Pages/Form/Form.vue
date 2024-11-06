@@ -59,8 +59,6 @@
 
         <SharpForm
             :form="form"
-            :entity-key="entityKey"
-            :instance-id="instanceId"
             :show-error-alert="Object.values(props.errors).length > 0"
             @submit="submit"
         >

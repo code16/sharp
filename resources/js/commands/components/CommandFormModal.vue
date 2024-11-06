@@ -48,8 +48,6 @@
                 <div>
                     <SharpForm
                         :post-fn="(data) => commands.postForm(data)"
-                        :entity-key="commands.state.currentCommandEndpoints.entityKey"
-                        :instance-id="commands.state.currentCommandEndpoints.instanceId"
                         :form="commands.state.currentCommandForm"
                         @loading="(loading) => commands.state.currentCommandFormLoading = loading"
                         :key="`form-${currentFormUpdatedKey}`"

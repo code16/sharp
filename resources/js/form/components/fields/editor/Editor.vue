@@ -183,17 +183,21 @@
                 <EditorContent :editor="editor" :key="locale ?? 'editor'" />
             </EditorAttributes>
 
-            <EditorUploadModal
-                :field="field"
-                :editor="editor"
-                ref="uploadModal"
-            />
+            <template v-if="props.field.uploads">
+                <EditorUploadModal
+                    :field="field"
+                    :editor="editor"
+                    ref="uploadModal"
+                />
+            </template>
 
-            <EditorEmbedModal
-                :editor="editor"
-                :field="field"
-                ref="embedModal"
-            />
+            <template v-if="props.field.embeds">
+                <EditorEmbedModal
+                    :editor="editor"
+                    :field="field"
+                    ref="embedModal"
+                />
+            </template>
 
                 <!-- Commenting this for now because it causes infinite loop on HMR -->
 

@@ -22,8 +22,6 @@
 
     const props = defineProps<{
         form: Form
-        entityKey: string,
-        instanceId?: string | number,
         inline?: boolean,
         postFn?: (data: FormData['data']) => Promise<ApiResponse<any>>,
         showErrorAlert?: boolean,

@@ -74,8 +74,6 @@
             </DialogHeader>
 
             <SharpForm
-                :entity-key="parentForm.entityKey"
-                :instance-id="parentForm.instanceId"
                 :form="modalEmbed?.form"
                 :post-fn="postForm"
                 inline
