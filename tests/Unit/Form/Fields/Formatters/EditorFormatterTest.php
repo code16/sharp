@@ -188,8 +188,15 @@ it('allows to format embeds with uploads to front', function () {
             'disk' => 'local',
         ]))
     );
+    
+    
+    $data = $formatter->toFront($field, $value);
+    $thumbnail = sprintf(
+        '/storage/thumbnails/data/Posts/1/200-200_q-90/image.jpg?%s',
+        Storage::disk('public')->lastModified('/thumbnails/data/Posts/1/200-200_q-90/image.jpg')
+    );
 
-    expect($formatter->toFront($field, $value))->toEqual([
+    expect($data)->toEqual([
         'text' => <<<'HTML'
             <x-embed data-key="0"></x-embed>
             HTML,
@@ -201,15 +208,15 @@ it('allows to format embeds with uploads to front', function () {
                         'name' => 'image.jpg',
                         'path' => 'data/Posts/1/image.jpg',
                         'disk' => 'local',
-                        'thumbnail' => sprintf(
-                            '/storage/thumbnails/data/Posts/1/200-200_q-90/image.jpg?%s',
-                            Storage::disk('public')->lastModified('/thumbnails/data/Posts/1/200-200_q-90/image.jpg')
-                        ),
+                        'thumbnail' => $thumbnail,
                         'size' => 120,
                         'mime_type' => 'image/jpeg',
                         'filters' => null,
                         'id' => null,
                     ],
+                    '_html' => sprintf('<img src="%s"> My <em>contentful</em> content',
+                        $thumbnail,
+                    ),
                 ],
             ],
         ],

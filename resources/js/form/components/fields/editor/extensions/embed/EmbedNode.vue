@@ -2,14 +2,17 @@
     import { __ } from "@/utils/i18n";
     import { Button } from '@/components/ui/button';
     import NodeRenderer from "../../NodeRenderer.vue";
-    import EmbedFormModal from "./EmbedFormModal.vue";
-    import { Form } from "@/form/Form";
     import { Embed, EmbedNodeAttributes } from "@/form/components/fields/editor/extensions/embed/Embed";
-    import { computed, nextTick, onMounted, onUnmounted, ref } from "vue";
-    import { useParentForm } from "@/form/useParentForm";
+    import { computed, onMounted, onUnmounted } from "vue";
     import { ExtensionNodeProps } from "@/form/components/fields/editor/types";
-    import { EmbedData } from "@/types";
     import { useParentEditor } from "@/form/components/fields/editor/useParentEditor";
+    import {
+        DropdownMenu,
+        DropdownMenuContent,
+        DropdownMenuItem,
+        DropdownMenuTrigger
+    } from "@/components/ui/dropdown-menu";
+    import { MoreHorizontal } from "lucide-vue-next";
 
     const props = defineProps<ExtensionNodeProps<typeof Embed, EmbedNodeAttributes>>();
 
@@ -27,30 +30,27 @@
 </script>
 
 <template>
-    <NodeRenderer class="editor__node embed-node" :node="node">
-        <div class="card">
-            <div class="card-body">
-                <div v-html="embedData._html"></div>
-
-                <div class="mt-3">
-                    <div class="row row-cols-auto gx-2">
-                        <template v-if="extension.options.embed.attributes.length">
-                            <div>
-                                <Button variant="outline" size="sm"
-                                    @click="embedModal.open({ id: node.attrs['data-key'], embed: extension.options.embed })"
-                                >
-                                    {{ __('sharp::form.upload.edit_button') }}
-                                </Button>
-                            </div>
-                        </template>
-                        <div>
-                            <Button variant="destructive" size="sm" @click="deleteNode()">
-                                {{ __('sharp::form.upload.remove_button') }}
-                            </Button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <NodeRenderer
+        class="my-4 first:mt-0 last:mb-0 border rounded-md items-center p-4 flex"
+        :class="{ '[:focus_&]:border-primary': selected }"
+        :node="node"
+    >
+        <div class="flex-1" v-html="embedData._html">
         </div>
+        <DropdownMenu :modal="false">
+            <DropdownMenuTrigger as-child>
+                <Button class="self-center" variant="ghost" size="icon">
+                    <MoreHorizontal class="size-4" />
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+                <DropdownMenuItem @click="embedModal.open({ id: node.attrs['data-key'], embed: extension.options.embed })">
+                    {{ __('sharp::form.upload.edit_button') }}
+                </DropdownMenuItem>
+                <DropdownMenuItem class="text-destructive" @click="deleteNode()">
+                    {{ __('sharp::form.upload.remove_button') }}
+                </DropdownMenuItem>
+            </DropdownMenuContent>
+        </DropdownMenu>
     </NodeRenderer>
 </template>

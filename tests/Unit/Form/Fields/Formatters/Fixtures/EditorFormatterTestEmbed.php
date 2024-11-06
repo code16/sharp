@@ -13,7 +13,10 @@ class EditorFormatterTestEmbed extends SharpFormEditorEmbed
     public function buildEmbedConfig(): void
     {
         $this->configureTagName('x-embed')
-            ->configureIcon('testicon-car');
+            ->configureIcon('testicon-car')
+            ->configureTemplate(<<<'blade'
+                <img src="{{ $visual['thumbnail'] ?? null }}"> {{ $slot }}
+                blade);
     }
 
     public function buildFormFields(FieldsContainer $formFields): void

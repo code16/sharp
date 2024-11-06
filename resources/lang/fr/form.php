@@ -75,6 +75,9 @@ return [
 
     'editor.dialogs.iframe.insert_title' => 'Insérez un Iframe (video, audio...)',
     'editor.dialogs.iframe.update_title' => 'Modifier l’Iframe (video, audio...)',
+    
+    'editor.dialogs.embed.submit_button_insert' => 'Insérer',
+    'editor.dialogs.embed.submit_button_update' => 'Mettre à jour',
 
     'editor.dropdown.table.insert_table' => 'Insérer un tableau',
     'editor.dropdown.table.toggle_header_cell' => 'Activer/désactiver la cellule comme en-tête',

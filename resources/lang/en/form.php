@@ -73,6 +73,9 @@ return [
     'editor.dialogs.raw_html.edit_title' => 'Edit HTML',
     'editor.dialogs.iframe.insert_title' => 'Insert Iframe (embed)',
     'editor.dialogs.iframe.update_title' => 'Update Iframe (embed)',
+    
+    'editor.dialogs.embed.submit_button_insert' => 'Insert',
+    'editor.dialogs.embed.submit_button_update' => 'Update',
 
     'editor.dropdown.table.insert_table' => 'Insert table',
     'editor.dropdown.table.toggle_header_cell' => 'Toggle header cell',
