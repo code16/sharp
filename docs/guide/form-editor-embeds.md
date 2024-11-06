@@ -58,9 +58,10 @@ This is not required, but you should implement `buildEmbedConfig(): void`, where
 
 - `configureLabel(string $label): self`: to define the name of the embed (should be short)
 - `configureTagName(string $tagName): self`: to define the tag name (typically starting with `x-`)
-- `configureFormInlineTemplate(string $template): self` and `configureFormTemplatePath(string $templatePath): self`: to define the .vue template for displaying the embed in the Editor field in the form
-- `configureShowInlineTemplate(string $template): self` and `configureShowTemplatePath(string $templatePath): self`: same, but for the show page, only you need to have a different version for it.
-- TODO configureIcon(string $icon) define icon, place it in toolbar...
+- `configureTemplate(string|View $template): self`: to define the blade as inline string or as a `view('my-template')` for both show & form. If you want to specify different templates between show & form you can use following methods :
+  - `configureShowTemplate(string|View $template): self`
+  - `configureFormTemplate(string|View $template): self`
+- `configureIcon(string $icon): self` define icon, place it in toolbar...
 
 Here's a complete example:
 
@@ -70,11 +71,19 @@ public function buildEmbedConfig(): void
     $this
         ->configureLabel('Related Post')
         ->configureTagName('x-related-post')
-        ->configureFormInlineTemplate('<div><span v-if="online" style="color: blue">●</span><i v-if="!online" style="color: orange">●</i> <em>{{ title }}</em></div>');
+        ->configureTemplate(<<<'HTML'
+            <div>
+                @if($online)
+                    <span style="color: blue">●</span>
+                @else
+                    <span style="color: orange">●</span>
+                @endif
+                <x-fas-link style="width: 1rem; height: 1rem" />
+                <em>{{ $title }}</em>
+            </div>
+            HTML);
 }
 ```
-
-Templates are vue-based, and work the same as for autocompletes or html form fields. We chose to write it inline here, but we could refer to a `.vue` file, with `configureFormTemplatePath` instead. The same template will be used in Show page, if the editor text should be displayed there, since we didn't configure anything (via `configureShowInlineTemplate` or `configureShowTemplatePath`).
 
 ### Additional useful methods
 
