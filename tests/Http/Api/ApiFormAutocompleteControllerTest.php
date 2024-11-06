@@ -1,9 +1,11 @@
 <?php
 
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteRemoteField;
+use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonForm;
+use Code16\Sharp\Tests\Http\Api\Fixtures\ApiFormAutocompleteControllerAutocompleteEmbed;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 beforeEach(function () {
@@ -356,3 +358,42 @@ it('won’t allow external remote endpoint', function () {
             'search' => 'my search',
         ]);
 })->expectException(\Code16\Sharp\Exceptions\SharpInvalidConfigException::class);
+
+it('allows to call an functional endpoint for a remote autocomplete field in an embed of an Editor field', function () {
+    fakeFormFor('person', new class() extends PersonForm
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(
+                SharpFormEditorField::make('editor_field')
+                    ->allowEmbeds([
+                        ApiFormAutocompleteControllerAutocompleteEmbed::class
+                    ])
+            );
+        }
+    });
+
+    Route::post('/my/endpoint', function () {
+        expect(request()->get('query'))->toBe('my search');
+
+        return [
+            ['id' => 1, 'label' => 'John'],
+        ];
+    });
+
+    $this
+        ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+            'entityKey' => 'person',
+            'autocompleteFieldKey' => 'autocomplete_field',
+            'embedKey' => (new ApiFormAutocompleteControllerAutocompleteEmbed())->key(),
+        ]), [
+            'endpoint' => '/my/endpoint',
+            'search' => 'my search',
+        ])
+        ->assertOk()
+        ->assertJson([
+            'data' => [
+                ['id' => 1, 'label' => 'John'],
+            ],
+        ]);
+});

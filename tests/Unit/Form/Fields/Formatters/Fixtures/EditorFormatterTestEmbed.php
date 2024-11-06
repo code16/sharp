@@ -22,11 +22,8 @@ class EditorFormatterTestEmbed extends SharpFormEditorEmbed
     public function buildFormFields(FieldsContainer $formFields): void
     {
         $formFields
-            ->addField(
-                SharpFormTextField::make('slot')
-            )->addField(
-                SharpFormUploadField::make('visual')->setImageOnly()
-            );
+            ->addField(SharpFormTextField::make('slot'))
+            ->addField(SharpFormUploadField::make('visual')->setImageOnly());
     }
 
     public function transformDataForTemplate(array $data, bool $isForm): array
