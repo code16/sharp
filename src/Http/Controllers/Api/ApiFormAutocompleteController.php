@@ -16,7 +16,7 @@ class ApiFormAutocompleteController extends ApiController
     
     public function index(string $entityKey, string $autocompleteFieldKey, ?string $embedKey = null)
     {
-        if($embedKey) {
+        if ($embedKey) {
             $formOrEmbed = $this->getEmbedFromKey($embedKey);
         } else {
             $entity = $this->entityManager->entityFor($entityKey);
