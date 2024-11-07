@@ -10,8 +10,14 @@ it('allows to format ids to front', function () {
         2 => 'blue',
     ]);
 
-    $this->assertEquals([['id' => 1]], $formatter->toFront($field, 1));
-    $this->assertEquals([['id' => 1], ['id' => 2]], $formatter->toFront($field, [1, 2]));
+    $this->assertEquals(
+        [['id' => 1, 'label' => 'red']],
+        $formatter->toFront($field, 1)
+    );
+    $this->assertEquals(
+        [['id' => 1, 'label' => 'red'], ['id' => 2, 'label' => 'blue']],
+        $formatter->toFront($field, [1, 2])
+    );
 });
 
 it('allows to format objects to front', function () {
@@ -22,11 +28,11 @@ it('allows to format objects to front', function () {
     ]);
 
     $this->assertEquals(
-        [['id' => 1]],
+        [['id' => 1, 'label' => 'red']],
         $formatter->toFront($field, [(object) ['id' => 1, 'name' => 'A']]),
     );
     $this->assertEquals(
-        [['id' => 1], ['id' => 2]],
+        [['id' => 1, 'label' => 'red'], ['id' => 2, 'label' => 'blue']],
         $formatter->toFront($field, [(object) ['id' => 1, 'name' => 'A'], (object) ['id' => 2, 'name' => 'B']]),
     );
 });
@@ -39,11 +45,11 @@ it('allows to format arrays to front', function () {
     ]);
 
     $this->assertEquals(
-        [['id' => 1]],
+        [['id' => 1, 'label' => 'red']],
         $formatter->toFront($field, [['id' => 1, 'name' => 'A']]),
     );
     $this->assertEquals(
-        [['id' => 1], ['id' => 2]],
+        [['id' => 1, 'label' => 'red'], ['id' => 2, 'label' => 'blue']],
         $formatter->toFront($field, [['id' => 1, 'name' => 'A'], ['id' => 2, 'name' => 'B']]),
     );
 });
@@ -57,11 +63,11 @@ it('allows to format objects to front with a defined id attribute', function () 
         ->setIdAttribute('number');
 
     $this->assertEquals(
-        [['id' => 1]],
+        [['id' => 1, 'label' => 'red']],
         $formatter->toFront($field, [(object) ['number' => 1, 'name' => 'A']]),
     );
     $this->assertEquals(
-        [['id' => 1], ['id' => 2]],
+        [['id' => 1, 'label' => 'red'], ['id' => 2, 'label' => 'blue']],
         $formatter->toFront($field, [(object) ['number' => 1, 'name' => 'A'], (object) ['number' => 2, 'name' => 'B']]),
     );
 });
@@ -101,9 +107,11 @@ it('we handle creatable attribute from front', function () {
         ->setCreatable()
         ->setCreateAttribute('name');
 
-    $this->assertEquals([['id' => 1], ['id' => 2], ['id' => null, 'name' => 'green']], $formatter->fromFront(
-        $field, $attribute, [['id' => 1], ['id' => 2], ['id' => null, 'label' => 'green']]),
-    );
+    $this->assertEquals(
+        [['id' => 1], ['id' => 2], ['id' => null, 'name' => 'green']],
+        $formatter->fromFront(
+            $field, $attribute, [['id' => 1], ['id' => 2], ['id' => null, 'label' => 'green']]),
+        );
 });
 
 it('we strip null ids if creatable attribute is false from front', function () {
@@ -116,9 +124,11 @@ it('we strip null ids if creatable attribute is false from front', function () {
         ->setCreatable(false)
         ->setCreateAttribute('name');
 
-    $this->assertEquals([['id' => 1], ['id' => 2]], $formatter->fromFront(
-        $field, $attribute, [['id' => 1], ['id' => 2], ['id' => null, 'label' => 'green']]),
-    );
+    $this->assertEquals(
+        [['id' => 1], ['id' => 2]],
+        $formatter->fromFront(
+            $field, $attribute, [['id' => 1], ['id' => 2], ['id' => null, 'label' => 'green']]),
+        );
 });
 
 it('we handle id attribute from front', function () {
