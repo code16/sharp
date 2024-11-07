@@ -30,13 +30,11 @@ class PostList extends SharpEntityList
         $fields
             ->addField(
                 EntityListField::make('cover')
-//                    ->setWidth(.1)
                     ->hideOnSmallScreens(),
             )
             ->addField(
                 EntityListField::make('title')
                     ->setLabel('Title')
-                //                    ->setWidth(.2)
             )
             ->addField(
                 EntityListStateField::make()
@@ -44,19 +42,17 @@ class PostList extends SharpEntityList
             ->addField(
                 EntityListField::make('author:name')
                     ->setLabel('Author')
-//                    ->setWidth(.2)
                     ->hideOnSmallScreens()
                     ->setSortable(),
             )
             ->addField(
                 EntityListField::make('categories')
                     ->setLabel('Categories')
-                //                    ->setWidth(.2)
+                    ->hideOnSmallScreens()
             )
             ->addField(
                 EntityListField::make('published_at')
                     ->setLabel('Published at')
-//                    ->setWidth(.2)
                     ->setSortable(),
             );
     }
