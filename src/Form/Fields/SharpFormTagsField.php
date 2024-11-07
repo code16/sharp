@@ -3,9 +3,12 @@
 namespace Code16\Sharp\Form\Fields;
 
 use Code16\Sharp\Form\Fields\Formatters\TagsFormatter;
+use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
 
 class SharpFormTagsField extends SharpFormField
 {
+    use SharpFormFieldWithPlaceholder;
+    
     const FIELD_TYPE = 'tags';
 
     protected bool $creatable = false;
@@ -15,7 +18,6 @@ class SharpFormTagsField extends SharpFormField
     protected ?int $maxTagCount = null;
     protected array $options = [];
     protected array $createAdditionalAttributes = [];
-    protected ?string $placeholder = null;
 
     public static function make(string $key, array $options): self
     {
@@ -78,13 +80,6 @@ class SharpFormTagsField extends SharpFormField
     public function setMaxTagCountUnlimited(): self
     {
         $this->maxTagCount = null;
-
-        return $this;
-    }
-    
-    public function setPlaceholder(string $placeholder): self
-    {
-        $this->placeholder = $placeholder;
 
         return $this;
     }
