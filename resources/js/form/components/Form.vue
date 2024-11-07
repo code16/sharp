@@ -19,6 +19,7 @@
     import { slugify } from "@/utils";
     import { Badge } from "@/components/ui/badge";
     import { UseElementBounding } from "@vueuse/components";
+    import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
     const props = defineProps<{
         form: Form
@@ -98,6 +99,18 @@
                 </template>
             </div>
         </template>
+        <template v-if="showErrorAlert">
+            <div class="container">
+                <Alert class="mb-4" variant="destructive">
+                    <AlertTitle>
+                        {{ __('sharp::form.validation_error.title') }}
+                    </AlertTitle>
+                    <AlertDescription>
+                        {{ __('sharp::form.validation_error.description') }}
+                    </AlertDescription>
+                </Alert>
+            </div>
+        </template>
         <component :is="inline ? 'div' : RootCard">
             <template v-if="!inline">
                 <CardHeader>
@@ -127,7 +140,7 @@
                                             <TabsTrigger :value="slugify(tab.title)">
                                                 {{ tab.title }}
                                                 <template v-if="form.tabErrorsCount(tab)">
-                                                    <Badge variant="destructive">
+                                                    <Badge class="ml-2" variant="destructive">
                                                         {{ form.tabErrorsCount(tab) }}
                                                     </Badge>
                                                 </template>
@@ -147,13 +160,6 @@
                         class="mb-3"
                         :page-alert="form.pageAlert"
                     />
-                </template>
-
-                <template v-if="showErrorAlert">
-                    <div class="alert alert-danger SharpForm__alert" role="alert">
-                        <div class="fw-bold">{{ __('sharp::form.validation_error.title') }}</div>
-                        <div>{{ __('sharp::form.validation_error.description') }}</div>
-                    </div>
                 </template>
 
                 <template v-for="tab in form.layout.tabs">

@@ -36,7 +36,7 @@ return [
     'upload.edit_modal.description' => 'Utilisez la molette de la souris pour zoomer. Maintenir la souris pour déplacer l’image ou la zone de recadrage.',
     'upload.help_text.max_file_size' => 'jusqu’à :size',
 
-    'multiselect.placeholder' => 'Choisir',
+    'multiselect.placeholder' => 'Choisir...',
     'multiselect.max_text' => 'Maximum atteint',
 
     'tags.unknown_label' => 'Inconnu',

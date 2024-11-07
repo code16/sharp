@@ -36,7 +36,7 @@ return [
     'upload.edit_modal.description' => 'Use the mouse wheel to zoom. Drag to move the image or the crop area',
     'upload.help_text.max_file_size' => 'up to :size',
 
-    'multiselect.placeholder' => 'Select option',
+    'multiselect.placeholder' => 'Select option...',
     'multiselect.max_text' => 'Maximum items reached',
 
     'tags.unknown_label' => 'Unknown',

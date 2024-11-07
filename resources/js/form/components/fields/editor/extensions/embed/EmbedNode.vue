@@ -32,7 +32,7 @@
 <template>
     <NodeRenderer
         class="my-4 first:mt-0 last:mb-0 border rounded-md items-center p-4 flex"
-        :class="{ '[:focus_&]:border-primary': selected }"
+        :class="{ 'group-focus/editor:border-primary': selected }"
         :node="node"
     >
         <div class="flex-1" v-html="embedData._html">

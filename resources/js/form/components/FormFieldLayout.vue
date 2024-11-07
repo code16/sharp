@@ -24,7 +24,7 @@
     const ariaDescribedBy = computed(() => [
             props.field.helpMessage && `${id}-help-message`,
             form.fieldHasError(props.field, props.fieldErrorKey) && `${id}-error`,
-        ].filter(Boolean).join(' ')
+        ].filter(Boolean).join(' ') || undefined
     );
     const slots = defineSlots<{
         default(props: { id: string, ariaDescribedBy: string }): any,
@@ -69,7 +69,7 @@
                             <Label
                                 :id="`${id}-label`"
                                 :as="fieldGroup ? 'div' : 'label'"
-                                class="leading-4"
+                                class="leading-4 cursor-default"
                                 :class="{ 'text-destructive': form.fieldHasError(field, fieldErrorKey) }"
                                 :for="id"
                                 @click="$emit('label-click')"

@@ -10,7 +10,7 @@
     import { ref } from "vue";
     import { Button } from "@/components/ui/button";
     import { __, trans_choice } from "@/utils/i18n";
-    import { ChevronsUpDown, X } from 'lucide-vue-next';
+    import { ChevronsUpDown, X, Check } from 'lucide-vue-next';
     import { cn } from "@/utils/cn";
     import {
         Command,
@@ -24,6 +24,7 @@
     import { useParentForm } from "@/form/useParentForm";
     import { fuzzySearch } from "@/utils/search";
     import {  isCancel } from "axios";
+    import { ComboboxItemIndicator } from "radix-vue";
 
     const props = defineProps<FormFieldProps<FormAutocompleteLocalFieldData | FormAutocompleteRemoteFieldData>>();
     const emit = defineEmits<FormFieldEmits<FormAutocompleteLocalFieldData | FormAutocompleteRemoteFieldData>>();
@@ -147,7 +148,7 @@
                     @update:model-value="onSelect($event as any)"
                     @update:search-term="search($event)"
                 >
-                    <CommandInput />
+                    <CommandInput :placeholder="props.value ? props.field.placeholder ?? __('sharp::form.autocomplete.placeholder') : null" />
                     <CommandList>
                         <template v-if="loading">
                             <div class="py-6 text-center text-sm">
@@ -169,8 +170,15 @@
                                         class="group/item"
                                         :value="item[props.field.itemIdAttribute]"
                                     >
-                                        <div class="hidden absolute top-0 -left-1 h-full border-l border-2 border-primary/50 group-data-[state=checked]/item:block"></div>
+                                        <div class="size-4 mr-2">
+                                            <ComboboxItemIndicator as-child>
+                                                <Check class="size-4" />
+                                            </ComboboxItemIndicator>
+                                        </div>
+
+<!--                                        <div class="hidden absolute top-0 -left-1 h-full border-l border-1 border-primary group-data-[state=checked]/item:block"></div>-->
                                         <div v-html="item._html"></div>
+
                                     </CommandItem>
                                 </template>
                             </CommandGroup>

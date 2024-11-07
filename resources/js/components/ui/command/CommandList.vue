@@ -5,7 +5,7 @@ import { ComboboxContent, useForwardPropsEmits } from 'radix-vue'
 import { cn } from '@/utils/cn'
 
 const props = withDefaults(defineProps<ComboboxContentProps & { class?: HTMLAttributes['class'] }>(), {
-  dismissable: false,
+   dismissable: false,
 })
 const emits = defineEmits<ComboboxContentEmits>()
 

@@ -5,7 +5,6 @@
     import { getDependantFieldsResetData } from "@/form/util";
     import { ComponentInstance, computed, nextTick, ref, watch, watchEffect } from "vue";
     import { Button, buttonVariants } from '@/components/ui/button';
-    import ListBulkUpload from "./ListBulkUpload.vue";
     import { showAlert } from "@/utils/dialogs";
     import { FieldsMeta, FormFieldEmits, FormFieldProps } from "@/form/types";
     import { Serializable } from "@/form/Serializable";
@@ -23,7 +22,6 @@
     import { Card, CardHeader } from "@/components/ui/card";
     import { useSortable } from "@vueuse/integrations/useSortable";
     import { watchArray } from "@vueuse/core";
-    import { Input } from "@/components/ui/input";
 
     const props = defineProps<FormFieldProps<FormListFieldData>>();
     const emit = defineEmits<FormFieldEmits<FormListFieldData>>();
