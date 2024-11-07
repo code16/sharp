@@ -11,7 +11,7 @@
     import List from "./fields/list/List.vue";
     import NumberInput from "./fields/Number.vue";
     import Select from "./fields/Select.vue";
-    import TagInput from "./fields/Tags.vue";
+    import Tags from "./fields/Tags.vue";
     import Text from "./fields/Text.vue";
     import Textarea from "./fields/Textarea.vue";
     import Upload from "./fields/upload/Upload.vue";
@@ -33,7 +33,7 @@
         'list': List,
         // 'number': NumberInput,
         'select': Select,
-        // 'tags': TagInput,
+        'tags': Tags,
         'text': Text,
         'textarea': Textarea,
         'upload': Upload

@@ -21,6 +21,7 @@ final class FormTagsFieldData extends Data
         #[LiteralTypeScriptType('Array<{ id: string|number, label: string }>')]
         public array $options,
         public ?int $maxTagCount = null,
+        public ?string $placeholder = null,
         public ?bool $localized = null,
         public ?string $label = null,
         public ?bool $readOnly = null,

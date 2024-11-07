@@ -15,6 +15,7 @@ class SharpFormTagsField extends SharpFormField
     protected ?int $maxTagCount = null;
     protected array $options = [];
     protected array $createAdditionalAttributes = [];
+    protected ?string $placeholder = null;
 
     public static function make(string $key, array $options): self
     {
@@ -80,6 +81,13 @@ class SharpFormTagsField extends SharpFormField
 
         return $this;
     }
+    
+    public function setPlaceholder(string $placeholder): self
+    {
+        $this->placeholder = $placeholder;
+
+        return $this;
+    }
 
     public function creatable(): bool
     {
@@ -122,6 +130,7 @@ class SharpFormTagsField extends SharpFormField
             'createText' => $this->createText,
             'maxTagCount' => $this->maxTagCount,
             'options' => $this->options,
+            'placeholder' => $this->placeholder,
         ]);
     }
 }

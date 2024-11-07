@@ -521,6 +521,7 @@ export type FormTagsFieldData = {
   createText: string;
   options: Array<{ id: string | number; label: string }>;
   maxTagCount: number | null;
+  placeholder: string | null;
   localized: boolean | null;
   label: string | null;
   readOnly: boolean | null;

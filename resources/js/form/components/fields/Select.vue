@@ -13,9 +13,9 @@
         emit('input', value, { error: options?.error });
     }
 
-    // todo put this in SelectFormatter instead ?
     async function setDefaultValue() {
-        if(!props.field.multiple
+        if(!props.field.clearable
+            && !props.field.multiple
             && props.value == null
             && props.field.options.length > 0
         ) {

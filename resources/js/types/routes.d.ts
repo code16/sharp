@@ -285,6 +285,9 @@ declare module 'ziggy-js' {
         },
         {
             "name": "autocompleteFieldKey"
+        },
+        {
+            "name": "embedKey"
         }
     ],
     "code16.sharp.login": [],

@@ -36,6 +36,7 @@
             <Tooltip :open="!!hoveringElementWithTitle?.dataset.title">
                 <TooltipTrigger as-child>
                     <template v-if="needsTemplate">
+                        <!-- to handle EL SharpTagsTransformer -->
                         <TemplateRenderer :template="updatedHtml" />
                     </template>
                     <template v-else>
