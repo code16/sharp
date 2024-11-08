@@ -78,4 +78,37 @@ class BelongsToManyRelationUpdaterTest extends SharpEloquentBaseTestCase
             'person2_id' => $person2->id,
         ]);
     }
+
+    /** @test */
+    public function we_can_handle_order_in_a_belongsToMany_relation()
+    {
+        $person1 = Person::create(['name' => 'A']);
+        $person2 = Person::create(['name' => 'B']);
+        $person3 = Person::create(['name' => 'C']);
+
+        $person1->friends()->sync([
+            ['id' => $person2->id, 'order' => 100],
+            ['id' => $person3->id, 'order' => 100],
+        ]);
+
+        $updater = new BelongsToManyRelationUpdater();
+        $updater->update(
+            $person1,
+            'friends',
+            [['id' => $person3->id], ['id' => $person2->id]],
+            ['orderAttribute' => 'order']
+        );
+
+        $this->assertDatabaseHas('friends', [
+            'person1_id' => $person1->id,
+            'person2_id' => $person3->id,
+            'order' => 1,
+        ]);
+
+        $this->assertDatabaseHas('friends', [
+            'person1_id' => $person1->id,
+            'person2_id' => $person2->id,
+            'order' => 2,
+        ]);
+    }
 }
