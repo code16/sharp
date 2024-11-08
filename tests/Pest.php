@@ -27,6 +27,7 @@ uses()
             $table->increments('id');
             $table->unsignedInteger('person1_id');
             $table->unsignedInteger('person2_id');
+            $table->unsignedInteger('order')->nullable();
             $table->timestamps();
         });
 
