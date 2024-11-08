@@ -19,7 +19,7 @@
             :min="field.min"
             :max="field.max"
             type="number"
-            @update:model-value="$emit('input', $event !== '' ? Number($event) : null)"
+            @update:model-value="emit('input', $event !== '' ? Number($event) : null)"
         />
     </FormFieldLayout>
 </template>

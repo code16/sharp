@@ -19,7 +19,7 @@ class DateFormatter extends SharpFieldFormatter
         }
 
         return $field->hasDate()
-            ? $value->toJSON()
+            ? $value->toDateTimeLocalString()
             : $value->format('H:i');
     }
 

@@ -4,13 +4,13 @@
     import { isCustomField, resolveCustomField } from "@/utils/fields";
     import Autocomplete from "./fields/Autocomplete.vue";
     import Check from "./fields/Check.vue";
-    import DateInput from "./fields/date/Date.vue";
+    import Date from "./fields/Date.vue";
     import Editor from "./fields/editor/Editor.vue";
     import Geolocation from "./fields/geolocation/Geolocation.vue";
     import Html from "./fields/Html.vue";
-    import List from "./fields/list/List.vue";
+    import List from "./fields/List.vue";
     import NumberInput from "./fields/Number.vue";
-    import Select from "./fields/Select.vue";
+    import Select from "./fields/select/Select.vue";
     import Tags from "./fields/Tags.vue";
     import Text from "./fields/Text.vue";
     import Textarea from "./fields/Textarea.vue";
@@ -26,7 +26,7 @@
     const components: Record<FormFieldData['type'], Component> = {
         'autocomplete': Autocomplete,
         'check': Check,
-        // 'date': DateInput,
+        'date': Date,
         'editor': Editor,
         'geolocation': Geolocation,
         'html': Html,

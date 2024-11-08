@@ -2,9 +2,9 @@
     import { FormFieldEmitInputOptions, FormFieldEmits, FormFieldProps } from "@/form/types";
     import { FormSelectFieldData } from "@/types";
     import { nextTick, watch } from "vue";
-    import DropdownSelect from "./select/DropdownSelect.vue";
-    import Checkboxes from "./select/Checkboxes.vue";
-    import Radios from "./select/Radios.vue";
+    import DropdownSelect from "./DropdownSelect.vue";
+    import Checkboxes from "./Checkboxes.vue";
+    import Radios from "./Radios.vue";
 
     const props = defineProps<FormFieldProps<FormSelectFieldData>>();
     const emit = defineEmits<FormFieldEmits<FormSelectFieldData>>();

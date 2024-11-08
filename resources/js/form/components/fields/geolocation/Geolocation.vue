@@ -7,7 +7,6 @@
     import Osm from "./osm/Osm.vue";
     import { onMounted, ref } from "vue";
     import { dd2dms, triggerResize } from "./utils";
-    import { loadGmaps } from "./gmaps/load";
     import {
         Dialog,
         DialogClose,
@@ -32,13 +31,10 @@
     } from "@/components/ui/dropdown-menu";
     import { MoreHorizontal, Search } from "lucide-vue-next";
     import FormFieldLayout from "@/form/components/FormFieldLayout.vue";
+    import { FormFieldEmits, FormFieldProps } from "@/form/types";
 
-    const props = defineProps<{
-        field: FormGeolocationFieldData,
-        value: FormGeolocationFieldData['value'],
-    }>();
-
-    const emit = defineEmits(['input']);
+    const props = defineProps<FormFieldProps<FormGeolocationFieldData>>();
+    const emit = defineEmits<FormFieldEmits<FormGeolocationFieldData>>();
 
     const components: Record<FormGeolocationFieldData['mapsProvider']['name'], Component> = {
         gmaps: Gmaps,

@@ -11,7 +11,7 @@
     import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
     import { ApiResponse } from "@/api/types";
     import { __ } from "@/utils/i18n";
-    import { CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+    import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
     import RootCard from "@/components/ui/RootCard.vue";
     import LocaleSelectTrigger from "@/components/LocaleSelectTrigger.vue";
     import { useFormTabs } from "@/form/components/useFormTabs";
@@ -20,6 +20,7 @@
     import { Badge } from "@/components/ui/badge";
     import { UseElementBounding } from "@vueuse/components";
     import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+    import { FieldMeta } from "@/form/types";
 
     const props = defineProps<{
         form: Form
@@ -173,11 +174,13 @@
                                                 <template v-for="fieldLayout in row">
                                                     <template v-if="'legend' in fieldLayout">
                                                         <FieldGridColumn>
-                                                            <fieldset v-show="form.fieldsetShouldBeVisible(fieldLayout)">
-                                                                <legend>
-                                                                    {{ fieldLayout.legend }}
-                                                                </legend>
-                                                                <div class="bg-white p-4">
+                                                            <Card>
+                                                                <CardHeader>
+                                                                    <CardTitle class="text-sm font-semibold">
+                                                                        {{ fieldLayout.legend }}
+                                                                    </CardTitle>
+                                                                </CardHeader>
+                                                                <CardContent>
                                                                     <FieldGrid class="gap-6">
                                                                         <template v-for="row in fieldLayout.fields">
                                                                             <FieldGridRow>
@@ -188,7 +191,7 @@
                                                                                             :field-layout="fieldLayout"
                                                                                             :field-error-key="fieldLayout.key"
                                                                                             :value="form.data[fieldLayout.key]"
-                                                                                            :locale="form.getMeta(fieldLayout.key)?.locale ?? form.defaultLocale"
+                                                                                            :locale="(form.getMeta(fieldLayout.key) as FieldMeta)?.locale ?? form.defaultLocale"
                                                                                             :row="row"
                                                                                             root
                                                                                             @input="(value, options) => onFieldInput(fieldLayout.key, value, options)"
@@ -200,8 +203,8 @@
                                                                             </FieldGridRow>
                                                                         </template>
                                                                     </FieldGrid>
-                                                                </div>
-                                                            </fieldset>
+                                                                </CardContent>
+                                                            </Card>
                                                         </FieldGridColumn>
                                                     </template>
                                                     <template v-else>
@@ -211,7 +214,7 @@
                                                                 :field-layout="fieldLayout"
                                                                 :field-error-key="fieldLayout.key"
                                                                 :value="form.data[fieldLayout.key]"
-                                                                :locale="form.getMeta(fieldLayout.key)?.locale ?? form.currentLocale"
+                                                                :locale="(form.getMeta(fieldLayout.key) as FieldMeta)?.locale ?? form.currentLocale"
                                                                 :row="row as LayoutFieldData[]"
                                                                 root
                                                                 @input="(value, options) => onFieldInput(fieldLayout.key, value, options)"

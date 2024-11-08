@@ -7,14 +7,14 @@
 </script>
 
 <template>
-    <div>
+    <div class="grid grid-cols-1 gap-2.5">
         <template v-if="label">
             <Label>
                 {{ label }}
             </Label>
         </template>
 
-        <div :class="[label ? 'mt-2' : '']">
+        <div>
             <slot />
         </div>
     </div>

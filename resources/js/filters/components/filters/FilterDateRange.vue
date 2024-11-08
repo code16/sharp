@@ -1,18 +1,16 @@
 <script setup lang="ts">
     // import FilterControl from '../FilterControl.vue';
-    import { parseDate, CalendarDate, fromDate, getLocalTimeZone, toCalendarDate  } from '@internationalized/date';
+    import { parseDate, CalendarDate } from '@internationalized/date';
     import { DateRangeFilterData } from "@/types";
     import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
     import { Button } from "@/components/ui/button";
-    import { CalendarIcon, ChevronDown, PlusCircle } from "lucide-vue-next";
+    import { CalendarIcon } from "lucide-vue-next";
     import { RangeCalendar } from "@/components/ui/range-calendar";
     import { reactive, ref, watch } from "vue";
     import { Separator } from "@/components/ui/separator";
-    import { Badge } from "@/components/ui/badge";
     import { Input } from "@/components/ui/input";
     import { __ } from "@/utils/i18n";
     import { Label } from "@/components/ui/label";
-    import FilterSelectValue from "@/filters/components/filters/FilterSelectValue.vue";
     import FilterDateRangeValue from "@/filters/components/filters/FilterDateRangeValue.vue";
     import { cn } from "@/utils/cn";
 
