@@ -66,3 +66,34 @@ it('allows to can_create a new related item', function () {
         'person2_id' => $niels->id,
     ]);
 })->group('eloquent');
+
+it('handles order in a belongsToMany relation', function () {
+    $marie = Person::create(['name' => 'Marie Curie']);
+    $niels = Person::create(['name' => 'Niels Bohr']);
+    $albert = Person::create(['name' => 'Albert Einstein']);
+
+    $marie->colleagues()->sync([
+        ['id' => $niels->id, 'order' => 100],
+        ['id' => $albert->id, 'order' => 100],
+    ]);
+
+    $updater = new BelongsToManyRelationUpdater();
+    $updater->update(
+        $marie,
+        'colleagues',
+        [['id' => $albert->id], ['id' => $niels->id]],
+        ['orderAttribute' => 'order']
+    );
+
+    $this->assertDatabaseHas('colleagues', [
+        'person1_id' => $marie->id,
+        'person2_id' => $albert->id,
+        'order' => 1,
+    ]);
+
+    $this->assertDatabaseHas('colleagues', [
+        'person1_id' => $marie->id,
+        'person2_id' => $niels->id,
+        'order' => 2,
+    ]);
+})->group('eloquent');
