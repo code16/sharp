@@ -4,7 +4,7 @@
     "target": "esnext",
     "module": "esnext",
     "downlevelIteration": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "paths": {
       "@/*": ["./resources/js/*"]

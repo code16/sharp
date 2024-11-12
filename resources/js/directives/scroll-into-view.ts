@@ -13,7 +13,6 @@ export function scrollIntoViewIfNeeded(el: HTMLElement) {
 
 export const vScrollIntoView: Directive = (el, { value, oldValue }) => {
     if(value && !oldValue) {
-        console.log(value);
         setTimeout(() => {
             scrollIntoViewIfNeeded(el);
         });

@@ -72,6 +72,7 @@ class TestForm extends SharpSingleForm
                 SharpFormDateField::make('datetime')
                     ->setLabel('Datetime')
                     ->setDisplayFormat('YYYY-MM-DD HH:mm')
+                    ->setMinTime(0, 15)
                     ->setHasTime(),
             )
             ->addField(
@@ -85,6 +86,8 @@ class TestForm extends SharpSingleForm
                     ->setLabel('Time')
                     ->setDisplayFormat('HH:mm')
                     ->setHasDate(false)
+                    ->setMinTime(0, 15)
+                    ->setMaxTime(22, 15)
                     ->setHasTime(),
             )
             ->addField(
@@ -356,7 +359,7 @@ class TestForm extends SharpSingleForm
     public function rules(): array
     {
         return [
-            'date' => 'required|before_or_equal:'.date('Y-m-d'),
+//            'date' => 'required|before_or_equal:'.date('Y-m-d'),
         ];
     }
 

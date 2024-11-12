@@ -9,7 +9,7 @@
     import Geolocation from "./fields/geolocation/Geolocation.vue";
     import Html from "./fields/Html.vue";
     import List from "./fields/List.vue";
-    import NumberInput from "./fields/Number.vue";
+    import Number from "./fields/Number.vue";
     import Select from "./fields/select/Select.vue";
     import Tags from "./fields/Tags.vue";
     import Text from "./fields/Text.vue";
@@ -31,7 +31,7 @@
         'geolocation': Geolocation,
         'html': Html,
         'list': List,
-        // 'number': NumberInput,
+        'number': Number,
         'select': Select,
         'tags': Tags,
         'text': Text,

@@ -52,7 +52,7 @@
 </script>
 
 <template>
-    <FormFieldLayout :field="props.field" v-slot="{ id, ariaDescribedBy }">
+    <FormFieldLayout v-bind="props" v-slot="{ id, ariaDescribedBy }">
         <ComboboxRoot
             class="flex-1"
             :model-value="props.value"

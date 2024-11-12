@@ -9,6 +9,7 @@ import circleDependency from 'vite-plugin-circular-dependency';
 
 export default defineConfig(({ mode, command }) => {
     const env = loadEnv(mode, path.join(process.cwd(), '/demo'), '');
+    const host = env.APP_URL ? new URL(env.APP_URL).hostname : null;
     return {
         base: (command === "build" ? '/vendor/sharp' : ""),
         envDir: path.join(process.cwd(), '/demo'),
@@ -25,6 +26,10 @@ export default defineConfig(({ mode, command }) => {
         },
         server: {
             // hmr: false,
+            hmr: {
+                host,
+            },
+            host,
             warmup: {
                 clientFiles: [
                     './resources/js/Pages/**/*.vue',

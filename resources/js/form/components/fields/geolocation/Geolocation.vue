@@ -124,7 +124,7 @@
 </script>
 
 <template>
-    <FormFieldLayout :field="props.field">
+    <FormFieldLayout v-bind="props">
         <div class="@container">
             <template v-if="value">
                 <div class="flex bg-background border border-input rounded-md gap-4 p-4">
