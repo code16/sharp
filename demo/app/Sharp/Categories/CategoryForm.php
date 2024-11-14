@@ -47,9 +47,7 @@ class CategoryForm extends SharpForm
         $formLayout->addColumn(6, function (FormLayoutColumn $column) {
             $column->withField('name')
                 ->withListField('list', function (FormLayoutColumn $listColumn) {
-                    $listColumn->withFields('test|6', 'file|6')
-                        ->withField('test')
-                        ->withField('file');
+                    $listColumn->withFields('test|6', 'file|6');
                 });
         });
     }

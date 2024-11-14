@@ -211,7 +211,7 @@ class PostForm extends SharpForm
             'title.fr' => ['required', 'string', 'max:150'],
             'title.en' => ['required', 'string', 'max:150'],
             'published_at' => ['required', 'date'],
-            'attachments.*.title' => ['required', 'string', 'max:50'],
+            'attachments.*.title' => ['required', 'string', 'max:150'],
             'attachments.*.link_url' => ['required_if:attachments.*.is_link,true,1', 'nullable', 'url', 'max:150'],
             'attachments.*.document' => ['required_if:attachments.*.is_link,false,0'],
         ];
