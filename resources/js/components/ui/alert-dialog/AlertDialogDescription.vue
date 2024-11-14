@@ -3,7 +3,7 @@ import { type HTMLAttributes, computed } from 'vue'
 import {
   AlertDialogDescription,
   type AlertDialogDescriptionProps,
-} from 'radix-vue'
+} from 'reka-ui'
 import { cn } from '@/utils/cn'
 
 const props = defineProps<AlertDialogDescriptionProps & { class?: HTMLAttributes['class'] }>()

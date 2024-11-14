@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Link, usePage } from "@inertiajs/vue3";
-import { CollapsibleTrigger, ConfigProvider, DropdownMenuPortal } from "radix-vue";
+import { CollapsibleTrigger, ConfigProvider, DropdownMenuPortal } from "reka-ui";
 import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {

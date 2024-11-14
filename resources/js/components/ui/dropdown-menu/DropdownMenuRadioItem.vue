@@ -6,7 +6,7 @@ import {
   type DropdownMenuRadioItemEmits,
   type DropdownMenuRadioItemProps,
   useForwardPropsEmits,
-} from 'radix-vue'
+} from 'reka-ui'
 import { Circle } from 'lucide-vue-next'
 import { cn } from '@/utils/cn'
 

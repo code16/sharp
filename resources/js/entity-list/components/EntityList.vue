@@ -36,7 +36,7 @@
         DropdownMenuSubTrigger,
         DropdownMenuTrigger
     } from "@/components/ui/dropdown-menu";
-    import { DropdownMenuPortal } from "radix-vue";
+    import { DropdownMenuPortal } from "reka-ui";
     import CommandDropdownItems from "@/commands/components/CommandDropdownItems.vue";
     import { Badge } from "@/components/ui/badge";
     import { Link } from "@inertiajs/vue3";
@@ -141,7 +141,7 @@
         const { commands, entityKey } = props;
 
         if(command.confirmation) {
-            el.value.querySelector('[data-radix-scroll-area-viewport]').scrollTo({ left: 0, behavior: 'smooth' });
+            el.value.querySelector('[data-reka-scroll-area-viewport]').scrollTo({ left: 0, behavior: 'smooth' });
         }
 
         await commands.send(command, {
@@ -176,7 +176,7 @@
     async function onDelete(instanceId: InstanceId) {
         const { entityKey, entityList, commands } = props;
 
-        el.value.querySelector('[data-radix-scroll-area-viewport]').scrollTo({ left: 0, behavior: 'smooth' });
+        el.value.querySelector('[data-reka-scroll-area-viewport]').scrollTo({ left: 0, behavior: 'smooth' });
 
         if(await showDeleteConfirm(entityList.config.deleteConfirmationText, {
             highlightElement: () => el.value?.querySelector(`[data-instance-row="${instanceId}"]`) as HTMLElement,
@@ -570,8 +570,8 @@
                                                         <Checkbox
                                                             class="block"
                                                             :id="`check-${entityKey}-${entityList.instanceId(item)}`"
-                                                            :checked="selectedItems[entityList.instanceId(item)]"
-                                                            @update:checked="(checked) => selectedItems[entityList.instanceId(item)] = checked"
+                                                            :model-value="selectedItems[entityList.instanceId(item)]"
+                                                            @update:model-value="(checked) => selectedItems[entityList.instanceId(item)] = checked"
                                                         />
                                                         <label class="absolute inset-0 z-20" data-row-action :for="`check-${entityKey}-${entityList.instanceId(item)}`">
                                                             <span class="sr-only">Select</span>
@@ -593,8 +593,8 @@
                                                                 <DropdownMenuContent align="start" :align-offset="-16">
                                                                     <template v-for="stateValue in entityList.config.state.values" :key="stateValue.value">
                                                                         <DropdownMenuCheckboxItem
-                                                                            :checked="stateValue.value == entityList.instanceState(item)"
-                                                                            @update:checked="(checked) => checked && onInstanceStateChange(stateValue.value, entityList.instanceId(item))"
+                                                                            :model-value="stateValue.value == entityList.instanceState(item)"
+                                                                            @update:model-value="(checked) => checked && onInstanceStateChange(stateValue.value, entityList.instanceId(item))"
                                                                         >
                                                                             <StateIcon class="mr-1.5" :state-value="stateValue" />
                                                                             <span class="truncate">{{ stateValue.label }}</span>
@@ -653,8 +653,8 @@
                                                                                 <DropdownMenuSubContent>
                                                                                     <template v-for="stateValue in entityList.config.state.values" :key="stateValue.value">
                                                                                         <DropdownMenuCheckboxItem
-                                                                                            :checked="stateValue.value == entityList.instanceState(item)"
-                                                                                            @update:checked="(checked) => checked && onInstanceStateChange(stateValue.value, entityList.instanceId(item))"
+                                                                                            :model-value="stateValue.value == entityList.instanceState(item)"
+                                                                                            @update:model-value="(checked) => checked && onInstanceStateChange(stateValue.value, entityList.instanceId(item))"
                                                                                         >
                                                                                             <StateIcon class="mr-1.5" :state-value="stateValue" />
                                                                                             <span class="truncate">{{ stateValue.label }}</span>

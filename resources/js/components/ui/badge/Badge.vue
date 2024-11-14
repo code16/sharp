@@ -2,7 +2,7 @@
 import type { HTMLAttributes } from 'vue'
 import { type BadgeVariants, badgeVariants } from '.'
 import { cn } from '@/utils/cn'
-import { Primitive } from "radix-vue";
+import { Primitive } from "reka-ui";
 
 const props = defineProps<{
   variant?: BadgeVariants['variant']

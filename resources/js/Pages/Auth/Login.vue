@@ -92,7 +92,7 @@
                     <template v-if="config('sharp.auth.suggest_remember_me')">
                         <FormItem>
                             <div class="flex items-center space-x-2">
-                                <Checkbox id="remember_me" :checked="form.remember" @update:checked="form.remember = $event"/>
+                                <Checkbox id="remember_me" v-model="form.remember" />
                                 <Label for="remember_me">
                                     {{ __('sharp::pages/auth/login.remember') }}
                                 </Label>

@@ -38,9 +38,9 @@
                     <div class="group/control flex items-center space-x-3">
                         <Checkbox
                             :id="`${id}.${index}`"
-                            :checked="value?.some(v => isSelected(option, v))"
+                            :model-value="value?.some(v => isSelected(option, v))"
                             :disabled="field.readOnly"
-                            @update:checked="onChange($event, option)"
+                            @update:model-value="onChange($event, option)"
                         />
                         <Label class="font-normal py-1" :for="`${id}.${index}`">
                             {{ field.localized && typeof option.label === 'object' ? option.label?.[locale] : option.label }}

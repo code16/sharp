@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { CalendarGridHead, type CalendarGridHeadProps } from 'radix-vue'
+import { CalendarGridHead, type CalendarGridHeadProps } from 'reka-ui'
 
 const props = defineProps<CalendarGridHeadProps>()
 </script>

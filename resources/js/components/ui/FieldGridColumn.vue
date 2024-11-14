@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { LayoutFieldData } from "@/types";
-    import { Primitive, Slot } from "radix-vue";
+    import { Primitive, Slot } from "reka-ui";
 
     defineProps<{
         layout?: LayoutFieldData,

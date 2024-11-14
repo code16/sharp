@@ -14,9 +14,9 @@
         <div class="group/control flex items-center gap-x-3 h-10">
             <Checkbox
                 :id="fieldErrorKey"
-                :checked="!!value"
+                :model-value="!!value"
                 :disabled="field.readOnly"
-                @update:checked="emit('input', $event)"
+                @update:model-value="emit('input', $event)"
             />
             <Label class="py-1" :for="fieldErrorKey">
                 {{ field.text }}

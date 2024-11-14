@@ -97,6 +97,7 @@
     "nprogress": "^0.2.0",
     "qs": "^6.6.0",
     "radix-vue": "^1.9.9",
+    "reka-ui": "^1.0.0-alpha.4",
     "sortablejs": "^1.15.2",
     "tailwind-merge": "^2.2.2",
     "tailwindcss-animate": "^1.0.7",

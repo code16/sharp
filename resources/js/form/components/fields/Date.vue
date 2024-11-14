@@ -29,8 +29,8 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { CalendarIcon, Clock, X } from "lucide-vue-next";
 import FormFieldLayout from "@/form/components/FormFieldLayout.vue";
-import { CalendarRoot } from "radix-vue";
-import { createYear, createYearRange, toDate } from 'radix-vue/date'
+import { CalendarRoot } from "reka-ui";
+import { createYear, createYearRange, toDate } from 'reka-ui/date'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 

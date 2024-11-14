@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useForwardPropsEmits } from 'radix-vue'
-import type { DialogRootEmits, DialogRootProps } from 'radix-vue'
+import { useForwardPropsEmits } from 'reka-ui'
+import type { DialogRootEmits, DialogRootProps } from 'reka-ui'
 import Command from './Command.vue'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 

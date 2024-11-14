@@ -38,7 +38,7 @@
     } from "@/components/ui/dropdown-menu";
     import { Badge } from "@/components/ui/badge";
     import CommandDropdownItems from "@/commands/components/CommandDropdownItems.vue";
-    import { DropdownMenuPortal } from "radix-vue";
+    import { DropdownMenuPortal } from "reka-ui";
     import RootCard from "@/components/ui/RootCard.vue";
     import LocaleSelectTrigger from "@/components/LocaleSelectTrigger.vue";
 
@@ -144,8 +144,8 @@
                                 <DropdownMenuContent>
                                     <template v-for="stateValue in show.config.state.values" :key="stateValue.value">
                                         <DropdownMenuCheckboxItem
-                                            :checked="stateValue.value === show.instanceState"
-                                            @update:checked="(checked) => checked && onStateChange(stateValue.value)"
+                                            :model-value="stateValue.value === show.instanceState"
+                                            @update:model-value="(checked) => checked && onStateChange(stateValue.value)"
                                         >
                                             <StateIcon class="mr-1.5" :state-value="stateValue" />
                                             <span class="truncate">{{ stateValue.label }}</span>
@@ -172,8 +172,8 @@
                                                     <DropdownMenuSubContent>
                                                         <template v-for="stateValue in show.config.state.values" :key="stateValue.value">
                                                             <DropdownMenuCheckboxItem
-                                                                :checked="stateValue.value === show.instanceState"
-                                                                @update:checked="(checked) => checked && onStateChange(stateValue.value)"
+                                                                :model-value="stateValue.value === show.instanceState"
+                                                                @update:model-value="(checked) => checked && onStateChange(stateValue.value)"
                                                             >
                                                                 <StateIcon class="mr-1.5" :state-value="stateValue" />
                                                                 <span class="truncate">{{ stateValue.label }}</span>

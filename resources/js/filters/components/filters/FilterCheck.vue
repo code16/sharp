@@ -16,7 +16,7 @@
     <Button as="div" class="relative h-8 border-dashed" variant="outline" size="sm">
         <Label class="flex items-center gap-2">
             <span class="absolute inset-0"></span>
-            <Checkbox :checked="value" @update:checked="$emit('input', $event)" />
+            <Checkbox :model-value="value" @update:model-value="$emit('input', $event)" />
             {{ filter.label }}
         </Label>
     </Button>

@@ -24,7 +24,7 @@
     import { useParentForm } from "@/form/useParentForm";
     import { fuzzySearch } from "@/utils/search";
     import {  isCancel } from "axios";
-    import { ComboboxItemIndicator } from "radix-vue";
+    import { ComboboxItemIndicator } from "reka-ui";
 
     const props = defineProps<FormFieldProps<FormAutocompleteLocalFieldData | FormAutocompleteRemoteFieldData>>();
     const emit = defineEmits<FormFieldEmits<FormAutocompleteLocalFieldData | FormAutocompleteRemoteFieldData>>();
@@ -139,36 +139,40 @@
                 </PopoverTrigger>
             </template>
 
-            <PopoverContent :class="cn('p-0 w-[--radix-popover-trigger-width] min-w-[200px]')" align="start" :avoid-collisions="false">
+            <PopoverContent :class="cn('p-0 w-[--reka-popover-trigger-width] min-w-[200px]')" align="start" :avoid-collisions="false">
                 <Command
                     :modelValue="value?.[props.field.itemIdAttribute]"
-                    v-model:search-term="searchTerm"
-                    :display-value="() => searchTerm"
                     :reset-search-term-on-blur="false"
+                    ignore-filter
                     @update:model-value="onSelect($event as any)"
-                    @update:search-term="search($event)"
                 >
-                    <CommandInput :placeholder="props.value ? props.field.placeholder ?? __('sharp::form.autocomplete.placeholder') : null" />
+                    <CommandInput
+                        v-model="searchTerm"
+                        @update:model-value="search($event)"
+                        :display-value="() => searchTerm"
+                        :placeholder="props.value ? props.field.placeholder ?? __('sharp::form.autocomplete.placeholder') : null"
+                    />
                     <CommandList>
                         <template v-if="loading">
                             <div class="py-6 text-center text-sm">
                                 {{ __('sharp::form.autocomplete.loading') }}
                             </div>
                         </template>
+                        <template v-else-if="!results.length && props.field.mode === 'remote' && searchTerm.length < props.field.searchMinChars">
+                            <div class="py-6 text-center text-sm">
+                                {{ trans_choice('sharp::form.autocomplete.query_too_short', props.field.searchMinChars, { min_chars: props.field.searchMinChars }) }}
+                            </div>
+                        </template>
                         <template v-else>
                             <CommandEmpty>
-                                <template v-if="props.field.mode === 'remote' && searchTerm.length < props.field.searchMinChars">
-                                    {{ trans_choice('sharp::form.autocomplete.query_too_short', props.field.searchMinChars, { min_chars: props.field.searchMinChars }) }}
-                                </template>
-                                <template v-else>
-                                    {{ __('sharp::form.autocomplete.no_results_text') }}
-                                </template>
+                                {{ __('sharp::form.autocomplete.no_results_text') }}
                             </CommandEmpty>
                             <CommandGroup>
                                 <template v-for="item in results" :key="item[props.field.itemIdAttribute]">
                                     <CommandItem
                                         class="group/item"
                                         :value="item[props.field.itemIdAttribute]"
+
                                     >
                                         <div class="size-4 mr-2">
                                             <ComboboxItemIndicator as-child>

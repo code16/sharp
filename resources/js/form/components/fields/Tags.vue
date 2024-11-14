@@ -2,7 +2,7 @@
     import { FormFieldEmits, FormFieldProps } from "@/form/types";
     import { FormTagsFieldData } from "@/types";
     import { TagsInput, TagsInputInput, TagsInputItem, TagsInputItemText, TagsInputItemDelete } from "@/components/ui/tags-input";
-    import { ComboboxAnchor, ComboboxContent, ComboboxPortal, ComboboxRoot, ComboboxInput } from "radix-vue";
+    import { ComboboxAnchor, ComboboxContent, ComboboxPortal, ComboboxRoot, ComboboxInput } from "reka-ui";
     import { computed, ref } from "vue";
     import { __ } from "@/utils/i18n";
     import { CommandGroup, CommandItem, CommandList, CommandSeparator } from "@/components/ui/command";
@@ -57,7 +57,7 @@
             class="flex-1"
             :model-value="props.value"
             v-model:open="open"
-            v-model:search-term="searchTerm"
+            ignore-filter
         >
             <ComboboxAnchor>
                 <TagsInput
@@ -73,7 +73,7 @@
                         </TagsInputItem>
                     </template>
 
-                    <ComboboxInput :placeholder="props.field.placeholder ?? __('sharp::form.multiselect.placeholder')" as-child>
+                    <ComboboxInput v-model="searchTerm" :placeholder="props.field.placeholder ?? __('sharp::form.multiselect.placeholder')" as-child>
                         <TagsInputInput :id="id" :aria-describedby="ariaDescribedBy" class="flex-1 w-[10rem]" @keydown.enter.prevent ref="input" />
                     </ComboboxInput>
                 </TagsInput>
@@ -83,7 +83,7 @@
                     <CommandList
                         position="popper"
                         :avoid-collisions="false"
-                        class="z-50 w-[--radix-popper-anchor-width] rounded-md mt-2 border bg-popover text-popover-foreground shadow-md outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2"
+                        class="z-50 w-[--reka-popper-anchor-width] rounded-md mt-2 border bg-popover text-popover-foreground shadow-md outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2"
                     >
                         <template v-if="searchTerm.length > 0 && props.field.creatable">
                             <CommandGroup>
@@ -91,21 +91,24 @@
                                     {{ props.field.createText }} “{{ searchTerm }}”
                                 </CommandItem>
                             </CommandGroup>
-                            <CommandSeparator />
+                            <CommandSeparator class="last:hidden" />
                         </template>
-                        <CommandGroup>
-                            <template
-                                v-for="option in filteredOptions"
-                                :key="option.id"
-                            >
-                                <CommandItem
-                                    :value="option"
-                                    @select.prevent="onOptionClick(option)"
+
+                        <template v-if="filteredOptions.length">
+                            <CommandGroup>
+                                <template
+                                    v-for="option in filteredOptions"
+                                    :key="option.id"
                                 >
-                                    {{ option.label }}
-                                </CommandItem>
-                            </template>
-                        </CommandGroup>
+                                    <CommandItem
+                                        :value="option"
+                                        @select.prevent="onOptionClick(option)"
+                                    >
+                                        {{ option.label }}
+                                    </CommandItem>
+                                </template>
+                            </CommandGroup>
+                        </template>
                     </CommandList>
                 </ComboboxContent>
             </ComboboxPortal>

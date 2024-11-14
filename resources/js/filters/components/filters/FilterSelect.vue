@@ -88,10 +88,8 @@
                     </Button>
                 </template>
             </PopoverTrigger>
-            <PopoverContent :class="cn('p-0 w-auto min-w-[200px]', !inline ? 'w-[--radix-popover-trigger-width]' : '')" align="start">
-                <Command
-                    :filter-function="(list: SelectFilterData['values'], term) => list.filter(i => i.label.toLowerCase()?.includes(term))"
-                >
+            <PopoverContent :class="cn('p-0 w-auto min-w-[200px]', !inline ? 'w-[--reka-popover-trigger-width]' : '')" align="start">
+                <Command>
                     <template v-if="filter.searchable">
                         <CommandInput :placeholder="__('sharp::form.multiselect.placeholder')" />
                     </template>
@@ -107,7 +105,7 @@
                                         <Checkbox
                                             class="mr-2"
                                             :class="{ 'opacity-50': !isSelected(selectValue) }"
-                                            :checked="isSelected(selectValue)"
+                                            :model-value="isSelected(selectValue)"
                                         />
                                     </template>
                                     <template v-if="!filter.multiple">

@@ -43,7 +43,7 @@
                         <div v-html="updatedHtml"></div>
                     </template>
                 </TooltipTrigger>
-                <TooltipContent class="max-w-[--radix-tooltip-content-available-width] md:max-w-md" :side-offset="12" :collision-boundary="hoveringElementWithTitle">
+                <TooltipContent class="max-w-[--reka-tooltip-content-available-width] md:max-w-md" :side-offset="12" :collision-boundary="hoveringElementWithTitle">
                     {{ hoveringElementWithTitle?.dataset.title }}
                 </TooltipContent>
             </Tooltip>

@@ -7,7 +7,7 @@ import {
   AlertDialogOverlay,
   AlertDialogPortal,
   useForwardPropsEmits,
-} from 'radix-vue'
+} from 'reka-ui'
 import { cn } from '@/utils/cn'
     import { useOverlayPath } from "@/composables/use-overlay-path/useOverlayPath";
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { CollapsibleTrigger, type CollapsibleTriggerProps } from 'radix-vue'
+import { CollapsibleTrigger, type CollapsibleTriggerProps } from 'reka-ui'
 
 const props = defineProps<CollapsibleTriggerProps>()
 </script>

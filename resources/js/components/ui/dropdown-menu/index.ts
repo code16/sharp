@@ -1,4 +1,4 @@
-export { DropdownMenuPortal } from 'radix-vue'
+export { DropdownMenuPortal } from 'reka-ui'
 
 export { default as DropdownMenu } from './DropdownMenu.vue'
 export { default as DropdownMenuTrigger } from './DropdownMenuTrigger.vue'
