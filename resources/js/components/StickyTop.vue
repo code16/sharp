@@ -15,7 +15,7 @@
         return el.value
             && style.position === 'sticky'
             && selfRect.bottom >= 0
-            && selfRect.top <= parseInt(style.top) + 1;
+            && selfRect.top <= parseFloat(style.top);
     });
     watch(stuck, () => {
         emit('update:stuck', stuck.value);

@@ -26,6 +26,19 @@ it('allows to format a text value to front', function () {
     );
 });
 
+it('allows to format a text value to front as object when localized', function () {
+    $formatter = new EditorFormatter();
+    $field = SharpFormEditorField::make('md')->setLocalized();
+    $value = Str::random()."\n\n".Str::random();
+    
+    expect($formatter->setDataLocalizations(['fr', 'en'])->toFront($field, $value))->toEqual([
+        'text' => [
+            'fr' => null,
+            'en' => $value,
+        ],
+    ]);
+});
+
 it('allows to format a text value from front', function () {
     $value = Str::random();
 

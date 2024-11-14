@@ -19,8 +19,6 @@
     import { cn } from "@/utils/cn";
     import { Label } from "@/components/ui/label";
     import { ref } from "vue";
-    import { SelectTrigger } from "@/components/ui/select";
-    import { PopoverAnchor } from "radix-vue";
     import FilterSelectValue from "@/filters/components/filters/FilterSelectValue.vue";
 
     const props = defineProps<{

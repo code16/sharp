@@ -1,87 +1,92 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
     import { Editor } from "@tiptap/vue-3";
-    import { Dropdown, DropdownItem, DropdownSeparator } from "@/components/ui";
+    import { FormFieldProps } from "@/form/types";
+    import { FormEditorFieldData } from "@/types";
+    import {
+        DropdownMenu,
+        DropdownMenuContent,
+        DropdownMenuItem, DropdownMenuSeparator,
+        DropdownMenuTrigger
+    } from "@/components/ui/dropdown-menu";
+    import { Toggle } from "@/components/ui/toggle";
+    import { TableIcon } from "lucide-vue-next";
 
-    defineProps<{
+    const props = defineProps<FormFieldProps<FormEditorFieldData> & {
         editor: Editor,
-        active: boolean,
-        disabled: boolean,
     }>()
 </script>
 
 <template>
-    <Dropdown
-        class="editor__dropdown editor__dropdown--table"
-        variant="light"
-        :active="active"
-        :disabled="disabled"
-        v-bind="$attrs"
-        ref="dropdown"
-    >
-        <template v-slot:text>
-            <slot />
-        </template>
-
-        <template v-slot:default>
-            <DropdownItem
-                :disabled="editor.isActive('table')"
-                @click="editor.chain().focus().insertTable().run()"
+    <DropdownMenu :modal="false">
+        <DropdownMenuTrigger as-child>
+            <Toggle
+                :pressed="props.editor.isActive('table')"
+                :disabled="props.field.readOnly"
+                :title="__('sharp::form.editor.toolbar.table.title')"
+            >
+                <TableIcon class="size-4" />
+            </Toggle>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+            <DropdownMenuItem
+                :disabled="props.editor.isActive('table')"
+                @click="props.editor.chain().focus().insertTable().run()"
             >
                 {{ __('sharp::form.editor.dropdown.table.insert_table') }}
-            </DropdownItem>
-            <DropdownSeparator />
-            <DropdownItem
-                :disabled="!editor.can().toggleHeaderCell()"
-                @click="editor.chain().focus().toggleHeaderCell().run()"
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+                :disabled="!props.editor.can().toggleHeaderCell()"
+                @click="props.editor.chain().focus().toggleHeaderCell().run()"
             >
                 {{ __('sharp::form.editor.dropdown.table.toggle_header_cell') }}
-            </DropdownItem>
-            <DropdownSeparator />
-            <DropdownItem
-                :disabled="!editor.can().addRowBefore()"
-                @click="editor.chain().focus().addRowBefore().run()"
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+                :disabled="!props.editor.can().addRowBefore()"
+                @click="props.editor.chain().focus().addRowBefore().run()"
             >
                 {{ __('sharp::form.editor.dropdown.table.insert_row_above') }}
-            </DropdownItem>
-            <DropdownItem
-                :disabled="!editor.can().addRowAfter()"
-                @click="editor.chain().focus().addRowAfter().run()"
+            </DropdownMenuItem>
+            <DropdownMenuItem
+                :disabled="!props.editor.can().addRowAfter()"
+                @click="props.editor.chain().focus().addRowAfter().run()"
             >
                 {{ __('sharp::form.editor.dropdown.table.insert_row_below') }}
-            </DropdownItem>
-            <DropdownItem
-                :disabled="!editor.can().deleteRow()"
-                @click="editor.chain().focus().deleteRow().run()"
+            </DropdownMenuItem>
+            <DropdownMenuItem
+                :disabled="!props.editor.can().deleteRow()"
+                @click="props.editor.chain().focus().deleteRow().run()"
             >
                 {{ __('sharp::form.editor.dropdown.table.remove_row') }}
-            </DropdownItem>
-            <DropdownSeparator />
-            <DropdownItem
-                :disabled="!editor.can().addColumnBefore()"
-                @click="editor.chain().focus().addColumnBefore().run()"
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+                :disabled="!props.editor.can().addColumnBefore()"
+                @click="props.editor.chain().focus().addColumnBefore().run()"
             >
                 {{ __('sharp::form.editor.dropdown.table.insert_col_left') }}
-            </DropdownItem>
-            <DropdownItem
-                :disabled="!editor.can().addColumnAfter()"
-                @click="editor.chain().focus().addColumnAfter().run()"
+            </DropdownMenuItem>
+            <DropdownMenuItem
+                :disabled="!props.editor.can().addColumnAfter()"
+                @click="props.editor.chain().focus().addColumnAfter().run()"
             >
                 {{ __('sharp::form.editor.dropdown.table.insert_col_right') }}
-            </DropdownItem>
-            <DropdownItem
-                :disabled="!editor.can().deleteColumn()"
-                @click="editor.chain().focus().deleteColumn().run()"
+            </DropdownMenuItem>
+            <DropdownMenuItem
+                :disabled="!props.editor.can().deleteColumn()"
+                @click="props.editor.chain().focus().deleteColumn().run()"
             >
                 {{ __('sharp::form.editor.dropdown.table.remove_col') }}
-            </DropdownItem>
-            <DropdownSeparator />
-            <DropdownItem
-                :disabled="!editor.can().deleteTable()"
-                @click="editor.chain().focus().deleteTable().run()"
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+                :disabled="!props.editor.can().deleteTable()"
+                @click="props.editor.chain().focus().deleteTable().run()"
             >
                 {{ __('sharp::form.editor.dropdown.table.remove_table') }}
-            </DropdownItem>
-        </template>
-    </Dropdown>
+            </DropdownMenuItem>
+        </DropdownMenuContent>
+    </DropdownMenu>
 </template>

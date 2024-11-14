@@ -14,7 +14,7 @@ class EditorFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
     public function toFront(SharpFormField $field, $value)
     {
         return collect([
-            'text' => $value,
+            'text' => $this->maybeLocalized($field, $value),
         ])
             ->pipeThrough([
                 fn (Collection $collection) => $collection->merge(

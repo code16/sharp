@@ -50,11 +50,11 @@ const calendarDateValue = computed(() => {
     return null;
 });
 
-const placeholder = ref();
+const calendarViewingDate = ref<CalendarDate>();
 
 watch(open, () => {
     if(open.value) {
-        placeholder.value = calendarDateValue.value ?? today(getLocalTimeZone());
+        calendarViewingDate.value = calendarDateValue.value ?? today(getLocalTimeZone());
     }
 });
 
@@ -209,7 +209,7 @@ function onMinuteChange(minute: string) {
                 <CalendarRoot
                     v-slot="{ date, grid, weekDays }"
                     :model-value="calendarDateValue"
-                    v-model:placeholder="placeholder"
+                    v-model:placeholder="calendarViewingDate"
                     :locale="dateLocale"
                     :week-starts-on="props.field.mondayFirst ? 0 : 1"
                     @update:model-value="onCalendarDateChange"
@@ -220,7 +220,7 @@ function onMinuteChange(minute: string) {
                         <CalendarHeading class="flex w-full items-center gap-2">
                             <Select
                                 :model-value="date.month.toString()"
-                                @update:model-value="(month) => { placeholder = placeholder.set({ month: Number(month) }) }"
+                                @update:model-value="(month) => { calendarViewingDate = calendarViewingDate.set({ month: Number(month) }) }"
                             >
                                 <SelectTrigger class="flex-1 w-auto h-7 text-left gap-1 px-2 py-1" aria-label="Select month">
                                     <SelectValue class="capitalize min-w-20" />
@@ -239,7 +239,7 @@ function onMinuteChange(minute: string) {
 
                             <Select
                                 :model-value="date.year.toString()"
-                                @update:model-value="(year) => { placeholder = placeholder.set({ year: Number(year) }) }"
+                                @update:model-value="(year) => { calendarViewingDate = calendarViewingDate.set({ year: Number(year) }) }"
                             >
                                 <SelectTrigger class="w-auto h-7 gap-1 text-left px-2 py-1" aria-label="Select year">
                                     <SelectValue />
@@ -297,8 +297,8 @@ function onMinuteChange(minute: string) {
             <template v-if="props.field.hasTime">
                 <div class="flex p-1" :class="props.field.hasDate ? 'max-h-[330px]' : 'max-h-[250px]'">
                     <Command class="w-auto rounded-none" :model-value="hourValue" @update:model-value="onHourChange">
-                        <CommandList class="max-h-none scroll-py-1">
-                            <CommandGroup class="w-14 p-0 rounded-sm">
+                        <CommandList class="max-h-none pr-1">
+                            <CommandGroup class="w-12 p-0 rounded-sm">
                                 <template v-for="hour in hours">
                                     <CommandItem
                                         class="data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
@@ -312,8 +312,8 @@ function onMinuteChange(minute: string) {
                         </CommandList>
                     </Command>
                     <Command class="ml-1 w-auto rounded-none" :model-value="minuteValue" @update:model-value="onMinuteChange">
-                        <CommandList class="max-h-none scroll-py-1">
-                            <CommandGroup class="w-14 p-0">
+                        <CommandList class="max-h-none">
+                            <CommandGroup class="w-12 p-0">
                                 <template v-for="minute in minutes">
                                     <CommandItem
                                         class="data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"

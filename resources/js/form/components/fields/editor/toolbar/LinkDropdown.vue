@@ -8,14 +8,13 @@
     import { Label } from "@/components/ui/label";
     import { Toggle } from "@/components/ui/toggle";
     import { LinkIcon } from "lucide-vue-next";
-    import { Popover, PopoverTrigger } from "@/components/ui/popover";
+    import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+    import { useId } from "@/composables/useId";
+    import { FormFieldProps } from "@/form/types";
+    import { FormEditorFieldData } from "@/types";
 
-    const props = defineProps<{
-        id: string,
+    const props = defineProps<FormFieldProps<FormEditorFieldData> & {
         editor: Editor,
-        active: boolean,
-        disabled: boolean,
-        title: string,
     }>();
 
     const open = ref(false);
@@ -26,6 +25,7 @@
     const selection = ref<Selection>(null);
     const input = ref<InstanceType<typeof Input>>();
 
+    const id = useId('link-dropdown');
 
     function onShow() {
         selection.value = props.editor.state.selection
@@ -33,8 +33,8 @@
         inserted.value = false;
         hasSelectedText.value = !selection.value.empty;
 
-        if(this.active) {
-            const attrs = this.editor.getAttributes('link');
+        if(props.editor.isActive('link')) {
+            const attrs = props.editor.getAttributes('link');
             href.value = attrs?.href;
             inserted.value = true;
         }
@@ -50,39 +50,38 @@
 
     function onHide() {
         if(!inserted.value && hasSelectedText.value) {
-            const { from, to } = props.editor.state.selection;
-            this.editor.chain()
-                .setTextSelection(selection.value.from, selection.value.to)
+            props.editor.chain()
+                .setTextSelection({ from: selection.value.from, to: selection.value.to })
                 .unsetLink()
-                .setTextSelection(from, to)
+                .setTextSelection(props.editor.state.selection)
                 .run();
         }
     }
 
-    function onSubmit({ editor } = props) {
+    function onSubmit() {
         if(!href.value) {
             open.value = false;
             props.editor.commands.focus();
             return;
         }
 
-        const selection = editor.state.tr.selection;
+        const selection = props.editor.state.tr.selection;
 
-        if(editor.isActive('link')) {
-            editor.chain()
+        if(props.editor.isActive('link')) {
+            props.editor.chain()
                 .focus()
                 .extendMarkRange('link')
-                .setLink({ href })
+                .setLink({ href: href.value })
                 .run();
 
         } else if(selection.empty) {
-            editor.chain()
+            props.editor.chain()
                 .focus()
                 .insertContent(`<a href="${href}">${label || href}</a>`)
                 .run();
 
         } else {
-            editor.chain().focus().setLink({ href }).run();
+            props.editor.chain().focus().setLink({ href: href.value }).run();
         }
 
         inserted.value = true;
@@ -98,17 +97,22 @@
     <Popover
         v-model:open="open"
         @update:open="$event ? onShow() : onHide()"
+        :modal="false"
     >
         <PopoverTrigger as-child>
-            <Toggle :pressed="active">
-                <LinkIcon class="w-4 h-4" />
+            <Toggle
+                :pressed="props.editor.isActive('link')"
+                :disabled="props.field.readOnly"
+                :title="__('sharp::form.editor.toolbar.link.title')"
+            >
+                <LinkIcon class="size-4" />
             </Toggle>
         </PopoverTrigger>
 
-        <template>
+        <PopoverContent>
             <form @submit.prevent="onSubmit()">
-                <template v-if="!active && !hasSelectedText">
-                    <div class="grid grid-cols-1 gap-3">
+                <template v-if="!props.editor.isActive('link') && !hasSelectedText">
+                    <div class="mb-4 grid grid-cols-1 gap-3">
                         <Label :for="`${id}-link-label`">
                             {{ __('sharp::form.editor.dialogs.link.text_label') }}
                         </Label>
@@ -116,14 +120,14 @@
                     </div>
                 </template>
 
-                <div class="mb-3">
+                <div class="mb-4 grid grid-cols-1 gap-3">
                     <Label :for="`${id}-href`">
                         {{ __('sharp::form.editor.dialogs.link.url_label') }}
                     </Label>
                     <Input :id="`${id}-href`" v-model="href" placeholder="https://example.org" autocomplete="off" ref="input" />
                 </div>
 
-                <div class="mt-3">
+                <div class="mt-4">
                     <div class="row g-2 flex-sm-nowrap">
                         <div class="col-auto">
                             <Button type="submit" size="sm">
@@ -142,7 +146,7 @@
                                 </Button>
                             </template>
                             <template v-else>
-                                <Button type="button" variant="outline" size="sm" @click="open = false; editor.commands.focus()">
+                                <Button type="button" variant="outline" size="sm" @click="open = false; props.editor.commands.focus()">
                                     {{ __('sharp::modals.cancel_button') }}
                                 </Button>
                             </template>
@@ -150,6 +154,6 @@
                     </div>
                 </div>
             </form>
-        </template>
+        </PopoverContent>
     </Popover>
 </template>

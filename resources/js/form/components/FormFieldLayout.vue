@@ -2,13 +2,13 @@
     import { computed, onUpdated, ref } from "vue";
     import { FormFieldProps } from "@/form/types";
     import { useParentForm } from "@/form/useParentForm";
-    import { useId } from "radix-vue";
     import { __ } from "@/utils/i18n";
     import { Label } from "@/components/ui/label";
     import { cn } from "@/utils/cn";
     import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
     import StickyTop from "@/components/StickyTop.vue";
     import { FormFieldData } from "@/types";
+    import { useId } from "@/composables/useId";
 
     const props = defineProps<FormFieldProps<FormFieldData, any> & {
         class?: string,
@@ -20,7 +20,7 @@
         (e: 'locale-change', locale: string)
     }>();
     const form = useParentForm();
-    const id = useId(null, `form-field_${props.fieldErrorKey}`);
+    const id = useId(`form-field_${props.fieldErrorKey}`);
     const ariaDescribedBy = computed(() => [
             props.field.helpMessage && `${id}-help-message`,
             form.fieldHasError(props.field, props.fieldErrorKey) && `${id}-error`,

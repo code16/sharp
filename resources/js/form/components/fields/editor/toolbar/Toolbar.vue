@@ -14,6 +14,14 @@
     import Icon from "@/components/ui/Icon.vue";
     import { Toggle } from "@/components/ui/toggle";
     import { ToggleGroup } from "@/components/ui/toggle-group";
+    import {
+        DropdownMenu,
+        DropdownMenuContent,
+        DropdownMenuItem,
+        DropdownMenuTrigger
+    } from "@/components/ui/dropdown-menu";
+    import { Button } from "@/components/ui/button";
+    import { Separator } from "@/components/ui/separator";
 
     const props = defineProps<FormFieldProps<FormEditorFieldData> & {
         editor: Editor,
@@ -31,39 +39,24 @@
 </script>
 
 <template>
-    <div class="flex gap-2 flex-wrap">
+    <div class="flex gap-x-1.5 gap-y-0 flex-wrap">
         <template v-for="group in toolbarGroups">
-            <div class="flex flex-wrap gap-1">
+            <div class="flex flex-wrap gap-0">
                 <template v-for="button in group">
                     <template v-if="button === 'link'">
-                        <LinkDropdown
-                            :id="fieldErrorKey"
-                            :active="buttons[button].isActive(editor)"
-                            :title="buttons[button].label()"
-                            :editor="editor"
-                            :disabled="field.readOnly"
-                        >
-                            <i :class="buttons[button].icon" data-test="link"></i>
-                        </LinkDropdown>
+                        <LinkDropdown v-bind="props" />
                     </template>
                     <template v-else-if="button === 'table'">
-                        <TableDropdown
-                            :active="buttons[button].isActive(editor)"
-                            :disabled="field.readOnly"
-                            :editor="editor"
-                        >
-                            <i :class="buttons[button].icon" data-test="table"></i>
-                        </TableDropdown>
+                        <TableDropdown v-bind="props" />
                     </template>
                     <template v-else-if="button.startsWith('embed:')">
                         <Toggle
-                            :pressed="editor.isActive(button)"
-                            :disabled="field.readOnly"
-                            :title="field.embeds[button.replace('embed:', '')]?.label"
-                            @click="$emit('embed', field.embeds[button.replace('embed:', '')])"
-                            :data-test="button"
+                            :pressed="props.editor.isActive(button)"
+                            :disabled="props.field.readOnly"
+                            :title="props.field.embeds[button.replace('embed:', '')]?.label"
+                            @click="$emit('embed', props.field.embeds[button.replace('embed:', '')])"
                         >
-                            <Icon :icon="field.embeds[button.replace('embed:', '')].icon" class="w-4 h-4" />
+                            <Icon :icon="field.embeds[button.replace('embed:', '')]?.icon" class="size-4" />
                         </Toggle>
                     </template>
                     <template v-else :key="button">
@@ -76,37 +69,28 @@
                                 : buttons[button].command(editor)"
                             :data-test="button"
                         >
-                            <i :class="buttons[button].icon"></i>
-                            <template v-if="button === 'small'">
-                                <i class="fas fa-font fa-xs" style="margin-top: .25em"></i>
-                            </template>
+                            <component :is="buttons[button].icon" class="size-4" />
                         </Toggle>
                     </template>
                 </template>
             </div>
+            <Separator orientation="vertical" class="h-4 self-center last:hidden" />
         </template>
         <template v-if="Object.values(props.field.embeds ?? {}).length > 0">
-            <div class="btn-group">
-                <Dropdown
-                    class="editor__dropdown"
-                    variant="light"
-                    small
-                    v-bind="$attrs"
-                    ref="dropdown"
-                >
-                    <template v-slot:text>
+            <DropdownMenu :modal="false">
+                <DropdownMenuTrigger as-child>
+                    <Button class="px-3" variant="ghost">
                         {{ __('sharp::form.editor.dropdown.embeds') }}
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                    <template v-for="embed in props.field.embeds">
+                        <DropdownMenuItem @click="$emit('embed', embed)">
+                            {{ embed.label }}
+                        </DropdownMenuItem>
                     </template>
-
-                    <template v-slot:default>
-                        <template v-for="embed in props.field.embeds">
-                            <DropdownItem @click="$emit('embed', embed)">
-                                {{ embed.label }}
-                            </DropdownItem>
-                        </template>
-                    </template>
-                </Dropdown>
-            </div>
+                </DropdownMenuContent>
+            </DropdownMenu>
         </template>
     </div>
 </template>

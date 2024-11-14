@@ -237,8 +237,9 @@
                 <UseElementBounding class="sticky z-30 -bottom-2 lg:-bottom-0 pointer-events-none" v-slot="{ bottom }">
                     <CardFooter class="justify-end px-0">
                         <div class="relative pointer-events-auto">
-                            <div class="bg-card absolute -inset-4 -bottom-6 lg:-inset-6 transition rounded-tl-lg border border-b-0 border-r-0 rounded-br-lg -z-10"
-                                :class="bottom >= window.innerHeight ? '' : 'border-transparent'"></div>
+                            <div class="absolute -inset-4 -bottom-6 lg:-inset-6 transition-[border-color] border-transparent border-l border-t rounded-tl-lg rounded-br-lg -z-10 data-[stuck]:bg-card data-[stuck]:border-border"
+                                :data-stuck="bottom >= window.innerHeight ? true : null"
+                            ></div>
                             <slot name="footer" />
                         </div>
                     </CardFooter>

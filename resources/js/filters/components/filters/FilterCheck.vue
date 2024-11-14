@@ -3,7 +3,6 @@
     import { Button } from "@/components/ui/button";
     import { Checkbox } from "@/components/ui/checkbox";
     import { Label } from "@/components/ui/label";
-    import { useId } from "radix-vue";
 
     const props = defineProps<{
         value: CheckFilterData['value'],
@@ -11,8 +10,6 @@
         disabled?: boolean,
     }>();
     defineEmits(['input']);
-
-    const id = useId(null, `filter-${props.filter.key}`);
 </script>
 
 <template>

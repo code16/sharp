@@ -1,12 +1,11 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
-    import { vSticky } from "@/directives/sticky";
     import { FormEditorFieldData } from "@/types";
     import { provide, ref, useTemplateRef, watch } from "vue";
     import { Editor } from "@tiptap/vue-3";
     import debounce from 'lodash/debounce';
     import { EditorContent } from '@tiptap/vue-3';
-    import MenuBar from "./toolbar/MenuBar.vue";
+    import Toolbar from "./toolbar/Toolbar.vue";
     import { normalizeText } from "@/form/util/text";
     import { useLocalizedEditor } from "@/form/components/fields/editor/useLocalizedEditor";
     import { Markdown } from "tiptap-markdown";
@@ -27,6 +26,7 @@
     import FormFieldLayout from "@/form/components/FormFieldLayout.vue";
     import EditorAttributes from "@/form/components/fields/editor/EditorAttributes.vue";
     import { cn } from "@/utils/cn";
+    import StickyTop from "@/components/StickyTop.vue";
 
     const emit = defineEmits(['input']);
     const props = defineProps<
@@ -117,10 +117,10 @@
                     : normalizeText(trimHTML(editor.getHTML(), { inline: props.field.inline }));
 
                 const value = Serializable.wrap(content, content => {
-                    if(props.field.localized && typeof (props.value.text ?? {}) === 'object') {
+                    if(props.field.localized && typeof props.value.text === 'object') {
                         return {
                             ...props.value,
-                            text: { ...props.value.text, [locale]: content }
+                            text: { ...props.value.text, [locale]: content },
                         }
                     }
                     return { ...props.value, text: content };
@@ -156,14 +156,16 @@
             }"
         >
             <template v-if="editor && field.toolbar">
-                <div class="card-header editor__header" ref="header">
-                    <MenuBar
-                        :editor="editor"
-                        v-bind="$props"
-                        @upload="uploadModal.open()"
-                        @embed="(embed) => embedModal.open({ embed })"
-                    />
-                </div>
+                <StickyTop class="sticky top-[--top-bar-height] data-[stuck]:border-b data-[stuck]:z-10 bg-background">
+                    <div ref="header">
+                        <Toolbar
+                            :editor="editor"
+                            v-bind="props"
+                            @upload="uploadModal.open()"
+                            @embed="(embed) => embedModal.open({ embed })"
+                        />
+                    </div>
+                </StickyTop>
             </template>
 
             <EditorAttributes

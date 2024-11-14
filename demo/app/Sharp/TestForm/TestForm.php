@@ -332,9 +332,6 @@ class TestForm extends SharpSingleForm
                 'datetime' => fake()->date('Y-m-d H:i:s'),
                 'date' => fake()->date('Y-m-d'),
                 'time' => fake()->date('H:i:s'),
-                'html' => [
-                    'name' => fake()->name,
-                ],
                 'markdown' => [
                     'fr' => "Du **texte** avec *style* \n\n",
                     'en' => 'Some **text** with *style*',
@@ -353,6 +350,9 @@ class TestForm extends SharpSingleForm
 
         return $this
             ->setCustomTransformer('upload', (new SharpUploadModelFormAttributeTransformer())->dynamicInstance())
+            ->setCustomTransformer('html', fn () => [
+                'name' => fake()->name,
+            ])
             ->transform($rawData);
     }
 
