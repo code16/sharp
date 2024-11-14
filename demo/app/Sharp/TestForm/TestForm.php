@@ -48,8 +48,8 @@ class TestForm extends SharpSingleForm
                     ->setLabel('Autocomplete remote')
                     ->setRemoteSearchAttribute('query')
                     ->setListItemTemplate('{{ $name }}')
-                    ->setResultItemTemplate('{{ $name }} ({{ $num }})')
-                    ->setRemoteEndpoint('/api/admin/users'),
+                    ->setResultItemTemplate('{{ $name }} ({{ $id }})')
+                    ->setRemoteEndpoint(route('sharp.autocompletes.users.index')),
             )
             ->addField(
                 SharpFormAutocompleteListField::make('autocomplete_list')
@@ -61,8 +61,8 @@ class TestForm extends SharpSingleForm
                             ->setLabel('Passenger')
                             ->setPlaceholder('test')
                             ->setListItemTemplate('{{ $name }}')
-                            ->setResultItemTemplate('{{ $name }} ({{ $num }})')
-                            ->setRemoteEndpoint(url('/passengers')),
+                            ->setResultItemTemplate('{{ $name }} ({{ $id }})')
+                            ->setRemoteEndpoint(route('sharp.autocompletes.users.index')),
                     ),
             )
             ->addField(

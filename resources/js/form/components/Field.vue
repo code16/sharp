@@ -74,7 +74,7 @@
     <template v-if="isCustomField(field.type) ? resolveCustomField(field.type) : components[field.type]">
         <component
             :is="isCustomField(field.type) ? resolveCustomField(field.type) : components[field.type]"
-            v-bind="$props"
+            v-bind="props"
             :has-error="form.fieldHasError(field, fieldErrorKey, locale)"
             @error="onError"
             @clear="onClear"

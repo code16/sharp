@@ -50,6 +50,6 @@
         </template>
     </template>
     <template v-else>
-        <DropdownSelect v-bind="{ ...$props, ...$attrs }" @input="onInput" />
+        <DropdownSelect v-bind="props" @input="onInput" />
     </template>
 </template>

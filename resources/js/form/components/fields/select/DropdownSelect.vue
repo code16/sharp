@@ -29,6 +29,7 @@
     }
 
     function onChange(checked: boolean, option: typeof props.field.options[0]) {
+        console.log(option);
         if(props.field.multiple) {
             const value = props.field.options
                 .filter(o => o.id === option.id ? checked : (props.value as Array<string | number>)?.some(val => isSelected(o, val)))
@@ -38,6 +39,7 @@
             if(isSelected(option, props.value) && props.field.clearable) {
                 emit('input', null);
             } else {
+                console.log(option.id);
                 emit('input', option.id);
             }
         }
@@ -83,7 +85,7 @@
                 <template v-for="option in field.options" :key="option.id">
                     <DropdownMenuCheckboxItem
                         :model-value="Array.isArray(value) ? value.some(val => isSelected(option, val)) : isSelected(option, value)"
-                        @update:movel-value="onChange($event, option)"
+                        @update:model-value="onChange($event, option)"
                         @select="field.multiple && $event.preventDefault()"
                     >
                         {{ field.localized && typeof option.label === 'object' ? option.label?.[locale] : option.label }}

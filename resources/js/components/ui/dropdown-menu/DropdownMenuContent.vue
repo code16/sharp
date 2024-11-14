@@ -14,6 +14,7 @@ const props = withDefaults(
   defineProps<DropdownMenuContentProps & { class?: HTMLAttributes['class'] }>(),
   {
     sideOffset: 4,
+    positionStrategy: 'absolute',
   },
 )
 const emits = defineEmits<DropdownMenuContentEmits>()

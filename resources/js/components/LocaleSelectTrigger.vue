@@ -6,6 +6,6 @@
 <template>
     <SelectTrigger class="w-auto h-8 gap-2">
         <Languages class="w-4 h-4" />
-        <SelectValue placeholder="-" />
+        <SelectValue class="uppercase text-xs" placeholder="-" />
     </SelectTrigger>
 </template>

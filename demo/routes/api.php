@@ -16,4 +16,4 @@ Route::get('/admin/users', function (Request $request) {
     }
 
     return $users->limit(10)->get();
-});
+})->name('sharp.autocompletes.users.index');

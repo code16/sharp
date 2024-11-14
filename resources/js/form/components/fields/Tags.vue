@@ -74,43 +74,42 @@
                     </template>
 
                     <ComboboxInput v-model="searchTerm" :placeholder="props.field.placeholder ?? __('sharp::form.multiselect.placeholder')" as-child>
-                        <TagsInputInput :id="id" :aria-describedby="ariaDescribedBy" class="flex-1 w-[10rem]" @keydown.enter.prevent ref="input" />
+                        <TagsInputInput :id="id" :aria-describedby="ariaDescribedBy" class="flex-1 w-[10rem]" autocomplete="off" @keydown.enter.prevent ref="input" />
                     </ComboboxInput>
                 </TagsInput>
             </ComboboxAnchor>
             <ComboboxPortal>
-                <ComboboxContent>
-                    <CommandList
-                        position="popper"
-                        :avoid-collisions="false"
-                        class="z-50 w-[--reka-popper-anchor-width] rounded-md mt-2 border bg-popover text-popover-foreground shadow-md outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2"
-                    >
-                        <template v-if="searchTerm.length > 0 && props.field.creatable">
-                            <CommandGroup>
-                                <CommandItem :value="{ id: null, label: searchTerm }" @select.prevent="onCreateClick()" :key="searchTerm">
-                                    {{ props.field.createText }} “{{ searchTerm }}”
-                                </CommandItem>
-                            </CommandGroup>
-                            <CommandSeparator class="last:hidden" />
-                        </template>
+                <CommandList
+                    position="popper"
+                    position-strategy="absolute"
+                    :avoid-collisions="false"
+                    class="z-50 w-[--reka-popper-anchor-width] rounded-md mt-2 border bg-popover text-popover-foreground shadow-md outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2"
+                >
+                    <template v-if="searchTerm.length > 0 && props.field.creatable">
+                        <CommandGroup>
+                            <CommandItem :value="{ id: null, label: searchTerm }" @select.prevent="onCreateClick()" :key="searchTerm">
+                                {{ props.field.createText }} “{{ searchTerm }}”
+                            </CommandItem>
+                        </CommandGroup>
+                        <CommandSeparator class="last:hidden" />
+                    </template>
 
-                        <template v-if="filteredOptions.length">
-                            <CommandGroup>
-                                <template
-                                    v-for="option in filteredOptions"
-                                    :key="option.id"
+                    <template v-if="filteredOptions.length">
+                        <CommandGroup>
+                            <template
+                                v-for="option in filteredOptions"
+                                :key="option.id"
+                            >
+                                <CommandItem
+                                    :value="option"
+                                    @select.prevent="onOptionClick(option)"
                                 >
-                                    <CommandItem
-                                        :value="option"
-                                        @select.prevent="onOptionClick(option)"
-                                    >
-                                        {{ option.label }}
-                                    </CommandItem>
-                                </template>
-                            </CommandGroup>
-                        </template>
-                    </CommandList>
-                </ComboboxContent>
+                                    {{ option.label }}
+                                </CommandItem>
+                            </template>
+                        </CommandGroup>
+                    </template>
+                </CommandList>
             </ComboboxPortal>
         </ComboboxRoot>
     </FormFieldLayout>

@@ -2,7 +2,7 @@ import {
     FormAutocompleteDynamicLocalValuesData,
     FormAutocompleteLocalFieldData,
     FormDynamicOptionsData,
-    FormFieldData,
+    FormFieldData, FormListFieldData,
     FormSelectFieldData,
     LayoutFieldData
 } from "@/types";
@@ -23,6 +23,7 @@ export type WithDynamicAttributesApplied<Data extends FormFieldData> =
 
 export type FormFieldProps<Data extends FormFieldData = FormFieldData & { value: any }, Value = Data['value']> = {
     field: WithDynamicAttributesApplied<Data>,
+    parentField?: FormListFieldData
     fieldLayout?: LayoutFieldData,
     fieldErrorKey?: string,
     hasError?: boolean,

@@ -57,7 +57,7 @@
                     results.value = await api.post(
                         route('code16.sharp.api.form.autocomplete.index', {
                             entityKey: form.entityKey,
-                            autocompleteFieldKey: field.key,
+                            autocompleteFieldKey: props.parentField ? `${props.parentField.key}.${field.key}` : field.key,
                             embedKey: form.embedKey,
                             endpoint: field.remoteEndpoint,
                             search: query,
@@ -172,7 +172,6 @@
                                     <CommandItem
                                         class="group/item"
                                         :value="item[props.field.itemIdAttribute]"
-
                                     >
                                         <div class="size-4 mr-2">
                                             <ComboboxItemIndicator as-child>
