@@ -227,6 +227,7 @@ it('returns list config', function () {
         'deleteHidden' => false,
         'deleteConfirmationText' => trans('sharp::show.delete_confirmation_text'),
         'filters' => null,
+        'createButtonLabel' => null,
     ]);
 });
 
@@ -293,4 +294,18 @@ it('allows to configure a reorder handler', function () {
 
     expect($list->listConfig()['reorderable'])->toBeTrue()
         ->and($list->reorderHandler())->toBeInstanceOf(ReorderHandler::class);
+});
+
+it('allows to configure a create button label', function () {
+    $list = new class() extends FakeSharpEntityList
+    {
+        public function buildListConfig(): void
+        {
+            $this->configureCreateButtonLabel('New post...');
+        }
+    };
+    
+    $list->buildListConfig();
+    
+    expect($list->listConfig()['createButtonLabel'])->toEqual('New post...');
 });

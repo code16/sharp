@@ -15,6 +15,7 @@ final class ShowConfigData extends Data
         public ?string $multiformAttribute = null,
         public ?string $titleAttribute = null,
         public ?string $breadcrumbAttribute = null,
+        public ?string $editButtonLabel = null,
         public ?EntityStateData $state = null,
     ) {}
 

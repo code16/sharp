@@ -60,6 +60,7 @@ class PostList extends SharpEntityList
     public function buildListConfig(): void
     {
         $this
+            ->configureCreateButtonLabel('New post...')
             ->configureEntityState('state', PostStateHandler::class)
             ->configureDefaultSort('published_at', 'desc')
             ->configureDelete(confirmationText: 'Are you sure you want to delete this post (this will permanently delete its data)?')

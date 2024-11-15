@@ -201,6 +201,8 @@ Here is the full list of available methods:
 
 - `configureDelete(bool $hide = false, ?string $onfirmationText = null)`: the first argument is to show / hide the delete command on each instance (shown by default); this is only useful to hide the link if you want to only display the delete action in the Show Page (if you have defined one), this is NOT to be used for authorization purpose (see [dedicated documentation on this topic](entity-authorizations.md)). The second argument is the message to display in the confirmation dialog (a sensible default will be used).
 
+- `configureCreateButtonLabel(string $label)` to set a custom "New..." button label.
+
 ## Configure the Entity List
 
 The Entity List must be declared in the correct entity class, as documented here: [Write an entity](entity-class.md)).

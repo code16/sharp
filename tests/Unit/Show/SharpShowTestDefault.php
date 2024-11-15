@@ -165,6 +165,21 @@ it('allows to declare a multiformAttribute', function () {
         ->toHaveKey('multiformAttribute', 'role');
 });
 
+it('allows to set an edit button label', function () {
+    $sharpShow = new class() extends FakeSharpShow
+    {
+        public function buildShowConfig(): void
+        {
+            $this->configureEditButtonLabel('Edit post');
+        }
+    };
+    
+    $sharpShow->buildShowConfig();
+    
+    expect($sharpShow->showConfig(1))
+        ->toHaveKey('editButtonLabel', 'Edit post');
+});
+
 it('allows to declare a page alert', function () {
     $sharpShow = new class() extends FakeSharpShow
     {

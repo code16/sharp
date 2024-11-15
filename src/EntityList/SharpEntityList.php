@@ -33,10 +33,11 @@ abstract class SharpEntityList
     protected ?string $defaultSortDir = null;
     protected bool $deleteHidden = false;
     protected ?string $deleteConfirmationText = null;
+    protected ?string $createButtonLabel = null;
 
     final public function initQueryParams(?array $query): self
     {
-        $this->queryParams = (new EntityListQueryParams(
+        $this->queryParams = new EntityListQueryParams(
             filterContainer: $this->filterContainer(),
             filterValues: $this->filterContainer()->getCurrentFilterValues($query),
             sortedBy: $query['sort'] ?? $this->defaultSort,
@@ -44,7 +45,7 @@ abstract class SharpEntityList
             page: $query['page'] ?? null,
             search: ($query['search'] ?? null) ? urldecode($query['search']) : null,
             specificIds: $query['ids'] ?? [],
-        ));
+        );
 
         return $this;
     }
@@ -111,6 +112,7 @@ abstract class SharpEntityList
             'hasShowPage' => $hasShowPage,
             'deleteConfirmationText' => $this->deleteConfirmationText ?: trans('sharp::show.delete_confirmation_text'),
             'deleteHidden' => $this->deleteHidden,
+            'createButtonLabel' => $this->createButtonLabel,
             'filters' => $this->filterContainer()->getFiltersConfigArray(),
         ];
 
@@ -141,6 +143,13 @@ abstract class SharpEntityList
     {
         $this->searchable = $searchable;
 
+        return $this;
+    }
+    
+    final public function configureCreateButtonLabel(string $label): self
+    {
+        $this->createButtonLabel = $label;
+        
         return $this;
     }
 

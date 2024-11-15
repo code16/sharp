@@ -308,6 +308,7 @@ Here is the full list of available methods:
   toggle, [see detailed doc](entity-states.md)
 - `configurePageTitleAttribute(string $titleAttribute, bool $localized = false)`: define a title to the Show Page, configuring an attribute that should be part of the `find($id)` array
 - `configureDeleteConfirmationText(string $text)` to add a custom confirm message when the use clicks on the delete button.
+- `configureEditButtonLabel(string $label)` to set a custom "Edit..." button label.
 
 ## Accessing the navigation breadcrumb
 
