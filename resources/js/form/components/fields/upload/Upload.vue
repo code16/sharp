@@ -7,20 +7,19 @@
     import DropTarget from '@uppy/drop-target';
     import Cropper from 'cropperjs';
     import {
-        computed,
+        computed, nextTick,
         onMounted,
         onUnmounted,
-        ref,
+        ref, useTemplateRef,
         watch
     } from "vue";
-    import { getErrorMessage, handleErrorAlert } from "@/api/api";
-    import { getFiltersFromCropData } from "./util/filters";
+    import { api, getErrorMessage, handleErrorAlert } from "@/api/api";
+    import { getCropDataFromFilters, getFiltersFromCropData } from "./util/filters";
     import { Button } from '@/components/ui/button';
     import { route } from "@/utils/url";
 
     import { __ } from "@/utils/i18n";
     import { filesizeLabel } from "@/utils/file";
-    import EditModal from "./EditModal.vue";
     import { useParentForm } from "@/form/useParentForm";
     import { getCsrfToken } from "@/utils/request";
 
@@ -36,6 +35,15 @@
     import { MoreHorizontal } from "lucide-vue-next";
     import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
     import FileIcon from "@/components/FileIcon.vue";
+    import {
+        Dialog,
+        DialogContent,
+        DialogDescription,
+        DialogFooter,
+        DialogHeader,
+        DialogTitle
+    } from "@/components/ui/dialog";
+    import { rotateTo } from "@/form/components/fields/upload/util/rotate";
 
     const props = defineProps<FormFieldProps<FormUploadFieldData> & { asEditorEmbed?: boolean }>();
 
@@ -55,21 +63,15 @@
         (e: 'edit', event: CustomEvent): void
     }>();
     const form = useParentForm();
-    const extension = computed(() => props.value?.name?.match(/\.[0-9a-z]+$/i)[0]);
     const editModalOpen = ref(false);
-    const isTransformable = computed(() => {
-        return props.field.imageTransformable
-            && (!props.field.imageTransformableFileTypes || props.field.imageTransformableFileTypes?.includes(extension.value))
-            && props.value?.mime_type?.startsWith('image/');
-    });
-
+    const editModalImageEl = useTemplateRef<HTMLImageElement>('editModalImageEl');
+    const editModalImageUrl = ref<string>();
+    const editModalCropper = ref<Cropper>();
+    const editModalCropperData = ref<Partial<Cropper.Data>>();
     const transformedImg = ref<string>();
     const uppyFile = ref<UppyFile>();
     const isEditable = computed(() => {
-        return props.value
-            && (!uppyFile.value || !uppyFile.value.progress.uploadStarted || uppyFile.value.progress.uploadComplete)
-            && isTransformable.value
-            && !props.hasError;
+        return props.value && canTransform(props.value.name, props.value.mime_type) && !props.hasError;
     });
     const uppy = new Uppy({
         id: props.fieldErrorKey,
@@ -106,7 +108,7 @@
             console.log('file-added', JSON.parse(JSON.stringify(uppyFile.value)));
         })
         .on('restriction-failed', (file, error) => {
-            emit('error', `${error.message} (${file.name})`, file.data);
+            emit('error', error.message, file.data);
         })
         .on('thumbnail:generated', async (file, preview) => {
             const { field } = props;
@@ -114,7 +116,7 @@
             uppyFile.value = uppy.getFile(file.id);
             console.log('thumbnail:generated', JSON.parse(JSON.stringify(uppyFile.value)));
 
-            if(isTransformable.value && field.imageCropRatio) {
+            if(canTransform(file.name, file.type) && field.imageCropRatio) {
                 const cropper = await new Promise<Cropper>((resolve) => {
                     const container = document.createElement('div');
                     const image = document.createElement('img');
@@ -171,6 +173,13 @@
             emit('uploading', false);
         });
 
+    function canTransform(fileName: string, mimeType: string) {
+        const extension = fileName.match(/\.[0-9a-z]+$/i)[0];
+        return props.field.imageTransformable
+            && (!props.field.imageTransformableFileTypes || props.field.imageTransformableFileTypes?.includes(extension))
+            && mimeType.startsWith('image/');
+    }
+
     const isDraggingOver = ref(false);
     const dropTarget = ref<HTMLElement>();
     watch(dropTarget, () => {
@@ -215,13 +224,89 @@
         emit('input', value);
     }
 
-    function onEdit() {
+    async function onEdit() {
         const event = new CustomEvent('edit', { cancelable: true });
         emit('edit', event);
 
-        if(!event.defaultPrevented) {
-            showEditModal.value = true;
+        if(event.defaultPrevented) {
+            return;
         }
+
+        if(!editModalImageUrl.value) {
+            if(props.value?.path) {
+                const data = await api.post(route('code16.sharp.api.form.upload.thumbnail.show', {
+                    entityKey: form.entityKey,
+                    instanceId: form.instanceId,
+                    path: props.value.path,
+                    disk: props.value.disk,
+                    width: 1200,
+                    height: 1000,
+                }))
+                    .then(response => response.data) as { thumbnail: string|null };
+
+                if(!data.thumbnail) {
+                    return Promise.reject('Sharp Upload: original thumbnail not found in POST /api/files request');
+                }
+
+                editModalImageUrl.value = data.thumbnail;
+
+                await new Promise<void>(resolve => {
+                    const image = new Image();
+                    image.src = data.thumbnail;
+                    image.onload = () => {
+                        editModalCropperData.value = getCropDataFromFilters({
+                            filters: props.value.filters,
+                            imageWidth: image.naturalWidth,
+                            imageHeight: image.naturalHeight,
+                        });
+                        resolve();
+                    }
+                    image.onerror = () => {
+                        editModalImageUrl.value = props.value.thumbnail;
+                        resolve();
+                    }
+                });
+            } else if(uppyFile.value) {
+                editModalImageUrl.value = await new Promise(resolve => {
+                    new Uppy()
+                        .use(ThumbnailGenerator, { thumbnailWidth: 1200, thumbnailHeight: 1000 })
+                        .on('thumbnail:generated', (file, preview) => {
+                            resolve(preview);
+                        })
+                        .addFile({ ...uppyFile.value, preview: null });
+                });
+            }
+        }
+
+        editModalOpen.value = true;
+
+        await nextTick();
+
+        editModalCropper.value = new Cropper(editModalImageEl.value, {
+            viewMode: 2,
+            dragMode: 'move',
+            aspectRatio: props.field.imageCropRatio
+                ? props.field.imageCropRatio[0] / props.field.imageCropRatio[1]
+                : null,
+            autoCropArea: 1,
+            guides: false,
+            background: true,
+            rotatable: true,
+            restore: false, // reset crop area on resize because it's buggy
+            data: editModalCropperData.value,
+            ready: () => {
+                if(editModalCropperData.value?.rotate) {
+                    rotateTo(editModalCropper.value, editModalCropperData.value.rotate);
+                    editModalCropper.value.setData(editModalCropperData.value);
+                }
+            },
+        });
+    }
+
+    function onEditModalSubmit() {
+        editModalCropperData.value = editModalCropper.value.getData(true);
+        editModalOpen.value = false;
+        onImageTransform(editModalCropper.value);
     }
 
     function onRemove() {
@@ -231,11 +316,9 @@
         if(uppyFile.value) {
             uppy.removeFile(uppyFile.value.id);
             uppyFile.value = null;
+            transformedImg.value = null;
+            editModalImageUrl.value = null;
         }
-    }
-
-    function onTransformSubmit(cropper: Cropper) {
-        onImageTransform(cropper);
     }
 
     function onInputChange(e: Event) {
@@ -276,8 +359,11 @@
                     <div class="flex gap-4">
                         <template v-if="transformedImg ?? value?.thumbnail ?? uppyFile?.preview">
                             <div class="self-center group/img relative flex flex-col justify-center rounded-md overflow-hidden">
-                                <img class="object-contain rounded-md"
-                                    width="150"
+                                <img class="rounded-md max-h-[150px] max-w-[150px]"
+                                    :class="uppyFile && !transformedImg && field.imageCropRatio ? 'object-cover aspect-[--ratio]' : ''"
+                                    :style="{
+                                        '--ratio': field.imageCropRatio ? `${field.imageCropRatio[0]} / ${field.imageCropRatio[1]}` : null
+                                    }"
                                     :src="transformedImg ?? value?.thumbnail ?? uppyFile.preview"
                                     alt=""
                                 >
@@ -327,34 +413,6 @@
                                     </div>
                                 </template>
                             </div>
-<!--                        <template v-if="!field.readOnly">-->
-<!--                            <div class="flex gap-2 mt-2">-->
-<!--                                <template v-if="value && (!uppyFile || !uppyFile.progress.uploadStarted || uppyFile.progress.uploadComplete) && isTransformable && !hasError">-->
-<!--                                    <Button class="h-8" variant="outline" size="sm" @click="onEdit">-->
-<!--                                        {{ __('sharp::form.upload.edit_button') }}-->
-<!--                                    </Button>-->
-<!--                                </template>-->
-<!--                                <Button class="h-8" variant="outline" size="sm" @click="onRemove">-->
-<!--                                    {{ __('sharp::form.upload.remove_button') }}-->
-<!--                                </Button>-->
-<!--                                <template v-if="value?.path">-->
-<!--                                    <Button-->
-<!--                                        class="h-8 underline -ml-2"-->
-<!--                                        size="sm"-->
-<!--                                        variant="link"-->
-<!--                                        :href="route('code16.sharp.download.show', {-->
-<!--                                            entityKey: form.entityKey,-->
-<!--                                            instanceId: form.instanceId,-->
-<!--                                            disk: value.disk,-->
-<!--                                            path: value.path,-->
-<!--                                        })"-->
-<!--                                        :download="value?.name?.split('/').at(-1)"-->
-<!--                                    >-->
-<!--                                        {{ __('sharp::form.upload.download_link') }}-->
-<!--                                    </Button>-->
-<!--                                </template>-->
-<!--                            </div>-->
-<!--                        </template>-->
                             <template v-if="uppyFile?.progress.percentage < 100 && !hasError">
                                 <div class="mt-2">
                                     <div class="bg-primary h-0.5 transition-all" :style="{ width: `${uppyFile.progress.percentage}%` }" role="progressbar">
@@ -367,9 +425,6 @@
                                 <Button class="self-center" variant="ghost" size="icon">
                                     <MoreHorizontal class="w-4 h-4" />
                                 </Button>
-<!--                            <Button class="self-center" size="sm" variant="outline">-->
-<!--                                {{ __('sharp::form.upload.edit_button') }}-->
-<!--                            </Button>-->
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
                                 <template v-if="value?.path">
@@ -403,52 +458,15 @@
             <template v-else>
                 <Input
                     :id="id"
+                    :class="isDraggingOver ? 'border-primary' : ''"
                     type="file"
                     :accept="field.allowedExtensions?.join(',')"
                     :aria-describedby="ariaDescribedBy"
                     @change="onInputChange"
+                    @dragover="isDraggingOver = true"
+                    @dragleave="isDraggingOver = false"
+                    @drop="isDraggingOver = false"
                 />
-
-<!--            <FileInput :uppy="uppy" :props="{ pretty: false }" ref="inputContainer" />-->
-<!--            <div class="relative flex justify-center rounded-lg border border-dashed px-6 py-10"-->
-<!--                :class="[-->
-<!--                    isDraggingOver ? 'border-primary-600' :-->
-<!--                    hasError ? 'border-red-600' :-->
-<!--                    'border-gray-900/25'-->
-<!--                ]"-->
-<!--                ref="dropTarget"-->
-<!--            >-->
-<!--                <div class="text-center" :class="{ 'invisible': isDraggingOver }">-->
-<!--                    <div class="text-sm leading-6 text-gray-600">-->
-<!--                        <UploadDropText>-->
-<!--                            <template #link="{ text }">-->
-<!--                                <label class="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">-->
-<!--                                    <span>{{ text }}</span>-->
-<!--                                    <FileInput class="sr-only" :uppy="uppy" :props="{ pretty: false }" ref="inputContainer" />-->
-<!--                                </label>-->
-<!--                            </template>-->
-<!--                        </UploadDropText>-->
-<!--                    </div>-->
-<!--                    <p class="text-xs leading-5 text-gray-600">-->
-<!--                        <template v-if="field.allowedExtensions?.length">-->
-<!--                            <span class="uppercase">-->
-<!--                                {{ field.allowedExtensions.map(extension => extension.replace('.', '')).join(', ') }}-->
-<!--                            </span>-->
-<!--                        </template>-->
-<!--                        <template v-if="field.maxFileSize">-->
-<!--                            {{ ' '+__('sharp::form.upload.help_text.max_file_size', { size: filesizeLabel(field.maxFileSize * 1024 * 1024) }) }}-->
-<!--                        </template>-->
-<!--                    </p>-->
-<!--                </div>-->
-<!--                <template v-if="isDraggingOver">-->
-<!--                    <div class="absolute inset-0 flex flex-col justify-center items-center pointer-events-none">-->
-<!--                        <ArrowDownOnSquareIcon class="w-8 h-8 text-gray-400 mb-1" />-->
-<!--                        <div class="text-sm leading-6 text-gray-600">-->
-<!--                            Drop your file here-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </template>-->
-<!--            </div>-->
             </template>
         </template>
 
@@ -464,17 +482,24 @@
         </template>
     </FormFieldLayout>
 
-    <EditModal
-        v-model:visible="editModalOpen"
-        :value="value"
-        :thumbnail="value?.thumbnail ?? uppyFile?.preview"
-        :field="field"
-        @submit="onTransformSubmit"
-    />
+    <Dialog v-model:open="editModalOpen">
+        <DialogContent>
+            <DialogHeader>
+                <DialogTitle>
+                    {{ __('sharp::modals.cropper.title') }}
+                </DialogTitle>
+                <DialogDescription>
+                    {{ __('sharp::form.upload.edit_modal.description') }}
+                </DialogDescription>
+            </DialogHeader>
+            <div class="h-full">
+                <img :src="editModalImageUrl" alt="" ref="editModalImageEl">
+            </div>
+            <DialogFooter>
+                <Button @click="onEditModalSubmit">
+                    {{ __('sharp::modals.ok_button') }}
+                </Button>
+            </DialogFooter>
+        </DialogContent>
+    </Dialog>
 </template>
-
-<style>
-    .uppy-DragDrop-container {
-        @apply flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10;
-    }
-</style>
