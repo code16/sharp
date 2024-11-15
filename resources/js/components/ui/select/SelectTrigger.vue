@@ -24,7 +24,7 @@ const forwardedProps = useForwardProps(delegatedProps)
     )"
   >
     <slot />
-    <SelectIcon as-child>
+    <SelectIcon v-if="!props.asChild" as-child>
       <ChevronDown class="w-4 h-4 opacity-50" />
     </SelectIcon>
   </SelectTrigger>

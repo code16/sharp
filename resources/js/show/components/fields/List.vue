@@ -2,7 +2,7 @@
     import { __ } from "@/utils/i18n";
     import { ShowListFieldData } from "@/types";
     import { UnknownField } from '@/components';
-    import FieldLayout from "../FieldLayout.vue";
+    import ShowFieldLayout from "../ShowFieldLayout.vue";
     import { ShowFieldProps } from "../../types";
     import FieldGrid from "@/components/ui/FieldGrid.vue";
     import FieldGridRow from "@/components/ui/FieldGridRow.vue";
@@ -25,13 +25,13 @@
 </script>
 
 <template>
-    <FieldLayout class="ShowListField" :label="field.label">
+    <ShowFieldLayout v-bind="props">
         <template v-if="value?.length > 0">
             <div :class="hasOnlyOneVisibleFileField ? 'space-y-4' : 'space-y-6'">
                 <template v-for="item in value">
                     <Card :class="hasOnlyOneVisibleFileField ? 'shadow-none border-none bg-none' : ''">
                         <CardContent :class="hasOnlyOneVisibleFileField ? '!p-0' : ''">
-                            <FieldGrid class="gap-x-4 gap-y-4">
+                            <FieldGrid class="gap-6">
                                 <template v-for="row in fieldLayout.item">
                                     <FieldGridRow>
                                         <template v-for="itemFieldLayout in row">
@@ -44,6 +44,7 @@
                                                         v-bind="$props"
                                                         :field="field.itemFields?.[itemFieldLayout.key]"
                                                         :value="item[itemFieldLayout.key]"
+                                                        :hide-label="hasOnlyOneVisibleFileField"
                                                     />
                                                 </template>
                                                 <template v-else>
@@ -64,5 +65,5 @@
                 {{ __('sharp::show.list.empty') }}
             </div>
         </template>
-    </FieldLayout>
+    </ShowFieldLayout>
 </template>

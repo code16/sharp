@@ -24,7 +24,16 @@
     import { useSortable } from '@vueuse/integrations/useSortable';
     import { CardContent, CardDescription, CardFooter, CardHeader } from "@/components/ui/card";
     import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-    import { MoreHorizontal, PlusCircle, Filter, ChevronsUpDown, ArrowUp, ArrowDown, GripVertical } from "lucide-vue-next";
+    import {
+        MoreHorizontal,
+        PlusCircle,
+        Filter,
+        ChevronsUpDown,
+        ArrowUp,
+        ArrowDown,
+        GripVertical,
+        ChevronDown
+    } from "lucide-vue-next";
     import { Checkbox } from "@/components/ui/checkbox";
     import {
         DropdownMenu, DropdownMenuCheckboxItem,
@@ -55,6 +64,7 @@
         DialogTrigger
     } from "@/components/ui/dialog";
     import RootCard from "@/components/ui/RootCard.vue";
+    import DropdownChevronDown from "@/components/ui/DropdownChevronDown.vue";
 
     const props = withDefaults(defineProps<{
         entityKey: string,
@@ -230,7 +240,7 @@
             emit('needs-topbar', false);
         }
         if(props.inline) {
-            document.dispatchEvent(new CustomEvent('breadcrumb:updateAppendItem', { detail: stuck.value ? { label: props.title } : null }));
+            document.dispatchEvent(new CustomEvent('breadcrumb:updateAppendItem', { detail: stuck.value && needsTopBar.value ? { label: props.title } : null }));
         }
     });
 
@@ -249,14 +259,21 @@
                 </transition>
 
             <template v-if="entityList">
-                <template v-if="showSearchField && entityList.config.searchable || entityList.visibleFilters?.length">
+                <template v-if="
+                    showReorderButton && entityList.canReorder
+                    || entityList.canSelect
+                    || entityList.dropdownEntityCommands(selecting)?.flat().length
+                    || entityList.primaryCommand
+                    || showCreateButton && entityList.authorizations.create
+                ">
                     <StickyTop
                         :class="cn(
-                            'group container sticky top-14 border-b -mb-px -mt-4 pt-4 bg-white pb-4 px-4 lg:px-6 flex gap-3 pointer-events-none data-[stuck=true]:z-30',
+                            'group container sticky top-14 border-b -mb-px -mt-4 pt-4 bg-white pb-4 px-4 lg:px-6 flex gap-3 pointer-events-none',
                             'lg:sticky lg:border-0 lg:pt-0 lg:mt-0 lg:top-3.5 lg:bg-transparent lg:last:*:-translate-x-[--sticky-safe-right-offset]',
                             {
                                 '-top-8 z-0 px-0': inline && !needsTopBar,
                                 'z-[15]': reordering,
+                                'data-[stuck=true]:z-30': !inline || needsTopBar,
                                 // 'opacity-0': inline && stuck && !needsTopBar,
                             })"
                         v-model:stuck="stuck"
@@ -301,6 +318,7 @@
                                             <template v-if="selecting">
                                                 ({{ Object.values(selectedItems).filter(Boolean).length }} selected)
                                             </template>
+                                            <DropdownChevronDown />
                                         </Button>
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent :collision-padding="20">
@@ -347,8 +365,7 @@
                                         :disabled="reordering || selecting"
                                         :href="route('code16.sharp.form.create', { parentUri: getAppendableParentUri(), entityKey })"
                                     >
-                                        <PlusCircle class="h-3.5 w-3.5" />
-                                        {{ __('sharp::action_bar.list.create_button') }}
+                                        {{ props.entityList.config.createButtonLabel || __('sharp::action_bar.list.create_button') }}
                                     </Button>
                                 </template>
                             </template>
@@ -369,7 +386,7 @@
                 </template>
             </div>
 
-            <RootCard  :class="reordering ? 'relative z-[11]' : ''">
+            <RootCard :class="reordering ? 'relative z-[11]' : ''">
                 <CardHeader>
                     <div class="flex sm:flex-wrap gap-y-6 gap-x-2">
                         <div class="flex items-baseline">

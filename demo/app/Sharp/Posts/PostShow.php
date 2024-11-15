@@ -48,6 +48,10 @@ class PostShow extends SharpShow
             ->addField(
                 SharpShowListField::make('attachments')
                     ->setLabel('Attachments')
+//                    ->addItemField(
+//                        SharpShowTextField::make('title')
+//                            ->setLabel('Title')
+//                    )
                     ->addItemField(
                         SharpShowTextField::make('link_url')
                             ->setLabel('External link')
@@ -74,7 +78,7 @@ class PostShow extends SharpShow
                             ->withField('categories')
                             ->withField('author')
                             ->withListField('attachments', function (ShowLayoutColumn $item) {
-                                $item->withField('link_url')
+                                $item->withField('title')->withField('link_url')
                                     ->withField('document');
                             });
                     })
@@ -154,7 +158,7 @@ class PostShow extends SharpShow
             ->setCustomTransformer('cover', new SharpUploadModelThumbnailUrlTransformer(500))
             ->setCustomTransformer(
                 'attachments[document]',
-                new SharpUploadModelFormAttributeTransformer(withThumbnails: false)
+                new SharpUploadModelFormAttributeTransformer(withThumbnails: true)
             )
             ->setCustomTransformer('attachments[link_url]', function ($value, $instance) {
                 return $instance->is_link

@@ -7,7 +7,7 @@ return [
 
     'list.add_button' => 'Ajouter un élément',
     'list.remove_button' => 'Supprimer',
-    'list.insert_button' => 'Insérer',
+    'list.insert_above_button' => 'Insérer au-dessus',
     'list.sort_button.inactive' => 'Réarranger...',
     'list.sort_button.active' => 'Terminer',
     'list.empty' => 'Liste vide',

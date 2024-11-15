@@ -75,14 +75,14 @@
                     {{ breadcrumb.items.at(-1).label }}
                 </BreadcrumbPage>
             </BreadcrumbItem>
-<!--            <template v-if="appendItem">-->
-<!--                <BreadcrumbSeparator />-->
-<!--                <BreadcrumbItem>-->
-<!--                    <BreadcrumbPage>-->
-<!--                        {{ appendItem.label }}-->
-<!--                    </BreadcrumbPage>-->
-<!--                </BreadcrumbItem>-->
-<!--            </template>-->
+            <template v-if="appendItem">
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                    <BreadcrumbPage>
+                        {{ appendItem.label }}
+                    </BreadcrumbPage>
+                </BreadcrumbItem>
+            </template>
         </BreadcrumbList>
     </Breadcrumb>
 </template>

@@ -1,26 +1,40 @@
 
 @layer components {
   .content {
-    :where(blockquote) {
-      @apply mt-6 border-l-2 pl-6 italic;
+    > :where(blockquote) {
+      @apply relative flow-root mt-6 pl-4 border-l-2 before:block before:-mt-0.5
+        /*before:absolute before:border-l-2 before:top-[0.2lh] before:-left-0.5 before:bottom-[0.1lh]*/
+      ;
+      > :where(p,ul,ol) {
+        @apply mt-2;
+      }
+      > :where(:first-child) {
+        @apply mt-0;
+      }
+      > :where(:last-child) {
+        @apply mb-0;
+      }
     }
-    :where(p) {
-      @apply [&:not(:first-child)]:mt-6;
+    > :where(p) {
+      @apply mt-4;
     }
     :where(a:not([style],[class])) {
       @apply relative p-1.5 -m-1.5 text-primary underline underline-offset-4 decoration-primary/20 hover:decoration-inherit;
       /*@apply before:absolute before:inset-0 before:transition-colors before:duration-100 before:rounded-sm before:hover:bg-primary/10;*/
     }
-    :where(ul) {
+    > :where(ul) {
       @apply my-6 ml-6 list-disc [&>li]:mt-2 first:mt-0 last:mb-0;
     }
     :where(strong) {
-      @apply font-bold;
+      @apply font-semibold;
+    }
+    > :where(:first-child) {
+      @apply mt-0;
+    }
+    > :where(:last-child) {
+      @apply mb-0;
     }
   }
   .content-sm {
-    :where(p) {
-      @apply [&:not(:first-child)]:mt-4;
-    }
   }
 }

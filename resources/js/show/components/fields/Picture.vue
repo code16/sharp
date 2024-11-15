@@ -1,15 +1,15 @@
 <script setup lang="ts">
-    import FieldLayout from "../FieldLayout.vue";
+    import ShowFieldLayout from "../ShowFieldLayout.vue";
     import { ShowPictureFieldData } from "@/types";
     import { ShowFieldProps } from "../../types";
 
-    defineProps<ShowFieldProps<ShowPictureFieldData>>();
+    const props = defineProps<ShowFieldProps<ShowPictureFieldData>>();
 </script>
 
 <template>
-    <FieldLayout>
-        <div class="flex" :class="[isRightCol ? 'md:justify-end' : '']">
-            <img class="rounded-md" :src="value" alt="">
+    <ShowFieldLayout v-bind="props">
+        <div class="flex" :class="[props.isRightCol ? 'md:justify-end' : '']">
+            <img class="rounded-md" :src="props.value" alt="">
         </div>
-    </FieldLayout>
+    </ShowFieldLayout>
 </template>

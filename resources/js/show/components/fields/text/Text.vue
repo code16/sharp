@@ -2,7 +2,7 @@
     import { __ } from "@/utils/i18n";
     import { ShowTextFieldData } from "@/types";
     import { computed, provide, ref } from "vue";
-    import FieldLayout from "../../FieldLayout.vue";
+    import ShowFieldLayout from "../../ShowFieldLayout.vue";
     import TextRenderer from "./TextRenderer.vue";
     import clip from "text-clipper";
     import { ShowFieldProps } from "@/show/types";
@@ -70,7 +70,7 @@
 </script>
 
 <template>
-    <FieldLayout :label="field.label">
+    <ShowFieldLayout v-bind="props">
         <template v-if="currentContent && field.html">
             <TextRenderer
                 class="content content-sm text-sm"
@@ -94,5 +94,5 @@
                 </template>
             </Button>
         </template>
-    </FieldLayout>
+    </ShowFieldLayout>
 </template>

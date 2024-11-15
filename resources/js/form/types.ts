@@ -21,7 +21,7 @@ export type WithDynamicAttributesApplied<Data extends FormFieldData> =
             ? Omit<FormAutocompleteLocalFieldData, 'localValues'> & { localValues: Exclude<FormAutocompleteLocalFieldData['localValues'], FormAutocompleteDynamicLocalValuesData> }
             : Data;
 
-export type FormFieldProps<Data extends FormFieldData = FormFieldData & { value: any }, Value = Data['value']> = {
+export type FormFieldProps<Data extends FormFieldData = FormFieldData, Value = Data['value']> = {
     field: WithDynamicAttributesApplied<Data>,
     parentField?: FormListFieldData
     fieldLayout?: LayoutFieldData,

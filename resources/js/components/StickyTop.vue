@@ -12,10 +12,11 @@
     const topbarSafeRect = reactive(useElementBounding(() => document.querySelector('[data-topbar-sticky-safe-area]') as HTMLElement));
     const stuck = computed(() => {
         const style = el.value ? window.getComputedStyle(el.value) : null;
+        const { bottom, top } = selfRect;
         return el.value
             && style.position === 'sticky'
-            && selfRect.bottom >= 0
-            && selfRect.top <= parseFloat(style.top);
+            && bottom >= 0
+            && top <= parseFloat(style.top);
     });
     watch(stuck, () => {
         emit('update:stuck', stuck.value);

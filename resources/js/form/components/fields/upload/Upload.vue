@@ -35,6 +35,7 @@
     } from "@/components/ui/dropdown-menu";
     import { MoreHorizontal } from "lucide-vue-next";
     import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+    import FileIcon from "@/components/FileIcon.vue";
 
     const props = defineProps<FormFieldProps<FormUploadFieldData> & { asEditorEmbed?: boolean }>();
 
@@ -55,7 +56,7 @@
     }>();
     const form = useParentForm();
     const extension = computed(() => props.value?.name?.match(/\.[0-9a-z]+$/i)[0]);
-    const showEditModal = ref(false);
+    const editModalOpen = ref(false);
     const isTransformable = computed(() => {
         return props.field.imageTransformable
             && (!props.field.imageTransformableFileTypes || props.field.imageTransformableFileTypes?.includes(extension.value))
@@ -272,10 +273,10 @@
         <template #default="{ id, ariaDescribedBy }">
             <template v-if="value?.path || value?.uploaded || uppyFile">
                 <div :class="{ 'bg-background border border-input rounded-md p-4': !asEditorEmbed }">
-                    <div class="flex">
+                    <div class="flex gap-4">
                         <template v-if="transformedImg ?? value?.thumbnail ?? uppyFile?.preview">
-                            <div class="mr-4 group/img relative rounded-md overflow-hidden">
-                                <img class="object-contain"
+                            <div class="self-center group/img relative flex flex-col justify-center rounded-md overflow-hidden">
+                                <img class="object-contain rounded-md"
                                     width="150"
                                     :src="transformedImg ?? value?.thumbnail ?? uppyFile.preview"
                                     alt=""
@@ -287,13 +288,16 @@
                                 </template>
                             </div>
                         </template>
+                        <template v-else>
+                            <FileIcon class="self-center size-4" :mime-type="value?.mime_type || uppyFile?.type" />
+                        </template>
                         <div class="flex-1 min-w-0">
                             <div class="text-sm font-medium truncate">
                                 <template v-if="value?.path">
                                     <TooltipProvider>
                                         <Tooltip :delay-duration="0" disable-hoverable-content>
                                             <TooltipTrigger as-child>
-                                                <a class="hover:underline underline-offset-4"
+                                                <a class="text-foreground underline underline-offset-4 decoration-foreground/20 hover:underline hover:decoration-foreground"
                                                     :href="route('code16.sharp.download.show', {
                                                         entityKey: form.entityKey,
                                                         instanceId: form.instanceId,
@@ -461,7 +465,7 @@
     </FormFieldLayout>
 
     <EditModal
-        v-model:visible="showEditModal"
+        v-model:visible="editModalOpen"
         :value="value"
         :thumbnail="value?.thumbnail ?? uppyFile?.preview"
         :field="field"

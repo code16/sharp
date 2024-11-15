@@ -1,16 +1,16 @@
 <script setup lang="ts">
     import { Label } from "@/components/ui/label";
+    import { ShowFieldProps } from "@/show/types";
+    import { ShowFieldData } from "@/types";
 
-    defineProps<{
-        label?: string,
-    }>();
+    const props = defineProps<ShowFieldProps<ShowFieldData, any>>();
 </script>
 
 <template>
     <div class="grid grid-cols-1 gap-2.5">
-        <template v-if="label">
+        <template v-if="'label' in props.field && !props.hideLabel">
             <Label>
-                {{ label }}
+                {{ props.field.label }}
             </Label>
         </template>
 

@@ -131,6 +131,7 @@ export type EntityListConfigData = {
   deleteConfirmationText: string;
   deleteHidden: boolean;
   multiformAttribute: string | null;
+  createButtonLabel: string | null;
   filters: ConfigFiltersData | null;
   commands: ConfigCommandsData | null;
   state: EntityStateData | null;
@@ -730,6 +731,7 @@ export type ShowConfigData = {
   multiformAttribute: string | null;
   titleAttribute: string | null;
   breadcrumbAttribute: string | null;
+  editButtonLabel: string | null;
   state: EntityStateData | null;
 };
 export type ShowCustomFieldData = {

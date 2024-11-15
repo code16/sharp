@@ -41,6 +41,7 @@
     import { DropdownMenuPortal } from "reka-ui";
     import RootCard from "@/components/ui/RootCard.vue";
     import LocaleSelectTrigger from "@/components/LocaleSelectTrigger.vue";
+    import DropdownChevronDown from "@/components/ui/DropdownChevronDown.vue";
 
     const props = defineProps<{
         show: ShowData,
@@ -159,6 +160,7 @@
                                 <DropdownMenuTrigger as-child>
                                     <Button class="h-8" variant="outline" size="sm">
                                         {{ __('sharp::entity_list.commands.instance.label') }}
+                                        <DropdownChevronDown />
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent>
@@ -203,22 +205,13 @@
                         </template>
                         <template v-if="show.authorizations.update">
                             <Button class="h-8" size="sm" :disabled="isReordering" as-child>
-                                <template v-if="isReordering">
-                                    {{ __('sharp::action_bar.show.edit_button') }}
-                                </template>
-                                <template v-else>
-                                    <Link :href="show.formUrl">
-                                        {{ __('sharp::action_bar.show.edit_button') }}
-                                    </Link>
-                                </template>
+                                <Link :as="isReordering ? 'button' : 'a'" :href="show.formUrl">
+                                    {{ props.show.config.editButtonLabel || __('sharp::action_bar.show.edit_button') }}
+                                </Link>
                             </Button>
                         </template>
                     </div>
                 </div>
-
-<!--                    <div class="flex-1">-->
-<!--                    </div>-->
-
             </StickyTop>
 
             <template v-if="show.pageAlert">
@@ -273,6 +266,7 @@
                                         <DropdownMenuTrigger as-child>
                                             <Button class="h-8" size="sm" variant="outline">
                                                 {{ __('sharp::entity_list.commands.instance.label') }}
+                                                <DropdownChevronDown />
                                             </Button>
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent>

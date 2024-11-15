@@ -16,6 +16,7 @@
     import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
     import CommandDropdownItems from "@/commands/components/CommandDropdownItems.vue";
     import { watch } from "vue";
+    import DropdownChevronDown from "@/components/ui/DropdownChevronDown.vue";
 
     const props = defineProps<{
         dashboard: DashboardData,
@@ -101,6 +102,7 @@
                                 <DropdownMenuTrigger as-child>
                                     <Button class="h-8" variant="outline" size="sm">
                                         {{ __('sharp::dashboard.commands.dashboard.label') }}
+                                        <DropdownChevronDown />
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent>
@@ -148,6 +150,7 @@
                                                 <DropdownMenuTrigger as-child>
                                                     <Button class="h-8" variant="outline" size="sm">
                                                         {{ __('sharp::dashboard.commands.dashboard.label') }}
+                                                        <DropdownChevronDown />
                                                     </Button>
                                                 </DropdownMenuTrigger>
                                                 <DropdownMenuContent>
