@@ -34,7 +34,7 @@ createInertiaApp({
     },
     progress: {
         delay: progressDelay,
-        color: 'var(--nprogress-color, hsl(var(--foreground)))',
+        color: 'var(--nprogress-color, oklch(var(--primary-oklch)))',
     }
 });
 
