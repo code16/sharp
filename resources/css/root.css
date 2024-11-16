@@ -32,4 +32,8 @@
         --color-primary-800: hsl(var(--primary-h), var(--primary-s), 10%);
         --color-primary-900: hsl(var(--primary-h), var(--primary-s), 5%);
     }
+
+    .dark {
+        color-scheme: dark;
+    }
 }

@@ -3,7 +3,7 @@
 return [
     'validation_error.title' => 'Votre saisie est invalide.',
     'validation_error.description' => 'Veuillez contrôler votre saisie, les erreurs sont indiquées sous chaque champ.',
-    'validation_error.localized' => 'Il y a une erreur avec la/les langue(s) : :locales',
+    'validation_error.localized' => 'Il y a une erreur avec la langue : :locales|Il y a une erreur avec les langues : :locales',
 
     'list.add_button' => 'Ajouter un élément',
     'list.remove_button' => 'Supprimer',

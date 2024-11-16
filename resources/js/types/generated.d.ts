@@ -797,13 +797,13 @@ export type ShowLayoutColumnData = {
   fields: Array<Array<LayoutFieldData>>;
 };
 export type ShowLayoutData = {
-  sections: { [key: number]: ShowLayoutSectionData };
+  sections: Array<ShowLayoutSectionData>;
 };
 export type ShowLayoutSectionData = {
   key: string | null;
   title: string;
   collapsable: boolean;
-  columns: { [key: number]: ShowLayoutColumnData };
+  columns: Array<ShowLayoutColumnData>;
 };
 export type ShowListFieldData = {
   value?: Array<{ [key: string]: ShowFieldData["value"] }>;

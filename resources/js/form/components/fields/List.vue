@@ -15,13 +15,12 @@
     import { MoreHorizontal, GripVertical, ArrowUpDown } from "lucide-vue-next";
     import {
         DropdownMenu, DropdownMenuContent,
-        DropdownMenuItem,
+        DropdownMenuItem, DropdownMenuSeparator,
         DropdownMenuTrigger
     } from "@/components/ui/dropdown-menu";
     import { Card, CardHeader } from "@/components/ui/card";
     import { useSortable } from "@vueuse/integrations/useSortable";
     import { watchArray } from "@vueuse/core";
-    import DropdownSeparator from "@/components/ui/dropdown/DropdownSeparator.vue";
 
     const props = defineProps<FormFieldProps<FormListFieldData>>();
     const emit = defineEmits<FormFieldEmits<FormListFieldData>>();
@@ -232,7 +231,7 @@
                                                         </DropdownMenuItem>
                                                     </template>
                                                     <template v-if="props.field.removable">
-                                                        <DropdownSeparator class="first:hidden" />
+                                                        <DropdownMenuSeparator class="first:hidden" />
                                                         <DropdownMenuItem class="text-destructive" @click="onRemove(index)">
                                                             {{ __('sharp::form.list.remove_button') }}
                                                         </DropdownMenuItem>

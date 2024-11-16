@@ -2,7 +2,7 @@
     import { computed, onUpdated, ref } from "vue";
     import { FormFieldProps } from "@/form/types";
     import { useParentForm } from "@/form/useParentForm";
-    import { __ } from "@/utils/i18n";
+    import { __, trans_choice } from "@/utils/i18n";
     import { Label } from "@/components/ui/label";
     import { cn } from "@/utils/cn";
     import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
@@ -42,9 +42,9 @@
 
 <template>
     <div :class="cn(
-            'grid grid-cols-1 grid-rows-subgrid gap-2.5',
+            'relative grid grid-cols-1 grid-rows-subgrid gap-2.5',
             hasLabelRow ? 'row-span-2' : '',
-            props.class
+            props.class,
         )"
         :role="fieldGroup ? 'group' : null"
         :aria-labelledby="fieldGroup ? `${id}-label` : null"
@@ -70,7 +70,7 @@
                                 :id="`${id}-label`"
                                 :as="fieldGroup ? 'div' : 'label'"
                                 class="leading-4 cursor-default"
-                                :class="{ 'text-destructive': form.fieldHasError(field, fieldErrorKey) }"
+                                :class="{ 'text-destructive dark:text-foreground': form.fieldHasError(field, fieldErrorKey) }"
                                 :for="id"
                                 @click="$emit('label-click')"
                             >
@@ -89,8 +89,8 @@
                                 <ToggleGroupItem class="uppercase text-xs h-6" size="sm" :value="btnLocale">
                                     {{ btnLocale }}
                                     <template v-if="form.fieldLocalesContainingError(fieldErrorKey).includes(btnLocale)">
-                                        <svg class="ml-1 h-1.5 w-1.5 fill-destructive" viewBox="0 0 6 6" aria-hidden="true">
-                                            <circle cx="3" cy="3" r="3" />
+                                        <svg class="ml-1 h-2 w-2 fill-destructive" viewBox="0 0 8 8" aria-hidden="true">
+                                            <circle cx="4" cy="4" r="3" />
                                         </svg>
                                     </template>
                                 </ToggleGroupItem>
@@ -124,17 +124,25 @@
 
                     <template v-if="form.fieldHasError(field, fieldErrorKey)">
                         <div :id="`${id}-error`" class="text-sm font-medium text-destructive leading-4">
-                            <template v-if="form.fieldError(fieldErrorKey)">
-                                {{ form.fieldError(fieldErrorKey) }}
-                            </template>
-                            <template v-else-if="'localized' in field && field.localized">
-                                <template v-if="form.fieldError(`${fieldErrorKey}.${locale}`)">
-                                    {{ form.fieldError(`${fieldErrorKey}.${locale}`) }}
+                            <span class="dark:bg-destructive dark:text-destructive-foreground dark:py-1 dark:px-2 dark:rounded-md">
+                                <template v-if="form.fieldError(fieldErrorKey)">
+                                    {{ form.fieldError(fieldErrorKey) }}
                                 </template>
-                                <template v-else>
-                                    {{ __('sharp::form.validation_error.localized', { locales: form.fieldLocalesContainingError(fieldErrorKey).map(l => l.toUpperCase()) }) }}
+                                <template v-else-if="'localized' in field && field.localized">
+                                    <template v-if="form.fieldError(`${fieldErrorKey}.${locale}`)">
+                                        {{ form.fieldError(`${fieldErrorKey}.${locale}`) }}
+                                    </template>
+                                    <template v-else>
+                                        {{
+                                            trans_choice(
+                                              'sharp::form.validation_error.localized',
+                                                form.fieldLocalesContainingError(fieldErrorKey).length,
+                                                { locales: form.fieldLocalesContainingError(fieldErrorKey).map(l => l.toUpperCase()) }
+                                            )
+                                        }}
+                                    </template>
                                 </template>
-                            </template>
+                            </span>
                         </div>
                     </template>
                 </div>

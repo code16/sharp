@@ -124,8 +124,8 @@
                         <div class="flex-1"
                             v-html="props.value._htmlResult ?? props.value._html ?? props.value[props.field.itemIdAttribute]"
                         ></div>
-                        <Button class="absolute right-0 h-[2.375rem] top-1/2 -translate-y-1/2"  variant="ghost" size="icon" @click="$emit('input', null)">
-                            <X class="size-4 opacity-50" />
+                        <Button class="absolute right-0 h-[2.375rem] top-1/2 -translate-y-1/2 opacity-50 hover:opacity-100"  variant="ghost" size="icon" @click="$emit('input', null)">
+                            <X class="size-4" />
                         </Button>
                     </div>
                 </PopoverTrigger>

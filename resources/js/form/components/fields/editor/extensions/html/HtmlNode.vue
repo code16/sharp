@@ -1,7 +1,6 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
     import { Button } from '@/components/ui/button';
-    import { Modal } from "@/components/ui";
     import { NodeViewWrapper } from '@tiptap/vue-3';
     import { ExtensionNodeProps } from "@/form/components/fields/editor/types";
     import { Html, HtmlContentNodeAttributes } from "@/form/components/fields/editor/extensions/html/Html";

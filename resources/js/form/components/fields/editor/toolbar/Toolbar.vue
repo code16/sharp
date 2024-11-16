@@ -3,17 +3,12 @@
     import { Editor } from "@tiptap/vue-3";
     import LinkDropdown from "./LinkDropdown.vue";
     import TableDropdown from "./TableDropdown.vue";
-    import { Dropdown, DropdownItem } from "@/components/ui";
     import { buttons } from './config';
     import { computed } from "vue";
-    import { config } from "@/utils/config";
     import { __ } from "@/utils/i18n";
-    import { ContentEmbedManager } from "@/content/ContentEmbedManager";
     import { FormFieldProps } from "@/form/types";
-    import { useParentEditor } from "@/form/components/fields/editor/useParentEditor";
     import Icon from "@/components/ui/Icon.vue";
     import { Toggle } from "@/components/ui/toggle";
-    import { ToggleGroup } from "@/components/ui/toggle-group";
     import {
         DropdownMenu,
         DropdownMenuContent,

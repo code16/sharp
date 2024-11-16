@@ -11,7 +11,7 @@ export function __(key: string, replacements = null): string {
 // simpler version of https://github.com/conedevelopment/i18n/tree/master/resources/js
 export function trans_choice(key: string, count: number = 1, replacements = null) {
     const translation = usePage()?.props.translations[key] ?? key;
-    const chosenTranslation = count > 1 ? translation.split('|')[1] : translation.split('|')[0];
+    const chosenTranslation = count > 1 && translation.split('|').length > 1 ? translation.split('|')[1] : translation.split('|')[0];
 
     return replace(chosenTranslation ?? key, replacements);
 }
