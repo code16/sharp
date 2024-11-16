@@ -7,7 +7,6 @@
     import FieldGrid from "@/components/ui/FieldGrid.vue";
     import FieldGridRow from "@/components/ui/FieldGridRow.vue";
     import FieldGridColumn from "@/components/ui/FieldGridColumn.vue";
-    import { Serializable } from "@/form/Serializable";
     import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
     import { ApiResponse } from "@/api/types";
     import { __ } from "@/utils/i18n";
@@ -70,14 +69,14 @@
     }
 
     function onFieldInput(fieldKey: string, value: FormFieldData['value'], { force = false } = {}) {
-        const data = Serializable.wrap(value, value => ({
+        const data = {
             ...props.form.data,
             ...(!force ? getDependantFieldsResetData(props.form.fields, fieldKey) : null),
             [fieldKey]: value,
-        }));
+        };
 
-        props.form.data = data.localValue;
-        props.form.serializedData = data.serialized;
+        props.form.data = data;
+        props.form.serializedData = data;
     }
 
     defineExpose({ submit });

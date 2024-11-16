@@ -16,8 +16,7 @@
     import { getDefaultExtensions } from "@/form/components/fields/editor/extensions";
     import { ContentEmbedManager } from "@/content/ContentEmbedManager";
     import { ContentUploadManager } from "@/content/ContentUploadManager";
-    import { Serializable } from "@/form/Serializable";
-    import { FormFieldProps } from "@/form/types";
+    import { FormFieldEmits, FormFieldProps } from "@/form/types";
     import { ParentEditor } from "@/form/components/fields/editor/useParentEditor";
     import { Upload } from "@/form/components/fields/editor/extensions/upload/Upload";
     import { Embed } from "@/form/components/fields/editor/extensions/embed/Embed";
@@ -28,10 +27,8 @@
     import { cn } from "@/utils/cn";
     import StickyTop from "@/components/StickyTop.vue";
 
-    const emit = defineEmits(['input']);
-    const props = defineProps<
-        FormFieldProps<FormEditorFieldData>
-    >();
+    const emit = defineEmits<FormFieldEmits<FormEditorFieldData>>();
+    const props = defineProps<FormFieldProps<FormEditorFieldData>>();
 
     const header = ref<HTMLElement>();
     const form = useParentForm();
@@ -116,17 +113,14 @@
                     ? normalizeText(editor.storage.markdown.getMarkdown() ?? '')
                     : normalizeText(trimHTML(editor.getHTML(), { inline: props.field.inline }));
 
-                const value = Serializable.wrap(content, content => {
-                    if(props.field.localized && typeof props.value.text === 'object') {
-                        return {
-                            ...props.value,
-                            text: { ...props.value.text, [locale]: content },
-                        }
-                    }
-                    return { ...props.value, text: content };
-                });
-
-                emit('input', value, { error });
+                if(props.field.localized && typeof props.value?.text === 'object') {
+                    emit('input', {
+                        ...props.value,
+                        text: { ...props.value.text, [locale]: content },
+                    }, { error });
+                } else {
+                    emit('input', { ...props.value, text: content }, { error });
+                }
             }, 50));
 
             editor.on('selectionUpdate', () => {

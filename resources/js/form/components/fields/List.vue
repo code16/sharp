@@ -7,7 +7,6 @@
     import { Button, buttonVariants } from '@/components/ui/button';
     import { showAlert } from "@/utils/dialogs";
     import { FieldsMeta, FormFieldEmits, FormFieldProps } from "@/form/types";
-    import { Serializable } from "@/form/Serializable";
     import FieldGridRow from "@/components/ui/FieldGridRow.vue";
     import FieldGridColumn from "@/components/ui/FieldGridColumn.vue";
     import { Toggle } from "@/components/ui/toggle";
@@ -142,18 +141,16 @@
     }
 
     function onFieldInput(itemIndex: number, itemFieldKey: string, itemFieldValue: FormFieldData['value'], { force = false } = {}) {
-        emit('input', Serializable.wrap(itemFieldValue, itemFieldValue =>
-            props.value.map((item, i) => {
-                if(i === itemIndex) {
-                    return {
-                        ...item,
-                        ...(!force ? getDependantFieldsResetData(props.field.itemFields, itemFieldKey) : null),
-                        [itemFieldKey]: itemFieldValue,
-                    }
+        emit('input', props.value.map((item, i) => {
+            if(i === itemIndex) {
+                return {
+                    ...item,
+                    ...(!force ? getDependantFieldsResetData(props.field.itemFields, itemFieldKey) : null),
+                    [itemFieldKey]: itemFieldValue,
                 }
-                return item;
-            })
-        ));
+            }
+            return item;
+        }));
     }
 
     function onFieldLocaleChange(fieldKey: string, locale: string) {
