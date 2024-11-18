@@ -46,7 +46,7 @@
                     </template>
                     <template v-else-if="button.startsWith('embed:')">
                         <Toggle
-                            :pressed="props.editor.isActive(button)"
+                            :model-value="props.editor.isActive(button)"
                             :disabled="props.field.readOnly"
                             :title="props.field.embeds[button.replace('embed:', '')]?.label"
                             @click="$emit('embed', props.field.embeds[button.replace('embed:', '')])"
@@ -56,7 +56,7 @@
                     </template>
                     <template v-else :key="button">
                         <Toggle
-                            :pressed="buttons[button].isActive(editor)"
+                            :model-value="buttons[button].isActive(editor)"
                             :disabled="field.readOnly"
                             :title="buttons[button].label()"
                             @click="button === 'upload' || button === 'upload-image'

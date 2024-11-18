@@ -12,7 +12,6 @@ return [
     'command.info.title' => 'Information',
     'command.submit_button' => 'Envoyer',
     'state.422.title' => "Impossible de modifier l'état",
-    'cropper.title' => 'Transformer l’image',
 
     // Other errors fallback text
     'error.title' => 'Erreur',

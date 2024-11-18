@@ -12,7 +12,6 @@ return [
     'command.info.title' => 'Info',
     'command.submit_button' => 'Submit',
     'state.422.title' => "Can't change state",
-    'cropper.title' => 'Transform picture',
 
     // Other errors fallback text
     'error.title' => 'Error',

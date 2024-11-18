@@ -33,7 +33,9 @@ return [
     'upload.download_tooltip' => 'Download the file',
     'upload.message.file_too_big' => 'The selected file is too big (max. :size)',
     'upload.message.bad_extension' => 'File extension is incorrect',
+    'upload.edit_modal.title' => 'Transform picture',
     'upload.edit_modal.description' => 'Use the mouse wheel to zoom. Drag to move the image or the crop area',
+    'upload.edit_modal.ok_button' => 'Save',
     'upload.help_text.max_file_size' => 'up to :size',
 
     'multiselect.placeholder' => 'Select option...',

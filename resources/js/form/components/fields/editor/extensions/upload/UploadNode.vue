@@ -64,32 +64,26 @@
         uploadManager.restoreUpload(props.node.attrs['data-key']);
     });
 
-    onUnmounted(() => {
-        uploadManager.removeUpload(props.node.attrs['data-key']);
-    });
+    // onUnmounted(() => {
+    //     uploadManager.removeUpload(props.node.attrs['data-key']);
+    // });
 </script>
 
 <template>
-    <NodeRenderer :node="node">
-        <div class="border rounded-md p-4">
-            <Upload
-                :field="parentEditor.props.field.uploads.fields.file"
-                :field-error-key="`${parentEditor.props.fieldErrorKey}-upload-${props.node.attrs['data-key']}`"
-                :value="upload?.file"
-                as-editor-embed
-                @thumbnail="onThumbnailGenerated"
-                @transform="onUploadTransformed"
-                @error="onUploadError"
-                @success="onUploadSuccess"
-                @remove="onRemove"
-                @edit="onEdit"
-                ref="uploadComponent"
-            />
-            <template v-if="upload.legend">
-                <div class="text-sm mt-2">
-                    {{ upload.legend }}
-                </div>
-            </template>
-        </div>
+    <NodeRenderer class="block my-4 first:mt-0 last:mb-0 border rounded-md p-4" :node="node">
+        <Upload
+            :field="parentEditor.props.field.uploads.fields.file"
+            :field-error-key="`${parentEditor.props.fieldErrorKey}-upload-${props.node.attrs['data-key']}`"
+            :value="upload?.file"
+            as-editor-embed
+            :legend="upload.legend"
+            @thumbnail="onThumbnailGenerated"
+            @transform="onUploadTransformed"
+            @error="onUploadError"
+            @success="onUploadSuccess"
+            @remove="onRemove"
+            @edit="onEdit"
+            ref="uploadComponent"
+        />
     </NodeRenderer>
 </template>

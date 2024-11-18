@@ -1,13 +1,23 @@
 <script setup lang="ts">
     import { FormFieldProps } from "@/form/types";
-    import { FormData, FormEditorFieldData } from "@/types";
-    import { nextTick, ref } from "vue";
+    import { FormEditorFieldData } from "@/types";
+    import { nextTick, ref, useTemplateRef } from "vue";
     import { Form } from "@/form/Form";
     import { useParentForm } from "@/form/useParentForm";
     import { FormEditorUploadData } from "@/content/types";
     import { Editor } from "@tiptap/vue-3";
     import { __ } from "@/utils/i18n";
     import { useParentEditor } from "@/form/components/fields/editor/useParentEditor";
+    import {
+        Dialog,
+        DialogClose,
+        DialogFooter,
+        DialogHeader,
+        DialogScrollContent,
+        DialogTitle
+    } from "@/components/ui/dialog";
+    import { Button } from "@/components/ui/button";
+    import type FormComponent from "@/form/components/Form.vue";
 
     const props = defineProps<{
         field: FormEditorFieldData,
@@ -15,32 +25,44 @@
     }>();
     const input = ref<HTMLInputElement | null>(null);
     const parentForm = useParentForm();
-    const currentModalUpload = ref<{ id: string, form: Form } | null>(null);
     const uploadManager = useParentEditor().uploadManager;
+    const modalOpen = ref(false);
+    const modalForm = useTemplateRef<InstanceType<typeof FormComponent>>('modalForm');
+    const modalUpload = ref<{ id: string, form: Form, loading?: boolean } | null>(null);
 
     async function postForm(data: FormEditorUploadData) {
-        const { id } = await uploadManager.postForm(currentModalUpload.value.id, data);
+        modalUpload.value.loading = true;
+        const { id } = await uploadManager.postForm(modalUpload.value.id, data)
+            .finally(() => {
+                modalUpload.value.loading = false;
+            });
 
-        if(!currentModalUpload.value.id) {
+        if(modalUpload.value.id == null) {
             props.editor.commands.insertUpload({ id, type: data.file.mime_type });
         }
 
-        currentModalUpload.value = null;
+        modalOpen.value = false;
     }
 
     function open(id?: string) {
         if(props.field.uploads.fields.legend) {
-            currentModalUpload.value = {
+            modalUpload.value = {
                 id,
                 form: new Form(
                     {
                         fields: props.field.uploads.fields,
                         layout: props.field.uploads.layout,
-                        data: id ? uploadManager.getUpload(id) : {},
+                        data: id != null ? uploadManager.getUpload(id) : {},
                     },
                     parentForm.entityKey,
                     parentForm.instanceId,
                 ),
+            }
+            modalOpen.value = true;
+            if(id == null) {
+                nextTick(() => {
+                    ((modalForm.value!.$el as HTMLElement).querySelector('input[type=file]') as HTMLInputElement).click();
+                });
             }
         } else {
             input.value.click();
@@ -58,21 +80,49 @@
 </script>
 
 <template>
-    <input class="hidden" type="file" :accept="props.field.uploads.fields.file.allowedExtensions.join(',')" @change="onInputChange" ref="input">
+    <input
+        class="hidden"
+        type="file"
+        :accept="props.field.uploads.fields.file.allowedExtensions.join(',')"
+        @change="onInputChange"
+        ref="input"
+    >
+    <Dialog v-model:open="modalOpen">
+        <DialogScrollContent class="gap-6" @pointer-down-outside.prevent>
+            <DialogHeader>
+                <DialogTitle>
+                    <template v-if="modalUpload.id == null">
+                        {{ __('sharp::form.editor.dialogs.upload.title.new') }}
 
-<!--    <EmbedFormModal-->
-<!--        :visible="!!currentModalUpload"-->
-<!--        :form="currentModalUpload?.form"-->
-<!--        :post="postForm"-->
-<!--        @cancel="currentModalUpload = null"-->
-<!--    >-->
-<!--        <template v-slot:title>-->
-<!--            <template v-if="currentModalUpload?.id">-->
-<!--                {{ __('sharp::form.editor.dialogs.upload.title.new') }}-->
-<!--            </template>-->
-<!--            <template v-else>-->
-<!--                {{ __('sharp::form.editor.dialogs.upload.title.update') }}-->
-<!--            </template>-->
-<!--        </template>-->
-<!--    </EmbedFormModal>-->
+                    </template>
+                    <template v-else>
+                        {{ __('sharp::form.editor.dialogs.upload.title.update') }}
+                    </template>
+                </DialogTitle>
+            </DialogHeader>
+
+            <SharpForm
+                :form="modalUpload.form"
+                :post-fn="postForm"
+                inline
+                ref="modalForm"
+            />
+
+            <DialogFooter>
+                <DialogClose as-child>
+                    <Button variant="outline">
+                        {{ __('sharp::modals.cancel_button') }}
+                    </Button>
+                </DialogClose>
+                <Button @click="modalForm!.submit()" :disabled="modalUpload.loading">
+                    <template v-if="modalUpload.id == null">
+                        {{ __('sharp::form.editor.dialogs.embed.submit_button_insert') }}
+                    </template>
+                    <template v-else>
+                        {{ __('sharp::form.editor.dialogs.embed.submit_button_update') }}
+                    </template>
+                </Button>
+            </DialogFooter>
+        </DialogScrollContent>
+    </Dialog>
 </template>

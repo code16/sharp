@@ -3,7 +3,8 @@ import { VueNodeViewRenderer } from "@tiptap/vue-3";
 import UploadNode from "./UploadNode.vue";
 import { ExtensionAttributesSpec, WithRequiredOptions } from "@/form/components/fields/editor/types";
 import { ContentUploadManager } from "@/content/ContentUploadManager";
-import { Plugin } from "@tiptap/pm/state";
+import { Plugin, Transaction } from "@tiptap/pm/state";
+import { ReplaceStep } from "@tiptap/pm/transform";
 import { Form } from "@/form/Form";
 
 
@@ -51,7 +52,7 @@ export const Upload: WithRequiredOptions<Node<UploadOptions>> = Node.create<Uplo
     },
 
     renderHTML({ node, HTMLAttributes }) {
-        if(node.attrs.isImage) {
+        if((node.attrs as UploadNodeAttributes).isImage) {
             return ['x-sharp-image', HTMLAttributes];
         }
         return ['x-sharp-file', HTMLAttributes];
@@ -63,12 +64,12 @@ export const Upload: WithRequiredOptions<Node<UploadOptions>> = Node.create<Uplo
                 id ??= this.options.uploadManager.newUpload(nativeFile);
 
                 return commands.insertContentAt(pos ?? tr.selection.to, {
-                        type: Upload.name,
-                        attrs: {
-                            'data-key': id,
-                            isImage: !!(type ?? nativeFile.type).match(/^image\//),
-                        } satisfies UploadNodeAttributes,
-                    });
+                    type: Upload.name,
+                    attrs: {
+                        'data-key': id,
+                        isImage: !!(type ?? nativeFile.type).match(/^image\//),
+                    } satisfies UploadNodeAttributes,
+                });
             },
         }
     },
@@ -121,6 +122,46 @@ export const Upload: WithRequiredOptions<Node<UploadOptions>> = Node.create<Uplo
                 },
             }),
         ]
+    },
+
+    onTransaction({ transaction }) {
+        function getAddedAndRemovedNodes(transaction: Transaction, nodeName, schema) {
+            const nodeType = schema.nodes[nodeName];
+            if (!nodeType) {
+                console.warn(`Node type ${nodeName} does not exist in the schema.`);
+                return { addedNodes: [], removedNodes: [] };
+            }
+
+            const addedNodes = [];
+            const removedNodes = [];
+
+            for (let step of transaction.steps) {
+                const stepMap = step.getMap();
+
+                // Check for removed nodes
+                stepMap.forEach((oldStart, oldEnd) => {
+                    transaction.before.content.nodesBetween(oldStart, oldEnd, (node, pos) => {
+                        if (node.type === nodeType) {
+                            removedNodes.push({ node, pos });
+                        }
+                    });
+                });
+
+                // Check for added nodes
+                if (step.slice && step.slice.content) {
+                    let addedPos = stepMap.map(step.from);
+                    step.slice.content.descendants((node, pos) => {
+                        if (node.type === nodeType) {
+                            addedNodes.push({ node, pos: addedPos + pos });
+                        }
+                        return true;
+                    });
+                }
+            }
+
+            return { addedNodes, removedNodes };
+        }
+
     },
 
     addNodeView() {

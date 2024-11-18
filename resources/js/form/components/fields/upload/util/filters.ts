@@ -1,4 +1,8 @@
-import { serializeFilterNumber } from "@/utils/upload";
+
+
+function round(number: number, decimals = 4) {
+    return Math.round((number + Number.EPSILON) * 10 ** decimals) / 10 ** decimals;
+}
 
 export function getCropDataFromFilters({ filters, imageWidth, imageHeight }) {
     const rotate = filters?.rotate?.angle ?? 0;
@@ -12,10 +16,10 @@ export function getCropDataFromFilters({ filters, imageWidth, imageHeight }) {
     const { width, height, x, y } = filters?.crop ?? {};
 
     return {
-        width: (width ?? 1) * rw,
-        height: (height ?? 1) * rh,
-        x: (x ?? 0) * rw,
-        y: (y ?? 0) * rh,
+        width: Math.round((width ?? 1) * rw),
+        height: Math.round((height ?? 1) * rh),
+        x: Math.round((x ?? 0) * rw),
+        y: Math.round((y ?? 0) * rh),
         rotate: rotate * -1,
     }
 }
@@ -30,13 +34,13 @@ export function getFiltersFromCropData({ cropData, imageWidth, imageHeight }) {
 
     return {
         crop: {
-            width: serializeFilterNumber(cropData.width / rw, 4),
-            height: serializeFilterNumber(cropData.height / rh, 4),
-            x: serializeFilterNumber(cropData.x / rw, 4),
-            y: serializeFilterNumber(cropData.y / rh, 4),
+            width: round(cropData.width / rw),
+            height: round(cropData.height / rh),
+            x: round(cropData.x / rw),
+            y: round(cropData.y / rh),
         },
         rotate: {
-            angle: serializeFilterNumber(cropData.rotate * -1, 4),
+            angle: cropData.rotate ? cropData.rotate * -1 : 0,
         },
     }
 }

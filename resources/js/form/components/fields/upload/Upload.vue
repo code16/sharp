@@ -17,12 +17,10 @@
     import { getCropDataFromFilters, getFiltersFromCropData } from "./util/filters";
     import { Button } from '@/components/ui/button';
     import { route } from "@/utils/url";
-
     import { __ } from "@/utils/i18n";
     import { filesizeLabel } from "@/utils/file";
     import { useParentForm } from "@/form/useParentForm";
     import { getCsrfToken } from "@/utils/request";
-
     import { FormFieldProps } from "@/form/types";
     import FormFieldLayout from "@/form/components/FormFieldLayout.vue";
     import { Input } from "@/components/ui/input";
@@ -32,20 +30,19 @@
         DropdownMenuItem, DropdownMenuSeparator,
         DropdownMenuTrigger
     } from "@/components/ui/dropdown-menu";
-    import { MoreHorizontal } from "lucide-vue-next";
+    import { MoreHorizontal, RotateCcw, RotateCw } from "lucide-vue-next";
     import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
     import FileIcon from "@/components/FileIcon.vue";
     import {
         Dialog,
-        DialogContent,
         DialogDescription,
         DialogFooter,
-        DialogHeader,
+        DialogHeader, DialogScrollContent,
         DialogTitle
     } from "@/components/ui/dialog";
-    import { rotateTo } from "@/form/components/fields/upload/util/rotate";
+    import { rotate, rotateTo } from "@/form/components/fields/upload/util/rotate";
 
-    const props = defineProps<FormFieldProps<FormUploadFieldData> & { asEditorEmbed?: boolean }>();
+    const props = defineProps<FormFieldProps<FormUploadFieldData> & { asEditorEmbed?: boolean, legend?: string }>();
 
     defineOptions({
         inheritAttrs: false,
@@ -63,11 +60,6 @@
         (e: 'edit', event: CustomEvent): void
     }>();
     const form = useParentForm();
-    const editModalOpen = ref(false);
-    const editModalImageEl = useTemplateRef<HTMLImageElement>('editModalImageEl');
-    const editModalImageUrl = ref<string>();
-    const editModalCropper = ref<Cropper>();
-    const editModalCropperData = ref<Partial<Cropper.Data>>();
     const transformedImg = ref<string>();
     const uppyFile = ref<UppyFile>();
     const isEditable = computed(() => {
@@ -173,8 +165,8 @@
             emit('uploading', false);
         });
 
-    function canTransform(fileName: string, mimeType: string) {
-        const extension = fileName.match(/\.[0-9a-z]+$/i)[0];
+    function canTransform(fileName: string | null, mimeType: string) {
+        const extension = fileName?.match(/\.[0-9a-z]+$/i)[0];
         return props.field.imageTransformable
             && (!props.field.imageTransformableFileTypes || props.field.imageTransformableFileTypes?.includes(extension))
             && mimeType.startsWith('image/');
@@ -224,6 +216,12 @@
         emit('input', value);
     }
 
+    const editModalOpen = ref(false);
+    const editModalImageEl = useTemplateRef<HTMLImageElement>('editModalImageEl');
+    const editModalImageUrl = ref<string>();
+    const editModalCropper = ref<Cropper>();
+    const editModalCropperData = ref<Partial<Cropper.Data>>();
+    let onWindowResize;
     async function onEdit() {
         const event = new CustomEvent('edit', { cancelable: true });
         emit('edit', event);
@@ -282,6 +280,7 @@
 
         await nextTick();
 
+        let currentCropData: Cropper.Data;
         editModalCropper.value = new Cropper(editModalImageEl.value, {
             viewMode: 2,
             dragMode: 'move',
@@ -299,9 +298,33 @@
                     rotateTo(editModalCropper.value, editModalCropperData.value.rotate);
                     editModalCropper.value.setData(editModalCropperData.value);
                 }
+                editModalCropper.value.setData(editModalCropperData.value);
+                currentCropData = editModalCropper.value.getData();
             },
+            cropend: () => {
+                currentCropData = editModalCropper.value.getData();
+            },
+            cropmove: () => {
+                currentCropData = editModalCropper.value.getData();
+            },
+            zoom: () => {
+                currentCropData = editModalCropper.value.getData();
+            }
+        });
+
+        window.removeEventListener('resize', onWindowResize);
+        window.addEventListener('resize', onWindowResize = () => {
+            if(editModalOpen.value) {
+                setTimeout(() => {
+                    editModalCropper.value.setData(currentCropData)
+                });
+            }
         });
     }
+
+    onUnmounted(() => {
+        window.removeEventListener('resize', onWindowResize);
+    })
 
     function onEditModalSubmit() {
         editModalCropperData.value = editModalCropper.value.getData(true);
@@ -406,13 +429,14 @@
                                     {{ value?.name?.split('/').at(-1) ?? uppyFile?.name }}
                                 </template>
                             </div>
-                            <div class="flex gap-2 mt-2">
-                                <template v-if="value?.size ?? uppyFile?.size">
-                                    <div class="text-xs text-muted-foreground">
-                                        {{ filesizeLabel(value?.size ?? uppyFile.size) }}
-                                    </div>
-                                </template>
-                            </div>
+                            <template v-if="value?.size ?? uppyFile?.size">
+                                <div class="mt-2 text-xs text-muted-foreground">
+                                    {{ filesizeLabel(value?.size ?? uppyFile.size) }}
+                                </div>
+                            </template>
+                            <template v-if="legend">
+                                <div class="mt-2 text-xs">{{ legend }}</div>
+                            </template>
                             <template v-if="uppyFile?.progress.percentage < 100 && !hasError">
                                 <div class="mt-2">
                                     <div class="bg-primary h-0.5 transition-all" :style="{ width: `${uppyFile.progress.percentage}%` }" role="progressbar">
@@ -483,23 +507,31 @@
     </FormFieldLayout>
 
     <Dialog v-model:open="editModalOpen">
-        <DialogContent>
+        <DialogScrollContent class="flex flex-col max-w-6xl min-h-[500px] h-[calc(100vh-4rem)] transition-none">
             <DialogHeader>
                 <DialogTitle>
-                    {{ __('sharp::modals.cropper.title') }}
+                    {{ __('sharp::form.upload.edit_modal.title') }}
                 </DialogTitle>
                 <DialogDescription>
                     {{ __('sharp::form.upload.edit_modal.description') }}
                 </DialogDescription>
             </DialogHeader>
-            <div class="h-full">
+            <div class="flex-1 min-h-0">
                 <img :src="editModalImageUrl" alt="" ref="editModalImageEl">
             </div>
-            <DialogFooter>
+            <DialogFooter class="flex-col">
+                <div class="flex gap-2 mr-auto">
+                    <Button variant="secondary" @click="rotate(editModalCropper, -90)">
+                        <RotateCcw class="size-4" />
+                    </Button>
+                    <Button variant="secondary" @click="rotate(editModalCropper, 90)">
+                        <RotateCw class="size-4" />
+                    </Button>
+                </div>
                 <Button @click="onEditModalSubmit">
-                    {{ __('sharp::modals.ok_button') }}
+                    {{ __('sharp::form.upload.edit_modal.ok_button') }}
                 </Button>
             </DialogFooter>
-        </DialogContent>
+        </DialogScrollContent>
     </Dialog>
 </template>

@@ -2,16 +2,13 @@
 
 namespace Code16\Sharp\Http\Controllers\Api;
 
+use Code16\Sharp\Http\Controllers\Api\Requests\EditorUploadFormRequest;
 use Illuminate\Routing\Controller;
 
 class ApiFormEditorUploadFormController extends Controller
 {
-    public function update(string $entityKey, ?string $instanceId = null)
+    public function update(EditorUploadFormRequest $request, string $entityKey, ?string $instanceId = null)
     {
-        request()->validate([
-            'data.file' => ['required'],
-        ]);
-
-        return response()->json(request()->input('data'));
+        return response()->json($request->input('data'));
     }
 }

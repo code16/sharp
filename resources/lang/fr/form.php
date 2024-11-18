@@ -33,7 +33,9 @@ return [
     'upload.download_tooltip' => 'Télécharger le fichier',
     'upload.message.file_too_big' => 'Le fichier sélectionné est trop grand (max. :size)',
     'upload.message.bad_extension' => 'L\'extension du fichier est invalide',
+    'upload.edit_modal.title' => 'Transformer l’image',
     'upload.edit_modal.description' => 'Utilisez la molette de la souris pour zoomer. Maintenir la souris pour déplacer l’image ou la zone de recadrage.',
+    'upload.edit_modal.ok_button' => 'Valider',
     'upload.help_text.max_file_size' => 'jusqu’à :size',
 
     'multiselect.placeholder' => 'Choisir...',
