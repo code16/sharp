@@ -42,7 +42,7 @@
                             :disabled="field.readOnly"
                             @update:model-value="onChange($event, option)"
                         />
-                        <Label class="font-normal py-1" :for="`${id}.${index}`">
+                        <Label class="font-normal py-1 text-sm leading-4" :for="`${id}.${index}`">
                             {{ field.localized && typeof option.label === 'object' ? option.label?.[locale] : option.label }}
                         </Label>
                     </div>

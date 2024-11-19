@@ -4,20 +4,35 @@
     import { Iframe, IframeAttributes } from "@/form/components/fields/editor/extensions/iframe/Iframe";
     import debounce from 'lodash/debounce';
     import { Button } from '@/components/ui/button';
-    import { Modal } from "@/components/ui";
     import NodeRenderer from "../../NodeRenderer.vue";
     import { getHTMLFromFragment } from "@tiptap/core";
     import { Fragment, Node } from "@tiptap/pm/model";
     import { ref } from "vue";
+    import {
+        DropdownMenu,
+        DropdownMenuContent,
+        DropdownMenuItem,
+        DropdownMenuSeparator, DropdownMenuTrigger
+    } from "@/components/ui/dropdown-menu";
+    import {
+        Dialog,
+        DialogClose,
+        DialogFooter,
+        DialogHeader,
+        DialogScrollContent,
+        DialogTitle
+    } from "@/components/ui/dialog";
+    import { Textarea } from "@/components/ui/textarea";
+    import { MoreHorizontal } from "lucide-vue-next";
 
     const props = defineProps<ExtensionNodeProps<typeof Iframe, IframeAttributes>>();
 
-    const modalVisible = ref(props.node.attrs.isNew);
+    const modalOpen = ref(props.node.attrs.isNew);
     const html = ref<string>();
     const previewHtml = ref<string>();
     const invalid = ref(false);
 
-    function getIframe(html) {
+    function getIframe(html: string) {
         const dom = document.createElement('div');
         dom.innerHTML = html;
         return dom.querySelector('iframe');
@@ -27,12 +42,15 @@
         const rendered = getHTMLFromFragment(Fragment.from(props.node as Node), props.editor.schema);
         html.value = getIframe(rendered).outerHTML;
         previewHtml.value = html.value;
-        modalVisible.value = true;
+        modalOpen.value = true;
         invalid.value = false;
     }
 
     function onRemove() {
         props.deleteNode();
+        setTimeout(() => {
+            props.editor.commands.focus();
+        });
     }
 
     function onModalOk(e) {
@@ -41,20 +59,20 @@
             props.updateAttributes({
                 ...Object.fromEntries(
                     Object.entries(props.node.type.spec.attrs)
-                        .map(([attr, spec]) => [attr, spec.default])
+                        .map(([attr, spec]) => [attr, (spec as any).default])
                 ),
                 ...Object.fromEntries(
                     [...iframe.attributes].map(attr => [attr.name, attr.value])
                 ),
                 isNew: false,
             });
-            modalVisible.value = false;
+            modalOpen.value = false;
         } else {
-            e.preventDefault();
+            invalid.value = true;
         }
     }
 
-    function onModalCancel() {
+    function onModalHidden() {
         if(props.node.attrs.isNew) {
             props.deleteNode();
             setTimeout(() => props.editor.commands.focus());
@@ -63,71 +81,93 @@
 
     function onModalInputChange() {
         const iframe = getIframe(html.value);
-        invalid.value = !iframe;
+        invalid.value = !!html.value && !iframe;
         if(iframe) {
             iframe.removeAttribute('style');
             previewHtml.value = iframe.outerHTML;
+        } else {
+            previewHtml.value = '';
         }
     }
     const debouncedOnModalInputChange = debounce(onModalInputChange, 200);
 </script>
 
 <template>
-    <NodeRenderer class="editor__node d-inline-flex" :node="node">
-        <template v-if="!node.attrs.isNew">
-            <div class="card">
-                <div class="card-body">
-                    <iframe v-bind="node.attrs"></iframe>
+    <NodeRenderer
+        class="my-4 first:mt-0 last:mb-0 border rounded-md items-center p-4 flex gap-4"
+        :class="{ 'group-focus/editor:border-primary': props.selected }"
+        :node="node"
+    >
+        <div class="flex-1 min-w-0">
+            <template v-if="!node.attrs.isNew">
+                <iframe class="w-full max-h-[200px] [[height$='%']]:h-[200px]" v-bind="node.attrs"></iframe>
+            </template>
+        </div>
+        <DropdownMenu>
+            <DropdownMenuTrigger as-child>
+                <Button class="shrink-0 self-center" variant="ghost" size="icon">
+                    <MoreHorizontal class="size-4" />
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+                <DropdownMenuItem @click="onEdit()">
+                    {{ __('sharp::form.editor.extension_node.edit_button') }}
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem class="text-destructive" @click="onRemove()">
+                    {{ __('sharp::form.editor.extension_node.remove_button') }}
+                </DropdownMenuItem>
+            </DropdownMenuContent>
+        </DropdownMenu>
 
-                    <div class="mt-3">
-                        <div class="row row-cols-auto gx-2">
-                            <div>
-                                <Button variant="outline" size="sm" @click="onEdit">
-                                    {{ __('sharp::form.upload.edit_button') }}
-                                </Button>
-                            </div>
-                            <div>
-                                <Button variant="destructive" size="sm" @click="onRemove">
-                                    {{ __('sharp::form.upload.remove_button') }}
-                                </Button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </template>
-
-        <Modal
-            v-model:visible="modalVisible"
-            @ok="onModalOk"
-            @close="onModalCancel"
-            @cancel="onModalCancel"
-            ref="modal"
+        <Dialog
+            v-model:open="modalOpen"
+            @update:open="!$event && onModalHidden()"
         >
-            <template v-slot:title>
-                <template v-if="node.attrs.isNew">
-                    {{ __('sharp::form.editor.dialogs.iframe.insert_title') }}
-                </template>
-                <template v-else>
-                    {{ __('sharp::form.editor.dialogs.iframe.update_title') }}
-                </template>
-            </template>
+            <DialogScrollContent class="gap-6 max-w-xl" @pointer-down-outside.prevent>
+                <DialogHeader>
+                    <DialogTitle>
+                        <template v-if="node.attrs.isNew">
+                            {{ __('sharp::form.editor.dialogs.iframe.insert_title') }}
+                        </template>
+                        <template v-else>
+                            {{ __('sharp::form.editor.dialogs.iframe.update_title') }}
+                        </template>
+                    </DialogTitle>
+                </DialogHeader>
 
-            <textarea
-                class="form-control"
-                :class="{ 'border-red-600': invalid }"
-                v-model="html"
-                placeholder="&lt;iframe src=&quot;...&quot;&gt;&lt;/iframe&gt;"
-                @input="debouncedOnModalInputChange"
-                @paste="onModalInputChange"
-                @focus="$event.target.select()"
-                rows="6"
-            ></textarea>
+                <div>
+                    <Textarea
+                        placeholder="&lt;iframe src=&quot;...&quot;&gt;&lt;/iframe&gt;"
+                        v-model="html"
+                        rows="6"
+                        @update:model-value="debouncedOnModalInputChange"
+                        @paste="onModalInputChange"
+                        @focus="($event.target as HTMLTextAreaElement).select()"
+                    />
+                    <template v-if="invalid">
+                        <div class="mt-2 text-destructive text-sm">
+                            {{ __('sharp::form.editor.dialogs.iframe.invalid_message') }}
+                        </div>
+                    </template>
 
-            <template v-if="previewHtml && !invalid">
-                <div class="[&_iframe]:w-full [&_iframe]:max-h-[260px] [&_iframe[height$='%']]:h-[260px] mt-3" v-html="previewHtml">
+                    <template v-if="previewHtml && !invalid">
+                        <div class="mt-4 [&_iframe]:w-full [&_iframe]:max-h-[260px] [&_iframe[height$='%']]:h-[260px]" v-html="previewHtml">
+                        </div>
+                    </template>
                 </div>
-            </template>
-        </Modal>
+
+                <DialogFooter>
+                    <DialogClose as-child>
+                        <Button variant="outline">
+                            {{ __('sharp::modals.cancel_button') }}
+                        </Button>
+                    </DialogClose>
+                    <Button @click="onModalOk">
+                        {{ __('sharp::modals.command.submit_button') }}
+                    </Button>
+                </DialogFooter>
+            </DialogScrollContent>
+        </Dialog>
     </NodeRenderer>
 </template>

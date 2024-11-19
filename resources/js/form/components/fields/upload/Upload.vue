@@ -42,7 +42,7 @@
     } from "@/components/ui/dialog";
     import { rotate, rotateTo } from "@/form/components/fields/upload/util/rotate";
 
-    const props = defineProps<FormFieldProps<FormUploadFieldData> & { asEditorEmbed?: boolean, legend?: string }>();
+    const props = defineProps<FormFieldProps<FormUploadFieldData> & { asEditorEmbed?: boolean, legend?: string, dropdownEditLabel?: string }>();
 
     defineOptions({
         inheritAttrs: false,
@@ -63,7 +63,8 @@
     const transformedImg = ref<string>();
     const uppyFile = ref<UppyFile>();
     const isEditable = computed(() => {
-        return props.value && canTransform(props.value.name, props.value.mime_type) && !props.hasError;
+        return props.value && canTransform(props.value.name, props.value.mime_type) && !props.hasError
+            || !!props.dropdownEditLabel;
     });
     const uppy = new Uppy({
         id: props.fieldErrorKey,
@@ -165,11 +166,11 @@
             emit('uploading', false);
         });
 
-    function canTransform(fileName: string | null, mimeType: string) {
+    function canTransform(fileName: string | null, mimeType: string | null) {
         const extension = fileName?.match(/\.[0-9a-z]+$/i)[0];
         return props.field.imageTransformable
             && (!props.field.imageTransformableFileTypes || props.field.imageTransformableFileTypes?.includes(extension))
-            && mimeType.startsWith('image/');
+            && mimeType?.startsWith('image/');
     }
 
     const isDraggingOver = ref(false);
@@ -391,7 +392,7 @@
                                     alt=""
                                 >
                                 <template v-if="isEditable">
-                                    <button class="absolute grid place-content-center inset-0 bg-black/50 transition text-white text-xs font-medium opacity-0 group-hover/img:opacity-100" tabindex="-1" @click="onEdit">
+                                    <button class="absolute flex justify-center items-center gap-2 inset-0 bg-black/50 transition text-white text-xs font-medium opacity-0 group-hover/img:opacity-100" tabindex="-1" @click="onEdit">
                                         {{ __('sharp::form.upload.edit_button') }}
                                     </button>
                                 </template>
@@ -406,16 +407,16 @@
                                     <TooltipProvider>
                                         <Tooltip :delay-duration="0" disable-hoverable-content>
                                             <TooltipTrigger as-child>
-                                                <a class="text-foreground underline underline-offset-4 decoration-foreground/20 hover:underline hover:decoration-foreground"
+                                                <a class="text-foreground underline underline-offset-4 decoration-foreground/20 hover:decoration-foreground"
                                                     :href="route('code16.sharp.download.show', {
                                                         entityKey: form.entityKey,
                                                         instanceId: form.instanceId,
                                                         disk: value.disk,
                                                         path: value.path,
                                                     })"
-                                                    :download="value?.name?.split('/').at(-1)"
+                                                    :download="value?.name"
                                                 >
-                                                    {{ value?.name?.split('/').at(-1) }}
+                                                    {{ value?.name }}
                                                 </a>
                                             </TooltipTrigger>
 
@@ -426,7 +427,7 @@
                                     </TooltipProvider>
                                 </template>
                                 <template v-else>
-                                    {{ value?.name?.split('/').at(-1) ?? uppyFile?.name }}
+                                    {{ value?.name ?? uppyFile?.name }}
                                 </template>
                             </div>
                             <template v-if="value?.size ?? uppyFile?.size">
@@ -446,7 +447,7 @@
                         </div>
                         <DropdownMenu :modal="false">
                             <DropdownMenuTrigger as-child>
-                                <Button class="self-center" variant="ghost" size="icon">
+                                <Button class="shrink-0 self-center" variant="ghost" size="icon">
                                     <MoreHorizontal class="w-4 h-4" />
                                 </Button>
                             </DropdownMenuTrigger>
@@ -467,7 +468,7 @@
                                 </template>
                                 <template v-if="isEditable">
                                     <DropdownMenuItem @click="onEdit">
-                                        {{ __('sharp::form.upload.edit_button') }}
+                                        {{ props.dropdownEditLabel ?? __('sharp::form.upload.edit_button') }}
                                     </DropdownMenuItem>
                                 </template>
                                 <DropdownMenuSeparator class="first:hidden" />

@@ -101,7 +101,7 @@
     >
         <PopoverTrigger as-child>
             <Toggle
-                :pressed="props.editor.isActive('link')"
+                :model-value="props.editor.isActive('link')"
                 :disabled="props.field.readOnly"
                 :title="__('sharp::form.editor.toolbar.link.title')"
             >

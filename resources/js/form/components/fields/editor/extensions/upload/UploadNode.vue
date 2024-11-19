@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { Upload as UploadExtension, UploadNodeAttributes } from "./Upload"
-    import { computed, nextTick, onMounted, onUnmounted, ref } from "vue";
+    import { computed, nextTick, onBeforeUnmount, onMounted, onUnmounted, ref } from "vue";
     import { __ } from "@/utils/i18n";
     import NodeRenderer from "../../NodeRenderer.vue";
     import { showAlert } from "@/utils/dialogs";
@@ -50,7 +50,7 @@
         props.deleteNode();
         setTimeout(() => {
             props.editor.commands.focus();
-        }, 0);
+        });
     }
 
     function onEdit(event: CustomEvent) {
@@ -64,19 +64,24 @@
         uploadManager.restoreUpload(props.node.attrs['data-key']);
     });
 
-    // onUnmounted(() => {
-    //     uploadManager.removeUpload(props.node.attrs['data-key']);
-    // });
+    onBeforeUnmount(() => {
+        uploadManager.removeUpload(props.node.attrs['data-key']);
+    });
 </script>
 
 <template>
-    <NodeRenderer class="block my-4 first:mt-0 last:mb-0 border rounded-md p-4" :node="node">
+    <NodeRenderer
+        class="block my-4 first:mt-0 last:mb-0 border rounded-md p-4 outline-none"
+        :class="{ 'group-focus/editor:border-primary': props.selected }"
+        :node="node"
+    >
         <Upload
             :field="parentEditor.props.field.uploads.fields.file"
             :field-error-key="`${parentEditor.props.fieldErrorKey}-upload-${props.node.attrs['data-key']}`"
             :value="upload?.file"
             as-editor-embed
             :legend="upload.legend"
+            :dropdown-edit-label="parentEditor.props.field.uploads.fields.legend ? __('sharp::form.editor.extension_node.edit_button') : null"
             @thumbnail="onThumbnailGenerated"
             @transform="onUploadTransformed"
             @error="onUploadError"

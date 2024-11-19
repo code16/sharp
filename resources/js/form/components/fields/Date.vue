@@ -167,6 +167,7 @@ function onMinuteChange(minute: string) {
                     <Input
                         :id="id"
                         class="pl-10 min-w-full appearance-none text-left [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-date-and-time-value]:text-left"
+                        :class="{ 'pr-10': props.value }"
                         :type="
                             props.field.hasDate && props.field.hasTime ? 'datetime-local'
                             : props.field.hasTime ? 'time'

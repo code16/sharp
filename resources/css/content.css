@@ -1,10 +1,29 @@
 
 @layer components {
   .content {
+    > :where(h1) {
+      @apply mt-6 border-b pb-2 text-3xl font-semibold tracking-tight;
+    }
+    > :where(h2) {
+      @apply mt-6 text-2xl font-semibold tracking-tight;
+    }
+    > :where(h3) {
+      @apply mt-4 text-xl font-semibold tracking-tight;
+    }
+    > :where(h4, h5, h6) {
+      @apply mt-4 font-semibold;
+    }
+    > :where(p) {
+      @apply mt-4;
+    }
+    > :where(ul) {
+      @apply mt-4 ml-6 list-disc [&>li]:mt-2;
+    }
+    > :where(ol) {
+      @apply mt-4 ml-6 list-decimal [&>li]:mt-2;
+    }
     > :where(blockquote) {
-      @apply relative flow-root mt-6 pl-4 border-l-2 before:block before:-mt-0.5
-        /*before:absolute before:border-l-2 before:top-[0.2lh] before:-left-0.5 before:bottom-[0.1lh]*/
-      ;
+      @apply mt-4 relative flow-root pl-4 border-l-2 before:block before:-mt-0.5;
       > :where(p,ul,ol) {
         @apply mt-2;
       }
@@ -15,18 +34,38 @@
         @apply mb-0;
       }
     }
-    > :where(p) {
+    > :where(table) {
+      @apply mt-4 w-full;
+      :where(tr) {
+        @apply m-0 border-t p-0 even:bg-muted;
+      }
+      :where(th) {
+        @apply border px-4 py-2 text-left font-bold [&[align=center]]:text-center [&[align=right]]:text-right;
+      }
+      :where(td) {
+        @apply border px-4 py-2 text-left [&[align=center]]:text-center [&[align=right]]:text-right;
+      }
+    }
+    :where(code) {
+      @apply rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm;
+    }
+    > :where(pre) {
+      @apply mt-4 !whitespace-pre overflow-x-auto;
+      > :where(code) {
+          @apply block py-2 px-4 bg-muted rounded-md [font-size:inherit];
+      }
+      .ProseMirror-trailingBreak {
+        @apply hidden;
+      }
+    }
+    > :where(hr) {
       @apply mt-4;
     }
     :where(a:not([style],[class])) {
       @apply relative p-1.5 -m-1.5 text-primary underline underline-offset-4 decoration-primary/20 hover:decoration-inherit;
-      /*@apply before:absolute before:inset-0 before:transition-colors before:duration-100 before:rounded-sm before:hover:bg-primary/10;*/
-    }
-    > :where(ul) {
-      @apply my-6 ml-6 list-disc [&>li]:mt-2 first:mt-0 last:mb-0;
     }
     :where(strong) {
-      @apply font-semibold;
+      @apply font-bold;
     }
     > :where(:first-child) {
       @apply mt-0;

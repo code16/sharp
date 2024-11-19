@@ -58,27 +58,28 @@
 </script>
 
 <template>
-    <NodeViewWrapper>
-        <div class="border rounded-md items-center p-4 flex" :class="{ 'shadow border-primary': selected }">
-            <div class="flex-1">
-                 <pre>{{ node.attrs.content }}</pre>
-            </div>
-            <DropdownMenu :modal="false">
-                <DropdownMenuTrigger as-child>
-                    <Button class="self-center" variant="ghost" size="icon">
-                        <MoreHorizontal class="size-4" />
-                    </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                    <DropdownMenuItem @click="onEdit">
-                        {{ __('sharp::form.upload.edit_button') }}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem class="text-destructive" @click="onRemove">
-                        {{ __('sharp::form.upload.remove_button') }}
-                    </DropdownMenuItem>
-                </DropdownMenuContent>
-            </DropdownMenu>
+    <NodeViewWrapper
+        class="my-4 first:mt-0 last:mb-0 border rounded-md items-center p-4 flex gap-4"
+        :class="{ 'group-focus/editor:border-primary': selected }"
+    >
+        <div class="flex-1">
+            <pre>{{ node.attrs.content }}</pre>
         </div>
+        <DropdownMenu :modal="false">
+            <DropdownMenuTrigger as-child>
+                <Button class="shrink-0 self-center" variant="ghost" size="icon">
+                    <MoreHorizontal class="size-4" />
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+                <DropdownMenuItem @click="onEdit">
+                    {{ __('sharp::form.editor.extension_node.edit_button') }}
+                </DropdownMenuItem>
+                <DropdownMenuItem class="text-destructive" @click="onRemove">
+                    {{ __('sharp::form.editor.extension_node.remove_button') }}
+                </DropdownMenuItem>
+            </DropdownMenuContent>
+        </DropdownMenu>
         <Dialog
             v-model:open="modalOpen"
             @update:open="!$event && onModalHidden()"

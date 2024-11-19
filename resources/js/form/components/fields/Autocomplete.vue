@@ -120,7 +120,7 @@
         <Popover v-model:open="open" @update:open="$event ? onOpen() : null">
             <template v-if="props.value">
                 <PopoverTrigger as-child>
-                    <div class="relative border border-input flex items-center rounded-md min-h-10 text-sm px-3 py-2">
+                    <div class="relative border border-input flex items-center rounded-md min-h-10 text-sm px-3 py-2 pr-10">
                         <div class="flex-1"
                             v-html="props.value._htmlResult ?? props.value._html ?? props.value[props.field.itemIdAttribute]"
                         ></div>

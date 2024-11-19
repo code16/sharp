@@ -13,7 +13,7 @@
 <template>
     <FormFieldLayout class="gap-y-3.5" v-bind="props" field-group v-slot="{ id }">
         <RadioGroup
-            class="flex items-start gap-y-1.5 gap-x-6"
+            class="flex items-start gap-y-1 gap-x-6"
             :class="field.inline ? 'flex-row flex-wrap' : 'flex-col'"
             :model-value="value != null ? String(value) : null"
             @update:model-value="checkedRadioValue => $emit('input', field.options.find(o => isSelected(o, checkedRadioValue))?.id)"
@@ -25,7 +25,7 @@
                         :value="String(option.id)"
                         :disabled="field.readOnly"
                     />
-                    <Label class="font-normal py-1" :for="`${id}.${index}`">
+                    <Label class="font-normal py-1 text-sm leading-4" :for="`${id}.${index}`">
                         {{ field.localized && typeof option.label === 'object' ? option.label?.[locale] : option.label }}
                     </Label>
                 </div>

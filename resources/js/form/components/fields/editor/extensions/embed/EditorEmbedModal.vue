@@ -23,7 +23,7 @@
     }>();
     const parentForm = useParentForm();
     const embedManager = useParentEditor().embedManager;
-    const modalEmbed = ref<{ id?: string, embed: EmbedData, form: Form, loading?: boolean } | null>(null);
+    const modalEmbed = ref<{ id?: string, embed: EmbedData, form?: Form, loading?: boolean } | null>(null);
     const modalForm = useTemplateRef<InstanceType<typeof FormComponent>>('modalForm');
     const modalOpen = ref(false);
 
@@ -39,21 +39,31 @@
             });
 
         modalOpen.value = false;
-        setTimeout(() => modalEmbed.value = null, 200);
 
         if(modalEmbed.value.id == null) {
             props.editor.commands.insertEmbed({ id, embed: modalEmbed.value.embed });
+            setTimeout(() => {
+                props.editor.commands.focus(props.editor.state.selection.to + 1);
+            }, 100);
         }
     }
 
-    async function open({ id, embed }: { id?: string, embed:EmbedData }) {
-        const embedForm = await embedManager.postResolveForm(id, embed);
-        modalEmbed.value = {
-            id,
-            embed,
-            form: new Form(embedForm, parentForm.entityKey, parentForm.instanceId, embed.key),
+    async function open({ id, embed }: { id?: string, embed: EmbedData }) {
+        if(Object.keys(embed.fields).length > 0) {
+            const embedForm = await embedManager.postResolveForm(id, embed);
+            modalEmbed.value = {
+                id,
+                embed,
+                form: new Form(embedForm, parentForm.entityKey, parentForm.instanceId, embed.key),
+            }
+            modalOpen.value = true;
+        } else {
+            modalEmbed.value = {
+                id,
+                embed,
+            }
+            await postForm(null);
         }
-        modalOpen.value = true;
     }
 
     defineExpose({
@@ -62,10 +72,7 @@
 </script>
 
 <template>
-    <Dialog
-        v-model:open="modalOpen"
-        @update:open="!$event && window.setTimeout(() => modalEmbed = null, 200)"
-    >
+    <Dialog v-model:open="modalOpen">
         <DialogScrollContent class="gap-6" @pointer-down-outside.prevent>
             <DialogHeader>
                 <DialogTitle>

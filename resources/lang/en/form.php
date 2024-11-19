@@ -28,7 +28,7 @@ return [
 
     'upload.browse_button' => 'Browse...',
     'upload.remove_button' => 'Remove',
-    'upload.edit_button' => 'Edit...',
+    'upload.edit_button' => 'Crop...',
     'upload.download_link' => 'Download',
     'upload.download_tooltip' => 'Download the file',
     'upload.message.file_too_big' => 'The selected file is too big (max. :size)',
@@ -61,7 +61,10 @@ return [
 
     'editor.character_count' => ':count characters',
     'editor.errors.unknown_file' => 'Unknown file ":path"',
-
+    
+    'editor.extension_node.edit_button' => 'Edit...',
+    'editor.extension_node.remove_button' => 'Remove',
+    
     'editor.dialogs.upload.title.new' => 'Insert file',
     'editor.dialogs.upload.title.update' => 'Update',
     'editor.dialogs.upload.legend_field.label' => 'Legend',
@@ -75,6 +78,7 @@ return [
     'editor.dialogs.raw_html.edit_title' => 'Edit HTML',
     'editor.dialogs.iframe.insert_title' => 'Insert Iframe (embed)',
     'editor.dialogs.iframe.update_title' => 'Update Iframe (embed)',
+    'editor.dialogs.iframe.invalid_message' => 'Iframe code is invalid',
     
     'editor.dialogs.embed.submit_button_insert' => 'Insert',
     'editor.dialogs.embed.submit_button_update' => 'Update',

@@ -21,7 +21,7 @@
     <DropdownMenu :modal="false">
         <DropdownMenuTrigger as-child>
             <Toggle
-                :pressed="props.editor.isActive('table')"
+                :model-value="props.editor.isActive('table')"
                 :disabled="props.field.readOnly"
                 :title="__('sharp::form.editor.toolbar.table.title')"
             >

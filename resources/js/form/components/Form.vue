@@ -83,7 +83,7 @@
 </script>
 
 <template>
-    <Tabs v-model="selectedTabSlug">
+    <Tabs v-model="selectedTabSlug" :unmount-on-hide="false">
         <template v-if="form.locales?.length">
             <div class="container mb-4">
                 <template v-if="form.locales?.length">
@@ -165,7 +165,7 @@
                     </template>
 
                     <template v-for="tab in form.layout.tabs">
-                        <TabsContent class="mt-0" :value="slugify(tab.title)">
+                        <TabsContent class="mt-0" :tabindex="form.layout.tabs.length > 1 ? 0 : -1" :value="slugify(tab.title)">
                             <div class="grid gap-6 md:grid-cols-12">
                                 <template v-for="column in tab.columns">
                                     <div class="col-[span_var(--size)]" :style="{ '--size': `${column.size}` }">

@@ -174,7 +174,7 @@
                 class="h-6 gap-2"
                 :class="{ 'invisible': value?.length < 2 }"
                 size="sm"
-                :pressed="reordering"
+                :model-value="reordering"
                 :disabled="isUploading"
                 @click="reordering = !reordering"
             >

@@ -134,12 +134,11 @@ class TestForm extends SharpSingleForm
                     ),
             )
             ->addField(
-                SharpFormEditorField::make('markdown')
-                    ->setRenderContentAsMarkdown()
+                SharpFormEditorField::make('wysiwyg')
                     ->setPlaceholder('Start typing content here...')
                     ->setMaxLength(200)
                     ->setLocalized()
-                    ->setLabel('Markdown')
+                    ->setLabel('Wysiwyg')
                     ->setToolbar([
                         SharpFormEditorField::B,
                         SharpFormEditorField::I,
@@ -175,11 +174,11 @@ class TestForm extends SharpSingleForm
                     ->setHeight(350)
             )
             ->addField(
-                SharpFormEditorField::make('wysiwyg')
-                    ->setRenderContentAsMarkdown(false)
+                SharpFormEditorField::make('markdown')
+                    ->setRenderContentAsMarkdown()
                     ->showCharacterCount()
                     ->setLocalized()
-                    ->setLabel('Wysiwyg')
+                    ->setLabel('Markdown')
                     ->setToolbar([
                         SharpFormEditorField::B, SharpFormEditorField::I, SharpFormEditorField::A,
                         SharpFormEditorField::SEPARATOR,
@@ -272,11 +271,11 @@ class TestForm extends SharpSingleForm
             ->addTab('Textarea', function (FormLayoutTab $tab) {
                 $tab
                     ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withField('markdown')
+                        $column->withField('wysiwyg')
                             ->withField('textarea');
                     })
                     ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withField('wysiwyg');
+                        $column->withField('markdown');
                     });
             })
             ->addTab('Select', function (FormLayoutTab $tab) {

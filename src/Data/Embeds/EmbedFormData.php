@@ -12,10 +12,10 @@ final class EmbedFormData extends Data
 {
     public function __construct(
         #[LiteralTypeScriptType('{ [key:string]: FormFieldData["value"] }')]
-        public array $data,
+        public ?array $data,
         /** @var DataCollection<string,FormFieldData> */
         public DataCollection $fields,
-        public FormLayoutData $layout,
+        public ?FormLayoutData $layout,
     ) {}
 
     public static function from(array $form): self
@@ -23,7 +23,7 @@ final class EmbedFormData extends Data
         return new self(
             data: $form['data'],
             fields: FormFieldData::collection($form['fields']),
-            layout: FormLayoutData::from($form['layout']),
+            layout: FormLayoutData::optional($form['layout']),
         );
     }
 }

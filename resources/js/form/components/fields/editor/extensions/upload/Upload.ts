@@ -124,46 +124,6 @@ export const Upload: WithRequiredOptions<Node<UploadOptions>> = Node.create<Uplo
         ]
     },
 
-    onTransaction({ transaction }) {
-        function getAddedAndRemovedNodes(transaction: Transaction, nodeName, schema) {
-            const nodeType = schema.nodes[nodeName];
-            if (!nodeType) {
-                console.warn(`Node type ${nodeName} does not exist in the schema.`);
-                return { addedNodes: [], removedNodes: [] };
-            }
-
-            const addedNodes = [];
-            const removedNodes = [];
-
-            for (let step of transaction.steps) {
-                const stepMap = step.getMap();
-
-                // Check for removed nodes
-                stepMap.forEach((oldStart, oldEnd) => {
-                    transaction.before.content.nodesBetween(oldStart, oldEnd, (node, pos) => {
-                        if (node.type === nodeType) {
-                            removedNodes.push({ node, pos });
-                        }
-                    });
-                });
-
-                // Check for added nodes
-                if (step.slice && step.slice.content) {
-                    let addedPos = stepMap.map(step.from);
-                    step.slice.content.descendants((node, pos) => {
-                        if (node.type === nodeType) {
-                            addedNodes.push({ node, pos: addedPos + pos });
-                        }
-                        return true;
-                    });
-                }
-            }
-
-            return { addedNodes, removedNodes };
-        }
-
-    },
-
     addNodeView() {
         return VueNodeViewRenderer(UploadNode);
     },

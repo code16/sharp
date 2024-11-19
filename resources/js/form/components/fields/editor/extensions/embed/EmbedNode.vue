@@ -3,13 +3,13 @@
     import { Button } from '@/components/ui/button';
     import NodeRenderer from "../../NodeRenderer.vue";
     import { Embed, EmbedNodeAttributes } from "@/form/components/fields/editor/extensions/embed/Embed";
-    import { computed, onMounted, onUnmounted } from "vue";
+    import { computed, onBeforeUnmount, onMounted } from "vue";
     import { ExtensionNodeProps } from "@/form/components/fields/editor/types";
     import { useParentEditor } from "@/form/components/fields/editor/useParentEditor";
     import {
         DropdownMenu,
         DropdownMenuContent,
-        DropdownMenuItem,
+        DropdownMenuItem, DropdownMenuSeparator,
         DropdownMenuTrigger
     } from "@/components/ui/dropdown-menu";
     import { MoreHorizontal } from "lucide-vue-next";
@@ -20,35 +20,51 @@
     const embedModal = useParentEditor().embedModal;
     const embedData = computed(() => embedManager.getEmbed(props.node.attrs['data-key'], props.extension.options.embed));
 
+    function onRemove() {
+        props.deleteNode();
+        setTimeout(() => {
+            props.editor.commands.focus();
+        });
+    }
+
     onMounted(() => {
         embedManager.restoreEmbed(props.node.attrs['data-key'], props.extension.options.embed)
     });
 
-    onUnmounted(() => {
+    onBeforeUnmount(() => {
         embedManager.removeEmbed(props.node.attrs['data-key'], props.extension.options.embed);
     });
 </script>
 
 <template>
     <NodeRenderer
-        class="my-4 first:mt-0 last:mb-0 border rounded-md items-center p-4 flex"
-        :class="{ 'group-focus/editor:border-primary': selected }"
+        class="my-4 first:mt-0 last:mb-0 border rounded-md items-center p-4 flex gap-4"
+        :class="{ 'group-focus/editor:border-primary has-[[aria-expanded=true]]:border-primary': props.selected }"
         :node="node"
     >
-        <div class="flex-1" v-html="embedData._html">
+        <div class="flex-1" >
+            <template v-if="embedData">
+                <div v-html="embedData?._html"></div>
+            </template>
+            <template v-else>
+                {{ extension.options.embed.label }}
+            </template>
         </div>
         <DropdownMenu :modal="false">
             <DropdownMenuTrigger as-child>
-                <Button class="self-center" variant="ghost" size="icon">
+                <Button class="shrink-0 self-center" variant="ghost" size="icon">
                     <MoreHorizontal class="size-4" />
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-                <DropdownMenuItem @click="embedModal.open({ id: node.attrs['data-key'], embed: extension.options.embed })">
-                    {{ __('sharp::form.upload.edit_button') }}
-                </DropdownMenuItem>
-                <DropdownMenuItem class="text-destructive" @click="deleteNode()">
-                    {{ __('sharp::form.upload.remove_button') }}
+                <template v-if="Object.keys(extension.options.embed.fields).length > 0">
+                    <DropdownMenuItem @click="embedModal.open({ id: node.attrs['data-key'], embed: extension.options.embed })">
+                        {{ __('sharp::form.editor.extension_node.edit_button') }}
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                </template>
+                <DropdownMenuItem class="text-destructive" @click="onRemove">
+                    {{ __('sharp::form.editor.extension_node.remove_button') }}
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
