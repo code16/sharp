@@ -31,10 +31,7 @@ class DemoSharpServiceProvider extends SharpAppServiceProvider
             ->addEntity('profile', ProfileEntity::class)
             ->addEntity('dashboard', DemoDashboardEntity::class)
             ->addEntity('test', TestEntity::class)
-            ->when(
-                auth()->id() === 1,
-                fn (SharpConfigBuilder $config) => $config->addGlobalFilter(DummyGlobalFilter::class)
-            )
+            ->addGlobalFilter(DummyGlobalFilter::class)
             ->configureUploadsThumbnailCreation(uploadModelClass: Media::class)
             ->setSharpMenu(SharpMenu::class)
             ->setThemeColor('#004c9b')

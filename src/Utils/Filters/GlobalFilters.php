@@ -10,7 +10,9 @@ final class GlobalFilters implements Arrayable
 
     public function getFilters(): array
     {
-        return sharp()->config()->get('global_filters');
+        return collect(sharp()->config()->get('global_filters'))
+            ->filter(fn (GlobalRequiredFilter $filter) => $filter->authorize())
+            ->all();
     }
 
     public function isEnabled(): bool

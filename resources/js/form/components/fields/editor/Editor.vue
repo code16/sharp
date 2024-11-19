@@ -195,20 +195,20 @@
                 />
             </template>
 
-                <!-- Commenting this for now because it causes infinite loop on HMR -->
-
-                <!--            <template v-if="editor && field.showCharacterCount">-->
-                <!--                <div class="card-footer fs-8 text-muted bg-white">-->
-                <!--                    <template v-if="field.maxLength">-->
-                <!--                        <span :class="{ 'text-danger': editor.storage.characterCount.characters() > field.maxLength }">-->
-                <!--                            {{ __('sharp::form.editor.character_count', { count: `${editor.storage.characterCount.characters()} / ${field.maxLength}` }) }}-->
-                <!--                        </span>-->
-                <!--                    </template>-->
-                <!--                    <template v-else>-->
-                <!--                        {{ __('sharp::form.editor.character_count', { count: editor.storage.characterCount.characters() }) }}-->
-                <!--                    </template>-->
-                <!--                </div>-->
-                <!--            </template>-->
+            <template v-if="editor && field.showCharacterCount">
+                <div class="mt-2 text-xs text-muted-foreground">
+                    <template v-if="field.maxLength">
+                        <div :class="{ 'text-destructive': editor.storage.characterCount.characters() > field.maxLength }">
+                            {{ __('sharp::form.editor.character_count', { count: `${editor.storage.characterCount.characters()} / ${field.maxLength}` }) }}
+                        </div>
+                    </template>
+                    <template v-else>
+                        <div>
+                            {{ __('sharp::form.editor.character_count', { count: editor.storage.characterCount.characters() }) }}
+                        </div>
+                    </template>
+                </div>
+            </template>
         </div>
     </FormFieldLayout>
 </template>

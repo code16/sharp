@@ -106,16 +106,16 @@
             <slot v-bind="{ id, ariaDescribedBy }" />
 
             <template v-if="field.helpMessage || $slots['help-message'] || form.fieldHasError(field, fieldErrorKey)">
-                <div class="mt-2.5 grid grid-cols-1 gap-y-2">
+                <div class="mt-2 grid grid-cols-1 gap-y-2">
                     <template v-if="field.helpMessage || $slots['help-message']">
                         <div :id="`${id}-help-message`" class="grid grid-cols-1 gap-y-2">
                             <template v-if="field.helpMessage">
-                                <p class="text-sm text-muted-foreground leading-4">
+                                <p class="text-xs text-muted-foreground leading-4">
                                     {{ field.helpMessage }}
                                 </p>
                             </template>
                             <template v-if="$slots['help-message']">
-                                <p class="text-sm text-muted-foreground leading-4">
+                                <p class="text-xs text-muted-foreground leading-4">
                                     <slot name="help-message" />
                                 </p>
                             </template>
