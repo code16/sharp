@@ -2,7 +2,7 @@
 sidebarDepth: 3
 ---
 
-# Building a Show Page
+# Create a Show Page
 
 Between an Entity List and a Form, you might want to add a Show page to display a whole instance, and allow the user to interact with it through Commands.
 

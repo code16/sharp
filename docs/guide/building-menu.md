@@ -1,4 +1,4 @@
-# Building the menu
+# Create the main menu
 
 The Sharp UI is organized with two menus: the main one is on a left sidebar, and the user menu is a dropdown located in the top right corner.
 
@@ -183,3 +183,7 @@ class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
     }
 }
 ```
+
+### Global menu Filters
+
+If you want to display a filter on all pages, above the menu, useful to scope the entire data set (use cases: multi tenant app, customer selector...), you can define a global filter as described in the [Filters documentation](filters.md#global-menu-filters).

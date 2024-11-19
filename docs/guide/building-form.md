@@ -2,7 +2,7 @@
 sidebarDepth: 3
 ---
 
-# Building a Form
+# Create a Form
 
 Forms as used to create or update instances.
 

@@ -269,6 +269,12 @@ class OrganizationGlobalFilter extends GlobalRequiredFilter
     {
         return Corporation::first()->id;
     }
+    
+    public function authorize(): bool
+    {
+        // Optional: you can define an authorization logic here
+        return true;
+    }
 }
 ```
 
