@@ -9,7 +9,7 @@
         globalFilters: GlobalFiltersData,
     }>();
 
-    const filters = useFilters(props.globalFilters.config.filters);
+    const filters = useFilters(props.globalFilters.config.filters, props.globalFilters.filterValues);
 
     function onChanged(filter: FilterData, value: FilterData['value']) {
         router.post(
@@ -26,7 +26,7 @@
             <template v-if="filter.type === 'select'">
                 <Select
                     :model-value="String(filters.currentValues[filter.key])"
-                    @update:model-value="onChanged(filter, $event)"
+                    @update:model-value="onChanged(filter, $event as string)"
                 >
                     <SelectTrigger>
                         <SelectValue />
