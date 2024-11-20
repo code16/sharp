@@ -1,0 +1,1 @@
+import{d as t,c as o,w as r,ao as n,o as c,i as a,t as e}from"./sharp-BDJdrkET.js";const l={class:"text-xl mb-2"},m=t({__name:"Error",props:{status:{},message:{}},setup(p){return(s,_)=>(c(),o(n,null,{default:r(()=>[a("h1",l," Error "+e(s.status),1),a("p",null,e(s.message),1)]),_:1}))}});export{m as default};
