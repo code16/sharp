@@ -2,6 +2,9 @@ import { __ } from "@/utils/i18n";
 import { showAlert } from "@/utils/dialogs";
 
 export function getErrorMessage({ data, status }) {
+    if(status === 417) {
+        return data.message;
+    }
     return __(`sharp::modals.${status}.message`) === `sharp::modals.${status}.message`
         ? `${status}: ${data.message}`
         : __(`sharp::modals.${status}.message`);

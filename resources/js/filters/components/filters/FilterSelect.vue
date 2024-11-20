@@ -103,7 +103,6 @@
                                 >
                                     <template v-if="filter.multiple">
                                         <Checkbox
-                                            class="mr-2"
                                             :class="{ 'opacity-50': !isSelected(selectValue) }"
                                             :model-value="isSelected(selectValue)"
                                         />
@@ -111,7 +110,7 @@
                                     <template v-if="!filter.multiple">
                                         <Check
                                             :class="cn(
-                                              'h-4 w-4 mr-2',
+                                              'h-4 w-4',
                                               isSelected(selectValue) ? 'opacity-100' : 'opacity-0',
                                             )"
                                         />

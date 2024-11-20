@@ -141,7 +141,7 @@
 
             <PopoverContent :class="cn('p-0 w-[--reka-popover-trigger-width] min-w-[200px]')" align="start" :avoid-collisions="false">
                 <Command
-                    :modelValue="value?.[props.field.itemIdAttribute]"
+                    :model-value="value?.[props.field.itemIdAttribute]"
                     :reset-search-term-on-blur="false"
                     ignore-filter
                     @update:model-value="onSelect($event as any)"
@@ -173,7 +173,7 @@
                                         class="group/item"
                                         :value="item[props.field.itemIdAttribute]"
                                     >
-                                        <div class="size-4 mr-2">
+                                        <div class="size-4">
                                             <ComboboxItemIndicator as-child>
                                                 <Check class="size-4" />
                                             </ComboboxItemIndicator>

@@ -48,7 +48,7 @@
         </template>
 
         <template v-if="session('status')">
-            <Alert class="mb-4">
+            <Alert class="mb-4" :variant="session('status_level') === 'error' ? 'destructive' : 'default'">
                 <template v-if="session('status_level') !== 'error'">
                     <Check class="w-4 h-4"/>
                 </template>

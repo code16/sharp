@@ -30,7 +30,7 @@ it('returns result on a valid search', function () {
             [
                 'label' => 'People',
                 'icon' => null,
-                'results' => [
+                'resultLinks' => [
                     [
                         'label' => 'John Wayne',
                         'link' => url('sharp/s-list/person/s-show/person/1'),
@@ -63,7 +63,7 @@ it('allows to configure a custom empty state label', function () {
                 [
                     'label' => 'People',
                     'icon' => null,
-                    'results' => [],
+                    'resultLinks' => [],
                     'emptyStateLabel' => 'Nobody found',
                 ],
             ]
@@ -87,8 +87,8 @@ it('allows to configure hide when empty', function () {
                 [
                     'label' => 'People',
                     'icon' => null,
-                    'results' => [],
-                    'showWhenEmpty' => false,
+                    'resultLinks' => [],
+                    'hideWhenEmpty' => true,
                 ],
             ]
         );
@@ -116,7 +116,7 @@ it('raises validation errors', function () {
                 [
                     'label' => 'People',
                     'icon' => null,
-                    'results' => [],
+                    'resultLinks' => [],
                     'validationErrors' => [
                         'Too short',
                         'Must start with a',
@@ -152,7 +152,7 @@ it('handles multiple result sets', function () {
                         'name' => 'testicon-user',
                         'svg' => '<svg><!--user--></svg>',
                     ],
-                    'results' => [
+                    'resultLinks' => [
                         [
                             'label' => 'John Wayne',
                             'link' => url('sharp/s-list/person/s-show/person/1'),
@@ -166,7 +166,7 @@ it('handles multiple result sets', function () {
                         'name' => 'testicon-car',
                         'svg' => '<svg><!--car--></svg>',
                     ],
-                    'results' => [
+                    'resultLinks' => [
                         [
                             'label' => 'Aston Martin',
                             'link' => url('sharp/s-list/car/s-show/car/1'),

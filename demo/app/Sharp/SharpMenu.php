@@ -11,7 +11,6 @@ class SharpMenu extends BaseSharpMenu
     public function build(): self
     {
         return $this
-            ->setVisible(false)
             ->setUserMenu(function (SharpMenuUserMenu $userMenu) {
                 $userMenu
                     ->addEntityLink('profile', 'Profile')
@@ -19,11 +18,10 @@ class SharpMenu extends BaseSharpMenu
             })
             ->addSection('Blog', function (SharpMenuItemSection $section) {
                 $section
-                    ->setCollapsible(true)
-                    ->addEntityLink('posts', 'Posts')
-                    ->addSeparator('')
-                    ->addEntityLink('categories', 'Categories')
-                    ->addEntityLink('authors', 'Authors');
+                    ->setCollapsible(false)
+                    ->addEntityLink('posts', 'Posts', icon: 'far-file')
+                    ->addEntityLink('categories', 'Categories', icon: 'fas-sitemap')
+                    ->addEntityLink('authors', 'Authors', icon: 'far-user');
             })
             ->addEntityLink('dashboard', 'Dashboard', icon: 'fas-chart-line')
             ->addEntityLink('test', 'Fields test', icon: 'fas-cog');

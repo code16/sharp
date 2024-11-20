@@ -4,7 +4,7 @@ namespace Code16\Sharp\Http\Middleware;
 
 use Closure;
 use Code16\Sharp\Auth\Impersonate\SharpImpersonationHandler;
-use Code16\Sharp\Enums\SessionStatusLevel;
+use Code16\Sharp\Exceptions\SharpTokenMismatchException;
 use Illuminate\Auth\Middleware\Authenticate as BaseAuthenticate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -30,8 +30,8 @@ class SharpAuthenticate extends BaseAuthenticate
 
     protected function unauthenticated($request, array $guards)
     {
-        session()->flash('status', session()->get('status', __('sharp::errors.401.status_displayed_in_login_page')));
-        session()->flash('status_level', SessionStatusLevel::Error->value);
+        /** reflash status flashed in @see SharpTokenMismatchException::render */
+        session()->reflash();
 
         parent::unauthenticated($request, $guards);
     }

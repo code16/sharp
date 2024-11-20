@@ -21,7 +21,7 @@
             } else if(notification.level === 'warning') {
                 toast.warning(notification.title, options);
             } else {
-                toast(notification.title, options); // no icon for info level
+                toast.info(notification.title, options);
             }
             await nextTick();
         }

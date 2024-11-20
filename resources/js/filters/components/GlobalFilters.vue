@@ -28,7 +28,7 @@
                     :model-value="String(filters.currentValues[filter.key])"
                     @update:model-value="onChanged(filter, $event as string)"
                 >
-                    <SelectTrigger>
+                    <SelectTrigger class="h-8">
                         <SelectValue />
                     </SelectTrigger>
                     <SelectContent>

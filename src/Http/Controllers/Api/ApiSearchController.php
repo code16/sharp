@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Http\Controllers\Api;
 
+use Code16\Sharp\Data\SearchResultSetData;
 use Code16\Sharp\Search\SearchResultSet;
 use Code16\Sharp\Search\SharpSearchEngine;
 use Code16\Sharp\Utils\StringUtil;
@@ -20,9 +21,11 @@ class ApiSearchController extends ApiController
         );
 
         return response()->json(
-            $searchEngine->resultSets()
-                ->map(fn (SearchResultSet $resultSet) => $resultSet->toArray())
-                ->all(),
+            SearchResultSetData::collection(
+                $searchEngine->resultSets()
+                    ->map(fn (SearchResultSet $resultSet) => $resultSet->toArray())
+                    ->all()
+            ),
         );
     }
 

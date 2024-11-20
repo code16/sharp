@@ -1,164 +1,135 @@
 <script setup lang="ts">
-    import { __ } from "@/utils/i18n";
+    import { SidebarGroup, SidebarGroupContent, SidebarInput } from "@/components/ui/sidebar";
+    import { Label } from "@/components/ui/label";
+    import { config } from "@/utils/config";
+    import { ref, watch } from "vue";
+    import { Search } from "lucide-vue-next";
+    import { Link } from '@inertiajs/vue3';
+    import {
+        Command,
+        CommandGroup,
+        CommandInput,
+        CommandItem,
+        CommandList
+    } from "@/components/ui/command";
+    import { useMagicKeys } from "@vueuse/core";
+    import { SearchResultSetData } from "@/types";
+    import { __ } from '@/utils/i18n';
+    import Icon from "@/components/ui/Icon.vue";
+    import { api } from "@/api/api";
+    import { route } from "@/utils/url";
+    import debounce from "lodash/debounce";
+    import { Dialog, DialogScrollContent } from "@/components/ui/dialog";
+
+    const open = ref(false);
+    const loading = ref(false);
+    const resultSets = ref<SearchResultSetData[]>([]);
+    const searchTerm = ref('');
+    const keys = useMagicKeys({
+        passive: false,
+    });
+    watch(keys['Cmd+K'], (k) => {
+        if(k) {
+            open.value = !open.value;
+        }
+    });
+
+    let loadingTimeout: any;
+    async function search(query: string) {
+        if(!query.length) {
+            resultSets.value = [];
+            return;
+        }
+
+        clearTimeout(loadingTimeout);
+        loadingTimeout = setTimeout(() => {
+            loading.value = true;
+        });
+        resultSets.value = await api.get(route('code16.sharp.api.search.index', { q: query }))
+            .then(response => response.data)
+            .finally(() => {
+                clearTimeout(loadingTimeout);
+                loading.value = false;
+            });
+    }
+
+    const debouncedSearch = debounce(search, 200);
 </script>
 
 <template>
-    <div>
-        <button class="btn d-inline-flex btn-sm btn-outline-light border-0" @click="open">
-            <!-- heroicons: solid/20/search -->
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
-            </svg>
-        </button>
-
-        <Modal
-            v-model:visible="modalVisible"
-            :no-close-on-backdrop="false"
-            :no-enforce-focus="false"
-            hide-footer
-            body-class="pb-5"
-            @shown="$refs.input.focus()"
-        >
-            <template v-slot:title>
-                {{ __('sharp::action_bar.list.search.placeholder') }}
-            </template>
-
-            <div class="position-relative">
-                <input type="text" class="form-control pe-4.5" :placeholder="placeholder" v-model="query" ref="input" @input="handleInput">
-                <template v-if="loading">
-                    <Loading class="position-absolute top-50 translate-middle-y" style="right: .5rem" small />
+    <SidebarGroup>
+        <SidebarGroupContent class="relative">
+            <Label for="global-search" class="sr-only">{{ config('sharp.search.placeholder') }}</Label>
+            <SidebarInput
+                id="global-search"
+                class="pl-8 text-xs"
+                :placeholder="config('sharp.search.placeholder') ?? __('sharp::menu.global_search.default_placeholder')"
+                @click="open = true"
+                readonly
+            />
+            <Search class="pointer-events-none absolute left-2 top-1/2 size-4 -translate-y-1/2 select-none opacity-50" />
+        </SidebarGroupContent>
+    </SidebarGroup>
+    <Dialog v-model:open="open" @update:open="open => !open && (resultSets = [])">
+        <DialogScrollContent class="overflow-hidden p-0 shadow-lg self-start my-[10vh]">
+            <Command ignore-filter :reset-search-term-on-blur="false">
+                <CommandInput
+                    v-model="searchTerm"
+                    @update:model-value="debouncedSearch"
+                    @keyup.esc="searchTerm = ''; resultSets = []"
+                    :placeholder="config('sharp.search.placeholder') ?? __('sharp::menu.global_search.default_placeholder')"
+                />
+                <template v-if="resultSets.length">
+                    <CommandList>
+                        <template v-for="resultSet in resultSets?.filter(set =>
+                            set.resultLinks.length
+                            || !set.hideWhenEmpty
+                            || set.validationErrors?.length
+                        )"
+                            :key="resultSet.label"
+                        >
+                            <CommandGroup :heading="resultSet.label">
+                                <template v-if="resultSet.validationErrors?.length">
+                                    <ul class="px-2">
+                                        <template v-for="error in resultSet.validationErrors">
+                                            <li class="text-xs text-destructive">
+                                                {{ error }}
+                                            </li>
+                                        </template>
+                                    </ul>
+                                </template>
+                                <template v-else-if="resultSet.resultLinks.length">
+                                    <template v-for="resultLink in resultSet.resultLinks" :key="resultLink.link">
+                                        <CommandItem :value="resultLink.link" as-child>
+                                            <Link :href="resultLink.link">
+                                                <template v-if="resultSet.icon">
+                                                    <Icon :icon="resultSet.icon" />
+                                                </template>
+                                                <div>
+                                                    <div>
+                                                        {{ resultLink.label }}
+                                                    </div>
+                                                    <template v-if="resultLink.detail">
+                                                        <div class="text-xs text-muted-foreground">
+                                                            {{ resultLink.detail }}
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </Link>
+                                        </CommandItem>
+                                    </template>
+                                </template>
+                                <template v-else>
+                                    <div class="px-2 py-1.5 text-sm">
+                                        {{ resultSet.emptyStateLabel || __('sharp::entity_list.empty_text') }}
+                                    </div>
+                                </template>
+                            </CommandGroup>
+                        </template>
+                    </CommandList>
                 </template>
-            </div>
-
-            <template v-if="visibleResultSets.length && query">
-                <div class="mt-4.5 mb-n4.5">
-                    <template v-for="resultSet in visibleResultSets">
-                        <section class="mb-4.5">
-                            <template v-if="resultSet.label">
-                                <h6 class="d-flex mb-3">
-                                    <template v-if="resultSet.icon">
-                                        <!-- TODO migrate to <Icon> + blade-icon sent by the back -->
-                                        <i class="fa fa-fw me-2" :class="resultSet.icon"></i>
-                                    </template>
-                                    {{ resultSet.label }}
-                                </h6>
-                            </template>
-                            <template v-if="(resultSet.validationErrors || []).length">
-                                <div class="text-danger fs-7">
-                                    <template v-for="error in resultSet.validationErrors">
-                                        <div>{{ error }}</div>
-                                    </template>
-                                </div>
-                            </template>
-                            <template v-if="(resultSet.results || []).length">
-                                <div class="list-group">
-                                    <template v-for="result in resultSet.results">
-                                        <a :href="result.link" class="list-group-item fs-7 list-group-item-action">
-                                            <div v-html="highlight(result.label)"></div>
-                                            <template v-if="result.detail">
-                                                <div class="fs-8 text-muted" v-html="highlight(result.detail)"></div>
-                                            </template>
-                                        </a>
-                                    </template>
-                                </div>
-                            </template>
-                            <template v-else-if="!(resultSet.validationErrors || []).length">
-                                <div class="text-muted fs-7">
-                                    {{ resultSet.emptyStateLabel || __('sharp::entity_list.empty_text') }}
-                                </div>
-                            </template>
-                        </section>
-                    </template>
-                </div>
-            </template>
-        </Modal>
-    </div>
+            </Command>
+        </DialogScrollContent>
+    </Dialog>
 </template>
-
-<script lang="ts">
-    import { Modal, Loading } from "@/components/ui";
-    import debounce from "lodash/debounce";
-    import {api} from "@/api/api";
-
-    export default {
-        components: {
-            Modal,
-            Loading,
-        },
-        props: {
-            placeholder: String,
-        },
-        data() {
-            return {
-                query: '',
-                resultSets: null,
-                loading: false,
-                modalVisible: false,
-            }
-        },
-        computed: {
-            visibleResultSets() {
-                return (this.resultSets ?? [])
-                    .filter(resultSet =>
-                        resultSet.results?.length ||
-                        resultSet.showWhenEmpty ||
-                        resultSet.validationErrors?.length
-                    );
-            },
-        },
-        methods: {
-            async getResults(query) {
-                if(!query?.length) {
-                    return;
-                }
-                const loadingTimeout = setTimeout(() => {
-                    this.loading = true;
-                }, 200);
-                try {
-                    this.resultSets = await api.get('/search', { params: { q: query } })
-                        .then(response => response.data);
-                } finally {
-                    clearTimeout(loadingTimeout);
-                    this.loading = false;
-                }
-            },
-            open() {
-                this.modalVisible = true;
-                this.query = '';
-                this.resultSets = null;
-            },
-            handleInput() {
-                this.debouncedGetResults(this.query);
-            },
-            highlight(text) {
-                if(this.query?.length) {
-                    return text.replace(new RegExp(this.query, 'gi'), match => {
-                        return `<mark class="px-0">${match}</mark>`;
-                    });
-                }
-                return text;
-            },
-            handleWindowKeydown(event) {
-                const isContentEditable = event.target.isContentEditable || /^(?:input|textarea|select)$/i.test(event.target.tagName);
-
-                if(event.key?.toLowerCase() === 'k' && (event.metaKey || event.ctrlKey) // Cmd+k
-                    || !isContentEditable && event.key === '/'
-                ) {
-                    event.preventDefault();
-                    this.open();
-                }
-            },
-        },
-        created() {
-            this.debouncedGetResults = debounce(this.getResults, 200);
-        },
-        mounted() {
-            window.addEventListener('keydown', this.handleWindowKeydown);
-        },
-        destroyed() {
-            window.removeEventListener('keydown', this.handleWindowKeydown);
-        }
-    }
-</script>
-
 

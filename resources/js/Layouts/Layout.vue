@@ -25,8 +25,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { buttonVariants } from "@/components/ui/button";
 import { Link, usePage } from "@inertiajs/vue3";
-import { CollapsibleTrigger, ConfigProvider, DropdownMenuPortal } from "reka-ui";
-import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
+import { ConfigProvider, DropdownMenuPortal } from "reka-ui";
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
 import {
     AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
     AlertDialogDescription,
@@ -54,6 +54,7 @@ import ColorModeDropdownItems from "@/components/ColorModeDropdownItems.vue";
         SidebarProvider, SidebarRail, SidebarSeparator, SidebarTrigger
     } from "@/components/ui/sidebar";
     import { useStorage } from "@vueuse/core";
+    import GlobalSearch from "@/components/GlobalSearch.vue";
 
 const dialogs = useDialogs();
 const menu = useMenu();
@@ -101,12 +102,16 @@ if(currentItemWithChildren) {
                             <GlobalFilters :global-filters="globalFilters" />
                         </SidebarGroup>
                     </template>
+                    <template v-if="config('sharp.search.enabled')">
+                        <GlobalSearch />
+                    </template>
+
                     <template v-if="menu.isVisible">
                         <template v-for="item in menu.items">
                             <template v-if="item.children">
                                 <Collapsible class="group/collapsible" v-model:open="openedMenu[item.label]" as-child :disabled="!item.isCollapsible">
-                                    <SidebarGroup >
-                                        <SidebarGroupLabel class="text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground" as-child>
+                                    <SidebarGroup>
+                                        <SidebarGroupLabel class="hover:bg-sidebar-accent hover:text-sidebar-accent-foreground disabled:pointer-events-none" as-child>
                                             <CollapsibleTrigger>
                                                 <span>{{ item.label }}</span>
                                                 <template v-if="item.isCollapsible">
@@ -140,9 +145,6 @@ if(currentItemWithChildren) {
                                                                         <template v-if="childItem.icon">
                                                                             <Icon :icon="childItem.icon" class="size-4" />
                                                                         </template>
-                                                                        <!--                                                                    <template v-else>-->
-                                                                        <!--                                                                        <div class="size-4"></div>-->
-                                                                        <!--                                                                    </template>-->
                                                                         <span>{{ childItem.label }}</span>
                                                                     </component>
                                                                 </SidebarMenuButton>
@@ -249,9 +251,7 @@ if(currentItemWithChildren) {
                 <header class="flex h-14 items-center gap-4 border-b backdrop-blur bg-background/90 px-4 sticky top-0 z-20 lg:h-[60px] lg:px-6
                     transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12
                 ">
-                    <template v-if="menu.isVisible">
-                        <SidebarTrigger class="-ml-1" />
-                    </template>
+                    <SidebarTrigger class="-ml-1" />
                     <div class="min-w-0 flex-1 lg:flex-initial">
                         <slot name="breadcrumb" />
                     </div>

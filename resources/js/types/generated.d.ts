@@ -113,7 +113,7 @@ export type EmbedData = {
 export type EmbedFormData = {
   data: { [key: string]: FormFieldData["value"] };
   fields: { [key: string]: FormFieldData };
-  layout: FormLayoutData;
+  layout: FormLayoutData | null;
 };
 export type EntityListAuthorizationsData = {
   view: Array<number | string>;
@@ -704,6 +704,19 @@ export type PanelWidgetData = {
   type: "panel";
   title: string | null;
   link: string | null;
+};
+export type SearchResultLinkData = {
+  link: string;
+  label: string;
+  detail: string | null;
+};
+export type SearchResultSetData = {
+  label: string;
+  resultLinks: Array<SearchResultLinkData>;
+  icon: IconData | null;
+  emptyStateLabel: string | null;
+  validationErrors: Array<string>;
+  hideWhenEmpty: boolean;
 };
 export type SelectFilterData = {
   value?: number | string | Array<number | string> | null;

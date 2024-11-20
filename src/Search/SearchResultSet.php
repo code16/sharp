@@ -57,10 +57,10 @@ class SearchResultSet
         return [
             'label' => $this->label,
             'icon' => app(IconManager::class)->iconToArray($this->icon),
-            'showWhenEmpty' => ! $this->hideWhenEmpty,
+            'hideWhenEmpty' => $this->hideWhenEmpty,
             'emptyStateLabel' => $this->emptyStateLabel,
             'validationErrors' => $this->validationErrors,
-            'results' => empty($this->validationErrors)
+            'resultLinks' => empty($this->validationErrors)
                 ? collect($this->resultLinks)
                     ->map(fn (ResultLink $resultLink) => $resultLink->toArray())
                     ->all()
