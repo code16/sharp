@@ -681,16 +681,17 @@
                                                                             </DropdownMenuPortal>
                                                                         </DropdownMenuSub>
                                                                     </DropdownMenuGroup>
-                                                                    <DropdownMenuSeparator />
+                                                                    <DropdownMenuSeparator class="last:hidden" />
                                                                 </template>
 
                                                                 <CommandDropdownItems
                                                                     :commands="entityList.instanceCommands(item)"
                                                                     @select="(command) => onInstanceCommand(command, entityList.instanceId(item))"
                                                                 />
+
                                                                 <template v-if="!entityList.config.deleteHidden && entityList.instanceCanDelete(item)">
                                                                     <template v-if="entityList.instanceCommands(item)?.flat().length">
-                                                                        <DropdownMenuSeparator />
+                                                                        <DropdownMenuSeparator class="first:hidden" />
                                                                     </template>
                                                                     <DropdownMenuItem class="text-destructive" @click="onDelete(entityList.instanceId(item))">
                                                                         {{ __('sharp::action_bar.form.delete_button') }}

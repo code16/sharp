@@ -20,7 +20,7 @@
 <template>
     <template v-for="(group, i) in commands?.filter(group => group.length > 0)">
         <template v-if="i > 0">
-            <DropdownMenuSeparator />
+            <DropdownMenuSeparator class="first:hidden" />
         </template>
         <DropdownMenuGroup class="max-w-sm">
             <TooltipProvider>
