@@ -62,7 +62,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "SharpInternalServiceProvider"
+                "Code16\\Sharp\\SharpInternalServiceProvider"
             ]
         }
     },
