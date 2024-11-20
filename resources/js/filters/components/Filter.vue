@@ -4,14 +4,9 @@
     import FilterDateRange from "./filters/FilterDateRange.vue";
     import FilterSelect from "./filters/FilterSelect.vue";
     import type { Component } from "vue";
+    import { FilterProps } from "@/filters/types";
 
-    defineProps<{
-        filter: FilterData,
-        value: any,
-        valuated: boolean,
-        disabled?: boolean,
-    }>();
-
+    const props = defineProps<FilterProps<FilterData, any>>();
     const components: Record<FilterData['type'], Component> = {
         'check': FilterCheck,
         'daterange': FilterDateRange,
@@ -22,9 +17,6 @@
 <template>
     <component
         :is="components[filter.type]"
-        :filter="filter"
-        :value="value"
-        :disabled="disabled"
-        :valuated="valuated"
+        v-bind="props"
     />
 </template>

@@ -192,7 +192,7 @@ export class Form implements FormData, CommandFormData {
             : this.errors[key] as string;
     }
 
-    fieldHasError(field: FormFieldData, key: string, locale = null, includeChildren = false): boolean {
+    fieldHasError(field: FormFieldData, key: string, locale = null): boolean {
         if(this.fieldError(key)) {
             return true;
         }
@@ -200,13 +200,6 @@ export class Form implements FormData, CommandFormData {
             return locale
                 ? this.fieldLocalesContainingError(key).includes(locale)
                 : this.fieldLocalesContainingError(key).length > 0;
-        }
-        if(includeChildren) {
-            if(field.type === 'list') {
-                return (this.data[key] as FormListFieldData['value'])?.some((item, index) =>
-                    Object.keys(item).some(fieldKey => this.fieldHasError(field, `${key}.${index}.${fieldKey}`))
-                );
-            }
         }
         return false;
     }
@@ -227,7 +220,15 @@ export class Form implements FormData, CommandFormData {
         return !value;
     }
 
-    tabErrorsCount(tab: FormLayoutTabData): number {
+    listFieldErrorCount(field: FormListFieldData, key: string): number {
+        return (this.data[key] as FormListFieldData['value'])
+            ?.flatMap((item, index) =>
+                Object.keys(field.itemFields).filter(fieldKey => this.fieldHasError(field, `${key}.${index}.${fieldKey}`))
+            )
+            .length ?? 0;
+    }
+
+    tabErrorCount(tab: FormLayoutTabData): number {
         const tabFields = tab.columns
             .map(col =>
                 col.fields.flat(2).map(fieldLayout =>
@@ -238,6 +239,14 @@ export class Form implements FormData, CommandFormData {
             .map(fieldLayout => this.fields[fieldLayout.key])
             .filter(Boolean);
 
-        return tabFields.filter(field => this.fieldHasError(field, field.key, null, true)).length;
+        return tabFields.reduce((count, field) => {
+            if(field.type === 'list') {
+                return count + this.listFieldErrorCount(field, field.key);
+            }
+            if(this.fieldHasError(field, field.key, null)) {
+                return count + 1;
+            }
+            return count;
+        }, 0);
     }
 }

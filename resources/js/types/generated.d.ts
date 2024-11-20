@@ -87,7 +87,7 @@ export type DashboardLayoutWidgetData = {
   key: string;
 };
 export type DateRangeFilterData = {
-  value?: DateRangeFilterValueData | null;
+  value?: { start: string; end: string } | { preset: string } | null;
   key: string;
   label: string | null;
   type: "daterange";
@@ -95,11 +95,6 @@ export type DateRangeFilterData = {
   mondayFirst: boolean;
   displayFormat: string;
   presets: Array<{ key: string; label: string }> | null;
-};
-export type DateRangeFilterValueData = {
-  start: string;
-  end: string;
-  preset: string | null;
 };
 export type EmbedData = {
   value?: FormData["data"] & { slot: string; _html: string };

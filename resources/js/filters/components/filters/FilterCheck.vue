@@ -3,21 +3,21 @@
     import { Button } from "@/components/ui/button";
     import { Checkbox } from "@/components/ui/checkbox";
     import { Label } from "@/components/ui/label";
+    import { FilterEmits, FilterProps } from "@/filters/types";
 
-    const props = defineProps<{
-        value: CheckFilterData['value'],
-        filter: Omit<CheckFilterData, 'value'>,
-        disabled?: boolean,
-    }>();
-    defineEmits(['input']);
+    const props = defineProps<FilterProps<CheckFilterData>>();
+    const emit = defineEmits<FilterEmits<CheckFilterData>>()
 </script>
 
 <template>
     <Button as="div" class="relative h-8 border-dashed" variant="outline" size="sm">
         <Label class="flex items-center gap-2">
             <span class="absolute inset-0"></span>
-            <Checkbox :model-value="value" @update:model-value="$emit('input', $event)" />
-            {{ filter.label }}
+            <Checkbox
+                :model-value="props.value"
+                @update:model-value="emit('input', $event as boolean)"
+            />
+            {{ props.filter.label }}
         </Label>
     </Button>
 </template>

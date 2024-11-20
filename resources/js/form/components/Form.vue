@@ -141,9 +141,9 @@
                                             <template v-for="tab in form.layout.tabs">
                                                 <TabsTrigger :value="slugify(tab.title)">
                                                     {{ tab.title }}
-                                                    <template v-if="form.tabErrorsCount(tab)">
+                                                    <template v-if="form.tabErrorCount(tab)">
                                                         <Badge class="ml-2" variant="destructive">
-                                                            {{ form.tabErrorsCount(tab) }}
+                                                            {{ form.tabErrorCount(tab) }}
                                                         </Badge>
                                                     </template>
                                                 </TabsTrigger>

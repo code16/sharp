@@ -16,7 +16,7 @@
                 :id="fieldErrorKey"
                 :model-value="!!value"
                 :disabled="field.readOnly"
-                @update:model-value="emit('input', $event)"
+                @update:model-value="emit('input', $event as boolean)"
             />
             <Label class="py-1" :for="fieldErrorKey">
                 {{ field.text }}

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-    // import FilterControl from '../FilterControl.vue';
     import { parseDate, CalendarDate } from '@internationalized/date';
     import { DateRangeFilterData } from "@/types";
     import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -13,16 +12,10 @@
     import { Label } from "@/components/ui/label";
     import FilterDateRangeValue from "@/filters/components/filters/FilterDateRangeValue.vue";
     import { cn } from "@/utils/cn";
+    import { FilterEmits, FilterProps } from "@/filters/types";
 
-    const props = defineProps<{
-        value: DateRangeFilterData['value'],
-        filter: Omit<DateRangeFilterData, 'value'>,
-        valuated: boolean,
-        disabled?: boolean,
-        inline?: boolean,
-    }>();
-
-    const emit = defineEmits(['input']);
+    const props = defineProps<FilterProps<DateRangeFilterData>>();
+    const emit = defineEmits<FilterEmits<DateRangeFilterData>>();
 
     const localValue = ref<{ start?: CalendarDate, end?: CalendarDate, preset?: string }>();
     const inputs = reactive({
@@ -32,13 +25,13 @@
     const edited = reactive({ start: false, end: false, count: 0 });
     const open = ref(false);
 
-    watch(() => props.value, update);
+    watch(() => props.value, () => update());
 
     function update() {
         localValue.value = props.value ? {
-            start: parseDate(props.value.start),
-            end: parseDate(props.value.end),
-            preset: props.value.preset,
+            start: 'start' in props.value ? parseDate(props.value.start) : null,
+            end: 'end' in props.value ? parseDate(props.value.end) : null,
+            preset: 'preset' in props.value ? props.value.preset : null,
         } : {};
         inputs.start = localValue.value.start?.toString();
         inputs.end = localValue.value.end?.toString();
@@ -109,9 +102,9 @@
                     <Button variant="outline" size="sm" class="h-8 border-dashed transition-shadow shadow-sm data-[state=open]:shadow-md" :disabled="disabled">
                         <CalendarIcon class="mr-2 h-4 w-4 stroke-[1.25]" />
                         {{ filter.label }}
-                        <template v-if="value?.start">
+                        <template v-if="props.value && 'start' in props.value">
                             <Separator orientation="vertical" class="mx-2 h-4" />
-                            <FilterDateRangeValue :filter="filter" :value="value" inline />
+                            <FilterDateRangeValue v-bind="props" />
                         </template>
                     </Button>
                 </template>
@@ -122,8 +115,8 @@
                         size="sm"
                         :disabled="disabled"
                     >
-                        <template v-if="value?.start">
-                            <FilterDateRangeValue :filter="filter" :value="value" />
+                        <template v-if="props.value && 'start' in props.value">
+                            <FilterDateRangeValue v-bind="props" />
                         </template>
                         <template v-else>
                             <span class="text-muted-foreground">

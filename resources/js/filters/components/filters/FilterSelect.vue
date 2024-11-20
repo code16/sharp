@@ -20,16 +20,10 @@
     import { Label } from "@/components/ui/label";
     import { ref } from "vue";
     import FilterSelectValue from "@/filters/components/filters/FilterSelectValue.vue";
+    import { FilterEmits, FilterProps } from "@/filters/types";
 
-    const props = defineProps<{
-        value: SelectFilterData['value'],
-        filter: Omit<SelectFilterData, 'value'>,
-        valuated: boolean,
-        disabled?: boolean,
-        inline?: boolean,
-    }>();
-
-    const emit = defineEmits(['input']);
+    const props = defineProps<FilterProps<SelectFilterData>>();
+    const emit = defineEmits<FilterEmits<SelectFilterData>>();
     const open = ref(false);
 
     function isSelected(selectValue: SelectFilterData['values'][0]) {
@@ -65,7 +59,7 @@
                         {{ filter.label }}
                         <template v-if="Array.isArray(value) ? value.length : value != null">
                             <Separator orientation="vertical" class="mx-2 h-4" />
-                            <FilterSelectValue :filter="filter" :value="value" inline />
+                            <FilterSelectValue v-bind="props" />
                         </template>
                     </Button>
                 </template>
@@ -77,7 +71,7 @@
                         :disabled="disabled"
                     >
                         <template v-if="Array.isArray(value) ? value.length : value != null">
-                            <FilterSelectValue :filter="filter" :value="value" />
+                            <FilterSelectValue v-bind="props" />
                         </template>
                         <template v-else>
                             <span class="text-muted-foreground">
@@ -127,7 +121,7 @@
                                     <CommandItem
                                         :value="{ label: __('sharp::filters.select.reset') }"
                                         class="justify-center text-center"
-                                        @select="$emit('input', null); open = false"
+                                        @select="emit('input', null); open = false"
                                     >
                                         {{ __('sharp::filters.select.reset') }}
                                     </CommandItem>

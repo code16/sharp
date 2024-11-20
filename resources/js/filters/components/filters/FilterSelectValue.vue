@@ -1,12 +1,9 @@
 <script setup lang="ts">
     import { SelectFilterData } from "@/types";
     import { Badge } from "@/components/ui/badge";
+    import { FilterProps } from "@/filters/types";
 
-    const props = defineProps<{
-        value: SelectFilterData['value'],
-        filter: Omit<SelectFilterData, 'value'>,
-        inline?: boolean,
-    }>();
+    const props = defineProps<FilterProps<SelectFilterData>>();
 </script>
 
 <template>

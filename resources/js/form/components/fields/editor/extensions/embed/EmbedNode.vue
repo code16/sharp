@@ -39,7 +39,7 @@
 <template>
     <NodeRenderer
         class="my-4 first:mt-0 last:mb-0 border rounded-md items-center p-4 flex gap-4"
-        :class="{ 'group-focus/editor:border-primary has-[[aria-expanded=true]]:border-primary': props.selected }"
+        :class="{ 'group-focus/editor:border-primary': props.selected }"
         :node="node"
     >
         <div class="flex-1" >

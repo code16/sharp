@@ -10,7 +10,8 @@ use Spatie\TypeScriptTransformer\Attributes\Optional;
 final class DateRangeFilterData extends Data
 {
     #[Optional]
-    public ?DateRangeFilterValueData $value;
+    #[LiteralTypeScriptType('{ start:string, end:string } | { preset:string } |null')]
+    public ?array $value;
 
     public function __construct(
         public string $key,
