@@ -22,11 +22,14 @@ const delegatedProps = computed(() => {
     const viewport = ref<InstanceType<typeof ScrollAreaViewport>>();
     const { arrivedState, measure } = useScroll(() => viewport.value?.viewportElement);
 
-    watch(useElementSize(() => viewport.value?.viewportElement).width, useThrottleFn(measure));
+    watch(
+        useElementSize(() => viewport.value?.viewportElement).width,
+        useThrottleFn(() => { measure() }, 50, true, true)
+    );
 </script>
 
 <template>
-  <ScrollAreaRoot v-bind="delegatedProps" :type="isTouchscreen ? touchType : type" :class="cn('relative overflow-hidden', props.class)">
+  <ScrollAreaRoot v-bind="delegatedProps" :type="isTouchscreen ? props.touchType : props.type" :class="cn('relative overflow-hidden', props.class)">
     <ScrollAreaViewport class="group/viewport h-full w-full rounded-[inherit]" :data-scroll-arrived-right="arrivedState.right" ref="viewport">
       <slot />
     </ScrollAreaViewport>

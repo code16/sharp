@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { CommandData, DashboardData, FilterData } from "@/types";
+    import { BreadcrumbData, CommandData, DashboardData, FilterData } from "@/types";
     import { useFilters } from "@/filters/useFilters";
     import { parseQuery } from "@/utils/querystring";
     import { router } from "@inertiajs/vue3";
@@ -17,11 +17,16 @@
     import CommandDropdownItems from "@/commands/components/CommandDropdownItems.vue";
     import { watch } from "vue";
     import DropdownChevronDown from "@/components/ui/DropdownChevronDown.vue";
+    import useMenu from "@/composables/useMenu";
+    import PageBreadcrumb from "@/components/PageBreadcrumb.vue";
+    import { config } from "@/utils/config";
 
     const props = defineProps<{
         dashboard: DashboardData,
+        breadcrumb: BreadcrumbData,
     }>();
 
+    const menu = useMenu();
     const dashboardKey = route().params.dashboardKey as string;
     const filters = useFilters(props.dashboard.config.filters, props.dashboard.filterValues);
     const commands = useCommands();
@@ -67,6 +72,12 @@
 <template>
     <Layout>
         <Title :entity-key="dashboardKey" />
+
+        <template #breadcrumb>
+            <template v-if="config('sharp.display_breadcrumb')">
+                <PageBreadcrumb :breadcrumb="breadcrumb" />
+            </template>
+        </template>
 
         <WithCommands :commands="commands">
             <div class="container mx-auto">

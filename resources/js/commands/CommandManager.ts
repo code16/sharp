@@ -13,13 +13,13 @@ import { Form } from "@/form/Form";
 export class CommandManager {
     commandResponseHandlers: CommandResponseHandlers;
 
-    state = reactive<{
+    state = reactive({}) as {
         currentCommand?: CommandData,
         currentCommandForm?: Form,
         currentCommandFormLoading?: boolean,
         currentCommandResponse?: CommandResponseData,
         currentCommandEndpoints?: CommandEndpoints,
-    }>({});
+    };
 
     constructor(commandResponseHandlers?: Partial<CommandResponseHandlers>) {
         this.commandResponseHandlers = {

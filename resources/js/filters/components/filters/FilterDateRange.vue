@@ -135,7 +135,7 @@
                 </template>
             </PopoverTrigger>
             <PopoverContent :class="cn('w-auto p-0', !inline ? 'w-[--reka-popover-trigger-width]' : '')">
-                <h4 v-if="!inline" class="font-medium leading-none mb-4">
+                <h4 v-if="!inline" class="font-medium leading-none p-3 pb-0 mb-4">
                     {{ filter.label }}
                 </h4>
                 <div class="flex">
@@ -177,7 +177,7 @@
                             </div>
                             <div class="flex flex-col md:flex-row justify-end gap-3 pt-0">
                                 <template v-if="localValue.end">
-                                    <Button variant="outline" @click="onResetClick">
+                                    <Button class="max-md:h-8" variant="outline" @click="onResetClick">
                                         {{ __('sharp::filters.select.reset') }}
                                     </Button>
                                 </template>

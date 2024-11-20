@@ -27,7 +27,7 @@
 </script>
 
 <template>
-    <div class="content"
+    <div
         @click="onClick"
         @mouseover="hoveringElementWithTitle = ($event.target as HTMLElement).closest('[data-title]')"
         @mouseout="hoveringElementWithTitle = null"
@@ -37,10 +37,10 @@
                 <TooltipTrigger as-child>
                     <template v-if="needsTemplate">
                         <!-- to handle EL SharpTagsTransformer -->
-                        <TemplateRenderer :template="updatedHtml" />
+                        <TemplateRenderer class="content" :template="updatedHtml" />
                     </template>
                     <template v-else>
-                        <div v-html="updatedHtml"></div>
+                        <div class="content" v-html="updatedHtml"></div>
                     </template>
                 </TooltipTrigger>
                 <TooltipContent class="max-w-[--reka-tooltip-content-available-width] md:max-w-md" :side-offset="12" :collision-boundary="hoveringElementWithTitle">

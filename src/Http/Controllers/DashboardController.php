@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Http\Controllers;
 
+use Code16\Sharp\Data\BreadcrumbData;
 use Code16\Sharp\Data\Dashboard\DashboardData;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Inertia\Inertia;
@@ -33,6 +34,9 @@ class DashboardController extends SharpProtectedController
 
         return Inertia::render('Dashboard/Dashboard', [
             'dashboard' => DashboardData::from($data),
+            'breadcrumb' => BreadcrumbData::from([
+                'items' => sharp()->context()->breadcrumb()->allSegments(),
+            ]),
         ]);
     }
 }

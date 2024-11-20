@@ -1,6 +1,6 @@
 
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
     important: '.custom-tw',
     content: [
         './resources/views/sharp/**/*.blade.php',

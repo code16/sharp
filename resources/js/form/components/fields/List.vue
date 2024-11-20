@@ -184,74 +184,74 @@
         </template>
         <div class="grid gap-y-6">
             <template v-if="value?.length > 0">
-                    <div class="relative group/list space-y-6" :ref="(el: HTMLElement) => sortableContainer = el">
-                        <TransitionGroup move-class="transition-transform duration-200" leave-to-class="opacity-0" leave-active-class="!absolute" :css="false">
-                            <template v-for="(item, index) in value" :key="`${item[itemKey]}-${sortedKey}`">
-                                <Card class="group relative p-6"
-                                    :class="[
-                                        '[&.sortable-ghost]:z-10 [&.sortable-ghost]:ring-2 [&.sortable-ghost]:ring-ring [&.sortable-ghost]:ring-offset-2',
-                                        reordering ? 'cursor-grab bg-muted/50' : 'bg-background'
-                                    ]"
-                                >
-                                    <div :inert="reordering">
-                                        <FieldGrid class="flex-1 min-w-0 gap-6">
-                                            <template v-for="row in fieldLayout.item">
-                                                <FieldGridRow>
-                                                    <template v-for="itemFieldLayout in row">
-                                                        <FieldGridColumn :layout="itemFieldLayout" :class="{ '!hidden': !form.fieldShouldBeVisible(itemFieldLayout, field.itemFields, item) }">
-                                                            <SharpFormField
-                                                                :field="form.getField(itemFieldLayout.key, field.itemFields, item)"
-                                                                :field-layout="itemFieldLayout"
-                                                                :field-error-key="`${field.key}.${item[errorIndex] ?? item[itemKey]}.${itemFieldLayout.key}`"
-                                                                :parent-field="props.field"
-                                                                :value="item[itemFieldLayout.key]"
-                                                                :locale="form.getMeta(`${field.key}.${item[itemKey]}.${itemFieldLayout.key}`)?.locale ?? form.defaultLocale"
-                                                                :row="row"
-                                                                @input="(value, options) => onFieldInput(index, itemFieldLayout.key, value, options)"
-                                                                @locale-change="onFieldLocaleChange(`${field.key}.${item[itemKey]}.${itemFieldLayout.key}`, $event)"
-                                                                @uploading="onFieldUploading(`${field.key}.${item[itemKey]}.${itemFieldLayout.key}`, $event)"
-                                                            />
-                                                        </FieldGridColumn>
-                                                    </template>
-                                                </FieldGridRow>
-                                            </template>
-                                        </FieldGrid>
-
-                                        <template v-if="canAddItem && field.sortable || props.field.removable">
-                                            <DropdownMenu :modal="false">
-                                                <DropdownMenuTrigger as-child>
-                                                    <Button class="absolute top-0 right-0 z-20" variant="ghost" size="icon">
-                                                        <MoreHorizontal class="w-4 h-4" />
-                                                    </Button>
-                                                </DropdownMenuTrigger>
-                                                <DropdownMenuContent>
-                                                    <template v-if="canAddItem && field.sortable">
-                                                        <DropdownMenuItem @click="onInsert(index)">
-                                                            {{ __('sharp::form.list.insert_above_button') }}
-                                                        </DropdownMenuItem>
-                                                    </template>
-                                                    <template v-if="props.field.removable">
-                                                        <DropdownMenuSeparator class="first:hidden" />
-                                                        <DropdownMenuItem class="text-destructive" @click="onRemove(index)">
-                                                            {{ __('sharp::form.list.remove_button') }}
-                                                        </DropdownMenuItem>
-                                                    </template>
-                                                </DropdownMenuContent>
-                                            </DropdownMenu>
+                <div class="relative group/list space-y-6" :ref="(el: HTMLElement) => sortableContainer = el">
+                    <TransitionGroup move-class="transition-transform duration-200" leave-to-class="opacity-0" leave-active-class="!absolute" :css="false">
+                        <template v-for="(item, index) in value" :key="`${item[itemKey]}-${sortedKey}`">
+                            <Card class="group relative ring-ring ring-offset-2 ring-background p-6"
+                                :class="[
+                                    '[&.sortable-ghost]:z-10 [&.sortable-ghost]:ring-2',
+                                    reordering ? 'cursor-grab bg-muted/50' : 'bg-background'
+                                ]"
+                            >
+                                <div :inert="reordering">
+                                    <FieldGrid class="flex-1 min-w-0 gap-6">
+                                        <template v-for="row in fieldLayout.item">
+                                            <FieldGridRow>
+                                                <template v-for="itemFieldLayout in row">
+                                                    <FieldGridColumn :layout="itemFieldLayout" :class="{ '!hidden': !form.fieldShouldBeVisible(itemFieldLayout, field.itemFields, item) }">
+                                                        <SharpFormField
+                                                            :field="form.getField(itemFieldLayout.key, field.itemFields, item)"
+                                                            :field-layout="itemFieldLayout"
+                                                            :field-error-key="`${field.key}.${item[errorIndex] ?? item[itemKey]}.${itemFieldLayout.key}`"
+                                                            :parent-field="props.field"
+                                                            :value="item[itemFieldLayout.key]"
+                                                            :locale="form.getMeta(`${field.key}.${item[itemKey]}.${itemFieldLayout.key}`)?.locale ?? form.defaultLocale"
+                                                            :row="row"
+                                                            @input="(value, options) => onFieldInput(index, itemFieldLayout.key, value, options)"
+                                                            @locale-change="onFieldLocaleChange(`${field.key}.${item[itemKey]}.${itemFieldLayout.key}`, $event)"
+                                                            @uploading="onFieldUploading(`${field.key}.${item[itemKey]}.${itemFieldLayout.key}`, $event)"
+                                                        />
+                                                    </FieldGridColumn>
+                                                </template>
+                                            </FieldGridRow>
                                         </template>
-                                    </div>
+                                    </FieldGrid>
 
-                                    <div class="z-10 absolute flex items-center justify-center right-0 top-1/2 translate-x-1/2 -translate-y-1/2 h-4 w-3 rounded-sm border bg-border duration-300 transition-opacity cursor-grab group-[&:has(.sortable-ghost)]/list:opacity-0 group-[&:has(.sortable-ghost)]/list:transition-none hover:bg-foreground hover:border-foreground hover:text-background group-hover:opacity-100"
-                                        :class="reordering ? 'opacity-100 group-hover:bg-foreground group-hover:border-foreground group-hover:text-background' : ' opacity-0'"
-                                        data-drag-handle
-                                    >
-                                        <div class="absolute -inset-3"></div>
-                                        <GripVertical class="h-2.5 w-2.5" />
-                                    </div>
-                                </Card>
-                            </template>
-                        </TransitionGroup>
-                    </div>
+                                    <template v-if="canAddItem && field.sortable || props.field.removable">
+                                        <DropdownMenu :modal="false">
+                                            <DropdownMenuTrigger as-child>
+                                                <Button data-item-dropdown class="absolute top-0 right-0 z-20" variant="ghost" size="icon">
+                                                    <MoreHorizontal class="w-4 h-4" />
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent>
+                                                <template v-if="canAddItem && field.sortable">
+                                                    <DropdownMenuItem @click="onInsert(index)">
+                                                        {{ __('sharp::form.list.insert_above_button') }}
+                                                    </DropdownMenuItem>
+                                                </template>
+                                                <template v-if="props.field.removable">
+                                                    <DropdownMenuSeparator class="first:hidden" />
+                                                    <DropdownMenuItem class="text-destructive" @click="onRemove(index)">
+                                                        {{ __('sharp::form.list.remove_button') }}
+                                                    </DropdownMenuItem>
+                                                </template>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </template>
+                                </div>
+
+                                <div class="z-10 absolute flex items-center justify-center right-0 top-1/2 translate-x-1/2 -translate-y-1/2 h-4 w-3 rounded-sm border bg-border duration-300 transition-opacity cursor-grab group-[&:has(.sortable-ghost)]/list:opacity-0 group-[&:has(.sortable-ghost)]/list:transition-none hover:bg-foreground hover:border-foreground hover:text-background group-hover:opacity-100"
+                                    :class="reordering ? 'opacity-100 group-hover:bg-foreground group-hover:border-foreground group-hover:text-background' : ' opacity-0'"
+                                    data-drag-handle
+                                >
+                                    <div class="absolute -inset-3"></div>
+                                    <GripVertical class="h-2.5 w-2.5" />
+                                </div>
+                            </Card>
+                        </template>
+                    </TransitionGroup>
+                </div>
             </template>
 
 

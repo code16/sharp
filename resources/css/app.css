@@ -1,5 +1,4 @@
 @import "./fonts.css";
-@import "./root.css";
 @import "./shadcn.css";
 @import "./shadcn-overrides.css";
 @import "./content.css";
@@ -22,20 +21,9 @@
         transform: scale(100%);
         clip-path: inset(0);
     }
-}
 
-/** see to remove this while supporting legacy bootstrap classes */
-@layer components {
-    .btn {
-        @apply rounded-md px-3 py-2 text-sm font-semibold shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2;
-    }
-
-    .btn-primary {
-        @apply bg-indigo-600 text-white hover:bg-indigo-500 focus-visible:ring-indigo-600;
-    }
-
-    .form-control {
-        @apply block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6;
+    .dark {
+        color-scheme: dark;
     }
 }
 

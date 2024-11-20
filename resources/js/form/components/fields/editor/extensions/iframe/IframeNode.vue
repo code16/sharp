@@ -103,7 +103,7 @@
                 <iframe class="w-full max-h-[200px] [[height$='%']]:h-[200px]" v-bind="node.attrs"></iframe>
             </template>
         </div>
-        <DropdownMenu>
+        <DropdownMenu :modal="false">
             <DropdownMenuTrigger as-child>
                 <Button class="shrink-0 self-center" variant="ghost" size="icon">
                     <MoreHorizontal class="size-4" />

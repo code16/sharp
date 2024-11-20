@@ -1,5 +1,8 @@
 <script setup lang="ts">
     import { CommandManager } from "../CommandManager";
+    import { Sheet, SheetContent } from "@/components/ui/sheet";
+    import { DialogClose } from "reka-ui";
+    import { X } from "lucide-vue-next";
 
     defineProps<{
         commands: CommandManager,
@@ -7,28 +10,25 @@
 </script>
 
 <template>
-<!--    TODO integration -->
-    <div>
-        <div class="fixed inset-0 z-[900]"
-            v-show="commands.state.currentCommandResponse?.action === 'view'"
-            @click="commands.finish()"
-        ></div>
-        <transition
-            enter-from-class="SharpViewPanel--collapsed"
-            enter-active-class="SharpViewPanel--expanding"
-            enter-to-class="SharpViewPanel--expanded"
-            leave-from-class="SharpViewPanel--expanded"
-            leave-active-class="SharpViewPanel--collapsing"
-            leave-to-class="SharpViewPanel--collapsed"
-        >
+    <Sheet
+        :open="commands.state.currentCommandResponse?.action === 'view'"
+        @update:open="(open) => !open && $nextTick(() => commands.finish())"
+    >
+        <SheetContent class="w-[calc(100%-2.5rem)] sm:w-3/4 sm:max-w-none" side="left">
             <template v-if="commands.state.currentCommandResponse?.action === 'view'">
-                <div class="fixed top-0 left-0 bottom-0 w-5/6 bg-white z-[1000]">
-                    <iframe
-                        :srcdoc="commands.state.currentCommandResponse.html"
-                        sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-modals allow-downloads"
-                    ></iframe>
-                </div>
+                <iframe
+                    class="absolute inset-0 size-full border-0"
+                    :srcdoc="commands.state.currentCommandResponse.html"
+                    sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-modals allow-downloads"
+                ></iframe>
             </template>
-        </transition>
-    </div>
+            <template #close>
+                <DialogClose
+                    class="absolute right-0 translate-x-full text-white top-0 p-2 md:p-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary"
+                >
+                    <X class="size-6" />
+                </DialogClose>
+            </template>
+        </SheetContent>
+    </Sheet>
 </template>
