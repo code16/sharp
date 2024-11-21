@@ -25,7 +25,7 @@
     const entityKey = route().params.entityKey as string;
     const entityList: Ref<EntityList> = ref(new EntityList(props.entityList, entityKey));
     const filters = useFilters(entityList.value.config.filters, entityList.value.filterValues);
-    const commands = useCommands({
+    const commands = useCommands('entityList', {
         refresh: (data) => {
             entityList.value = entityList.value.withRefreshedItems(data.items)
         },

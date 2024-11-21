@@ -29,7 +29,7 @@
     const menu = useMenu();
     const dashboardKey = route().params.dashboardKey as string;
     const filters = useFilters(props.dashboard.config.filters, props.dashboard.filterValues);
-    const commands = useCommands();
+    const commands = useCommands('dashboard');
 
     watch(() => props.dashboard, () => {
         filters.update(props.dashboard.config.filters, props.dashboard.filterValues);

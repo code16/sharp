@@ -28,7 +28,7 @@
     const collapsed = ref(props.collapsable);
     const entityList: Ref<EntityList | null> = ref(null);
     const filters: FilterManager = useFilters();
-    const commands = useCommands({
+    const commands = useCommands('entityList', {
         reload: () => {
             init();
         },

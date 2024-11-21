@@ -93,6 +93,6 @@ Route::group([
     Route::post('/upload', [ApiFormUploadController::class, 'store'])
         ->name('code16.sharp.api.form.upload');
 
-    Route::post('/form/autocomplete/{entityKey}/{autocompleteFieldKey}/{embedKey?}', [ApiFormAutocompleteController::class, 'index'])
+    Route::post('/form/autocomplete/{entityKey}/{autocompleteFieldKey}', [ApiFormAutocompleteController::class, 'index'])
         ->name('code16.sharp.api.form.autocomplete.index');
 });

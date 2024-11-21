@@ -8,8 +8,9 @@ use Code16\Sharp\Utils\Uploads\SharpUploadManager;
 
 class ApiEntityListInstanceCommandController extends ApiController
 {
+    use HandlesCommandResult;
     use HandlesCommandForm;
-    use HandlesCommandReturn;
+    use HandlesInstanceCommand;
 
     public function __construct(
         private readonly SharpUploadManager $uploadManager,

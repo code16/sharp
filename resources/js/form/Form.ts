@@ -38,14 +38,21 @@ export class Form implements FormData, CommandFormData {
     serializedData: FormData['data'];
 
     entityKey: string;
-    instanceId: string | number;
+    instanceId: string | number | null;
     embedKey?: string;
+    commandKey?: string;
 
-    constructor(data: FormData | EmbedFormData, entityKey: string, instanceId: string | number, embedKey?: string) {
+    constructor(
+        data: FormData | EmbedFormData,
+        entityKey: string,
+        instanceId: string | number | null,
+        additionalProps?: { embedKey?: string, commandKey?: string }
+    ) {
         Object.assign(this, data);
         this.entityKey = entityKey;
         this.instanceId = instanceId;
-        this.embedKey = embedKey;
+        this.embedKey = additionalProps?.embedKey;
+        this.commandKey = additionalProps?.commandKey;
         this.serializedData = this.data;
     }
 

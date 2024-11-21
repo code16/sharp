@@ -25,6 +25,8 @@
     import { fuzzySearch } from "@/utils/search";
     import {  isCancel } from "axios";
     import { ComboboxItemIndicator } from "reka-ui";
+    import { useParentCommands } from "@/commands/useCommands";
+    import { useIsInDialog } from "@/components/ui/dialog/Dialog.vue";
 
     const props = defineProps<FormFieldProps<FormAutocompleteLocalFieldData | FormAutocompleteRemoteFieldData>>();
     const emit = defineEmits<FormFieldEmits<FormAutocompleteLocalFieldData | FormAutocompleteRemoteFieldData>>();
@@ -38,6 +40,8 @@
     let abortController: AbortController | null = null;
     let timeout = null;
     let loadingTimeout = null;
+
+    const parentCommands = useParentCommands();
 
     function search(query: string, immediate?: boolean) {
         if(props.field.mode === 'remote') {
@@ -58,7 +62,10 @@
                         route('code16.sharp.api.form.autocomplete.index', {
                             entityKey: form.entityKey,
                             autocompleteFieldKey: props.parentField ? `${props.parentField.key}.${field.key}` : field.key,
-                            embedKey: form.embedKey,
+                            embed_key: form.embedKey,
+                            entity_list_command_key: parentCommands?.commandContainer === 'entityList' ? form.commandKey : null,
+                            show_command_key: parentCommands?.commandContainer === 'show' ? form.commandKey : null,
+                            instance_id: form.instanceId,
                             endpoint: field.remoteEndpoint,
                             search: query,
                         }), {

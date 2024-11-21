@@ -11,7 +11,7 @@ use Code16\Sharp\Utils\Uploads\SharpUploadManager;
 class ApiDashboardCommandController extends ApiController
 {
     use HandlesCommandForm;
-    use HandlesCommandReturn;
+    use HandlesCommandResult;
 
     public function __construct(
         private readonly SharpUploadManager $uploadManager,
@@ -25,7 +25,7 @@ class ApiDashboardCommandController extends ApiController
         $dashboard->buildDashboardConfig();
         $dashboard->initQueryParams(request()->query());
 
-        $commandHandler = $this->getCommandHandler($dashboard, $commandKey);
+        $commandHandler = $this->getDashboardCommandHandler($dashboard, $commandKey);
         $formData = $commandHandler->formData() ?: null;
 
         return response()->json(
@@ -41,7 +41,7 @@ class ApiDashboardCommandController extends ApiController
         $dashboard->buildDashboardConfig();
         $dashboard->initQueryParams(request()->input('query'));
 
-        $commandHandler = $this->getCommandHandler($dashboard, $commandKey);
+        $commandHandler = $this->getDashboardCommandHandler($dashboard, $commandKey);
 
         $formattedData = $commandHandler->formatAndValidateRequestData((array) request('data'));
         $result = $this->returnCommandResult($dashboard, $commandHandler->execute($formattedData));
@@ -50,7 +50,7 @@ class ApiDashboardCommandController extends ApiController
         return $result;
     }
 
-    protected function getCommandHandler(SharpDashboard $dashboard, string $commandKey)
+    protected function getDashboardCommandHandler(SharpDashboard $dashboard, string $commandKey)
     {
         if ($handler = $dashboard->findDashboardCommandHandler($commandKey)) {
             $handler->buildCommandConfig();

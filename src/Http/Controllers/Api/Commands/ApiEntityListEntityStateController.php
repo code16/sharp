@@ -7,7 +7,8 @@ use Code16\Sharp\Http\Controllers\Api\ApiController;
 
 class ApiEntityListEntityStateController extends ApiController
 {
-    use HandlesCommandReturn;
+    use HandlesCommandResult;
+    use HandlesInstanceCommand;
 
     public function update(string $entityKey, mixed $instanceId)
     {

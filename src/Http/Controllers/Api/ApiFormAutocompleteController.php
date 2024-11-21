@@ -2,9 +2,14 @@
 
 namespace Code16\Sharp\Http\Controllers\Api;
 
+use Code16\Sharp\EntityList\Commands\Command;
 use Code16\Sharp\Exceptions\SharpInvalidConfigException;
+use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteRemoteField;
-use Code16\Sharp\Http\Controllers\Api\Embeds\HandleEmbed;
+use Code16\Sharp\Form\SharpForm;
+use Code16\Sharp\Http\Controllers\Api\Commands\HandlesEntityCommand;
+use Code16\Sharp\Http\Controllers\Api\Commands\HandlesInstanceCommand;
+use Code16\Sharp\Http\Controllers\Api\Embeds\HandlesEmbed;
 use Code16\Sharp\Utils\Transformers\ArrayConverter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -12,18 +17,14 @@ use Illuminate\Support\Facades\Route;
 
 class ApiFormAutocompleteController extends ApiController
 {
-    use HandleEmbed;
+    use HandlesEmbed;
+    use HandlesEntityCommand;
+    use HandlesInstanceCommand;
     
-    public function index(string $entityKey, string $autocompleteFieldKey, ?string $embedKey = null)
+    public function index(string $entityKey, string $autocompleteFieldKey)
     {
-        if ($embedKey) {
-            $formOrEmbed = $this->getEmbedFromKey($embedKey);
-        } else {
-            $entity = $this->entityManager->entityFor($entityKey);
-            $formOrEmbed = $entity->getFormOrFail(sharp_normalize_entity_key($entityKey)[1]);
-        }
-        
-        $field = $formOrEmbed->findFieldByKey($autocompleteFieldKey);
+        $fieldContainer = $this->getFieldContainer($entityKey);
+        $field = $fieldContainer->findFieldByKey($autocompleteFieldKey);
 
         if ($field === null) {
             throw new SharpInvalidConfigException('Remote autocomplete field '.$autocompleteFieldKey.' was not found in form.');
@@ -34,15 +35,15 @@ class ApiFormAutocompleteController extends ApiController
         if ($callback = $field->getRemoteCallback()) {
             $formData = request()->input('formData')
                 ? collect(request()->input('formData'))
-                    ->filter(fn ($value, $key) => in_array($key, $formOrEmbed->getDataKeys()))
-                    ->map(function ($value, $key) use ($formOrEmbed) {
-                        if (! $field =  $formOrEmbed->findFieldByKey($key)) {
+                    ->filter(fn ($value, $key) => in_array($key, $fieldContainer->getDataKeys()))
+                    ->map(function ($value, $key) use ($fieldContainer) {
+                        if (! $field =  $fieldContainer->findFieldByKey($key)) {
                             return $value;
                         }
 
                         return $field
                             ->formatter()
-                            ->setDataLocalizations($formOrEmbed->getDataLocalizations())
+                            ->setDataLocalizations($fieldContainer->getDataLocalizations())
                             ->fromFront($field, $key, $value);
                     })
                     ->toArray()
@@ -79,6 +80,37 @@ class ApiFormAutocompleteController extends ApiController
         return response()->json([
             'data' => collect($data)->map(fn ($item) => $field->itemWithRenderedTemplates($item)),
         ]);
+    }
+    
+    private function getFieldContainer(string $entityKey): SharpFormEditorEmbed | Command | SharpForm
+    {
+        if (request()->input('embed_key')) {
+            return $this->getEmbedFromKey(request()->input('embed_key'));
+        }
+        if ($commandKey = request()->input('entity_list_command_key')) {
+            $entity = $this->entityManager->entityFor($entityKey);
+            if(request()->input('instance_id')) {
+                return $this->getInstanceCommandHandler(
+                    $entity->getListOrFail(),
+                    $commandKey,
+                    request()->input('instance_id')
+                );
+            }
+            return $this->getEntityCommandHandler(
+                $entity->getListOrFail(),
+                $commandKey
+            );
+        }
+        if ($commandKey = request()->input('show_command_key')) {
+            $entity = $this->entityManager->entityFor($entityKey);
+            return $this->getInstanceCommandHandler(
+                $entity->getShowOrFail(),
+                $commandKey,
+                request()->input('instance_id')
+            );
+        }
+        $entity = $this->entityManager->entityFor($entityKey);
+        return $entity->getFormOrFail(sharp_normalize_entity_key($entityKey)[1]);
     }
 
     private function normalizeEndpoint(string $input): string

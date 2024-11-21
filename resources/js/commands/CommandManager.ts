@@ -6,11 +6,12 @@ import { AxiosResponse } from "axios";
 import { reactive } from "vue";
 import { __ } from "@/utils/i18n";
 import { router } from "@inertiajs/vue3";
-import { CommandResponseHandlers, CommandEndpoints, GetFormQuery } from "./types";
+import { CommandResponseHandlers, CommandEndpoints, GetFormQuery, CommandContainer } from "./types";
 import { Form } from "@/form/Form";
 
 
 export class CommandManager {
+    commandContainer: CommandContainer;
     commandResponseHandlers: CommandResponseHandlers;
 
     state = reactive({}) as {
@@ -21,7 +22,8 @@ export class CommandManager {
         currentCommandEndpoints?: CommandEndpoints,
     };
 
-    constructor(commandResponseHandlers?: Partial<CommandResponseHandlers>) {
+    constructor(commandContainer: CommandContainer, commandResponseHandlers?: Partial<CommandResponseHandlers>) {
+        this.commandContainer = commandContainer;
         this.commandResponseHandlers = {
             ...this.defaultCommandResponseHandlers,
             ...commandResponseHandlers,
@@ -138,7 +140,8 @@ export class CommandManager {
                 new Form(
                     response.data,
                     this.state.currentCommandEndpoints.entityKey,
-                    this.state.currentCommandEndpoints.instanceId
+                    this.state.currentCommandEndpoints.instanceId,
+                    { commandKey: this.state.currentCommand.key }
                 )
             )
             .finally(() => {

@@ -53,7 +53,7 @@
     const locale = ref(show.locales?.[0]);
     const { isReordering, onEntityListReordering } = useReorderingLists();
     const entityListNeedsTopBar = ref(false);
-    const commands = useCommands();
+    const commands = useCommands('show');
 
     provide('show', show);
 

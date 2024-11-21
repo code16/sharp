@@ -1,5 +1,7 @@
 import { CommandResponseData } from "@/types";
 
+export type CommandContainer = 'dashboard' | 'entityList' | 'show';
+
 export type CommandResponseHandlers = {
     [Action in CommandResponseData['action']]: (data: Extract<CommandResponseData, { action: Action }>) => void | Promise<void>
 }

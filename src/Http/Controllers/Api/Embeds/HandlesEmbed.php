@@ -5,7 +5,7 @@ namespace Code16\Sharp\Http\Controllers\Api\Embeds;
 use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
 use Illuminate\Support\Str;
 
-trait HandleEmbed
+trait HandlesEmbed
 {
     protected function getEmbedFromKey(string $embedKey): SharpFormEditorEmbed
     {

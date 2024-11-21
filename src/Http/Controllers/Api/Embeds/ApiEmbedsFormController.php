@@ -7,7 +7,7 @@ use Illuminate\Routing\Controller;
 
 class ApiEmbedsFormController extends Controller
 {
-    use HandleEmbed;
+    use HandlesEmbed;
 
     public function show(string $embedKey, string $entityKey, ?string $instanceId = null)
     {

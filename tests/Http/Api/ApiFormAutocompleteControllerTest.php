@@ -385,11 +385,10 @@ it('allows to call an functional endpoint for a remote autocomplete field in an 
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
             'entityKey' => 'person',
             'autocompleteFieldKey' => 'autocomplete_field',
-            'embedKey' => (new ApiFormAutocompleteControllerAutocompleteEmbed())->key(),
-        ]), [
+            'embed_key' => (new ApiFormAutocompleteControllerAutocompleteEmbed())->key(),
             'endpoint' => '/my/endpoint',
             'search' => 'my search',
-        ])
+        ]))
         ->assertOk()
         ->assertJson([
             'data' => [
