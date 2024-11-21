@@ -9,4 +9,5 @@ export type ShowFieldProps<Data extends ShowFieldData = ShowFieldData, Value = D
     root?: boolean,
     isRightCol?: boolean,
     hideLabel?: boolean,
+    row?: LayoutFieldData[],
 }

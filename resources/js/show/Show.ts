@@ -1,9 +1,9 @@
 import {
     CommandData,
-    EntityStateValueData,
+    EntityStateValueData, LayoutFieldData,
     ShowData,
     ShowFieldData,
-    ShowFieldType,
+    ShowFieldType, ShowLayoutColumnData,
     ShowLayoutSectionData,
     ShowListFieldData,
     ShowTextFieldData
@@ -88,11 +88,6 @@ export class Show implements ShowData {
         return this.sectionFields(section).some(field => field.type === type);
     }
 
-    sectionShouldBeVisible(section: ShowLayoutSectionData, locale: string): boolean {
-        return this.sectionFields(section)
-            .some(field => this.fieldShouldBeVisible(field, this.data[field.key], locale));
-    }
-
     sectionCommands(section: ShowLayoutSectionData): Array<Array<CommandData>> | null {
         if(!section.key) {
             return null;
@@ -101,7 +96,25 @@ export class Show implements ShowData {
             .map(group => group.filter(command => command.authorization));
     }
 
-    fieldShouldBeVisible(field: ShowFieldData, value: ShowFieldData['value'], locale: string): boolean {
+    sectionShouldBeVisible(section: ShowLayoutSectionData, locale: string): boolean {
+        return section.columns
+            .map((column) => column.fields)
+            .flat(2)
+            .some(fieldLayout => this.fieldShouldBeVisible(fieldLayout, locale));
+    }
+
+    fieldRowShouldBeVisible(row: ShowLayoutColumnData['fields'][0], locale: string, fields = this.fields, data = this.data): boolean {
+        return row
+            .some(fieldLayout => this.fieldShouldBeVisible(fieldLayout, locale, fields, data));
+    }
+
+    fieldShouldBeVisible(fieldLayout: LayoutFieldData, locale: string, fields = this.fields, data = this.data): boolean {
+        const field = fields[fieldLayout.key];
+
+        if(!field) {
+            return false;
+        }
+
         if(field.type === 'entityList') {
             return true;
         }
@@ -111,15 +124,17 @@ export class Show implements ShowData {
         }
 
         if(field.type === 'text') {
+            const value = data[field.key] as ShowTextFieldData['value'];
             return field.localized
-                ? !!(value as ShowTextFieldData['value'])?.text?.[locale]
-                : !!(value as ShowTextFieldData['value'])?.text;
+                ? !!value?.text?.[locale]
+                : !!value?.text;
         }
 
         if(field.type === 'list') {
-            return (value as ShowListFieldData['value'])?.length > 0;
+            const value = data[field.key] as ShowListFieldData['value']
+            return value?.length > 0;
         }
 
-        return !!value;
+        return !!data[field.key];
     }
 }

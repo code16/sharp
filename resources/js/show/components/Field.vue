@@ -22,10 +22,8 @@
 </script>
 
 <template>
-    <div>
-        <component
-            :is="isCustomField(field.type) ? resolveCustomField(field.type) : components[field.type]"
-            v-bind="$props"
-        />
-    </div>
+    <component
+        :is="isCustomField(field.type) ? resolveCustomField(field.type) : components[field.type]"
+        v-bind="$props"
+    />
 </template>

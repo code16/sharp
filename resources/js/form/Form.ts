@@ -4,6 +4,7 @@ import {
     FormData,
     FormEditorFieldData,
     FormFieldData,
+    FormLayoutColumnData,
     FormLayoutFieldsetData,
     FormLayoutTabData,
     FormListFieldData,
@@ -177,6 +178,14 @@ export class Form implements FormData, CommandFormData {
             ...fieldsWithDynamicAttributesApplied[key],
             readOnly: this.isReadOnly || fieldsWithDynamicAttributesApplied[key].readOnly || readOnly,
         };
+    }
+
+    fieldRowShouldBeVisible(row: FormLayoutColumnData['fields'][0], fields = this.fields, data = this.data) {
+        return row.some(fieldLayout =>
+            'legend' in fieldLayout
+                ? this.fieldsetShouldBeVisible(fieldLayout, fields, data)
+                : this.fieldShouldBeVisible(fieldLayout, fields, data)
+        );
     }
 
     fieldShouldBeVisible(fieldLayout: LayoutFieldData, fields = this.fields, data = this.data) {

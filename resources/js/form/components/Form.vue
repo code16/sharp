@@ -173,10 +173,10 @@
                                     <div class="col-[span_var(--size)]" :style="{ '--size': `${column.size}` }">
                                         <FieldGrid class="gap-6">
                                             <template v-for="row in column.fields">
-                                                <FieldGridRow>
+                                                <FieldGridRow v-show="form.fieldRowShouldBeVisible(row)">
                                                     <template v-for="fieldLayout in row">
                                                         <template v-if="'legend' in fieldLayout">
-                                                            <FieldGridColumn>
+                                                            <FieldGridColumn v-show="form.fieldsetShouldBeVisible(fieldLayout)">
                                                                 <Card>
                                                                     <CardHeader>
                                                                         <CardTitle class="text-sm font-semibold">
@@ -186,9 +186,9 @@
                                                                     <CardContent>
                                                                         <FieldGrid class="gap-6">
                                                                             <template v-for="row in fieldLayout.fields">
-                                                                                <FieldGridRow>
+                                                                                <FieldGridRow v-show="form.fieldRowShouldBeVisible(row)">
                                                                                     <template v-for="fieldLayout in row">
-                                                                                        <FieldGridColumn :layout="fieldLayout" :class="{ '!hidden': !form.fieldShouldBeVisible(fieldLayout) }">
+                                                                                        <FieldGridColumn :layout="fieldLayout" v-show="form.fieldShouldBeVisible(fieldLayout)">
                                                                                             <SharpFormField
                                                                                                 :field="form.getField(fieldLayout.key)"
                                                                                                 :field-layout="fieldLayout"
@@ -211,7 +211,7 @@
                                                             </FieldGridColumn>
                                                         </template>
                                                         <template v-else>
-                                                            <FieldGridColumn :layout="fieldLayout" :class="{ '!hidden': !form.fieldShouldBeVisible(fieldLayout) }">
+                                                            <FieldGridColumn :layout="fieldLayout" v-show="form.fieldShouldBeVisible(fieldLayout)">
                                                                 <SharpFormField
                                                                     :field="form.getField(fieldLayout.key)"
                                                                     :field-layout="fieldLayout"

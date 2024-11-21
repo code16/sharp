@@ -33,18 +33,19 @@
                         <CardContent :class="hasOnlyOneVisibleFileField ? '!p-0' : ''">
                             <FieldGrid class="gap-6">
                                 <template v-for="row in fieldLayout.item">
-                                    <FieldGridRow>
+                                    <FieldGridRow v-show="show.fieldRowShouldBeVisible(row, props.locale, props.field.itemFields, item)">
                                         <template v-for="itemFieldLayout in row">
                                             <FieldGridColumn
                                                 :layout="itemFieldLayout"
-                                                v-show="field.itemFields?.[itemFieldLayout.key] && show.fieldShouldBeVisible(field.itemFields[itemFieldLayout.key], item[itemFieldLayout.key], locale)"
+                                                v-show="show.fieldShouldBeVisible(itemFieldLayout, props.locale, props.field.itemFields, item)"
                                             >
                                                 <template v-if="field.itemFields?.[itemFieldLayout.key]">
                                                     <SharpShowField
-                                                        v-bind="$props"
+                                                        v-bind="props"
                                                         :field="field.itemFields?.[itemFieldLayout.key]"
                                                         :value="item[itemFieldLayout.key]"
                                                         :hide-label="hasOnlyOneVisibleFileField"
+                                                        :row="row"
                                                     />
                                                 </template>
                                                 <template v-else>

@@ -303,11 +303,11 @@
                                             <div class="min-w-0 w-full sm:w-[calc(var(--size)/12*100%)] px-4" :style="{ '--size': `${column.size}` }">
                                                 <FieldGrid class="gap-x-4 gap-y-6">
                                                     <template v-for="row in column.fields">
-                                                        <FieldGridRow>
+                                                        <FieldGridRow v-show="show.fieldRowShouldBeVisible(row, locale)">
                                                             <template v-for="fieldLayout in row">
                                                                 <FieldGridColumn
                                                                     :layout="fieldLayout"
-                                                                    v-show="show.fieldShouldBeVisible(show.fields[fieldLayout.key], show.data[fieldLayout.key], locale)"
+                                                                    v-show="show.fieldShouldBeVisible(fieldLayout, locale)"
                                                                 >
                                                                     <template v-if="show.fields[fieldLayout.key]">
                                                                         <SharpShowField
@@ -319,6 +319,7 @@
                                                                             :entity-key="entityKey"
                                                                             :instance-id="instanceId"
                                                                             :is-right-col="columnIndex === section.columns.length - 1"
+                                                                            :row="row"
                                                                             @reordering="onEntityListReordering(fieldLayout.key, $event)"
                                                                         />
                                                                     </template>

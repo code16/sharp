@@ -196,14 +196,14 @@
                                 <div :inert="reordering">
                                     <FieldGrid class="flex-1 min-w-0 gap-6">
                                         <template v-for="row in fieldLayout.item">
-                                            <FieldGridRow>
+                                            <FieldGridRow v-show="form.fieldRowShouldBeVisible(row, field.itemFields, item)">
                                                 <template v-for="itemFieldLayout in row">
-                                                    <FieldGridColumn :layout="itemFieldLayout" :class="{ '!hidden': !form.fieldShouldBeVisible(itemFieldLayout, field.itemFields, item) }">
+                                                    <FieldGridColumn :layout="itemFieldLayout" v-show="form.fieldShouldBeVisible(itemFieldLayout, field.itemFields, item)">
                                                         <SharpFormField
                                                             :field="form.getField(itemFieldLayout.key, field.itemFields, item)"
                                                             :field-layout="itemFieldLayout"
                                                             :field-error-key="`${field.key}.${item[errorIndex] ?? item[itemKey]}.${itemFieldLayout.key}`"
-                                                            :parent-field="props.field"
+                                                            :parent-field="field"
                                                             :value="item[itemFieldLayout.key]"
                                                             :locale="form.getMeta(`${field.key}.${item[itemKey]}.${itemFieldLayout.key}`)?.locale ?? form.defaultLocale"
                                                             :row="row"

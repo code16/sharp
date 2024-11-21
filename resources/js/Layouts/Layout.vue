@@ -200,7 +200,7 @@ if(currentItemWithChildren) {
                                     </SidebarMenuButton>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent class="w-[--reka-dropdown-menu-trigger-width] min-w-56 rounded-lg" side="bottom" :side-offset="4" :collision-boundary="null" align="end">
-                                    <template v-if="menu.userMenu">
+                                    <template v-if="menu.userMenu?.items?.length">
                                         <DropdownMenuGroup>
                                             <template v-for="item in menu.userMenu.items">
                                                 <template v-if="item.isSeparator">
@@ -219,7 +219,7 @@ if(currentItemWithChildren) {
                                             </template>
                                         </DropdownMenuGroup>
                                     </template>
-                                    <DropdownMenuSeparator />
+                                    <DropdownMenuSeparator class="first:hidden" />
                                     <DropdownMenuSub>
                                         <DropdownMenuSubTrigger>
                                             <Sun class="w-4 h-4 mr-2 dark:hidden" />
