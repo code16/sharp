@@ -9,7 +9,7 @@ class Vite extends Component
     public function __construct(
         public ?string $hotFile = null
     ) {
-        \Illuminate\Support\Facades\Vite::useHotFile($hotFile ?? public_path('vendor/sharp/hot'));
+        \Illuminate\Support\Facades\Vite::useHotFile($hotFile ?? base_path('vendor/code16/sharp/dist/hot'));
     }
 
     public function render(): callable

@@ -509,7 +509,10 @@
                                                 <TableHead
                                                     class="max-w-[70cqw] md:w-[var(--width,auto)]"
                                                     :style="{
-                                                        '--width': field.width === 'fill' ? (100 / visibleFields.length)+'%' : field.width,
+                                                        '--width':
+                                                            field.width === 'fill' ? (100 / visibleFields.length)+'%' :
+                                                            field.width ? field.width :
+                                                            field.type === 'state' ? 0 : null
                                                     }"
                                                 >
                                                     <template v-if="field.sortable">
@@ -596,7 +599,7 @@
                                                     </TableCell>
                                                 </template>
                                                 <template v-for="(field, fieldIndex) in visibleFields" :key="field.key">
-                                                    <template v-if="field.key === '@state' && entityList.config.state && showEntityState">
+                                                    <template v-if="field.type === 'state' && entityList.config.state && showEntityState">
                                                         <TableCell class="max-w-[70cqw]">
                                                             <DropdownMenu>
                                                                 <DropdownMenuTrigger as-child>

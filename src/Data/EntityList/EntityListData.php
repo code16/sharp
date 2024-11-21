@@ -19,10 +19,10 @@ final class EntityListData extends Data
         public DataCollection $fields,
         #[LiteralTypeScriptType('Array<{ [key: string]: any }>')]
         public array $data,
-        /** @var DataCollection<string, EntityListMultiformData> */
-        public DataCollection $forms,
         public FilterValuesData $filterValues,
         public ?EntityListQueryParamsData $query,
+        /** @var DataCollection<string, EntityListMultiformData> */
+        public ?DataCollection $forms = null,
         public ?PaginatorMetaData $meta = null,
         public ?PageAlertData $pageAlert = null,
     ) {}
@@ -34,9 +34,9 @@ final class EntityListData extends Data
             config: EntityListConfigData::from($entityList['config']),
             fields: EntityListFieldData::collection($entityList['fields']),
             data: $entityList['data'],
-            forms: EntityListMultiformData::collection($entityList['forms']),
             filterValues: FilterValuesData::from($entityList['filterValues']),
             query: EntityListQueryParamsData::optional($entityList['query']),
+            forms: $entityList['forms'] ? EntityListMultiformData::collection($entityList['forms']) : null,
             meta: PaginatorMetaData::optional($entityList['meta'] ?? null),
             pageAlert: PageAlertData::optional($entityList['pageAlert'] ?? null),
         );

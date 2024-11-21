@@ -3,11 +3,13 @@
 namespace Code16\Sharp\Data\EntityList;
 
 use Code16\Sharp\Data\Data;
+use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 use Spatie\TypeScriptTransformer\Attributes\Optional;
 
 final class EntityListFieldData extends Data
 {
     public function __construct(
+        #[LiteralTypeScriptType('"text"|"state"')]
         public string $type,
         public string $key,
         public string $label,
