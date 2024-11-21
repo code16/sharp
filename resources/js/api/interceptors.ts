@@ -29,8 +29,12 @@ export function installInterceptors(api: Axios) {
             if(error instanceof AxiosError) {
                 const response = error.response;
 
-                if(response.data instanceof Blob && response.data.type === 'application/json') {
-                    response.data = await parseBlobJSONContent(response.data);
+                if(response.data instanceof Blob) {
+                    if(response.data.type === 'application/json') {
+                        response.data = await parseBlobJSONContent(response.data);
+                    } else if(response.data.type === 'text/html') {
+                        response.data = await response.data.text();
+                    }
                 }
 
                 handleErrorAlert({

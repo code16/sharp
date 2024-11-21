@@ -4,6 +4,7 @@ namespace Code16\Sharp\Http\Middleware\Api;
 
 use Closure;
 use Code16\Sharp\Exceptions\SharpException;
+use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
@@ -20,7 +21,18 @@ class HandleSharpApiErrors
             }
 
             $code = $this->getHttpCodeFor($response->exception);
-
+            
+            if(config('app.debug')) {
+                // return the response in HTML to display it in a modal
+                return app(ExceptionHandler::class)
+                    ->render(
+                        tap($request->duplicate(), function ($request) {
+                            $request->headers->set('Accept', 'text/html');
+                        }),
+                        $response->exception
+                    );
+            }
+            
             if ($code != 500) {
                 return response()->json(
                     ['message' => $response->exception->getMessage()],
