@@ -63,14 +63,18 @@ export class Show implements ShowData {
             ?.map(group => group.filter(command => command.authorization));
     }
 
-    getTitle(locale: string): string {
+    getTitle(locale: string): string | null {
         if(!this.config.titleAttribute) {
             return null;
         }
-        if((this.fields[this.config.titleAttribute] as ShowTextFieldData).localized) {
-            return this.data[this.config.titleAttribute]?.[locale];
+        if(this.fields[this.config.titleAttribute]) {
+            const field = this.fields[this.config.titleAttribute] as ShowTextFieldData;
+            const value = this.data[this.config.titleAttribute] as ShowTextFieldData['value'];
+            return field.localized && typeof value?.text === 'object'
+                ? value?.text?.[locale]
+                : value?.text as string;
         }
-        return this.data[this.config.titleAttribute] as string;
+        return null;
     }
 
     sectionFields(section: ShowLayoutSectionData): Array<ShowFieldData> {

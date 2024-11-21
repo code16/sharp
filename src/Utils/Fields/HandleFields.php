@@ -76,6 +76,10 @@ trait HandleFields
 
         return collect($attributes)
             ->map(function ($value, $key) {
+                if(isset($this->pageTitleField) && $this->pageTitleField->key == $key) {
+                    return $this->pageTitleField->formatter()->toFront($this->pageTitleField, $value);
+                }
+                
                 $field = $this->findFieldByKey($key);
 
                 return $field
