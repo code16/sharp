@@ -36,7 +36,6 @@ export class CommandManager {
                 await showAlert(message, {
                     title: __('sharp::modals.command.info.title'),
                 });
-                this.finish();
             },
             link: ({ link }) => {
                 const url = new URL(link);
@@ -77,6 +76,7 @@ export class CommandManager {
     }
 
     async send(command: CommandData, endpoints: CommandEndpoints, confirmDialogOptions?: Partial<RootAlertDialog>) {
+        this.finish();
         this.state.currentCommand = command;
         this.state.currentCommandEndpoints = endpoints;
 
@@ -115,12 +115,18 @@ export class CommandManager {
     async handleCommandApiResponse(response: AxiosResponse<Blob>): Promise<void> {
         if(response.data.type !== 'application/json') {
             location.replace(URL.createObjectURL(response.data)); // download the file
+            this.finish();
             return;
         }
 
-        const data = await parseBlobJSONContent(response.data);
+        const data = await parseBlobJSONContent(response.data) as CommandResponseData;
 
-        await this.handleCommandResponse(data as CommandResponseData);
+        if(data.action !== 'step') {
+            // close form modal
+            this.state.currentCommandForm = null;
+        }
+
+        await this.handleCommandResponse(data);
     }
 
     handleCommandResponse(data: CommandResponseData): void | Promise<void> {

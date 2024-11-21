@@ -33,7 +33,7 @@
             init();
         },
         refresh: (data) => {
-            entityList.value = entityList.value.withRefreshedItems(data.items)
+            entityList.value = entityList.value.withRefreshedItems(data.items);
         },
     });
 

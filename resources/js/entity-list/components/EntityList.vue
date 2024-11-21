@@ -253,10 +253,10 @@
     <WithCommands :commands="commands">
         <div ref="el">
             <transition enter-active-class="transition" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition" leave-from-class="opacity-100" leave-to-class="opacity-0">
-                    <template v-if="reordering">
-                        <div class="fixed inset-0 z-10 bg-black/5"></div>
-                    </template>
-                </transition>
+                <template v-if="reordering">
+                    <div class="fixed inset-0 z-10 bg-black/5"></div>
+                </template>
+            </transition>
 
             <template v-if="entityList">
                 <template v-if="
@@ -377,7 +377,7 @@
                 <div class="h-8 mb-4"></div>
             </template>
 
-            <div class="container" :class="[inline ? 'px-0' : 'px-4 lg:px-6']">
+            <div class="container px-4 lg:px-6">
                 <template v-if="entityList?.pageAlert">
                     <PageAlert
                         class="mb-3"

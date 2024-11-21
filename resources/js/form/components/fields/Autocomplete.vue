@@ -147,8 +147,13 @@
                 </PopoverTrigger>
             </template>
 
-            <PopoverContent :class="cn('p-0 w-[--reka-popover-trigger-width] min-w-[200px]')" align="start" :avoid-collisions="false">
+            <PopoverContent
+                class="p-0 w-[--reka-popover-trigger-width] min-w-[200px]"
+                align="start"
+                :avoid-collisions="false"
+            >
                 <Command
+                    :class="isInDialog ? 'max-h-[--reka-popper-available-height]' : ''"
                     :model-value="value?.[props.field.itemIdAttribute]"
                     :reset-search-term-on-blur="false"
                     ignore-filter
