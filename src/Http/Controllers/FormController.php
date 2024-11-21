@@ -27,10 +27,7 @@ class FormController extends SharpProtectedController
     {
         $entity = $this->entityManager->entityFor($entityKey);
 
-        sharp_check_ability(
-            $entity->hasShow() ? 'create' : 'view',
-            $entityKey,
-        );
+        sharp_check_ability('create', $entityKey);
 
         $form = $entity->getFormOrFail(sharp_normalize_entity_key($entityKey)[1]);
 
