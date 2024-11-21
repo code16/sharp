@@ -3,7 +3,6 @@
     import { ChevronDown, PlusCircle } from "lucide-vue-next";
     import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
     import { Separator } from "@/components/ui/separator";
-    import { Badge } from "@/components/ui/badge";
     import {
         Command,
         CommandEmpty,
@@ -19,7 +18,7 @@
     import { cn } from "@/utils/cn";
     import { Label } from "@/components/ui/label";
     import { ref } from "vue";
-    import FilterSelectValue from "@/filters/components/filters/FilterSelectValue.vue";
+    import SelectFilterValue from "@/filters/components/filters/SelectFilterValue.vue";
     import { FilterEmits, FilterProps } from "@/filters/types";
 
     const props = defineProps<FilterProps<SelectFilterData>>();
@@ -54,39 +53,49 @@
         <Popover v-model:open="open" :modal="!inline">
             <PopoverTrigger as-child>
                 <template v-if="inline">
-                    <Button variant="outline" size="sm" class="h-8 border-dashed transition-shadow shadow-sm data-[state=open]:shadow-md" :disabled="disabled">
-                        <PlusCircle class="mr-2 w-4 h-4 stroke-[1.25]" />
+                    <Button
+                        class="text-left justify-start h-8 py-1.5 gap-2 transition-shadow data-[state=open]:shadow-md"
+                        variant="outline"
+                        size="sm"
+                        :disabled="disabled"
+                    >
                         {{ filter.label }}
                         <template v-if="Array.isArray(value) ? value.length : value != null">
-                            <Separator orientation="vertical" class="mx-2 h-4" />
-                            <FilterSelectValue v-bind="props" />
+                            <Separator orientation="vertical" class="h-4" />
+                            <SelectFilterValue v-bind="props" />
                         </template>
+                        <ChevronDown class="-mr-0.5 w-4 h-4 opacity-50 shrink-0" />
                     </Button>
                 </template>
                 <template v-else>
                     <Button
-                        class="mt-2 w-full text-left justify-start font-normal h-auto min-h-9 py-1.5 gap-1"
+                        class="mt-2 h-auto min-h-9 w-full text-left justify-start font-normal py-1.5 gap-2"
                         variant="outline"
                         size="sm"
                         :disabled="disabled"
                     >
                         <template v-if="Array.isArray(value) ? value.length : value != null">
-                            <FilterSelectValue v-bind="props" />
+                            <SelectFilterValue v-bind="props" />
                         </template>
                         <template v-else>
                             <span class="text-muted-foreground">
                                 {{ __('sharp::form.multiselect.placeholder') }}
                             </span>
                         </template>
-                        <ChevronDown class="w-4 h-4 opacity-50 shrink-0 ml-auto" />
+                        <ChevronDown class="ml-auto w-4 h-4 opacity-50 shrink-0" />
                     </Button>
                 </template>
             </PopoverTrigger>
             <PopoverContent :class="cn('p-0 w-auto min-w-[200px]', !inline ? 'w-[--reka-popover-trigger-width]' : '')" align="start">
-                <Command>
-                    <template v-if="filter.searchable">
+                <Command
+                    :multiple="props.filter.multiple"
+                    highlight-on-hover
+                >
+                    <div v-show="filter.searchable">
+                        <!-- v-show because otherwise highlight on hover does not work -->
                         <CommandInput :placeholder="__('sharp::form.multiselect.placeholder')" />
-                    </template>
+                    </div>
+
                     <CommandList>
                         <CommandEmpty>{{ __('sharp::form.autocomplete.no_results_text') }}</CommandEmpty>
                         <CommandGroup>

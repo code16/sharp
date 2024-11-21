@@ -10,7 +10,7 @@
     import { Input } from "@/components/ui/input";
     import { __ } from "@/utils/i18n";
     import { Label } from "@/components/ui/label";
-    import FilterDateRangeValue from "@/filters/components/filters/FilterDateRangeValue.vue";
+    import DateRangeFilterValue from "@/filters/components/filters/DateRangeFilterValue.vue";
     import { cn } from "@/utils/cn";
     import { FilterEmits, FilterProps } from "@/filters/types";
 
@@ -99,12 +99,12 @@
         <Popover v-model:open="open" @update:open="$event && onOpen()" :modal="!inline">
             <PopoverTrigger as-child>
                 <template v-if="inline">
-                    <Button variant="outline" size="sm" class="h-8 border-dashed transition-shadow shadow-sm data-[state=open]:shadow-md" :disabled="disabled">
-                        <CalendarIcon class="mr-2 h-4 w-4 stroke-[1.25]" />
+                    <Button variant="outline" size="sm" class="h-8 gap-2 transition-shadow data-[state=open]:shadow-md" :disabled="disabled">
+                        <CalendarIcon class="h-4 w-4 opacity-50" />
                         {{ filter.label }}
                         <template v-if="props.value && 'start' in props.value">
-                            <Separator orientation="vertical" class="mx-2 h-4" />
-                            <FilterDateRangeValue v-bind="props" />
+                            <Separator orientation="vertical" class="h-4" />
+                            <DateRangeFilterValue v-bind="props" />
                         </template>
                     </Button>
                 </template>
@@ -116,7 +116,7 @@
                         :disabled="disabled"
                     >
                         <template v-if="props.value && 'start' in props.value">
-                            <FilterDateRangeValue v-bind="props" />
+                            <DateRangeFilterValue v-bind="props" />
                         </template>
                         <template v-else>
                             <span class="text-muted-foreground">

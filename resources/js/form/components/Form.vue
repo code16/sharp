@@ -85,19 +85,54 @@
 <template>
     <Tabs v-model="selectedTabSlug" :unmount-on-hide="false">
         <template v-if="form.locales?.length">
-            <div class="container mb-4">
-                <template v-if="form.locales?.length">
-                    <Select :model-value="form.currentLocale ?? undefined" @update:model-value="onLocaleChange">
-                        <LocaleSelectTrigger />
-                        <SelectContent>
-                            <template v-for="locale in form.locales" :key="locale">
-                                <SelectItem :value="locale">
-                                    <span class="uppercase text-xs">{{ locale }}</span>
-                                </SelectItem>
-                            </template>
-                        </SelectContent>
-                    </Select>
+            <div class="@container container flex items-end mb-4 gap-4">
+                <div class="flex-1">
+                    <template v-if="form.locales?.length">
+                        <Select :model-value="form.currentLocale ?? undefined" @update:model-value="onLocaleChange">
+                            <LocaleSelectTrigger />
+                            <SelectContent>
+                                <template v-for="locale in form.locales" :key="locale">
+                                    <SelectItem :value="locale">
+                                        <span class="uppercase text-xs">{{ locale }}</span>
+                                    </SelectItem>
+                                </template>
+                            </SelectContent>
+                        </Select>
+                    </template>
+                </div>
+                <template v-if="form.layout.tabbed && form.layout.tabs.length > 1">
+                    <div>
+                        <div class="@3xl:hidden">
+                            <Select v-model="selectedTabSlug">
+                                <SelectTrigger class="h-8">
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <template v-for="tab in form.layout.tabs">
+                                        <SelectItem :value="slugify(tab.title)">
+                                            {{ tab.title }}
+                                        </SelectItem>
+                                    </template>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div class="hidden h-8 flex-col justify-end @3xl:flex">
+                            <TabsList>
+                                <template v-for="tab in form.layout.tabs">
+                                    <TabsTrigger :value="slugify(tab.title)">
+                                        {{ tab.title }}
+                                        <template v-if="form.tabErrorCount(tab)">
+                                            <Badge class="ml-2" variant="destructive">
+                                                {{ form.tabErrorCount(tab) }}
+                                            </Badge>
+                                        </template>
+                                    </TabsTrigger>
+                                </template>
+                            </TabsList>
+                        </div>
+                    </div>
                 </template>
+                <div class="flex-1"></div>
             </div>
         </template>
         <template v-if="showErrorAlert">
@@ -120,39 +155,6 @@
                             <CardTitle class="-mt-0.5 flex-1 truncate text-2xl/7">
                                 <slot name="title" />
                             </CardTitle>
-                            <template v-if="form.layout.tabbed && form.layout.tabs.length > 1">
-                                <div>
-                                    <div class="@3xl/root-card:hidden">
-                                        <Select v-model="selectedTabSlug">
-                                            <SelectTrigger>
-                                                <SelectValue />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <template v-for="tab in form.layout.tabs">
-                                                    <SelectItem :value="slugify(tab.title)">
-                                                        {{ tab.title }}
-                                                    </SelectItem>
-                                                </template>
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
-                                    <div class="hidden @3xl/root-card:block">
-                                        <TabsList>
-                                            <template v-for="tab in form.layout.tabs">
-                                                <TabsTrigger :value="slugify(tab.title)">
-                                                    {{ tab.title }}
-                                                    <template v-if="form.tabErrorCount(tab)">
-                                                        <Badge class="ml-2" variant="destructive">
-                                                            {{ form.tabErrorCount(tab) }}
-                                                        </Badge>
-                                                    </template>
-                                                </TabsTrigger>
-                                            </template>
-                                        </TabsList>
-                                    </div>
-                                </div>
-                                <div class="flex-1 hidden @4xl/root-card:block"></div>
-                            </template>
                         </div>
                     </CardHeader>
                 </template>

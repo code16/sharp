@@ -10,7 +10,7 @@
 </script>
 
 <template>
-    <Button as="div" class="relative h-8 border-dashed" variant="outline" size="sm">
+    <Button as="div" class="relative h-8 border" variant="outline" size="sm">
         <Label class="flex items-center gap-2">
             <span class="absolute inset-0"></span>
             <Checkbox
