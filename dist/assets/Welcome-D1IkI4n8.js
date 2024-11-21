@@ -1,1 +1,0 @@
-import{d as a,c as e,w as s,ap as t,o,i as n,t as _,u as c,_ as r}from"./sharp-BX2sk5Vp.js";const l={class:"text-xl"},d=a({__name:"Welcome",setup(p){return(i,m)=>(o(),e(t,null,{default:s(()=>[n("h1",l,_(c(r)("sharp::menu.no-dashboard-message")),1)]),_:1}))}});export{d as default};
