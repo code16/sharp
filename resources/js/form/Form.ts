@@ -122,7 +122,10 @@ export class Form implements FormData, CommandFormData {
         return get(this.meta, fieldKey);
     }
 
-    setMeta(fieldKey: string, values: Partial<FieldMeta> | FieldsMeta[]) {
+    setMeta(fieldKey: string, values: Partial<FieldMeta> | FieldsMeta[], listFieldKey?: string) {
+        if(listFieldKey && !this.meta[listFieldKey]) {
+            this.meta[listFieldKey] = [];
+        }
         if(Array.isArray(values)) {
             this.meta[fieldKey] = values;
         } else {

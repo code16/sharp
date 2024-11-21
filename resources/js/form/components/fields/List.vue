@@ -79,7 +79,7 @@
 
     emit('input', props.value?.map(item => ({ ...item, [itemKey]: itemKeyIndex++ })), { force: true });
 
-    // watch(form.meta, () => console.log(form.meta), { deep: true });
+    watch(form.meta, () => console.log(form.meta), { deep: true });
 
     watchArray(() => props.value, async (newList, oldList, added) => {
         if(!added.length) {
@@ -153,11 +153,11 @@
     }
 
     function onFieldLocaleChange(fieldKey: string, locale: string) {
-        form.setMeta(fieldKey, { locale });
+        form.setMeta(fieldKey, { locale }, props.field.key);
     }
 
     function onFieldUploading(fieldKey: string, uploading: boolean) {
-        form.setMeta(fieldKey, { uploading });
+        form.setMeta(fieldKey, { uploading }, props.field.key);
     }
 
     const bulkDroppingFile = ref(false);
