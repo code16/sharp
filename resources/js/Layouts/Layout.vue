@@ -277,8 +277,11 @@ if(currentItemWithChildren) {
                     v-model:open="dialog.open"
                     @update:open="(open) => !open && window.setTimeout(() => dialog.onHidden(), 200)"
                 >
-                    <DialogContent class="max-w-5xl h-[90dvh]">
-                        <iframe class="size-full" :srcdoc="`<style>body,pre{margin:0}</style>${dialog.text}`"></iframe>
+                    <DialogContent class="max-w-screen-xl w-[calc(100%-4rem)] h-[90dvh]">
+                        <iframe class="size-full" :srcdoc="`
+                            <style>body,pre{margin:0}</style>
+                            ${dialog.text.replace('</head>', '<style>html{font-size:14px}</style></head>')}
+                        `"></iframe>
                     </DialogContent>
                 </Dialog>
             </template>

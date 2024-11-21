@@ -42,6 +42,7 @@
     let loadingTimeout = null;
 
     const parentCommands = useParentCommands();
+    const isInDialog = useIsInDialog();
 
     function search(query: string, immediate?: boolean) {
         if(props.field.mode === 'remote') {
