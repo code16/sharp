@@ -20,7 +20,7 @@ class ApiFormAutocompleteController extends ApiController
     use HandlesEmbed;
     use HandlesEntityCommand;
     use HandlesInstanceCommand;
-    
+
     public function index(string $entityKey, string $autocompleteFieldKey)
     {
         $fieldContainer = $this->getFieldContainer($entityKey);
@@ -37,7 +37,7 @@ class ApiFormAutocompleteController extends ApiController
                 ? collect(request()->input('formData'))
                     ->filter(fn ($value, $key) => in_array($key, $fieldContainer->getDataKeys()))
                     ->map(function ($value, $key) use ($fieldContainer) {
-                        if (! $field =  $fieldContainer->findFieldByKey($key)) {
+                        if (! $field = $fieldContainer->findFieldByKey($key)) {
                             return $value;
                         }
 
@@ -81,35 +81,38 @@ class ApiFormAutocompleteController extends ApiController
             'data' => collect($data)->map(fn ($item) => $field->itemWithRenderedTemplates($item)),
         ]);
     }
-    
-    private function getFieldContainer(string $entityKey): SharpFormEditorEmbed | Command | SharpForm
+
+    private function getFieldContainer(string $entityKey): SharpFormEditorEmbed|Command|SharpForm
     {
         if (request()->input('embed_key')) {
             return $this->getEmbedFromKey(request()->input('embed_key'));
         }
+
+        $entity = $this->entityManager->entityFor($entityKey);
+
         if ($commandKey = request()->input('entity_list_command_key')) {
-            $entity = $this->entityManager->entityFor($entityKey);
-            if(request()->input('instance_id')) {
+            if (request()->input('instance_id')) {
                 return $this->getInstanceCommandHandler(
                     $entity->getListOrFail(),
                     $commandKey,
                     request()->input('instance_id')
                 );
             }
+
             return $this->getEntityCommandHandler(
                 $entity->getListOrFail(),
                 $commandKey
             );
         }
+
         if ($commandKey = request()->input('show_command_key')) {
-            $entity = $this->entityManager->entityFor($entityKey);
             return $this->getInstanceCommandHandler(
                 $entity->getShowOrFail(),
                 $commandKey,
                 request()->input('instance_id')
             );
         }
-        $entity = $this->entityManager->entityFor($entityKey);
+
         return $entity->getFormOrFail(sharp_normalize_entity_key($entityKey)[1]);
     }
 

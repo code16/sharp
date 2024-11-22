@@ -1,10 +1,16 @@
 <?php
 
+use Code16\Sharp\EntityList\Commands\EntityCommand;
+use Code16\Sharp\EntityList\Commands\InstanceCommand;
+use Code16\Sharp\EntityList\Commands\SingleInstanceCommand;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteRemoteField;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonForm;
+use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
+use Code16\Sharp\Tests\Fixtures\Sharp\PersonShow;
+use Code16\Sharp\Tests\Fixtures\Sharp\PersonSingleShow;
 use Code16\Sharp\Tests\Http\Api\Fixtures\ApiFormAutocompleteControllerAutocompleteEmbed;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
@@ -367,7 +373,7 @@ it('allows to call an functional endpoint for a remote autocomplete field in an 
             $formFields->addField(
                 SharpFormEditorField::make('editor_field')
                     ->allowEmbeds([
-                        ApiFormAutocompleteControllerAutocompleteEmbed::class
+                        ApiFormAutocompleteControllerAutocompleteEmbed::class,
                     ])
             );
         }
@@ -395,4 +401,267 @@ it('allows to call an functional endpoint for a remote autocomplete field in an 
                 ['id' => 1, 'label' => 'John'],
             ],
         ]);
+});
+
+it('allows to call an functional endpoint for a remote autocomplete field in an InstanceCommand of an EntityList', function () {
+    fakeListFor('person', new class() extends PersonList
+    {
+        protected function getInstanceCommands(): ?array
+        {
+            return [
+                'my-command' => new class() extends InstanceCommand
+                {
+                    public function label(): ?string
+                    {
+                        return 'test';
+                    }
+
+                    public function buildFormFields(FieldsContainer $formFields): void
+                    {
+                        $formFields->addField(
+                            SharpFormAutocompleteRemoteField::make('autocomplete_field')
+                                ->setRemoteMethodPOST()
+                                ->setRemoteEndpoint('/my/endpoint')
+                        );
+                    }
+
+                    public function execute(mixed $instanceId, array $data = []): array {}
+                },
+            ];
+        }
+    });
+
+    Route::post('/my/endpoint', function () {
+        expect(request()->get('query'))->toBe('my search');
+
+        return [
+            ['id' => 1, 'label' => 'John'],
+        ];
+    });
+
+    $this
+        ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+            'entityKey' => 'person',
+            'autocompleteFieldKey' => 'autocomplete_field',
+            'instance_id' => 1,
+            'entity_list_command_key' => 'my-command',
+            'endpoint' => '/my/endpoint',
+            'search' => 'my search',
+        ]))
+        ->assertOk()
+        ->assertJson([
+            'data' => [
+                ['id' => 1, 'label' => 'John'],
+            ],
+        ]);
+});
+
+it('allows to call an functional endpoint for a remote autocomplete field in an EntityCommand of an EntityList', function () {
+    fakeListFor('person', new class() extends PersonList
+    {
+        protected function getEntityCommands(): ?array
+        {
+            return [
+                'my-command' => new class() extends EntityCommand
+                {
+                    public function label(): ?string
+                    {
+                        return 'test';
+                    }
+
+                    public function buildFormFields(FieldsContainer $formFields): void
+                    {
+                        $formFields->addField(
+                            SharpFormAutocompleteRemoteField::make('autocomplete_field')
+                                ->setRemoteMethodPOST()
+                                ->setRemoteEndpoint('/my/endpoint')
+                        );
+                    }
+
+                    public function execute(array $data = []): array {}
+                },
+            ];
+        }
+    });
+
+    Route::post('/my/endpoint', function () {
+        expect(request()->get('query'))->toBe('my search');
+
+        return [
+            ['id' => 1, 'label' => 'John'],
+        ];
+    });
+
+    $this
+        ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+            'entityKey' => 'person',
+            'autocompleteFieldKey' => 'autocomplete_field',
+            'entity_list_command_key' => 'my-command',
+            'endpoint' => '/my/endpoint',
+            'search' => 'my search',
+        ]))
+        ->assertOk()
+        ->assertJson([
+            'data' => [
+                ['id' => 1, 'label' => 'John'],
+            ],
+        ]);
+});
+
+it('allows to call an functional endpoint for a remote autocomplete field in an InstanceCommand of a Show', function () {
+    fakeShowFor('person', new class() extends PersonShow
+    {
+        public function getInstanceCommands(): ?array
+        {
+            return [
+                'my-command' => new class() extends SingleInstanceCommand
+                {
+                    public function label(): ?string
+                    {
+                        return 'test';
+                    }
+
+                    public function buildFormFields(FieldsContainer $formFields): void
+                    {
+                        $formFields->addField(
+                            SharpFormAutocompleteRemoteField::make('autocomplete_field')
+                                ->setRemoteMethodPOST()
+                                ->setRemoteEndpoint('/my/endpoint')
+                        );
+                    }
+
+                    protected function executeSingle(array $data): array {}
+                },
+            ];
+        }
+    });
+
+    Route::post('/my/endpoint', function () {
+        expect(request()->get('query'))->toBe('my search');
+
+        return [
+            ['id' => 1, 'label' => 'John'],
+        ];
+    });
+
+    $this
+        ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+            'entityKey' => 'person',
+            'autocompleteFieldKey' => 'autocomplete_field',
+            'instance_id' => 1,
+            'show_command_key' => 'my-command',
+            'endpoint' => '/my/endpoint',
+            'search' => 'my search',
+        ]))
+        ->assertOk()
+        ->assertJson([
+            'data' => [
+                ['id' => 1, 'label' => 'John'],
+            ],
+        ]);
+});
+
+it('allows to call an functional endpoint for a remote autocomplete field in an InstanceCommand of a SingleShow', function () {
+    fakeShowFor('person', new class() extends PersonSingleShow
+    {
+        public function getInstanceCommands(): ?array
+        {
+            return [
+                'my-command' => new class() extends SingleInstanceCommand
+                {
+                    public function label(): ?string
+                    {
+                        return 'test';
+                    }
+
+                    public function buildFormFields(FieldsContainer $formFields): void
+                    {
+                        $formFields->addField(
+                            SharpFormAutocompleteRemoteField::make('autocomplete_field')
+                                ->setRemoteMethodPOST()
+                                ->setRemoteEndpoint('/my/endpoint')
+                        );
+                    }
+
+                    protected function executeSingle(array $data): array {}
+                },
+            ];
+        }
+    });
+
+    Route::post('/my/endpoint', function () {
+        expect(request()->get('query'))->toBe('my search');
+
+        return [
+            ['id' => 1, 'label' => 'John'],
+        ];
+    });
+
+    $this
+        ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+            'entityKey' => 'person',
+            'autocompleteFieldKey' => 'autocomplete_field',
+            'show_command_key' => 'my-command',
+            'endpoint' => '/my/endpoint',
+            'search' => 'my search',
+        ]))
+        ->assertOk()
+        ->assertJson([
+            'data' => [
+                ['id' => 1, 'label' => 'John'],
+            ],
+        ]);
+});
+
+it('won’t allow to call an functional endpoint for a remote autocomplete field in an InstanceCommand when not authorized', function () {
+    fakeListFor('person', new class() extends PersonList
+    {
+        protected function getInstanceCommands(): ?array
+        {
+            return [
+                'my-command' => new class() extends InstanceCommand
+                {
+                    public function label(): ?string
+                    {
+                        return 'test';
+                    }
+
+                    public function buildFormFields(FieldsContainer $formFields): void
+                    {
+                        $formFields->addField(
+                            SharpFormAutocompleteRemoteField::make('autocomplete_field')
+                                ->setRemoteMethodPOST()
+                                ->setRemoteEndpoint('/my/endpoint')
+                        );
+                    }
+
+                    public function authorizeFor(mixed $instanceId): bool
+                    {
+                        return false;
+                    }
+
+                    public function execute(mixed $instanceId, array $data = []): array {}
+                },
+            ];
+        }
+    });
+
+    Route::post('/my/endpoint', function () {
+        expect(request()->get('query'))->toBe('my search');
+
+        return [
+            ['id' => 1, 'label' => 'John'],
+        ];
+    });
+
+    $this
+        ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+            'entityKey' => 'person',
+            'autocompleteFieldKey' => 'autocomplete_field',
+            'instance_id' => 1,
+            'entity_list_command_key' => 'my-command',
+            'endpoint' => '/my/endpoint',
+            'search' => 'my search',
+        ]))
+        ->assertForbidden();
 });
