@@ -36,7 +36,7 @@ Then, in your Entity List you have to configure your reorder handler:
 ```php
 class PageEntityList extends SharpEntityList
 {
-    // [...]
+    // ...
     
     public function buildListConfig()
     {
@@ -55,7 +55,7 @@ Note that you can also pass a ReorderHandler classname, or an anonymous class th
 
 The reorder action depends on the `reorder` permission. You can define it in the [Entity Policy](entity-authorizations.md):
 
-Sometimes you may need to restrict the reorder action depending on the actual data, or on some filters values. This can be achieved by using the `forbidReorder()` method in your EntityList class, typically in the `getListData()` method.
+Sometimes you may need to restrict the reorder action depending on the actual data, or on some filters values. This can be achieved by using the `disableReorder()` method in your EntityList class, typically in the `getListData()` method.
 
 ```php
 class PostEntityList extends SharpEntityList
@@ -70,7 +70,7 @@ class PostEntityList extends SharpEntityList
     public function getListData(): array|Arrayable
     {
         // We can’t reorder if there is a search 
-        $this->forbidReorder($this->queryParams->hasSearch());
+        $this->disableReorder($this->queryParams->hasSearch());
         
         // ...
     }

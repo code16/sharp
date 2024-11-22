@@ -243,7 +243,7 @@ In order to make this feature work, since filters are generalized, you'll need t
 
 ## Drop filters depending on functional data
 
-Sometimes you may want to hide a filter to the user depending on the actual data, or on other filters values. This can be achieved by using the `dropFilter()` method in your EntityList class, typically in the `getListData()` method.
+Sometimes you may want to hide a filter to the user depending on the actual data, or on other filters values. This can be achieved by using the `useFilter()` method in your EntityList class, typically in the `getListData()` method.
 
 ```php
 class OrderEntityList extends SharpEntityList
@@ -262,7 +262,7 @@ class OrderEntityList extends SharpEntityList
     {
         if ($this->queryParams->filterFor(PaymentMethodFilter::class) !== 'online') {
             // No need to show the OnlinePaymentProviderFilter
-            $this->dropFilter(OnlinePaymentProviderFilter::class);
+            $this->hideFilter(OnlinePaymentProviderFilter::class);
         }
         
         // ...

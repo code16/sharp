@@ -532,7 +532,7 @@ it('allows to drop a filter afterwards', function () {
 
         public function getListData(): array
         {
-            $this->dropFilter('test');
+            $this->hideFilter('test');
 
             return [];
         }

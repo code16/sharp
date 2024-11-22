@@ -296,7 +296,7 @@ it('allows to configure a reorder handler', function () {
         ->and($list->reorderHandler())->toBeInstanceOf(ReorderHandler::class);
 });
 
-it('allows to borbid a configured reorder handler', function () {
+it('allows to disable a configured reorder handler', function () {
     $list = new class() extends FakeSharpEntityList
     {
         public function buildListConfig(): void
@@ -309,7 +309,7 @@ it('allows to borbid a configured reorder handler', function () {
 
         public function getListData(): array|Arrayable
         {
-            $this->forbidReorder();
+            $this->disableReorder();
 
             return [];
         }

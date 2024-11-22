@@ -20,7 +20,7 @@ trait HandleFilters
     /**
      * @internal
      */
-    final public function dropFilter(string $filterFullClassNameOrKey): void
+    final public function hideFilter(string $filterFullClassNameOrKey): void
     {
         $this->filterContainer()->excludeFilter($filterFullClassNameOrKey);
     }
