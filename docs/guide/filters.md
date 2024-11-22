@@ -241,6 +241,34 @@ And with that Sharp will keep the filter value in session and ensure it is value
 In order to make this feature work, since filters are generalized, you'll need to have unique filters key (the filter class name by default).
 :::
 
+## Drop filters depending on functional data
+
+Sometimes you may want to hide a filter to the user depending on the actual data, or on other filters values. This can be achieved by using the `dropFilter()` method in your EntityList class, typically in the `getListData()` method.
+
+```php
+class ProductEntityList extends SharpEntityList
+{
+    // ...
+    
+    protected function getFilters(): ?array
+    {
+        return [
+            PaymentMethodFilter::class,
+            OnlinePaymentProviderFilter::class,
+        ];
+    }
+    
+    public function getListData(): array|Arrayable
+    {
+        if ($this->queryParams->filterFor(PaymentMethodFilter::class) !== 'online') {
+            // No need to show the OnlinePaymentProviderFilter
+            $this->dropFilter(OnlinePaymentProviderFilter::class);
+        }
+        
+        // ...
+    }
+}
+```
 
 ## Filters for Dashboards
 
