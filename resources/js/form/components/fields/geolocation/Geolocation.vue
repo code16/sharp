@@ -152,7 +152,7 @@
                     <template v-if="!field.readOnly">
                         <DropdownMenu :modal="false">
                             <DropdownMenuTrigger as-child>
-                                <Button class="self-center" variant="ghost" size="icon">
+                                <Button class="self-center" variant="ghost" size="icon" :disabled="props.field.readOnly">
                                     <MoreHorizontal class="size-4" />
                                 </Button>
                             </DropdownMenuTrigger>
@@ -169,7 +169,7 @@
                 </div>
             </template>
             <template v-else>
-                <Button variant="secondary" class="w-full" @click="openModal()">
+                <Button variant="secondary" :disabled="props.field.readOnly" class="w-full" @click="openModal()">
                     {{ __('sharp::form.geolocation.browse_button') }}
                 </Button>
             </template>
@@ -214,14 +214,14 @@
                                 :is="components[field.mapsProvider.name]"
                                 class="mt-4 rounded-md aspect-[4/3]"
                                 v-bind="{
-                                field,
-                                markerPosition: modalMarkerPosition,
-                                bounds: modalMapBounds,
-                                maxBounds: field.boundaries ? [field.boundaries.sw, field.boundaries.ne] : null,
-                                center: value ?? field.initialPosition ?? { lat:48.5838961, lng:7.7421826 },
-                                zoom: field.zoomLevel,
-                                editable: true,
-                            } satisfies MapComponentProps"
+                                    field,
+                                    markerPosition: modalMarkerPosition,
+                                    bounds: modalMapBounds,
+                                    maxBounds: field.boundaries ? [field.boundaries.sw, field.boundaries.ne] : null,
+                                    center: value ?? field.initialPosition ?? { lat:48.5838961, lng:7.7421826 },
+                                    zoom: field.zoomLevel,
+                                    editable: true,
+                                } satisfies MapComponentProps"
                                 @change="onModalMarkerPositionChange"
                             />
                         </Suspense>

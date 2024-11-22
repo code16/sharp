@@ -18,6 +18,7 @@
             :step="field.step"
             :min="field.min"
             :max="field.max"
+            :disabled="field.readOnly"
             type="number"
             @update:model-value="emit('input', $event !== '' ? Number($event) : null)"
         />

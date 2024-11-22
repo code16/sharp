@@ -391,7 +391,7 @@
                                     :src="transformedImg ?? value?.thumbnail ?? uppyFile.preview"
                                     alt=""
                                 >
-                                <template v-if="isEditable">
+                                <template v-if="isEditable && !props.field.readOnly">
                                     <button class="absolute flex justify-center items-center gap-2 inset-0 bg-black/50 transition text-white text-xs font-medium opacity-0 group-hover/img:opacity-100" tabindex="-1" @click="onEdit">
                                         {{ __('sharp::form.upload.edit_button') }}
                                     </button>
@@ -466,15 +466,17 @@
                                         {{ __('sharp::form.upload.download_link') }}
                                     </DropdownMenuItem>
                                 </template>
-                                <template v-if="isEditable">
-                                    <DropdownMenuItem @click="onEdit">
-                                        {{ props.dropdownEditLabel ?? __('sharp::form.upload.edit_button') }}
+                                <template v-if="!props.field.readOnly">
+                                    <template v-if="isEditable">
+                                        <DropdownMenuItem @click="onEdit">
+                                            {{ props.dropdownEditLabel ?? __('sharp::form.upload.edit_button') }}
+                                        </DropdownMenuItem>
+                                    </template>
+                                    <DropdownMenuSeparator class="first:hidden" />
+                                    <DropdownMenuItem class="text-destructive" @click="onRemove">
+                                        {{ __('sharp::form.upload.remove_button') }}
                                     </DropdownMenuItem>
                                 </template>
-                                <DropdownMenuSeparator class="first:hidden" />
-                                <DropdownMenuItem class="text-destructive" @click="onRemove">
-                                    {{ __('sharp::form.upload.remove_button') }}
-                                </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </div>
@@ -487,6 +489,7 @@
                     type="file"
                     :accept="field.allowedExtensions?.join(',')"
                     :aria-describedby="ariaDescribedBy"
+                    :disabled="props.field.readOnly"
                     @change="onInputChange"
                     @dragover="isDraggingOver = true"
                     @dragleave="isDraggingOver = false"

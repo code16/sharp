@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { SelectFilterData } from "@/types";
-    import { ChevronDown, PlusCircle } from "lucide-vue-next";
+    import { ChevronDown } from "lucide-vue-next";
     import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
     import { Separator } from "@/components/ui/separator";
     import {
@@ -129,7 +129,7 @@
                                 <CommandGroup>
                                     <CommandItem
                                         :value="{ label: __('sharp::filters.select.reset') }"
-                                        class="justify-center text-center"
+                                        class="justify-center text-center font-medium"
                                         @select="emit('input', null); open = false"
                                     >
                                         {{ __('sharp::filters.select.reset') }}

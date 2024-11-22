@@ -169,7 +169,7 @@
         field-group
         sticky-label
     >
-        <template #action v-if="field.sortable">
+        <template #action v-if="field.sortable && !field.readOnly">
             <Toggle
                 class="h-6 gap-2"
                 :class="{ 'invisible': value?.length < 2 }"
@@ -200,7 +200,7 @@
                                                 <template v-for="itemFieldLayout in row">
                                                     <FieldGridColumn :layout="itemFieldLayout" v-show="form.fieldShouldBeVisible(itemFieldLayout, field.itemFields, item)">
                                                         <SharpFormField
-                                                            :field="form.getField(itemFieldLayout.key, field.itemFields, item)"
+                                                            :field="form.getField(itemFieldLayout.key, field.itemFields, item, props.field.readOnly)"
                                                             :field-layout="itemFieldLayout"
                                                             :field-error-key="`${field.key}.${item[errorIndex] ?? item[itemKey]}.${itemFieldLayout.key}`"
                                                             :parent-field="field"
@@ -217,7 +217,7 @@
                                         </template>
                                     </FieldGrid>
 
-                                    <template v-if="canAddItem && field.sortable || props.field.removable">
+                                    <template v-if="!props.field.readOnly && (canAddItem && field.sortable || props.field.removable)">
                                         <DropdownMenu :modal="false">
                                             <DropdownMenuTrigger as-child>
                                                 <Button data-item-dropdown class="absolute top-0 right-0 z-20" variant="ghost" size="icon">
@@ -255,57 +255,59 @@
             </template>
 
 
-            <div class="relative grid grid-cols-1 gap-y-3"
-                @dragenter="($event as DragEvent).dataTransfer.types.includes('Files') && (bulkDroppingFile = true)"
-                @dragleave="(!$event.relatedTarget || !$el.contains($event.relatedTarget)) && (bulkDroppingFile = false)"
-            >
-                <template v-if="canAddItem">
-                    <div>
-                        <Button
-                            class="w-full gap-1"
-                            :class="{ 'invisible': reordering }"
-                            variant="secondary"
-                            @click="onAdd"
-                        >
-                            <span aria-hidden="true">＋</span> {{ field.addText }}
-                        </Button>
-                    </div>
-                </template>
-                <template v-if="field.itemFields[field.bulkUploadField]?.type === 'upload' && canAddItem && currentBulkUploadLimit > 0">
-                    <Card :class="{
+            <template v-if="!props.field.readOnly">
+                <div class="relative grid grid-cols-1 gap-y-3"
+                    @dragenter="($event as DragEvent).dataTransfer.types.includes('Files') && (bulkDroppingFile = true)"
+                    @dragleave="(!$event.relatedTarget || !$el.contains($event.relatedTarget)) && (bulkDroppingFile = false)"
+                >
+                    <template v-if="canAddItem">
+                        <div>
+                            <Button
+                                class="w-full gap-1"
+                                :class="{ 'invisible': reordering }"
+                                variant="secondary"
+                                @click="onAdd"
+                            >
+                                <span aria-hidden="true">＋</span> {{ field.addText }}
+                            </Button>
+                        </div>
+                    </template>
+                    <template v-if="field.itemFields[field.bulkUploadField]?.type === 'upload' && canAddItem && currentBulkUploadLimit > 0">
+                        <Card :class="{
                         'invisible': reordering,
                         'ring-2 ring-ring ring-offset-2': bulkDroppingFile,
                     }">
-                        <CardHeader :class="{ 'relative': !bulkDroppingFile }">
-                            <div class="flex flex-wrap justify-center">
-                                <div class="text-sm"
-                                    v-html='
+                            <CardHeader :class="{ 'relative': !bulkDroppingFile }">
+                                <div class="flex flex-wrap justify-center">
+                                    <div class="text-sm"
+                                        v-html='
                                         __(`sharp::form.list.bulk_upload.text`)
                                             .replace(
                                                 /\[(.+?)]\(.*?\)/,
                                                 `<button class="relative z-10 underline -mx-3 -my-2 ${buttonVariants({ variant: "link", size:"sm" })}" tabindex="-1">$1</button>`
                                             )
                                     '
-                                    @click.prevent="($refs.bulkUploadInput as HTMLInputElement).click()"
-                                ></div>
-                                <div class="text-sm text-muted-foreground">
-                                     ({{ __('sharp::form.list.bulk_upload.help_text', { limit: currentBulkUploadLimit }) }})
+                                        @click.prevent="($refs.bulkUploadInput as HTMLInputElement).click()"
+                                    ></div>
+                                    <div class="text-sm text-muted-foreground">
+                                         ({{ __('sharp::form.list.bulk_upload.help_text', { limit: currentBulkUploadLimit }) }})
+                                    </div>
                                 </div>
-                            </div>
-                            <input
-                                class="absolute inset-0 opacity-0"
-                                type="file"
-                                :aria-label="__(`sharp::form.list.bulk_upload.text`)"
-                                :accept="(field.itemFields[field.bulkUploadField] as FormUploadFieldData).allowedExtensions?.join(',')"
-                                multiple
-                                @drop="bulkDroppingFile = false"
-                                @change="onBulkUploadInputChange"
-                                ref="bulkUploadInput"
-                            >
-                        </CardHeader>
-                    </Card>
-                </template>
-            </div>
+                                <input
+                                    class="absolute inset-0 opacity-0"
+                                    type="file"
+                                    :aria-label="__(`sharp::form.list.bulk_upload.text`)"
+                                    :accept="(field.itemFields[field.bulkUploadField] as FormUploadFieldData).allowedExtensions?.join(',')"
+                                    multiple
+                                    @drop="bulkDroppingFile = false"
+                                    @change="onBulkUploadInputChange"
+                                    ref="bulkUploadInput"
+                                >
+                            </CardHeader>
+                        </Card>
+                    </template>
+                </div>
+            </template>
 
             <template v-if="field.readOnly && !value?.length">
                 <div class="text-muted-foreground text-sm">

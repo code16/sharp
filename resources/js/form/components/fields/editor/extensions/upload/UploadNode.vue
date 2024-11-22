@@ -76,7 +76,10 @@
         :node="node"
     >
         <Upload
-            :field="parentEditor.props.field.uploads.fields.file"
+            :field="{
+                ...parentEditor.props.field.uploads.fields.file,
+                readOnly: parentEditor.props.field.readOnly,
+            }"
             :field-error-key="`${parentEditor.props.fieldErrorKey}-upload-${props.node.attrs['data-key']}`"
             :value="upload?.file"
             as-editor-embed

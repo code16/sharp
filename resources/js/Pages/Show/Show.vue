@@ -225,13 +225,13 @@
 
             <div class="grid gap-6 md:gap-8">
                 <template v-if="show.getTitle(locale) && show.layout.sections[0] && (show.sectionHasField(show.layout.sections[0], 'entityList') || show.layout.sections[0].title)">
-                    <Card>
+                    <RootCard>
                         <CardHeader>
                             <CardTitle>
                                 {{ show.getTitle(locale) }}
                             </CardTitle>
                         </CardHeader>
-                    </Card>
+                    </RootCard>
                 </template>
                 <template v-for="(section, i) in show.layout.sections">
                     <Section

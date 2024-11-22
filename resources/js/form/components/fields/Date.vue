@@ -173,6 +173,7 @@ function onMinuteChange(minute: string) {
                             : props.field.hasTime ? 'time'
                             : 'date'
                         "
+                        :disabled="props.field.readOnly"
                         :step="props.field.hasTime ? props.field.stepTime * 60 : null"
                         :aria-describedby="ariaDescribedBy"
                         :model-value="inputValue"

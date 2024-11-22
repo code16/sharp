@@ -61,9 +61,10 @@
         >
             <ComboboxAnchor>
                 <TagsInput
-                    class="ring-offset-background has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-offset-2"
+                    class="ring-offset-background data-[disabled]:pointer-events-none data-[disabled]:opacity-50 has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-offset-2"
                     :model-value="props.value"
                     :display-value="(item: typeof props.value[0]) => item.label ?? item.id"
+                    :disabled="props.field.readOnly"
                     @click="open = true; $refs.input.$el.focus()"
                 >
                     <template v-for="item in value" :key="item[itemKey]">
@@ -74,7 +75,7 @@
                     </template>
 
                     <ComboboxInput v-model="searchTerm" :placeholder="props.field.placeholder ?? __('sharp::form.multiselect.placeholder')" as-child>
-                        <TagsInputInput :id="id" :aria-describedby="ariaDescribedBy" class="flex-1 w-[10rem]" autocomplete="off" @keydown.enter.prevent ref="input" />
+                        <TagsInputInput :id="id" :aria-describedby="ariaDescribedBy" :disabled="props.field.readOnly" class="flex-1 w-[10rem]" autocomplete="off" @keydown.enter.prevent ref="input" />
                     </ComboboxInput>
                 </TagsInput>
             </ComboboxAnchor>

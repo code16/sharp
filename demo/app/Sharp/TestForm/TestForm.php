@@ -33,6 +33,7 @@ class TestForm extends SharpSingleForm
             ->addField(
                 SharpFormTextField::make('text')
                     ->setLocalized()
+//                    ->setReadOnly()
                     ->setLabel('Text'),
             )
             ->addField(
@@ -41,6 +42,7 @@ class TestForm extends SharpSingleForm
                     ->setLocalSearchKeys(['label'])
                     ->setListItemTemplate('{{ $label }}')
                     ->setResultItemTemplate('{{ $label }} ({{ $id }})')
+//                    ->setReadOnly()
                     ->setLocalValues($this->options()),
             )
             ->addField(
@@ -49,6 +51,7 @@ class TestForm extends SharpSingleForm
                     ->setRemoteSearchAttribute('query')
                     ->setListItemTemplate('{{ $name }}')
                     ->setResultItemTemplate('{{ $name }} ({{ $id }})')
+//                    ->setReadOnly()
                     ->setRemoteEndpoint(route('sharp.autocompletes.users.index')),
             )
             ->addField(
@@ -56,6 +59,7 @@ class TestForm extends SharpSingleForm
                     ->setLabel('Autocomplete_list')
                     ->setAddable()
                     ->setRemovable()
+//                    ->setReadOnly()
                     ->setItemField(
                         SharpFormAutocompleteRemoteField::make('item')
                             ->setLabel('Passenger')
@@ -66,19 +70,22 @@ class TestForm extends SharpSingleForm
                     ),
             )
             ->addField(
-                SharpFormCheckField::make('check', 'Check'),
+                SharpFormCheckField::make('check', 'Check')
+//                    ->setReadOnly(),
             )
             ->addField(
                 SharpFormDateField::make('datetime')
                     ->setLabel('Datetime')
                     ->setDisplayFormat('YYYY-MM-DD HH:mm')
                     ->setMinTime(0, 15)
+//                    ->setReadOnly()
                     ->setHasTime(),
             )
             ->addField(
                 SharpFormDateField::make('date')
                     ->setLabel('Date')
                     ->setDisplayFormat('YYYY-MM-DD')
+//                    ->setReadOnly()
                     ->setHasTime(false),
             )
             ->addField(
@@ -88,6 +95,7 @@ class TestForm extends SharpSingleForm
                     ->setHasDate(false)
                     ->setMinTime(0, 15)
                     ->setMaxTime(22, 15)
+//                    ->setReadOnly()
                     ->setHasTime(),
             )
             ->addField(
@@ -95,6 +103,7 @@ class TestForm extends SharpSingleForm
                     ->setLabel('Geolocation')
                     ->setApiKey(env('GMAPS_KEY'))
                     ->setGoogleMapsMapId(env('GMAPS_MAP_ID'))
+//                    ->setReadOnly()
                     ->setMapsProvider('osm')
                     ->setGeocodingProvider('osm')
 //                    ->setMapsProvider('gmaps')
@@ -106,6 +115,7 @@ class TestForm extends SharpSingleForm
             )
             ->addField(
                 SharpFormHtmlField::make('html')
+//                    ->setReadOnly()
                     ->setLabel('Html')
                     ->setTemplate('Your name is <strong>{{ $name }}</strong>'),
             )
@@ -114,6 +124,7 @@ class TestForm extends SharpSingleForm
                     ->setLabel('List')
                     ->setAddable()
                     ->setSortable()
+//                    ->setReadOnly()
                     ->setRemovable()
                     ->setItemIdAttribute('id')
                     ->addItemField(
@@ -137,6 +148,7 @@ class TestForm extends SharpSingleForm
                 SharpFormEditorField::make('wysiwyg')
                     ->setPlaceholder('Start typing content here...')
                     ->setMaxLength(200)
+//                    ->setReadOnly()
                     ->setLocalized()
                     ->setLabel('Wysiwyg')
                     ->setToolbar([
@@ -177,6 +189,7 @@ class TestForm extends SharpSingleForm
                 SharpFormEditorField::make('markdown')
                     ->setRenderContentAsMarkdown()
                     ->showCharacterCount()
+//                    ->setReadOnly()
                     ->setLocalized()
                     ->setLabel('Markdown')
                     ->setToolbar([
@@ -205,6 +218,7 @@ class TestForm extends SharpSingleForm
             ->addField(
                 SharpFormNumberField::make('number')
                     ->setLabel('Number')
+//                    ->setReadOnly()
                     ->setMin(0)
                     ->setMax(1)
                     ->setStep(.1),
@@ -212,24 +226,28 @@ class TestForm extends SharpSingleForm
             ->addField(
                 SharpFormSelectField::make('select_dropdown', $this->options())
                     ->setLabel('Select dropdown')
+//                    ->setReadOnly()
                     ->setMultiple()
                     ->setDisplayAsDropdown(),
             )
             ->addField(
                 SharpFormSelectField::make('select_list', $this->options())
                     ->setLabel('Select list')
+//                    ->setReadOnly()
                     ->setDisplayAsList(),
             )
             ->addField(
                 SharpFormSelectField::make('select_list_multiple', $this->options())
                     ->setLabel('Select list multiple')
                     ->setMultiple()
+//                    ->setReadOnly()
                     ->setDisplayAsList()
                     ->setMaxSelected(2),
             )
             ->addField(
                 SharpFormTagsField::make('tags', $this->options())
                     ->setLabel('Tags')
+//                    ->setReadOnly()
                     ->setCreatable(true)
                     ->setCreateAttribute('label')
                     ->setMaxTagCount(4),
@@ -237,6 +255,7 @@ class TestForm extends SharpSingleForm
             ->addField(
                 SharpFormTextareaField::make('textarea')
                     ->setLocalized()
+//                    ->setReadOnly()
                     ->setLabel('Textarea')
                     ->setMaxLength(50)
                     ->setRowCount(4),
@@ -245,6 +264,7 @@ class TestForm extends SharpSingleForm
                 SharpFormUploadField::make('upload')
                     ->setLabel('Upload')
                     ->setMaxFileSize(5)
+//                    ->setReadOnly()
                     ->setImageCropRatio('1:1')
                     ->setStorageDisk('local')
                     ->setStorageBasePath('data'),

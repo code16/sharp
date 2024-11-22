@@ -580,7 +580,7 @@
                                         <template v-for="(item, itemIndex) in reorderedItems ?? entityList.data" :key="entityList.instanceId(item)">
                                             <TableRow
                                                 :class="cn(
-                                                    'relative bg-background hover:bg-background has-[[data-row-action]:hover]:bg-muted/50 has-[[aria-expanded=true]]:bg-muted/50 lg:first:*:pl-6 lg:last:*:pr-6',
+                                                    'relative hover:bg-background has-[[data-row-action]:hover]:bg-muted/50 has-[[aria-expanded=true]]:bg-muted/50 lg:first:*:pl-6 lg:last:*:pr-6',
                                                     reordering ? 'cursor-move hover:bg-muted/50 group-[:has(.sortable-chosen)]:bg-background [&.sortable-chosen]:transition-none' : ''
                                                 )"
                                                 :data-instance-row="entityList.instanceId(item)"
@@ -591,7 +591,7 @@
                                                             class="block"
                                                             :id="`check-${entityKey}-${entityList.instanceId(item)}`"
                                                             :model-value="selectedItems[entityList.instanceId(item)]"
-                                                            @update:model-value="(checked) => selectedItems[entityList.instanceId(item)] = checked"
+                                                            @update:model-value="(checked) => selectedItems[entityList.instanceId(item)] = checked as boolean"
                                                         />
                                                         <label class="absolute inset-0 z-20" data-row-action :for="`check-${entityKey}-${entityList.instanceId(item)}`">
                                                             <span class="sr-only">Select</span>

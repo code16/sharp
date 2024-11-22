@@ -16,6 +16,7 @@
 
     const props = defineProps<ExtensionNodeProps<typeof Embed, EmbedNodeAttributes>>();
 
+    const parentEditor = useParentEditor();
     const embedManager = useParentEditor().embedManager;
     const embedModal = useParentEditor().embedModal;
     const embedData = computed(() => embedManager.getEmbed(props.node.attrs['data-key'], props.extension.options.embed));
@@ -50,23 +51,25 @@
                 {{ extension.options.embed.label }}
             </template>
         </div>
-        <DropdownMenu :modal="false">
-            <DropdownMenuTrigger as-child>
-                <Button class="shrink-0 self-center" variant="ghost" size="icon">
-                    <MoreHorizontal class="size-4" />
-                </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-                <template v-if="Object.keys(extension.options.embed.fields).length > 0">
-                    <DropdownMenuItem @click="embedModal.open({ id: node.attrs['data-key'], embed: extension.options.embed })">
-                        {{ __('sharp::form.editor.extension_node.edit_button') }}
+        <template v-if="!parentEditor.props.field.readOnly">
+            <DropdownMenu :modal="false">
+                <DropdownMenuTrigger as-child>
+                    <Button class="shrink-0 self-center" variant="ghost" size="icon">
+                        <MoreHorizontal class="size-4" />
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                    <template v-if="Object.keys(extension.options.embed.fields).length > 0">
+                        <DropdownMenuItem @click="embedModal.open({ id: node.attrs['data-key'], embed: extension.options.embed })">
+                            {{ __('sharp::form.editor.extension_node.edit_button') }}
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                    </template>
+                    <DropdownMenuItem class="text-destructive" @click="onRemove">
+                        {{ __('sharp::form.editor.extension_node.remove_button') }}
                     </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                </template>
-                <DropdownMenuItem class="text-destructive" @click="onRemove">
-                    {{ __('sharp::form.editor.extension_node.remove_button') }}
-                </DropdownMenuItem>
-            </DropdownMenuContent>
-        </DropdownMenu>
+                </DropdownMenuContent>
+            </DropdownMenu>
+        </template>
     </NodeRenderer>
 </template>

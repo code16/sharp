@@ -21,6 +21,7 @@
             <template v-for="(option, index) in field.options" :key="option.id">
                 <div class="group/control flex items-center space-x-3">
                     <RadioGroupItem
+                        class="peer"
                         :id="`${id}.${index}`"
                         :value="String(option.id)"
                         :disabled="field.readOnly"

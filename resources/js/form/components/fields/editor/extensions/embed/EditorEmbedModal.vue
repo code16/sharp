@@ -73,7 +73,7 @@
 
 <template>
     <Dialog v-model:open="modalOpen">
-        <DialogScrollContent class="gap-6" @pointer-down-outside.prevent>
+        <DialogScrollContent class="gap-6 max-w-xl" @pointer-down-outside.prevent>
             <DialogHeader>
                 <DialogTitle>
                     {{ modalEmbed?.embed.label }}

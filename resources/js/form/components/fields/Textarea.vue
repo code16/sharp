@@ -24,14 +24,15 @@
 
 <template>
     <FormFieldLayout v-bind="props" v-slot="{ id, ariaDescribedBy }">
-          <Textarea
-              :id="id"
-              :model-value="field.localized && typeof value === 'object' ? value?.[locale] : (value as string)"
-              :rows="field.rows"
-              :placeholder="field.placeholder"
-              :disabled="field.readOnly"
-              :aria-describedby="ariaDescribedBy"
-              @update:model-value="onInput"
-          />
+        <Textarea
+            :id="id"
+            class="min-h-0"
+            :model-value="field.localized && typeof value === 'object' ? value?.[locale] : (value as string)"
+            :rows="field.rows"
+            :placeholder="field.placeholder"
+            :disabled="field.readOnly"
+            :aria-describedby="ariaDescribedBy"
+            @update:model-value="onInput"
+        />
     </FormFieldLayout>
 </template>

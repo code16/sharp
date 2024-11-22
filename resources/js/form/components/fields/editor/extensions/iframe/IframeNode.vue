@@ -24,9 +24,11 @@
     } from "@/components/ui/dialog";
     import { Textarea } from "@/components/ui/textarea";
     import { MoreHorizontal } from "lucide-vue-next";
+    import { useParentEditor } from "@/form/components/fields/editor/useParentEditor";
 
     const props = defineProps<ExtensionNodeProps<typeof Iframe, IframeAttributes>>();
 
+    const parentEditor = useParentEditor();
     const modalOpen = ref(props.node.attrs.isNew);
     const html = ref<string>();
     const previewHtml = ref<string>();
@@ -103,22 +105,25 @@
                 <iframe class="w-full max-h-[200px] [[height$='%']]:h-[200px]" v-bind="node.attrs"></iframe>
             </template>
         </div>
-        <DropdownMenu :modal="false">
-            <DropdownMenuTrigger as-child>
-                <Button class="shrink-0 self-center" variant="ghost" size="icon">
-                    <MoreHorizontal class="size-4" />
-                </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-                <DropdownMenuItem @click="onEdit()">
-                    {{ __('sharp::form.editor.extension_node.edit_button') }}
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem class="text-destructive" @click="onRemove()">
-                    {{ __('sharp::form.editor.extension_node.remove_button') }}
-                </DropdownMenuItem>
-            </DropdownMenuContent>
-        </DropdownMenu>
+
+        <template v-if="!parentEditor.props.field.readOnly">
+            <DropdownMenu :modal="false">
+                <DropdownMenuTrigger as-child>
+                    <Button class="shrink-0 self-center" variant="ghost" size="icon">
+                        <MoreHorizontal class="size-4" />
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                    <DropdownMenuItem @click="onEdit()">
+                        {{ __('sharp::form.editor.extension_node.edit_button') }}
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem class="text-destructive" @click="onRemove()">
+                        {{ __('sharp::form.editor.extension_node.remove_button') }}
+                    </DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
+        </template>
 
         <Dialog
             v-model:open="modalOpen"
