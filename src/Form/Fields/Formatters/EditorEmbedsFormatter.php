@@ -44,12 +44,12 @@ class EditorEmbedsFormatter extends SharpFieldFormatter implements FormatsAfterU
                         $dataKey = $element->getAttribute('data-key');
                         foreach ($embed->getBuiltFields() as $fieldKey => $field) {
                             $fieldValue = $value['embeds'][$embedKey][$dataKey][$fieldKey] ?? null;
-                            if ($field instanceof SharpFormUploadField) {
+                            if ($field->formatter() instanceof UploadFormatter) {
                                 $fieldValue = $field->formatter()
                                     ->setInstanceId($this->instanceId)
                                     ->fromFront($field, $fieldKey, $fieldValue);
                             }
-                            if ($field instanceof SharpFormListField) {
+                            if ($field->formatter() instanceof ListFormatter) {
                                 $fieldValue = $field->formatter()
                                     ->formatItemFieldUsing(function (SharpFormField $field) {
                                         if ($field instanceof SharpFormUploadField) {

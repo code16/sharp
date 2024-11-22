@@ -3,8 +3,9 @@
 namespace Code16\Sharp\Form\Fields\Embeds;
 
 use Code16\Sharp\Form\Fields\Formatters\AbstractSimpleFormatter;
+use Code16\Sharp\Form\Fields\Formatters\ListFormatter;
+use Code16\Sharp\Form\Fields\Formatters\UploadFormatter;
 use Code16\Sharp\Form\Fields\SharpFormField;
-use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\HasModalFormLayout;
@@ -107,12 +108,12 @@ abstract class SharpFormEditorEmbed
                     return $value;
                 }
 
-                if ($field instanceof SharpFormUploadField) {
+                if ($field->formatter() instanceof UploadFormatter) {
                     // in case of uploads we only want to call formatter on Form store/update
                     return $value;
                 }
 
-                if ($field instanceof SharpFormListField) {
+                if ($field->formatter() instanceof ListFormatter) {
                     $field->formatter()->formatItemFieldUsing(function (SharpFormField $itemField) {
                         if ($itemField instanceof SharpFormUploadField) {
                             return new class() extends AbstractSimpleFormatter {};
