@@ -29,7 +29,7 @@ it('allows to call an info instance command from a show', function () {
 
                     public function execute($instanceId, array $data = []): array
                     {
-                        return $this->info('ok');
+                        return $this->info('ok: ' . $instanceId);
                     }
                 },
             ];
@@ -40,7 +40,7 @@ it('allows to call an info instance command from a show', function () {
         ->assertOk()
         ->assertJson([
             'action' => 'info',
-            'message' => 'ok',
+            'message' => 'ok: 1',
         ]);
 });
 
