@@ -17,6 +17,7 @@ class FilterContainer
     use ProvidesFilterValuesToFront;
 
     protected ?Collection $filterHandlers = null;
+    protected array $excludedFilters = [];
 
     public function __construct(
         protected ?array $baseFilters = null,
@@ -38,34 +39,25 @@ class FilterContainer
                     ]
                 )
 
-                ->map(function ($handlers) {
-                    return collect($handlers)
-                        ->map(function ($filterHandlerOrClassName) {
-                            if (is_string($filterHandlerOrClassName)) {
-                                if (! class_exists($filterHandlerOrClassName)) {
-                                    throw new SharpException(sprintf(
-                                        'Handler for filter [%s] is invalid',
-                                        $filterHandlerOrClassName
-                                    ));
-                                }
-                                $filterHandler = app($filterHandlerOrClassName);
-                            } else {
-                                $filterHandler = $filterHandlerOrClassName;
-                            }
+                ->map(fn ($handlers) => collect($handlers)
+                    ->map(function ($filterHandlerOrClassName) {
+                        $filterHandler = instanciate($filterHandlerOrClassName);
 
-                            if (! $filterHandler instanceof Filter) {
-                                throw new SharpException(sprintf(
-                                    'Handler class for filter [%s] must implement a sub-interface of [%s]',
-                                    $filterHandlerOrClassName,
-                                    Filter::class
-                                ));
-                            }
+                        if (! $filterHandler instanceof Filter) {
+                            throw new SharpException(sprintf(
+                                'Handler class for filter [%s] must implement a sub-interface of [%s]',
+                                $filterHandlerOrClassName,
+                                Filter::class
+                            ));
+                        }
 
-                            $filterHandler->buildFilterConfig();
+                        $filterHandler->buildFilterConfig();
 
-                            return $filterHandler;
-                        });
-                });
+                        return $filterHandler;
+                    })
+                    ->filter(fn (Filter $filter) => ! in_array($filter->getKey(), $this->excludedFilters))
+                    ->values()
+                );
         }
 
         return $this->filterHandlers;
@@ -125,5 +117,14 @@ class FilterContainer
                     $handler->getKey() => $handler->fromQueryParam($handler->toQueryParam($handler->defaultValue())),
                 ];
             });
+    }
+
+    public function excludeFilter(string $filterClassNameOrKey): void
+    {
+        if ($filter = $this->findFilterHandler($filterClassNameOrKey)) {
+            $this->excludedFilters[] = $filter->getKey();
+        }
+
+        $this->filterHandlers = null;
     }
 }
