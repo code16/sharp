@@ -131,8 +131,7 @@ abstract class Command
 
     final protected function configureConfirmationText(string $confirmationText): self
     {
-        $this->confirmationTitle = strlen($confirmationText) > 50 ? __('sharp::modals.confirm.title') : $confirmationText;
-        $this->confirmationDescription = strlen($confirmationText) > 50 ? $confirmationText : null;
+        $this->confirmationDescription = $confirmationText;
 
         return $this;
     }
