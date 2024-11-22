@@ -246,7 +246,7 @@ In order to make this feature work, since filters are generalized, you'll need t
 Sometimes you may want to hide a filter to the user depending on the actual data, or on other filters values. This can be achieved by using the `dropFilter()` method in your EntityList class, typically in the `getListData()` method.
 
 ```php
-class ProductEntityList extends SharpEntityList
+class OrderEntityList extends SharpEntityList
 {
     // ...
     

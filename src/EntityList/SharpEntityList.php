@@ -133,9 +133,7 @@ abstract class SharpEntityList
 
     final public function configureReorderable(ReorderHandler|string $reorderHandler): self
     {
-        $this->reorderHandler = $reorderHandler instanceof ReorderHandler
-            ? $reorderHandler
-            : app($reorderHandler);
+        $this->reorderHandler = instanciate($reorderHandler);
 
         return $this;
     }
