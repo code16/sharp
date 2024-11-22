@@ -501,3 +501,46 @@ it('allows to define a check filter', function () {
 
     expect($list->listConfig()['filters']['_root'][0]['type'])->toEqual('check');
 });
+
+it('allows to drop a filter afterwards', function () {
+    $list = new class() extends FakeSharpEntityList
+    {
+        public function getFilters(): array
+        {
+            return [
+                new class() extends EntityListSelectFilter
+                {
+                    public function values(): array
+                    {
+                        return [];
+                    }
+                },
+                new class() extends EntityListSelectFilter
+                {
+                    public function buildFilterConfig(): void
+                    {
+                        $this->configureKey('test');
+                    }
+
+                    public function values(): array
+                    {
+                        return [];
+                    }
+                },
+            ];
+        }
+
+        public function getListData(): array
+        {
+            $this->hideFilter('test');
+
+            return [];
+        }
+    };
+
+    $list->buildListConfig();
+    expect($list->listConfig()['filters']['_root'])->toHaveCount(2);
+
+    $list->data();
+    expect($list->listConfig()['filters']['_root'])->toHaveCount(1);
+});

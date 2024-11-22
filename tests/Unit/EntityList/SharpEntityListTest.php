@@ -296,6 +296,31 @@ it('allows to configure a reorder handler', function () {
         ->and($list->reorderHandler())->toBeInstanceOf(ReorderHandler::class);
 });
 
+it('allows to disable a configured reorder handler', function () {
+    $list = new class() extends FakeSharpEntityList
+    {
+        public function buildListConfig(): void
+        {
+            $this->configureReorderable(new class() implements ReorderHandler
+            {
+                public function reorder(array $ids): void {}
+            });
+        }
+
+        public function getListData(): array|Arrayable
+        {
+            $this->disableReorder();
+
+            return [];
+        }
+    };
+
+    $list->buildListConfig();
+    $list->data();
+
+    expect($list->listConfig()['reorderable'])->toBeFalse();
+});
+
 it('allows to configure a create button label', function () {
     $list = new class() extends FakeSharpEntityList
     {
