@@ -7,38 +7,38 @@
 </script>
 
 <script setup lang="ts">
-    import { provide, ref, useTemplateRef } from "vue";
-import { CircleUser, ChevronsUpDown, LogOut, Menu, PanelLeftClose, PanelLeftOpen, Moon, Sun, ChevronDown } from "lucide-vue-next";
-import Notifications from "@/components/Notifications.vue";
-import { useDialogs } from "@/utils/dialogs";
-import useMenu from "@/composables/useMenu";
-import Logo from "@/components/Logo.vue";
-import { auth } from "@/utils/auth";
-import { __ } from "@/utils/i18n";
-import { route } from "@/utils/url";
-import { getCsrfToken } from "@/utils/request";
-import {
-    DropdownMenu,
-    DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
-     DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger,
-    DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu";
-import { buttonVariants } from "@/components/ui/button";
-import { Link, usePage } from "@inertiajs/vue3";
-import { ConfigProvider, DropdownMenuPortal } from "reka-ui";
-import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
-import {
-    AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle
-} from "@/components/ui/alert-dialog";
-import { config } from "@/utils/config";
-import { GlobalFiltersData } from "@/types";
-import GlobalFilters from "@/filters/components/GlobalFilters.vue";
-import SharpLogoMini from '../../svg/logo-mini.svg';
-import ColorModeDropdownItems from "@/components/ColorModeDropdownItems.vue";
+    import { provide, useTemplateRef } from "vue";
+    import { CircleUser, ChevronsUpDown, LogOut, Moon, Sun, ChevronDown } from "lucide-vue-next";
+    import Notifications from "@/components/Notifications.vue";
+    import { useDialogs } from "@/utils/dialogs";
+    import useMenu from "@/composables/useMenu";
+    import Logo from "@/components/Logo.vue";
+    import { auth } from "@/utils/auth";
+    import { __ } from "@/utils/i18n";
+    import { route } from "@/utils/url";
+    import { getCsrfToken } from "@/utils/request";
+    import {
+        DropdownMenu,
+        DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
+         DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger,
+        DropdownMenuTrigger
+    } from "@/components/ui/dropdown-menu";
+    import { buttonVariants } from "@/components/ui/button";
+    import { Link, usePage } from "@inertiajs/vue3";
+    import { ConfigProvider, DropdownMenuPortal } from "reka-ui";
+    import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
+    import {
+        AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+        AlertDialogDescription,
+        AlertDialogFooter,
+        AlertDialogHeader,
+        AlertDialogTitle
+    } from "@/components/ui/alert-dialog";
+    import { config } from "@/utils/config";
+    import { GlobalFiltersData } from "@/types";
+    import GlobalFilters from "@/filters/components/GlobalFilters.vue";
+    import SharpLogoMini from '../../svg/logo-mini.svg';
+    import ColorModeDropdownItems from "@/components/ColorModeDropdownItems.vue";
     import Icon from "@/components/ui/Icon.vue";
     import { Dialog, DialogContent } from "@/components/ui/dialog";
     import {
@@ -55,22 +55,23 @@ import ColorModeDropdownItems from "@/components/ColorModeDropdownItems.vue";
     } from "@/components/ui/sidebar";
     import { useStorage } from "@vueuse/core";
     import GlobalSearch from "@/components/GlobalSearch.vue";
+    import { vScrollIntoView } from "@/directives/scroll-into-view";
 
-const dialogs = useDialogs();
-const menu = useMenu();
-const globalFilters = usePage().props.globalFilters as GlobalFiltersData | null;
-const menuBoundary = useTemplateRef<HTMLElement>('menuBoundary');
-provide('menuBoundary', menuBoundary);
+    const dialogs = useDialogs();
+    const menu = useMenu();
+    const globalFilters = usePage().props.globalFilters as GlobalFiltersData | null;
+    const menuBoundary = useTemplateRef<HTMLElement>('menuBoundary');
+    provide('menuBoundary', menuBoundary);
 
-const openedMenu = useStorage('opened-menu', Object.fromEntries(
-    menu.items.filter(item => item.children?.length > 0).map(item => [item.label, true])),
-    sessionStorage,
-    { mergeDefaults: true },
-);
-const currentItemWithChildren = menu.items.find(item => item.children?.some(child => child.current));
-if(currentItemWithChildren) {
-    openedMenu.value[currentItemWithChildren.label] = true;
-}
+    const openedMenu = useStorage('opened-menu', Object.fromEntries(
+        menu.items.filter(item => item.children?.length > 0).map(item => [item.label, true])),
+        sessionStorage,
+        { mergeDefaults: true },
+    );
+    const currentItemWithChildren = menu.items.find(item => item.children?.some(child => child.current));
+    if(currentItemWithChildren) {
+        openedMenu.value[currentItemWithChildren.label] = true;
+    }
 </script>
 
 <template>
@@ -96,7 +97,7 @@ if(currentItemWithChildren) {
                         </template>
                     </div>
                 </SidebarHeader>
-                <SidebarContent>
+                <SidebarContent scroll-region>
                     <template v-if="globalFilters">
                         <SidebarGroup>
                             <GlobalFilters :global-filters="globalFilters" />
@@ -107,7 +108,7 @@ if(currentItemWithChildren) {
                     </template>
 
                     <template v-if="menu.isVisible">
-                        <template v-for="item in menu.items">
+                        <template v-for="item in menu.items" :key="item.label">
                             <template v-if="item.children">
                                 <Collapsible class="group/collapsible" v-model:open="openedMenu[item.label]" as-child :disabled="!item.isCollapsible">
                                     <SidebarGroup>
@@ -122,7 +123,7 @@ if(currentItemWithChildren) {
                                         <CollapsibleContent>
                                             <SidebarGroupContent>
                                                 <SidebarMenu>
-                                                    <template v-for="childItem in item.children">
+                                                    <template v-for="childItem in item.children" :key="childItem.label">
                                                         <template v-if="childItem.isSeparator">
                                                             <div class="relative flex items-center  min-h-px gap-2 mx-2">
                                                                 <SidebarSeparator class="mx-0 absolute inset-x-0 top-1/2" />
@@ -141,6 +142,8 @@ if(currentItemWithChildren) {
                                                                     <component
                                                                         :is="childItem.isExternalLink ? 'a' : Link"
                                                                         :href="childItem.url"
+                                                                        preserve-scroll
+                                                                        v-scroll-into-view.center="childItem.current"
                                                                     >
                                                                         <template v-if="childItem.icon">
                                                                             <Icon :icon="childItem.icon" class="size-4" />
@@ -163,7 +166,12 @@ if(currentItemWithChildren) {
                                         <SidebarMenu>
                                             <SidebarMenuItem>
                                                 <SidebarMenuButton :is-active="item.current" as-child>
-                                                    <component :is="item.isExternalLink ? 'a' : Link" :href="item.url">
+                                                    <component
+                                                        :is="item.isExternalLink ? 'a' : Link"
+                                                        :href="item.url"
+                                                        preserve-scroll
+                                                        v-scroll-into-view.center="item.current"
+                                                    >
                                                         <template v-if="item.icon">
                                                             <Icon :icon="item.icon" class="size-4" />
                                                         </template>
@@ -297,7 +305,7 @@ if(currentItemWithChildren) {
                                     {{ dialog.title }}
                                 </AlertDialogTitle>
                             </template>
-                            <AlertDialogDescription class="break-all">
+                            <AlertDialogDescription class="break-all" :class="!dialog.title ? 'text-base font-medium text-foreground' : ''">
                                 {{ dialog.text }}
                             </AlertDialogDescription>
                         </AlertDialogHeader>

@@ -17,13 +17,15 @@
     import { Check } from "lucide-vue-next";
     import { cn } from "@/utils/cn";
     import { Label } from "@/components/ui/label";
-    import { ref } from "vue";
+    import { computed, ref } from "vue";
     import SelectFilterValue from "@/filters/components/filters/SelectFilterValue.vue";
     import { FilterEmits, FilterProps } from "@/filters/types";
 
     const props = defineProps<FilterProps<SelectFilterData>>();
     const emit = defineEmits<FilterEmits<SelectFilterData>>();
     const open = ref(false);
+
+    const valuated = computed(() => Array.isArray(props.value) ? props.value.length : props.value != null);
 
     function isSelected(selectValue: SelectFilterData['values'][0]) {
         return Array.isArray(props.value)
@@ -54,13 +56,13 @@
             <PopoverTrigger as-child>
                 <template v-if="inline">
                     <Button
-                        class="text-left justify-start h-8 py-1.5 gap-2 transition-shadow data-[state=open]:shadow-md"
+                        class="relative text-left justify-start h-8 py-1.5 gap-2 transition-shadow data-[state=open]:shadow-md"
                         variant="outline"
                         size="sm"
                         :disabled="disabled"
                     >
                         {{ filter.label }}
-                        <template v-if="Array.isArray(value) ? value.length : value != null">
+                        <template v-if="valuated">
                             <Separator orientation="vertical" class="h-4" />
                             <SelectFilterValue v-bind="props" />
                         </template>
@@ -74,7 +76,7 @@
                         size="sm"
                         :disabled="disabled"
                     >
-                        <template v-if="Array.isArray(value) ? value.length : value != null">
+                        <template v-if="valuated">
                             <SelectFilterValue v-bind="props" />
                         </template>
                         <template v-else>
@@ -86,7 +88,7 @@
                     </Button>
                 </template>
             </PopoverTrigger>
-            <PopoverContent :class="cn('p-0 w-auto min-w-[200px]', !inline ? 'w-[--reka-popover-trigger-width]' : '')" align="start">
+            <PopoverContent :class="cn('p-0 w-auto min-w-[150px]', !inline ? 'w-[--reka-popover-trigger-width]' : '')" align="start">
                 <Command
                     :multiple="props.filter.multiple"
                     highlight-on-hover
@@ -101,6 +103,7 @@
                         <CommandGroup>
                             <template v-for="selectValue in filter.values" :key="selectValue.id">
                                 <CommandItem
+                                    class="pr-6"
                                     :value="selectValue"
                                     @select="onSelect(selectValue)"
                                 >
