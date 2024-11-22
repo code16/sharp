@@ -16,4 +16,12 @@ trait HandleFilters
     {
         return $this->filterContainer ??= new FilterContainer($this->getFilters());
     }
+
+    /**
+     * @internal
+     */
+    final public function dropFilter(string $filterFullClassNameOrKey): void
+    {
+        $this->filterContainer()->excludeFilter($filterFullClassNameOrKey);
+    }
 }

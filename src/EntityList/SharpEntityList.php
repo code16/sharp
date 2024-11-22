@@ -29,6 +29,7 @@ abstract class SharpEntityList
     protected ?string $multiformAttribute = null;
     protected bool $searchable = false;
     protected ?ReorderHandler $reorderHandler = null;
+    private bool $forbidsReorder = false;
     protected ?string $defaultSort = null;
     protected ?string $defaultSortDir = null;
     protected bool $deleteHidden = false;
@@ -106,7 +107,7 @@ abstract class SharpEntityList
             'instanceIdAttribute' => $this->instanceIdAttribute,
             'multiformAttribute' => $this->multiformAttribute,
             'searchable' => $this->searchable,
-            'reorderable' => ! is_null($this->reorderHandler),
+            'reorderable' => ! is_null($this->reorderHandler) && ! $this->forbidsReorder,
             'defaultSort' => $this->defaultSort,
             'defaultSortDir' => $this->defaultSortDir,
             'hasShowPage' => $hasShowPage,
@@ -145,11 +146,11 @@ abstract class SharpEntityList
 
         return $this;
     }
-    
+
     final public function configureCreateButtonLabel(string $label): self
     {
         $this->createButtonLabel = $label;
-        
+
         return $this;
     }
 
@@ -194,6 +195,11 @@ abstract class SharpEntityList
         return collect($this->fields())
             ->pluck('key')
             ->all();
+    }
+
+    final protected function forbidReorder(bool $forbidReorder = true): void
+    {
+        $this->forbidsReorder = $forbidReorder;
     }
 
     /**
