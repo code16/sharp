@@ -30,7 +30,7 @@ const menuBoundary = useMenuBoundaryElement();
 </script>
 
 <template>
-  <DropdownMenuPortal ref="el">
+  <DropdownMenuPortal>
     <DropdownMenuContent
       v-bind="forwarded"
       :collision-boundary="typeof props.collisionBoundary === 'undefined' ? menuBoundary : props.collisionBoundary"

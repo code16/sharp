@@ -8,7 +8,7 @@
         <div class="absolute inset-0 -z-10">
             <!-- Should be the same as in Layout -->
             <div class="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
-                <div class="flex h-14 items-center border-b border-transparent px-4 lg:h-[60px] lg:px-6">
+                <div class="flex h-14 items-center border-b border-transparent px-4 lg:px-6">
                     <template v-if="$page.props.logo">
                         <div class="text-accent-foreground">
                             <Logo />

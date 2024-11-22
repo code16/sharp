@@ -2,34 +2,26 @@
     import { FormFieldEmits, FormFieldProps } from "@/form/types";
     import { FormSelectFieldData } from "@/types";
     import { __ } from "@/utils/i18n";
-    import { ChevronDown } from "lucide-vue-next";
+    import { ChevronDown, X, ListChecks } from "lucide-vue-next";
     import { Button } from "@/components/ui/button";
-    import { ref } from "vue";
+    import { computed, ref } from "vue";
     import { Badge } from "@/components/ui/badge";
     import { isSelected } from "@/form/util/select";
     import {
         DropdownMenu, DropdownMenuCheckboxItem,
-        DropdownMenuContent,
+        DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator,
         DropdownMenuTrigger
     } from "@/components/ui/dropdown-menu";
     import FormFieldLayout from "@/form/components/FormFieldLayout.vue";
+    import { useSelect } from "@/form/components/fields/select/useSelect";
 
     const props = defineProps<FormFieldProps<FormSelectFieldData>>();
     const emit = defineEmits<FormFieldEmits<FormSelectFieldData>>();
     const open = ref(false);
 
-    function validate(value: typeof props.value) {
-        if(props.field.multiple
-            && props.field.maxSelected
-            && (value as Array<string | number>)?.length > props.field.maxSelected
-        ) {
-            return __('sharp::form.select.validation.max_selected', { max_selected: props.field.maxSelected });
-        }
-        return null;
-    }
+    const { validate, isAllSelected, selectAll } = useSelect(props, emit);
 
     function onChange(checked: boolean, option: typeof props.field.options[0]) {
-        console.log(option);
         if(props.field.multiple) {
             const value = props.field.options
                 .filter(o => o.id === option.id ? checked : (props.value as Array<string | number>)?.some(val => isSelected(o, val)))
@@ -44,6 +36,12 @@
             }
         }
     }
+
+    const showClear = computed(() =>
+        (Array.isArray(props.value) ? props.value.length : props.value != null)
+        && (props.field.clearable || props.field.showSelectAll && props.field.multiple)
+    );
+    const showSelectAll = computed(() => props.field.showSelectAll && props.field.multiple && !isAllSelected.value);
 </script>
 
 <template>
@@ -58,17 +56,19 @@
                 >
                     <template v-if="Array.isArray(value) ? value.length : value != null">
                         <template v-if="field.multiple">
-                            <div class="flex flex-wrap gap-2">
+                            <span class="flex flex-wrap gap-2">
                                 <template v-for="option in field.options.filter((o) => (value as Array<string | number>)?.some(val => isSelected(o, val)))" :key="option.id">
                                     <Badge variant="secondary" class="block border-0 text-sm rounded-sm px-2 py-0.5 font-normal max-w-52 truncate transition-shadow">
                                         {{ field.localized && typeof option.label === 'object' ? option.label?.[locale] : option.label }}
                                     </Badge>
                                 </template>
-                            </div>
+                            </span>
                         </template>
                         <template v-else>
                             <template v-for="option in [field.options.find((o) => isSelected(o, value))]">
-                                {{ field.localized && typeof option.label === 'object' ? option.label?.[locale] : option?.label }}
+                                <span class="truncate min-w-0 flex-1">
+                                    {{ field.localized && typeof option.label === 'object' ? option.label?.[locale] : option?.label }}
+                                </span>
                             </template>
                         </template>
                     </template>
@@ -86,10 +86,30 @@
                     <DropdownMenuCheckboxItem
                         :model-value="Array.isArray(value) ? value.some(val => isSelected(option, val)) : isSelected(option, value)"
                         @update:model-value="onChange($event, option)"
-                        @select="field.multiple && $event.preventDefault()"
+                        @select="field.multiple && $event.preventDefault() /* prevent closing if multiple */"
                     >
                         {{ field.localized && typeof option.label === 'object' ? option.label?.[locale] : option.label }}
                     </DropdownMenuCheckboxItem>
+                </template>
+                <template v-if="showClear || showSelectAll">
+                    <div class="isolate sticky bottom-0 border-b border-transparent">
+                        <div class="bg-popover absolute -inset-1 -bottom-1.5 top-0 -z-10"></div>
+                        <DropdownMenuSeparator />
+                        <div class="flex gap-2">
+                            <template v-if="showClear">
+                                <DropdownMenuItem class="flex-1 font-medium text-center justify-center" @select="emit('input', null); field.multiple && $event.preventDefault()">
+                                    <X />
+                                    {{ __('sharp::form.select.clear') }}
+                                </DropdownMenuItem>
+                            </template>
+                            <template v-if="showSelectAll">
+                                <DropdownMenuItem class="flex-1 font-medium text-center justify-center" @select.prevent="selectAll()">
+                                    <ListChecks />
+                                    {{ __('sharp::form.select.select_all') }}
+                                </DropdownMenuItem>
+                            </template>
+                        </div>
+                    </div>
                 </template>
             </DropdownMenuContent>
         </DropdownMenu>

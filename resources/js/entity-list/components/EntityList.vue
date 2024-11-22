@@ -269,9 +269,10 @@
                     <StickyTop
                         :class="cn(
                             'group container sticky top-14 border-b -mb-px -mt-4 pt-4 bg-white pb-4 px-4 lg:px-6 flex gap-3 pointer-events-none',
-                            'lg:sticky lg:border-0 lg:pt-0 lg:mt-0 lg:top-3.5 lg:bg-transparent lg:last:*:-translate-x-[--sticky-safe-right-offset]',
+                            'lg:sticky lg:border-0 lg:pt-0 lg:mt-0 lg:top-3 lg:bg-transparent lg:last:*:-translate-x-[--sticky-safe-right-offset]',
                             {
-                                '-top-8 z-0 px-0': inline && !needsTopBar,
+                                'border-0': inline,
+                                '-top-8 z-0': inline && !needsTopBar,
                                 'z-[15]': reordering,
                                 'data-[stuck=true]:z-30': !inline || needsTopBar,
                                 // 'opacity-0': inline && stuck && !needsTopBar,
@@ -387,7 +388,7 @@
             </div>
 
             <RootCard :class="reordering ? 'relative z-[11]' : ''">
-                <CardHeader>
+                <CardHeader class="pb-4">
                     <div class="flex sm:flex-wrap gap-y-6 gap-x-2">
                         <div class="flex items-baseline">
                             <slot name="card-header" />
@@ -402,9 +403,11 @@
                                 </CardDescription>
                             </template>
                         </div>
-                        <template v-if="entityList">
+                    </div>
+                    <template v-if="entityList && (showSearchField && entityList.config.searchable || entityList.visibleFilters?.length)">
+                        <div class="mt-4 flex sm:flex-wrap gap-2">
                             <template v-if="showSearchField && entityList.config.searchable">
-                                <div class="self-center -my-1 pointer-events-auto hidden sm:block" v-show="!reordering && !selecting && !collapsed">
+                                <div class="self-center pointer-events-auto hidden sm:block" v-show="!reordering && !selecting && !collapsed">
                                     <EntityListSearch
                                         inline
                                         v-model:expanded="searchExpanded"
@@ -414,7 +417,7 @@
                                 </div>
                             </template>
                             <template v-if="entityList.visibleFilters?.length">
-                                <div class="relative -my-1 flex pointer-events-auto" v-show="!reordering && !selecting && !collapsed">
+                                <div class="contents" v-show="!reordering && !selecting && !collapsed">
                                     <div class="flex items-center lg:hidden">
                                         <Dialog>
                                             <DialogTrigger as-child>
@@ -467,9 +470,9 @@
                                             <Badge class="ml-2">{{ Object.values(filters.filterValues?.valuated ?? {}).filter(Boolean).length }}</Badge>
                                         </template>
                                     </div>
-                                    <div class="hidden lg:flex flex-wrap gap-2"
+                                    <div class="hidden lg:contents"
                                         :class="{
-                                            'opacity-0 pointer-events-none': searchExpanded,
+                                            '*:opacity-0 *:pointer-events-none': searchExpanded,
                                         }"
                                     >
                                         <template v-for="filter in entityList.visibleFilters" :key="filter.key">
@@ -490,15 +493,15 @@
                                     </div>
                                 </div>
                             </template>
-                        </template>
-                    </div>
+                        </div>
+                    </template>
                 </CardHeader>
                 <template v-if="entityList">
                     <CardContent :class="entityList.count > 0 ? 'pb-2 !px-0' : ''" v-show="!collapsed">
                         <template v-if="entityList.data?.length > 0">
                             <ScrollArea class="w-full" type="auto" touch-type="scroll">
-                                <Table no-scroll class="w-max min-w-full max-w-[768px] md:max-w-[1024px] @5xl:w-full @5xl:max-w-none">
-                                    <TableHeader>
+                                <Table no-scroll class="w-max min-w-full max-w-[768px] md:max-w-[1024px] @3xl:w-full @3xl:max-w-none">
+                                    <TableHeader :class="!visibleFields.some(field => field.label) ? 'collapse [&_tr]:border-0' : ''">
                                         <TableRow class="hover:bg-transparent lg:first:*:pl-6 lg:last:*:pr-6">
                                             <template v-if="selecting">
                                                 <TableHead>
@@ -516,8 +519,6 @@
                                                     }"
                                                 >
                                                     <template v-if="field.sortable">
-                                                        <!--                                                            <DropdownMenu>-->
-                                                        <!--                                                                <DropdownMenuTrigger as-child>-->
                                                         <Button
                                                             variant="ghost"
                                                             size="sm"
@@ -533,31 +534,6 @@
                                                                 <ChevronsUpDown class="ml-2 h-3.5 w-3.5" />
                                                             </template>
                                                         </Button>
-                                                        <!--                                                                </DropdownMenuTrigger>-->
-                                                        <!--                                                                <DropdownMenuContent align="start" :align-offset="-48">-->
-                                                        <!--                                                                    <DropdownMenuRadioGroup-->
-                                                        <!--                                                                        :model-value="entityList.currentSort === field.key ? entityList.currentSortDir : ''"-->
-                                                        <!--                                                                        @update:model-value="dir => onSortClick(field.key, dir as any)"-->
-                                                        <!--                                                                    >-->
-                                                        <!--                                                                        <DropdownMenuRadioItem value="asc">-->
-                                                        <!--                                                                            <ArrowUp class="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />-->
-                                                        <!--                                                                            {{ __('sharp::entity_list.sort_asc') }}-->
-                                                        <!--                                                                        </DropdownMenuRadioItem>-->
-                                                        <!--                                                                        <DropdownMenuRadioItem value="desc">-->
-                                                        <!--                                                                            <ArrowDown class="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />-->
-                                                        <!--                                                                            {{ __('sharp::entity_list.sort_desc') }}-->
-                                                        <!--                                                                        </DropdownMenuRadioItem>-->
-                                                        <!--                                                                        <template v-if="entityList.currentSort === field.key-->
-                                                        <!--                                                                            && !(entityList.config.defaultSort === field.key && entityList.config.defaultSortDir === entityList.currentSortDir)">-->
-                                                        <!--                                                                            <DropdownMenuSeparator />-->
-                                                        <!--                                                                            <DropdownMenuRadioItem value="">-->
-                                                        <!--                                                                                <div class="mr-2 h-3.5 w-3.5"></div>-->
-                                                        <!--                                                                                {{ __('sharp::filters.select.reset') }}-->
-                                                        <!--                                                                            </DropdownMenuRadioItem>-->
-                                                        <!--                                                                        </template>-->
-                                                        <!--                                                                    </DropdownMenuRadioGroup>-->
-                                                        <!--                                                                </DropdownMenuContent>-->
-                                                        <!--                                                            </DropdownMenu>-->
                                                     </template>
                                                     <template v-else>
                                                         {{ field.label }}

@@ -21,6 +21,7 @@
     import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
     import { FieldMeta } from "@/form/types";
     import { UseElementBoundingReturn, UseElementSizeReturn } from "@vueuse/core";
+    import StickyTop from "@/components/StickyTop.vue";
 
     const props = defineProps<{
         form: Form
@@ -84,12 +85,24 @@
 
 <template>
     <Tabs v-model="selectedTabSlug" :unmount-on-hide="false">
-        <template v-if="form.locales?.length">
-            <div class="@container container flex items-end mb-4 gap-4">
+        <template v-if="showErrorAlert">
+            <div class="container">
+                <Alert class="mb-4" variant="destructive">
+                    <AlertTitle>
+                        {{ __('sharp::form.validation_error.title') }}
+                    </AlertTitle>
+                    <AlertDescription>
+                        {{ __('sharp::form.validation_error.description') }}
+                    </AlertDescription>
+                </Alert>
+            </div>
+        </template>
+        <template v-if="form.locales?.length || form.layout.tabbed && form.layout.tabs.length > 1">
+            <StickyTop class="@container group flex items-end gap-4 container mb-4 pointer-events-none overflow-x-clip lg:sticky top-3 data-[stuck=true]:z-20">
                 <div class="flex-1">
                     <template v-if="form.locales?.length">
                         <Select :model-value="form.currentLocale ?? undefined" @update:model-value="onLocaleChange">
-                            <LocaleSelectTrigger />
+                            <LocaleSelectTrigger class="pointer-events-auto lg:ml-[--sticky-safe-left-offset]" />
                             <SelectContent>
                                 <template v-for="locale in form.locales" :key="locale">
                                     <SelectItem :value="locale">
@@ -104,7 +117,7 @@
                     <div>
                         <div class="@3xl:hidden">
                             <Select v-model="selectedTabSlug">
-                                <SelectTrigger class="h-8">
+                                <SelectTrigger class="h-8 pointer-events-auto">
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -116,8 +129,8 @@
                                 </SelectContent>
                             </Select>
                         </div>
-                        <div class="hidden h-8 flex-col justify-end @3xl:flex">
-                            <TabsList>
+                        <div class="hidden h-8 @3xl:flex flex-col justify-end group-data-[stuck=true]:justify-center">
+                            <TabsList class="pointer-events-auto">
                                 <template v-for="tab in form.layout.tabs">
                                     <TabsTrigger :value="slugify(tab.title)">
                                         {{ tab.title }}
@@ -133,20 +146,9 @@
                     </div>
                 </template>
                 <div class="flex-1"></div>
-            </div>
+            </StickyTop>
         </template>
-        <template v-if="showErrorAlert">
-            <div class="container">
-                <Alert class="mb-4" variant="destructive">
-                    <AlertTitle>
-                        {{ __('sharp::form.validation_error.title') }}
-                    </AlertTitle>
-                    <AlertDescription>
-                        {{ __('sharp::form.validation_error.description') }}
-                    </AlertDescription>
-                </Alert>
-            </div>
-        </template>
+
         <UseElementSize v-bind="{ width: 0, height: 0 }" v-slot="formSize: Reactive<UseElementSizeReturn>">
             <component :is="inline ? 'div' : RootCard">
                 <template v-if="!inline">

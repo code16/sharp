@@ -78,7 +78,7 @@
     <ConfigProvider>
         <SidebarProvider>
             <Sidebar>
-                <SidebarHeader class="h-14 lg:h-[60px] justify-center">
+                <SidebarHeader class="h-14 justify-center">
                     <div class="p-2">
                         <template v-if="$page.props.logo">
                             <div class="text-sidebar-accent-foreground">
@@ -256,7 +256,7 @@
                 <SidebarRail />
             </Sidebar>
             <SidebarInset>
-                <header class="flex h-14 items-center gap-4 border-b backdrop-blur bg-background/90 px-4 sticky top-0 z-20 lg:h-[60px] lg:px-6
+                <header class="flex h-14 items-center gap-4 border-b backdrop-blur bg-background/90 px-4 sticky top-0 z-20 lg:px-6
                     transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12
                 ">
                     <SidebarTrigger class="-ml-1" />

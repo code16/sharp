@@ -7,7 +7,7 @@
     import Title from "@/components/Title.vue";
     import { config } from "@/utils/config";
     import PageBreadcrumb from "@/components/PageBreadcrumb.vue";
-    import { ref, watchEffect } from "vue";
+    import { ref, watch } from "vue";
     import { __ } from "@/utils/i18n";
     import { Button } from '@/components/ui/button';
 
@@ -20,28 +20,34 @@
     const { entityKey, instanceId } = route().params as { entityKey: string, instanceId?: string };
     const form = new Form(props.form, entityKey, instanceId);
     const loading = ref(false);
-    const bottomBarStuck = ref(false);
+    const showErrorAlert = ref(false);
 
-    watchEffect(() => {
-        form.errors = props.errors;
-    });
+    watch(() => form.errors, () => {
+        if(Object.keys(form.errors).length === 0) {
+            showErrorAlert.value = false;
+        }
+    }, { deep: true });
 
     function submit() {
         const { parentUri, entityKey, instanceId } = route().params;
         const onStart = () => { loading.value = true };
         const onFinish = () => { loading.value = false };
+        const onError = () => {
+            showErrorAlert.value = true;
+            form.errors = props.errors;
+        }
 
         if(route().current('code16.sharp.form.create')) {
             router.post(
                 route('code16.sharp.form.store', { parentUri, entityKey }),
                 form.serializedData,
-                { onStart, onFinish }
+                { onStart, onFinish, onError }
             );
         } else if(route().current('code16.sharp.form.edit')) {
             router.post(
                 route('code16.sharp.form.update', { parentUri, entityKey, instanceId }),
                 form.serializedData,
-                { onStart, onFinish }
+                { onStart, onFinish, onError }
             );
         }
     }
@@ -59,7 +65,7 @@
 
         <SharpForm
             :form="form"
-            :show-error-alert="Object.values(props.errors).length > 0"
+            :show-error-alert="showErrorAlert"
             @submit="submit"
         >
             <template #title>

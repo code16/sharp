@@ -110,7 +110,7 @@
 
         <WithCommands :commands="commands">
             <StickyTop
-                class="group container mb-4 pointer-events-none top-3.5 data-[stuck=true]:z-20"
+                class="group container mb-4 pointer-events-none top-3 data-[stuck=true]:z-20"
                 :class="[
                     { 'lg:sticky': !entityListNeedsTopBar }
                 ]"
@@ -185,7 +185,7 @@
                                                 </DropdownMenuPortal>
                                             </DropdownMenuSub>
                                         </DropdownMenuGroup>
-                                        <DropdownMenuSeparator />
+                                        <DropdownMenuSeparator class="last:hidden" />
                                     </template>
 
                                     <CommandDropdownItems
