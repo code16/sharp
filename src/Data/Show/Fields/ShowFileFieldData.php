@@ -26,7 +26,7 @@ final class ShowFileFieldData extends Data
         #[LiteralTypeScriptType('"'.ShowFieldType::File->value.'"')]
         public ShowFieldType $type,
         public bool $emptyVisible,
-        public ?string $label,
+        public ?string $label = null,
     ) {}
 
     public static function from(array $field): self
