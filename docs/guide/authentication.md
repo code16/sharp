@@ -321,12 +321,11 @@ class SharpServiceProvider extends SharpAppServiceProvider
 ```
 
 ::: warning
-By default, Sharp will also check the `APP_ENV` value to be `local` to enable this feature, since we should avoid to put this in production by mistake.
+By default Sharp will also check the `APP_ENV` value to be `local` to enable this feature, since this should never hit the production by mistake.
 You can override this behavior by providing a custom handler class, see below. 
 :::
 
-Configured like this, Sharp wil display a dropdown list of all users in the login form, allowing you to select one and be logged in as this user. 
-But if you want more control on this users list, or if you need to opt out from this default Eloquent implementation, you can provide your own handler class, which must extend `Code16\Sharp\Auth\Impersonate\SharpImpersonationHandler`:
+Configured like this, Sharp will display a dropdown list of all users in the login form, allowing you to select one and be logged in as this user. If you want more control on this users list, or if you need to opt out from this default Eloquent implementation, you can provide your own handler class, which must extend `Code16\Sharp\Auth\Impersonate\SharpImpersonationHandler`:
 
 ```php
 use \Code16\Sharp\Auth\Impersonate\SharpImpersonationHandler;

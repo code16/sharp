@@ -14,7 +14,7 @@ export function sidebar(): DefaultTheme.SidebarItem[] {
             text: 'Entity Lists',
             collapsed: true,
             items: [
-                { text: 'Building an Entity List', link: '/guide/building-entity-list.md' },
+                { text: 'Create an Entity List', link: '/guide/building-entity-list.md' },
                 { text: 'Filters', link: '/guide/filters.md' },
                 { text: 'Entity States', link: '/guide/entity-states.md' },
                 { text: 'Reordering instances', link: '/guide/reordering-instances.md' },
@@ -25,7 +25,7 @@ export function sidebar(): DefaultTheme.SidebarItem[] {
             text: 'Forms',
             collapsed: true,
             items: [
-                { text: 'Building a Form', link: '/guide/building-form.md' },
+                { text: 'Create a Form', link: '/guide/building-form.md' },
                 { text: 'Multi-Forms', link: '/guide/multiforms.md' },
                 { text: 'Using Single Form for unique resources', link: '/guide/single-form.md' },
                 { text: 'Write an Embed for the Editor field', link: '/guide/form-editor-embeds.md' },
@@ -50,7 +50,7 @@ export function sidebar(): DefaultTheme.SidebarItem[] {
             text: 'Show Pages',
             collapsed: true,
             items: [
-                { text: 'Building a Show Page', link: '/guide/building-show-page.md' },
+                { text: 'Create a Show Page', link: '/guide/building-show-page.md' },
                 { text: 'Using Single Show for unique resources', link: '/guide/single-show.md' },
                 { text: 'Text', link: '/guide/show-fields/text.md' },
                 { text: 'Picture', link: '/guide/show-fields/picture.md' },

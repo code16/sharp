@@ -35,7 +35,7 @@ Finally, **orders**, must be listed, detailed and updatable, and we also need to
 <img src="./img/schema-order.png" style="max-width:700px; width:100%">
 </div>
 
-Maybe we can add an `Entity Cmmand` to export orders in a CSV file in the `Entity List`, and an `Instance command` on the order `Show Page` to declare the order as shipped.
+Maybe we can add an `Entity Command` to export orders in a CSV file in the `Entity List`, and an `Instance command` on the order `Show Page` to declare the order as shipped.
 
 This is a simple example to illustrate the main concepts of Sharp: we'll see in this guide how to build such structures but also more complexe ones, and how to manage states, commands, dashboards, authorizations, errors, validation... in the process.
 
@@ -65,7 +65,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
             ->setName('My new project')
             ->setSharpMenu(SharpMenu::class)
             ->addEntity('product', ProductEntity::class);
-            // [...]
+            // ...
     }
 }
 ```
@@ -110,7 +110,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
         $config
             ->setCustomUrlSegment('admin')
             ->addEntity('product', ProductEntity::class)
-            // [...]
+            // ...
     }
 }
 ```
