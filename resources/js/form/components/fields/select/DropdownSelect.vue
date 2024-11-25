@@ -93,18 +93,16 @@
                 </template>
                 <template v-if="showClear || showSelectAll">
                     <div class="isolate sticky bottom-0 border-b border-transparent">
-                        <div class="bg-popover absolute -inset-1 -bottom-1.5 top-0 -z-10"></div>
+                        <div class="bg-popover absolute -inset-1 -bottom-1 top-0 -z-10"></div>
                         <DropdownMenuSeparator />
                         <div class="flex gap-2">
                             <template v-if="showClear">
                                 <DropdownMenuItem class="flex-1 font-medium text-center justify-center" @select="emit('input', null); field.multiple && $event.preventDefault()">
-                                    <X />
                                     {{ __('sharp::form.select.clear') }}
                                 </DropdownMenuItem>
                             </template>
                             <template v-if="showSelectAll">
                                 <DropdownMenuItem class="flex-1 font-medium text-center justify-center" @select.prevent="selectAll()">
-                                    <ListChecks />
                                     {{ __('sharp::form.select.select_all') }}
                                 </DropdownMenuItem>
                             </template>

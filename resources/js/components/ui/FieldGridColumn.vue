@@ -1,16 +1,17 @@
 <script setup lang="ts">
     import { LayoutFieldData } from "@/types";
-    import { Primitive, Slot } from "reka-ui";
+    import { HTMLAttributes } from "vue";
 
     defineProps<{
+        class?: HTMLAttributes['class'],
         layout?: LayoutFieldData,
     }>();
 </script>
 
 <template>
     <div
-        class="contents *:col-[span_var(--size-xs)] md:*:col-[span_var(--size)]"
-        :style="{ '--size-xs': layout?.sizeXS ?? 12, '--size': layout?.size ?? 12 }"
+        class="contents *:col-[span_var(--size)]"
+        :style="{ '--size': layout?.size ?? 12 }"
     >
         <slot />
     </div>

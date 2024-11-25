@@ -226,7 +226,7 @@ class TestForm extends SharpSingleForm
             ->addField(
                 SharpFormSelectField::make('select_dropdown', $this->options())
                     ->setLabel('Select dropdown')
-//                    ->allowSelectAll()
+                    ->allowSelectAll()
 //                    ->setClearable()
 //                    ->setReadOnly()
                     ->setMultiple()
@@ -241,7 +241,7 @@ class TestForm extends SharpSingleForm
             ->addField(
                 SharpFormSelectField::make('select_list_multiple', $this->options())
                     ->setLabel('Select list multiple')
-//                    ->allowSelectAll()
+                    ->allowSelectAll()
 //                    ->setInline()
                     ->setMultiple()
 //                    ->setReadOnly()
