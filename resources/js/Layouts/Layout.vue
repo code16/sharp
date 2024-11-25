@@ -7,7 +7,7 @@
 </script>
 
 <script setup lang="ts">
-    import { provide, useTemplateRef } from "vue";
+    import { onMounted, provide, useTemplateRef } from "vue";
     import { CircleUser, ChevronsUpDown, LogOut, Moon, Sun, ChevronDown } from "lucide-vue-next";
     import Notifications from "@/components/Notifications.vue";
     import { useDialogs } from "@/utils/dialogs";
@@ -53,7 +53,7 @@
         SidebarMenuItem,
         SidebarProvider, SidebarRail, SidebarSeparator, SidebarTrigger
     } from "@/components/ui/sidebar";
-    import { useStorage } from "@vueuse/core";
+    import { useEventListener, useStorage } from "@vueuse/core";
     import GlobalSearch from "@/components/GlobalSearch.vue";
     import { vScrollIntoView } from "@/directives/scroll-into-view";
 
@@ -72,6 +72,16 @@
     if(currentItemWithChildren) {
         openedMenu.value[currentItemWithChildren.label] = true;
     }
+    const savedScrollTop = useStorage('menu-scroll', 0, sessionStorage);
+    const sidebarContent = useTemplateRef<InstanceType<typeof SidebarContent>>('sidebarContent');
+    useEventListener(() => sidebarContent.value?.$el, 'scroll', (e) => {
+        savedScrollTop.value = (e.target as HTMLElement).scrollTop;
+    });
+    onMounted(() => {
+        if(!history.state?.scrollRegions?.length && savedScrollTop.value) {
+            (sidebarContent.value?.$el as HTMLElement).scrollTop = savedScrollTop.value;
+        }
+    });
 </script>
 
 <template>
@@ -97,7 +107,7 @@
                         </template>
                     </div>
                 </SidebarHeader>
-                <SidebarContent scroll-region>
+                <SidebarContent ref="sidebarContent">
                     <template v-if="globalFilters">
                         <SidebarGroup>
                             <GlobalFilters :global-filters="globalFilters" />
@@ -142,7 +152,6 @@
                                                                     <component
                                                                         :is="childItem.isExternalLink ? 'a' : Link"
                                                                         :href="childItem.url"
-                                                                        preserve-scroll
                                                                         v-scroll-into-view.center="childItem.current"
                                                                     >
                                                                         <template v-if="childItem.icon">
@@ -169,7 +178,6 @@
                                                     <component
                                                         :is="item.isExternalLink ? 'a' : Link"
                                                         :href="item.url"
-                                                        preserve-scroll
                                                         v-scroll-into-view.center="item.current"
                                                     >
                                                         <template v-if="item.icon">

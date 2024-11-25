@@ -7,11 +7,10 @@
         FormAutocompleteRemoteFieldData,
     } from "@/types";
     import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-    import { ref } from "vue";
+    import { computed, ref } from "vue";
     import { Button } from "@/components/ui/button";
     import { __, trans_choice } from "@/utils/i18n";
     import { ChevronsUpDown, X, Check } from 'lucide-vue-next';
-    import { cn } from "@/utils/cn";
     import {
         Command,
         CommandEmpty,
@@ -114,13 +113,11 @@
         open.value = false;
     }
 
-    if(props.field.mode === 'local' && props.value) {
-        const localValue = props.field.localValues
-            .find(v => String(props.value[props.field.itemIdAttribute]) === String(v[props.field.itemIdAttribute]));
-        if(localValue) {
-            emit('input', localValue, { force: true });
-        }
-    }
+    const currentLocalValue = computed(() => {
+        return props.field.mode === 'local' && props.value
+            ? props.field.localValues.find(v => String(props.value[props.field.itemIdAttribute]) === String(v[props.field.itemIdAttribute]))
+            : null;
+    })
 </script>
 
 <template>
@@ -132,7 +129,10 @@
                         :aria-disabled="props.field.readOnly"
                     >
                         <div class="flex-1"
-                            v-html="props.value._htmlResult ?? props.value._html ?? props.value[props.field.itemIdAttribute]"
+                            v-html="currentLocalValue
+                                ? currentLocalValue._htmlResult ?? currentLocalValue._html
+                                : props.value._htmlResult ?? props.value._html ?? props.value[props.field.itemIdAttribute]
+                            "
                         ></div>
                         <Button class="absolute right-0 h-[2.375rem] top-1/2 -translate-y-1/2 opacity-50 hover:opacity-100"
                             :disabled="props.field.readOnly"

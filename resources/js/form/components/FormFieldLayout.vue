@@ -63,7 +63,9 @@
                     <div class="absolute bg-background transition-colors hidden border-b -inset-x-6 -top-3 -bottom-2.5 lg:group-data-[stuck]:block"
                         :class="stuck ? 'border-border' : 'border-transparent'"></div>
                 </template>
-                <div class="relative flex">
+                <div class="relative flex" :class="{
+                    'pr-4': !root, // in list items we add padding to prevent dropdown overlapping
+                }">
                     <div class="flex mr-auto">
                         <template v-if="field.label">
                             <Label

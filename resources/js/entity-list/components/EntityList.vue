@@ -388,7 +388,7 @@
             </div>
 
             <RootCard :class="reordering ? 'relative z-[11]' : ''">
-                <CardHeader class="pb-4">
+                <CardHeader>
                     <div class="flex sm:flex-wrap gap-y-6 gap-x-2">
                         <div class="flex items-baseline">
                             <slot name="card-header" />
@@ -405,7 +405,7 @@
                         </div>
                     </div>
                     <template v-if="entityList && (showSearchField && entityList.config.searchable || entityList.visibleFilters?.length)">
-                        <div class="mt-4 flex sm:flex-wrap gap-2">
+                        <div class="mt-4 flex sm:flex-wrap gap-2" :class="!collapsed && entityList.data?.length ? '-mb-2' : ''">
                             <template v-if="showSearchField && entityList.config.searchable">
                                 <div class="self-center pointer-events-auto hidden sm:block" v-show="!reordering && !selecting && !collapsed">
                                     <EntityListSearch
@@ -696,7 +696,9 @@
                             </ScrollArea>
                         </template>
                         <template v-else>
-                            {{ __('sharp::entity_list.empty_text') }}
+                            <div class="text-muted-foreground">
+                                {{ __('sharp::entity_list.empty_text') }}
+                            </div>
                         </template>
                     </CardContent>
                     <template v-if="entityList.meta?.prev_page_url || entityList.meta?.next_page_url">

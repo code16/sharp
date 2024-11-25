@@ -3,10 +3,10 @@
     import { useParentForm } from "@/form/useParentForm";
     import { FormFieldData, FormListFieldData, FormUploadFieldData, FormUploadFieldValueData } from "@/types";
     import { getDependantFieldsResetData } from "@/form/util";
-    import { ComponentInstance, computed, nextTick, ref, watch, watchEffect } from "vue";
+    import { computed, nextTick, ref, watch, watchEffect } from "vue";
     import { Button, buttonVariants } from '@/components/ui/button';
     import { showAlert } from "@/utils/dialogs";
-    import { FieldsMeta, FormFieldEmits, FormFieldProps } from "@/form/types";
+    import { FieldMeta, FieldsMeta, FormFieldEmits, FormFieldProps } from "@/form/types";
     import FieldGridRow from "@/components/ui/FieldGridRow.vue";
     import FieldGridColumn from "@/components/ui/FieldGridColumn.vue";
     import { Toggle } from "@/components/ui/toggle";
@@ -32,6 +32,7 @@
             (!field.maxItemCount || value?.length < field.maxItemCount) &&
             !field.readOnly;
     });
+    const hasItemDropdown = computed(() => !props.field.readOnly && (canAddItem.value && props.field.sortable || props.field.removable));
     const isUploading = computed(() => {
         return (form.meta[props.field.key] as FieldsMeta[])
             ?.some(itemMeta => Object.values(itemMeta).some(fieldMeta => fieldMeta.uploading));
@@ -160,6 +161,12 @@
         form.setMeta(fieldKey, { uploading }, props.field.key);
     }
 
+    function itemShouldHavePaddingTop(item: FormListFieldData['value'][0]) {
+        return hasItemDropdown.value
+            && props.fieldLayout.item[0]?.length === 1
+            && !props.field.itemFields[props.fieldLayout.item[0][0].key].label;
+    }
+
     const bulkDroppingFile = ref(false);
 </script>
 
@@ -190,7 +197,8 @@
                             <Card class="group relative ring-ring ring-offset-2 ring-background p-6"
                                 :class="[
                                     '[&.sortable-ghost]:z-10 [&.sortable-ghost]:ring-2',
-                                    reordering ? 'cursor-grab bg-muted/50' : 'bg-background'
+                                    reordering ? 'cursor-grab bg-muted/50' : 'bg-background',
+                                    itemShouldHavePaddingTop(item) ? 'pt-10' : ''
                                 ]"
                             >
                                 <div :inert="reordering">
@@ -205,7 +213,7 @@
                                                             :field-error-key="`${field.key}.${item[errorIndex] ?? item[itemKey]}.${itemFieldLayout.key}`"
                                                             :parent-field="field"
                                                             :value="item[itemFieldLayout.key]"
-                                                            :locale="form.getMeta(`${field.key}.${item[itemKey]}.${itemFieldLayout.key}`)?.locale ?? form.defaultLocale"
+                                                            :locale="(form.getMeta(`${field.key}.${item[itemKey]}.${itemFieldLayout.key}`) as FieldMeta)?.locale ?? form.defaultLocale"
                                                             :row="row"
                                                             @input="(value, options) => onFieldInput(index, itemFieldLayout.key, value, options)"
                                                             @locale-change="onFieldLocaleChange(`${field.key}.${item[itemKey]}.${itemFieldLayout.key}`, $event)"
@@ -217,7 +225,7 @@
                                         </template>
                                     </FieldGrid>
 
-                                    <template v-if="!props.field.readOnly && (canAddItem && field.sortable || props.field.removable)">
+                                    <template v-if="hasItemDropdown">
                                         <DropdownMenu :modal="false">
                                             <DropdownMenuTrigger as-child>
                                                 <Button data-item-dropdown class="absolute top-0 right-0 z-20" variant="ghost" size="icon">
@@ -274,9 +282,9 @@
                     </template>
                     <template v-if="field.itemFields[field.bulkUploadField]?.type === 'upload' && canAddItem && currentBulkUploadLimit > 0">
                         <Card :class="{
-                        'invisible': reordering,
-                        'ring-2 ring-ring ring-offset-2': bulkDroppingFile,
-                    }">
+                            'invisible': reordering,
+                            'ring-2 ring-ring ring-offset-2': bulkDroppingFile
+                        }">
                             <CardHeader :class="{ 'relative': !bulkDroppingFile }">
                                 <div class="flex flex-wrap justify-center">
                                     <div class="text-sm"
