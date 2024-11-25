@@ -30,6 +30,7 @@ final class MenuItemData extends Data
                     app(SharpMenuManager::class)
                         ->resolveSectionItems($item)
                         ->map(fn (SharpMenuItem $item) => self::from($item))
+                        ->values()
                 ),
                 isCollapsible: $item->isCollapsible(),
             );

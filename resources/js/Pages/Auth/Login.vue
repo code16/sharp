@@ -81,7 +81,7 @@
                     <FormItem>
                         <div class="flex items-center">
                             <Label for="password">{{ __('sharp::pages/auth/login.password_field') }}</Label>
-                            <template v-if="config('sharp.auth.forgotten_password.enabled')">
+                            <template v-if="config('sharp.auth.forgotten_password.enabled') && config('sharp.auth.forgotten_password.show_reset_link_in_login_form')">
                                 <a :href="route('code16.sharp.password.request')" class="ml-auto inline-block text-sm underline">
                                     {{ __('sharp::pages/auth/login.forgot_password_link') }}
                                 </a>

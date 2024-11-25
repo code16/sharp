@@ -21,6 +21,7 @@ final class MenuData extends Data
                 $menuManager
                     ->getItems()
                     ->map(fn (SharpMenuItem $item) => MenuItemData::from($item))
+                    ->values()
             ),
             userMenu: new UserMenuData(
                 MenuItemData::collection(

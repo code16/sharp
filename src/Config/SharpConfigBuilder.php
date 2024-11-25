@@ -269,12 +269,14 @@ class SharpConfigBuilder
 
     public function enableForgottenPassword(
         PasswordBroker|string|null $broker = null,
-        ?Closure $resetCallback = null
+        ?Closure $resetCallback = null,
+        bool $showResetLinkInLoginForm = true,
     ): self {
         $this->config['auth']['forgotten_password'] = [
             'enabled' => true,
             'password_broker' => $broker ? instanciate($broker) : null,
             'reset_password_callback' => $resetCallback,
+            'show_reset_link_in_login_form' => $showResetLinkInLoginForm,
         ];
 
         return $this;
