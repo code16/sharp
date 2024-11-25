@@ -288,6 +288,20 @@ class SharpServiceProvider extends SharpAppServiceProvider
 }
 ```
 
+Finally, you can decide to hide the "reset password" link displayed in Sharp’s login form (in case you want to provide this functionality in another way, like a custom command in Sharp for instance):
+
+```php
+class SharpServiceProvider extends SharpAppServiceProvider
+{
+    protected function configureSharp(SharpConfigBuilder $config): void
+    {
+        $config
+            ->enableForgottenPassword(showResetLinkInLoginForm: false)
+            // [...]
+    }
+}
+```
+
 These customizations will not interfere with any default behavior that you may have implemented for your app, outside Sharp.
 
 ## User impersonation (dev only)
