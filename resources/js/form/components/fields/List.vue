@@ -292,12 +292,12 @@
                                 <div class="flex flex-wrap justify-center">
                                     <div class="text-sm"
                                         v-html='
-                                        __(`sharp::form.list.bulk_upload.text`)
-                                            .replace(
-                                                /\[(.+?)]\(.*?\)/,
-                                                `<button class="relative z-10 underline -mx-3 -my-2 ${buttonVariants({ variant: "link", size:"sm" })}" tabindex="-1">$1</button>`
-                                            )
-                                    '
+                                            __(`sharp::form.list.bulk_upload.text`)
+                                                .replace(
+                                                    /\[(.+?)]\(.*?\)/,
+                                                    `<button class="relative z-10 underline -mx-3 -my-2 ${buttonVariants({ variant: "link", size:"sm" })}" tabindex="-1">$1</button>`
+                                                )
+                                        '
                                         @click.prevent="($refs.bulkUploadInput as HTMLInputElement).click()"
                                     ></div>
                                     <div class="text-sm text-muted-foreground">

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-    import { FormData, FormFieldData, FormLayoutTabData, LayoutFieldData } from "@/types";
+    import { FormData, FormFieldData,  LayoutFieldData } from "@/types";
     import PageAlert from "@/components/PageAlert.vue";
-    import { provide, Reactive, ref } from "vue";
+    import { provide, ref } from "vue";
     import { Form } from "../Form";
     import { getDependantFieldsResetData } from "../util";
     import FieldGrid from "@/components/ui/FieldGrid.vue";
@@ -21,6 +21,7 @@
     import { FieldMeta } from "@/form/types";
     import StickyTop from "@/components/StickyTop.vue";
     import StickyBottom from "@/components/StickyBottom.vue";
+    import { Menu } from 'lucide-vue-next';
 
     const props = defineProps<{
         form: Form
@@ -97,7 +98,9 @@
             </div>
         </template>
         <template v-if="form.locales?.length || form.layout.tabbed && form.layout.tabs.length > 1">
-            <StickyTop class="@container group flex items-end container mb-4 pointer-events-none overflow-x-clip lg:sticky top-3 data-[stuck]:z-20">
+            <StickyTop class="@container relative group flex items-end container mb-4 pointer-events-none overflow-x-clip lg:sticky lg:top-3 data-[stuck]:z-20"
+                v-slot="{ stuck, isOverflowing }"
+            >
                 <div class="flex-1">
                     <template v-if="form.locales?.length">
                         <Select :model-value="form.currentLocale ?? undefined" @update:model-value="onLocaleChange">
@@ -113,22 +116,10 @@
                     </template>
                 </div>
                 <template v-if="form.layout.tabbed && form.layout.tabs.length > 1">
-                    <div>
-                        <div class="@2xl:hidden group-data-[stuck]:!block">
-                            <Select v-model="selectedTabSlug">
-                                <SelectTrigger class="h-8 text-left pointer-events-auto">
-                                    <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <template v-for="tab in form.layout.tabs">
-                                        <SelectItem :value="slugify(tab.title)">
-                                            {{ tab.title }}
-                                        </SelectItem>
-                                    </template>
-                                </SelectContent>
-                            </Select>
-                        </div>
-                        <div class="hidden h-8 @2xl:flex flex-col justify-end group-data-[stuck]:!hidden">
+                    <div class="">
+                        <div class="hidden lg:h-8 col-start-1 row-start-1 @2xl:flex flex-col justify-end group-data-[stuck]:!hidden group-data-[overflowing]:opacity-0"
+                            :inert="isOverflowing"
+                        >
                             <TabsList class="pointer-events-auto">
                                 <template v-for="tab in form.layout.tabs">
                                     <TabsTrigger :value="slugify(tab.title)">
@@ -141,6 +132,25 @@
                                     </TabsTrigger>
                                 </template>
                             </TabsList>
+                        </div>
+                        <div class="@2xl:hidden group-data-[stuck]:!block group-data-[overflowing]:!block"
+                            :class="{ '@2xl:absolute @2xl:bottom-0 @2xl:left-1/2 @2xl:-translate-x-1/2': isOverflowing && !stuck }"
+                        >
+                            <div class="flex items-center">
+                                <Select v-model="selectedTabSlug">
+                                    <SelectTrigger class="h-8 w-auto text-left pointer-events-auto">
+                                        <Menu class="size-4 shrink-0 mr-2" />
+                                        <SelectValue class="font-medium" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <template v-for="(tab, i) in form.layout.tabs">
+                                            <SelectItem :value="slugify(tab.title)">
+                                                {{ tab.title }}
+                                            </SelectItem>
+                                        </template>
+                                    </SelectContent>
+                                </Select>
+                            </div>
                         </div>
                     </div>
                 </template>
@@ -168,9 +178,9 @@
 
                 <template v-for="tab in form.layout.tabs">
                     <TabsContent class="mt-0" :tabindex="form.layout.tabs.length > 1 ? 0 : -1" :value="slugify(tab.title)">
-                        <div class="grid gap-6 @3xl/root-card:grid-cols-12">
+                        <div class="grid gap-6 grid-cols-1 @3xl/root-card:grid-cols-12">
                             <template v-for="column in tab.columns">
-                                <div class="col-[span_var(--size)]" :style="{ '--size': `${column.size}` }">
+                                <div class="@3xl/root-card:col-[span_var(--size)]" :style="{ '--size': `${column.size}` }">
                                     <FieldGrid class="gap-6">
                                         <template v-for="row in column.fields">
                                             <FieldGridRow v-show="form.fieldRowShouldBeVisible(row)">
@@ -238,7 +248,7 @@
             </CardContent>
             <template v-if="$slots.footer">
                 <StickyBottom class="group sticky z-30 -bottom-2 lg:bottom-0 pointer-events-none" sentinel-class="bottom-2 lg:bottom-0">
-                    <CardFooter class="justify-end px-0">
+                    <CardFooter class="justify-end px-0 pt-4">
                         <div class="relative pointer-events-auto">
                             <div class="absolute -inset-4 -bottom-6 lg:-inset-6 transition-[border-color] border-transparent border-l border-t rounded-tl-lg rounded-br-lg -z-10 group-data-[stuck]:bg-card group-data-[stuck]:border-border"
                             ></div>

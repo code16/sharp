@@ -66,7 +66,7 @@
 
 <template>
     <form @submit.prevent="onSubmit" ref="el">
-        <div class="relative z-[1]" :class="[inline ? 'h-8 w-[150px] 2xl:w-[200px]' : '']">
+        <div class="relative z-[1]" :class="[inline ? 'h-8 w-[150px] @5xl/root-card:w-[200px]' : '']">
             <div class="top-0 left-0 group flex gap-3" :class="cn(
                 inline ? 'absolute h-8' : 'flex-col',
                 inline && expanded ? '-mr-[100px]' : ''
@@ -76,7 +76,7 @@
                         :placeholder="__('sharp::action_bar.list.search.placeholder')"
                         v-model="search"
                         :class="cn('w-full pl-8 h-9', {
-                            'h-8 w-[150px] 2xl:w-[200px]': inline,
+                            'h-8 w-[150px] @5xl/root-card:w-[200px]': inline,
                             'sm:!w-[300px]': inline && expanded,
                             'pr-8': props.entityList.query?.search,
                         })"

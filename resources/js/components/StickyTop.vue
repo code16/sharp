@@ -18,6 +18,10 @@
             && bottom >= 0
             && top <= parseFloat(style.top);
     });
+    const isOverflowing = ref(false);
+    watch(selfRect, () => {
+        isOverflowing.value = el.value.scrollWidth > el.value.clientWidth;
+    });
     watch(stuck, () => {
         emit('update:stuck', stuck.value);
     })
@@ -25,12 +29,14 @@
 
 <template>
     <div :style="{
-        '--top-bar-height': `${topbarSafeRect.height}px`,
-        '--sticky-safe-left-offset': stuck ? `${Math.max(topbarSafeRect.left - selfRect.left, 0)}px` : '0px',
-        '--sticky-safe-right-offset': stuck ? `${Math.max(selfRect.right - topbarSafeRect.right - parseInt(window.getComputedStyle(el).paddingRight), 0)}px` : '0px',
-    }"
+            '--top-bar-height': `${topbarSafeRect.height}px`,
+            '--sticky-safe-left-offset': stuck ? `${Math.max(topbarSafeRect.left - selfRect.left, 0)}px` : '0px',
+            '--sticky-safe-right-offset': stuck ? `${Math.max(selfRect.right - topbarSafeRect.right - parseInt(window.getComputedStyle(el).paddingRight), 0)}px` : '0px',
+        }"
         :data-stuck="stuck ? true : null"
-        ref="el">
-        <slot v-bind="{ stuck, largerThanTopbar: selfRect.height > topbarSafeRect.height }" />
+        :data-overflowing="isOverflowing ? true : null"
+        ref="el"
+    >
+        <slot v-bind="{ stuck, largerThanTopbar: selfRect.height > topbarSafeRect.height, isOverflowing }" />
     </div>
 </template>

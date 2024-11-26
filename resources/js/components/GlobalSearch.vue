@@ -57,7 +57,7 @@
 </script>
 
 <template>
-    <SidebarGroup>
+    <SidebarGroup v-bind="$attrs">
         <SidebarGroupContent class="relative">
             <Label for="global-search" class="sr-only">{{ config('sharp.search.placeholder') }}</Label>
             <SidebarInput

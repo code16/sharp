@@ -31,7 +31,7 @@
                 <template v-for="command in group" :key="command.key">
                     <Tooltip :delay-duration="0">
                         <component :is="requiresSelection(command) ? TooltipTrigger : 'div'"
-                            @touchend="showAlert(__('sharp::entity_list.commands.needs_selection_message'), { highlightElement: $event.target })"
+                            @touchend="requiresSelection(command) && showAlert(__('sharp::entity_list.commands.needs_selection_message'), { highlightElement: $event.target })"
                             as="div"
                         >
                             <DropdownMenuItem

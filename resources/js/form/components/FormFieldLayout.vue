@@ -9,6 +9,7 @@
     import StickyTop from "@/components/StickyTop.vue";
     import { FormFieldData } from "@/types";
     import { useId } from "@/composables/useId";
+    import { Toggle } from "@/components/ui/toggle";
 
     const props = defineProps<FormFieldProps<FormFieldData, any> & {
         class?: string,
@@ -42,7 +43,7 @@
 <template>
     <div :class="cn(
             'relative grid grid-cols-1 grid-rows-subgrid gap-2.5',
-            hasLabelRow ? 'row-span-2' : props.row?.length > 1 ? 'row-span-1 @xs/field-container:row-span-2' : '',
+            hasLabelRow ? 'row-span-2' : props.row?.length > 1 ? 'row-span-1 @lg/field-container:row-span-2' : '',
             props.class,
         )"
         :role="fieldGroup ? 'group' : null"
@@ -57,7 +58,7 @@
                 class="group"
                 :class="{
                     'top-[calc(var(--top-bar-height)+.625rem)] z-10 lg:sticky': stickyLabel,
-                    'hidden @xs/field-container:block': !hasLabelRow,
+                    'hidden @lg/field-container:block': !hasLabelRow,
                 }"
                 v-slot="{ stuck = false } = {}"
             >
@@ -65,10 +66,10 @@
                     <div class="absolute bg-background transition-colors hidden border-b -inset-x-6 -top-3 -bottom-2.5 lg:group-data-[stuck]:block"
                         :class="stuck ? 'border-border' : 'border-transparent'"></div>
                 </template>
-                <div class="relative flex gap-2" :class="{
+                <div class="relative flex flex-row-reverse flex-wrap gap-4" :class="{
                     'pr-4': !root, // in list items we add padding to prevent dropdown overlapping
                 }">
-                    <div class="flex mr-auto">
+                    <div class="order-1 flex mr-auto">
                         <template v-if="field.label">
                             <Label
                                 :id="`${id}-label`"
@@ -83,17 +84,19 @@
                         </template>
                     </div>
                     <template v-if="$slots.action">
-                        <div class="grid items-center content-center h-3.5">
+                        <div class="ml-auto grid items-center content-center h-3.5">
                             <slot name="action" />
                         </div>
                     </template>
                     <template v-if="'localized' in field && field.localized">
-                        <ToggleGroup class="h-3.5 gap-0 md:gap-1" :model-value="locale" @update:model-value="$emit('locale-change', $event as string)" type="single">
+                        <div class="ml-auto flex items-center h-3.5 gap-0 md:gap-1">
                             <template v-for="btnLocale in form.locales">
-                                <ToggleGroupItem class="uppercase text-xs h-6"
+                                <Toggle class="uppercase text-xs h-6"
                                     :class="form.fieldIsEmpty(props.field, props.value, btnLocale) ? 'text-foreground/50' : ''"
+                                    :model-value="locale === btnLocale"
                                     size="sm"
                                     :value="btnLocale"
+                                    @update:model-value="$emit('locale-change', btnLocale)"
                                 >
                                     {{ btnLocale }}
                                     <template v-if="form.fieldLocalesContainingError(fieldErrorKey).includes(btnLocale)">
@@ -101,9 +104,9 @@
                                             <circle cx="4" cy="4" r="3" />
                                         </svg>
                                     </template>
-                                </ToggleGroupItem>
+                                </Toggle>
                             </template>
-                        </ToggleGroup>
+                        </div>
                     </template>
                 </div>
             </component>

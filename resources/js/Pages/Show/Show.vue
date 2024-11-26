@@ -293,9 +293,9 @@
                                     <CardHeader class="pb-0" />
                                 </template>
                                 <CardContent v-show="!collapsed">
-                                    <div class="flex flex-wrap gap-y-4 -mx-4">
+                                    <div class="grid grid-cols-1 gap-6 @3xl/root-card:grid-cols-12">
                                         <template v-for="(column, columnIndex) in section.columns">
-                                            <div class="min-w-0 w-full @3xl/root-card:w-[calc(var(--size)/12*100%)] px-4" :style="{ '--size': `${column.size}` }">
+                                            <div class="@3xl/root-card:col-[span_var(--size)]" :style="{ '--size': `${column.size}` }">
                                                 <FieldGrid class="gap-x-4 gap-y-6">
                                                     <template v-for="row in column.fields">
                                                         <FieldGridRow v-show="show.fieldRowShouldBeVisible(row, locale)">

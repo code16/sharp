@@ -418,7 +418,7 @@
 
             <RootCard :class="reordering ? 'relative z-[11]' : ''">
                 <CardHeader>
-                    <div class="flex md:grid grid-cols-1 flex-wrap gap-y-4 gap-x-2">
+                    <div class="flex @2xl/root-card:grid grid-cols-1 flex-wrap gap-y-4 gap-x-2">
                         <div class="flex items-baseline">
                             <slot name="card-header" />
                             <template v-if="entityList">
@@ -433,9 +433,9 @@
                             </template>
                         </div>
                         <template v-if="entityList && (showSearchField && entityList.config.searchable || entityList.visibleFilters?.length)">
-                            <div class="flex flex-wrap gap-2" :class="!collapsed && entityList.data?.length ? 'md:-mb-2' : ''">
+                            <div class="flex flex-wrap items-center gap-2 -my-1 @2xl/root-card:my-0" :class="!collapsed && entityList.data?.length ? '@2xl/root-card:-mb-2' : ''">
                                 <template v-if="showSearchField && entityList.config.searchable">
-                                    <div class="self-center pointer-events-auto hidden sm:block" v-show="!reordering && !selecting && !collapsed">
+                                    <div class="self-center pointer-events-auto hidden @2xl/root-card:block" v-show="!reordering && !selecting && !collapsed">
                                         <EntityListSearch
                                             inline
                                             v-model:expanded="searchExpanded"
@@ -446,7 +446,7 @@
                                 </template>
                                 <template v-if="entityList.visibleFilters?.length">
                                     <div class="contents" v-show="!reordering && !selecting && !collapsed">
-                                        <div class="flex items-center h-6 sm:h-auto lg:hidden">
+                                        <div class="flex items-center @2xl/root-card:hidden">
                                             <Dialog>
                                                 <DialogTrigger as-child>
                                                     <Button class="h-8 gap-1" variant="outline" size="sm">
@@ -498,7 +498,7 @@
                                                 <Badge class="ml-2">{{ Object.values(filters.filterValues?.valuated ?? {}).filter(Boolean).length }}</Badge>
                                             </template>
                                         </div>
-                                        <div class="hidden lg:contents"
+                                        <div class="hidden @2xl/root-card:contents"
                                             :class="{
                                                 '*:opacity-0 *:pointer-events-none': searchExpanded,
                                             }"
