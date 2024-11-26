@@ -4,6 +4,8 @@
 
     import { CommandData } from "@/types";
     import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+    import { useBreakpoints } from "@/composables/useBreakpoints";
+    import { showAlert } from "@/utils/dialogs";
 
     const props = defineProps<{
         commands: CommandData[][],
@@ -15,6 +17,8 @@
     function requiresSelection(command) {
         return !props.selecting && command.instance_selection === 'required';
     }
+
+    const breakpoints = useBreakpoints();
 </script>
 
 <template>
@@ -26,7 +30,10 @@
             <TooltipProvider>
                 <template v-for="command in group" :key="command.key">
                     <Tooltip :delay-duration="0">
-                        <component :is="requiresSelection(command) ? TooltipTrigger : 'div'" as="div">
+                        <component :is="requiresSelection(command) ? TooltipTrigger : 'div'"
+                            @touchend="showAlert(__('sharp::entity_list.commands.needs_selection_message'), { highlightElement: $event.target })"
+                            as="div"
+                        >
                             <DropdownMenuItem
                                 @click="$emit('select', command)"
                                 :disabled="requiresSelection(command)"
@@ -41,7 +48,7 @@
                                 </div>
                             </DropdownMenuItem>
                         </component>
-                        <TooltipContent class="max-w-sm" side="left">
+                        <TooltipContent class="max-w-sm" :side="breakpoints.md ? 'left' : 'bottom'">
                             {{ __('sharp::entity_list.commands.needs_selection_message') }}
                         </TooltipContent>
                     </Tooltip>

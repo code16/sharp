@@ -52,7 +52,6 @@
     import EntityListSearch from "@/entity-list/components/EntityListSearch.vue";
     import StickyTop from "@/components/StickyTop.vue";
     import { cn } from "@/utils/cn";
-    import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
     import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
     import { UseElementBounding, UseWindowSize } from '@vueuse/components';
     import {
@@ -65,6 +64,7 @@
     } from "@/components/ui/dialog";
     import RootCard from "@/components/ui/RootCard.vue";
     import DropdownChevronDown from "@/components/ui/DropdownChevronDown.vue";
+    import { useBreakpoints } from "@/composables/useBreakpoints";
 
     const props = withDefaults(defineProps<{
         entityKey: string,
@@ -89,6 +89,10 @@
     const emit = defineEmits(['update:query', 'filter-change', 'reset', 'reordering', 'needs-topbar']);
     const selectedItems: Ref<{ [key: InstanceId]: boolean } | null> = ref(null);
     const selecting = computed(() => !!selectedItems.value);
+
+    function onSelecting() {
+        selectedItems.value = Object.fromEntries(props.entityList.data.map(item => [item.id, false]));
+    }
 
     function onFilterChange(filter: FilterData, value: FilterData['value']) {
         emit('filter-change', filter, value);
@@ -221,6 +225,10 @@
         emit('reordering', reordering.value);
     });
 
+    function onReordering() {
+        reorderedItems.value = [...props.entityList.data]
+    }
+
     async function onReorderSubmit() {
         const { entityKey, commands } = props;
 
@@ -244,9 +252,8 @@
         }
     });
 
-    const breakpoints = useBreakpoints(breakpointsTailwind);
-    const isXS = breakpoints.smaller('md');
-    const visibleFields = computed(() => props.entityList.fields.filter(field => isXS.value ? !field.hideOnXS : true));
+    const breakpoints = useBreakpoints();
+    const visibleFields = computed(() => props.entityList.fields.filter(field => breakpoints.md ? true : !field.hideOnXS));
 </script>
 
 <template>
@@ -261,10 +268,10 @@
             <template v-if="entityList">
                 <template v-if="
                     showReorderButton && entityList.canReorder
-                    || entityList.canSelect
-                    || entityList.dropdownEntityCommands(selecting)?.flat().length
-                    || entityList.primaryCommand
-                    || showCreateButton && entityList.authorizations.create
+                        || entityList.canSelect
+                        || entityList.dropdownEntityCommands(selecting)?.flat().length
+                        || entityList.primaryCommand
+                        || showCreateButton && entityList.authorizations.create
                 ">
                     <StickyTop
                         :class="cn(
@@ -279,7 +286,7 @@
                             })"
                         v-model:stuck="stuck"
                     >
-                        <div class="ml-auto self-start pointer-events-auto flex flex-wrap gap-2 lg:flex-nowrap">
+                        <div class="ml-auto self-start flex flex-wrap justify-end pointer-events-auto gap-2">
                             <template v-if="showReorderButton && entityList.canReorder && !selecting">
                                 <template v-if="reordering">
                                     <Button class="h-8" size="sm" variant="outline" @click="reorderedItems = null">
@@ -290,11 +297,15 @@
                                     </Button>
                                 </template>
                                 <template v-else>
-                                    <div class="col-auto">
-                                        <Button class="h-8" size="sm" variant="outline" @click="reorderedItems = [...entityList.data]">
-                                            {{ __('sharp::action_bar.list.reorder_button') }}
-                                        </Button>
-                                    </div>
+                                    <Button
+                                        class="h-8"
+                                        :class="entityList.dropdownEntityCommands(selecting)?.flat().length ? 'max-sm:hidden' : ''"
+                                        size="sm"
+                                        variant="outline"
+                                        @click="onReordering"
+                                    >
+                                        {{ __('sharp::action_bar.list.reorder_button') }}
+                                    </Button>
                                 </template>
                             </template>
 
@@ -305,7 +316,13 @@
                                     </Button>
                                 </template>
                                 <template v-else>
-                                    <Button class="h-8" size="sm" variant="outline" @click="selectedItems = Object.fromEntries(entityList.data.map(item => [item.id, false]))">
+                                    <Button
+                                        class="h-8"
+                                        :class="entityList.dropdownEntityCommands(selecting)?.flat().length ? 'max-sm:hidden' : ''"
+                                        size="sm"
+                                        variant="outline"
+                                        @click="onSelecting"
+                                    >
                                         {{ __('sharp::action_bar.list.select_button') }}
                                     </Button>
                                 </template>
@@ -322,7 +339,19 @@
                                             <DropdownChevronDown />
                                         </Button>
                                     </DropdownMenuTrigger>
-                                    <DropdownMenuContent :collision-padding="20">
+                                    <DropdownMenuContent>
+                                        <template v-if="showReorderButton && entityList.canReorder && !selecting">
+                                            <DropdownMenuItem class="sm:hidden" @click="onReordering">
+                                                {{ __('sharp::action_bar.list.reorder_button') }}
+                                            </DropdownMenuItem>
+                                            <DropdownMenuSeparator class="sm:hidden" />
+                                        </template>
+                                        <template v-if="entityList.canSelect && !selecting">
+                                            <DropdownMenuItem class="sm:hidden" @click="onSelecting">
+                                                {{ __('sharp::action_bar.list.select_button') }}
+                                            </DropdownMenuItem>
+                                            <DropdownMenuSeparator class="sm:hidden" />
+                                        </template>
                                         <CommandDropdownItems
                                             :commands="entityList.dropdownEntityCommands(selecting)"
                                             :selecting="selecting"
@@ -389,7 +418,7 @@
 
             <RootCard :class="reordering ? 'relative z-[11]' : ''">
                 <CardHeader>
-                    <div class="flex sm:flex-wrap gap-y-6 gap-x-2">
+                    <div class="flex md:grid grid-cols-1 flex-wrap gap-y-4 gap-x-2">
                         <div class="flex items-baseline">
                             <slot name="card-header" />
                             <template v-if="entityList">
@@ -403,98 +432,98 @@
                                 </CardDescription>
                             </template>
                         </div>
-                    </div>
-                    <template v-if="entityList && (showSearchField && entityList.config.searchable || entityList.visibleFilters?.length)">
-                        <div class="mt-4 flex sm:flex-wrap gap-2" :class="!collapsed && entityList.data?.length ? '-mb-2' : ''">
-                            <template v-if="showSearchField && entityList.config.searchable">
-                                <div class="self-center pointer-events-auto hidden sm:block" v-show="!reordering && !selecting && !collapsed">
-                                    <EntityListSearch
-                                        inline
-                                        v-model:expanded="searchExpanded"
-                                        :entity-list="entityList"
-                                        @submit="onSearchSubmit"
-                                    />
-                                </div>
-                            </template>
-                            <template v-if="entityList.visibleFilters?.length">
-                                <div class="contents" v-show="!reordering && !selecting && !collapsed">
-                                    <div class="flex items-center lg:hidden">
-                                        <Dialog>
-                                            <DialogTrigger as-child>
-                                                <Button class="h-8 gap-1" variant="outline" size="sm">
-                                                    <Filter class="h-3.5 w-3.5" />
-                                                    <span>
-                                                        {{ __('sharp::filters.popover_button') }}
-                                                    </span>
+                        <template v-if="entityList && (showSearchField && entityList.config.searchable || entityList.visibleFilters?.length)">
+                            <div class="flex flex-wrap gap-2" :class="!collapsed && entityList.data?.length ? 'md:-mb-2' : ''">
+                                <template v-if="showSearchField && entityList.config.searchable">
+                                    <div class="self-center pointer-events-auto hidden sm:block" v-show="!reordering && !selecting && !collapsed">
+                                        <EntityListSearch
+                                            inline
+                                            v-model:expanded="searchExpanded"
+                                            :entity-list="entityList"
+                                            @submit="onSearchSubmit"
+                                        />
+                                    </div>
+                                </template>
+                                <template v-if="entityList.visibleFilters?.length">
+                                    <div class="contents" v-show="!reordering && !selecting && !collapsed">
+                                        <div class="flex items-center h-6 sm:h-auto lg:hidden">
+                                            <Dialog>
+                                                <DialogTrigger as-child>
+                                                    <Button class="h-8 gap-1" variant="outline" size="sm">
+                                                        <Filter class="h-3.5 w-3.5" />
+                                                        <span>
+                                                            {{ __('sharp::filters.popover_button') }}
+                                                        </span>
+                                                    </Button>
+                                                </DialogTrigger>
+                                                <DialogScrollContent @open-auto-focus.prevent>
+                                                    <DialogHeader>
+                                                        <DialogTitle>
+                                                            {{ __('sharp::filters.popover_button') }} : {{ title }}
+                                                        </DialogTitle>
+                                                    </DialogHeader>
+                                                    <div class="flex flex-col flex-wrap gap-4">
+                                                        <template v-if="showSearchField && entityList.config.searchable">
+                                                            <EntityListSearch
+                                                                v-model:expanded="searchExpanded"
+                                                                :entity-list="entityList"
+                                                                @submit="onSearchSubmit"
+                                                            />
+                                                        </template>
+                                                        <template v-for="filter in entityList.visibleFilters" :key="filter.key">
+                                                            <SharpFilter
+                                                                :filter="filter"
+                                                                :value="filters.currentValues[filter.key]"
+                                                                :disabled="reordering"
+                                                                :valuated="filters.isValuated([filter])"
+                                                                @input="onFilterChange(filter, $event)"
+                                                            />
+                                                        </template>
+                                                    </div>
+                                                    <DialogFooter class="flex-row gap-2 mt-2">
+                                                        <DialogClose as-child>
+                                                            <Button class="flex-1" variant="secondary" :disabled="!filters.isValuated(entityList.visibleFilters) && !entityList.query?.search" @click="onResetAll">
+                                                                {{ __('sharp::filters.reset_all') }}
+                                                            </Button>
+                                                        </DialogClose>
+                                                        <DialogClose as-child>
+                                                            <Button class="flex-1">
+                                                                {{ __('sharp::action_bar.form.submit_button.update')}}
+                                                            </Button>
+                                                        </DialogClose>
+                                                    </DialogFooter>
+                                                </DialogScrollContent>
+                                            </Dialog>
+                                            <template v-if="filters.isValuated(filters.rootFilters)">
+                                                <Badge class="ml-2">{{ Object.values(filters.filterValues?.valuated ?? {}).filter(Boolean).length }}</Badge>
+                                            </template>
+                                        </div>
+                                        <div class="hidden lg:contents"
+                                            :class="{
+                                                '*:opacity-0 *:pointer-events-none': searchExpanded,
+                                            }"
+                                        >
+                                            <template v-for="filter in entityList.visibleFilters" :key="filter.key">
+                                                <SharpFilter
+                                                    :filter="filter"
+                                                    :value="filters.currentValues[filter.key]"
+                                                    :disabled="reordering"
+                                                    :valuated="filters.isValuated([filter])"
+                                                    inline
+                                                    @input="onFilterChange(filter, $event)"
+                                                />
+                                            </template>
+                                            <template v-if="filters.isValuated(entityList.visibleFilters) || entityList.query?.search">
+                                                <Button class="h-8 underline underline-offset-4 -ml-2" variant="ghost" size="sm" @click="onResetAll">
+                                                    {{ __('sharp::filters.reset_all') }}
                                                 </Button>
-                                            </DialogTrigger>
-                                            <DialogScrollContent @open-auto-focus.prevent>
-                                                <DialogHeader>
-                                                    <DialogTitle>
-                                                        {{ __('sharp::filters.popover_button') }} : {{ title }}
-                                                    </DialogTitle>
-                                                </DialogHeader>
-                                                <div class="flex flex-col flex-wrap gap-4">
-                                                    <template v-if="showSearchField && entityList.config.searchable">
-                                                        <EntityListSearch
-                                                            v-model:expanded="searchExpanded"
-                                                            :entity-list="entityList"
-                                                            @submit="onSearchSubmit"
-                                                        />
-                                                    </template>
-                                                    <template v-for="filter in entityList.visibleFilters" :key="filter.key">
-                                                        <SharpFilter
-                                                            :filter="filter"
-                                                            :value="filters.currentValues[filter.key]"
-                                                            :disabled="reordering"
-                                                            :valuated="filters.isValuated([filter])"
-                                                            @input="onFilterChange(filter, $event)"
-                                                        />
-                                                    </template>
-                                                </div>
-                                                <DialogFooter class="flex-row gap-2 mt-2">
-                                                    <DialogClose as-child>
-                                                        <Button class="flex-1" variant="secondary" :disabled="!filters.isValuated(entityList.visibleFilters) && !entityList.query?.search" @click="onResetAll">
-                                                            {{ __('sharp::filters.reset_all') }}
-                                                        </Button>
-                                                    </DialogClose>
-                                                    <DialogClose as-child>
-                                                        <Button class="flex-1">
-                                                            {{ __('sharp::action_bar.form.submit_button.update')}}
-                                                        </Button>
-                                                    </DialogClose>
-                                                </DialogFooter>
-                                            </DialogScrollContent>
-                                        </Dialog>
-                                        <template v-if="filters.isValuated(filters.rootFilters)">
-                                            <Badge class="ml-2">{{ Object.values(filters.filterValues?.valuated ?? {}).filter(Boolean).length }}</Badge>
-                                        </template>
+                                            </template>
+                                        </div>
                                     </div>
-                                    <div class="hidden lg:contents"
-                                        :class="{
-                                            '*:opacity-0 *:pointer-events-none': searchExpanded,
-                                        }"
-                                    >
-                                        <template v-for="filter in entityList.visibleFilters" :key="filter.key">
-                                            <SharpFilter
-                                                :filter="filter"
-                                                :value="filters.currentValues[filter.key]"
-                                                :disabled="reordering"
-                                                :valuated="filters.isValuated([filter])"
-                                                inline
-                                                @input="onFilterChange(filter, $event)"
-                                            />
-                                        </template>
-                                        <template v-if="filters.isValuated(entityList.visibleFilters) || entityList.query?.search">
-                                            <Button class="h-8 underline underline-offset-4 -ml-2" variant="ghost" size="sm" @click="onResetAll">
-                                                {{ __('sharp::filters.reset_all') }}
-                                            </Button>
-                                        </template>
-                                    </div>
-                                </div>
-                            </template>
-                        </div>
-                    </template>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
                 </CardHeader>
                 <template v-if="entityList">
                     <CardContent :class="entityList.count > 0 ? 'pb-2 !px-0' : ''" v-show="!collapsed">
@@ -602,9 +631,6 @@
                                                     </template>
                                                     <template v-else>
                                                         <TableCell class="max-w-[70cqw]">
-                                                            <template v-if="fieldIndex === 0 && entityList.instanceUrl(item) && !selecting && !reordering">
-                                                                <Link class="absolute inset-0" data-row-action :href="entityList.instanceUrl(item)"></Link>
-                                                            </template>
                                                             <template v-if="field.html && typeof item[field.key] === 'string'">
                                                                 <Content class="break-words [&_a]:relative [&_a]:z-10"
                                                                     :class="{ '[&_a]:pointer-events-none': selecting || reordering }"
@@ -613,6 +639,9 @@
                                                             </template>
                                                             <template v-else>
                                                                 {{ item[field.key] }}
+                                                            </template>
+                                                            <template v-if="fieldIndex === 0 && entityList.instanceUrl(item) && !selecting && !reordering">
+                                                                <Link class="absolute inset-0" data-row-action :href="entityList.instanceUrl(item)"></Link>
                                                             </template>
                                                         </TableCell>
                                                     </template>

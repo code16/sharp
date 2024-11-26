@@ -88,9 +88,13 @@
                         </div>
                     </template>
                     <template v-if="'localized' in field && field.localized">
-                        <ToggleGroup class="h-3.5 gap-0 md:gap-1" :model-value="locale" @update:model-value="$emit('locale-change', $event)" type="single">
+                        <ToggleGroup class="h-3.5 gap-0 md:gap-1" :model-value="locale" @update:model-value="$emit('locale-change', $event as string)" type="single">
                             <template v-for="btnLocale in form.locales">
-                                <ToggleGroupItem class="uppercase text-xs h-6" size="sm" :value="btnLocale">
+                                <ToggleGroupItem class="uppercase text-xs h-6"
+                                    :class="form.fieldIsEmpty(props.field, props.value, btnLocale) ? 'text-foreground/50' : ''"
+                                    size="sm"
+                                    :value="btnLocale"
+                                >
                                     {{ btnLocale }}
                                     <template v-if="form.fieldLocalesContainingError(fieldErrorKey).includes(btnLocale)">
                                         <svg class="ml-1 h-2 w-2 fill-destructive" viewBox="0 0 8 8" aria-hidden="true">

@@ -313,7 +313,7 @@
                                     {{ dialog.title }}
                                 </AlertDialogTitle>
                             </template>
-                            <AlertDialogDescription class="break-all" :class="!dialog.title ? 'text-base font-medium text-foreground' : ''">
+                            <AlertDialogDescription class="break-words" :class="!dialog.title ? 'text-base font-medium text-foreground' : ''">
                                 {{ dialog.text }}
                             </AlertDialogDescription>
                         </AlertDialogHeader>
