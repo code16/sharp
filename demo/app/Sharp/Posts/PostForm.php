@@ -171,7 +171,7 @@ class PostForm extends SharpForm
                             ->withFields('published_at', 'categories')
                             ->withField('cover')
                             ->withListField('attachments', function (FormLayoutColumn $item) {
-                                $item->withFields('title|8', 'is_link|4')
+                                $item->withFields(title: 8, is_link: 4)
                                     ->withField('link_url')
                                     ->withField('document');
                             });

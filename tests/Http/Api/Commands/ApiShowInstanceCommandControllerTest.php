@@ -146,7 +146,7 @@ it('gets form and initialize form data in an instance command of a show', functi
                             [
                                 'fields' => [
                                     [
-                                        ['key' => 'name', 'size' => 12, 'sizeXS' => 12],
+                                        ['key' => 'name', 'size' => 12],
                                     ],
                                 ],
                                 'size' => 12,
@@ -241,7 +241,7 @@ it('gets form and initialize form data in an instance command of a single show',
                             [
                                 'fields' => [
                                     [
-                                        ['key' => 'name', 'size' => 12, 'sizeXS' => 12],
+                                        ['key' => 'name', 'size' => 12],
                                     ],
                                 ],
                                 'size' => 12,

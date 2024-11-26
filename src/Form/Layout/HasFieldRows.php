@@ -4,6 +4,7 @@ namespace Code16\Sharp\Form\Layout;
 
 use Closure;
 use Code16\Sharp\Utils\Layout\LayoutField;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Traits\Conditionable;
 
 trait HasFieldRows
@@ -25,7 +26,7 @@ trait HasFieldRows
     public function withField(string $fieldKey): self
     {
         $this->addRowLayout([
-            $this->newLayoutField($fieldKey),
+            $this->newLayoutField($this->normalizedFieldsRow([$fieldKey])->first()),
         ]);
 
         return $this;
@@ -40,11 +41,11 @@ trait HasFieldRows
         return $this;
     }
 
-    public function withFields(string ...$fieldKeys): self
+    public function withFields(string|int ...$fieldKeys): self
     {
         $this
             ->addRowLayout(
-                collect($fieldKeys)
+                $this->normalizedFieldsRow($fieldKeys)
                     ->map(fn ($key) => $this->newLayoutField($key))
                     ->all(),
             );
@@ -65,7 +66,7 @@ trait HasFieldRows
     {
         $rows = collect($this->rows);
         $rows->splice($index, 0, [
-            collect($fieldKeys)
+            $this->normalizedFieldsRow($fieldKeys)
                 ->map(fn ($key) => $this->newLayoutField($key))
                 ->all(),
         ]);
@@ -97,8 +98,32 @@ trait HasFieldRows
             ->firstWhere(fn ($row) => count($row) > 0) !== null;
     }
 
-    protected function newLayoutField(string $fieldKey, ?\Closure $subLayoutCallback = null): LayoutField
+    protected function newLayoutField(string|array $fieldKey, ?\Closure $subLayoutCallback = null): LayoutField
     {
         return new FormLayoutField($fieldKey, $subLayoutCallback);
+    }
+
+    private function normalizedFieldsRow(array $fieldKeys): Collection
+    {
+        return collect($fieldKeys)
+            ->map(function ($value, $key) use ($fieldKeys) {
+                if (! is_string($key)) {
+                    // ['name'] or ['name|6'] cases
+                    return strpos($value, '|')
+                        ? collect(explode('|', $value))
+                            ->map(fn ($v, $k) => $k == 1 ? (int) $v : $v)
+                            ->all()
+                        : [$value, match (count($fieldKeys)) {
+                            2 => 6,
+                            3 => 4,
+                            4 => 3,
+                            6 => 2,
+                            default => 12,
+                        }];
+                }
+
+                return [$key, $value];
+            })
+            ->values();
     }
 }

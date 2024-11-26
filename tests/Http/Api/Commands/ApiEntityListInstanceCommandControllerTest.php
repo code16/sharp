@@ -400,7 +400,7 @@ it('returns the form of the instance command', function () {
                             [
                                 'fields' => [
                                     [
-                                        ['key' => 'name', 'size' => 12, 'sizeXS' => 12],
+                                        ['key' => 'name', 'size' => 12],
                                     ],
                                 ],
                                 'size' => 12,

@@ -49,7 +49,6 @@ it('handles fields in columns', function () {
         ->and($show->showLayout()['sections'][0]['columns'][0]['fields'][0][0])->toEqual([
             'key' => 'name',
             'size' => 12,
-            'sizeXS' => 12,
         ]);
 });
 
@@ -72,13 +71,11 @@ it('handles fields with layout', function () {
         ->and($show->showLayout()['sections'][0]['columns'][0]['fields'][0][0])->toEqual([
             'key' => 'list',
             'size' => 12,
-            'sizeXS' => 12,
             'item' => [
                 [
                     [
                         'key' => 'item',
                         'size' => 12,
-                        'sizeXS' => 12,
                     ],
                 ],
             ],

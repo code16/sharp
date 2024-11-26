@@ -54,7 +54,6 @@ it('returns form layout', function () {
                         [
                             'key' => 'name',
                             'size' => 12,
-                            'sizeXS' => 12,
                         ],
                     ]],
                 ], [
@@ -63,7 +62,6 @@ it('returns form layout', function () {
                         [
                             'key' => 'age',
                             'size' => 12,
-                            'sizeXS' => 12,
                         ],
                     ]],
                 ]],

@@ -23,5 +23,3 @@ function find($id): array
         ->transform([...]);
 }
 ```
-
-See [related documentation of this transformer here](../how-to-transform-data.md#SharpUploadModelThumbnailUrlTransformer).
