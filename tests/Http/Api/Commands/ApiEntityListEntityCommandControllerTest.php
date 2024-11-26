@@ -518,7 +518,7 @@ it('returns the form fields of the entity command and build a basic layout if mi
                             [
                                 'fields' => [
                                     [
-                                        ['key' => 'name', 'size' => 12, 'sizeXS' => 12],
+                                        ['key' => 'name', 'size' => 12],
                                     ],
                                 ],
                                 'size' => 12,

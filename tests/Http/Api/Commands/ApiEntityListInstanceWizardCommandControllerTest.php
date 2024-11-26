@@ -57,7 +57,7 @@ it('displays first step form on the first call of a wizard instance command', fu
                             [
                                 'fields' => [
                                     [
-                                        ['key' => 'name', 'size' => 12, 'sizeXS' => 12],
+                                        ['key' => 'name', 'size' => 12],
                                     ],
                                 ],
                                 'size' => 12,

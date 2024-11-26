@@ -39,7 +39,7 @@ it('returns fields and layout of an embed', function () {
                             [
                                 'fields' => [
                                     [
-                                        ['key' => 'name', 'size' => 12, 'sizeXS' => 12],
+                                        ['key' => 'name', 'size' => 12],
                                     ],
                                 ],
                                 'size' => 12,
