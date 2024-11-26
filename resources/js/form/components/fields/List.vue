@@ -206,7 +206,10 @@
                                         <template v-for="row in fieldLayout.item">
                                             <FieldGridRow v-show="form.fieldRowShouldBeVisible(row, field.itemFields, item)">
                                                 <template v-for="itemFieldLayout in row">
-                                                    <FieldGridColumn :layout="itemFieldLayout" v-show="form.fieldShouldBeVisible(itemFieldLayout, field.itemFields, item)">
+                                                    <FieldGridColumn
+                                                        :layout="itemFieldLayout"
+                                                        v-show="form.fieldShouldBeVisible(itemFieldLayout, field.itemFields, item)"
+                                                    >
                                                         <SharpFormField
                                                             :field="form.getField(itemFieldLayout.key, field.itemFields, item, props.field.readOnly)"
                                                             :field-layout="itemFieldLayout"

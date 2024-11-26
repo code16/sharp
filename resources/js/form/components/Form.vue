@@ -114,7 +114,7 @@
                 </div>
                 <template v-if="form.layout.tabbed && form.layout.tabs.length > 1">
                     <div>
-                        <div class="@3xl:hidden group-data-[stuck]:!block">
+                        <div class="@2xl:hidden group-data-[stuck]:!block">
                             <Select v-model="selectedTabSlug">
                                 <SelectTrigger class="h-8 text-left pointer-events-auto">
                                     <SelectValue />
@@ -128,7 +128,7 @@
                                 </SelectContent>
                             </Select>
                         </div>
-                        <div class="hidden h-8 @3xl:flex flex-col justify-end group-data-[stuck]:!hidden">
+                        <div class="hidden h-8 @2xl:flex flex-col justify-end group-data-[stuck]:!hidden">
                             <TabsList class="pointer-events-auto">
                                 <template v-for="tab in form.layout.tabs">
                                     <TabsTrigger :value="slugify(tab.title)">
@@ -168,7 +168,7 @@
 
                 <template v-for="tab in form.layout.tabs">
                     <TabsContent class="mt-0" :tabindex="form.layout.tabs.length > 1 ? 0 : -1" :value="slugify(tab.title)">
-                        <div class="grid gap-6 md:grid-cols-12">
+                        <div class="grid gap-6 @3xl/root-card:grid-cols-12">
                             <template v-for="column in tab.columns">
                                 <div class="col-[span_var(--size)]" :style="{ '--size': `${column.size}` }">
                                     <FieldGrid class="gap-6">

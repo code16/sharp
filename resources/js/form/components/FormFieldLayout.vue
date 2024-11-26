@@ -33,7 +33,6 @@
     }>();
     const hasLabelRow = computed(() =>
         props.field.label
-        || props.row?.length > 1
         || 'localized' in props.field && props.field.localized
         || !!slots.action
     );
@@ -43,7 +42,7 @@
 <template>
     <div :class="cn(
             'relative grid grid-cols-1 grid-rows-subgrid gap-2.5',
-            hasLabelRow ? 'row-span-2' : '',
+            hasLabelRow ? 'row-span-2' : props.row?.length > 1 ? 'row-span-1 @xs/field-container:row-span-2' : '',
             props.class,
         )"
         :role="fieldGroup ? 'group' : null"
@@ -52,18 +51,21 @@
         :aria-invalid="form.fieldHasError(field, fieldErrorKey)"
         ref="el"
     >
-        <template v-if="hasLabelRow">
+        <template v-if="hasLabelRow || props.row?.length > 1">
             <component
                 :is="stickyLabel ? StickyTop : 'div'"
                 class="group"
-                :class="{ 'top-[calc(var(--top-bar-height)+.625rem)] z-10 lg:sticky': stickyLabel }"
+                :class="{
+                    'top-[calc(var(--top-bar-height)+.625rem)] z-10 lg:sticky': stickyLabel,
+                    'hidden @xs/field-container:block': !hasLabelRow,
+                }"
                 v-slot="{ stuck = false } = {}"
             >
                 <template v-if="stickyLabel">
                     <div class="absolute bg-background transition-colors hidden border-b -inset-x-6 -top-3 -bottom-2.5 lg:group-data-[stuck]:block"
                         :class="stuck ? 'border-border' : 'border-transparent'"></div>
                 </template>
-                <div class="relative flex" :class="{
+                <div class="relative flex gap-2" :class="{
                     'pr-4': !root, // in list items we add padding to prevent dropdown overlapping
                 }">
                     <div class="flex mr-auto">
@@ -86,7 +88,7 @@
                         </div>
                     </template>
                     <template v-if="'localized' in field && field.localized">
-                        <ToggleGroup class="h-3.5" :model-value="locale" @update:model-value="$emit('locale-change', $event)" type="single">
+                        <ToggleGroup class="h-3.5 gap-0 md:gap-1" :model-value="locale" @update:model-value="$emit('locale-change', $event)" type="single">
                             <template v-for="btnLocale in form.locales">
                                 <ToggleGroupItem class="uppercase text-xs h-6" size="sm" :value="btnLocale">
                                     {{ btnLocale }}

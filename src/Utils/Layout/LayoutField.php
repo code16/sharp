@@ -41,7 +41,6 @@ abstract class LayoutField
             [
                 'key' => $this->fieldKey,
                 'size' => $this->size,
-                'sizeXS' => $this->sizeXS,
             ],
             $this->itemLayout
                 ? ['item' => $this->itemLayout]

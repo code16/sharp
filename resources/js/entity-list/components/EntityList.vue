@@ -556,7 +556,7 @@
                                         <template v-for="(item, itemIndex) in reorderedItems ?? entityList.data" :key="entityList.instanceId(item)">
                                             <TableRow
                                                 :class="cn(
-                                                    'relative hover:bg-background has-[[data-row-action]:hover]:bg-muted/50 has-[[aria-expanded=true]]:bg-muted/50 lg:first:*:pl-6 lg:last:*:pr-6',
+                                                    'relative hover:bg-transparent has-[[data-row-action]:hover]:bg-muted/50 has-[[aria-expanded=true]]:bg-muted/50 lg:first:*:pl-6 lg:last:*:pr-6',
                                                     reordering ? 'cursor-move hover:bg-muted/50 group-[:has(.sortable-chosen)]:bg-background [&.sortable-chosen]:transition-none' : ''
                                                 )"
                                                 :data-instance-row="entityList.instanceId(item)"

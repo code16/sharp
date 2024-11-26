@@ -136,9 +136,9 @@ export type EntityListData = {
   config: EntityListConfigData;
   fields: Array<EntityListFieldData>;
   data: Array<{ [key: string]: any }>;
-  forms: { [key: string]: EntityListMultiformData };
   filterValues: FilterValuesData;
   query: EntityListQueryParamsData | null;
+  forms: { [key: string]: EntityListMultiformData } | null;
   meta: PaginatorMetaData | null;
   pageAlert: PageAlertData | null;
 };
@@ -628,7 +628,6 @@ export type InstanceSelectionMode = "required" | "allowed";
 export type LayoutFieldData = {
   key: string;
   size: number;
-  sizeXS: number;
   item: Array<Array<LayoutFieldData>> | null;
 };
 export type LogoData = {
