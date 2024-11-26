@@ -9,7 +9,7 @@ it('allows to set a key', function () {
         ->toEqual('name');
 });
 
-it('allows to set a general size', function () {
+it('allows to define a size', function () {
     $formTab = new FormLayoutField('name|6');
 
     expect($formTab->toArray())

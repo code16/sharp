@@ -148,7 +148,7 @@ class ProductForm extends SharpForm
 
 ##### Displaying fields on the same row
 
-One final way is to put fields side by side on the same column:
+Here’s how to put fields side by side on the same row, using the `withFields()` (notice the final S) method:
 
 ```php
 class ProductForm extends SharpForm
@@ -164,26 +164,37 @@ class ProductForm extends SharpForm
 }
 ```
 
-This will align the two fields on the row. They'll have the same width (50%), but we can act on this adding a special suffix:
+This will align the two fields on the row. They'll have the same width (50%), but we can act on this referencing a 12-based grid system with either variadic arguments:
 
 ```php
-$column->withFields('name|8', 'capacity|4');
+class ProductForm extends SharpForm
+{
+    // ...
+    
+	public function buildFormLayout(FormLayout $formLayout): void
+	{
+		$formLayout->addColumn(6, function (FormLayoutColumn $column) {
+			$column->withFields(name: 8, capacity: 4);
+		});
+	}
+}
 ```
 
-Once again, it's a 12-based grid, so `name` will take 2/3 of the width, and `capacity` 1/3.
-
-##### A word on small screens
-
-Columns are only used in medium to large screens (768 pixels and up).
-
-Same for fields put on the same row: on smaller screens, they'll be placed on different rows, except if another layout is intentionally configured, using this convention:
+... or using the special `|` character instead: 
 
 ```php
-$column->withFields('name|8,6', 'capacity|4,6');
+class ProductForm extends SharpForm
+{
+    // ...
+    
+	public function buildFormLayout(FormLayout $formLayout): void
+	{
+		$formLayout->addColumn(6, function (FormLayoutColumn $column) {
+			$column->withFields('name|8', 'capacity|4');
+		});
+	}
+}
 ```
-
-Here, `name` will take 8/12 of the width on large screens, and 6/12 on smaller one.
-
 
 #### Fieldsets
 
