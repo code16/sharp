@@ -4,13 +4,13 @@ Uploads are painful.
 
 Sharp provide a very opinionated and totally optional solution to handle if you are using Eloquent and the `WithSharpFormEloquentUpdater` trait (see [related documentation](building-form.md)).
 
-The proposal is to use a special Sharp Model for all your uploads, and to link them to your Models with Eloquent's Morph relationships.
+The proposal is to use a special Sharp Model for all your uploads, and to link them to your Models with Eloquent’s Morph relationships.
 
 ## Use `SharpUploadModel`
 
 The base Model class is `Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel`. Just create your own Model class and make it extends this base class.
 
-You'll have to define the Eloquent `$table` attribute to indicate the table name. So for instance, let's say your Model name choice is `Media`, here's the class code:
+You’ll have to define the Eloquent `$table` attribute to indicate the table name. So for instance, let’s say your Model name choice is `Media`, here’s the class code:
 
 ```php
 use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
@@ -85,12 +85,9 @@ class Book extends Model
 
 ## Use it!
 
-Let's pretend you already have data in this new table, here how to handle it.
-
 ### Properties
 
 By default, you can get the `file_name`, but also `mime_type` and file's `size`.
-
 
 ### Custom properties
 
@@ -100,7 +97,7 @@ You can add whatever property you need through custom properties, by setting it:
 $book->cover->author = 'Tomi Ungerer';
 ```
 
-Custom properties will be stored in the `custom_properties` column, as JSON.
+Custom properties are stored in the `custom_properties` column, as JSON.
 
 You can retrieve the value the same way:
 
@@ -110,7 +107,7 @@ $author = $book->cover->author;
 
 ### Thumbnails
 
-Thumbnail creation is built-in; you can configure thumbnail disk and base directory:
+Thumbnail creation is built-in, you can configure thumbnail disk and base directory:
 
 ```php
 class SharpServiceProvider extends SharpAppServiceProvider
@@ -201,8 +198,8 @@ function buildFormFields()
     $this->addField(
         SharpFormUploadField::make('cover')
             ->setLabel('Cover')
-            ->setFileFilterImages()
-            ->setCropRatio('1:1')
+            ->setImageOnly()
+            ->setImageCropRatio('1:1')
             ->setStorageDisk('local')
             ->setStorageBasePath('data/Books')
     );
@@ -280,7 +277,7 @@ $this->addField(
         ->setOrderAttribute('order')
         ->addItemField(
             SharpFormUploadField::make('file')
-                ->setFileFilterImages()
+                ->setImageOnly()
                 ->setStorageDisk('local')
                 ->setStorageBasePath('data/Books/Pictures')
         )
