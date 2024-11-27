@@ -65,7 +65,7 @@ class SharpMenuManager
 
     protected function buildMenu(): void
     {
-        $this->menu = sharp()->config()->get('menu');
+        $this->menu = instanciate(sharp()->config()->get('menu'));
         $this->menu?->build();
     }
 
