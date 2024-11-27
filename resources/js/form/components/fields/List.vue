@@ -63,8 +63,10 @@
         }
     );
     watch(sortableContainer, () => {
-        sortable.stop();
-        sortable.start();
+        if(props.field.sortable) {
+            sortable.stop();
+            sortable.start();
+        }
     });
     watchEffect(() => {
         sortable.option('handle', reordering.value ? null : '[data-drag-handle]');
@@ -252,13 +254,15 @@
                                     </template>
                                 </div>
 
-                                <div class="z-10 absolute flex items-center justify-center right-0 top-1/2 translate-x-1/2 -translate-y-1/2 h-4 w-3 rounded-sm border bg-border duration-300 transition-opacity cursor-grab group-[&:has(.sortable-ghost)]/list:opacity-0 group-[&:has(.sortable-ghost)]/list:transition-none hover:bg-foreground hover:border-foreground hover:text-background group-hover:opacity-100"
-                                    :class="reordering ? 'opacity-100 group-hover:bg-foreground group-hover:border-foreground group-hover:text-background' : ' opacity-0'"
-                                    data-drag-handle
-                                >
-                                    <div class="absolute -inset-3"></div>
-                                    <GripVertical class="h-2.5 w-2.5" />
-                                </div>
+                                <template v-if="field.sortable">
+                                    <div class="z-10 absolute flex items-center justify-center right-0 top-1/2 translate-x-1/2 -translate-y-1/2 h-4 w-3 rounded-sm border bg-border duration-300 transition-opacity cursor-grab group-[&:has(.sortable-ghost)]/list:opacity-0 group-[&:has(.sortable-ghost)]/list:transition-none hover:bg-foreground hover:border-foreground hover:text-background group-hover:opacity-100"
+                                        :class="reordering ? 'opacity-100 group-hover:bg-foreground group-hover:border-foreground group-hover:text-background' : ' opacity-0'"
+                                        data-drag-handle
+                                    >
+                                        <div class="absolute -inset-3"></div>
+                                        <GripVertical class="h-2.5 w-2.5" />
+                                    </div>
+                                </template>
                             </Card>
                         </template>
                     </TransitionGroup>

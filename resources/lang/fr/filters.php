@@ -5,4 +5,5 @@ return [
     'select.reset' => 'Réinitialiser',
     'daterange.confirm' => 'Valider',
     'reset_all' => 'Réinitialiser',
+    'dialog.submit' => 'Appliquer',
 ];

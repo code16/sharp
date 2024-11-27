@@ -83,7 +83,7 @@
     <input
         class="hidden"
         type="file"
-        :accept="props.field.uploads.fields.file.allowedExtensions.join(',')"
+        :accept="props.field.uploads.fields.file.allowedExtensions?.join(',')"
         @change="onInputChange"
         ref="input"
     >

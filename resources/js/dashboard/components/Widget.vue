@@ -5,11 +5,9 @@
     import OrderedList from "./widgets/OrderedList.vue";
     import Panel from "./widgets/Panel.vue";
     import Graph from "./widgets/Graph.vue";
+    import { DashboardWidgetProps } from "@/dashboard/types";
 
-    defineProps<{
-        widget: WidgetData,
-        value: WidgetData['value'],
-    }>();
+    const props = defineProps<DashboardWidgetProps<WidgetData, any>>();
 
     const components: Record<WidgetData['type'], Component> = {
         'figure': Figure,
@@ -22,7 +20,6 @@
 <template>
     <component
         :is="components[widget.type]"
-        :value="value"
-        :widget="widget"
+        v-bind="props"
     />
 </template>

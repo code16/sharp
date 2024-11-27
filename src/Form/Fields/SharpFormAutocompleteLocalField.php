@@ -72,8 +72,17 @@ class SharpFormAutocompleteLocalField extends SharpFormField implements IsSharpF
                 $this->toArrayBase(),
                 [
                     'localValues' => $this->dynamicAttributes
-                        ? self::formatDynamicOptions($this->localValues, count($this->dynamicAttributes[0]['path']), $this->itemWithRenderedTemplates(...))
-                        : self::formatOptions($this->localValues, $this->itemIdAttribute, $this->itemWithRenderedTemplates(...)),
+                        ? self::formatDynamicOptions(
+                            $this->localValues,
+                            count($this->dynamicAttributes[0]['path']),
+                            $this->itemIdAttribute,
+                            $this->itemWithRenderedTemplates(...)
+                        )
+                        : self::formatOptions(
+                            $this->localValues,
+                            $this->itemIdAttribute,
+                            $this->itemWithRenderedTemplates(...)
+                        ),
                     'searchKeys' => $this->localSearchKeys,
                 ],
             ),

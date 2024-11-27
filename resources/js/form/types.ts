@@ -16,10 +16,10 @@ export type FieldsMeta = { [key: string]: FieldMeta };
 
 export type WithDynamicAttributesApplied<Data extends FormFieldData> =
     Data extends FormSelectFieldData
-        ? Omit<FormSelectFieldData, 'options'> & { options: Exclude<FormSelectFieldData['options'], FormDynamicOptionsData> }
+        ? Omit<FormSelectFieldData, 'options' | 'value'> & { options: Exclude<FormSelectFieldData['options'], FormDynamicOptionsData> }
         : Data extends FormAutocompleteLocalFieldData
-            ? Omit<FormAutocompleteLocalFieldData, 'localValues'> & { localValues: Exclude<FormAutocompleteLocalFieldData['localValues'], FormAutocompleteDynamicLocalValuesData> }
-            : Data;
+            ? Omit<FormAutocompleteLocalFieldData, 'localValues' | 'value'> & { localValues: Exclude<FormAutocompleteLocalFieldData['localValues'], FormAutocompleteDynamicLocalValuesData> }
+            : Omit<Data, 'value'>;
 
 export type FormFieldProps<Data extends FormFieldData = FormFieldData, Value = Data['value']> = {
     field: WithDynamicAttributesApplied<Data>,

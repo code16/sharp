@@ -8,6 +8,7 @@
     import { CommandGroup, CommandItem, CommandList, CommandSeparator } from "@/components/ui/command";
     import FormFieldLayout from "@/form/components/FormFieldLayout.vue";
     import { fuzzySearch } from "@/utils/search";
+    import { useFullTextSearch } from "@/composables/useFullTextSearch";
 
     const props = defineProps<FormFieldProps<FormTagsFieldData>>();
     const emit = defineEmits<FormFieldEmits<FormTagsFieldData>>();
@@ -41,11 +42,13 @@
         ]);
     }
 
+    const { fullTextSearch } = useFullTextSearch(() => props.field.options, { id: 'id', searchKeys: ['label'] });
     const filteredOptions = computed(() => {
-        const unselectedOptions = props.field.options.filter(o => !props.value?.find(v => o.id != null && v.id != null && o.id === v.id));
-        return searchTerm.value.length > 0
-            ? fuzzySearch(unselectedOptions, searchTerm.value, { searchKeys: ['label'] })
-            : unselectedOptions;
+        const filtered = searchTerm.value.length > 0
+            ? fullTextSearch(searchTerm.value)
+            : props.field.options;
+        return filtered
+            .filter(o => !props.value?.find(v => o.id != null && v.id != null && o.id === v.id)); // show only unselected options
     });
 
     emit('input', props.value.map(option => withItemKey(option)));

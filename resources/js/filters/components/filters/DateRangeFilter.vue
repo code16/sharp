@@ -128,9 +128,9 @@
                 </template>
             </PopoverTrigger>
             <PopoverContent :class="cn('w-auto p-0', !inline ? 'w-[--reka-popover-trigger-width]' : '')">
-                <h4 v-if="!inline" class="font-medium leading-none p-3 pb-0 mb-4">
-                    {{ filter.label }}
-                </h4>
+<!--                <h4 v-if="!inline" class="font-medium leading-none p-3 pb-0 mb-4">-->
+<!--                    {{ filter.label }}-->
+<!--                </h4>-->
                 <div class="flex">
                     <template v-if="filter.presets?.length">
                         <div class="flex flex-col shrink-0 p-3">
@@ -147,9 +147,9 @@
                             </template>
                         </div>
                     </template>
-                    <div class="flex-1">
+                    <div class="flex-1 min-w-0">
                         <RangeCalendar
-                            class="hidden md:block"
+                            :class="!inline ? 'hidden' : 'hidden md:block'"
                             v-model="localValue"
                             :number-of-months="2"
                             :locale="window.navigator.language"
@@ -157,8 +157,8 @@
                             @update:model-value="onCalendarChange"
                             :key="edited.count"
                         />
-                        <div class="grid gap-4 p-3" key="footer">
-                            <div class="grid md:grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 gap-4 p-3" key="footer">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <Input class="block" type="date"
                                     v-model="inputs.start"
                                     @update:model-value="onStartChange"

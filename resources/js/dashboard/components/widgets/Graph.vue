@@ -5,11 +5,9 @@
     import Line from "./graph/Line.vue";
     import Pie from "./graph/Pie.vue";
     import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+    import { DashboardWidgetProps } from "@/dashboard/types";
 
-    defineProps<{
-        widget: Omit<GraphWidgetData, 'value'>,
-        value: GraphWidgetData['value'],
-    }>();
+    const props = defineProps<DashboardWidgetProps<GraphWidgetData>>();
 
     const components: Record<GraphWidgetData['display'], Component> = {
         'bar': Bar,
@@ -30,9 +28,8 @@
         <CardContent :class="widget.minimal ? '!p-0' : ''">
             <component
                 :is="components[widget.display]"
-                :value="value"
-                :widget="widget"
-                class="[&_svg]:rounded-b-[calc(.5rem-1px)]"
+                v-bind="props"
+                class="[&_svg]:rounded-b-[calc(.5rem-1px)] [&_svg]:overflow-visible"
                 :class="[
                     !widget.height ? 'aspect-[--ratio]' : '',
                 ]"

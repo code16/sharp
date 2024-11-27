@@ -26,6 +26,7 @@
     import { ComboboxItemIndicator } from "reka-ui";
     import { useParentCommands } from "@/commands/useCommands";
     import { useIsInDialog } from "@/components/ui/dialog/Dialog.vue";
+    import { useFullTextSearch } from "@/composables/useFullTextSearch";
 
     const props = defineProps<FormFieldProps<FormAutocompleteLocalFieldData | FormAutocompleteRemoteFieldData>>();
     const emit = defineEmits<FormFieldEmits<FormAutocompleteLocalFieldData | FormAutocompleteRemoteFieldData>>();
@@ -42,6 +43,13 @@
 
     const parentCommands = useParentCommands();
     const isInDialog = useIsInDialog();
+    const { fullTextSearch } = useFullTextSearch(
+        () => props.field.mode === 'local' ? props.field.localValues : null,
+        {
+            id: props.field.itemIdAttribute,
+            searchKeys: props.field.mode === 'local' ? props.field.searchKeys : [],
+        }
+    );
 
     function search(query: string, immediate?: boolean) {
         if(props.field.mode === 'remote') {
@@ -98,7 +106,7 @@
         } else {
             results.value = !query.length
                 ? props.field.localValues
-                : fuzzySearch(props.field.localValues, query, { searchKeys: props.field.searchKeys });
+                : fullTextSearch(query);
         }
     }
 
@@ -115,7 +123,7 @@
 
     const currentLocalValue = computed(() => {
         return props.field.mode === 'local' && props.value
-            ? props.field.localValues.find(v => String(props.value[props.field.itemIdAttribute]) === String(v[props.field.itemIdAttribute]))
+            ? props.field.localValues?.find(v => String(props.value[props.field.itemIdAttribute]) === String(v[props.field.itemIdAttribute]))
             : null;
     })
 </script>
@@ -178,7 +186,7 @@
                                 {{ __('sharp::form.autocomplete.loading') }}
                             </div>
                         </template>
-                        <template v-else-if="!results.length && props.field.mode === 'remote' && searchTerm.length < props.field.searchMinChars">
+                        <template v-else-if="!results?.length && props.field.mode === 'remote' && searchTerm.length < props.field.searchMinChars">
                             <div class="py-6 text-center text-sm">
                                 {{ trans_choice('sharp::form.autocomplete.query_too_short', props.field.searchMinChars, { min_chars: props.field.searchMinChars }) }}
                             </div>

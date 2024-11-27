@@ -4,11 +4,9 @@
     import { Badge } from "@/components/ui/badge";
     import MaybeInertiaLink from "@/components/MaybeInertiaLink.vue";
     import { __ } from "@/utils/i18n";
+    import { DashboardWidgetProps } from "@/dashboard/types";
 
-    defineProps<{
-        widget: Omit<OrderedListWidgetData, 'value'>,
-        value: OrderedListWidgetData['value'],
-    }>();
+    const props = defineProps<DashboardWidgetProps<OrderedListWidgetData>>();
 </script>
 
 <template>

@@ -32,6 +32,10 @@ export class FilterManager {
         return filters.some(filter => this.filterValues.valuated[filter.key]);
     }
 
+    valuatedCount(filters: Array<FilterData>): number {
+        return filters.filter(filter => this.filterValues.valuated[filter.key]).length;
+    }
+
     nextValues(filter: FilterData, value: ParsedValue): FilterValues {
         if(filter.type === 'select' && filter.master) {
             return {

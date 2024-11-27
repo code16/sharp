@@ -43,7 +43,19 @@ class TestForm extends SharpSingleForm
                     ->setListItemTemplate('{{ $label }}')
                     ->setResultItemTemplate('{{ $label }} ({{ $id }})')
 //                    ->setReadOnly()
-                    ->setLocalValues($this->options()),
+                    ->setLocalValues([
+                        1 => [
+                            ['id' => 1, 'label' => 'Voltaire - Candide'],
+                            ['id' => 2, 'label' => 'Voltaire - Zadig'],
+                            ['id' => 3, 'label' => 'Voltaire - Micromégas'],
+                        ],
+                        2 => [
+                            ['id' => 4, 'label' => 'Hugo - Les Misérables'],
+                            ['id' => 5, 'label' => 'Hugo - Notre-Dame de Paris'],
+                            ['id' => 6, 'label' => 'Hugo - Les Contemplations'],
+                        ]
+                    ])
+                    ->setLocalValuesLinkedTo('select_list'),
             )
             ->addField(
                 SharpFormAutocompleteRemoteField::make('autocomplete_remote')

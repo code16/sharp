@@ -31,26 +31,17 @@ trait SharpFormFieldWithOptions
             ->all();
     }
 
-    protected static function formatDynamicOptions(array|Collection &$options, int $depth, ?Closure $format = null): array
+    protected static function formatDynamicOptions(array|Collection &$options, int $depth, string $idAttribute = 'id', ?Closure $format = null): array
     {
         if (! count($options)) {
             return [];
         }
 
-        $format ??= fn ($option) => $option;
-
         return collect($options)
-            ->map(function ($values) use ($depth, $format) {
-                if ($depth > 1) {
-                    return self::formatDynamicOptions($values, $depth - 1, $format);
-                }
-
-                return collect($values)
-                    ->map(fn ($label, $id) => compact('id', 'label'))
-                    ->map($format)
-                    ->values()
-                    ->all();
-            })
+            ->map(fn($values) => $depth > 1
+                ? self::formatDynamicOptions($values, $depth - 1, $idAttribute, $format)
+                : self::formatOptions($values, 'id', $format)
+            )
             ->all();
     }
 }

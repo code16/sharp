@@ -1,13 +1,11 @@
 <script setup lang="ts">
-    import { PanelWidgetData } from "@/types";
+    import { OrderedListWidgetData, PanelWidgetData } from "@/types";
     import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
     import MaybeInertiaLink from "@/components/MaybeInertiaLink.vue";
     import Content from "@/components/Content.vue";
+    import { DashboardWidgetProps } from "@/dashboard/types";
 
-    defineProps<{
-        widget: Omit<PanelWidgetData, 'value'>,
-        value: PanelWidgetData['value'],
-    }>();
+    const props = defineProps<DashboardWidgetProps<PanelWidgetData>>();
 </script>
 
 <template>

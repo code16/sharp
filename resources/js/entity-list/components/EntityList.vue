@@ -282,7 +282,6 @@
                                 '-top-8 z-0': inline && !needsTopBar,
                                 'z-[15]': reordering,
                                 'data-[stuck=true]:z-30': !inline || needsTopBar,
-                                // 'opacity-0': inline && stuck && !needsTopBar,
                             })"
                         v-model:stuck="stuck"
                     >
@@ -488,14 +487,14 @@
                                                         </DialogClose>
                                                         <DialogClose as-child>
                                                             <Button class="flex-1">
-                                                                {{ __('sharp::action_bar.form.submit_button.update')}}
+                                                                {{ __('sharp::filters.dialog.submit') }}
                                                             </Button>
                                                         </DialogClose>
                                                     </DialogFooter>
                                                 </DialogScrollContent>
                                             </Dialog>
                                             <template v-if="filters.isValuated(filters.rootFilters)">
-                                                <Badge class="ml-2">{{ Object.values(filters.filterValues?.valuated ?? {}).filter(Boolean).length }}</Badge>
+                                                <Badge class="ml-2">{{ filters.valuatedCount(filters.rootFilters) }}</Badge>
                                             </template>
                                         </div>
                                         <div class="hidden @2xl/root-card:contents"

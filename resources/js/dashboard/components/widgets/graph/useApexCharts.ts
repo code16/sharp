@@ -5,18 +5,35 @@ import ru from "apexcharts/dist/locales/ru.json";
 import es from "apexcharts/dist/locales/es.json";
 import de from "apexcharts/dist/locales/de.json";
 import merge from 'lodash/merge';
-import { computed, ComputedRef, ref } from "vue";
+import { computed, MaybeRefOrGetter, ref, toValue, useTemplateRef } from "vue";
 import { GraphWidgetData } from "@/types";
+import { VueApexChartsComponent } from "vue3-apexcharts";
+import { useResizeObserver } from "@vueuse/core";
+import { DashboardWidgetProps } from "@/dashboard/types";
+import debounce from "lodash/debounce";
 
-export function useChartOptions(
-    widgetRef: ComputedRef<GraphWidgetData>,
-    additionalOptions: ComputedRef<ApexOptions>
-): ComputedRef<ApexOptions> {
-
+export function useApexCharts(
+    props: DashboardWidgetProps<GraphWidgetData>,
+    additionalOptions: ({ width }: { width: number }) => ApexOptions
+) {
     const zoomed = ref(false);
-
-    return computed(() => {
-        const widget = widgetRef.value;
+    const apexChartsComponent = useTemplateRef<VueApexChartsComponent>('apexChartsComponent');
+    const el = computed<HTMLElement>(() => apexChartsComponent.value?.$el);
+    const width = ref(0);
+    const redraw = debounce(() => {
+        apexChartsComponent.value.chart?.updateOptions({}, true);
+        width.value = el.value.clientWidth;
+        el.value.style.overflow = 'visible';
+    }, 100);
+    useResizeObserver(apexChartsComponent, () => {
+        el.value.style.overflow = 'hidden';
+        if(!width.value) {
+            width.value = el.value.clientWidth;
+        }
+        redraw();
+    });
+    const options = computed<ApexOptions>(() => {
+        const widget = props.widget;
         const baseOptions: ApexOptions = {
             chart: {
                 height: widget.height ?? '100%',
@@ -42,6 +59,8 @@ export function useChartOptions(
                     en, fr, ru, es, de,
                 ],
                 defaultLocale: document.documentElement.lang,
+                redrawOnParentResize: false,
+                redrawOnWindowResize: false,
             },
             legend: {
                 show: widget.showLegend && !widget.minimal,
@@ -58,6 +77,11 @@ export function useChartOptions(
             },
         };
 
-        return merge(baseOptions, additionalOptions.value);
+        return merge(baseOptions, additionalOptions({ width: width.value }));
     });
+
+    return {
+        apexChartsComponent,
+        options,
+    };
 }

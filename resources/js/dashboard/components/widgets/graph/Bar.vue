@@ -1,64 +1,62 @@
 <script setup lang="ts">
-    import { useChartOptions } from "@/dashboard/components/widgets/graph/useChartOptions";
-    import { computed } from "vue";
+    import { useApexCharts } from "@/dashboard/components/widgets/graph/useApexCharts";
     import { normalizeColor } from "@/dashboard/utils/chart";
     import { GraphWidgetData } from "@/types";
     import ApexChart from "vue3-apexcharts";
+    import { DashboardWidgetProps } from "@/dashboard/types";
 
-    const props = defineProps<{
-        widget: Omit<GraphWidgetData, 'value'>,
-        value: GraphWidgetData['value'],
-    }>();
+    const props = defineProps<DashboardWidgetProps<GraphWidgetData>>();
 
-    const options = useChartOptions(
-        computed(() => props.widget),
-        computed(() => {
-            const { widget, value } = props;
-            return {
-                chart: {
-                    type: 'bar'
-                },
-                colors: value?.datasets?.map(dataset => normalizeColor(dataset.color)),
-                grid: {
+    const { apexChartsComponent, options } = useApexCharts(props, () => {
+        const { widget, value } = props;
+        return {
+            chart: {
+                type: 'bar'
+            },
+            colors: value?.datasets?.map(dataset => normalizeColor(dataset.color)),
+            grid: {
+                show: false,
+                padding: {
+                    left: 0,
+                }
+            },
+            labels: value?.labels,
+            legend: {
+                position: 'bottom',
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: !!widget.options?.horizontal,
+                }
+            },
+            series: value?.datasets?.map(dataset => ({
+                data: dataset.data,
+                name: dataset.label,
+            })),
+            xaxis: {
+                type: !widget.options?.horizontal && widget.dateLabels
+                    ? 'datetime'
+                    : 'category',
+                axisBorder: {
                     show: false,
-                },
-                labels: value?.labels,
-                legend: {
-                    position: 'bottom',
-                },
-                plotOptions: {
-                    bar: {
-                        horizontal: !!widget.options?.horizontal,
-                    }
-                },
-                series: value?.datasets?.map(dataset => ({
-                    data: dataset.data,
-                    name: dataset.label,
-                })),
-                xaxis: {
-                    type: !widget.options?.horizontal && widget.dateLabels
-                        ? 'datetime'
-                        : 'category',
-                    axisBorder: {
-                        show: false,
-                    }
-                },
-                yaxis: {
-                    axisBorder: {
-                        show: false,
-                    }
-                },
-            }
-        })
-    )
+                }
+            },
+            yaxis: {
+                axisBorder: {
+                    show: false,
+                }
+            },
+        }
+    })
 </script>
 
 <template>
-    <div :class="{ 'mb-2': options.legend.show }">
+    <div :class="{ 'mb-2': options.legend.show }" ref="el">
         <ApexChart
             :options="options"
             :series="options.series"
             :height="options.chart.height"
+            ref="apexChartsComponent"
         />
     </div>
 </template>

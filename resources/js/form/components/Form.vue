@@ -171,7 +171,7 @@
             <CardContent :class="inline ? '!p-0' : ''">
                 <template v-if="form.pageAlert">
                     <PageAlert
-                        class="mb-3"
+                        class="mb-4"
                         :page-alert="form.pageAlert"
                     />
                 </template>

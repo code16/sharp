@@ -17,7 +17,7 @@
         return props.field.itemFields
             && props.value?.every(item => {
                 const visibleFields = Object.values(props.field.itemFields).filter(field =>
-                    show.fieldShouldBeVisible(field, item[field.key], props.locale)
+                    show.fieldShouldBeVisible(props.fieldLayout.item[field.key], props.locale, props.field.itemFields, item)
                 );
                 return visibleFields.length === 1 && visibleFields[0].type === 'file';
             })

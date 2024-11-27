@@ -1,13 +1,10 @@
 <script setup lang="ts">
     import { FigureWidgetData } from "@/types";
     import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-    import { ArrowUpRight, ArrowDownRight } from "lucide-vue-next";
     import MaybeInertiaLink from "@/components/MaybeInertiaLink.vue";
+    import { DashboardWidgetProps } from "@/dashboard/types";
 
-    defineProps<{
-        widget: Omit<FigureWidgetData, 'value'>,
-        value: FigureWidgetData['value'],
-    }>();
+    const props = defineProps<DashboardWidgetProps<FigureWidgetData>>();
 </script>
 
 <template>

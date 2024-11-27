@@ -212,7 +212,7 @@
             <template v-if="show.pageAlert">
                 <div class="container">
                     <PageAlert
-                        class="mb-3"
+                        class="mb-4"
                         :page-alert="show.pageAlert"
                     />
                 </div>

@@ -114,7 +114,10 @@ export class CommandManager {
 
     async handleCommandApiResponse(response: AxiosResponse<Blob>): Promise<void> {
         if(response.data.type !== 'application/json') {
-            location.replace(URL.createObjectURL(response.data)); // download the file
+            const link = document.createElement("a");
+            link.download = (response.headers['content-disposition'] as string)?.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/)?.[1] ?? 'download';
+            link.href = URL.createObjectURL(response.data);
+            link.click();
             this.finish();
             return;
         }

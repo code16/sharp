@@ -9,12 +9,12 @@
 @tailwind utilities;
 
 @layer base {
-    html {
-        /*scrollbar-gutter: stable;*/
-    }
     [type="search"]::-webkit-search-decoration,
     [type="search"]::-webkit-search-cancel-button {
         appearance: none;
+    }
+    body {
+        overflow-y: scroll;
     }
 
     tr.relative {

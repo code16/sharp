@@ -1,25 +1,18 @@
-import Fuse, { type FuseOptions } from 'fuse.js';
+import Flexsearch from 'flexsearch';
 
-const defaultOptions: FuseOptions = {
-    caseSensitive: false,
-    distance: 0,
-    findAllMatches: false,
-    id: null,
-    include: [],
-    keys: ['value'],
-    location: 0,
-    matchAllTokens: false,
-    maxPatternLength: 64,
-    minMatchCharLength: 1,
-    shouldSort: true,
-    threshold: 0.0,
-    tokenize: true,
-}
 
-export function fuzzySearch<T>(list: T[], query: string, { searchKeys }: { searchKeys: string[] }) {
-    const fuse = new Fuse(list, {
-        ...defaultOptions,
-        keys: searchKeys,
+export function fuzzySearch<T>(list: T[], query: string, { id, searchKeys }: { id: string, searchKeys: string[] }) {
+    const index = new Flexsearch.Document<T, true>({
+        document: {
+            id,
+            index: searchKeys,
+            store: true,
+        },
+        tokenize: 'forward',
+        charset: 'latin:simple',
     });
-    return fuse.search<T>(query);
+    list.forEach(item => index.add(item));
+    return index.search(query, undefined, { enrich: true })
+        .map(result => result.result.map(r => r.doc))
+        .flat();
 }
