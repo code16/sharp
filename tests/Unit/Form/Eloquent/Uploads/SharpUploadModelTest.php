@@ -14,7 +14,7 @@ beforeEach(function () {
     Storage::fake('public');
 });
 
-it('fills several attributes at once when setting the magic file attribute', function () {
+it('fills several attributes at once at save with the magic "file" attribute', function () {
     $file = createImage();
     $upload = createSharpUploadModel($file);
 
@@ -22,11 +22,15 @@ it('fills several attributes at once when setting the magic file attribute', fun
         'file_name' => 'test/test.png',
         'mime_type' => 'test_mime',
         'size' => 1,
+        'legend' => 'test_legend',
     ];
+
+    $upload->save();
 
     expect($upload->file_name)->toBe('test/test.png')
         ->and($upload->mime_type)->toBe('test_mime')
-        ->and($upload->size)->toBe(1);
+        ->and($upload->size)->toBe(1)
+        ->and($upload->custom_properties['legend'])->toBe('test_legend');
 });
 
 it('allows to create thumbnails', function () {
