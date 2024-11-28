@@ -8,7 +8,25 @@
             },
             {
                 "path": "demo/resources/views"
+            },
+            {
+                "path": "resources/views",
+                "namespace": "sharp"
             }
         ]
+    },
+    "blade": {
+        "components": {
+            "viewPaths": [
+                {
+                    "path": "resources/views/components",
+                    "namespace": "sharp"
+                },
+                {
+                    "path": "src/View/Components",
+                    "namespace": "sharp"
+                }
+            ]
+        }
     }
 }

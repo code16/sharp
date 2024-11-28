@@ -4,7 +4,7 @@ namespace Code16\Sharp\View\Components;
 
 use Illuminate\View\Component;
 
-class Vite extends Component
+class ViteWrapper extends Component
 {
     public function __construct(
         public ?string $hotFile = null

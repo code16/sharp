@@ -6,13 +6,6 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="robots" content="noindex, nofollow" />
 
-{{--        <x-sharp::vite>--}}
-{{--            @vite([--}}
-{{--                'resources/css/vendors.css',--}}
-{{--                'resources/css/app.css',--}}
-{{--            ], '/vendor/sharp')--}}
-{{--        </x-sharp::vite>--}}
-
         <script>
             const preference = localStorage.getItem('vueuse-color-scheme') || 'auto';
             if(preference === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches || preference === 'dark') {
@@ -22,15 +15,13 @@
 
         <x-sharp::root-styles />
 
-        <x-sharp::extensions.injected-assets />
+        @foreach(sharp()->config()->get('assets') as $asset)
+            {!! $asset !!}
+        @endforeach
 
         @include('sharp::partials.head')
 
-        {{--    <x-sharp::vite>--}}
-        {{--    @vite('resources/assets/js/client-api.js', '/vendor/sharp')--}}
-        {{--    </x-sharp::vite>--}}
-
-        <x-sharp::extensions.custom-fields-script />
+{{--        <x-sharp::extensions.custom-fields-script />--}}
 
         @php
             config()->set('ziggy', ['only' => 'code16.sharp.*'])
@@ -38,12 +29,12 @@
         @routes
         @inertiaHead
 
-        <x-sharp::vite>
+        <x-sharp::vite-wrapper>
             @if(!Vite::isRunningHot())
                 @vite(['vite/legacy-polyfills'], '/vendor/sharp')
             @endif
             @vite('resources/js/sharp.ts', '/vendor/sharp')
-        </x-sharp::vite>
+        </x-sharp::vite-wrapper>
     </head>
     <body class="font-sans antialiased">
         <x-sharp::alert.assets-outdated />

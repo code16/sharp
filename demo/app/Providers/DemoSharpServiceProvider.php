@@ -47,6 +47,9 @@ class DemoSharpServiceProvider extends SharpAppServiceProvider
             ->suggestRememberMeOnLoginForm()
             ->appendMessageOnLoginForm('sharp._login-page-message')
             ->enableGlobalSearch(AppSearchEngine::class, 'Search for posts or authors...')
-            ->appendToMiddlewareWebGroup(PrefillLoginWithExampleCredentials::class);
+            ->appendToMiddlewareWebGroup(PrefillLoginWithExampleCredentials::class)
+            ->loadViteAssets([
+                'resources/css/sharp-extension.css',
+            ]);
     }
 }

@@ -85,36 +85,18 @@ class SharpServiceProvider extends SharpAppServiceProvider
 }
 ```
 
-### Injecting Assets
+### Injecting CSS
 
-TODO check this documentation
-
-You may globally inject custom CSS files after the Sharp assets by defining their paths in the `config/sharp.php` config file.
+If you want to inject custom CSS in Sharp, you can do so by using `loadViteAssets()` or `loadStaticCss()`. Be aware that tailwind classes may clash with Sharp default CSS so you may define a [Tailwind prefix](https://tailwindcss.com/docs/configuration#prefix).
 
 ```php
-// config/sharp.php
-
-return [
-    // [...]
-
-    'extensions' => [
-       'assets' => [
-          'strategy' => 'raw',
-          'head' => [
-             '/css/inject.css', // Outputs <link rel="stylesheet" href="/css/inject.css"> after sharp assets
-          ],
-       ],
-    ],
-];
+class SharpServiceProvider extends SharpAppServiceProvider
+{
+    protected function configureSharp(SharpConfigBuilder $config): void
+    {
+        $config
+            ->loadViteAssets(['resources/css/sharp.css']) // to load a CSS file built with Vite
+            ->loadStaticCss(asset('/css/sharp.css')) // Or to load a static CSS file
+    }
+}
 ```
-
-The comment next to the item within the `head` position show how the output would appear in the HTML.
-
-### Strategy
-
-The `strategy` defines how the asset path will be rendered
-
-- `raw` to output the path in the form it appears in your array
-- `asset` to pass the path to the laravel [`asset()`](https://laravel.com/docs/5.6/helpers#method-asset) function
-- `mix` to pass the path to the laravel [`mix()`](https://laravel.com/docs/5.6/helpers#method-mix) function
-- `vite` to pass to path to the laravel [`Vite::asset()`](https://laravel.com/docs/10.x/vite#blade-processing-static-assets) function

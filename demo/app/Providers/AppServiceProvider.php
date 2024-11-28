@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use Code16\Sharp\Dev\SharpDevServiceProvider;
 use Code16\Sharp\SharpInternalServiceProvider;
-use Code16\Sharp\View\Components\Vite as SharpViteComponent;
+use Code16\Sharp\View\Components\ViteWrapper as SharpViteWrapperComponent;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -20,8 +20,8 @@ class AppServiceProvider extends ServiceProvider
             $this->app->register(SharpDevServiceProvider::class);
         }
 
-        $this->app->bind(SharpViteComponent::class, function () {
-            return new SharpViteComponent(hotFile: base_path('../dist/hot'));
+        $this->app->bind(SharpViteWrapperComponent::class, function () {
+            return new SharpViteWrapperComponent(hotFile: base_path('../dist/hot'));
         });
     }
 

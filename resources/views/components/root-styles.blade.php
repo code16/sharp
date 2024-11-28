@@ -20,12 +20,4 @@
     :root {
         --sharp-config-primary: {{ $primaryColor }};
     }
-    /** Legacy vars */
-    :root {
-        --primary-h: {{ $self->formatNumber($primaryColorHSL[0]) }}deg;
-        --primary-s: {{ $self->formatNumber($primaryColorHSL[1]) }}%;
-        --primary-l: {{ $self->formatNumber($primaryColorHSL[2]) }}%;
-
-        --l-threshold: {{ $self->formatNumber(80 - $primaryColorLuminosity * 40) }}%;
-    }
 </style>

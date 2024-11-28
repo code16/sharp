@@ -16,7 +16,7 @@ class PreviewPostCommand extends InstanceCommand
 
     public function execute(mixed $instanceId, array $data = []): array
     {
-        return $this->view('sharp.post-preview', [
+        return $this->view('pages.post', [
             'post' => Post::findOrFail($instanceId),
         ]);
     }

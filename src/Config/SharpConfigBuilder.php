@@ -10,6 +10,7 @@ use Code16\Sharp\Search\SharpSearchEngine;
 use Code16\Sharp\Utils\Filters\GlobalRequiredFilter;
 use Code16\Sharp\Utils\Menu\SharpMenu;
 use Illuminate\Contracts\Auth\PasswordBroker;
+use Illuminate\Foundation\Vite;
 use Illuminate\Support\Traits\Conditionable;
 
 class SharpConfigBuilder
@@ -87,6 +88,7 @@ class SharpConfigBuilder
             'logo_url' => null,
             'logo_height' => '1.5rem',
         ],
+        'assets' => [],
     ];
 
     public function setName(string $name): self
@@ -389,6 +391,22 @@ class SharpConfigBuilder
     {
         $this->config['auth']['login_page_url'] = $url;
 
+        return $this;
+    }
+    
+    public function loadViteAssets(array|Vite $assets): self
+    {
+        $this->config['assets'][] = $assets instanceof Vite
+            ? $assets->toHtml()
+            : app(Vite::class)->__invoke($assets)->toHtml();
+
+        return $this;
+    }
+    
+    public function loadStaticCss(string $url): self
+    {
+        $this->config['assets'][] = sprintf('<link rel="stylesheet" href="%s">', $url);
+        
         return $this;
     }
 
