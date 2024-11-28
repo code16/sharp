@@ -1,11 +1,10 @@
 <script setup lang="ts">
-    import { computed, onUpdated, ref } from "vue";
+    import { computed, ref } from "vue";
     import { FormFieldProps } from "@/form/types";
     import { useParentForm } from "@/form/useParentForm";
     import { __, trans_choice } from "@/utils/i18n";
     import { Label } from "@/components/ui/label";
     import { cn } from "@/utils/cn";
-    import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
     import StickyTop from "@/components/StickyTop.vue";
     import { FormFieldData } from "@/types";
     import { useId } from "@/composables/useId";
@@ -56,10 +55,10 @@
             <component
                 :is="stickyLabel ? StickyTop : 'div'"
                 class="group"
-                :class="{
-                    'top-[calc(var(--top-bar-height)+.625rem)] z-10 lg:sticky': stickyLabel,
+                :class="[{
+                    'top-[calc(var(--top-bar-height)+.625rem)] [[role=dialog]_&]:top-2.5 z-10 lg:sticky': stickyLabel,
                     'hidden @lg/field-container:block': !hasLabelRow,
-                }"
+                }]"
                 v-slot="{ stuck = false } = {}"
             >
                 <template v-if="stickyLabel">

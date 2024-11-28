@@ -150,7 +150,7 @@
             }"
         >
             <template v-if="editor && field.toolbar">
-                <StickyTop class="sticky top-[--top-bar-height] data-[stuck]:border-b data-[stuck]:z-10 bg-background">
+                <StickyTop class="sticky top-[--top-bar-height] [[role=dialog]_&]:top-0 data-[stuck]:border-b data-[stuck]:z-10 bg-background">
                     <div ref="header">
                         <Toolbar
                             :editor="editor"

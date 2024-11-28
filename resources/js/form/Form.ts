@@ -211,7 +211,7 @@ export class Form implements FormData, CommandFormData {
             : this.errors[key] as string;
     }
 
-    fieldHasError(field: FormFieldData, key: string, locale = null): boolean {
+    fieldHasError(field: Omit<FormFieldData, 'value'>, key: string, locale = null): boolean {
         if(this.fieldError(key)) {
             return true;
         }
@@ -227,7 +227,7 @@ export class Form implements FormData, CommandFormData {
         return this.locales.filter(locale => this.fieldError(`${key}.${locale}`));
     }
 
-    fieldIsEmpty(field: FormFieldData, value: FormFieldData['value'], locale: string): boolean {
+    fieldIsEmpty(field: Omit<FormFieldData, 'value'>, value: FormFieldData['value'], locale: string): boolean {
         if('localized' in field && field.localized) {
             if(field.type === 'editor') {
                 return !(value as FormEditorFieldData['value'])?.text?.[locale];
