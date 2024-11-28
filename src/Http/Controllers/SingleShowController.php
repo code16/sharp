@@ -40,10 +40,10 @@ class SingleShowController extends SharpProtectedController
                 ? $show->getDataLocalizations()
                 : null,
             'authorizations' => [
-                'create' => $this->sharpAuthorizationManager->isAllowed('create', $entityKey),
+                'create' => false,
                 'view' => $this->sharpAuthorizationManager->isAllowed('view', $entityKey),
                 'update' => $this->sharpAuthorizationManager->isAllowed('update', $entityKey),
-                'delete' => $this->sharpAuthorizationManager->isAllowed('delete', $entityKey),
+                'delete' => false,
             ],
         ]);
 
