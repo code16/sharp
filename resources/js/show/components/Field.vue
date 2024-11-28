@@ -8,10 +8,7 @@
     import { ShowFieldProps } from "../types";
     import { ShowFieldData } from "@/types";
 
-    defineProps<ShowFieldProps & {
-        field: ShowFieldData,
-        value?: ShowFieldData['value'],
-    }>();
+    const props = defineProps<ShowFieldProps<ShowFieldData, any>>();
 
     const components: Record<Exclude<ShowFieldData['type'], 'html' | 'entityList'>, Component> = {
         'file': File,
@@ -24,6 +21,6 @@
 <template>
     <component
         :is="isCustomField(field.type) ? resolveCustomField(field.type) : components[field.type]"
-        v-bind="$props"
+        v-bind="props"
     />
 </template>

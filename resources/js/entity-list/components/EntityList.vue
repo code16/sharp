@@ -406,14 +406,14 @@
                 <div class="h-8 mb-4"></div>
             </template>
 
-            <div class="container px-4 lg:px-6">
-                <template v-if="entityList?.pageAlert">
+            <template v-if="entityList?.pageAlert">
+                <div class="container px-4 lg:px-6">
                     <PageAlert
                         class="mb-3"
                         :page-alert="entityList.pageAlert"
                     />
-                </template>
-            </div>
+                </div>
+            </template>
 
             <RootCard :class="reordering ? 'relative z-[11]' : ''">
                 <CardHeader>
@@ -434,7 +434,10 @@
                         <template v-if="entityList && (showSearchField && entityList.config.searchable || entityList.visibleFilters?.length)">
                             <div class="flex flex-wrap items-center gap-2 -my-1 @2xl/root-card:my-0" :class="!collapsed && entityList.data?.length ? '@2xl/root-card:-mb-2' : ''">
                                 <template v-if="showSearchField && entityList.config.searchable">
-                                    <div class="self-center pointer-events-auto hidden @2xl/root-card:block" v-show="!reordering && !selecting && !collapsed">
+                                    <div class="self-center pointer-events-auto"
+                                        :class="{ 'hidden @2xl/root-card:block':entityList.visibleFilters?.length }"
+                                        v-show="!reordering && !selecting && !collapsed"
+                                    >
                                         <EntityListSearch
                                             inline
                                             v-model:expanded="searchExpanded"
@@ -527,7 +530,7 @@
                 <template v-if="entityList">
                     <CardContent :class="entityList.count > 0 ? 'pb-2 !px-0' : ''" v-show="!collapsed">
                         <template v-if="entityList.data?.length > 0">
-                            <ScrollArea class="w-full" type="auto" touch-type="scroll">
+                            <ScrollArea class="w-full data-[scrollbar-x-visible]:pb-4" type="auto" touch-type="scroll">
                                 <Table no-scroll class="w-max min-w-full max-w-[768px] md:max-w-[1024px] @3xl:w-full @3xl:max-w-none">
                                     <TableHeader :class="!visibleFields.some(field => field.label) ? 'collapse [&_tr]:border-0' : ''">
                                         <TableRow class="hover:bg-transparent lg:first:*:pl-6 lg:last:*:pr-6">
@@ -655,10 +658,10 @@
                                                 </template>
 
                                                 <template v-if="!reordering && !selecting && entityList.instanceHasActions(item, showEntityState)">
-                                                    <TableCell class="sticky bg-background pl-1 -right-3 z-10 group-data-[scroll-arrived-right=true]/viewport:bg-transparent @5xl:pl-4 @5xl:bg-transparent">
+                                                    <TableCell class="sticky bg-background pl-1 -right-3 z-10 group-data-[scroll-arrived-right=true]/scroll-area:bg-transparent @5xl:pl-4 @5xl:bg-transparent">
                                                         <div class="absolute inset-0 -left-2 overflow-hidden" aria-hidden="true"></div>
                                                         <div class="absolute inset-0 -left-4 overflow-hidden pointer-events-none" aria-hidden="true">
-                                                            <div class="absolute inset-0 left-4 shadow-l-xl dark:border-l shadow-border transition-opacity group-data-[scroll-arrived-right=true]/viewport:opacity-0  @5xl:opacity-0" aria-hidden="true"></div>
+                                                            <div class="absolute inset-0 left-4 shadow-l-xl dark:border-l shadow-border transition-opacity group-data-[scroll-arrived-right=true]/scroll-area:opacity-0  @5xl:opacity-0" aria-hidden="true"></div>
                                                         </div>
                                                         <DropdownMenu>
                                                             <DropdownMenuTrigger as-child>
@@ -712,15 +715,19 @@
                                         </template>
                                     </TableBody>
                                 </Table>
-                                <UseWindowSize v-slot="{ height }">
-                                    <UseElementBounding class="absolute inset-0 pointer-events-none" v-slot="{ bottom }">
-                                        <ScrollBar
-                                            class="z-20 [@media(hover:hover)]:bg-background pointer-events-auto will-change-transform"
-                                            orientation="horizontal"
-                                            :style="{ transform: `translate3d(0, ${Math.max(0, bottom - height) * -1}px, 0)` }"
-                                        />
-                                    </UseElementBounding>
-                                </UseWindowSize>
+                                <template #scrollbar>
+                                    <UseWindowSize v-slot="{ height }">
+                                        <UseElementBounding class="absolute inset-0 pointer-events-none" v-slot="{ bottom }">
+                                            <ScrollBar
+                                                class="z-20 [@media(hover:hover)]:bg-background pointer-events-auto will-change-transform"
+                                                orientation="horizontal"
+                                                :style="{
+                                                    transform: `translate3d(0, ${Math.max(0, bottom - height) * -1}px, 0)`
+                                                }"
+                                            />
+                                        </UseElementBounding>
+                                    </UseWindowSize>
+                                </template>
                             </ScrollArea>
                         </template>
                         <template v-else>

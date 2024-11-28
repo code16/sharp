@@ -8,7 +8,7 @@
 
 <template>
     <ShowFieldLayout v-bind="props">
-        <div class="flex" :class="[props.isRightCol ? 'md:justify-end' : '']">
+        <div class="flex" :class="[props.isRightCol ? '@3xl/root-card:justify-end' : '']">
             <img class="rounded-md" :src="props.value" alt="">
         </div>
     </ShowFieldLayout>
