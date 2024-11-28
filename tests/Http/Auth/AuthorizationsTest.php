@@ -1,10 +1,13 @@
 <?php
 
 use Code16\Sharp\Auth\SharpAuthenticationCheckHandler;
+use Code16\Sharp\Auth\SharpEntityPolicy;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
+use Code16\Sharp\Tests\Fixtures\Entities\SinglePersonEntity;
 use Code16\Sharp\Tests\Fixtures\User;
 use Code16\Sharp\Tests\Unit\EntityList\Fakes\FakeSharpEntityList;
 use Code16\Sharp\Tests\Unit\Form\Fakes\FakeSharpForm;
+use Code16\Sharp\Tests\Unit\Show\Fakes\FakeSharpSingleShow;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Facades\Gate;
@@ -84,6 +87,33 @@ it('returns prohibited actions with a show or form get request', function () {
                 'delete' => false,
                 'update' => false,
                 'create' => true,
+                'view' => true,
+            ])
+        );
+});
+
+it('always disallow create and delete actions for a single show', function () {
+    sharp()->config()->addEntity('single_person', SinglePersonEntity::class);
+    app(SharpEntityManager::class)
+        ->entityFor('single_person')
+        ->setProhibitedActions([]);
+    fakeShowFor('single_person', new class() extends FakeSharpSingleShow
+    {
+        public function findSingle(): array
+        {
+            return [];
+        }
+    });
+    fakePolicyFor('single_person', new class() extends SharpEntityPolicy {});
+
+    $this
+        ->get('/sharp/s-show/single_person')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('show.authorizations', [
+                'delete' => false,
+                'update' => true,
+                'create' => false,
                 'view' => true,
             ])
         );
@@ -179,7 +209,6 @@ it('allow access by default', function () {
 });
 
 it('checks the main entity prohibited actions in case of a sub entity', function () {
-
     app(SharpEntityManager::class)
         ->entityFor('person')
         ->setMultiforms([
