@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Code16\Sharp\SharpInternalServiceProvider;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -11,7 +12,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->register(SharpInternalServiceProvider::class);
     }
 
     /**
@@ -19,6 +20,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $this->app->register(SharpServiceProvider::class);
         //
     }
 }

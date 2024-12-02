@@ -1,15 +1,15 @@
 <?php
 
-namespace DummyNamespace;
+namespace App\Sharp;
 
 use Code16\Sharp\Show\Fields\SharpShowTextField;
 use Code16\Sharp\Show\Layout\ShowLayout;
 use Code16\Sharp\Show\Layout\ShowLayoutColumn;
 use Code16\Sharp\Show\Layout\ShowLayoutSection;
-use Code16\Sharp\Show\SharpSingleShow;
+use Code16\Sharp\Show\SharpShow;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
-class DummyClass extends SharpSingleShow
+class TestModelShow extends SharpShow
 {
     protected function buildShowFields(FieldsContainer $showFields): void
     {
@@ -26,13 +26,23 @@ class DummyClass extends SharpSingleShow
             ->addSection('My section', function (ShowLayoutSection $section) {
                 $section
                     ->addColumn(12, function (ShowLayoutColumn $column) {
-                        $column->withField('my_field');
+                        $column->withSingleField('my_field');
                     });
             });
     }
 
-    public function findSingle(): array
+    public function buildShowConfig(): void
     {
-        return $this->transform([]);
+        //
+    }
+
+    public function find($id): array
+    {
+        return $this->transform(...);
+    }
+
+    public function delete($id): void
+    {
+        //
     }
 }

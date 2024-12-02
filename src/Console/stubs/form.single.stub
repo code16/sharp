@@ -27,7 +27,7 @@ class DummyClass extends SharpSingleForm
         $formLayout
             ->addColumn(6, function (FormLayoutColumn $column) {
                 $column
-                    ->withSingleField('my_field');
+                    ->withField('my_field');
             });
     }
 

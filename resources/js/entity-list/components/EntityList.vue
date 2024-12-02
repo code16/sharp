@@ -32,7 +32,6 @@
         ArrowUp,
         ArrowDown,
         GripVertical,
-        ChevronDown
     } from "lucide-vue-next";
     import { Checkbox } from "@/components/ui/checkbox";
     import {
