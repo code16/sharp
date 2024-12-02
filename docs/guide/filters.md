@@ -146,7 +146,7 @@ class ProductEntityList extends SharpEntityList
 
 ### Configuration
 
-You can define the date display format (default is `MM-DD-YYYY`, using [the Moment.js parser syntax](https://momentjs.com/docs/#/parsing/string-format/)) and choose if the week should start on monday (default is sunday).
+You can define the date display format (default is `MM-DD-YYYY`, using [Carbon isoFormat() syntax](https://carbon.nesbot.com/docs/#iso-format-available-replacements)) and choose if the week should start on monday (default is sunday).
 With `configureShowPresets()`, a list of buttons is displayed allowing the user to quickly select a date range.
 
 ```php

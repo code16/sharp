@@ -62,7 +62,11 @@ trait ProvidesFilterValuesToFront
         if ($value && $handler instanceof DateRangeFilter) {
             $value = [
                 'start' => $value['start']->format('Y-m-d'),
-                'end' => $value['end']->format('Y-m-d'),
+                'end' => $value['end']?->format('Y-m-d'),
+                'formatted' => [
+                    'start' => $value['start']->isoFormat($handler->getDateFormat()),
+                    'end' => $value['end']?->isoFormat($handler->getDateFormat()),
+                ],
                 'preset' => $value['preset'] ?? null,
             ];
         }

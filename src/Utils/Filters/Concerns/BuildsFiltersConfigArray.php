@@ -43,7 +43,6 @@ trait BuildsFiltersConfigArray
                                 'type' => 'daterange',
                                 'required' => $filterHandler instanceof DateRangeRequiredFilter,
                                 'mondayFirst' => $filterHandler->isMondayFirst(),
-                                'displayFormat' => $filterHandler->getDateFormat(),
                                 'presets' => collect($filterHandler->getPresets())
                                     ->map(fn ($preset, $key) => ['key' => $key, ...$preset->toArray()])
                                     ->values()

@@ -22,7 +22,6 @@ final class FormDateFieldData extends Data
         public string $maxTime,
         public int $stepTime,
         public bool $mondayFirst,
-        public string $displayFormat,
         public string $language,
         public ?string $label = null,
         public ?bool $readOnly = null,

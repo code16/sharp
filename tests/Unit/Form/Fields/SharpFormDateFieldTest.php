@@ -65,14 +65,6 @@ it('allows to define monday as first day of week', function () {
         ->toHaveKey('mondayFirst', true);
 });
 
-it('allows to define a display format', function () {
-    $dateFormField = SharpFormDateField::make('date')
-        ->setDisplayFormat('DD/MM/YYYY');
-
-    expect($dateFormField->toArray())
-        ->toHaveKey('displayFormat', 'DD/MM/YYYY');
-});
-
 it('formats default displayFormat regarding date and time configuration', function () {
     $dateFormField = SharpFormDateField::make('date')
         ->setHasDate();

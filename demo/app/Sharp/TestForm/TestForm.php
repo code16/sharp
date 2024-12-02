@@ -88,7 +88,6 @@ class TestForm extends SharpSingleForm
             ->addField(
                 SharpFormDateField::make('datetime')
                     ->setLabel('Datetime')
-                    ->setDisplayFormat('YYYY-MM-DD HH:mm')
                     ->setMinTime(0, 15)
 //                    ->setReadOnly()
                     ->setHasTime(),
@@ -96,14 +95,12 @@ class TestForm extends SharpSingleForm
             ->addField(
                 SharpFormDateField::make('date')
                     ->setLabel('Date')
-                    ->setDisplayFormat('YYYY-MM-DD')
 //                    ->setReadOnly()
                     ->setHasTime(false),
             )
             ->addField(
                 SharpFormDateField::make('time')
                     ->setLabel('Time')
-                    ->setDisplayFormat('HH:mm')
                     ->setHasDate(false)
                     ->setMinTime(0, 15)
                     ->setMaxTime(22, 15)
@@ -142,7 +139,6 @@ class TestForm extends SharpSingleForm
                     ->addItemField(
                         SharpFormDateField::make('date')
                             ->setLabel('Date')
-                            ->setDisplayFormat('YYYY/MM/DD')
                             ->setHasTime(false),
                     )
                     ->addItemField(

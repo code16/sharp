@@ -268,8 +268,7 @@ class DemoDashboard extends SharpDashboard
 
         $this->setPanelData('highlighted_post', [
             'author' => $author,
-            'post' => $author->posts->first(),
-            'postUrl' => LinkToShowPage::make('posts', $author->posts->first()->id)->renderAsUrl(),
+            'post' => $author?->posts->first(),
         ]);
     }
 
