@@ -48,10 +48,10 @@ class PostShow extends SharpShow
             ->addField(
                 SharpShowListField::make('attachments')
                     ->setLabel('Attachments')
-//                    ->addItemField(
-//                        SharpShowTextField::make('title')
-//                            ->setLabel('Title')
-//                    )
+                    ->addItemField(
+                        SharpShowTextField::make('title')
+                            ->setLabel('Title')
+                    )
                     ->addItemField(
                         SharpShowTextField::make('link_url')
                             ->setLabel('External link')

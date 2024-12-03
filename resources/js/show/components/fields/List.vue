@@ -1,7 +1,6 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
     import { ShowListFieldData } from "@/types";
-    import { UnknownField } from '@/components';
     import ShowFieldLayout from "../ShowFieldLayout.vue";
     import { ShowFieldProps } from "../../types";
     import FieldGrid from "@/components/ui/FieldGrid.vue";
@@ -16,50 +15,64 @@
     const hasOnlyOneVisibleFileField = computed(() => {
         return props.field.itemFields
             && props.value?.every(item => {
-                const visibleFields = Object.values(props.field.itemFields).filter(field =>
-                    show.fieldShouldBeVisible(props.fieldLayout.item[field.key], props.locale, props.field.itemFields, item)
+                const visibleFields = props.fieldLayout.item.flat().filter(fieldLayout =>
+                    show.fieldShouldBeVisible(fieldLayout, props.locale, props.field.itemFields, item)
                 );
-                return visibleFields.length === 1 && visibleFields[0].type === 'file';
-            })
+                return visibleFields.length === 1 && props.field.itemFields[visibleFields[0].key]?.type === 'file';
+            });
     });
 </script>
 
 <template>
     <ShowFieldLayout v-bind="props">
         <template v-if="value?.length > 0">
-            <div :class="hasOnlyOneVisibleFileField ? 'space-y-4' : 'space-y-6'">
-                <template v-for="item in value">
-                    <Card :class="hasOnlyOneVisibleFileField ? 'shadow-none border-none bg-none' : ''">
-                        <CardContent :class="hasOnlyOneVisibleFileField ? '!p-0' : ''">
-                            <FieldGrid class="gap-6">
-                                <template v-for="row in fieldLayout.item">
-                                    <FieldGridRow v-show="show.fieldRowShouldBeVisible(row, props.locale, props.field.itemFields, item)">
-                                        <template v-for="itemFieldLayout in row">
-                                            <FieldGridColumn
-                                                :layout="itemFieldLayout"
-                                                v-show="show.fieldShouldBeVisible(itemFieldLayout, props.locale, props.field.itemFields, item)"
-                                            >
-                                                <template v-if="field.itemFields?.[itemFieldLayout.key]">
+            <template v-if="hasOnlyOneVisibleFileField">
+                <div class="grid grid-cols-1 gap-y-4">
+                    <template v-for="item in value">
+                        <template v-for="row in fieldLayout.item">
+                            <template v-for="itemFieldLayout in row">
+                                <SharpShowField
+                                    v-if="show.fieldShouldBeVisible(itemFieldLayout, props.locale, props.field.itemFields, item)"
+                                    v-bind="props"
+                                    :field="field.itemFields[itemFieldLayout.key]"
+                                    :value="item[itemFieldLayout.key]"
+                                    hide-label
+                                />
+                            </template>
+                        </template>
+                    </template>
+                </div>
+            </template>
+            <template v-else>
+                <div class="grid grid-cols-1 gap-y-6">
+                    <template v-for="item in value">
+                        <Card>
+                            <CardContent>
+                                <FieldGrid class="gap-6">
+                                    <template v-for="row in fieldLayout.item">
+                                        <FieldGridRow v-show="show.fieldRowShouldBeVisible(row, props.locale, props.field.itemFields, item)">
+                                            <template v-for="itemFieldLayout in row">
+                                                <FieldGridColumn
+                                                    :layout="itemFieldLayout"
+                                                    v-show="show.fieldShouldBeVisible(itemFieldLayout, props.locale, props.field.itemFields, item)"
+                                                >
                                                     <SharpShowField
                                                         v-bind="props"
                                                         :field="field.itemFields?.[itemFieldLayout.key]"
                                                         :value="item[itemFieldLayout.key]"
-                                                        :hide-label="hasOnlyOneVisibleFileField"
+                                                        :field-layout="itemFieldLayout"
                                                         :row="row"
                                                     />
-                                                </template>
-                                                <template v-else>
-                                                    <UnknownField :name="itemFieldLayout.key" />
-                                                </template>
-                                            </FieldGridColumn>
-                                        </template>
-                                    </FieldGridRow>
-                                </template>
-                            </FieldGrid>
-                        </CardContent>
-                    </Card>
-                </template>
-            </div>
+                                                </FieldGridColumn>
+                                            </template>
+                                        </FieldGridRow>
+                                    </template>
+                                </FieldGrid>
+                            </CardContent>
+                        </Card>
+                    </template>
+                </div>
+            </template>
         </template>
         <template v-else>
             <div class="text-muted-foreground">

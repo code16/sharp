@@ -14,7 +14,8 @@ final class DateRangeFilterData extends Data
         start: string,
         end: string,
         formatted?: { start: string, end: string },
-    } | { preset:string } | null')]
+        preset?: string,
+    } | null')]
     public ?array $value;
 
     public function __construct(

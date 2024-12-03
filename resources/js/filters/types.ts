@@ -12,6 +12,6 @@ export type FilterProps<Data extends FilterData, Value = Data['value']> = {
     disabled?: boolean;
     inline?: boolean;
 }
-export type FilterEmits<Data extends FilterData> = {
-    (e: 'input', values: Data['value']): void
+export type FilterEmits<Data extends FilterData, Value = Data['value']> = {
+    (e: 'input', values: Value): void
 };

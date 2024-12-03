@@ -15,24 +15,20 @@
     import { FilterEmits, FilterProps } from "@/filters/types";
 
     const props = defineProps<FilterProps<DateRangeFilterData>>();
-    const emit = defineEmits<FilterEmits<DateRangeFilterData>>();
+    const emit = defineEmits<FilterEmits<DateRangeFilterData, { start: string, end: string } | { preset: string } | null>>();
 
-    const localValue = ref<{ start?: CalendarDate, end?: CalendarDate, preset?: string }>();
-    const inputs = reactive({
-        start: '',
-        end: ''
-    });
+    const localValue = ref<{ start: CalendarDate | null, end: CalendarDate | null }>();
+    const inputs = reactive({ start: '', end: '' });
     const renderKey = ref(0);
     const open = ref(false);
 
     watch(() => props.value, () => update());
 
     function update() {
-        localValue.value = props.value ? {
-            start: 'start' in props.value ? parseDate(props.value.start) : null,
-            end: 'end' in props.value ? parseDate(props.value.end) : null,
-            preset: 'preset' in props.value ? props.value.preset : null,
-        } : {};
+        localValue.value = {
+            start: props.value?.start ? parseDate(props.value.start) : null,
+            end: props.value?.end ? parseDate(props.value.end) : null,
+        };
         inputs.start = localValue.value.start?.toString();
         inputs.end = localValue.value.end?.toString();
         renderKey.value++;
@@ -130,7 +126,7 @@
                             <template v-for="preset in filter.presets">
                                 <Button
                                     class="text-left justify-start"
-                                    :class="{ 'bg-accent text-accent-foreground': preset.key === localValue.preset }"
+                                    :class="{ 'bg-accent text-accent-foreground': preset.key === props.value?.preset }"
                                     size="sm"
                                     variant="ghost"
                                     @click="onPresetSelected(preset)"
@@ -147,7 +143,7 @@
                             :number-of-months="2"
                             :locale="window.navigator.language"
                             :week-starts-on="props.filter.mondayFirst ? 1 : 0"
-                            @update:start-value="(startDate) => localValue.start = startDate"
+                            @update:start-value="(startDate) => localValue.start = startDate as CalendarDate"
                             @update:model-value="onCalendarChange"
                             :key="renderKey"
                         />
