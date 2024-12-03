@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Sharp\Entities\TestModelEntity;
 use Code16\Sharp\Config\SharpConfigBuilder;
 use Code16\Sharp\SharpAppServiceProvider;
 use App\Sharp\SharpMenu;
@@ -12,8 +13,8 @@ class SharpServiceProvider extends SharpAppServiceProvider
     {
         $config
             ->setName('E2E')
-            ->setSharpMenu(SharpMenu::class);
-//            ->addEntity('posts', PostEntity::class)
+            ->setSharpMenu(SharpMenu::class)
+            ->addEntity('test-models', TestModelEntity::class);
     }
 
     protected function declareAccessGate(): void

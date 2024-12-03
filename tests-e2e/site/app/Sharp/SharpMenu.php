@@ -9,6 +9,6 @@ class SharpMenu extends BaseSharpMenu
     public function build(): self
     {
         return $this
-            ->addExternalLink('https://sharp.code16.fr/docs/guide/building-menu', 'Documentation', 'fa fa-book');
+            ->addEntityLink('test-models', 'Test Models');
     }
 }

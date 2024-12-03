@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Sharp;
+namespace App\Sharp\TestModels;
 
 use App\Models\TestModel;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
@@ -34,7 +34,7 @@ class TestModelForm extends SharpForm
         $formFields
             ->addField(
                 SharpFormAutocompleteLocalField::make('autocomplete_local')
-                    ->setLabel('autocomplete_local')
+                    ->setLabel('Autocomplete local')
                     ->setLocalSearchKeys(['label'])
                     ->setListItemTemplate('{{ $label }}')
                     ->setResultItemTemplate('{{ $label }} ({{ $id }})')
@@ -42,23 +42,23 @@ class TestModelForm extends SharpForm
             )
             ->addField(
                 SharpFormAutocompleteRemoteField::make('autocomplete_remote')
-                    ->setLabel('autocomplete_remote')
+                    ->setLabel('Autocomplete remote')
                     ->setRemoteSearchAttribute('query')
                     ->setListItemTemplate('{{ $name }}')
                     ->setResultItemTemplate('{{ $name }} ({{ $id }})')
-                    ->setRemoteEndpoint(route('sharp.autocompletes.users.index')),
+                    ->setRemoteEndpoint(route('sharp.remote-autocomplete')),
             )
             ->addField(
                 SharpFormAutocompleteListField::make('autocomplete_list')
-                    ->setLabel('autocomplete_list')
+                    ->setLabel('Autocomplete list')
                     ->setAddable()
                     ->setRemovable()
                     ->setItemField(
                         SharpFormAutocompleteLocalField::make('item')
                             ->setLabel('autocomplete_list_item')
                             ->setPlaceholder('test')
-                            ->setListItemTemplate('{{ $name }}')
-                            ->setResultItemTemplate('{{ $name }} ({{ $id }})')
+                            ->setListItemTemplate('{{ $label }}')
+                            ->setResultItemTemplate('{{ $label }} ({{ $id }})')
                             ->setLocalValues($this->options()),
                     ),
             )
@@ -67,7 +67,7 @@ class TestModelForm extends SharpForm
             )
             ->addField(
                 SharpFormDateField::make('date_time')
-                    ->setLabel('date_time')
+                    ->setLabel('Date time')
                     ->setMinTime(0, 15)
                     ->setHasTime(),
             )
@@ -83,15 +83,6 @@ class TestModelForm extends SharpForm
                     ->setMinTime(0, 15)
                     ->setMaxTime(22, 15)
                     ->setHasTime(),
-            )
-            ->addField(
-                SharpFormTextField::make('text')
-                    ->setLabel('text'),
-            )
-            ->addField(
-                SharpFormTextField::make('text_localized')
-                    ->setLocalized()
-                    ->setLabel('text_localized'),
             )
             ->addField(
                 SharpFormGeolocationField::make('geolocation')
@@ -128,7 +119,6 @@ class TestModelForm extends SharpForm
                         SharpFormCheckField::make('check', 'check this'),
                     )
                     ->addItemField(SharpFormEditorField::make('markdown2')
-                        ->setLocalized()
                         ->setLabel('Markdown')
                         ->setToolbar([
                             SharpFormEditorField::B, SharpFormEditorField::I, SharpFormEditorField::A,
@@ -136,12 +126,9 @@ class TestModelForm extends SharpForm
                     ),
             )
             ->addField(
-                SharpFormEditorField::make('wysiwyg')
+                SharpFormEditorField::make('editor_html')
                     ->setPlaceholder('Start typing content here...')
-                    ->setMaxLength(200)
-//                    ->setReadOnly()
-                    ->setLocalized()
-                    ->setLabel('Wysiwyg')
+                    ->setLabel('Editor HTML')
                     ->setToolbar([
                         SharpFormEditorField::B,
                         SharpFormEditorField::I,
@@ -177,11 +164,26 @@ class TestModelForm extends SharpForm
                     ->setHeight(350)
             )
             ->addField(
-                SharpFormEditorField::make('markdown')
+                SharpFormEditorField::make('editor_html_localized')
+                    ->setPlaceholder('Start typing content here...')
+                    ->setLabel('Editor HTML')
+                    ->setToolbar([
+                        SharpFormEditorField::B,
+                        SharpFormEditorField::I,
+                        SharpFormEditorField::A,
+                    ])
+                    ->allowUploads(
+                        SharpFormEditorUpload::make()
+                            ->setImageOnly()
+                            ->setImageCropRatio('1:1')
+                            ->setStorageDisk('local')
+                            ->setStorageBasePath('data')
+                    )
+                    ->setHeight(350)
+            )
+            ->addField(
+                SharpFormEditorField::make('editor_markdown')
                     ->setRenderContentAsMarkdown()
-                    ->showCharacterCount()
-//                    ->setReadOnly()
-                    ->setLocalized()
                     ->setLabel('Markdown')
                     ->setToolbar([
                         SharpFormEditorField::B, SharpFormEditorField::I, SharpFormEditorField::A,
@@ -202,8 +204,6 @@ class TestModelForm extends SharpForm
                             ->setStorageDisk('local')
                             ->setStorageBasePath('data')
                     )
-//                    ->hideToolbar()
-//                    ->setWithoutParagraphs()
                     ->setHeight(350, 0),
             )
             ->addField(
@@ -222,12 +222,12 @@ class TestModelForm extends SharpForm
                     ->setDisplayAsDropdown(),
             )
             ->addField(
-                SharpFormSelectField::make('select_list', $this->options())
+                SharpFormSelectField::make('select_radios', $this->options())
                     ->setLabel('Select list')
                     ->setDisplayAsList(),
             )
             ->addField(
-                SharpFormSelectField::make('select_list_multiple', $this->options())
+                SharpFormSelectField::make('select_checkboxes', $this->options())
                     ->setLabel('Select list multiple')
                     ->allowSelectAll()
 //                    ->setInline()
@@ -244,10 +244,23 @@ class TestModelForm extends SharpForm
             )
             ->addField(
                 SharpFormTextareaField::make('textarea')
-                    ->setLocalized()
                     ->setLabel('Textarea')
-                    ->setMaxLength(50)
                     ->setRowCount(4),
+            )
+            ->addField(
+                SharpFormTextareaField::make('textarea_localized')
+                    ->setLocalized()
+                    ->setLabel('Textarea localized')
+                    ->setRowCount(4),
+            )
+            ->addField(
+                SharpFormTextField::make('text')
+                    ->setLabel('text'),
+            )
+            ->addField(
+                SharpFormTextField::make('text_localized')
+                    ->setLocalized()
+                    ->setLabel('text_localized'),
             )
             ->addField(
                 SharpFormUploadField::make('upload')
@@ -264,7 +277,32 @@ class TestModelForm extends SharpForm
          $formLayout
              ->addColumn(6, function (FormLayoutColumn $column) {
                  $column
-                     ->withField('my_field');
+                    ->withField('autocomplete_local')
+                    ->withField('autocomplete_remote')
+                    ->withField('autocomplete_list')
+                    ->withField('check')
+                    ->withField('date_time')
+                    ->withField('date')
+                    ->withField('time')
+                    ->withField('geolocation')
+                    ->withField('html')
+                    ->withField('list')
+                     ->withField('editor_html')
+                     ->withField('editor_html_localized')
+                     ->withField('editor_markdown');
+             })
+             ->addColumn(6, function (FormLayoutColumn $column) {
+                 $column
+                     ->withField('number')
+                     ->withField('select_dropdown')
+                     ->withField('select_radios')
+                     ->withField('select_checkboxes')
+                     ->withField('tags')
+                     ->withField('textarea')
+                     ->withField('textarea_localized')
+                     ->withField('text')
+                     ->withField('text_localized')
+                     ->withField('upload');
              });
     }
 
@@ -282,6 +320,11 @@ class TestModelForm extends SharpForm
     {
     	return [
     	];
+    }
+
+    public function getDataLocalizations(): array
+    {
+        return ['fr', 'en'];
     }
 
     protected function options(): array

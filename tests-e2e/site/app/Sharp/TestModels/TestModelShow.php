@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Sharp;
+namespace App\Sharp\TestModels;
 
+use App\Models\TestModel;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
 use Code16\Sharp\Show\Layout\ShowLayout;
 use Code16\Sharp\Show\Layout\ShowLayoutColumn;
@@ -15,34 +16,33 @@ class TestModelShow extends SharpShow
     {
         $showFields
             ->addField(
-                SharpShowTextField::make('my_field')
-                    ->setLabel('My field')
+                SharpShowTextField::make('text')
+                    ->setLabel('Text')
             );
     }
 
     protected function buildShowLayout(ShowLayout $showLayout): void
     {
         $showLayout
-            ->addSection('My section', function (ShowLayoutSection $section) {
+            ->addSection('Section 1', function (ShowLayoutSection $section) {
                 $section
                     ->addColumn(12, function (ShowLayoutColumn $column) {
-                        $column->withSingleField('my_field');
+                        $column->withField('text');
                     });
             });
     }
 
     public function buildShowConfig(): void
     {
-        //
     }
 
     public function find($id): array
     {
-        return $this->transform(...);
+        return $this->transform(TestModel::findOrFail($id));
     }
 
     public function delete($id): void
     {
-        //
+        TestModel::findOrFail($id)->delete();
     }
 }

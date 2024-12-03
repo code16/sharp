@@ -6,7 +6,8 @@ import { defineConfig, devices } from '@playwright/test';
  */
 import dotenv from 'dotenv';
 import path from 'node:path';
-dotenv.config({ path: path.resolve(__dirname, '.env') });
+
+dotenv.config({ path: path.resolve(__dirname, 'site/.env') });
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -14,19 +15,19 @@ dotenv.config({ path: path.resolve(__dirname, '.env') });
 export default defineConfig({
   testDir: './tests',
   /* Run tests in files in parallel */
-  fullyParallel: true,
+  fullyParallel: false,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
   /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
+  workers: 1,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    // baseURL: 'http://127.0.0.1:3000',
+    baseURL: process.env.APP_URL,
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
@@ -36,7 +37,10 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+        ...devices['Desktop Chrome'],
+        launchOptions: { args: ['--window-position=-1600,100'] },
+      },
     },
 
     // {
@@ -71,10 +75,10 @@ export default defineConfig({
   ],
 
   /* Run your local dev server before starting the tests */
-  webServer: {
-    command: 'php artisan serve --host=127.0.0.1 --port=8080',
-    cwd: '../demo',
-    url: 'http://127.0.0.1:8080',
-    reuseExistingServer: !process.env.CI,
-  },
+  // webServer: {
+  //   command: 'php artisan serve --host=127.0.0.1 --port=8080',
+  //   cwd: 'site',
+  //   url: 'http://127.0.0.1:8080',
+  //   reuseExistingServer: !process.env.CI,
+  // },
 });

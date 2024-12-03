@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Sharp;
+namespace App\Sharp\TestModels;
 
+use App\Models\TestModel;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\SharpEntityList;
@@ -13,17 +14,13 @@ class TestModelList extends SharpEntityList
     {
         $fields
             ->addField(
-                EntityListField::make('my_field')
-                    ->setLabel('My field')
-                    ->setWidth(4)
-                    ->setWidthOnSmallScreens(6),
+                EntityListField::make('text')
+                    ->setLabel('Text'),
             );
     }
 
     public function buildListConfig(): void
     {
-        $this
-            ->configureDefaultSort('created_at', 'desc');
     }
 
     protected function getInstanceCommands(): ?array
@@ -44,6 +41,6 @@ class TestModelList extends SharpEntityList
     public function getListData(): array|Arrayable
     {
         return $this
-            ->transform([]);
+            ->transform(TestModel::paginate(20));
     }
 }
