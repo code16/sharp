@@ -116,8 +116,12 @@ abstract class DateRangeFilter extends Filter
         );
 
         return [
-            'start' => $start,
-            'end' => $end,
+            'start' => $start->format('Y-m-d'),
+            'end' => $end->format('Y-m-d'),
+            'formatted' => [
+                'start' => $start->isoFormat($this->getDateFormat()),
+                'end' => $end->isoFormat($this->getDateFormat()),
+            ],
             'preset' => $presetKey ?: null,
         ];
     }

@@ -11,7 +11,6 @@ it('sets default values', function () {
             'hasDate' => true, 'hasTime' => false,
             'minTime' => '00:00', 'maxTime' => '23:59',
             'stepTime' => 30,
-            'displayFormat' => 'YYYY-MM-DD',
             'mondayFirst' => true,
             'language' => app()->getLocale(),
         ]);
@@ -63,23 +62,4 @@ it('allows to define monday as first day of week', function () {
 
     expect($dateFormField->toArray())
         ->toHaveKey('mondayFirst', true);
-});
-
-it('formats default displayFormat regarding date and time configuration', function () {
-    $dateFormField = SharpFormDateField::make('date')
-        ->setHasDate();
-
-    $dateTimeFormField = SharpFormDateField::make('date')
-        ->setHasTime();
-
-    $timeFormField = SharpFormDateField::make('date')
-        ->setHasTime()
-        ->setHasDate(false);
-
-    expect($dateFormField->toArray())
-        ->toHaveKey('displayFormat', 'YYYY-MM-DD')
-        ->and($dateTimeFormField->toArray())
-        ->toHaveKey('displayFormat', 'YYYY-MM-DD HH:mm')
-        ->and($timeFormField->toArray())
-        ->toHaveKey('displayFormat', 'HH:mm');
 });
