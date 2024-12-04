@@ -2,7 +2,6 @@
 
 namespace App\Sharp\Dashboard;
 
-use App\Models\Category;
 use App\Models\User;
 use App\Sharp\Dashboard\Commands\ExportStatsAsCsvCommand;
 use App\Sharp\Utils\Filters\PeriodRequiredFilter;
@@ -17,9 +16,11 @@ use Code16\Sharp\Dashboard\Widgets\SharpBarGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpFigureWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
 use Code16\Sharp\Dashboard\Widgets\SharpLineGraphWidget;
+use Code16\Sharp\Dashboard\Widgets\SharpOrderedListWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpPieGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\WidgetsContainer;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
+use Code16\Sharp\Utils\Links\LinkToShowPage;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 
@@ -61,6 +62,13 @@ class DemoDashboard extends SharpDashboard
                     ->setCurvedLines(),
             )
             ->addWidget(
+                SharpOrderedListWidget::make('top_categories_list')
+                    ->setTitle('Most used categories')
+                    ->buildItemLink(function ($item) {
+                        return LinkToShowPage::make('categories', $item['id']);
+                    })
+            )
+            ->addWidget(
                 SharpFigureWidget::make('draft_panel')
                     ->setTitle('Draft posts')
                     ->setLink(LinkToEntityList::make('posts')->addFilter(StateFilter::class, 'draft')),
@@ -88,6 +96,9 @@ class DemoDashboard extends SharpDashboard
                     ->addRow(function (DashboardLayoutRow $row) {
                         $row->addWidget(6, 'authors_bar')
                             ->addWidget(6, 'categories_pie');
+                    })
+                    ->addRow(function (DashboardLayoutRow $row) {
+                        $row->addWidget(12, 'top_categories_list');
                     })
                     ->addFullWidthWidget('visits_line');
             });
@@ -124,6 +135,7 @@ class DemoDashboard extends SharpDashboard
         $this->setPieGraphDataSet();
         $this->setBarsGraphDataSet();
         $this->setLineGraphDataSet();
+        $this->setOrderedListDataset();
 
         $posts = DB::table('posts')
             ->select(DB::raw('state, count(*) as count'))
@@ -193,19 +205,23 @@ class DemoDashboard extends SharpDashboard
 
     protected function setPieGraphDataSet(): void
     {
-        Category::withCount([
-            'posts' => function (Builder $query) {
-                $query->whereBetween('published_at', [$this->getStartDate(), $this->getEndDate()]);
-            }, ])
-            ->limit(8)
-            ->orderBy('posts_count')
+        DB::table('posts')
+            ->selectRaw('categories.name as category_name, count(*) as post_count')
+            ->join('category_post', 'post_id', '=', 'posts.id')
+            ->join('categories', 'category_id', '=', 'categories.id')
+            ->whereBetween('published_at', [
+                $this->getStartDate(),
+                $this->getEndDate(),
+            ])
+            ->groupBy('category_id')
+            ->orderBy('post_count', 'desc')
             ->limit(5)
             ->get()
-            ->each(function (Category $category) {
+            ->each(function ($result) {
                 $this->addGraphDataSet(
                     'categories_pie',
-                    SharpGraphWidgetDataSet::make([$category->posts_count])
-                        ->setLabel($category->name)
+                    SharpGraphWidgetDataSet::make([$result->post_count])
+                        ->setLabel($result->category_name)
                         ->setColor(static::nextColor()),
                 );
             });
@@ -230,6 +246,34 @@ class DemoDashboard extends SharpDashboard
         return min(
             $this->queryParams->filterFor(PeriodRequiredFilter::class)['end'],
             today()->subDay(),
+        );
+    }
+
+    private function setOrderedListDataset()
+    {
+        $this->setOrderedListData(
+            'top_categories_list',
+            DB::table('posts')
+                ->selectRaw('category_id, categories.name as category_name, count(*) as post_count')
+                ->join('category_post', 'post_id', '=', 'posts.id')
+                ->join('categories', 'category_id', '=', 'categories.id')
+                ->whereBetween('published_at', [
+                    $this->getStartDate(),
+                    $this->getEndDate(),
+                ])
+                ->groupBy('category_id')
+                ->orderBy('post_count', 'desc')
+                ->limit(5)
+                ->get()
+                ->map(function ($data) {
+                    return [
+                        'label' => $data->category_name,
+                        'count' => (int) $data->post_count,
+                        'id' => $data->category_id,
+                    ];
+                })
+                ->values()
+                ->toArray(),
         );
     }
 }
