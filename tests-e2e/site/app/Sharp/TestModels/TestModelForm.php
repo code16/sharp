@@ -166,7 +166,7 @@ class TestModelForm extends SharpForm
             ->addField(
                 SharpFormEditorField::make('editor_html_localized')
                     ->setPlaceholder('Start typing content here...')
-                    ->setLabel('Editor HTML')
+                    ->setLabel('Editor HTML localized')
                     ->setToolbar([
                         SharpFormEditorField::B,
                         SharpFormEditorField::I,
@@ -184,7 +184,7 @@ class TestModelForm extends SharpForm
             ->addField(
                 SharpFormEditorField::make('editor_markdown')
                     ->setRenderContentAsMarkdown()
-                    ->setLabel('Markdown')
+                    ->setLabel('Editor markdown')
                     ->setToolbar([
                         SharpFormEditorField::B, SharpFormEditorField::I, SharpFormEditorField::A,
                         SharpFormEditorField::SEPARATOR,
@@ -223,12 +223,12 @@ class TestModelForm extends SharpForm
             )
             ->addField(
                 SharpFormSelectField::make('select_radios', $this->options())
-                    ->setLabel('Select list')
+                    ->setLabel('Select radios')
                     ->setDisplayAsList(),
             )
             ->addField(
                 SharpFormSelectField::make('select_checkboxes', $this->options())
-                    ->setLabel('Select list multiple')
+                    ->setLabel('Select checkboxes')
                     ->allowSelectAll()
 //                    ->setInline()
                     ->setMultiple()
@@ -259,8 +259,8 @@ class TestModelForm extends SharpForm
             )
             ->addField(
                 SharpFormTextField::make('text_localized')
-                    ->setLocalized()
-                    ->setLabel('text_localized'),
+                    ->setLabel('Text localized')
+                    ->setLocalized(),
             )
             ->addField(
                 SharpFormUploadField::make('upload')
@@ -306,9 +306,18 @@ class TestModelForm extends SharpForm
              });
     }
 
+    public function create(): array
+    {
+        return $this->transform(TestModel::make()->fill([
+            'html' => ['name' => 'John'],
+        ]));
+    }
+
     public function find($id): array
     {
-        return $this->transform(TestModel::findOrNew($id));
+        return $this->transform(TestModel::findOrFail($id)->fill([
+            'html' => ['name' => 'John'],
+        ]));
     }
 
     public function update($id, array $data)
