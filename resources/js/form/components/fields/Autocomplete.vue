@@ -129,7 +129,7 @@
 </script>
 
 <template>
-    <FormFieldLayout v-bind="props">
+    <FormFieldLayout v-bind="props" field-group>
         <Popover v-model:open="open" @update:open="$event ? onOpen() : null">
             <template v-if="props.value">
                 <PopoverTrigger as-child>

@@ -7,9 +7,10 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Inertia\Inertia;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
 
-class SharpException extends \Exception
+class SharpException extends \Exception implements HttpExceptionInterface
 {
     public function __construct(
         string $message = '',
@@ -21,7 +22,7 @@ class SharpException extends \Exception
 
     public function render(Request $request): Response|RedirectResponse|JsonResponse|bool
     {
-        if (app()->environment('local')) {
+        if ($this->getStatusCode() >= 500 && config('app.debug')) {
             return false;
         }
 
@@ -40,5 +41,10 @@ class SharpException extends \Exception
     public function getStatusCode(): int
     {
         return $this->statusCode;
+    }
+    
+    public function getHeaders(): array
+    {
+        return [];
     }
 }

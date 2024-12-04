@@ -1,5 +1,6 @@
 <script setup lang="ts">
     import Layout from "@/Layouts/Layout.vue";
+    import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
     defineProps<{
         status: number,
@@ -9,11 +10,17 @@
 
 <template>
     <Layout>
-        <h1 class="text-xl mb-2">
-            Error {{ status }}
-        </h1>
-        <p>
-            {{ message }}
-        </p>
+        <div class="container">
+            <Card>
+                <CardHeader>
+                    <CardTitle>
+                        Error {{ status }}
+                    </CardTitle>
+                    <CardDescription>
+                        {{ message }}
+                    </CardDescription>
+                </CardHeader>
+            </Card>
+        </div>
     </Layout>
 </template>

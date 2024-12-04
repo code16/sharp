@@ -16,14 +16,14 @@ class HandleSharpApiErrors
     {
         $response = $next($request);
 
-        if (isset($response->exception) && $response->exception) {
+        if (isset($response->exception)) {
             if ($response->exception instanceof ValidationException) {
                 return $this->handleValidationException($response);
             }
 
             $code = $this->getHttpCodeFor($response->exception);
             
-            if(config('app.debug') && !$response->exception instanceof SharpApplicativeException) {
+            if(config('app.debug') && $code >= 500) {
                 // return the response in HTML to display it in a modal
                 return app(ExceptionHandler::class)
                     ->render(

@@ -17,6 +17,7 @@ class TestCase extends Orchestra
 
         config()->set('app.key', 'base64:'.base64_encode(random_bytes(32)));
         config()->set('view.cache', false);
+        config()->set('inertia.testing.page_paths', [__DIR__.'/../resources/js/Pages']);
     }
 
     protected function getPackageProviders($app)
