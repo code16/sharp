@@ -5,10 +5,13 @@ import { createApp, DefineComponent, h, nextTick } from 'vue';
 import { createInertiaApp, router } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { progressDelay } from "@/api/progress";
+import lucideIconsDefaultAttributes from 'lucide-vue-next/dist/esm/defaultAttributes';
 
 import Form from "@/form/components/Form.vue";
 import FormField from "@/form/components/Field.vue";
 import ShowField from "@/show/components/Field.vue";
+
+lucideIconsDefaultAttributes['aria-hidden'] = 'true';
 
 createInertiaApp({
     resolve: name => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob<DefineComponent>('./Pages/**/*.vue')),

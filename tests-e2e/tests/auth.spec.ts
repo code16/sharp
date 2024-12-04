@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test';
-import { seed } from "../helpers";
+import { init } from "../helpers";
 
 test('login', async ({ page }) => {
-  await seed(page);
+  await init(page, { login: false });
   await page.goto('/sharp');
 
   await expect(page.getByRole('heading', { name: 'Sign in' })).toBeVisible();

@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'empty_text' => 'No result found',
+    'empty_text' => 'No results found',
     'filter.search_placeholder' => 'Search',
     'commands.entity.label' => 'Actions',
     'commands.instance.label' => 'Actions',

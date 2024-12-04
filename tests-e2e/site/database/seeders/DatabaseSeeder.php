@@ -8,9 +8,9 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
+    // TODO after editing this file, run:
+    //  > php artisan e2e:update-db-snapshot
+
     public function run(): void
     {
         // User::factory(10)->create();

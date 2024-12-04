@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\DB;
 
 class UpdateDbSnapshot extends Command
 {
@@ -13,8 +12,7 @@ class UpdateDbSnapshot extends Command
 
     public function handle()
     {
-        DB::table('cache')->truncate();
-        DB::table('sessions')->truncate();
+        Artisan::call('migrate:fresh', ['--seed' => true], $this->output);
         Artisan::call('snapshot:create', ['name' => 'e2e-seed'], $this->output);
     }
 }

@@ -9,25 +9,11 @@ Route::get('/e2e/init', function () {
         'name' => 'e2e-seed',
     ]);
 
-    $user = User::where('email', 'test@example.org')->firstOrFail();
+    if(request()->input('login')) {
+        $user = User::where('email', 'test@example.org')->firstOrFail();
 
-    auth()->login($user);
+        auth()->login($user);
+    }
 
     return 'init ok';
-});
-
-Route::get('/e2e/seed', function () {
-    Artisan::call('migrate:fresh', [
-        '--seed' => true,
-    ]);
-
-    return 'seeded successfully';
-});
-
-Route::get('/e2e/login', function () {
-    $user = User::where('email', 'test@example.org')->firstOrFail();
-
-    auth()->login($user);
-
-    return 'logged as '.$user->email;
 });
