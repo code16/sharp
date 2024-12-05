@@ -11,30 +11,35 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // TODO after editing this file, run:
+        //  > php artisan migrate:fresh --seed
+        //  > php artisan snapshot:create e2e-seed
+
         Schema::create('test_models', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('autocomplete_local');
-            $table->unsignedInteger('autocomplete_remote');
-            $table->json('autocomplete_list');
-            $table->boolean('check');
-            $table->date('date');
-            $table->dateTime('date_time');
-            $table->time('time');
-            $table->text('editor_html');
-            $table->json('editor_html_localized');
-            $table->text('editor_markdown');
-            $table->json('geolocation');
-            $table->json('list');
-            $table->integer('number');
-            $table->unsignedInteger('select_dropdown');
-            $table->unsignedInteger('select_checkboxes');
-            $table->unsignedInteger('select_radios');
-            $table->json('tags');
-            $table->text('textarea');
-            $table->json('textarea_localized');
-            $table->string('text');
-            $table->json('text_localized');
-            $table->unsignedInteger('upload_id');
+            $table->unsignedInteger('autocomplete_local')->nullable();
+            $table->unsignedInteger('autocomplete_remote')->nullable();
+            $table->unsignedInteger('autocomplete_remote2')->nullable();
+            $table->json('autocomplete_list')->nullable();
+            $table->boolean('check')->nullable();
+            $table->date('date')->nullable();
+            $table->dateTime('date_time')->nullable();
+            $table->time('time')->nullable();
+            $table->text('editor_html')->nullable();
+            $table->json('editor_html_localized')->nullable();
+            $table->text('editor_markdown')->nullable();
+            $table->json('geolocation')->nullable();
+            $table->json('list')->nullable();
+            $table->integer('number')->nullable();
+            $table->unsignedInteger('select_dropdown')->nullable();
+            $table->unsignedInteger('select_checkboxes')->nullable();
+            $table->unsignedInteger('select_radios')->nullable();
+            $table->json('tags')->nullable();
+            $table->text('textarea')->nullable();
+            $table->json('textarea_localized')->nullable();
+            $table->string('text')->nullable();
+            $table->json('text_localized')->nullable();
+            $table->unsignedInteger('upload_id')->nullable();
             $table->timestamps();
         });
     }

@@ -26,6 +26,11 @@ class TestModel extends Model
         return [
             'date' => 'date',
             'date_time' => 'datetime',
+            'list' => 'array',
+            'autocomplete_list' => 'array',
+            'select_dropdown' => 'array',
+            'select_checkboxes' => 'array',
+            'tags' => 'array',
         ];
     }
 

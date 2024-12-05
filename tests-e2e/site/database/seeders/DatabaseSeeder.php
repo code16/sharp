@@ -9,7 +9,8 @@ use Illuminate\Database\Seeder;
 class DatabaseSeeder extends Seeder
 {
     // TODO after editing this file, run:
-    //  > php artisan e2e:update-db-snapshot
+    //  > php artisan migrate:fresh --seed
+    //  > php artisan snapshot:create e2e-seed
 
     public function run(): void
     {

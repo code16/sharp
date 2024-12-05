@@ -35,8 +35,13 @@ test.describe('form', () => {
     test('autocomplete remote', async ({ page }) => {
       await init(page);
       await page.goto('/sharp/s-list/test-models/s-form/test-models');
-      await page.getByRole('combobox', { name: 'Autocomplete remote' }).click();
+      await page.getByRole('combobox', { name: 'Autocomplete endpoint remote' }).click();
       const menu = page.getByRole('dialog');
+      await expect(menu).toContainText('Enter at least 1 character to search');
+      await menu.getByRole('combobox').fill('2');
+      await expect(menu.getByRole('option')).toHaveCount(1);
+      await menu.getByRole('option', { name: 'Option 2' }).click();
+      await expect(page.getByRole('combobox', { name: 'Autocomplete endpoint remote' })).toContainText('Option 2');
     });
   });
 });

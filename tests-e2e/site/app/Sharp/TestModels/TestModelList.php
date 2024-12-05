@@ -3,6 +3,7 @@
 namespace App\Sharp\TestModels;
 
 use App\Models\TestModel;
+use App\Sharp\TestCommand;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\SharpEntityList;
@@ -30,7 +31,9 @@ class TestModelList extends SharpEntityList
 
     protected function getEntityCommands(): ?array
     {
-        return [];
+        return [
+            TestCommand::class,
+        ];
     }
 
     protected function getFilters(): array

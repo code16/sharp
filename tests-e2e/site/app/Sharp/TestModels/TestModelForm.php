@@ -38,15 +38,32 @@ class TestModelForm extends SharpForm
                     ->setLocalSearchKeys(['label'])
                     ->setListItemTemplate('{{ $label }}')
                     ->setResultItemTemplate('{{ $label }} ({{ $id }})')
-                    ->setLocalValues($this->options()),
+                    ->setLocalValues(static::options()),
             )
             ->addField(
                 SharpFormAutocompleteRemoteField::make('autocomplete_remote')
-                    ->setLabel('Autocomplete remote')
+                    ->setLabel('Autocomplete endpoint remote')
                     ->setRemoteSearchAttribute('query')
                     ->setListItemTemplate('{{ $name }}')
                     ->setResultItemTemplate('{{ $name }} ({{ $id }})')
                     ->setRemoteEndpoint(route('sharp.remote-autocomplete')),
+            )
+            ->addField(
+                SharpFormAutocompleteRemoteField::make('autocomplete_remote2')
+                    ->setLabel('Autocomplete callback remote')
+                    ->setRemoteSearchAttribute('query')
+                    ->setListItemTemplate('{{ $name }}')
+                    ->setResultItemTemplate('{{ $name }} ({{ $id }})')
+                    ->setRemoteCallback(function ($query) {
+                        return collect(static::options())
+                            ->filter(function ($label, $id) use ($query) {
+                                return str_contains($label, $query);
+                            })
+                            ->map(function ($label, $id) {
+                                return ['id' => $id, 'name' => $label];
+                            })
+                            ->values();
+                    }),
             )
             ->addField(
                 SharpFormAutocompleteListField::make('autocomplete_list')
@@ -59,7 +76,7 @@ class TestModelForm extends SharpForm
                             ->setPlaceholder('test')
                             ->setListItemTemplate('{{ $label }}')
                             ->setResultItemTemplate('{{ $label }} ({{ $id }})')
-                            ->setLocalValues($this->options()),
+                            ->setLocalValues(static::options()),
                     ),
             )
             ->addField(
@@ -214,7 +231,7 @@ class TestModelForm extends SharpForm
                     ->setStep(.1),
             )
             ->addField(
-                SharpFormSelectField::make('select_dropdown', $this->options())
+                SharpFormSelectField::make('select_dropdown', static::options())
                     ->setLabel('Select dropdown')
                     ->allowSelectAll()
 //                    ->setClearable()
@@ -222,12 +239,12 @@ class TestModelForm extends SharpForm
                     ->setDisplayAsDropdown(),
             )
             ->addField(
-                SharpFormSelectField::make('select_radios', $this->options())
+                SharpFormSelectField::make('select_radios', static::options())
                     ->setLabel('Select radios')
                     ->setDisplayAsList(),
             )
             ->addField(
-                SharpFormSelectField::make('select_checkboxes', $this->options())
+                SharpFormSelectField::make('select_checkboxes', static::options())
                     ->setLabel('Select checkboxes')
                     ->allowSelectAll()
 //                    ->setInline()
@@ -236,7 +253,7 @@ class TestModelForm extends SharpForm
 //                    ->setMaxSelected(2),
             )
             ->addField(
-                SharpFormTagsField::make('tags', $this->options())
+                SharpFormTagsField::make('tags', static::options())
                     ->setLabel('Tags')
                     ->setCreatable(true)
                     ->setCreateAttribute('label')
@@ -336,7 +353,7 @@ class TestModelForm extends SharpForm
         return ['fr', 'en'];
     }
 
-    protected function options(): array
+    public static function options(): array
     {
         return [
             '1' => 'Option 1',
