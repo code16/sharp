@@ -266,11 +266,13 @@ class DemoDashboard extends SharpDashboard
             ->inRandomOrder()
             ->first();
 
-        $this->setPanelData('highlighted_post', [
-            'author' => $author,
-            'post' => $author->posts->first(),
-            'postUrl' => LinkToShowPage::make('posts', $author->posts->first()->id)->renderAsUrl(),
-        ]);
+        if ($author) {
+            $this->setPanelData('highlighted_post', [
+                'author' => $author,
+                'post' => $author->posts->first(),
+                'postUrl' => LinkToShowPage::make('posts', $author->posts->first()->id)->renderAsUrl(),
+            ]);
+        }
     }
 
     private static function nextColor(): string
