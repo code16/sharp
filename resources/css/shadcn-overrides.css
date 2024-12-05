@@ -23,7 +23,7 @@
         --accent-foreground-oklch: from var(--sharp-config-primary) 0.21 min(c, 0.2) h;
 
         /*--input-oklch: from var(--sharp-config-primary) 0.92 0 h; !* default levels *!*/
-        --input-oklch: from var(--sharp-config-primary) 0.92 min(c, 0.005) h;
+        --input-oklch: from var(--sharp-config-primary) 0.89 min(c, 0.005) h;
         /*--border-oklch: from var(--sharp-config-primary) 0.92 0 h; !* default levels *!*/
         --border-oklch: from var(--sharp-config-primary) 0.92 min(c, 0.005) h;
         /*--ring-oklch: from var(--sharp-config-primary) 0.71 min(c, 0.01) h; !* default levels *!*/

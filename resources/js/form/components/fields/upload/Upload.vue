@@ -379,7 +379,7 @@
     <FormFieldLayout v-bind="props">
         <template #default="{ id, ariaDescribedBy }">
             <template v-if="value?.path || value?.uploaded || uppyFile">
-                <div :class="{ 'bg-background border border-input rounded-md p-4': !asEditorEmbed }">
+                <div :class="{ 'bg-background border rounded-md p-4': !asEditorEmbed }">
                     <div class="flex gap-4">
                         <template v-if="transformedImg ?? value?.thumbnail ?? uppyFile?.preview">
                             <div class="self-center group/img relative flex flex-col justify-center rounded-md overflow-hidden">
@@ -402,7 +402,7 @@
                             <FileIcon class="self-center size-4" :mime-type="value?.mime_type || uppyFile?.type" />
                         </template>
                         <div class="flex-1 min-w-0">
-                            <div class="text-sm font-medium truncate">
+                            <div class="text-sm truncate">
                                 <template v-if="value?.path">
                                     <TooltipProvider>
                                         <Tooltip :delay-duration="0" disable-hoverable-content>
