@@ -6,6 +6,9 @@ use Code16\Sharp\Data\Commands\ConfigCommandsData;
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\EntityStateData;
 
+/**
+ * @internal
+ */
 final class ShowConfigData extends Data
 {
     public function __construct(

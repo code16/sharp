@@ -2,6 +2,9 @@
 
 namespace Code16\Sharp\Data;
 
+/**
+ * @internal
+ */
 final class EntityStateData extends Data
 {
     public function __construct(

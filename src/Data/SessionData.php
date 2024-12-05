@@ -4,6 +4,9 @@ namespace Code16\Sharp\Data;
 
 use Code16\Sharp\Enums\SessionStatusLevel;
 
+/**
+ * @internal
+ */
 final class SessionData extends Data
 {
     public function __construct(

@@ -6,6 +6,9 @@ use Code16\Sharp\Utils\Icons\IconManager;
 use Code16\Sharp\Utils\Menu\SharpMenuItem;
 use Code16\Sharp\Utils\Menu\SharpMenuManager;
 
+/**
+ * @internal
+ */
 final class MenuItemData extends Data
 {
     public function __construct(

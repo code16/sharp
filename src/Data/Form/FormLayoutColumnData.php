@@ -5,6 +5,9 @@ namespace Code16\Sharp\Data\Form;
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\LayoutFieldData;
 
+/**
+ * @internal
+ */
 final class FormLayoutColumnData extends Data
 {
     public function __construct(

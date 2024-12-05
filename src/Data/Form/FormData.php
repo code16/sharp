@@ -9,6 +9,9 @@ use Code16\Sharp\Data\InstanceAuthorizationsData;
 use Code16\Sharp\Data\PageAlertData;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 
+/**
+ * @internal
+ */
 final class FormData extends Data
 {
     public function __construct(

@@ -6,6 +6,9 @@ use Code16\Sharp\Data\Data;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 use Spatie\TypeScriptTransformer\Attributes\Optional;
 
+/**
+ * @internal
+ */
 final class FormUploadFieldValueData extends Data
 {
     public function __construct(

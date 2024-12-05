@@ -6,6 +6,9 @@ use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\Form\FormLayoutData;
 use Spatie\TypeScriptTransformer\Attributes\TypeScriptType;
 
+/**
+ * @internal
+ */
 final class FormEditorFieldUploadData extends Data
 {
     public function __construct(

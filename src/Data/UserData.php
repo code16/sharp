@@ -4,6 +4,9 @@ namespace Code16\Sharp\Data;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 
+/**
+ * @internal
+ */
 final class UserData extends Data
 {
     public function __construct(

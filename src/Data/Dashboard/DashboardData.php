@@ -8,6 +8,9 @@ use Code16\Sharp\Data\DataCollection;
 use Code16\Sharp\Data\Filters\FilterValuesData;
 use Code16\Sharp\Data\PageAlertData;
 
+/**
+ * @internal
+ */
 final class DashboardData extends Data
 {
     public function __construct(

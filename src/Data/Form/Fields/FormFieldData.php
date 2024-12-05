@@ -24,6 +24,9 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScriptType;
     .'|'.FormTextareaFieldData::class
     .'|'.FormUploadFieldData::class
 )]
+/**
+ * @internal
+ */
 final class FormFieldData extends Data
 {
     public function __construct() {}

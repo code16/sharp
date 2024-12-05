@@ -7,6 +7,9 @@ use Code16\Sharp\Data\Form\Fields\Common\FormConditionalDisplayData;
 use Code16\Sharp\Enums\FormFieldType;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 
+/**
+ * @internal
+ */
 final class FormUploadFieldData extends Data
 {
     public ?FormUploadFieldValueData $value;

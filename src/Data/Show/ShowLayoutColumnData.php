@@ -5,6 +5,9 @@ namespace Code16\Sharp\Data\Show;
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\LayoutFieldData;
 
+/**
+ * @internal
+ */
 final class ShowLayoutColumnData extends Data
 {
     public function __construct(

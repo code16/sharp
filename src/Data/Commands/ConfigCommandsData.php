@@ -7,6 +7,9 @@ use Code16\Sharp\Enums\CommandType;
 use Spatie\TypeScriptTransformer\Attributes\RecordTypeScriptType;
 
 #[RecordTypeScriptType(CommandType::class.'|string', 'array<DataCollection<'.CommandData::class.'>>')]
+/**
+ * @internal
+ */
 final class ConfigCommandsData extends Data
 {
     public function __construct(

@@ -9,6 +9,9 @@ use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 use Spatie\TypeScriptTransformer\Attributes\Optional;
 use Spatie\TypeScriptTransformer\Attributes\TypeScriptType;
 
+/**
+ * @internal
+ */
 final class FormGeolocationFieldData extends Data
 {
     #[Optional]

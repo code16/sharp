@@ -7,6 +7,9 @@ use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\EntityStateData;
 use Code16\Sharp\Data\Filters\ConfigFiltersData;
 
+/**
+ * @internal
+ */
 final class EntityListConfigData extends Data
 {
     public function __construct(

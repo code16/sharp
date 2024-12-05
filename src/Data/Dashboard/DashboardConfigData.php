@@ -6,6 +6,9 @@ use Code16\Sharp\Data\Commands\ConfigCommandsData;
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\Filters\ConfigFiltersData;
 
+/**
+ * @internal
+ */
 final class DashboardConfigData extends Data
 {
     public function __construct(

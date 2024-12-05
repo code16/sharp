@@ -12,6 +12,9 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScriptType;
     .'|'.OrderedListWidgetData::class
     .'|'.PanelWidgetData::class
 )]
+/**
+ * @internal
+ */
 final class WidgetData extends Data
 {
     public function __construct() {}

@@ -4,6 +4,9 @@ namespace Code16\Sharp\Data\Dashboard;
 
 use Code16\Sharp\Data\Data;
 
+/**
+ * @internal
+ */
 final class DashboardLayoutWidgetData extends Data
 {
     public function __construct(

@@ -5,6 +5,9 @@ namespace Code16\Sharp\Data\Filters;
 use Code16\Sharp\Data\Data;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 
+/**
+ * @internal
+ */
 final class GlobalFiltersData extends Data
 {
     public function __construct(

@@ -7,6 +7,9 @@ use Code16\Sharp\Data\Form\Fields\Common\FormConditionalDisplayData;
 use Code16\Sharp\Enums\FormFieldType;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 
+/**
+ * @internal
+ */
 final class FormTextareaFieldData extends Data
 {
     #[LiteralTypeScriptType('string | null | { [locale:string]: string|null }')]
