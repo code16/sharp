@@ -100,3 +100,21 @@ it('renders debug 500 error', function () {
     // response is not rendered in inertia
     expect(fn () => $response->assertInertia())->toThrow('Not a valid Inertia response.');
 });
+
+it('renders debug 500 API error', function () {
+    fakeListFor('person', new class() extends PersonList
+    {
+        public function getListData(): array
+        {
+            new UnknownClass();
+            return [];
+        }
+    });
+    
+    config()->set('app.debug', true);
+    
+    $this->getJson('/sharp/api/list/person')
+        ->assertStatus(500)
+        ->assertHeader('Content-Type', 'text/html; charset=UTF-8');
+});
+

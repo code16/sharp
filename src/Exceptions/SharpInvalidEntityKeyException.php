@@ -2,7 +2,9 @@
 
 namespace Code16\Sharp\Exceptions;
 
-class SharpInvalidEntityKeyException extends SharpException
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+
+class SharpInvalidEntityKeyException extends SharpException implements HttpExceptionInterface
 {
     public function getStatusCode(): int
     {

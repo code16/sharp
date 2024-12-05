@@ -7,10 +7,9 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Inertia\Inertia;
-use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
 
-class SharpException extends \Exception implements HttpExceptionInterface
+class SharpException extends \Exception
 {
     public function __construct(
         string $message = '',
