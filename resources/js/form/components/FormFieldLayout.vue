@@ -42,7 +42,7 @@
 <template>
     <div :class="cn(
             'relative grid grid-cols-1 grid-rows-subgrid gap-2.5',
-            hasLabelRow ? 'row-span-2' : props.row?.length > 1 ? 'row-span-1 @lg/field-container:row-span-2' : '',
+            hasLabelRow ? 'row-span-2' : props.row?.length > 1 ? 'row-span-1 @lg/field-container:row-span-2 @3xl/root-card:@md/field-container:row-span-2' : '',
             props.class,
         )"
         :role="fieldGroup ? 'group' : null"
@@ -57,7 +57,7 @@
                 class="group"
                 :class="[{
                     'top-[calc(var(--top-bar-height)+.625rem)] [[role=dialog]_&]:top-2.5 z-10 lg:sticky': stickyLabel,
-                    'hidden @lg/field-container:block': !hasLabelRow,
+                    'hidden @lg/field-container:block @3xl/root-card:@md/field-container:block': !hasLabelRow,
                 }]"
                 v-slot="{ stuck = false } = {}"
             >
