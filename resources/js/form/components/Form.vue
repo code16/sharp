@@ -197,7 +197,7 @@
                                                             <FieldGridColumn v-show="form.fieldsetShouldBeVisible(fieldLayout)">
                                                                 <Card class="shadow">
                                                                     <CardHeader>
-                                                                        <CardTitle class="text-base font-light opacity-75">
+                                                                        <CardTitle class="text-base font-light tracking-normal">
                                                                             {{ fieldLayout.legend }}
                                                                         </CardTitle>
                                                                     </CardHeader>

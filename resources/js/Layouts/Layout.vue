@@ -313,7 +313,7 @@
                                     {{ dialog.title }}
                                 </AlertDialogTitle>
                             </template>
-                            <AlertDialogDescription class="break-words" :class="!dialog.title ? 'text-base font-medium text-foreground' : ''">
+                            <AlertDialogDescription class="break-words max-h-[calc(100vh-14rem)] pr-6 -mr-6 overflow-auto" :class="!dialog.title ? 'text-base font-medium text-foreground' : ''">
                                 {{ dialog.text }}
                             </AlertDialogDescription>
                         </AlertDialogHeader>
