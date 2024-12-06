@@ -15,8 +15,10 @@
         "laravel/framework": "^11.31",
         "laravel/tinker": "^2.9",
         "spatie/laravel-db-snapshots": "^2.6",
+        "spatie/laravel-ray": "^1.37",
         "spatie/laravel-translatable": "^6.8",
-        "tightenco/ziggy": "^2.4"
+        "tightenco/ziggy": "^2.4",
+        "ext-json": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
