@@ -36,7 +36,7 @@
 <template>
     <div class="flex gap-x-1.5 gap-y-0 flex-wrap">
         <template v-for="group in toolbarGroups">
-            <div class="flex flex-wrap gap-0">
+            <div class="flex flex-wrap gap-x-1">
                 <template v-for="button in group">
                     <template v-if="button === 'link'">
                         <LinkDropdown v-bind="props" />
@@ -46,6 +46,7 @@
                     </template>
                     <template v-else-if="button.startsWith('embed:')">
                         <Toggle
+                            size="sm"
                             :model-value="props.editor.isActive(button)"
                             :disabled="props.field.readOnly"
                             :title="props.field.embeds[button.replace('embed:', '')]?.label"
@@ -56,6 +57,7 @@
                     </template>
                     <template v-else :key="button">
                         <Toggle
+                            size="sm"
                             :model-value="buttons[button].isActive(editor)"
                             :disabled="field.readOnly"
                             :title="buttons[button].label()"

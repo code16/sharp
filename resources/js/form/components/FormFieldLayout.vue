@@ -8,7 +8,9 @@
     import StickyTop from "@/components/StickyTop.vue";
     import { FormFieldData } from "@/types";
     import { useId } from "@/composables/useId";
-    import { Toggle } from "@/components/ui/toggle";
+    import { Select, SelectContent, SelectItem,  SelectValue } from "@/components/ui/select";
+
+    import LocaleSelectTrigger from "@/components/LocaleSelectTrigger.vue";
 
     const props = defineProps<FormFieldProps<FormFieldData, any> & {
         class?: string,
@@ -43,7 +45,7 @@
 <template>
     <div :class="cn(
             'relative grid grid-cols-1 grid-rows-subgrid gap-2.5',
-            hasLabelRow ? 'row-span-2' : props.row?.length > 1 ? 'row-span-1 @lg/field-container:row-span-2' : '',
+            hasLabelRow ? 'row-span-2' : props.row?.length > 1 ? 'row-span-1 @lg/field-container:row-span-2 @3xl/root-card:@md/field-container:row-span-2' : '',
             props.class,
         )"
         :role="fieldGroup ? 'group' : null"
@@ -58,7 +60,7 @@
                 class="group"
                 :class="[{
                     'top-[calc(var(--top-bar-height)+.625rem)] [[role=dialog]_&]:top-2.5 z-10 lg:sticky': stickyLabel,
-                    'hidden @lg/field-container:block': !hasLabelRow,
+                    'hidden @lg/field-container:block @3xl/root-card:@md/field-container:block': !hasLabelRow,
                 }]"
                 v-slot="{ stuck = false } = {}"
             >
@@ -89,25 +91,44 @@
                         </div>
                     </template>
                     <template v-if="'localized' in field && field.localized">
-                        <div class="ml-auto flex items-center h-3.5 gap-0 md:gap-1">
-                            <template v-for="btnLocale in form.locales">
-                                <Toggle class="uppercase text-xs h-6"
-                                    :class="form.fieldIsEmpty(props.field, props.value, btnLocale) ? 'text-foreground/50' : ''"
-                                    :model-value="locale === btnLocale"
-                                    size="sm"
-                                    :value="btnLocale"
-                                    @update:model-value="$emit('locale-change', btnLocale)"
-                                >
-                                    {{ btnLocale }}
-                                    <template v-if="form.fieldLocalesContainingError(fieldErrorKey).includes(btnLocale)">
-                                        <svg class="ml-1 h-2 w-2 fill-destructive" viewBox="0 0 8 8" aria-hidden="true">
-                                            <circle cx="4" cy="4" r="3" />
-                                        </svg>
-                                    </template>
-                                </Toggle>
-                            </template>
-                        </div>
+                        <Select :model-value="props.locale" @update:model-value="emit('locale-change', $event as string)">
+                            <LocaleSelectTrigger class="ml-auto w-auto border-transparent hover:border-input aria-expanded:border-input -my-2" :show-arrow="false" />
+                            <SelectContent>
+                                <template v-for="itemLocale in form.locales" :key="itemLocale">
+                                    <SelectItem  :value="itemLocale">
+                                        <div class="flex items-center">
+                                            <span class="uppercase text-xs">{{ itemLocale }}</span>
+                                            <template v-if="form.fieldLocalesContainingError(fieldErrorKey).includes(itemLocale)">
+                                                <svg class="ml-1 h-2 w-2 fill-destructive" viewBox="0 0 8 8" aria-hidden="true">
+                                                    <circle cx="4" cy="4" r="3" />
+                                                </svg>
+                                            </template>
+                                        </div>
+                                    </SelectItem>
+                                </template>
+                            </SelectContent>
+                        </Select>
                     </template>
+<!--                    <template v-if="'localized' in field && field.localized">-->
+<!--                        <div class="ml-auto flex items-center h-3.5 gap-0 md:gap-1">-->
+<!--                            <template v-for="btnLocale in form.locales">-->
+<!--                                <Toggle class="uppercase text-xs h-6"-->
+<!--                                    :class="form.fieldIsEmpty(props.field, props.value, btnLocale) ? 'text-foreground/50' : ''"-->
+<!--                                    :model-value="locale === btnLocale"-->
+<!--                                    size="sm"-->
+<!--                                    :value="btnLocale"-->
+<!--                                    @update:model-value="$emit('locale-change', btnLocale)"-->
+<!--                                >-->
+<!--                                    {{ btnLocale }}-->
+<!--                                    <template v-if="form.fieldLocalesContainingError(fieldErrorKey).includes(btnLocale)">-->
+<!--                                        <svg class="ml-1 h-2 w-2 fill-destructive" viewBox="0 0 8 8" aria-hidden="true">-->
+<!--                                            <circle cx="4" cy="4" r="3" />-->
+<!--                                        </svg>-->
+<!--                                    </template>-->
+<!--                                </Toggle>-->
+<!--                            </template>-->
+<!--                        </div>-->
+<!--                    </template>-->
                 </div>
             </component>
         </template>

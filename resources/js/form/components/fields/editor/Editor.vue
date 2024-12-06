@@ -26,6 +26,7 @@
     import EditorAttributes from "@/form/components/fields/editor/EditorAttributes.vue";
     import { cn } from "@/utils/cn";
     import StickyTop from "@/components/StickyTop.vue";
+    import { useScroll } from "@vueuse/core";
 
     const emit = defineEmits<FormFieldEmits<FormEditorFieldData>>();
     const props = defineProps<FormFieldProps<FormEditorFieldData>>();
@@ -143,14 +144,14 @@
 
 <template>
     <FormFieldLayout v-bind="props">
-        <div class="editor"
+        <div class="editor rounded-md border border-input bg-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background"
             :class="{
                 'editor--disabled': field.readOnly,
                 'editor--no-toolbar': !field.toolbar,
             }"
         >
             <template v-if="editor && field.toolbar">
-                <StickyTop class="sticky top-[--top-bar-height] [[role=dialog]_&]:top-0 data-[stuck]:border-b data-[stuck]:z-10 bg-background">
+                <StickyTop class="sticky top-[--top-bar-height] [[role=dialog]_&]:top-0 p-1.5 border-b data-[stuck]:z-10 data-[stuck]:bg-background">
                     <div ref="header">
                         <Toolbar
                             :editor="editor"
@@ -164,7 +165,7 @@
 
             <EditorAttributes
                 :class="cn(
-                    'group/editor content min-h-20 w-full rounded-md border border-input overflow-y-auto bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+                    'group/editor content min-h-20 w-full rounded-b-md overflow-y-auto focus:outline-none px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50',
                     {
                         'min-h-[--min-height]': field.minHeight,
                         'max-h-[--max-height]': field.maxHeight,
@@ -194,21 +195,20 @@
                     ref="embedModal"
                 />
             </template>
-
-            <template v-if="editor && field.showCharacterCount">
-                <div class="mt-2 text-xs text-muted-foreground">
-                    <template v-if="field.maxLength">
-                        <div :class="{ 'text-destructive': editor.storage.characterCount.characters() > field.maxLength }">
-                            {{ __('sharp::form.editor.character_count', { count: `${editor.storage.characterCount.characters()} / ${field.maxLength}` }) }}
-                        </div>
-                    </template>
-                    <template v-else>
-                        <div>
-                            {{ __('sharp::form.editor.character_count', { count: editor.storage.characterCount.characters() }) }}
-                        </div>
-                    </template>
-                </div>
-            </template>
         </div>
+        <template v-if="editor && field.showCharacterCount">
+            <div class="mt-2 text-xs text-muted-foreground">
+                <template v-if="field.maxLength">
+                    <div :class="{ 'text-destructive': editor.storage.characterCount.characters() > field.maxLength }">
+                        {{ __('sharp::form.editor.character_count', { count: `${editor.storage.characterCount.characters()} / ${field.maxLength}` }) }}
+                    </div>
+                </template>
+                <template v-else>
+                    <div>
+                        {{ __('sharp::form.editor.character_count', { count: editor.storage.characterCount.characters() }) }}
+                    </div>
+                </template>
+            </div>
+        </template>
     </FormFieldLayout>
 </template>

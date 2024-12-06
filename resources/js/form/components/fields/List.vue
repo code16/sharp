@@ -191,12 +191,12 @@
                 {{ reordering ? __('sharp::form.list.sort_button.active') : __('sharp::form.list.sort_button.inactive') }}
             </Toggle>
         </template>
-        <div class="grid gap-y-6">
+        <div class="grid grid-cols-1 gap-y-6">
             <template v-if="value?.length > 0">
                 <div class="relative group/list space-y-6" :ref="(el: HTMLElement) => sortableContainer = el">
                     <TransitionGroup move-class="transition-transform duration-200" leave-to-class="opacity-0" leave-active-class="!absolute" :css="false">
                         <template v-for="(item, index) in value" :key="`${item[itemKey]}-${sortedKey}`">
-                            <Card class="group relative ring-ring ring-offset-2 ring-background p-6"
+                            <Card class="group relative ring-ring ring-offset-2 ring-background p-6 shadow"
                                 :class="[
                                     '[&.sortable-ghost]:z-10 [&.sortable-ghost]:ring-2',
                                     reordering ? 'cursor-grab bg-muted/50' : 'bg-background',

@@ -266,10 +266,12 @@ class DemoDashboard extends SharpDashboard
             ->inRandomOrder()
             ->first();
 
-        $this->setPanelData('highlighted_post', [
-            'author' => $author,
-            'post' => $author?->posts->first(),
-        ]);
+        if ($author) {
+            $this->setPanelData('highlighted_post', [
+                'author' => $author,
+                'post' => $author->posts->first(),
+            ]);
+        }
     }
 
     private static function nextColor(): string
