@@ -21,6 +21,7 @@
     const form = new Form(props.form, entityKey, instanceId);
     const loading = ref(false);
     const showErrorAlert = ref(false);
+    const errorAlertMessage = ref('');
 
     watch(() => form.errors, () => {
         if(Object.keys(form.errors).length === 0) {
@@ -33,8 +34,9 @@
         const onStart = () => { loading.value = true };
         const onFinish = () => { loading.value = false };
         const onError = () => {
-            showErrorAlert.value = true;
             form.errors = props.errors;
+            showErrorAlert.value = true;
+            errorAlertMessage.value = props.errors.error as string | null;
         }
 
         if(route().current('code16.sharp.form.create')) {
@@ -66,6 +68,7 @@
         <SharpForm
             :form="form"
             :show-error-alert="showErrorAlert"
+            :error-alert-message="errorAlertMessage"
             @submit="submit"
         >
             <template #title>
