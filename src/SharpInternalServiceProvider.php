@@ -31,6 +31,7 @@ use Code16\Sharp\Exceptions\SharpTokenMismatchException;
 use Code16\Sharp\Form\Eloquent\Uploads\Migration\CreateUploadsMigration;
 use Code16\Sharp\Http\Context\CurrentSharpRequest;
 use Code16\Sharp\Http\Middleware\AddLinkHeadersForPreloadedRequests;
+use Code16\Sharp\Http\Middleware\Api\AutocompleteMiddleware;
 use Code16\Sharp\Http\Middleware\SharpAuthenticate;
 use Code16\Sharp\Http\Middleware\SharpRedirectIfAuthenticated;
 use Code16\Sharp\Utils\Menu\SharpMenuManager;
@@ -134,7 +135,7 @@ class SharpInternalServiceProvider extends ServiceProvider
 
     protected function declareMiddleware(): void
     {
-        $this->app['router']
+        $this->app->make('router')
             ->middlewareGroup('sharp_common', sharp()->config()->get('middleware.common'))
             ->middlewareGroup('sharp_web', sharp()->config()->get('middleware.web'))
             ->middlewareGroup('sharp_api', sharp()->config()->get('middleware.api'))
