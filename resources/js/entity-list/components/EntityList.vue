@@ -366,16 +366,16 @@
                             </template>
 
                             <template v-if="showCreateButton && entityList.authorizations.create && !reordering && !selecting">
-                                <template v-if="entityList.forms?.length">
+                                <template v-if="entityList.forms && Object.values(entityList.forms).length">
                                     <DropdownMenu>
                                         <DropdownMenuTrigger as-child>
-                                            <Button class="h-8 gap-1" size="sm">
-                                                <PlusCircle class="h-3.5 w-3.5" />
-                                                {{ __('sharp::action_bar.list.forms_dropdown') }}
+                                            <Button class="h-8" size="sm">
+                                                {{ props.entityList.config.createButtonLabel || __('sharp::action_bar.list.forms_dropdown') }}
+                                                <DropdownChevronDown class="opacity-75" />
                                             </Button>
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent>
-                                            <template v-for="form in Object.values(entityList.forms).filter(form => !!form.label)">
+                                            <template v-for="form in Object.values(entityList.forms).filter(f => !!f.label)">
                                                 <DropdownMenuItem as-child>
                                                     <Link :href="route('code16.sharp.form.create', { parentUri: getAppendableParentUri(), entityKey: `${entityKey}:${form.key}` })">
                                                         {{ form.label }}
