@@ -140,7 +140,7 @@ it('validates posted data of a quick creation command', function () {
 
         public function rules(): array
         {
-            return ['name' => 'required', 'min:2'];
+            return ['name' => 'required'];
         }
 
         public function update($id, array $data)
