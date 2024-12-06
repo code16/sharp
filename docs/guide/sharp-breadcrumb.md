@@ -9,12 +9,15 @@ Under the hood Sharp manages a breadcrumb to keep track of stacked pages.
 You can activate the breadcrumb display in sharp's configuration: 
 
 ```php
-// config/sharp.php
-return [
-    // [...]
-    
-    "display_breadcrumb" => true,
-];
+class SharpServiceProvider extends SharpAppServiceProvider
+{
+    protected function configureSharp(SharpConfigBuilder $config): void
+    {
+        $config
+            ->displayBreadcrumb()
+            // [...]
+    }
+}
 ```
 
 ## Configure entity label
@@ -72,3 +75,7 @@ class PostShow extends \Code16\Sharp\Show\SharpShow
 ::: tip
 In the Form, the breadcrumb label is only used in one particular case: when coming from an embedded Entity List inside a Show Page. In this case, the Show Page and the Form entity are different, and the breadcrumb helps to keep track of the current edited entity.
 :::
+
+## Interact with Sharp's Breadcrumb
+
+Refer to [the Context documentation](context.md) to find out how to interact with Sharp's breadcrumb.

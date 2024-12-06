@@ -13,27 +13,4 @@ class SharpFigureWidget extends SharpWidget
     {
         return parent::buildArray([]);
     }
-
-    public static function formatEvolution(?string $evolution): ?array
-    {
-        if ($evolution === null) {
-            return null;
-        }
-
-        $evolution = str($evolution);
-
-        if ($evolution->startsWith('-')) {
-            return [
-                'increase' => false,
-                'value' => $evolution->substr(1),
-            ];
-        }
-
-        return [
-            'increase' => true,
-            'value' => $evolution->startsWith('+')
-                ? $evolution->substr(1)
-                : $evolution,
-        ];
-    }
 }

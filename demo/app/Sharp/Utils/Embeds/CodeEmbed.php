@@ -12,8 +12,9 @@ class CodeEmbed extends SharpFormEditorEmbed
     {
         $this->configureLabel('Code')
             ->configureTagName('x-codeblock')
-            ->configureFormInlineTemplate('<div style="overflow:auto; max-height:100px; font-family:monospace; white-space: pre-wrap">{{ code }}</div>')
-            ->configureShowTemplatePath('sharp/templates/codeblock_show_embed.vue');
+            ->configureIcon('fas fa-code')
+            ->configureFormTemplate('<div style="overflow:auto; max-height:100px; font-family:monospace; white-space: pre-wrap">{{ $code }}</div>')
+            ->configureShowTemplate(view('sharp.templates.codeblock-show-embed'));
     }
 
     public function buildFormFields(FieldsContainer $formFields): void

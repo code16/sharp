@@ -14,4 +14,5 @@ class PostEntity extends SharpEntity
     protected ?string $show = PostShow::class;
     protected ?string $form = PostForm::class;
     protected ?string $policy = PostPolicy::class;
+    protected string $label = 'Post';
 }

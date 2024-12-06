@@ -14,7 +14,10 @@ trait HandleValidation
 
         if ($validator->fails()) {
             throw new ValidationException(
-                $validator, new JsonResponse($validator->errors()->getMessages(), 422),
+                $validator,
+                request()->wantsJson()
+                    ? new JsonResponse($validator->errors()->getMessages(), 422)
+                    : null,
             );
         }
     }

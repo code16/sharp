@@ -8,12 +8,7 @@ use Code16\Sharp\Utils\Layout\LayoutField;
 
 class ShowLayoutColumn extends LayoutColumn implements HasLayout
 {
-    /**
-     * Override HasLayout::newLayoutField.
-     *
-     * @return \Code16\Sharp\Form\Layout\FormLayoutField|ShowLayoutField
-     */
-    protected function newLayoutField(string $fieldKey, ?\Closure $subLayoutCallback = null): LayoutField
+    protected function newLayoutField(string|array $fieldKey, ?\Closure $subLayoutCallback = null): LayoutField
     {
         return new ShowLayoutField($fieldKey, $subLayoutCallback);
     }

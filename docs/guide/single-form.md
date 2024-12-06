@@ -38,10 +38,10 @@ class AccountSharpForm extends SharpSingleForm
 
     function buildFormLayout(FormLayout $formLayout): void
     {
-        $formLayout->addColumn(6, function($column) {
+        $formLayout->addColumn(6, function ($column) {
             return $column
-                ->withSingleField('name')
-                ->withSingleField('email');
+                ->withField('name')
+                ->withField('email');
         });
     }
 

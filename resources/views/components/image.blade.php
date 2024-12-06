@@ -4,6 +4,11 @@
  */
 @endphp
 
-<p>
+<figure>
     <img src="{{ $fileModel->thumbnail($thumbnailWidth, $thumbnailHeight, $filters) }}" {{ $attributes }}>
-</p>
+    @if($legend)
+        <figcaption>
+            {{ $legend }}
+        </figcaption>
+    @endif
+</figure>

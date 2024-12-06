@@ -45,4 +45,7 @@ abstract class Filter
     }
 
     public function buildFilterConfig(): void {}
+
+    abstract public function fromQueryParam($value): mixed;
+    abstract public function toQueryParam($value): mixed;
 }

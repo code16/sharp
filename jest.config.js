@@ -8,7 +8,7 @@ const config = {
     ],
     transform: {
         "^.+\\.js$": "babel-jest",
-        "^.+\\.vue$": "@vue/vue2-jest"
+        // "^.+\\.vue$": "@vue/vue2-jest" // todo update to vue 3
     },
     snapshotSerializers: [
         "<rootDir>/packages/test-utils/src/htmlSnapshotBeautifier.js"

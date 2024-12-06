@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "target": "esnext",
+    "module": "esnext",
+    "downlevelIteration": true,
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "paths": {
+      "@/*": ["./resources/js/*"]
+    },
+    "useDefineForClassFields": false,
+    "allowSyntheticDefaultImports": true
+  },
+  "exclude": ["node_modules", "public"]
+}

@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\EntityList;
 
+use Code16\Sharp\Utils\Filters\FilterContainer;
 use Code16\Sharp\Utils\Filters\HasFiltersInQuery;
 use Code16\Sharp\Utils\StringUtil;
 
@@ -9,49 +10,19 @@ class EntityListQueryParams
 {
     use HasFiltersInQuery;
 
-    protected ?int $page;
-    protected ?string $search = null;
-    protected ?string $sortedBy = null;
-    protected ?string $sortedDir = null;
-    protected array $specificIds = [];
-
-    public static function create(): static
-    {
-        return new static();
-    }
+    public function __construct(
+        protected FilterContainer $filterContainer,
+        protected array $filterValues = [],
+        protected ?string $sortedBy = null,
+        protected ?string $sortedDir = null,
+        protected ?int $page = null,
+        protected ?string $search = null,
+        protected array $specificIds = [],
+    ) {}
 
     public function getPage(): ?int
     {
         return $this->page;
-    }
-
-    public function setDefaultSort(?string $defaultSortedBy, ?string $defaultSortedDir): self
-    {
-        $this->sortedBy = $defaultSortedBy;
-        $this->sortedDir = $defaultSortedDir;
-
-        return $this;
-    }
-
-    public function fillWithRequest(): self
-    {
-        $query = request()->method() === 'GET' ? request()->all() : request('query');
-
-        $this->search = $query['search'] ?? null ? urldecode($query['search']) : null;
-        $this->page = $query['page'] ?? null;
-
-        if (isset($query['sort'])) {
-            $this->sortedBy = $query['sort'];
-            $this->sortedDir = $query['dir'];
-        }
-
-        if (isset($query['ids'])) {
-            $this->specificIds = $query['ids'];
-        }
-
-        $this->fillFilterWithRequest($query);
-
-        return $this;
     }
 
     public function hasSearch(): bool
