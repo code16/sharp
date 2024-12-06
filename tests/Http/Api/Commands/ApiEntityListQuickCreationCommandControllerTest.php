@@ -84,3 +84,76 @@ it('fails when calling a quick creation command on a not configured list', funct
         )
         ->assertStatus(403);
 });
+
+it('allows to post a quick creation command', function () {
+    fakeListFor('person', new class() extends PersonList
+    {
+        public function buildListConfig(): void
+        {
+            $this->configureQuickCreation();
+        }
+    });
+
+    fakeFormFor('person', new class() extends PersonForm
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(SharpFormTextField::make('name'))
+                ->addField(SharpFormTextField::make('job'));
+        }
+
+        public function update($id, array $data)
+        {
+            expect($data)->toBe([
+                'name' => 'Marie Curie',
+                'job' => 'Scientist',
+            ]);
+
+            return 1;
+        }
+    });
+
+    $this
+        ->postJson(
+            route('code16.sharp.api.list.command.quickCreate.create', ['person']),
+            ['data' => ['name' => 'Marie Curie', 'job' => 'Scientist']],
+        )
+        ->assertOk()
+        ->assertJson(['action' => 'reload']);
+});
+
+it('validates posted data of a quick creation command', function () {
+    fakeListFor('person', new class() extends PersonList
+    {
+        public function buildListConfig(): void
+        {
+            $this->configureQuickCreation();
+        }
+    });
+
+    fakeFormFor('person', new class() extends PersonForm
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(SharpFormTextField::make('name'));
+        }
+
+        public function rules(): array
+        {
+            return ['name' => 'required', 'min:2'];
+        }
+
+        public function update($id, array $data)
+        {
+            return 1;
+        }
+    });
+
+    $this
+        ->postJson(
+            route('code16.sharp.api.list.command.quickCreate.create', ['person']),
+            ['data' => ['name' => '']],
+        )
+        ->assertStatus(422)
+        ->assertJsonValidationErrors('name');
+});

@@ -3,8 +3,6 @@
 namespace Code16\Sharp\Http\Controllers\Api\Commands;
 
 use Code16\Sharp\Data\Commands\CommandFormData;
-use Code16\Sharp\EntityList\Commands\EntityCommand;
-use Code16\Sharp\EntityList\Commands\QuickCreate\QuickCreationCommand;
 use Code16\Sharp\Http\Controllers\Api\ApiController;
 use Code16\Sharp\Utils\Uploads\SharpUploadManager;
 
@@ -41,24 +39,25 @@ class ApiEntityListQuickCreationCommandController extends ApiController
 
     public function store(string $entityKey)
     {
-        //        $list = $this->getListInstance($entityKey);
-        //        $list->buildListConfig();
-        //        $list->initQueryParams(request()->input('query'));
-        //
-        //        $commandHandler = $this->getEntityCommandHandler($list, $commandKey);
-        //
-        //        $formattedData = $commandHandler->formatAndValidateRequestData((array) request('data'));
-        //        $result = $this->returnCommandResult($list, $commandHandler->execute($formattedData));
-        //        $this->uploadManager->dispatchJobs();
-        //
-        //        return $result;
-    }
+        $list = $this->getListInstance($entityKey);
+        $list->buildListConfig();
 
-    private function getEntityCommandHandler(): EntityCommand
-    {
-        $commandHandler = app(QuickCreationCommand::class);
-        $commandHandler->buildCommandConfig();
+        abort_if(
+            ($quickCreationHandler = $list->quickCreationCommandHandler()) === null,
+            403
+        );
 
-        return $commandHandler;
+        $quickCreationHandler->setFormInstance(
+            $this->entityManager->entityFor($entityKey)->getFormOrFail()
+        );
+
+        $formattedData = $quickCreationHandler->formatAndValidateRequestData((array) request('data'));
+        $result = $this->returnCommandResult(
+            $list,
+            $quickCreationHandler->execute($formattedData)
+        );
+        $this->uploadManager->dispatchJobs();
+
+        return $result;
     }
 }

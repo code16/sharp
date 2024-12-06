@@ -30,7 +30,26 @@ class QuickCreationCommand extends EntityCommand
             ->each(fn (SharpFormField $field) => $formFields->addField($field));
     }
 
-    public function execute(array $data = []): array {}
+    public function rules(): array
+    {
+        return method_exists($this->sharpForm, 'rules')
+            ? $this->sharpForm->rules()
+            : [];
+    }
+
+    public function messages(): array
+    {
+        return method_exists($this->sharpForm, 'messages')
+            ? $this->sharpForm->messages()
+            : [];
+    }
+
+    public function execute(array $data = []): array
+    {
+        $this->sharpForm->update(null, $data);
+
+        return $this->reload();
+    }
 
     public function setFormInstance(SharpForm $form): void
     {
