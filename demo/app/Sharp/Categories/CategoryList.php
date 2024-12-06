@@ -28,7 +28,8 @@ class CategoryList extends SharpEntityList
 
     public function buildListConfig(): void
     {
-        $this->configureReorderable(new SimpleEloquentReorderHandler(Category::class));
+        $this->configureReorderable(new SimpleEloquentReorderHandler(Category::class))
+            ->configureQuickCreation();
     }
 
     protected function getEntityCommands(): ?array
