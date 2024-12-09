@@ -152,15 +152,11 @@ it('formats autocomplete results as an array, and handle data wrapper', function
         }
     });
 
-    Route::get('/my/endpoint');
-
-    Http::fake([
-        '/my/endpoint*' => Http::response([
-            'wrapper' => [
-                (object) ['id' => 1, 'label' => 'John'],
-                (object) ['id' => 2, 'label' => 'Jane'],
-            ],
-        ]),
+    Route::get('/my/endpoint', fn () => [
+        'wrapper' => [
+            (object) ['id' => 1, 'label' => 'John'],
+            (object) ['id' => 2, 'label' => 'Jane'],
+        ],
     ]);
 
     $this
@@ -194,13 +190,9 @@ it('renders autocomplete results with template', function () {
         }
     });
 
-    Route::post('/my/endpoint');
-
-    Http::fake([
-        '/my/endpoint*' => Http::response([
-            ['id' => 1, 'name' => 'John', 'job' => 'actor'],
-            ['id' => 2, 'name' => 'Jane', 'job' => 'producer'],
-        ]),
+    Route::post('/my/endpoint', fn () => [
+        ['id' => 1, 'name' => 'John', 'job' => 'actor'],
+        ['id' => 2, 'name' => 'Jane', 'job' => 'producer'],
     ]);
 
     $this
@@ -238,7 +230,7 @@ it('fails if field is missing', function () {
             'entityKey' => 'person',
             'autocompleteFieldKey' => 'autocomplete_field',
         ]));
-})->throws(\Code16\Sharp\Exceptions\SharpInvalidConfigException::class);
+})->expectException(\Code16\Sharp\Exceptions\SharpInvalidConfigException::class);
 
 it('fails if field is not a remote autocomplete field', function () {
     $this->withoutExceptionHandling();
@@ -258,7 +250,7 @@ it('fails if field is not a remote autocomplete field', function () {
             'entityKey' => 'person',
             'autocompleteFieldKey' => 'name',
         ]));
-})->throws(\Code16\Sharp\Exceptions\SharpInvalidConfigException::class);
+})->expectException(\Code16\Sharp\Exceptions\SharpInvalidConfigException::class);
 
 it('validates that the sent remote endpoint is the same that was defined in the autocomplete field', function () {
     $this->withoutExceptionHandling();
@@ -283,7 +275,7 @@ it('validates that the sent remote endpoint is the same that was defined in the 
             'endpoint' => '/another/endpoint',
             'search' => 'my search',
         ]);
-})->throws(\Code16\Sharp\Exceptions\SharpInvalidConfigException::class);
+})->expectException(\Code16\Sharp\Exceptions\SharpInvalidConfigException::class);
 
 it('allows full and relative remote endpoint', function () {
     fakeFormFor('person', new class() extends PersonForm
@@ -304,11 +296,7 @@ it('allows full and relative remote endpoint', function () {
         }
     });
 
-    Route::post('/my/endpoint');
-
-    Http::fake([
-        '/my/endpoint*' => Http::response([]),
-    ]);
+    Route::post('/my/endpoint', fn () => []);
 
     foreach (['/my/endpoint', url('/my/endpoint')] as $endpoint) {
         $this
@@ -346,11 +334,7 @@ it('allows dynamic remote endpoint', function () {
         }
     });
 
-    Route::post('/my/test/endpoint');
-
-    Http::fake([
-        '/my/test/endpoint*' => Http::response([]),
-    ]);
+    Route::post('/my/test/endpoint', fn () => []);
 
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
@@ -386,7 +370,7 @@ it('won’t allow external remote endpoint', function () {
             'endpoint' => 'https://google.fr',
             'search' => 'my search',
         ]);
-})->throws(\Code16\Sharp\Exceptions\SharpInvalidConfigException::class);
+})->expectException(\Code16\Sharp\Exceptions\SharpInvalidConfigException::class);
 
 it('allows to call an functional endpoint for a remote autocomplete field in an embed of an Editor field', function () {
     fakeFormFor('person', new class() extends PersonForm
@@ -402,13 +386,13 @@ it('allows to call an functional endpoint for a remote autocomplete field in an 
         }
     });
 
-    Route::post('/my/endpoint');
+    Route::post('/my/endpoint', function () {
+        expect(request()->get('query'))->toBe('my search');
 
-    Http::fake([
-        '/my/endpoint*' => Http::response([
+        return [
             ['id' => 1, 'label' => 'John'],
-        ]),
-    ]);
+        ];
+    });
 
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
@@ -454,13 +438,13 @@ it('allows to call an functional endpoint for a remote autocomplete field in an 
         }
     });
 
-    Route::post('/my/endpoint');
+    Route::post('/my/endpoint', function () {
+        expect(request()->get('query'))->toBe('my search');
 
-    Http::fake([
-        '/my/endpoint*' => Http::response([
+        return [
             ['id' => 1, 'label' => 'John'],
-        ]),
-    ]);
+        ];
+    });
 
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
@@ -507,13 +491,13 @@ it('allows to call an functional endpoint for a remote autocomplete field in an 
         }
     });
 
-    Route::post('/my/endpoint');
+    Route::post('/my/endpoint', function () {
+        expect(request()->get('query'))->toBe('my search');
 
-    Http::fake([
-        '/my/endpoint*' => Http::response([
+        return [
             ['id' => 1, 'label' => 'John'],
-        ]),
-    ]);
+        ];
+    });
 
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
@@ -559,13 +543,13 @@ it('allows to call an functional endpoint for a remote autocomplete field in an 
         }
     });
 
-    Route::post('/my/endpoint');
+    Route::post('/my/endpoint', function () {
+        expect(request()->get('query'))->toBe('my search');
 
-    Http::fake([
-        '/my/endpoint*' => Http::response([
+        return [
             ['id' => 1, 'label' => 'John'],
-        ]),
-    ]);
+        ];
+    });
 
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
@@ -612,13 +596,13 @@ it('allows to call an functional endpoint for a remote autocomplete field in an 
         }
     });
 
-    Route::post('/my/endpoint');
+    Route::post('/my/endpoint', function () {
+        expect(request()->get('query'))->toBe('my search');
 
-    Http::fake([
-        '/my/endpoint*' => Http::response([
+        return [
             ['id' => 1, 'label' => 'John'],
-        ]),
-    ]);
+        ];
+    });
 
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
