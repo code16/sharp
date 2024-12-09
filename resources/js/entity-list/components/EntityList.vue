@@ -47,7 +47,7 @@
     import { DropdownMenuPortal } from "reka-ui";
     import CommandDropdownItems from "@/commands/components/CommandDropdownItems.vue";
     import { Badge } from "@/components/ui/badge";
-    import { Link } from "@inertiajs/vue3";
+    import { Link, router } from "@inertiajs/vue3";
     import EntityListSearch from "@/entity-list/components/EntityListSearch.vue";
     import StickyTop from "@/components/StickyTop.vue";
     import { cn } from "@/utils/cn";
@@ -148,6 +148,28 @@
                     });
                 }
             });
+    }
+
+    async function onCreate(event: MouseEvent) {
+        if(event.metaKey || event.ctrlKey || event.shiftKey) {
+            return;
+        }
+        event.preventDefault();
+        if(props.entityList.config.quickCreationForm) {
+            const { commands, entityKey } = props;
+
+            await commands.send({ has_form: true } as CommandData, {
+                postCommand: route('code16.sharp.api.list.command.quick-creation-form.store', { entityKey }),
+                getForm: route('code16.sharp.api.list.command.quick-creation-form.create', { entityKey }),
+                query: props.entityList.query,
+                entityKey,
+            });
+        } else {
+            router.visit(route('code16.sharp.form.create', {
+                parentUri: getAppendableParentUri(),
+                entityKey: props.entityKey,
+            }));
+        }
     }
 
     async function onInstanceCommand(command: CommandData, instanceId: InstanceId) {
@@ -387,11 +409,12 @@
                                 </template>
                                 <template v-else>
                                     <Button
-                                        :as="Link"
+                                        as="a"
                                         class="h-8 gap-1"
                                         size="sm"
                                         :disabled="reordering || selecting"
                                         :href="route('code16.sharp.form.create', { parentUri: getAppendableParentUri(), entityKey })"
+                                        @click="onCreate"
                                     >
                                         {{ props.entityList.config.createButtonLabel || __('sharp::action_bar.list.create_button') }}
                                     </Button>
