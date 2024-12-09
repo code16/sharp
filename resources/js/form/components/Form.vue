@@ -106,8 +106,11 @@
             </div>
         </template>
         <template v-if="form.locales?.length || form.layout.tabbed && form.layout.tabs.length > 1">
-            <StickyTop class="@container relative group flex items-end container mb-4 pointer-events-none overflow-x-clip lg:sticky lg:top-3 data-[stuck]:z-20"
+            <StickyTop class="@container relative group flex items-end  pointer-events-none data-[stuck]:z-20"
                 v-slot="{ stuck, isOverflowing }"
+                :class="[
+                    inline ? 'mb-6' : 'mb-4 container overflow-x-clip lg:sticky lg:top-3',
+                ]"
             >
                 <div class="flex-1">
                     <template v-if="form.locales?.length">
