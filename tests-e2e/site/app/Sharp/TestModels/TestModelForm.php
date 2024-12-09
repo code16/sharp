@@ -54,6 +54,7 @@ class TestModelForm extends SharpForm
                     ->setRemoteSearchAttribute('query')
                     ->setListItemTemplate('{{ $name }}')
                     ->setResultItemTemplate('{{ $name }} ({{ $id }})')
+                    ->allowEmptySearch()
                     ->setRemoteCallback(function ($query) {
                         return collect(static::options())
                             ->filter(function ($label, $id) use ($query) {
@@ -72,7 +73,7 @@ class TestModelForm extends SharpForm
                     ->setRemovable()
                     ->setItemField(
                         SharpFormAutocompleteLocalField::make('item')
-                            ->setLabel('autocomplete_list_item')
+                            ->setLabel('Autocomplete list item')
                             ->setPlaceholder('test')
                             ->setListItemTemplate('{{ $label }}')
                             ->setResultItemTemplate('{{ $label }} ({{ $id }})')
@@ -295,15 +296,18 @@ class TestModelForm extends SharpForm
              ->addColumn(6, function (FormLayoutColumn $column) {
                  $column
                     ->withField('autocomplete_local')
-                    ->withField('autocomplete_remote')
-                    ->withField('autocomplete_list')
-                    ->withField('check')
-                    ->withField('date_time')
-                    ->withField('date')
-                    ->withField('time')
-                    ->withField('geolocation')
-                    ->withField('html')
-                    ->withField('list')
+                     ->withField('autocomplete_remote')
+                     ->withField('autocomplete_remote2')
+                     ->withListField('autocomplete_list', function (FormLayoutColumn $listItem) {
+                         $listItem->withField('item');
+                     })
+                     ->withField('check')
+                     ->withField('date_time')
+                     ->withField('date')
+                     ->withField('time')
+                     ->withField('geolocation')
+                     ->withField('html')
+                     ->withField('list')
                      ->withField('editor_html')
                      ->withField('editor_html_localized')
                      ->withField('editor_markdown');

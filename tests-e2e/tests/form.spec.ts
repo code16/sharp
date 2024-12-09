@@ -19,12 +19,12 @@ test.describe('form', () => {
       await menu.getByRole('combobox').fill('2');
       await expect(menu.getByRole('option')).toHaveCount(1);
       await menu.getByRole('option', { name: 'Option 2' }).click();
+      await expect(menu).not.toBeVisible();
       await expect(page.getByRole('combobox', { name: 'Autocomplete local' })).toContainText('Option 2');
       await page.getByRole('combobox', { name: 'Autocomplete local' }).click();
       await menu.getByRole('combobox').clear();
       await expect(menu.getByRole('option')).toHaveCount(10);
-      await menu.getByRole('option', { name: 'Option 3' }).click();
-      await expect(page.getByRole('combobox', { name: 'Autocomplete local' })).toContainText('Option 3');
+      await page.mouse.click(0, 0);
       await expect(menu).not.toBeVisible();
       await page.getByRole('group', { name: 'Autocomplete local' }).getByRole('button', { name: 'Clear' }).click();
       await expect(page.getByRole('combobox', { name: 'Autocomplete local' })).toContainText('Search...');
@@ -32,7 +32,7 @@ test.describe('form', () => {
       await menu.getByRole('combobox').fill('foobar');
       await expect(menu).toContainText('No results found');
     });
-    test('autocomplete remote', async ({ page }) => {
+    test('autocomplete remote endpoint', async ({ page }) => {
       await init(page);
       await page.goto('/sharp/s-list/test-models/s-form/test-models');
       await page.getByRole('combobox', { name: 'Autocomplete endpoint remote' }).click();
@@ -41,7 +41,32 @@ test.describe('form', () => {
       await menu.getByRole('combobox').fill('2');
       await expect(menu.getByRole('option')).toHaveCount(1);
       await menu.getByRole('option', { name: 'Option 2' }).click();
+      await expect(menu).not.toBeVisible();
       await expect(page.getByRole('combobox', { name: 'Autocomplete endpoint remote' })).toContainText('Option 2');
+      await page.getByRole('group', { name: 'Autocomplete endpoint remote' }).getByRole('button', { name: 'Clear' }).click();
+      await expect(page.getByRole('combobox', { name: 'Autocomplete endpoint remote' })).toContainText('Search...');
+      await page.getByRole('combobox', { name: 'Autocomplete endpoint remote' }).click();
+      await menu.getByRole('combobox').fill('foobar');
+      await expect(menu).toContainText('No results found');
+    });
+    test('autocomplete remote callback', async ({ page }) => {
+      await init(page);
+      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      await page.getByRole('combobox', { name: 'Autocomplete callback remote' }).click();
+      const menu = page.getByRole('dialog');
+      await expect(menu.getByRole('option')).toHaveCount(10);
+      await menu.getByRole('combobox').fill('2');
+      await expect(menu.getByRole('option')).toHaveCount(1);
+      await menu.getByRole('option', { name: 'Option 2' }).click();
+      await expect(menu).not.toBeVisible();
+      await expect(page.getByRole('combobox', { name: 'Autocomplete callback remote' })).toContainText('Option 2');
+      await page.getByRole('group', { name: 'Autocomplete callback remote' }).getByRole('button', { name: 'Clear' }).click();
+      await expect(page.getByRole('combobox', { name: 'Autocomplete callback remote' })).toContainText('Search...');
+      await page.getByRole('combobox', { name: 'Autocomplete callback remote' }).click();
+      await menu.getByRole('combobox').clear();
+      await expect(menu.getByRole('option')).toHaveCount(10);
+      await menu.getByRole('combobox').fill('foobar');
+      await expect(menu).toContainText('No results found');
     });
   });
 });

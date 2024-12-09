@@ -165,7 +165,7 @@
 
     function itemShouldHavePaddingTop(item: FormListFieldData['value'][0]) {
         return hasItemDropdown.value
-            && props.fieldLayout.item[0]?.length === 1
+            && props.fieldLayout.item?.[0]?.length === 1
             && !props.field.itemFields[props.fieldLayout.item[0][0].key].label;
     }
 

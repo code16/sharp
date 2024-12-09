@@ -11,7 +11,6 @@ import {
 } from 'reka-ui'
 import { X } from 'lucide-vue-next'
 import { cn } from '@/utils/cn'
-    import { useForceBodyScrollLock } from "@/components/ui/dialog/useForceBodyScrollLock";
 
 const props = defineProps<DialogContentProps & { class?: HTMLAttributes['class'] }>()
 const emits = defineEmits<DialogContentEmits>()
@@ -23,8 +22,6 @@ const delegatedProps = computed(() => {
 })
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
-
-    useForceBodyScrollLock();
 </script>
 
 <template>
