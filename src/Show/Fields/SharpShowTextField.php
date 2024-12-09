@@ -2,13 +2,16 @@
 
 namespace Code16\Sharp\Show\Fields;
 
-use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithDataLocalization;
-use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithEmbeds;
+use Code16\Sharp\Show\Fields\Formatters\TextFormatter;
+use Code16\Sharp\Utils\Fields\IsSharpFieldWithEmbeds;
+use Code16\Sharp\Utils\Fields\IsSharpFieldWithLocalization;
+use Code16\Sharp\Utils\Fields\SharpFieldWithEmbeds;
+use Code16\Sharp\Utils\Fields\SharpFieldWithLocalization;
 
-class SharpShowTextField extends SharpShowField
+class SharpShowTextField extends SharpShowField implements IsSharpFieldWithEmbeds, IsSharpFieldWithLocalization
 {
-    use SharpFormFieldWithDataLocalization;
-    use SharpFormFieldWithEmbeds;
+    use SharpFieldWithEmbeds;
+    use SharpFieldWithLocalization;
 
     const FIELD_TYPE = 'text';
 
@@ -18,7 +21,7 @@ class SharpShowTextField extends SharpShowField
 
     public static function make(string $key): SharpShowTextField
     {
-        return new static($key, static::FIELD_TYPE);
+        return new static($key, static::FIELD_TYPE, new TextFormatter());
     }
 
     public function setLabel(string $label): self

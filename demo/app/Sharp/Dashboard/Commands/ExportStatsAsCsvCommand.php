@@ -6,6 +6,7 @@ use App\Sharp\Utils\Filters\PeriodRequiredFilter;
 use Code16\Sharp\Dashboard\Commands\DashboardCommand;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Code16\Sharp\Utils\PageAlerts\PageAlert;
 
 class ExportStatsAsCsvCommand extends DashboardCommand
 {
@@ -14,9 +15,17 @@ class ExportStatsAsCsvCommand extends DashboardCommand
         return 'Export stats as a CSV file...';
     }
 
-    public function buildCommandConfig(): void
+    protected function buildPageAlert(PageAlert $pageAlert): void
     {
-        $this->configurePageAlert('For the period {{start}} - {{end}}', null, 'period');
+        $pageAlert
+            ->setLevelInfo()
+            ->setMessage(function () {
+                return sprintf(
+                    'For the period %s - %s',
+                    $this->queryParams->filterFor(PeriodRequiredFilter::class)['start']->isoFormat('L'),
+                    $this->queryParams->filterFor(PeriodRequiredFilter::class)['end']->isoFormat('L'),
+                );
+            });
     }
 
     public function buildFormFields(FieldsContainer $formFields): void
@@ -36,15 +45,5 @@ class ExportStatsAsCsvCommand extends DashboardCommand
         ]);
 
         return $this->streamDownload('some stats', 'stats.csv');
-    }
-
-    protected function initialData(): array
-    {
-        return [
-            'period' => [
-                'start' => $this->queryParams->filterFor(PeriodRequiredFilter::class)['start']->isoFormat('L'),
-                'end' => $this->queryParams->filterFor(PeriodRequiredFilter::class)['end']->isoFormat('L'),
-            ],
-        ];
     }
 }

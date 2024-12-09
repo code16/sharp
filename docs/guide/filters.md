@@ -33,7 +33,7 @@ You can implement the optional `buildFilterConfig()` method to configure the fil
 ```php
 class ProductCategoryFilter extends EntityListSelectFilter
 {
-    // [...]
+    // ...
     
     public function buildFilterConfig(): void
     {
@@ -55,7 +55,7 @@ Next, in the Entity List, we must declare the filter:
 ```php
 class ProductEntityList extends SharpEntityList
 {
-    // [...]
+    // ...
     
     function getFilters(): ?array
     {
@@ -77,7 +77,7 @@ Example:
 ```php
 class ProductEntityList extends SharpEntityList
 {
-    // [...]
+    // ...
     
     function getListData()
     {
@@ -87,7 +87,7 @@ class ProductEntityList extends SharpEntityList
             $products->where('category_id', $cat);
         }
     
-        // [...]
+        // ...
     }
 }
 ```
@@ -101,7 +101,7 @@ In this case, with Eloquent for instance, your might have to modify your code to
 ```php
 class ProductEntityList extends SharpEntityList
 {
-    // [...]
+    // ...
     
     function getListData()
     {
@@ -111,7 +111,7 @@ class ProductEntityList extends SharpEntityList
             $products->whereIn('category_id', $categories);
         }
     
-        // [...]
+        // ...
     }
 }
 ```
@@ -127,7 +127,7 @@ Then you need to adjust the query with selected range (Sharp will return an asso
 ```php
 class ProductEntityList extends SharpEntityList
 {
-    // [...]
+    // ...
     
     function getListData()
     {
@@ -139,24 +139,26 @@ class ProductEntityList extends SharpEntityList
             );
         }
         
-        // [...]
+        // ...
     }
 }
 ```
 
 ### Configuration
 
-You can define the date display format (default is `MM-DD-YYYY`, using [the Moment.js parser syntax](https://momentjs.com/docs/#/parsing/string-format/)) and choose if the week should start on monday (default is sunday) implementing those two optional methods in your filter implementation:
+You can define the date display format (default is `MM-DD-YYYY`, using [Carbon isoFormat() syntax](https://carbon.nesbot.com/docs/#iso-format-available-replacements)) and choose if the week should start on monday (default is sunday).
+With `configureShowPresets()`, a list of buttons is displayed allowing the user to quickly select a date range.
 
 ```php
 class ProductCreationDateFilter extends EntityListDateRangeFilter
 {
-    // [...]
+    // ...
     
     public function buildFilterConfig(): void
     {
         $this->configureDateFormat("YYYY-MM-DD")
-            ->configureMondayFirst(false);
+            ->configureMondayFirst(false)
+            ->configureShowPresets();
     }
 }
 ```
@@ -207,50 +209,6 @@ public function buildFilterConfig(): void
 }
 ```
 
-## Filter template
-
-Sometimes you need your select filter results to be a little more than a label. For this, configure a template (similar to form fields with templates):
-
-```php
-public function buildFilterConfig(): void
-{
-    $this->configureTemplate('<div>{{label}}</div><div><small>{{detail}}</small></div>');
-}
-```
-
-You can also, for more control, return a view here.
-
-The template will be [interpreted by Vue.js](https://vuejs.org/v2/guide/syntax.html), meaning you can add data placeholders, DOM structure but also directives, and anything that Vue will parse. It's the same as [Autocomplete's templates](form-fields/autocomplete.md).
-
-You'll need also to change your `values()` function, returning more than an `[{id}=>{value}]` array. For instance:
-
-```php
-public function values()
-{
-    return ProductCategory::orderBy('label')
-        ->get()
-        ->map(function ($category) {
-            return [
-                'id' => $category->id,
-                'label' => $category->label,
-                'detail' => $category->detail_text
-            ];
-        });
-}
-```
-
-Note that **the label attribute is mandatory**: it is used for the result display of the filter.
-
-Finally, if your filter is also searchable, you'll need to configure attributes which should be searched in the template:
-
-```php
-public function buildFilterConfig(): void
-{
-    $this->configureSearchable()
-        ->configureSearchKeys(['label', 'detail']);
-}
-```
-
 ## Check filter
 
 In case of a filter that is just a matter on true / false ("only show admins" for example), just make your filter class extend `Code16\Sharp\EntityList\Filters\EntityListCheckFilter`.
@@ -283,6 +241,35 @@ And with that Sharp will keep the filter value in session and ensure it is value
 In order to make this feature work, since filters are generalized, you'll need to have unique filters key (the filter class name by default).
 :::
 
+## Drop filters depending on functional data
+
+Sometimes you may want to hide a filter to the user depending on the actual data, or on other filters values. This can be achieved by using the `useFilter()` method in your EntityList class, typically in the `getListData()` method.
+
+```php
+class OrderEntityList extends SharpEntityList
+{
+    // ...
+    
+    protected function getFilters(): ?array
+    {
+        return [
+            PaymentMethodFilter::class,
+            OnlinePaymentProviderFilter::class,
+        ];
+    }
+    
+    public function getListData(): array|Arrayable
+    {
+        if ($this->queryParams->filterFor(PaymentMethodFilter::class) !== 'online') {
+            // No need to show the OnlinePaymentProviderFilter
+            $this->hideFilter(OnlinePaymentProviderFilter::class);
+        }
+        
+        // ...
+    }
+}
+```
+
 ## Filters for Dashboards
 
 [Dashboards](building-dashboard.md) also can take advantage of filters; the API the same, but base classes are specific: `Code16\Sharp\Dashboard\Filters\DashboardSelectFilter`, `Code16\Sharp\Dashboard\Filters\DashboardDateRangeFilter`,`Code16\Sharp\Dashboard\DashboardCheckFilter` and so on.
@@ -310,27 +297,33 @@ class OrganizationGlobalFilter extends GlobalRequiredFilter
     {
         return Corporation::first()->id;
     }
+    
+    public function authorize(): bool
+    {
+        // Optional: you can define an authorization logic here
+        return true;
+    }
 }
 ```
 
-And then, we declare it in Sharp's config file:
+And then, we declare it:
 
 ```php
-// in config/sharp.php
-
-return [
-    // [...]
-
-    'global_filters' => [
-        OrganizationGlobalFilter::class
-    ],
-];
+class SharpServiceProvider extends SharpAppServiceProvider
+{
+    protected function configureSharp(SharpConfigBuilder $config): void
+    {
+        $config
+            ->addGlobalFilter(OrganizationGlobalFilter::class)
+            // ...
+    }
+}
 ```
 
 Finally, to get the actual value of the filter on your Entity List, Show Page or Form classes, you must use the context:
 
 ```php
-currentSharpRequest()->globalFilterFor(OrganizationGlobalFilter::class)
+sharp()->context()->globalFilterValue(OrganizationGlobalFilter::class)
 ```
 
 The usage of Sharp Context is [detailed here](context.md).

@@ -1,12 +1,18 @@
 {
+  "resources/css/app.css": {
+    "file": "assets/app-DAu-k9ui.css",
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
   "resources/css/sharp-extension.css": {
-    "file": "assets/sharp-extension-e295d086.css",
-    "isEntry": true,
-    "src": "resources/css/sharp-extension.css"
+    "file": "assets/sharp-extension-SggIrOo2.css",
+    "src": "resources/css/sharp-extension.css",
+    "isEntry": true
   },
   "resources/js/sharp-plugin.js": {
-    "file": "assets/sharp-plugin-4ed993c7.js",
-    "isEntry": true,
-    "src": "resources/js/sharp-plugin.js"
+    "file": "assets/sharp-plugin-l0sNRNKZ.js",
+    "name": "sharp-plugin",
+    "src": "resources/js/sharp-plugin.js",
+    "isEntry": true
   }
 }

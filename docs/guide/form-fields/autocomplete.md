@@ -1,12 +1,8 @@
 # Autocomplete
 
-Class: `Code16\Sharp\Form\Fields\SharpFormAutocompleteField`
+Classes: `Code16\Sharp\Form\Fields\SharpFormAutocompleteLocalField` and `Code16\Sharp\Form\Fields\SharpFormAutocompleteRemoteField` 
 
-## Configuration
-
-### `self::make(string $key, string $mode)`
-
-`$mode` must be either "local" (dictionary is defined locally with `setLocalValues()`) or "remote" (a endpoint must be provided).
+## Configuration for local autocomplete
 
 ### `setLocalValues($localValues)`
 
@@ -17,22 +13,67 @@ Set the values of the dictionary on mode=local, as an object array with at least
 Set the names of the attributes used in the search (mode=local).
 Default: `['value']`
 
+### `setLocalValuesLinkedTo(string ...$fieldKeys)`
+
+This method is useful to link the dataset of a local autocomplete (aka: the `localValues`) to another form field. Please refer to [the documentation of the select field's `setOptionsLinkedTo()` method](select.md), which is identical.
+
+## Configuration for remote autocomplete
+
+### `setRemoteEndpoint(string $remoteEndpoint)`
+
+The remote endpoint which should return JSON-formatted results. Note that you can add the `sharp_auth` middleware to this route to handle authentication and prevent this API endpoint to be called by non-sharp users:
+
+```php
+// in a route file
+
+Route::get('/api/sharp/clients', [MySharpApiClientController::class, 'index'])
+    ->middleware('sharp_auth');
+```
+
+::: tip
+This endpoint MUST be part of your application. If you need to hit an external endpoint, you should create a custom endpoint in your application that will call the external endpoint (be sure to check the alternative `setRemoteCallback` method).
+:::
+
+### `setRemoteCallback(Closure $closure, ?array $linkedFields = null)`
+
+To avoid the pain of writing a new dedicated endpoint, and for simple cases, you can use this method to provide a callback that will be called when the autocomplete field needs to fetch data. The callback will receive the search string as a parameter and should return an array of objects.
+
+Example:
+
+```php
+SharpFormAutocompleteRemoteField::make('customer')
+    ->setRemoteCallback(function ($search) {
+        return Customer::select('id', 'name', 'email')
+            ->where('name', 'like', "%$search%")
+            ->get();
+    });
+```
+
+The second argument, `$linkedFields`, allows you to provide a list of fields that will be sent with their values to the callback, so you can filter the results based on the values of other fields.
+
+Example:
+
+```php
+SharpFormAutocompleteRemoteField::make('customer')
+    ->setRemoteCallback(function ($search, $linkedFields) {
+        return Customer::select('id', 'name', 'email')
+            ->when(
+                $linkedFields['country'], 
+                fn ($query) => $query->where('country_id', $linkedFields['country'])
+            )
+            ->where('name', 'like', "%$search%")
+            ->get();
+    }, linkedFields: ['country']);
+```
+
+### `allowEmptySearch()`
+
+This method allows to call the endpoint / callback with empty search (on first click on the field for example). It's equivalent to `setSearchMinChars(0)`.
+
 ### `setSearchMinChars(int $searchMinChars)`
 
 Set a minimum number of character to type before performing the search.
 Default: `1`
-
-### `setRemoteEndpoint(string $remoteEndpoint)`
-
-The endpoint to hit with mode=remote.
-
-If this endpoint is yours (`remote` mode here is useful to avoid loading a lot of data in the view), you can add the `sharp_auth` middleware to the API route to handle authentication and prevent this API endpoint to be called by non-sharp users:
-
-```php
-Route::get('/api/sharp/clients')
-    ->middleware('sharp_auth')
-    ->uses('MySharpApiClientController@index')
-```
 
 ### `setRemoteSearchAttribute(string $remoteSearchAttribute)`
 
@@ -54,72 +95,12 @@ Default: 300.
 
 Set the remote method to GET (default) or POST.
 
-### `setItemIdAttribute(string $itemIdAttribute)`
-
-Set the name of the id attribute for items. This is useful :
-- if you pass an object as the data for the autocomplete (meaning: in the formatter's `toFront`).
-- to designate the id attribute in the remote API call return.
-Default: `"id"`
-
-### `setListItemInlineTemplate(string $template)`
-### `setResultItemInlineTemplate(string $template)`
-Just write the template as a string, using placeholders for data like this: `{{var}}`.
-
-Example:
-
-```php
-$panel->setInlineTemplate(
-    'Foreground: <strong>{{color}}</strong>'
-)
-```
-
-The template will be used, depending on the function, to display either the list item (in the result dropdown) or the result item (meaning the valuated form input).
-
-Be aware that you'll need for this to work to pass a valuated object to the Autocomplete, as data.
-
-### `setListItemTemplatePath(string $listItemTemplatePath)`
-### `setResultItemTemplatePath(string $resultItemTemplate)`
-
-Use this if you need more control: give the path of a full template, in its own file.
-
-The template will be [interpreted by Vue.js](https://vuejs.org/v2/guide/syntax.html), meaning you can add data placeholders, DOM structure but also directives, and anything that Vue will parse. For instance:
-
-```vue
-<div v-if="show">result is {{value}}</div>
-<div v-else>result is unknown</div>
-```
-
-The template will be use, depending on the function, to display either the list item (in the result dropdown) or the result item (meaning the valuated form input).
-
-Be aware that you'll need for this to work to pass a valuated object to the Autocomplete, as data.
-
-### `setAdditionalTemplateData(array $data)`
-
-Useful to add some static (or at least not instance-dependant) data to the template. For instance:
-
-```php
-SharpFormAutocompleteField::make('brand', 'remote')
-    ->setAdditionalTemplateData([
-        'years' => [2020, 1018, 2017]
-    ]);
-```
-
-In the template, the provided data can be used as normal:
-
-```vue
-<div v-for="year in years"> {{ year }} </div>
-```
-
-### `setLocalValuesLinkedTo(string ...$fieldKeys)`
-
-This method is useful to link the dataset of a local autocomplete (aka: the `localValues`) to another form field. Please refer to [the documentation of the select field's `setOptionsLinkedTo()` method](select.md), which is identical.
-
 ### `setDynamicRemoteEndpoint(string $dynamicRemoteEndpoint, array $defaultValues)`
 
 In a remote autocomplete case, you can use this method instead of `setRemoteEndpoint` to handle a dynamic URL, based on another form field. Here's how, for example:
 
 ```php
-SharpFormAutocompleteField::make('brand', 'remote')
+SharpFormAutocompleteRemoteField::make('brand')
     ->setDynamicRemoteEndpoint('/brands/{{country}}');
 ```
 
@@ -129,7 +110,7 @@ You may need to provide a default value for the endpoint, used when `country` (i
 fill the second argument:
 
 ```php
-SharpFormAutocompleteField::make('model', 'remote')
+SharpFormAutocompleteRemoteField::make('model')
     ->setDynamicRemoteEndpoint(''/models/{{country}}/{{brand}}'', [
         'country' => 'france',
         'brand' => 'renault'
@@ -137,6 +118,34 @@ SharpFormAutocompleteField::make('model', 'remote')
 ```
 
 The default endpoint would be `/brands/france/renault`.
+
+
+## Common configuration for both modes
+
+### `setItemIdAttribute(string $itemIdAttribute)`
+
+Set the name of the id attribute for items. This is useful :
+- if you pass an object as the data for the autocomplete (meaning: in the formatter's `toFront`).
+- to designate the id attribute in the remote API call return.
+Default: `"id"`
+
+### `setListItemTemplate(View|string $template)`
+### `setResultItemTemplate(View|string $template)`
+
+The templates for the list and result items can be set in two ways: either by passing a string, or by passing a Laravel view.
+
+Examples:
+
+```php
+SharpFormAutocompleteRemoteField::make('customer')
+    ->setRemoteCallback(function ($search) {
+        return Customer::select('id', 'name', 'email')
+            ->where('name', 'like', "%$search%")
+            ->get();
+    })
+    ->setListItemTemplate('<div>{{$name}}</div><div><small>{{$email}}</small></div>')
+    ->setResultItemTemplate(view('my/customer/blade/view'));
+```
 
 ## Formatter
 

@@ -20,9 +20,9 @@ trait CommonCommandUtils
                             'label' => $handler->label(),
                             'description' => $handler->getDescription(),
                             'type' => $handler->type(),
-                            'confirmation' => $handler->getConfirmationText() ?: null,
-                            'modal_title' => $handler->getFormModalTitle() ?: null,
-                            'modal_confirm_label' => $handler->getFormModalButtonLabel() ?: null,
+                            'confirmation' => $handler->getConfirmationDescription() ? [
+                                'description' => $handler->getConfirmationDescription(),
+                            ] : null,
                             'has_form' => count($handler->form()) > 0,
                             'authorization' => $instanceId
                                 ? $handler->authorizeFor($instanceId)
@@ -40,7 +40,7 @@ trait CommonCommandUtils
         // force JSON arrays when groupIndex starts at 1 (https://github.com/code16/sharp-dev/issues/33)
         if ($config['commands'] ?? null) {
             $config['commands'] = collect($config['commands'])
-                ->map(fn ($group) => collect($group)->values())
+                ->map(fn ($group) => collect($group)->values()->filter())
                 ->toArray();
         }
     }

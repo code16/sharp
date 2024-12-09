@@ -42,8 +42,8 @@ trait Activate2faViaTotpWizardCommandTrait
                 'required',
                 'string',
                 function (string $attribute, mixed $value, Closure $fail) {
-                    $loginAttr = config('sharp.auth.login_attribute', 'email');
-                    $passwordAttr = config('sharp.auth.password_attribute', 'password');
+                    $loginAttr = sharp()->config()->get('auth.login_attribute');
+                    $passwordAttr = sharp()->config()->get('auth.password_attribute');
 
                     $credentials = [
                         $loginAttr => auth()->user()->$loginAttr,
@@ -86,7 +86,7 @@ trait Activate2faViaTotpWizardCommandTrait
             ->addField(
                 SharpFormHtmlField::make('qr')
                     ->setLabel(trans('sharp::auth.2fa.totp.commands.activate.qrcode_field_label'))
-                    ->setInlineTemplate('<div style="text-align: center; margin: 1em 0;" v-html="svg"></div>')
+                    ->setTemplate('<div style="text-align: center; margin: 1em 0;">{!! $svg !!}</div>')
             )
             ->addField(
                 SharpFormTextField::make('code')

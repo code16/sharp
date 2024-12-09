@@ -33,14 +33,8 @@ class ProfileSingleShow extends SharpSingleShow
         $showLayout
             ->addSection('', function (ShowLayoutSection $section) {
                 $section
-                    ->addColumn(6, function (ShowLayoutColumn $column) {
-                        $column
-                            ->withSingleField('email');
-                    })
-                    ->addColumn(6, function (ShowLayoutColumn $column) {
-                        $column
-                            ->withSingleField('avatar');
-                    });
+                    ->addColumn(6, fn (ShowLayoutColumn $column) => $column->withField('email'))
+                    ->addColumn(6, fn (ShowLayoutColumn $column) => $column->withField('avatar'));
             });
     }
 
