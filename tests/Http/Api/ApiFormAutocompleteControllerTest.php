@@ -223,7 +223,7 @@ it('fails if field is missing', function () {
             'entityKey' => 'person',
             'autocompleteFieldKey' => 'autocomplete_field',
         ]));
-})->expectException(\Code16\Sharp\Exceptions\SharpInvalidConfigException::class);
+})->throws(\Code16\Sharp\Exceptions\SharpInvalidConfigException::class);
 
 it('fails if field is not a remote autocomplete field', function () {
     $this->withoutExceptionHandling();
@@ -243,7 +243,7 @@ it('fails if field is not a remote autocomplete field', function () {
             'entityKey' => 'person',
             'autocompleteFieldKey' => 'name',
         ]));
-})->expectException(\Code16\Sharp\Exceptions\SharpInvalidConfigException::class);
+})->throws(\Code16\Sharp\Exceptions\SharpInvalidConfigException::class);
 
 it('validates that the sent remote endpoint is the same that was defined in the autocomplete field', function () {
     $this->withoutExceptionHandling();
@@ -268,7 +268,7 @@ it('validates that the sent remote endpoint is the same that was defined in the 
             'endpoint' => '/another/endpoint',
             'search' => 'my search',
         ]);
-})->expectException(\Code16\Sharp\Exceptions\SharpInvalidConfigException::class);
+})->throws(\Code16\Sharp\Exceptions\SharpInvalidConfigException::class);
 
 it('allows full and relative remote endpoint', function () {
     fakeFormFor('person', new class() extends PersonForm
@@ -363,7 +363,7 @@ it('won’t allow external remote endpoint', function () {
             'endpoint' => 'https://google.fr',
             'search' => 'my search',
         ]);
-})->expectException(\Code16\Sharp\Exceptions\SharpInvalidConfigException::class);
+})->throws(\Code16\Sharp\Exceptions\SharpInvalidConfigException::class);
 
 it('allows to call an functional endpoint for a remote autocomplete field in an embed of an Editor field', function () {
     fakeFormFor('person', new class() extends PersonForm
