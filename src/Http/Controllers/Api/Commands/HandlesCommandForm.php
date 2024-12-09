@@ -14,8 +14,6 @@ trait HandlesCommandForm
             return [];
         }
 
-        $locales = $commandHandler->getDataLocalizations();
-
         return [
             'fields' => $formFields,
             'layout' => $commandHandler->formLayout(),
@@ -26,9 +24,9 @@ trait HandlesCommandForm
                 'description' => $commandHandler->getFormModalDescription($formData) ?? $commandHandler->getDescription(),
                 'buttonLabel' => $commandHandler->getFormModalButtonLabel(),
             ],
-            ...$locales ? [
-                'locales' => $locales,
-            ] : [],
+            'locales' => $commandHandler->hasDataLocalizations()
+                ? $commandHandler->getDataLocalizations()
+                : null,
         ];
     }
 }
