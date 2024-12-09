@@ -9,6 +9,7 @@ use Code16\Sharp\Form\Layout\HasModalFormLayout;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Fields\HandleFormFields;
 use Code16\Sharp\Utils\SharpNotification;
+use Code16\Sharp\Utils\Traits\HandleLocalizedFields;
 use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
 use Code16\Sharp\Utils\Traits\HandleValidation;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
@@ -20,6 +21,7 @@ abstract class Command
     use HandleValidation;
     use HasModalFormLayout;
     use WithCustomTransformers;
+    use HandleLocalizedFields;
 
     protected int $groupIndex = 0;
     protected ?string $commandKey = null;
