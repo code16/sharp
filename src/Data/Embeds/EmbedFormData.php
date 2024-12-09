@@ -8,6 +8,9 @@ use Code16\Sharp\Data\Form\Fields\FormFieldData;
 use Code16\Sharp\Data\Form\FormLayoutData;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 
+/**
+ * @internal
+ */
 final class EmbedFormData extends Data
 {
     public function __construct(

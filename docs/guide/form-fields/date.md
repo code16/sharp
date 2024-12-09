@@ -31,10 +31,6 @@ If set, the time-chooser will be constraint as defined.
 
 Set a time step (in minutes) for the time-chooser. Default is 30.
 
-### `setDisplayFormat(string $displayFormat)`
-
-Set the date / time display format in the field, as defined by [moment.js](https://momentjs.com/docs/#/parsing/string-format/). Default is `YYYY-MM-DD`.
-
 
 ## Formatter
 

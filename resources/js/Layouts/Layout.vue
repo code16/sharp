@@ -293,10 +293,13 @@
                     v-model:open="dialog.open"
                     @update:open="(open) => !open && window.setTimeout(() => dialog.onHidden(), 200)"
                 >
-                    <DialogContent class="max-w-screen-xl w-[calc(100%-4rem)] h-[90dvh]">
+                    <DialogContent
+                        class="max-w-screen-xl overflow-hidden w-[calc(100%-4rem)] h-[90dvh]"
+                        :class="!dialog.text?.includes('window.Sfdump') ? 'p-0' : ''"
+                    >
                         <iframe class="size-full" :srcdoc="`
                             <style>body,pre{margin:0}</style>
-                            ${dialog.text.replace('</head>', '<style>html{font-size:14px}</style></head>')}
+                            ${dialog.text.replace('</head>', '<style>html{font-size:14px}.container{max-width: none;}</style></head>')}
                         `"></iframe>
                     </DialogContent>
                 </Dialog>
@@ -313,7 +316,7 @@
                                     {{ dialog.title }}
                                 </AlertDialogTitle>
                             </template>
-                            <AlertDialogDescription class="break-words" :class="!dialog.title ? 'text-base font-medium text-foreground' : ''">
+                            <AlertDialogDescription class="break-words max-h-[calc(100vh-14rem)] pr-6 -mr-6 overflow-auto" :class="!dialog.title ? 'text-base font-medium text-foreground' : ''">
                                 {{ dialog.text }}
                             </AlertDialogDescription>
                         </AlertDialogHeader>

@@ -11,6 +11,9 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScriptType;
     .'|'.DateRangeFilterData::class
     .'|'.SelectFilterData::class
 )]
+/**
+ * @internal
+ */
 final class FilterData extends Data
 {
     public function __construct() {}

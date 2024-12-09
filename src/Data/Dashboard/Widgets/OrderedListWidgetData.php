@@ -7,6 +7,9 @@ use Code16\Sharp\Enums\WidgetType;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 use Spatie\TypeScriptTransformer\Attributes\Optional;
 
+/**
+ * @internal
+ */
 final class OrderedListWidgetData extends Data
 {
     #[Optional]

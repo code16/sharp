@@ -29,7 +29,7 @@
     const canAddItem = computed(() => {
         const { field, value } = props;
         return field.addable &&
-            (!field.maxItemCount || value?.length < field.maxItemCount) &&
+            (!field.maxItemCount || !value || value.length < field.maxItemCount) &&
             !field.readOnly;
     });
     const hasItemDropdown = computed(() => !props.field.readOnly && (canAddItem.value && props.field.sortable || props.field.removable));
@@ -84,7 +84,7 @@
 
     watch(form.meta, () => console.log(form.meta), { deep: true });
 
-    watchArray(() => props.value, async (newList, oldList, added) => {
+    watchArray(() => props.value ?? [], async (newList, oldList, added) => {
         if(!added.length) {
             // for remove / sort we wait after child fields has triggered unmount
             await nextTick();
@@ -165,7 +165,7 @@
 
     function itemShouldHavePaddingTop(item: FormListFieldData['value'][0]) {
         return hasItemDropdown.value
-            && props.fieldLayout.item[0]?.length === 1
+            && props.fieldLayout.item?.[0]?.length === 1
             && !props.field.itemFields[props.fieldLayout.item[0][0].key].label;
     }
 
@@ -178,10 +178,10 @@
         field-group
         sticky-label
     >
-        <template #action v-if="field.sortable && !field.readOnly">
+        <template #action v-if="field.sortable &&  !field.readOnly">
             <Toggle
                 class="h-6 gap-2"
-                :class="{ 'invisible': value?.length < 2 }"
+                :class="{ 'invisible': !value || value?.length < 2 }"
                 size="sm"
                 :model-value="reordering"
                 :disabled="isUploading"

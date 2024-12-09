@@ -9,6 +9,9 @@ use Code16\Sharp\Data\Form\FormLayoutData;
 use Code16\Sharp\Data\PageAlertData;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 
+/**
+ * @internal
+ */
 final class CommandFormData extends Data
 {
     public function __construct(

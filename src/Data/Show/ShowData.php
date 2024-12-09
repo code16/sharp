@@ -9,6 +9,9 @@ use Code16\Sharp\Data\PageAlertData;
 use Code16\Sharp\Data\Show\Fields\ShowFieldData;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 
+/**
+ * @internal
+ */
 final class ShowData extends Data
 {
     public function __construct(

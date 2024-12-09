@@ -6,6 +6,9 @@ use Code16\Sharp\Data\Data;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 
 #[LiteralTypeScriptType('{ _root: Array<FilterData> } & { [key: string]: Array<FilterData> }')]
+/**
+ * @internal
+ */
 final class ConfigFiltersData extends Data
 {
     public function __construct(

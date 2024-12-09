@@ -39,9 +39,13 @@ it('finds filter values', function () {
         ])
         ->and(buildParams(1, '', null, null, ['range' => '20190201..20190210'])->filterFor('range'))
         ->toEqual([
-            'start' => Carbon::createFromFormat('Y-m-d', '2019-02-01')->setTime(0, 0),
-            'end' => Carbon::createFromFormat('Y-m-d', '2019-02-10')->setTime(23, 59, 59, 999999),
+            'start' => '2019-02-01',
+            'end' => '2019-02-10',
             'preset' => null,
+            'formatted' => [
+                'start' => '2019-02-01',
+                'end' => '2019-02-10',
+            ],
         ])
         ->and(buildParams()->filterFor('job'))->toBeNull();
 });

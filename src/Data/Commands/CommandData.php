@@ -7,6 +7,9 @@ use Code16\Sharp\Enums\CommandType;
 use Code16\Sharp\Enums\InstanceSelectionMode;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 
+/**
+ * @internal
+ */
 final class CommandData extends Data
 {
     public function __construct(

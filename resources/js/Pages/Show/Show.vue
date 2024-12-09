@@ -5,7 +5,6 @@
     import Section from "@/show/components/Section.vue";
     import { Button } from '@/components/ui/button';
     import StateIcon from '@/components/ui/StateIcon.vue';
-    import UnknownField from "@/components/UnknownField.vue";
     import Layout from "@/Layouts/Layout.vue";
     import { config } from "@/utils/config";
     import { __ } from "@/utils/i18n";
@@ -248,7 +247,7 @@
                                             />
                                         </template>
                                         <template v-else>
-                                            <UnknownField :name="fieldLayout.key" />
+                                            Undefined EntityList <span class="font-mono">{{ fieldLayout.key }}</span>
                                         </template>
                                     </template>
                                 </template>
@@ -304,23 +303,18 @@
                                                                     :layout="fieldLayout"
                                                                     v-show="show.fieldShouldBeVisible(fieldLayout, locale)"
                                                                 >
-                                                                    <template v-if="show.fields[fieldLayout.key]">
-                                                                        <SharpShowField
-                                                                            :field="show.fields[fieldLayout.key]"
-                                                                            :field-layout="fieldLayout"
-                                                                            :value="show.data[fieldLayout.key]"
-                                                                            :locale="locale"
-                                                                            :collapsable="section.collapsable"
-                                                                            :entity-key="entityKey"
-                                                                            :instance-id="instanceId"
-                                                                            :is-right-col="columnIndex === section.columns.length - 1"
-                                                                            :row="row"
-                                                                            @reordering="onEntityListReordering(fieldLayout.key, $event)"
-                                                                        />
-                                                                    </template>
-                                                                    <template v-else>
-                                                                        <UnknownField :name="fieldLayout.key" />
-                                                                    </template>
+                                                                    <SharpShowField
+                                                                        :field="show.fields[fieldLayout.key]"
+                                                                        :field-layout="fieldLayout"
+                                                                        :value="show.data[fieldLayout.key]"
+                                                                        :locale="locale"
+                                                                        :collapsable="section.collapsable"
+                                                                        :entity-key="entityKey"
+                                                                        :instance-id="instanceId"
+                                                                        :is-right-col="columnIndex === section.columns.length - 1"
+                                                                        :row="row"
+                                                                        @reordering="onEntityListReordering(fieldLayout.key, $event)"
+                                                                    />
                                                                 </FieldGridColumn>
                                                             </template>
                                                         </FieldGridRow>

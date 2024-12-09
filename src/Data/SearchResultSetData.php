@@ -3,6 +3,9 @@
 namespace Code16\Sharp\Data;
 
 
+/**
+ * @internal
+ */
 final class SearchResultSetData extends Data
 {
     public function __construct(

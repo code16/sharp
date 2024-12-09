@@ -16,7 +16,7 @@ import { transformFields } from "./util";
 import { FieldMeta, FieldsMeta, WithDynamicAttributesApplied } from "./types";
 import get from 'lodash/get';
 import set from 'lodash/set';
-
+import { config } from "@/utils/config";
 
 export class Form implements FormData, CommandFormData {
     authorizations: FormData['authorizations'];
@@ -174,10 +174,12 @@ export class Form implements FormData, CommandFormData {
     getField(key: string, fields = this.fields, data = this.data, readOnly = false): WithDynamicAttributesApplied<FormFieldData> {
         const fieldsWithDynamicAttributesApplied = transformFields(fields, data);
 
-        return {
-            ...fieldsWithDynamicAttributesApplied[key],
-            readOnly: this.isReadOnly || fieldsWithDynamicAttributesApplied[key].readOnly || readOnly,
-        };
+        return fieldsWithDynamicAttributesApplied[key]
+            ? {
+                ...fieldsWithDynamicAttributesApplied[key],
+                readOnly: this.isReadOnly || fieldsWithDynamicAttributesApplied[key].readOnly || readOnly,
+            }
+            : null;
     }
 
     fieldRowShouldBeVisible(row: FormLayoutColumnData['fields'][0], fields = this.fields, data = this.data) {
@@ -191,9 +193,14 @@ export class Form implements FormData, CommandFormData {
     fieldShouldBeVisible(fieldLayout: LayoutFieldData, fields = this.fields, data = this.data) {
         const field = fields[fieldLayout.key];
 
+        if(!field) {
+            return config('app.debug');
+        }
+
         if(!field.conditionalDisplay) {
             return true;
         }
+
         const fieldsWithAppliedDynamicAttributes = transformFields(fields, data);
 
         return computeCondition(fieldsWithAppliedDynamicAttributes, data, field.conditionalDisplay);

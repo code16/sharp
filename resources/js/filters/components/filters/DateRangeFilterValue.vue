@@ -13,13 +13,11 @@
         class="rounded-sm px-1 font-normal"
     >
         <template v-if="props.value.end">
-            {{ new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' }).format(new Date(props.value.start)) }}
-            -
-            {{ new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' }).format(new Date(props.value.end)) }}
+            {{ props.value.formatted.start }} - {{ props.value.formatted.end }}
         </template>
 
         <template v-else>
-            {{ new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' }).format(new Date(props.value.start)) }}
+            {{ props.value.formatted.start }}
         </template>
     </Badge>
 </template>

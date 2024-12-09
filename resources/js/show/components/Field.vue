@@ -19,8 +19,20 @@
 </script>
 
 <template>
-    <component
-        :is="isCustomField(field.type) ? resolveCustomField(field.type) : components[field.type]"
-        v-bind="props"
-    />
+    <template v-if="props.field && (isCustomField(field.type) ? resolveCustomField(field.type) : components[field.type])">
+        <component
+            :is="isCustomField(field.type) ? resolveCustomField(field.type) : components[field.type]"
+            v-bind="props"
+        />
+    </template>
+    <template v-else>
+        <div class="bg-destructive text-destructive-foreground text-sm px-4 py-2">
+            <template v-if="!props.field">
+                Undefined field: <span class="font-mono">{{ props.fieldLayout.key }}</span>
+            </template>
+            <template v-else>
+                Unknown field type: <div class="font-mono">{{ props.field.type }}</div>
+            </template>
+        </div>
+    </template>
 </template>

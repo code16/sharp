@@ -5,6 +5,9 @@ namespace Code16\Sharp\Data;
 use Illuminate\Support\Arr;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 
+/**
+ * @internal
+ */
 final class PaginatorMetaData extends Data
 {
     public function __construct(

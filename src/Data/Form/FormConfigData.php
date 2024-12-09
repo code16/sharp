@@ -4,6 +4,9 @@ namespace Code16\Sharp\Data\Form;
 
 use Code16\Sharp\Data\Data;
 
+/**
+ * @internal
+ */
 final class FormConfigData extends Data
 {
     public function __construct(

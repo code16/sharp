@@ -4,6 +4,9 @@ namespace Code16\Sharp\Data\EntityList;
 
 use Code16\Sharp\Data\Data;
 
+/**
+ * @internal
+ */
 final class EntityListMultiformData extends Data
 {
     public function __construct(

@@ -9,6 +9,9 @@ use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 use Spatie\TypeScriptTransformer\Attributes\Optional;
 use Spatie\TypeScriptTransformer\Attributes\TypeScriptType;
 
+/**
+ * @internal
+ */
 final class FormEditorFieldData extends Data
 {
     const VALUE_TS_TYPE = '{

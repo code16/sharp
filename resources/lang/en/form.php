@@ -48,7 +48,7 @@ return [
     'select.clear' => 'Clear',
     'select.validation.max_selected' => 'Too many items selected (:max_selected max.)',
 
-    'autocomplete.no_results_text' => 'No result found',
+    'autocomplete.no_results_text' => 'No results found',
     'autocomplete.loading' => 'Loading...',
     'autocomplete.query_too_short' => 'Enter at least 1 character to search|Enter at least :min_chars characters to search',
     'autocomplete.placeholder' => 'Search...',

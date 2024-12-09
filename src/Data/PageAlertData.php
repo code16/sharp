@@ -4,6 +4,9 @@ namespace Code16\Sharp\Data;
 
 use Code16\Sharp\Enums\PageAlertLevel;
 
+/**
+ * @internal
+ */
 final class PageAlertData extends Data
 {
     public function __construct(

@@ -9,6 +9,9 @@ use Code16\Sharp\Data\IconData;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 use Spatie\TypeScriptTransformer\Attributes\Optional;
 
+/**
+ * @internal
+ */
 final class EmbedData extends Data
 {
     #[Optional]

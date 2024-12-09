@@ -58,6 +58,7 @@ class HandleInertiaRequests extends Middleware
                     ->toArray();
             }),
             'config' => [
+                'app.debug' => config('app.debug'),
                 'sharp.auth.forgotten_password.enabled' => sharp()->config()->get('auth.forgotten_password.enabled'),
                 'sharp.auth.forgotten_password.show_reset_link_in_login_form' => sharp()->config()->get('auth.forgotten_password.show_reset_link_in_login_form'),
                 'sharp.auth.suggest_remember_me' => sharp()->config()->get('auth.suggest_remember_me'),

@@ -213,7 +213,7 @@ function onMinuteChange(minute: string) {
                     :model-value="calendarDateValue"
                     v-model:placeholder="calendarViewingDate"
                     :locale="dateLocale"
-                    :week-starts-on="props.field.mondayFirst ? 0 : 1"
+                    :week-starts-on="props.field.mondayFirst ? 1 : 0"
                     @update:model-value="onCalendarDateChange"
                     class="p-3"
                 >

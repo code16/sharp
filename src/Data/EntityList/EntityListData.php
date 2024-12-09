@@ -10,6 +10,9 @@ use Code16\Sharp\Data\PageAlertData;
 use Code16\Sharp\Data\PaginatorMetaData;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 
+/**
+ * @internal
+ */
 final class EntityListData extends Data
 {
     public function __construct(

@@ -15,27 +15,23 @@
     import { FilterEmits, FilterProps } from "@/filters/types";
 
     const props = defineProps<FilterProps<DateRangeFilterData>>();
-    const emit = defineEmits<FilterEmits<DateRangeFilterData>>();
+    const emit = defineEmits<FilterEmits<DateRangeFilterData, { start: string, end: string } | { preset: string } | null>>();
 
-    const localValue = ref<{ start?: CalendarDate, end?: CalendarDate, preset?: string }>();
-    const inputs = reactive({
-        start: '',
-        end: ''
-    });
-    const edited = reactive({ start: false, end: false, count: 0 });
+    const localValue = ref<{ start: CalendarDate | null, end: CalendarDate | null }>();
+    const inputs = reactive({ start: '', end: '' });
+    const renderKey = ref(0);
     const open = ref(false);
 
     watch(() => props.value, () => update());
 
     function update() {
-        localValue.value = props.value ? {
-            start: 'start' in props.value ? parseDate(props.value.start) : null,
-            end: 'end' in props.value ? parseDate(props.value.end) : null,
-            preset: 'preset' in props.value ? props.value.preset : null,
-        } : {};
+        localValue.value = {
+            start: props.value?.start ? parseDate(props.value.start) : null,
+            end: props.value?.end ? parseDate(props.value.end) : null,
+        };
         inputs.start = localValue.value.start?.toString();
         inputs.end = localValue.value.end?.toString();
-        edited.count++;
+        renderKey.value++;
     }
 
     function onOpen() {
@@ -51,7 +47,7 @@
 
     function onSubmit() {
         open.value = false;
-        emit('input', localValue.value.start ? {
+        emit('input', localValue.value.start && localValue.value.end ? {
             start: localValue.value.start.toString(),
             end: localValue.value.end.toString(),
         } : null);
@@ -60,8 +56,6 @@
     function onCalendarChange() {
         inputs.start = localValue.value.start?.toString() ?? '';
         inputs.end = localValue.value.end?.toString() ?? '';
-        edited.start = true;
-        edited.end = true;
     }
 
     function onResetClick() {
@@ -70,20 +64,18 @@
     }
 
     function onStartChange() {
-        edited.count++;
-        edited.start = true;
+        renderKey.value++;
         localValue.value.start = inputs.start ? parseDate(inputs.start) : null;
-        if(!edited.end) {
+        if(!inputs.end) {
             inputs.end = inputs.start;
             localValue.value.end = localValue.value.start;
         }
     }
 
     function onEndChange() {
-        edited.count++;
-        edited.end = true;
+        renderKey.value++;
         localValue.value.end = inputs.end ? parseDate(inputs.end) : null;
-        if(!edited.start) {
+        if(!inputs.start) {
             inputs.start = inputs.end;
             localValue.value.start = localValue.value.end;
         }
@@ -128,16 +120,13 @@
                 </template>
             </PopoverTrigger>
             <PopoverContent :class="cn('w-auto p-0', !inline ? 'w-[--reka-popover-trigger-width]' : '')">
-<!--                <h4 v-if="!inline" class="font-medium leading-none p-3 pb-0 mb-4">-->
-<!--                    {{ filter.label }}-->
-<!--                </h4>-->
                 <div class="flex">
                     <template v-if="filter.presets?.length">
                         <div class="flex flex-col shrink-0 p-3">
                             <template v-for="preset in filter.presets">
                                 <Button
                                     class="text-left justify-start"
-                                    :class="{ 'bg-accent text-accent-foreground': preset.key === localValue.preset }"
+                                    :class="{ 'bg-accent text-accent-foreground': preset.key === props.value?.preset }"
                                     size="sm"
                                     variant="ghost"
                                     @click="onPresetSelected(preset)"
@@ -153,9 +142,10 @@
                             v-model="localValue"
                             :number-of-months="2"
                             :locale="window.navigator.language"
-                            @update:start-value="(startDate) => localValue.start = startDate"
+                            :week-starts-on="props.filter.mondayFirst ? 1 : 0"
+                            @update:start-value="(startDate) => localValue.start = startDate as CalendarDate"
                             @update:model-value="onCalendarChange"
-                            :key="edited.count"
+                            :key="renderKey"
                         />
                         <div class="grid grid-cols-1 gap-4 p-3" key="footer">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">

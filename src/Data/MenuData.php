@@ -5,6 +5,9 @@ namespace Code16\Sharp\Data;
 use Code16\Sharp\Utils\Menu\SharpMenuItem;
 use Code16\Sharp\Utils\Menu\SharpMenuManager;
 
+/**
+ * @internal
+ */
 final class MenuData extends Data
 {
     public function __construct(

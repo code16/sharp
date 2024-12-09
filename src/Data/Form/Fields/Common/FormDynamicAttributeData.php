@@ -5,6 +5,9 @@ namespace Code16\Sharp\Data\Form\Fields\Common;
 use Code16\Sharp\Data\Data;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 
+/**
+ * @internal
+ */
 final class FormDynamicAttributeData extends Data
 {
     public function __construct(

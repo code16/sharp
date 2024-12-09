@@ -6,6 +6,9 @@ use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\Form\Fields\Common\FormConditionalDisplayData;
 use Spatie\TypeScriptTransformer\Attributes\Optional;
 
+/**
+ * @internal
+ */
 final class FormCustomFieldData extends Data
 {
     #[Optional]

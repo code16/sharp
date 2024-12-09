@@ -23,13 +23,14 @@
     }>();
     const form = useParentForm();
     const id = useId(`form-field_${props.fieldErrorKey}`);
+    const ariaLabelledBy = computed(() => `${id}-label`);
     const ariaDescribedBy = computed(() => [
             props.field.helpMessage && `${id}-help-message`,
             form.fieldHasError(props.field, props.fieldErrorKey) && `${id}-error`,
         ].filter(Boolean).join(' ') || undefined
     );
     const slots = defineSlots<{
-        default(props: { id: string, ariaDescribedBy: string }): any,
+        default(props: { id: string, ariaDescribedBy: string, ariaLabelledBy: string }): any,
         'help-message'?(): any,
         'action'?(): any,
     }>();
@@ -48,7 +49,7 @@
             props.class,
         )"
         :role="fieldGroup ? 'group' : null"
-        :aria-labelledby="fieldGroup ? `${id}-label` : null"
+        :aria-labelledby="fieldGroup ? ariaLabelledBy : null"
         :aria-describedby="fieldGroup ? ariaDescribedBy : null"
         :aria-invalid="form.fieldHasError(field, fieldErrorKey)"
         ref="el"
@@ -134,7 +135,7 @@
 
         <!-- We wrap the field + error / description to have only 2 child elements max (for subgrid alignment) -->
         <div class="isolate">
-            <slot v-bind="{ id, ariaDescribedBy }" />
+            <slot v-bind="{ id, ariaDescribedBy, ariaLabelledBy }" />
 
             <template v-if="field.helpMessage || $slots['help-message'] || form.fieldHasError(field, fieldErrorKey)">
                 <div class="mt-2 grid grid-cols-1 gap-y-2">

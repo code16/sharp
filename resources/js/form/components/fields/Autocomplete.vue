@@ -129,33 +129,49 @@
 </script>
 
 <template>
-    <FormFieldLayout v-bind="props" field-group>
+    <FormFieldLayout v-bind="props" field-group v-slot="{ ariaLabelledBy, ariaDescribedBy }">
         <Popover v-model:open="open" @update:open="$event ? onOpen() : null">
             <template v-if="props.value">
-                <PopoverTrigger as-child>
-                    <div class="relative border border-input flex items-center rounded-md min-h-10 text-sm px-3 py-2 pr-10 aria-disabled:pointer-events-none aria-disabled:opacity-50"
-                        :aria-disabled="props.field.readOnly"
-                    >
-                        <div class="flex-1"
-                            v-html="currentLocalValue
-                                ? currentLocalValue._htmlResult ?? currentLocalValue._html
-                                : props.value._htmlResult ?? props.value._html ?? props.value[props.field.itemIdAttribute]
-                            "
-                        ></div>
-                        <Button class="absolute right-0 h-[2.375rem] top-1/2 -translate-y-1/2 opacity-50 hover:opacity-100"
-                            :disabled="props.field.readOnly"
-                            variant="ghost"
-                            size="icon"
-                            @click="$emit('input', null)"
+                <div class="relative">
+                    <PopoverTrigger as-child>
+                        <div class="relative border border-input flex items-center rounded-md min-h-10 text-sm px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 aria-disabled:pointer-events-none aria-disabled:opacity-50"
+                            role="combobox"
+                            aria-autocomplete="none"
+                            tabindex="0"
+                            :aria-labelledby="ariaLabelledBy"
+                            :aria-describedby="ariaDescribedBy"
+                            :aria-disabled="props.field.readOnly"
                         >
-                            <X class="size-4" />
-                        </Button>
-                    </div>
-                </PopoverTrigger>
+                            <div class="flex-1"
+                                v-html="currentLocalValue
+                                    ? currentLocalValue._htmlResult ?? currentLocalValue._html
+                                    : props.value._htmlResult ?? props.value._html ?? props.value[props.field.itemIdAttribute]
+                                "
+                            ></div>
+                        </div>
+                    </PopoverTrigger>
+                    <Button class="absolute right-0 h-[2.375rem] top-1/2 -translate-y-1/2 opacity-50 hover:opacity-100"
+                        :disabled="props.field.readOnly"
+                        variant="ghost"
+                        size="icon"
+                        :aria-label="__('sharp::form.select.clear')"
+                        @click="$emit('input', null)"
+                    >
+                        <X class="size-4" aria-hidden="true" />
+                    </Button>
+                </div>
             </template>
             <template v-else>
                 <PopoverTrigger as-child>
-                    <Button class="w-full justify-between text-muted-foreground px-3" variant="outline" :disabled="props.field.readOnly">
+                    <Button
+                        class="w-full justify-between text-muted-foreground px-3"
+                        variant="outline"
+                        role="combobox"
+                        aria-autocomplete="none"
+                        :disabled="props.field.readOnly"
+                        :aria-labelledby="ariaLabelledBy"
+                        :aria-describedby="ariaDescribedBy"
+                    >
                         {{ props.field.placeholder ?? __('sharp::form.autocomplete.placeholder') }}
                         <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50 text-foreground" />
                     </Button>

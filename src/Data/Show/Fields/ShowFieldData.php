@@ -14,6 +14,9 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScriptType;
     .'|'.ShowPictureFieldData::class
     .'|'.ShowTextFieldData::class
 )]
+/**
+ * @internal
+ */
 final class ShowFieldData extends Data
 {
     public function __construct() {}

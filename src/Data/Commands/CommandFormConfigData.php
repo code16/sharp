@@ -4,6 +4,9 @@ namespace Code16\Sharp\Data\Commands;
 
 use Code16\Sharp\Data\Data;
 
+/**
+ * @internal
+ */
 final class CommandFormConfigData extends Data
 {
     public function __construct(

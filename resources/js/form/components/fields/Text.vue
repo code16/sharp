@@ -36,7 +36,6 @@
             :model-value="field.localized && typeof value === 'object' ? value?.[locale] : (value as string)"
             :placeholder="field.placeholder"
             :disabled="field.readOnly"
-            :has-error="hasError"
             :aria-describedby="ariaDescribedBy"
             @update:model-value="onInput"
             ref="input"

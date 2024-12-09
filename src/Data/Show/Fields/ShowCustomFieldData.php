@@ -5,6 +5,9 @@ namespace Code16\Sharp\Data\Show\Fields;
 use Code16\Sharp\Data\Data;
 use Spatie\TypeScriptTransformer\Attributes\Optional;
 
+/**
+ * @internal
+ */
 final class ShowCustomFieldData extends Data
 {
     #[Optional]

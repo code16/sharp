@@ -9,6 +9,7 @@ import {
     ShowTextFieldData
 } from "@/types";
 import { getAppendableParentUri, route } from "@/utils/url";
+import { config } from "@/utils/config";
 
 
 export class Show implements ShowData {
@@ -112,7 +113,7 @@ export class Show implements ShowData {
         const field = fields[fieldLayout.key];
 
         if(!field) {
-            return false;
+            return config('app.debug');
         }
 
         if(field.type === 'entityList') {

@@ -392,6 +392,10 @@ it('formats date range filter retained value', function () {
                 'start' => '2019-09-22',
                 'end' => '2019-09-25',
                 'preset' => null,
+                'formatted' => [
+                    'start' => '2019-09-22',
+                    'end' => '2019-09-25',
+                ]
             ],
         ],
         'valuated' => ['test_22' => true],
@@ -429,6 +433,10 @@ it('allows to declare a date range filter as required', function () {
                     'start' => Carbon::now()->subDay()->format('Y-m-d'),
                     'end' => Carbon::now()->format('Y-m-d'),
                     'preset' => null,
+                    'formatted' => [
+                        'start' => Carbon::now()->subDay()->format('Y-m-d'),
+                        'end' => Carbon::now()->format('Y-m-d'),
+                    ],
                 ],
             ],
             'current' => [
@@ -436,6 +444,10 @@ it('allows to declare a date range filter as required', function () {
                     'start' => Carbon::now()->subDay()->format('Y-m-d'),
                     'end' => Carbon::now()->format('Y-m-d'),
                     'preset' => null,
+                    'formatted' => [
+                        'start' => Carbon::now()->subDay()->format('Y-m-d'),
+                        'end' => Carbon::now()->format('Y-m-d'),
+                    ],
                 ],
             ],
             'valuated' => ['test' => false],
@@ -452,16 +464,34 @@ it('allows to define a date display format for a date range filter', function ()
                 {
                     public function buildFilterConfig(): void
                     {
-                        $this->configureDateFormat('YYYY-MM-DD');
+                        $this->configureKey('test_22')
+                            ->configureDateFormat('YYYY_MM_DD')
+                            ->configureRetainInSession();
                     }
                 },
             ];
         }
     };
-
+    
+    // Artificially put retained value in session
+    session()->put('_sharp_retained_filter_test_22', '20190922..20190925');
     $list->buildListConfig();
-
-    expect($list->listConfig()['filters']['_root'][0]['displayFormat'])->toEqual('YYYY-MM-DD');
+    
+    expect($list->filterContainer()->getCurrentFilterValuesForFront(null))->toEqual([
+        'default' => ['test_22' => null],
+        'current' => [
+            'test_22' => [
+                'start' => '2019-09-22',
+                'end' => '2019-09-25',
+                'preset' => null,
+                'formatted' => [
+                    'start' => '2019_09_22',
+                    'end' => '2019_09_25',
+                ]
+            ],
+        ],
+        'valuated' => ['test_22' => true],
+    ]);
 });
 
 it('allows to define the monday first attribute for a date range filter', function () {

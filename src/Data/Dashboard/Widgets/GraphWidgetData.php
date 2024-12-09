@@ -11,7 +11,7 @@ use Spatie\TypeScriptTransformer\Attributes\Optional;
 use Spatie\TypeScriptTransformer\Attributes\TypeScriptType;
 
 /**
- * @see SharpGraphWidget
+ * @internal
  */
 final class GraphWidgetData extends Data
 {

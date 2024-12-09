@@ -87,13 +87,17 @@ export type DashboardLayoutWidgetData = {
   key: string;
 };
 export type DateRangeFilterData = {
-  value?: { start: string; end: string } | { preset: string } | null;
+  value?: {
+    start: string;
+    end: string;
+    formatted?: { start: string; end: string };
+    preset?: string;
+  } | null;
   key: string;
   label: string | null;
   type: "daterange";
   required: boolean;
   mondayFirst: boolean;
-  displayFormat: string;
   presets: Array<{ key: string; label: string }> | null;
 };
 export type EmbedData = {
@@ -296,7 +300,6 @@ export type FormDateFieldData = {
   maxTime: string;
   stepTime: number;
   mondayFirst: boolean;
-  displayFormat: string;
   language: string;
   label: string | null;
   readOnly: boolean | null;

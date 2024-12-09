@@ -2,6 +2,9 @@
 
 namespace Code16\Sharp\Data;
 
+/**
+ * @internal
+ */
 final class LogoData extends Data
 {
     public function __construct(

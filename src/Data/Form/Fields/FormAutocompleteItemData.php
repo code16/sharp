@@ -12,4 +12,7 @@ use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
     _html: string|null,
     _htmlResult: string|null
 }')]
+/**
+ * @internal
+ */
 final class FormAutocompleteItemData extends Data {}

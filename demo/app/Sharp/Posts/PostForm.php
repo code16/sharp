@@ -101,8 +101,7 @@ class PostForm extends SharpForm
             ->addField(
                 SharpFormDateField::make('published_at')
                     ->setLabel('Publication date')
-                    ->setHasTime()
-                    ->setDisplayFormat('MM-DD-YYYY HH:mm'),
+                    ->setHasTime(),
             )
             ->addField(
                 SharpFormListField::make('attachments')

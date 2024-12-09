@@ -26,7 +26,7 @@ class DummyClass extends SharpSingleShow
             ->addSection('My section', function (ShowLayoutSection $section) {
                 $section
                     ->addColumn(12, function (ShowLayoutColumn $column) {
-                        $column->withSingleField('my_field');
+                        $column->withField('my_field');
                     });
             });
     }

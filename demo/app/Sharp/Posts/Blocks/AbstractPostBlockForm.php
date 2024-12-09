@@ -28,7 +28,7 @@ abstract class AbstractPostBlockForm extends SharpForm
                         Post block type: <strong>{{ $name }}</strong>
                         @if($help)
                             <div><small>{{ $help }}</small></div>
-                        @endif'
+                        @endif
                     blade),
             );
 

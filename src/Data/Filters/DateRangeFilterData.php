@@ -7,10 +7,18 @@ use Code16\Sharp\Enums\FilterType;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 use Spatie\TypeScriptTransformer\Attributes\Optional;
 
+/**
+ * @internal
+ */
 final class DateRangeFilterData extends Data
 {
     #[Optional]
-    #[LiteralTypeScriptType('{ start:string, end:string } | { preset:string } |null')]
+    #[LiteralTypeScriptType('{
+        start: string,
+        end: string,
+        formatted?: { start: string, end: string },
+        preset?: string,
+    } | null')]
     public ?array $value;
 
     public function __construct(
@@ -20,7 +28,6 @@ final class DateRangeFilterData extends Data
         public FilterType $type,
         public bool $required,
         public bool $mondayFirst,
-        public string $displayFormat,
         #[LiteralTypeScriptType('Array<{ key:string, label:string }>|null')]
         public ?array $presets,
     ) {}

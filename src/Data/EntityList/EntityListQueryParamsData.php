@@ -14,6 +14,9 @@ use Spatie\TypeScriptTransformer\Attributes\Optional;
 } & {
     [filterKey: string]: string,
 }')]
+/**
+ * @internal
+ */
 final class EntityListQueryParamsData extends Data
 {
     public function __construct(

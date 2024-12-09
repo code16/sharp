@@ -52,17 +52,50 @@ abstract class DateRangeFilter extends Filter
 
         return [
             'today' => new DateRangePreset(
-                Carbon::today(), Carbon::today(),
-                'Today'
+                start: today(),
+                end: today(),
+                label: __('sharp::filters.daterange.preset.today')
             ),
-            'yesterday' => new DateRangePreset(Carbon::yesterday(), Carbon::yesterday(), 'Yesterday'),
-            'last_7_days' => new DateRangePreset(Carbon::today()->subDays(7), Carbon::today(), 'Last 7 days'),
-            'last_30_days' => new DateRangePreset(Carbon::today()->subDays(30), Carbon::today(), 'Last 30 days'),
-            'last_365_days' => new DateRangePreset(Carbon::today()->subDays(365), Carbon::today(), 'Last 365 days'),
-            'this_month' => new DateRangePreset(Carbon::today()->startOfMonth(), Carbon::today()->endOfMonth(), 'This month'),
-            'last_month' => new DateRangePreset(Carbon::today()->subMonth()->startOfMonth(), Carbon::today()->subMonth()->endOfMonth(), 'Last month'),
-            'this_year' => new DateRangePreset(Carbon::today()->startOfYear(), Carbon::today()->endOfYear(), 'This year'),
-            'last_year' => new DateRangePreset(Carbon::today()->subYear()->startOfYear(), Carbon::today()->subYear()->endOfYear(), 'Last year'),
+            'yesterday' => new DateRangePreset(
+                start: today()->subDay(),
+                end: today()->subDay(),
+                label: __('sharp::filters.daterange.preset.yesterday')
+            ),
+            'last_7_days' => new DateRangePreset(
+                start: today()->subDays(7),
+                end: today(),
+                label: __('sharp::filters.daterange.preset.last_7_days')
+            ),
+            'last_30_days' => new DateRangePreset(
+                start: today()->subDays(30),
+                end: today(),
+                label: __('sharp::filters.daterange.preset.last_30_days')
+            ),
+            'last_365_days' => new DateRangePreset(
+                start: today()->subDays(365),
+                end: today(),
+                label: __('sharp::filters.daterange.preset.last_365_days')
+            ),
+            'this_month' => new DateRangePreset(
+                start: today()->startOfMonth(),
+                end: today()->endOfMonth(),
+                label:  __('sharp::filters.daterange.preset.this_month')
+            ),
+            'last_month' => new DateRangePreset(
+                start: today()->subMonth()->startOfMonth(),
+                end: today()->subMonth()->endOfMonth(),
+                label: __('sharp::filters.daterange.preset.last_month')
+            ),
+            'this_year' => new DateRangePreset(
+                start: today()->startOfYear(),
+                end: today()->endOfYear(),
+                label: __('sharp::filters.daterange.preset.this_year')
+            ),
+            'last_year' => new DateRangePreset(
+                start: today()->subYear()->startOfYear(),
+                end: today()->subYear()->endOfYear(),
+                label: __('sharp::filters.daterange.preset.last_year')
+            ),
         ];
     }
 
@@ -78,12 +111,17 @@ abstract class DateRangeFilter extends Filter
         [$start, $end] = explode('..', $value);
         $start = Carbon::createFromFormat('Ymd', $start)->startOfDay();
         $end = Carbon::createFromFormat('Ymd', $end)->endOfDay();
-        $presetKey = collect($this->getPresets())
-            ->search(fn (DateRangePreset $preset) => $preset->getStart()->isSameDay($start) && $preset->getEnd()->isSameDay($end));
+        $presetKey = collect($this->getPresets())->search(fn (DateRangePreset $preset) =>
+            $preset->getStart()->isSameDay($start) && $preset->getEnd()->isSameDay($end)
+        );
 
         return [
-            'start' => $start,
-            'end' => $end,
+            'start' => $start->format('Y-m-d'),
+            'end' => $end->format('Y-m-d'),
+            'formatted' => [
+                'start' => $start->isoFormat($this->getDateFormat()),
+                'end' => $end->isoFormat($this->getDateFormat()),
+            ],
             'preset' => $presetKey ?: null,
         ];
     }

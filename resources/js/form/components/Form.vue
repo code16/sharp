@@ -28,6 +28,7 @@
         inline?: boolean,
         postFn?: (data: FormData['data']) => Promise<ApiResponse<any>>,
         showErrorAlert?: boolean,
+        errorAlertMessage?: string,
     }>();
 
     provide('form', props.form);
@@ -88,12 +89,19 @@
         <template v-if="showErrorAlert">
             <div class="container">
                 <Alert class="mb-4" variant="destructive">
-                    <AlertTitle>
-                        {{ __('sharp::form.validation_error.title') }}
-                    </AlertTitle>
-                    <AlertDescription>
-                        {{ __('sharp::form.validation_error.description') }}
-                    </AlertDescription>
+                    <template v-if="errorAlertMessage">
+                        <AlertTitle class="mb-0">
+                            {{ errorAlertMessage }}
+                        </AlertTitle>
+                    </template>
+                    <template v-else>
+                        <AlertTitle>
+                            {{ __('sharp::form.validation_error.title') }}
+                        </AlertTitle>
+                        <AlertDescription>
+                            {{ __('sharp::form.validation_error.description') }}
+                        </AlertDescription>
+                    </template>
                 </Alert>
             </div>
         </template>
@@ -189,7 +197,7 @@
                                                             <FieldGridColumn v-show="form.fieldsetShouldBeVisible(fieldLayout)">
                                                                 <Card class="shadow">
                                                                     <CardHeader>
-                                                                        <CardTitle class="text-base font-light opacity-75">
+                                                                        <CardTitle class="text-base font-light tracking-normal">
                                                                             {{ fieldLayout.legend }}
                                                                         </CardTitle>
                                                                     </CardHeader>

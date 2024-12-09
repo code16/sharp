@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Utils\Filters\Concerns;
 
-use Code16\Sharp\Utils\Filters\DateRangeFilter;
 use Code16\Sharp\Utils\Filters\Filter;
 use Code16\Sharp\Utils\Filters\SelectMultipleFilter;
 use Illuminate\Support\Arr;
@@ -19,10 +18,7 @@ trait ProvidesFilterValuesToFront
                 ->flatten()
                 ->mapWithKeys(function (Filter $handler) use ($defaultValues) {
                     return [
-                        $handler->getKey() => $this->formatFilterValueForFront(
-                            $handler,
-                            $defaultValues[$handler->getKey()] ?? null
-                        ),
+                        $handler->getKey() => $defaultValues[$handler->getKey()] ?? null,
                     ];
                 })
                 ->toArray(),
@@ -30,10 +26,7 @@ trait ProvidesFilterValuesToFront
                 ->flatten()
                 ->mapWithKeys(function (Filter $handler) use ($currentValues) {
                     return [
-                        $handler->getKey() => $this->formatFilterValueForFront(
-                            $handler,
-                            $currentValues[$handler->getKey()] ?? null
-                        ),
+                        $handler->getKey() => $currentValues[$handler->getKey()] ?? null,
                     ];
                 })
                 ->toArray(),
@@ -55,18 +48,5 @@ trait ProvidesFilterValuesToFront
                 })
                 ->toArray(),
         ];
-    }
-
-    protected function formatFilterValueForFront(Filter $handler, mixed $value)
-    {
-        if ($value && $handler instanceof DateRangeFilter) {
-            $value = [
-                'start' => $value['start']->format('Y-m-d'),
-                'end' => $value['end']->format('Y-m-d'),
-                'preset' => $value['preset'] ?? null,
-            ];
-        }
-
-        return $value;
     }
 }
