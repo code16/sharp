@@ -25,14 +25,15 @@ class ApiEntityListQuickCreationCommandController extends ApiController
             ($quickCreationHandler = $list->quickCreationCommandHandler()) === null,
             403
         );
+        
+        $form = $this->entityManager->entityFor($entityKey)->getFormOrFail();
+        $form->buildFormConfig();
 
         $quickCreationHandler
             ->setTitle(__('sharp::breadcrumb.form.create_entity', [
                 'entity' => $this->entityManager->entityFor($entityKey)->getLabel()
             ]))
-            ->setFormInstance(
-                $this->entityManager->entityFor($entityKey)->getFormOrFail()
-            );
+            ->setFormInstance($form);
 
         return response()->json(
             CommandFormData::from(
@@ -50,10 +51,11 @@ class ApiEntityListQuickCreationCommandController extends ApiController
             ($quickCreationHandler = $list->quickCreationCommandHandler()) === null,
             403
         );
+        
+        $form = $this->entityManager->entityFor($entityKey)->getFormOrFail();
+        $form->buildFormConfig();
 
-        $quickCreationHandler->setFormInstance(
-            $this->entityManager->entityFor($entityKey)->getFormOrFail()
-        );
+        $quickCreationHandler->setFormInstance($form);
 
         $formattedData = $quickCreationHandler->formatAndValidateRequestData((array) request('data'));
         $result = $this->returnCommandResult(
