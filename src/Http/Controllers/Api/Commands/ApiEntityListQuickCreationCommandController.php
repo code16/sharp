@@ -26,9 +26,13 @@ class ApiEntityListQuickCreationCommandController extends ApiController
             403
         );
 
-        $quickCreationHandler->setFormInstance(
-            $this->entityManager->entityFor($entityKey)->getFormOrFail()
-        );
+        $quickCreationHandler
+            ->setTitle(__('sharp::breadcrumb.form.create_entity', [
+                'entity' => $this->entityManager->entityFor($entityKey)->getLabel()
+            ]))
+            ->setFormInstance(
+                $this->entityManager->entityFor($entityKey)->getFormOrFail()
+            );
 
         return response()->json(
             CommandFormData::from(

@@ -131,6 +131,7 @@ export type EntityListConfigData = {
   deleteHidden: boolean;
   multiformAttribute: string | null;
   createButtonLabel: string | null;
+  quickCreationForm: boolean;
   filters: ConfigFiltersData | null;
   commands: ConfigCommandsData | null;
   state: EntityStateData | null;

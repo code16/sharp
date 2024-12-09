@@ -36,7 +36,7 @@ abstract class SharpEntityList
     protected bool $deleteHidden = false;
     protected ?string $deleteConfirmationText = null;
     protected ?string $createButtonLabel = null;
-    private bool $quickCreation = false;
+    private bool $quickCreationForm = false;
     private ?array $quickCreationFields = null;
 
     final public function initQueryParams(?array $query): self
@@ -117,7 +117,7 @@ abstract class SharpEntityList
             'deleteConfirmationText' => $this->deleteConfirmationText ?: trans('sharp::show.delete_confirmation_text'),
             'deleteHidden' => $this->deleteHidden,
             'createButtonLabel' => $this->createButtonLabel,
-            'quickCreation' => $this->quickCreation,
+            'quickCreationForm' => $this->quickCreationForm,
             'filters' => $this->filterContainer()->getFiltersConfigArray(),
         ];
 
@@ -156,9 +156,9 @@ abstract class SharpEntityList
         return $this;
     }
 
-    final public function configureQuickCreation(?array $fields = null): self
+    final public function configureQuickCreationForm(?array $fields = null): self
     {
-        $this->quickCreation = true;
+        $this->quickCreationForm = true;
         $this->quickCreationFields = $fields;
 
         return $this;
@@ -194,7 +194,7 @@ abstract class SharpEntityList
 
     final public function quickCreationCommandHandler(): ?QuickCreationCommand
     {
-        return $this->quickCreation
+        return $this->quickCreationForm
             ? new QuickCreationCommand($this->quickCreationFields)
             : null;
     }

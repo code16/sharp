@@ -16,7 +16,7 @@ it('allows to call a quick creation command with the standard form', function ()
     {
         public function buildListConfig(): void
         {
-            $this->configureQuickCreation();
+            $this->configureQuickCreationForm();
         }
     });
 
@@ -31,7 +31,7 @@ it('allows to call a quick creation command with the standard form', function ()
 
     $this
         ->getJson(
-            route('code16.sharp.api.list.command.quickCreate.create', ['person']),
+            route('code16.sharp.api.list.command.quick-creation-form.create', ['person']),
         )
         ->assertOk()
         ->assertJson([
@@ -51,7 +51,7 @@ it('allows to call a quick creation command with custom form fields', function (
     {
         public function buildListConfig(): void
         {
-            $this->configureQuickCreation(['name']);
+            $this->configureQuickCreationForm(['name']);
         }
     });
 
@@ -66,7 +66,7 @@ it('allows to call a quick creation command with custom form fields', function (
 
     $this
         ->getJson(
-            route('code16.sharp.api.list.command.quickCreate.create', ['person']),
+            route('code16.sharp.api.list.command.quick-creation-form.create', ['person']),
         )
         ->assertOk()
         ->assertJsonCount(1, 'fields');
@@ -80,7 +80,7 @@ it('fails when calling a quick creation command on a not configured list', funct
 
     $this
         ->getJson(
-            route('code16.sharp.api.list.command.quickCreate.create', ['person']),
+            route('code16.sharp.api.list.command.quick-creation-form.create', ['person']),
         )
         ->assertStatus(403);
 });
@@ -90,7 +90,7 @@ it('allows to post a quick creation command', function () {
     {
         public function buildListConfig(): void
         {
-            $this->configureQuickCreation();
+            $this->configureQuickCreationForm();
         }
     });
 
@@ -115,7 +115,7 @@ it('allows to post a quick creation command', function () {
 
     $this
         ->postJson(
-            route('code16.sharp.api.list.command.quickCreate.create', ['person']),
+            route('code16.sharp.api.list.command.quick-creation-form.create', ['person']),
             ['data' => ['name' => 'Marie Curie', 'job' => 'Scientist']],
         )
         ->assertOk()
@@ -127,7 +127,7 @@ it('validates posted data of a quick creation command', function () {
     {
         public function buildListConfig(): void
         {
-            $this->configureQuickCreation();
+            $this->configureQuickCreationForm();
         }
     });
 
@@ -151,7 +151,7 @@ it('validates posted data of a quick creation command', function () {
 
     $this
         ->postJson(
-            route('code16.sharp.api.list.command.quickCreate.create', ['person']),
+            route('code16.sharp.api.list.command.quick-creation-form.create', ['person']),
             ['data' => ['name' => '']],
         )
         ->assertStatus(422)

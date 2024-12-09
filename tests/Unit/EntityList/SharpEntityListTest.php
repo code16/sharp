@@ -228,7 +228,7 @@ it('returns list config', function () {
         'deleteConfirmationText' => trans('sharp::show.delete_confirmation_text'),
         'filters' => null,
         'createButtonLabel' => null,
-        'quickCreation' => false,
+        'quickCreationForm' => false,
     ]);
 });
 
