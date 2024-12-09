@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { type HTMLAttributes, computed } from 'vue'
 import {
-  PopoverContent,
-  type PopoverContentEmits,
-  type PopoverContentProps,
-  PopoverPortal,
-  useForwardPropsEmits,
+    injectDialogRootContext,
+    PopoverContent,
+    type PopoverContentEmits,
+    type PopoverContentProps,
+    PopoverPortal,
+    useForwardPropsEmits,
 } from 'reka-ui'
 import { cn } from '@/utils/cn'
 
@@ -29,11 +30,12 @@ const delegatedProps = computed(() => {
   return delegated
 })
 
+const dialogContext = injectDialogRootContext(null);
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
 </script>
 
 <template>
-  <PopoverPortal>
+  <PopoverPortal :to="dialogContext?.contentElement.value?.parentElement">
     <PopoverContent
       v-bind="{ ...forwarded, ...$attrs }"
       :class="
