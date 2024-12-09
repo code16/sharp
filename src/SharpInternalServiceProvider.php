@@ -134,7 +134,7 @@ class SharpInternalServiceProvider extends ServiceProvider
 
     protected function declareMiddleware(): void
     {
-        $this->app->make('router')
+        $this->app['router']
             ->middlewareGroup('sharp_common', sharp()->config()->get('middleware.common'))
             ->middlewareGroup('sharp_web', sharp()->config()->get('middleware.web'))
             ->middlewareGroup('sharp_api', sharp()->config()->get('middleware.api'))

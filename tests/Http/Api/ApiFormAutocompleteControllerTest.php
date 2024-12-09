@@ -13,7 +13,6 @@ use Code16\Sharp\Tests\Fixtures\Sharp\PersonShow;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonSingleShow;
 use Code16\Sharp\Tests\Http\Api\Fixtures\ApiFormAutocompleteControllerAutocompleteEmbed;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
-use Illuminate\Support\Facades\Http;
 
 beforeEach(function () {
     sharp()->config()->addEntity('person', PersonEntity::class);
@@ -33,14 +32,14 @@ it('allows to call an functional endpoint for a remote autocomplete field', func
             );
         }
     });
-    
-    Route::post('/my/endpoint');
-    
-    Http::fake([
-        '/my/endpoint*' => Http::response([
+
+    Route::post('/my/endpoint', function () {
+        expect(request()->get('query'))->toBe('my search');
+
+        return [
             ['id' => 1, 'label' => 'John'],
-        ]),
-    ]);
+        ];
+    });
 
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
@@ -56,12 +55,6 @@ it('allows to call an functional endpoint for a remote autocomplete field', func
                 ['id' => 1, 'label' => 'John'],
             ],
         ]);
-    
-    Http::assertSent(function (\Illuminate\Http\Client\Request $request) {
-        return $request->url() === url()->query('/my/endpoint', [
-            'query' => 'my search',
-        ]);
-    });
 });
 
 it('allows to call a closure for a remote autocomplete field', function () {
