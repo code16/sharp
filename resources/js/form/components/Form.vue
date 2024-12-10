@@ -36,7 +36,7 @@
     const loading = ref(false);
     const { selectedTabSlug } = useFormTabs(props);
 
-    function submit() {
+    function submit<ExtraData extends { [key: string]: any } = any>(extraData?: ExtraData) {
         const { form, postFn } = props;
 
         if (form.isUploading) {
@@ -45,7 +45,7 @@
 
         loading.value = true;
 
-        return postFn(form.serializedData)
+        return postFn({ ...form.serializedData, ...extraData })
             .catch(error => {
                 console.log('handled', error);
                 if (error.response?.status === 422) {

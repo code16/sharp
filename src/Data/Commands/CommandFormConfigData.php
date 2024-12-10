@@ -13,14 +13,12 @@ final class CommandFormConfigData extends Data
         public ?string $title = null,
         public ?string $description = null,
         public ?string $buttonLabel = null,
+        public bool $showSubmitAndReopenButton = false,
+        public ?string $submitAndReopenButtonLabel = null,
     ) {}
 
     public static function from(array $config): self
     {
-        return new self(
-            title: $config['title'],
-            description: $config['description'],
-            buttonLabel: $config['buttonLabel'],
-        );
+        return new self(...$config);
     }
 }

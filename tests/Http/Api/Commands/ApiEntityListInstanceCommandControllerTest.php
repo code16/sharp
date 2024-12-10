@@ -556,6 +556,7 @@ it('allows to initialize form data in an instance command', function () {
             'config' => [
                 'title' => 'Edit Marie Curie',
                 'description' => 'Custom description',
+                'showSubmitAndReopenButton' => false,
             ],
         ]);
 });

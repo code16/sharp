@@ -1,9 +1,17 @@
 import { CommandResponseData } from "@/types";
+import { CommandManager } from "@/commands/CommandManager";
 
 export type CommandContainer = 'dashboard' | 'entityList' | 'show';
 
 export type CommandResponseHandlers = {
-    [Action in CommandResponseData['action']]: (data: Extract<CommandResponseData, { action: Action }>) => void | Promise<void>
+    [Action in CommandResponseData['action']]: (
+        data: Extract<CommandResponseData, { action: Action }>,
+        context: ReturnType<CommandManager['getCommandResponseHandlerContext']>
+    ) => void | Promise<void>
+}
+
+export type CommandFormExtraData = {
+    _shouldReopen?: boolean
 }
 
 export type GetFormQuery = {

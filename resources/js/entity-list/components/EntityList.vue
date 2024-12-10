@@ -3,7 +3,7 @@
     import { FilterManager } from "@/filters/FilterManager";
     import { EntityList } from "../EntityList";
     import {
-        CommandData,
+        CommandData, EntityListMultiformData,
         EntityStateValueData,
         FilterData
     } from "@/types";
@@ -47,7 +47,7 @@
     import { DropdownMenuPortal } from "reka-ui";
     import CommandDropdownItems from "@/commands/components/CommandDropdownItems.vue";
     import { Badge } from "@/components/ui/badge";
-    import { Link } from "@inertiajs/vue3";
+    import { Link, router } from "@inertiajs/vue3";
     import EntityListSearch from "@/entity-list/components/EntityListSearch.vue";
     import StickyTop from "@/components/StickyTop.vue";
     import { cn } from "@/utils/cn";
@@ -148,6 +148,33 @@
                     });
                 }
             });
+    }
+
+    async function onCreate(event: MouseEvent, form?: EntityListMultiformData) {
+        if(event.metaKey || event.ctrlKey || event.shiftKey) {
+            return;
+        }
+        const { entityKey } = props;
+
+        event.preventDefault();
+
+        if(props.entityList.config.quickCreationForm) {
+            await props.commands.send({ hasForm: true } as CommandData, {
+                postCommand: route('code16.sharp.api.list.command.quick-creation-form.store', {
+                    entityKey: form ? `${entityKey}:${form.key}` : entityKey,
+                }),
+                getForm: route('code16.sharp.api.list.command.quick-creation-form.create', {
+                    entityKey: form ? `${entityKey}:${form.key}` : entityKey,
+                }),
+                query: props.entityList.query,
+                entityKey,
+            });
+        } else {
+            router.visit(route('code16.sharp.form.create', {
+                parentUri: getAppendableParentUri(),
+                entityKey: form ? `${entityKey}:${form.key}` : entityKey,
+            }));
+        }
     }
 
     async function onInstanceCommand(command: CommandData, instanceId: InstanceId) {
@@ -376,10 +403,12 @@
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent>
                                             <template v-for="form in Object.values(entityList.forms).filter(f => !!f.label)">
-                                                <DropdownMenuItem as-child>
-                                                    <Link :href="route('code16.sharp.form.create', { parentUri: getAppendableParentUri(), entityKey: `${entityKey}:${form.key}` })">
-                                                        {{ form.label }}
-                                                    </Link>
+                                                <DropdownMenuItem
+                                                    as="a"
+                                                    :href="route('code16.sharp.form.create', { parentUri: getAppendableParentUri(), entityKey: `${entityKey}:${form.key}` })"
+                                                    @click="onCreate($event, form)"
+                                                >
+                                                    {{ form.label }}
                                                 </DropdownMenuItem>
                                             </template>
                                         </DropdownMenuContent>
@@ -387,11 +416,12 @@
                                 </template>
                                 <template v-else>
                                     <Button
-                                        :as="Link"
+                                        as="a"
                                         class="h-8 gap-1"
                                         size="sm"
                                         :disabled="reordering || selecting"
                                         :href="route('code16.sharp.form.create', { parentUri: getAppendableParentUri(), entityKey })"
+                                        @click="onCreate"
                                     >
                                         {{ props.entityList.config.createButtonLabel || __('sharp::action_bar.list.create_button') }}
                                     </Button>

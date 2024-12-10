@@ -29,11 +29,13 @@
     const entityList: Ref<EntityList | null> = ref(null);
     const filters: FilterManager = useFilters();
     const commands = useCommands('entityList', {
-        reload: () => {
+        reload: (data, { formModal }) => {
             init();
+            formModal.shouldReopen && formModal.reopen();
         },
-        refresh: (data) => {
+        refresh: (data, { formModal }) => {
             entityList.value = entityList.value.withRefreshedItems(data.items);
+            formModal.shouldReopen && formModal.reopen();
         },
     });
 

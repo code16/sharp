@@ -94,7 +94,7 @@ class FormController extends SharpProtectedController
         $form->update($instanceId, $formattedData);
         $this->uploadManager->dispatchJobs($instanceId);
 
-        return redirect()->to(sharp()->context()->breadcrumb()->getUrlOfPreviousSegment());
+        return redirect()->to(sharp()->context()->breadcrumb()->getPreviousSegmentUrl());
     }
 
     public function store(string $parentUri, string $entityKey)
@@ -113,7 +113,7 @@ class FormController extends SharpProtectedController
         $instanceId = $form->update(null, $formattedData);
         $this->uploadManager->dispatchJobs($instanceId);
 
-        $previousUrl = sharp()->context()->breadcrumb()->getUrlOfPreviousSegment();
+        $previousUrl = sharp()->context()->breadcrumb()->getPreviousSegmentUrl();
 
         return redirect()->to(
             $form->isDisplayShowPageAfterCreation()

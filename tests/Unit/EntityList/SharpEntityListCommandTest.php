@@ -50,9 +50,9 @@ it('returns commands config', function () {
                     'type' => 'entity',
                     'authorization' => true,
                     'description' => null,
-                    'instance_selection' => null,
+                    'instanceSelection' => null,
                     'confirmation' => null,
-                    'has_form' => false,
+                    'hasForm' => false,
                 ],
             ],
         ],
@@ -65,7 +65,7 @@ it('returns commands config', function () {
                     'authorization' => [],
                     'description' => null,
                     'confirmation' => null,
-                    'has_form' => false,
+                    'hasForm' => false,
                 ],
             ],
         ],
@@ -157,9 +157,9 @@ it('allows to declare instance selection mode on a command', function () {
 
     $list->buildListConfig();
 
-    expect($list->listConfig()['commands']['entity'][0][0]['instance_selection'])->toEqual('required')
-        ->and($list->listConfig()['commands']['entity'][0][1]['instance_selection'])->toEqual('allowed')
-        ->and($list->listConfig()['commands']['entity'][0][2]['instance_selection'])->toBeNull();
+    expect($list->listConfig()['commands']['entity'][0][0]['instanceSelection'])->toEqual('required')
+        ->and($list->listConfig()['commands']['entity'][0][1]['instanceSelection'])->toEqual('allowed')
+        ->and($list->listConfig()['commands']['entity'][0][2]['instanceSelection'])->toBeNull();
 });
 
 it('allows to define a form to a command', function () {
@@ -193,7 +193,7 @@ it('allows to define a form to a command', function () {
 
     $list->buildListConfig();
 
-    expect($list->listConfig()['commands']['entity'][0][0]['has_form'])->toBeTrue();
+    expect($list->listConfig()['commands']['entity'][0][0]['hasForm'])->toBeTrue();
 });
 
 it('handles authorization in an entity command', function () {

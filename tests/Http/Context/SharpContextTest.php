@@ -87,7 +87,7 @@ it('allows to get previous show of a given key from request', function () {
 it('allows to get previous url from request', function () {
     $this->fakeBreadcrumbWithUrl('/sharp/s-list/person/s-show/person/42/s-form/child/2');
 
-    expect(sharp()->context()->breadcrumb()->getUrlOfPreviousSegment())
+    expect(sharp()->context()->breadcrumb()->getPreviousSegmentUrl())
         ->toEqual(url('/sharp/s-list/person/s-show/person/42'));
 });
 

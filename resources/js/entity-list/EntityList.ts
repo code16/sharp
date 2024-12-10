@@ -74,7 +74,7 @@ export class EntityList implements EntityListData {
     }
 
     get canSelect() {
-        return this.allowedEntityCommands.flat().some(command => command.instance_selection);
+        return this.allowedEntityCommands.flat().some(command => command.instanceSelection);
     }
 
     get canReorder() {
@@ -95,7 +95,7 @@ export class EntityList implements EntityListData {
         return this.allowedEntityCommands.map(commandGroup =>
             commandGroup.filter(command => {
                 if(selecting) {
-                    return !!command.instance_selection;
+                    return !!command.instanceSelection;
                 }
                 return !command.primary;
             })

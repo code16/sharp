@@ -199,6 +199,8 @@ Here is the full list of available methods:
 
 - `configurePrimaryEntityCommand(string $commandKeyOrClassName)`: define an instance command as "primary", by passing its key or full cass name. The command should be declared for this Entity List ([see related doc](commands.md)).
 
+- `configureQuickCreationForm(?array $fields = null)`: show the creation form in a modal instead of a full page ([see detailed doc](quick-creation-form.md))
+
 - `configureDelete(bool $hide = false, ?string $onfirmationText = null)`: the first argument is to show / hide the delete command on each instance (shown by default); this is only useful to hide the link if you want to only display the delete action in the Show Page (if you have defined one), this is NOT to be used for authorization purpose (see [dedicated documentation on this topic](entity-authorizations.md)). The second argument is the message to display in the confirmation dialog (a sensible default will be used).
 
 - `configureCreateButtonLabel(string $label)` to set a custom "New..." button label.

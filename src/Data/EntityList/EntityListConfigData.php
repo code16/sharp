@@ -23,6 +23,7 @@ final class EntityListConfigData extends Data
         public bool $deleteHidden,
         public ?string $multiformAttribute,
         public ?string $createButtonLabel = null,
+        public bool $quickCreationForm = false,
         public ?ConfigFiltersData $filters = null,
         public ?ConfigCommandsData $commands = null,
         public ?EntityStateData $state = null,

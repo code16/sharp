@@ -19,10 +19,10 @@ final class CommandData extends Data
         public CommandType $type,
         #[LiteralTypeScriptType('{ title: string, description: string | null } | null')]
         public ?array $confirmation,
-        public bool $has_form,
+        public bool $hasForm,
         /** @var array<string|int>|bool */
         public array|bool $authorization,
-        public ?InstanceSelectionMode $instance_selection = null,
+        public ?InstanceSelectionMode $instanceSelection = null,
         public ?bool $primary = null,
     ) {}
 
@@ -31,8 +31,8 @@ final class CommandData extends Data
         $command = [
             ...$command,
             'type' => CommandType::from($command['type']),
-            'instance_selection' => isset($command['instance_selection'])
-                ? InstanceSelectionMode::from($command['instance_selection'])
+            'instanceSelection' => isset($command['instanceSelection'])
+                ? InstanceSelectionMode::from($command['instanceSelection'])
                 : null,
         ];
 

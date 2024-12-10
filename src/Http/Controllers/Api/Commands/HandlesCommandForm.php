@@ -23,6 +23,12 @@ trait HandlesCommandForm
                 'title' => $commandHandler->getFormModalTitle($formData) ?? $commandHandler->label(),
                 'description' => $commandHandler->getFormModalDescription($formData) ?? $commandHandler->getDescription(),
                 'buttonLabel' => $commandHandler->getFormModalButtonLabel(),
+                'showSubmitAndReopenButton' => $commandHandler instanceof EntityCommand
+                    ? $commandHandler->getFormModalShowSubmitAndReopenButton()
+                    : false,
+                'submitAndReopenButtonLabel' => $commandHandler instanceof EntityCommand
+                    ? $commandHandler->getFormModalSubmitAndReopenButtonLabel()
+                    : null,
             ],
             'locales' => $commandHandler->hasDataLocalizations()
                 ? $commandHandler->getDataLocalizations()
