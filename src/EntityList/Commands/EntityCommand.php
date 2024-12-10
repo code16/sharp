@@ -36,12 +36,12 @@ abstract class EntityCommand extends Command
 
         return $this;
     }
-    
+
     final protected function configureFormModalSubmitAndReopenButton(?string $label = null): self
     {
         $this->formModalShowSubmitAndReopenButton = true;
         $this->formModalSubmitAndReopenButtonLabel = $label;
-        
+
         return $this;
     }
 
@@ -71,12 +71,12 @@ abstract class EntityCommand extends Command
     {
         return $this->instanceSelectionMode;
     }
-    
+
     final public function getFormModalShowSubmitAndReopenButton(): bool
     {
         return $this->formModalShowSubmitAndReopenButton;
     }
-    
+
     final public function getFormModalSubmitAndReopenButtonLabel(): ?string
     {
         return $this->formModalSubmitAndReopenButtonLabel;

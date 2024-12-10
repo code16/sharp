@@ -45,9 +45,12 @@ The example above is an "entity" case, which is reserved to Entity Lists: Comman
 To create an instance Command (relative to a specific instance, which can be placed on each Entity List row, or in a Show Page), the Command class must extend `Code16\Sharp\EntityList\Commands\InstanceCommand`. The execute method signature is a bit different:
 
 ```php
-public function execute($instanceId, array $params = []): array
+class PromoteToAdminCommand extends InstanceCommand
 {
-    // [...]
+    public function execute($instanceId, array $params = []): array
+    {
+        // ...
+    }
 }
 ```
 
@@ -60,7 +63,7 @@ The second parameter in the `execute()` function is an array named `$data`, whic
 ```php
 class SendInvoiceToCustomerCommand extends InstanceCommand
 {
-    // [...]
+    // ...
     
     function buildFormFields(FieldsContainer $formFields): void
     {
@@ -84,7 +87,7 @@ Once this method has been declared, a form will be prompted to the user in a mod
 ```php
 class SendInvoiceToCustomerCommand extends InstanceCommand
 {
-    // [...]
+    // ...
     
     public function execute($instanceId, array $data = []): array
     {
@@ -101,7 +104,7 @@ class SendInvoiceToCustomerCommand extends InstanceCommand
 ```
 
 ::: tip
-Notice that validation can be extracted to a dedicated `rules()` method instead.
+Validation can be extracted to a dedicated `rules()` method instead.
 :::
 
 #### Initializing form data
@@ -122,7 +125,7 @@ For an Instance command, add the `$instanceId` as a parameter:
 ```php
  protected function initialData($instanceId): array
  {
-     // [...]
+     // ...
  }
 ```
 
@@ -162,6 +165,7 @@ Here is the full list of available methods:
 - `configureFormModalTitle(string $formModalTitle)`: if the Command has a Form, the title of the modal will be its label, or `$formModalTitle` if defined
 - `configureFormModalButtonLabel(string $formModalButtonLabel)`: if the Command has a Form, the label of the OK button will be `$formModalButtonLabel`
 - `configurePageAlert(string $template, string $alertLevel = null, string $fieldKey = null, bool $declareTemplateAsPath = false)`: display a dynamic message above the Form; [see detailed doc](page-alerts.md)
+- `configureFormModalSubmitAndReopenButton(?string $label = null)`: only useful to Commands with forms; if set, an additional button will be displayed to allow the user to submit the form and immediately reopen the Command; the label of the button will be `$label` if defined.
 
 ### Command return types
 
@@ -181,7 +185,7 @@ Finally, let's review the return possibilities: after a Command has been execute
 ```php
 class OrderList extends SharpEntityList
 {
-    // [...]
+    // ...
     function getListData()
     {
         $orders = Order::query();
@@ -202,7 +206,7 @@ In the same fashion as for a Form, you can display notifications after a Command
 ```php
 public function execute($instanceId, array $data= []): array
 {
-    // [...]
+    // ...
 
     $this->notify('This is done.')
          ->setDetail('As you asked.')
@@ -226,7 +230,7 @@ Once the Command class is written, we must add it to the Entity List or Show Pag
 ```php
 class OrderList extends SharpEntityList
 {
-    // [...]
+    // ...
     function getInstanceCommands(): ?array
     {
         return [
@@ -248,7 +252,7 @@ or to the Dashboard:
 ```php
 class SalesDashboard extends SharpDashboard
 {
-    // [...]
+    // ...
     
     function getDashboardCommands(): ?array
     {
@@ -305,7 +309,7 @@ An Entity List can declare one (and only one) of its entity Commands as "primary
 ```php
 class UserList extends SharpEntityList
 {
-    // [...]
+    // ...
     
     function buildListConfig(): void
     {
@@ -339,7 +343,7 @@ To achieve this, you must choose a unique key and attach it to the layout sectio
 ```php
 class PostShow extends SharpShow
 {
-    // [...]
+    // ...
 
     protected function buildShowLayout(ShowLayout $showLayout): void
     {
@@ -386,7 +390,7 @@ As seen before, Entity Commands are executed on multiple instances: either all o
 ```php
 class MyBulkCommand extends EntityCommand
 {
-    // [...]
+    // ...
     
     public function buildCommandConfig(): void
     {
@@ -406,7 +410,7 @@ Use the `$this->selectedIds()` method to retrieve the list of selected instances
 ```php
 class MyBulkCommand extends EntityCommand
 {
-    // [...]
+    // ...
     
     public function execute(array $data = []): array
     {
