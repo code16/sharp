@@ -130,6 +130,7 @@ it('gets form and initialize form data in an instance command of a show', functi
             'config' => [
                 'title' => 'Edit Marie Curie',
                 'description' => 'Custom description',
+                'showSubmitAndReopenButton' => false,
             ],
             'fields' => [
                 'name' => [
@@ -225,6 +226,7 @@ it('gets form and initialize form data in an instance command of a single show',
             'config' => [
                 'title' => 'Edit Marie Curie',
                 'description' => 'Custom description',
+                'showSubmitAndReopenButton' => false,
             ],
             'fields' => [
                 'name' => [
