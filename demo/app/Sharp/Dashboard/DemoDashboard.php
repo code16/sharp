@@ -24,7 +24,6 @@ use Code16\Sharp\Dashboard\Widgets\SharpPanelWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpPieGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\WidgetsContainer;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
-use Code16\Sharp\Utils\Links\LinkToShowPage;
 use Code16\Sharp\Utils\PageAlerts\PageAlert;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
@@ -196,9 +195,10 @@ class DemoDashboard extends SharpDashboard
     protected function setBarsGraphDataSet(): void
     {
         $data = User::withCount([
-            'posts' => function (Builder $query) {
-                $query->whereBetween('published_at', [$this->getStartDate(), $this->getEndDate()]);
-            }, ])
+            'posts' => fn (Builder $query) => $query->whereBetween(
+                'published_at',
+                [$this->getStartDate(), $this->getEndDate()]
+            )])
             ->orderBy('posts_count', 'desc')
             ->limit(8)
             ->get()
@@ -285,13 +285,13 @@ class DemoDashboard extends SharpDashboard
 
     protected function getStartDate(): Carbon
     {
-        return $this->queryParams->filterFor(PeriodRequiredFilter::class)['start'];
+        return $this->queryParams->filterFor(PeriodRequiredFilter::class)->getStart();
     }
 
     protected function getEndDate(): Carbon
     {
         return min(
-            $this->queryParams->filterFor(PeriodRequiredFilter::class)['end'],
+            $this->queryParams->filterFor(PeriodRequiredFilter::class)->getEnd(),
             today()->subDay(),
         );
     }

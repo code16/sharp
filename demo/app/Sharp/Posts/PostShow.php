@@ -39,7 +39,7 @@ class PostShow extends SharpShow
                         CodeEmbed::class,
                         TableOfContentsEmbed::class,
                     ])
-                    ->collapseToWordCount(30)
+                    ->collapseToWordCount(40)
                     ->setLocalized()
             )
             ->addField(SharpShowTextField::make('author')->setLabel('Author'))
@@ -77,9 +77,7 @@ class PostShow extends SharpShow
                         $column
                             ->withFields(categories: 5, author: 7)
                             ->withListField('attachments', function (ShowLayoutColumn $item) {
-                                $item->withField('title')
-                                    ->withField('link_url')
-                                    ->withField('document');
+                                $item->withFields(title: 6, link_url: 6, document: 6);
                             });
                     })
                     ->addColumn(5, function (ShowLayoutColumn $column) {
