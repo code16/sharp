@@ -157,3 +157,31 @@ it('validates posted data of a quick creation command', function () {
         ->assertStatus(422)
         ->assertJsonValidationErrors('name');
 });
+
+it('returns a link action on a quick creation command with a form with configureDisplayShowPageAfterCreation', function () {
+    fakeListFor('person', new class() extends PersonList
+    {
+        public function buildListConfig(): void
+        {
+            $this->configureQuickCreationForm();
+        }
+    });
+
+    fakeFormFor('person', new class() extends PersonForm
+    {
+        public function buildFormConfig(): void
+        {
+            $this->configureDisplayShowPageAfterCreation();
+        }
+    });
+
+    $this->get(route('code16.sharp.list', ['person']));
+
+    $this
+        ->postJson(
+            route('code16.sharp.api.list.command.quick-creation-form.create', ['person']),
+            ['data' => ['name' => 'Marie Curie']],
+        )
+        ->assertOk()
+        ->assertJson(['action' => 'link']);
+});
