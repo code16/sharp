@@ -28,6 +28,7 @@ export function sidebar(): DefaultTheme.SidebarItem[] {
                 { text: 'Create a Form', link: '/guide/building-form.md' },
                 { text: 'Multi-Forms', link: '/guide/multiforms.md' },
                 { text: 'Using Single Form for unique resources', link: '/guide/single-form.md' },
+                { text: 'Quick creation form', link: '/guide/quick-creation-form.md' },
                 { text: 'Write an Embed for the Editor field', link: '/guide/form-editor-embeds.md' },
                 { text: 'Text', link: '/guide/form-fields/text.md' },
                 { text: 'Textarea', link: '/guide/form-fields/textarea.md' },
