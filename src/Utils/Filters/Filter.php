@@ -44,6 +44,11 @@ abstract class Filter
         return $this;
     }
 
+    public function formatRawValue(mixed $value): mixed
+    {
+        return $value;
+    }
+
     public function buildFilterConfig(): void {}
 
     abstract public function fromQueryParam($value): mixed;

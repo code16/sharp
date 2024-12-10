@@ -4,7 +4,7 @@ namespace Code16\Sharp\Utils\Filters;
 
 trait HasFiltersInQuery
 {
-    public function filterFor(string $filterFullClassNameOrKey): mixed
+    public function filterFor(string $filterFullClassNameOrKey): string|bool|array|DateRangeFilterValue|null
     {
         $handler = $this->filterContainer->findFilterHandler($filterFullClassNameOrKey);
 
@@ -12,6 +12,8 @@ trait HasFiltersInQuery
             return null;
         }
 
-        return $this->filterValues[$handler->getKey()];
+        $rawValue = $this->filterValues[$handler->getKey()];
+
+        return $handler->formatRawValue($rawValue);
     }
 }

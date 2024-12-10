@@ -31,23 +31,20 @@ it('allows to use a star in search', function () {
 
 it('finds filter values', function () {
     expect(buildParams(1, '', null, null, ['job' => 'carpenter'])->filterFor('job'))
-        ->toEqual('carpenter')
-        ->and(buildParams(1, '', null, null, ['job' => 'carpenter,salesman'])->filterFor('job'))
+        ->toEqual('carpenter');
+
+    expect(buildParams(1, '', null, null, ['job' => 'carpenter,salesman'])->filterFor('job'))
         ->toEqual([
             'carpenter',
             'salesman',
-        ])
-        ->and(buildParams(1, '', null, null, ['range' => '20190201..20190210'])->filterFor('range'))
-        ->toEqual([
-            'start' => '2019-02-01',
-            'end' => '2019-02-10',
-            'preset' => null,
-            'formatted' => [
-                'start' => '2019-02-01',
-                'end' => '2019-02-10',
-            ],
-        ])
-        ->and(buildParams()->filterFor('job'))->toBeNull();
+        ]);
+
+    expect(buildParams(1, '', null, null, ['range' => '20190201..20190210'])->filterFor('range'))
+        ->toBeInstanceOf(\Code16\Sharp\Utils\Filters\DateRangeFilterValue::class)
+        ->getStart()->toEqual(Carbon::parse('20190201'))
+        ->getEnd()->toEqual(Carbon::parse('20190210'));
+
+    expect(buildParams()->filterFor('job'))->toBeNull();
 });
 
 function buildParams($p = 1, $s = '', $sb = null, $sd = null, $filters = null): EntityListQueryParams
