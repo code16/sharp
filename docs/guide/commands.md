@@ -169,7 +169,7 @@ Here is the full list of available methods:
 
 ### Command return types
 
-Finally, let's review the return possibilities: after a Command has been executed, the code must return something to tell to the front what to do next. There are six of them:
+Finally, let's review the return possibilities: after a Command has been executed, the code must return something to tell to the front what to do next. There are height of them:
 
 - `return $this->info('some text')`: displays the entered text in a modal.
 - `return $this->reload()`: reload the current page (with context).
@@ -186,15 +186,13 @@ Finally, let's review the return possibilities: after a Command has been execute
 class OrderList extends SharpEntityList
 {
     // ...
-    function getListData()
+    function getListData(): array|Arrayble
     {
-        $orders = Order::query();
-    
-        if($params->specificIds()) {
-            $orders->whereIn('id', $this->queryParams->specificIds());
-        }
-    
-        return $this->transform($orders->get());
+        return Order::query()
+            ->when($this->queryParams->specificIds(), function (Builder $query, $ids) {
+                $query->whereIn('id', $ids);
+            })
+            ->transform($orders->get());
     }
 }
 ```
