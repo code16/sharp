@@ -26,8 +26,9 @@
     const entityList: Ref<EntityList> = ref(new EntityList(props.entityList, entityKey));
     const filters = useFilters(entityList.value.config.filters, entityList.value.filterValues);
     const commands = useCommands('entityList', {
-        refresh: (data) => {
-            entityList.value = entityList.value.withRefreshedItems(data.items)
+        refresh: (data, { formModal }) => {
+            entityList.value = entityList.value.withRefreshedItems(data.items);
+            formModal.shouldReopen && formModal.reopen();
         },
     });
 

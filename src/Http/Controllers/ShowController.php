@@ -73,6 +73,6 @@ class ShowController extends SharpProtectedController
 
         $show->delete($instanceId);
 
-        return redirect()->to(sharp()->context()->breadcrumb()->getUrlOfPreviousSegment());
+        return redirect()->to(sharp()->context()->breadcrumb()->getPreviousSegmentUrl());
     }
 }

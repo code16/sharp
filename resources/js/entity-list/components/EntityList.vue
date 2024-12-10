@@ -3,7 +3,7 @@
     import { FilterManager } from "@/filters/FilterManager";
     import { EntityList } from "../EntityList";
     import {
-        CommandData,
+        CommandData, EntityListMultiformData,
         EntityStateValueData,
         FilterData
     } from "@/types";
@@ -150,24 +150,29 @@
             });
     }
 
-    async function onCreate(event: MouseEvent) {
+    async function onCreate(event: MouseEvent, form?: EntityListMultiformData) {
         if(event.metaKey || event.ctrlKey || event.shiftKey) {
             return;
         }
-        event.preventDefault();
-        if(props.entityList.config.quickCreationForm) {
-            const { commands, entityKey } = props;
+        const { entityKey } = props;
 
-            await commands.send({ has_form: true } as CommandData, {
-                postCommand: route('code16.sharp.api.list.command.quick-creation-form.store', { entityKey }),
-                getForm: route('code16.sharp.api.list.command.quick-creation-form.create', { entityKey }),
+        event.preventDefault();
+
+        if(props.entityList.config.quickCreationForm) {
+            await props.commands.send({ hasForm: true } as CommandData, {
+                postCommand: route('code16.sharp.api.list.command.quick-creation-form.store', {
+                    entityKey: form ? `${entityKey}:${form.key}` : entityKey,
+                }),
+                getForm: route('code16.sharp.api.list.command.quick-creation-form.create', {
+                    entityKey: form ? `${entityKey}:${form.key}` : entityKey,
+                }),
                 query: props.entityList.query,
                 entityKey,
             });
         } else {
             router.visit(route('code16.sharp.form.create', {
                 parentUri: getAppendableParentUri(),
-                entityKey: props.entityKey,
+                entityKey: form ? `${entityKey}:${form.key}` : entityKey,
             }));
         }
     }
@@ -398,10 +403,12 @@
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent>
                                             <template v-for="form in Object.values(entityList.forms).filter(f => !!f.label)">
-                                                <DropdownMenuItem as-child>
-                                                    <Link :href="route('code16.sharp.form.create', { parentUri: getAppendableParentUri(), entityKey: `${entityKey}:${form.key}` })">
-                                                        {{ form.label }}
-                                                    </Link>
+                                                <DropdownMenuItem
+                                                    as="a"
+                                                    :href="route('code16.sharp.form.create', { parentUri: getAppendableParentUri(), entityKey: `${entityKey}:${form.key}` })"
+                                                    @click="onCreate($event, form)"
+                                                >
+                                                    {{ form.label }}
                                                 </DropdownMenuItem>
                                             </template>
                                         </DropdownMenuContent>

@@ -26,7 +26,9 @@ class ApiEntityListQuickCreationCommandController extends ApiController
             403
         );
         
-        $form = $this->entityManager->entityFor($entityKey)->getFormOrFail();
+        $quickCreationHandler->buildCommandConfig();
+        
+        $form = $this->entityManager->entityFor($entityKey)->getFormOrFail(sharp_normalize_entity_key($entityKey)[1]);
         $form->buildFormConfig();
 
         $quickCreationHandler
@@ -52,7 +54,9 @@ class ApiEntityListQuickCreationCommandController extends ApiController
             403
         );
         
-        $form = $this->entityManager->entityFor($entityKey)->getFormOrFail();
+        $quickCreationHandler->buildCommandConfig();
+        
+        $form = $this->entityManager->entityFor($entityKey)->getFormOrFail(sharp_normalize_entity_key($entityKey)[1]);
         $form->buildFormConfig();
 
         $quickCreationHandler->setFormInstance($form);

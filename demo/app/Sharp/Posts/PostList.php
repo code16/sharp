@@ -61,7 +61,6 @@ class PostList extends SharpEntityList
     {
         $this
             ->configureCreateButtonLabel('New post...')
-            ->configureQuickCreationForm(fields: ['title', 'published_at', 'cover'])
             ->configureEntityState('state', PostStateHandler::class)
             ->configureDefaultSort('published_at', 'desc')
             ->configureDelete(confirmationText: 'Are you sure you want to delete this post (this will permanently delete its data)?')

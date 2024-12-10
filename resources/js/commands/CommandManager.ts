@@ -6,7 +6,13 @@ import { AxiosResponse } from "axios";
 import { reactive } from "vue";
 import { __ } from "@/utils/i18n";
 import { router } from "@inertiajs/vue3";
-import { CommandResponseHandlers, CommandEndpoints, GetFormQuery, CommandContainer } from "./types";
+import {
+    CommandResponseHandlers,
+    CommandEndpoints,
+    GetFormQuery,
+    CommandContainer,
+    CommandFormExtraData
+} from "./types";
 import { Form } from "@/form/Form";
 
 
@@ -20,6 +26,7 @@ export class CommandManager {
         currentCommandFormLoading?: boolean,
         currentCommandResponse?: CommandResponseData,
         currentCommandEndpoints?: CommandEndpoints,
+        currentCommandShouldReopen?: boolean,
     };
 
     constructor(commandContainer: CommandContainer, commandResponseHandlers?: Partial<CommandResponseHandlers>) {
@@ -28,16 +35,22 @@ export class CommandManager {
             ...this.defaultCommandResponseHandlers,
             ...commandResponseHandlers,
         }
+        this.maybeReopenFromSessionStorage();
     }
 
     get defaultCommandResponseHandlers(): CommandResponseHandlers {
         return {
-            info: async ({ message }) => {
+            info: async ({ message }, { formModal }) => {
                 await showAlert(message, {
                     title: __('sharp::modals.command.info.title'),
                 });
+                formModal.shouldReopen && formModal.reloadAndReopen();
             },
-            link: ({ link }) => {
+            link: ({ link }, { formModal }) => {
+                if(formModal.shouldReopen) {
+                    formModal.reloadAndReopen();
+                    return;
+                }
                 const url = new URL(link);
                 if(url.origin === location.origin) {
                     router.visit(url.pathname + url.search);
@@ -45,20 +58,22 @@ export class CommandManager {
                     location.href = link;
                 }
             },
-            reload: () => {
+            reload: (data, { formModal }) => {
                 return new Promise((resolve) =>
                     router.visit(location.href, {
                         preserveState: false,
-                        preserveScroll: false,
+                        preserveScroll: true,
+                        onStart: () => formModal.shouldReopen && formModal.queueReopen(),
                         onFinish: () => resolve(),
                     })
                 );
             },
-            refresh: () => {
+            refresh: (data, { formModal }) => {
                 return new Promise((resolve) =>
                     router.visit(location.href, {
                         preserveState: false,
-                        preserveScroll: false,
+                        preserveScroll: true,
+                        onStart: () => formModal.shouldReopen && formModal.queueReopen(),
                         onFinish: () => resolve(),
                     })
                 );
@@ -69,7 +84,11 @@ export class CommandManager {
                     command_step: data.step,
                 });
             },
-            view: (data) => {
+            view: (data, { formModal }) => {
+                if(formModal.shouldReopen) {
+                    formModal.reloadAndReopen();
+                    return;
+                }
                 this.state.currentCommandResponse = data;
             },
         };
@@ -80,7 +99,7 @@ export class CommandManager {
         this.state.currentCommand = command;
         this.state.currentCommandEndpoints = endpoints;
 
-        if(command.has_form) {
+        if(command.hasForm) {
             this.state.currentCommandForm = await this.getForm();
             return;
         }
@@ -110,6 +129,7 @@ export class CommandManager {
         this.state.currentCommandFormLoading = false;
         this.state.currentCommandResponse = null;
         this.state.currentCommandEndpoints = null;
+        this.state.currentCommandShouldReopen = false;
     }
 
     async handleCommandApiResponse(response: AxiosResponse<Blob>): Promise<void> {
@@ -118,6 +138,10 @@ export class CommandManager {
             link.download = (response.headers['content-disposition'] as string)?.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/)?.[1] ?? 'download';
             link.href = URL.createObjectURL(response.data);
             link.click();
+            if(this.state.currentCommandShouldReopen) {
+                await this.reopenCurrentCommand();
+                return;
+            }
             this.finish();
             return;
         }
@@ -132,8 +156,25 @@ export class CommandManager {
         await this.handleCommandResponse(data);
     }
 
+    getCommandResponseHandlerContext() {
+        return {
+            formModal: {
+                shouldReopen: this.state.currentCommandShouldReopen,
+                queueReopen: () => {
+                    this.queueReopenInSessionStorage();
+                },
+                reopen: () => {
+                    this.reopenCurrentCommand();
+                },
+                reloadAndReopen: () => {
+                    this.handleCommandResponse({ action: 'reload' });
+                },
+            },
+        }
+    }
+
     handleCommandResponse(data: CommandResponseData): void | Promise<void> {
-        return this.commandResponseHandlers[data.action]?.(data as any);
+        return this.commandResponseHandlers[data.action]?.(data as any, this.getCommandResponseHandlerContext());
     }
 
     getForm(query?: GetFormQuery): Promise<Form> {
@@ -158,8 +199,9 @@ export class CommandManager {
             });
     }
 
-    async postForm(data: CommandFormData['data']) {
+    async postForm(data: CommandFormData['data'] & CommandFormExtraData) {
         this.state.currentCommandFormLoading = true;
+        this.state.currentCommandShouldReopen = data._shouldReopen ?? false;
 
         try {
             const response = await api.post(this.state.currentCommandEndpoints.postCommand, {
@@ -175,6 +217,35 @@ export class CommandManager {
             this.handleCommandApiResponse(response);
         } finally {
             this.state.currentCommandFormLoading = false;
+        }
+    }
+
+    async reopenCurrentCommand() {
+        this.state.currentCommandShouldReopen = false;
+        this.state.currentCommandForm = await this.getForm();
+    }
+
+    queueReopenInSessionStorage() {
+        if(this.state.currentCommandShouldReopen) {
+            const data = {
+                command: this.state.currentCommand,
+                commandEndpoints: this.state.currentCommandEndpoints,
+                url: location.href,
+            };
+            sessionStorage.setItem('reopen-command', JSON.stringify(data));
+            return data;
+        }
+    }
+
+    maybeReopenFromSessionStorage() {
+        const reopenData: ReturnType<typeof this.queueReopenInSessionStorage> = JSON.parse(
+            sessionStorage.getItem('reopen-command') ?? 'null'
+        );
+        if(reopenData) {
+            if(location.href === reopenData.url) {
+                this.send(reopenData.command, reopenData.commandEndpoints);
+            }
+            sessionStorage.removeItem('reopen-command');
         }
     }
 }
