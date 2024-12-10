@@ -30,6 +30,7 @@ class PostList extends SharpEntityList
         $fields
             ->addField(
                 EntityListField::make('cover')
+                    ->setWidth(1)
                     ->hideOnSmallScreens(),
             )
             ->addField(
@@ -110,29 +111,24 @@ class PostList extends SharpEntityList
             // Handle specific IDs (in case of refresh, called by a state handler or a command)
             ->when(
                 $this->queryParams->specificIds(),
-                function (Builder $builder, array $ids) {
-                    $builder->whereIn('id', $ids);
-                },
+                fn (Builder $builder, array $ids) => $builder->whereIn('id', $ids),
             )
 
             // Handle filters
             ->when(
                 $this->queryParams->filterFor(StateFilter::class),
-                function (Builder $builder, string $state) {
-                    $builder->where('state', $state);
-                },
+                fn (Builder $builder, string $state) => $builder->where('state', $state),
             )
             ->when(
                 $this->queryParams->filterFor(PeriodFilter::class),
-                function (Builder $builder, array $dates) {
-                    $builder->whereBetween('published_at', [$dates['start'], $dates['end']]);
-                },
+                fn (Builder $builder, array $dates) => $builder->whereBetween(
+                    'published_at',
+                    [$dates['start'], $dates['end']]
+                ),
             )
             ->when(
                 $this->queryParams->filterFor(AuthorFilter::class),
-                function (Builder $builder, int $authorId) {
-                    $builder->where('author_id', $authorId);
-                },
+                fn (Builder $builder, int $authorId) => $builder->where('author_id', $authorId),
             )
             ->when(
                 $this->queryParams->filterFor(CategoryFilter::class),
@@ -166,22 +162,18 @@ class PostList extends SharpEntityList
             // Handle sorting
             ->when(
                 $this->queryParams->sortedBy() === 'author:name',
-                function (Builder $builder) {
-                    $builder
-                        ->leftJoin('users', 'posts.author_id', '=', 'users.id')
-                        ->orderBy('users.name', $this->queryParams->sortedDir());
-                },
-                function (Builder $builder) {
-                    $builder->orderBy('published_at', $this->queryParams->sortedDir() ?: 'desc');
-                },
+                fn (Builder $builder) => $builder
+                    ->leftJoin('users', 'posts.author_id', '=', 'users.id')
+                    ->orderBy('users.name', $this->queryParams->sortedDir()),
+                fn (Builder $builder) => $builder->orderBy('published_at', $this->queryParams->sortedDir() ?: 'desc')
             );
 
         return $this
             ->setCustomTransformer('title', function ($value, Post $instance) {
                 return sprintf(
-                    '<div><strong>fr</strong> %s</div><div><strong>en</strong> %s</div>',
-                    $instance->getTranslation('title', 'fr'),
-                    $instance->getTranslation('title', 'en')
+                    '<div>%s</div><div><small>[fr] %s</div>',
+                    $instance->getTranslation('title', 'en'),
+                    $instance->getTranslation('title', 'fr')
                 );
             })
             ->setCustomTransformer('author:name', function ($value, $instance) {

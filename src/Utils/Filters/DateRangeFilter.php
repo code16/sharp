@@ -79,7 +79,7 @@ abstract class DateRangeFilter extends Filter
             'this_month' => new DateRangePreset(
                 start: today()->startOfMonth(),
                 end: today()->endOfMonth(),
-                label:  __('sharp::filters.daterange.preset.this_month')
+                label: __('sharp::filters.daterange.preset.this_month')
             ),
             'last_month' => new DateRangePreset(
                 start: today()->subMonth()->startOfMonth(),
@@ -111,9 +111,9 @@ abstract class DateRangeFilter extends Filter
         [$start, $end] = explode('..', $value);
         $start = Carbon::createFromFormat('Ymd', $start)->startOfDay();
         $end = Carbon::createFromFormat('Ymd', $end)->endOfDay();
-        $presetKey = collect($this->getPresets())->search(fn (DateRangePreset $preset) =>
-            $preset->getStart()->isSameDay($start) && $preset->getEnd()->isSameDay($end)
-        );
+        $presetKey = collect($this->getPresets())
+            ->search(fn (DateRangePreset $preset) => $preset->getStart()->isSameDay($start)
+                && $preset->getEnd()->isSameDay($end));
 
         return [
             'start' => $start->format('Y-m-d'),
@@ -152,5 +152,10 @@ abstract class DateRangeFilter extends Filter
             Carbon::parse($value['start'])->format('Ymd'),
             Carbon::parse($value['end'])->format('Ymd'),
         );
+    }
+
+    public function formatRawValue(mixed $value): DateRangeFilterValue
+    {
+        return new DateRangeFilterValue(Carbon::parse($value['start']), Carbon::parse($value['end']));
     }
 }

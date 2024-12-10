@@ -54,6 +54,7 @@ class PostForm extends SharpForm
                         SharpFormEditorField::SEPARATOR,
                         SharpFormEditorField::IFRAME,
                         SharpFormEditorField::UPLOAD,
+                        AuthorEmbed::class,
                         CodeEmbed::class,
                     ])
                     ->allowEmbeds([
@@ -69,7 +70,7 @@ class PostForm extends SharpForm
                             ->setMaxFileSize(1)
                             ->setHasLegend()
                     )
-                    ->setMaxLength(1000)
+                    ->setMaxLength(2000)
                     ->setHeight(300, 0)
             )
             ->addField(
@@ -208,6 +209,8 @@ class PostForm extends SharpForm
         return [
             'title.fr' => ['required', 'string', 'max:150'],
             'title.en' => ['required', 'string', 'max:150'],
+            'content.fr' => ['nullable', 'string', 'max:2000'],
+            'content.en' => ['nullable', 'string', 'max:2000'],
             'published_at' => ['required', 'date'],
             'attachments.*.title' => ['required', 'string', 'max:150'],
             'attachments.*.link_url' => ['required_if:attachments.*.is_link,true,1', 'nullable', 'url', 'max:150'],
