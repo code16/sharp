@@ -1,70 +1,131 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Form\Layout;
-
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
-use Code16\Sharp\Tests\SharpTestCase;
 
-class FormLayoutColumnTest extends SharpTestCase
-{
-    /** @test */
-    public function we_can_set_a_size()
-    {
-        $formTab = new FormLayoutColumn(2);
+it('allows to set a size', function () {
+    $formTab = new FormLayoutColumn(2);
 
-        $this->assertEquals(2, $formTab->toArray()['size']);
-    }
+    expect($formTab->toArray()['size'])
+        ->toEqual(2);
+});
 
-    /** @test */
-    public function we_can_add_a_field()
-    {
-        $formTab = new FormLayoutColumn(2);
-        $formTab->withSingleField('name');
+it('allows to add a field', function () {
+    $formTab = new FormLayoutColumn(2);
+    $formTab->withField('name');
 
-        $this->assertCount(1, $formTab->toArray()['fields'][0]);
-    }
+    expect($formTab->toArray()['fields'])
+        ->toEqual([[
+            ['key' => 'name', 'size' => 12],
+        ]]);
+});
 
-    /** @test */
-    public function we_can_add_multiple_fields()
-    {
-        $formTab = new FormLayoutColumn(2);
-        $formTab->withFields('name', 'age');
+it('allows to add a field with a specific size', function () {
+    $formTabLegacy = new FormLayoutColumn(2);
+    $formTabLegacy->withField('name|4');
 
-        $this->assertCount(2, $formTab->toArray()['fields'][0]);
-    }
+    expect($formTabLegacy->toArray()['fields'])
+        ->toEqual([[
+            ['key' => 'name', 'size' => 4],
+        ]]);
+});
 
-    /** @test */
-    public function we_can_insert_a_field()
-    {
-        $formTab = new FormLayoutColumn(2);
-        $formTab->withSingleField('name');
-        $formTab->insertSingleFieldAt(0, 'age');
+it('allows to add multiple fields with default size', function () {
+    $formTab2 = new FormLayoutColumn(2);
+    $formTab2->withFields('name', 'age');
 
-        $this->assertEquals('age', $formTab->toArray()['fields'][0][0]['key']);
-        $this->assertEquals('name', $formTab->toArray()['fields'][1][0]['key']);
-    }
+    expect($formTab2->toArray()['fields'][0])
+        ->toEqual([
+            ['key' => 'name', 'size' => 6],
+            ['key' => 'age', 'size' => 6],
+        ]);
 
-    /** @test */
-    public function we_can_insert_multiple_fields()
-    {
-        $formTab = new FormLayoutColumn(2);
-        $formTab->withSingleField('name');
-        $formTab->insertFieldsAt(0, 'age', 'size');
+    $formTab3 = new FormLayoutColumn(2);
+    $formTab3->withFields('name', 'age', 'weight');
 
-        $this->assertEquals('age', $formTab->toArray()['fields'][0][0]['key']);
-        $this->assertEquals('size', $formTab->toArray()['fields'][0][1]['key']);
-        $this->assertEquals('name', $formTab->toArray()['fields'][1][0]['key']);
-    }
+    expect($formTab3->toArray()['fields'][0])
+        ->toEqual([
+            ['key' => 'name', 'size' => 4],
+            ['key' => 'age', 'size' => 4],
+            ['key' => 'weight', 'size' => 4],
+        ]);
 
-    /** @test */
-    public function we_can_add_a_fieldset()
-    {
-        $formTab = new FormLayoutColumn(2);
-        $formTab->withFieldset('label', function ($layout) {
-            $layout->withSingleField('name');
-        });
+    $formTab4 = new FormLayoutColumn(2);
+    $formTab4->withFields('name', 'age', 'weight', 'height');
 
-        $this->assertCount(1, $formTab->toArray()['fields'][0]);
-        $this->assertCount(1, $formTab->toArray()['fields'][0][0]['fields']);
-    }
-}
+    expect($formTab4->toArray()['fields'][0])
+        ->toEqual([
+            ['key' => 'name', 'size' => 3],
+            ['key' => 'age', 'size' => 3],
+            ['key' => 'weight', 'size' => 3],
+            ['key' => 'height', 'size' => 3],
+        ]);
+
+    $formTab6 = new FormLayoutColumn(2);
+    $formTab6->withFields('name', 'age', 'weight', 'height', 'gender', 'eyes');
+
+    expect($formTab6->toArray()['fields'][0])
+        ->toEqual([
+            ['key' => 'name', 'size' => 2],
+            ['key' => 'age', 'size' => 2],
+            ['key' => 'weight', 'size' => 2],
+            ['key' => 'height', 'size' => 2],
+            ['key' => 'gender', 'size' => 2],
+            ['key' => 'eyes', 'size' => 2],
+        ]);
+});
+
+it('allows to add multiple fields with specific size', function () {
+    $formTab = new FormLayoutColumn(2);
+    $formTab->withFields(name: 4, age: 8);
+
+    expect($formTab->toArray()['fields'][0])
+        ->toEqual([
+            ['key' => 'name', 'size' => 4],
+            ['key' => 'age', 'size' => 8],
+        ]);
+
+    $formTabLegacy = new FormLayoutColumn(2);
+    $formTabLegacy->withFields('name|4', 'age|8');
+
+    expect($formTabLegacy->toArray()['fields'][0])
+        ->toEqual([
+            ['key' => 'name', 'size' => 4],
+            ['key' => 'age', 'size' => 8],
+        ]);
+});
+
+it('allows to insert a field', function () {
+    $formTab = new FormLayoutColumn(2);
+    $formTab->withField('name');
+    $formTab->insertSingleFieldAt(0, 'age');
+
+    expect($formTab->toArray()['fields'][0][0]['key'])
+        ->toEqual('age')
+        ->and($formTab->toArray()['fields'][1][0]['key'])
+        ->toEqual('name');
+});
+
+it('allows to insert multiple fields', function () {
+    $formTab = new FormLayoutColumn(2);
+    $formTab->withField('name');
+    $formTab->insertFieldsAt(0, 'age', 'size');
+
+    expect($formTab->toArray()['fields'][0][0]['key'])
+        ->toEqual('age')
+        ->and($formTab->toArray()['fields'][0][1]['key'])
+        ->toEqual('size')
+        ->and($formTab->toArray()['fields'][1][0]['key'])
+        ->toEqual('name');
+});
+
+it('allows to add a fieldset', function () {
+    $formTab = new FormLayoutColumn(2);
+    $formTab->withFieldset('label', function ($layout) {
+        $layout->withField('name');
+    });
+
+    expect($formTab->toArray()['fields'][0])
+        ->toHaveCount(1)
+        ->and($formTab->toArray()['fields'][0][0]['fields'])
+        ->toHaveCount(1);
+});

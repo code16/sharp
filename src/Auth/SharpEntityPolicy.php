@@ -24,6 +24,11 @@ class SharpEntityPolicy
         return true;
     }
 
+    public function reorder($user): bool
+    {
+        return true;
+    }
+
     public function delete($user, $instanceId): bool
     {
         return true;

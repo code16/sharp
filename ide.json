@@ -1,0 +1,32 @@
+{
+    "$schema": "https://laravel-ide.com/schema/laravel-ide-v2.json",
+    "view": {
+        "paths": [
+            {
+                "path": "tests/Fixtures/resources/views",
+                "namespace": "fixtures"
+            },
+            {
+                "path": "demo/resources/views"
+            },
+            {
+                "path": "resources/views",
+                "namespace": "sharp"
+            }
+        ]
+    },
+    "blade": {
+        "components": {
+            "viewPaths": [
+                {
+                    "path": "resources/views/components",
+                    "namespace": "sharp"
+                },
+                {
+                    "path": "src/View/Components",
+                    "namespace": "sharp"
+                }
+            ]
+        }
+    }
+}

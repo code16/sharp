@@ -12,9 +12,11 @@ class PreviewPostCommand extends InstanceCommand
         return 'Preview post';
     }
 
+    public function buildCommandConfig(): void {}
+
     public function execute(mixed $instanceId, array $data = []): array
     {
-        return $this->view('sharp.post-preview', [
+        return $this->view('pages.post', [
             'post' => Post::findOrFail($instanceId),
         ]);
     }
@@ -25,10 +27,10 @@ class PreviewPostCommand extends InstanceCommand
             return true;
         }
 
-        if ($post = Post::find($instanceId)) {
-            return $post->isOnline() || $post->author_id === auth()->id();
-        }
+        $post = sharp()
+            ->context()
+            ->findListInstance($instanceId, fn ($postId) => Post::find($postId));
 
-        return false;
+        return $post && ($post->isOnline() || $post->author_id === auth()->id());
     }
 }

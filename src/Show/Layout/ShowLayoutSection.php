@@ -3,9 +3,12 @@
 namespace Code16\Sharp\Show\Layout;
 
 use Code16\Sharp\Form\Layout\HasLayout;
+use Illuminate\Support\Traits\Conditionable;
 
 class ShowLayoutSection implements HasLayout
 {
+    use Conditionable;
+
     protected ?string $title = null;
     protected array $columns = [];
     protected bool $collapsable = false;

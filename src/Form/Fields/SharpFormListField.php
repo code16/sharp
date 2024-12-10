@@ -3,12 +3,9 @@
 namespace Code16\Sharp\Form\Fields;
 
 use Code16\Sharp\Form\Fields\Formatters\ListFormatter;
-use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithTemplates;
 
 class SharpFormListField extends SharpFormField
 {
-    use SharpFormFieldWithTemplates;
-
     const FIELD_TYPE = 'list';
 
     protected bool $addable = false;
@@ -103,20 +100,6 @@ class SharpFormListField extends SharpFormField
         return $this;
     }
 
-    public function setCollapsedItemInlineTemplate(string $collapsedItemInlineTemplate): self
-    {
-        $this->setInlineTemplate($collapsedItemInlineTemplate, 'item');
-
-        return $this;
-    }
-
-    public function setCollapsedItemTemplatePath(string $collapsedItemTemplatePath): self
-    {
-        $this->setTemplatePath($collapsedItemTemplatePath, 'item');
-
-        return $this;
-    }
-
     public function addItemField(SharpFormField $field): self
     {
         $this->itemFields[] = $field;
@@ -177,8 +160,7 @@ class SharpFormListField extends SharpFormField
             'addable' => $this->addable,
             'removable' => $this->removable,
             'sortable' => $this->sortable,
-            'addText' => $this->addText ?? trans('sharp-front::form.list.add_button'),
-            'collapsedItemTemplate' => $this->template('item'),
+            'addText' => $this->addText ?? trans('sharp::form.list.add_button'),
             'maxItemCount' => $this->maxItemCount,
             'bulkUploadField' => $this->allowBulkUpload ? $this->bulkUploadItemFieldKey : null,
             'bulkUploadLimit' => $this->bulkUploadFileCountLimit,

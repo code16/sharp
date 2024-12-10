@@ -14,8 +14,6 @@ class CategoryForm extends SharpForm
 {
     use WithSharpFormEloquentUpdater;
 
-    protected ?string $formValidatorClass = CategoryValidator::class;
-
     public function buildFormFields(FieldsContainer $formFields): void
     {
         $formFields
@@ -29,13 +27,18 @@ class CategoryForm extends SharpForm
     public function buildFormLayout(FormLayout $formLayout): void
     {
         $formLayout->addColumn(6, function (FormLayoutColumn $column) {
-            $column->withSingleField('name');
+            $column->withField('name');
         });
     }
 
     public function buildFormConfig(): void
     {
         $this->configureDisplayShowPageAfterCreation();
+    }
+
+    public function getDataLocalizations(): array
+    {
+        return ['fr', 'en'];
     }
 
     public function find($id): array
@@ -45,6 +48,11 @@ class CategoryForm extends SharpForm
 
     public function update($id, array $data)
     {
+        $this->validate(
+            $data,
+            ['name' => ['required', 'string', 'max:150']]
+        );
+
         $category = $id
             ? Category::findOrFail($id)
             : new Category();

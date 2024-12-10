@@ -5,48 +5,13 @@
 
   --vp-home-hero-image-background-image: linear-gradient(-100deg, hsla(211deg, 100%, 30%, 1), hsla(211deg, 100%, 50%, 1)) url(https://grainy-gradients.vercel.app/noise.svg);
 
-  .content {
-    max-width: var(--vp-layout-max-width);
-    margin: 0 auto;
-    padding: 0 24px;
-    @media (min-width: 640px) {
-      padding: 0 48px;
-    }
-
-    @media (min-width: 960px) {
-      padding: 0 64px;
-    }
-
-    @media (min-width: 1440px) {
-      padding: 0 172px;
-    }
-  }
-
-  .VPHero {
-    @media (min-width: 1440px) {
-      padding-left: 172px;
-      padding-right: 92px;
-      max-width: var(--vp-layout-max-width);
-      margin: 0 auto;
-    }
-  }
-
   .main, .main .text {
     @media (min-width: 960px) {
       max-width: 700px!important;
     }
   }
 
-  .VPHero .container {
-    max-width: 1172px;
-  }
-
-  .content-container {
-    margin: 0 auto;
-    max-width: 1172px;
-  }
-
-  .vp-doc {
+  .content {
     display: grid;
     grid-template-columns: minmax(0,688px) 1fr;
     max-width: 962px;

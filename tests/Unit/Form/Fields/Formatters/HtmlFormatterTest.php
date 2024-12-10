@@ -1,27 +1,34 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Form\Fields\Formatters;
-
 use Code16\Sharp\Form\Fields\Formatters\HtmlFormatter;
 use Code16\Sharp\Form\Fields\SharpFormHtmlField;
-use Code16\Sharp\Tests\SharpTestCase;
 use Illuminate\Support\Str;
 
-class HtmlFormatterTest extends SharpTestCase
-{
-    /** @test */
-    public function we_can_format_value_to_front()
-    {
-        $value = Str::random();
+it('allows to format value to front', function () {
+    $value = Str::random();
 
-        $this->assertEquals($value, (new HtmlFormatter())->toFront(SharpFormHtmlField::make('html'), $value));
-    }
+    expect(
+        (new HtmlFormatter())->toFront(
+            SharpFormHtmlField::make('html')->setTemplate('<b>{{ $text }}</b>'),
+            ['text' => $value]
+        )
+    )
+        ->toEqual("<b>$value</b>");
+});
 
-    /** @test */
-    public function we_can_format_value_from_front()
-    {
-        $this->assertNull(
-            (new HtmlFormatter())->fromFront(SharpFormHtmlField::make('html'), 'attribute', Str::random()),
-        );
-    }
-}
+it('allows to format value with view to front', function () {
+    $value = Str::random();
+
+    expect(
+        (new HtmlFormatter())->toFront(
+            SharpFormHtmlField::make('html')->setTemplate(view('fixtures::test')),
+            ['text' => $value]
+        )
+    )
+        ->toContain("<b>$value</b>");
+});
+
+it('allows to format value from front', function () {
+    expect((new HtmlFormatter())->fromFront(SharpFormHtmlField::make('html'), 'attribute', Str::random()))
+        ->toBeNull();
+});

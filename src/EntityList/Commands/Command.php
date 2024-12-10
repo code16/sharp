@@ -2,10 +2,14 @@
 
 namespace Code16\Sharp\EntityList\Commands;
 
+use Closure;
+use Code16\Sharp\Enums\CommandAction;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
+use Code16\Sharp\Form\Layout\HasModalFormLayout;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Fields\HandleFormFields;
 use Code16\Sharp\Utils\SharpNotification;
+use Code16\Sharp\Utils\Traits\HandleLocalizedFields;
 use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
 use Code16\Sharp\Utils\Traits\HandleValidation;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
@@ -15,19 +19,23 @@ abstract class Command
     use HandleFormFields;
     use HandlePageAlertMessage;
     use HandleValidation;
+    use HasModalFormLayout;
     use WithCustomTransformers;
+    use HandleLocalizedFields;
 
     protected int $groupIndex = 0;
     protected ?string $commandKey = null;
-    private ?string $formModalTitle = null;
+    private string|Closure|null $formModalTitle = null;
+    private string|Closure|null $formModalDescription = null;
     private ?string $formModalButtonLabel = null;
-    private ?string $confirmationText = null;
+    private ?string $confirmationTitle = null;
+    private ?string $confirmationDescription = null;
     private ?string $description = null;
 
     protected function info(string $message): array
     {
         return [
-            'action' => 'info',
+            'action' => CommandAction::Info->value,
             'message' => $message,
         ];
     }
@@ -35,7 +43,7 @@ abstract class Command
     protected function link(string $link): array
     {
         return [
-            'action' => 'link',
+            'action' => CommandAction::Link->value,
             'link' => $link,
         ];
     }
@@ -43,14 +51,14 @@ abstract class Command
     protected function reload(): array
     {
         return [
-            'action' => 'reload',
+            'action' => CommandAction::Reload->value,
         ];
     }
 
     protected function refresh($ids): array
     {
         return [
-            'action' => 'refresh',
+            'action' => CommandAction::Refresh->value,
             'items' => (array) $ids,
         ];
     }
@@ -58,7 +66,7 @@ abstract class Command
     protected function view(string $bladeView, array $params = []): array
     {
         return [
-            'action' => 'view',
+            'action' => CommandAction::View->value,
             'html' => view($bladeView, $params)->render(),
         ];
     }
@@ -74,7 +82,7 @@ abstract class Command
     protected function download(string $filePath, ?string $fileName = null, ?string $diskName = null): array
     {
         return [
-            'action' => 'download',
+            'action' => CommandAction::Download->value,
             'file' => $filePath,
             'disk' => $diskName,
             'name' => $fileName,
@@ -84,7 +92,7 @@ abstract class Command
     protected function streamDownload(string $fileContent, string $fileName): array
     {
         return [
-            'action' => 'streamDownload',
+            'action' => CommandAction::StreamDownload->value,
             'content' => $fileContent,
             'name' => $fileName,
         ];
@@ -95,14 +103,21 @@ abstract class Command
         return new SharpNotification($title);
     }
 
-    final protected function configureFormModalTitle(string $formModalTitle): self
+    final protected function configureFormModalTitle(string|Closure $formModalTitle): self
     {
         $this->formModalTitle = $formModalTitle;
 
         return $this;
     }
 
-    final protected function configureFormModalButtonLabel(string $formModalButtonLabel): self
+    final protected function configureFormModalDescription(string|Closure $formModalDescription): self
+    {
+        $this->formModalDescription = $formModalDescription;
+
+        return $this;
+    }
+
+    final protected function configureFormModalButtonLabel(string|Closure $formModalButtonLabel): self
     {
         $this->formModalButtonLabel = $formModalButtonLabel;
 
@@ -118,7 +133,7 @@ abstract class Command
 
     final protected function configureConfirmationText(string $confirmationText): self
     {
-        $this->confirmationText = $confirmationText;
+        $this->confirmationDescription = $confirmationText;
 
         return $this;
     }
@@ -136,9 +151,14 @@ abstract class Command
         return $this->authorize();
     }
 
-    final public function getConfirmationText(): ?string
+    final public function getConfirmationTitle(): ?string
     {
-        return $this->confirmationText;
+        return $this->confirmationTitle;
+    }
+
+    final public function getConfirmationDescription(): ?string
+    {
+        return $this->confirmationDescription;
     }
 
     final public function getDescription(): ?string
@@ -146,9 +166,18 @@ abstract class Command
         return $this->description;
     }
 
-    final public function getFormModalTitle(): ?string
+    final public function getFormModalTitle(?array $formData): ?string
     {
-        return $this->formModalTitle;
+        return ($callback = $this->formModalTitle) instanceof Closure
+            ? $callback($formData)
+            : $this->formModalTitle;
+    }
+
+    final public function getFormModalDescription(?array $formData): ?string
+    {
+        return ($callback = $this->formModalDescription) instanceof Closure
+            ? $callback($formData)
+            : $this->formModalDescription;
     }
 
     final public function getFormModalButtonLabel(): ?string
@@ -171,17 +200,6 @@ abstract class Command
      */
     public function buildFormLayout(FormLayoutColumn &$column): void {}
 
-    final public function commandFormConfig(): ?array
-    {
-        if ($this->pageAlertHtmlField === null) {
-            return null;
-        }
-
-        return tap([], function (&$config) {
-            $this->appendGlobalMessageToConfig($config);
-        });
-    }
-
     final public function form(): array
     {
         return $this->fields();
@@ -189,20 +207,9 @@ abstract class Command
 
     final public function formLayout(): ?array
     {
-        if ($fields = $this->fieldsContainer()->getFields()) {
-            $column = new FormLayoutColumn(12);
+        return $this->modalFormLayout(function (FormLayoutColumn $column) {
             $this->buildFormLayout($column);
-
-            if (empty($column->fieldsToArray()['fields'])) {
-                foreach ($fields as $field) {
-                    $column->withSingleField($field->key());
-                }
-            }
-
-            return $column->fieldsToArray()['fields'];
-        }
-
-        return null;
+        });
     }
 
     final public function setGroupIndex($index): void

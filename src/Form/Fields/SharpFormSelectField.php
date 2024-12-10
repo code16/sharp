@@ -3,12 +3,10 @@
 namespace Code16\Sharp\Form\Fields;
 
 use Code16\Sharp\Form\Fields\Formatters\SelectFormatter;
-use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithDataLocalization;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithOptions;
 
 class SharpFormSelectField extends SharpFormField
 {
-    use SharpFormFieldWithDataLocalization;
     use SharpFormFieldWithOptions;
 
     const FIELD_TYPE = 'select';
@@ -143,7 +141,6 @@ class SharpFormSelectField extends SharpFormField
                 'display' => $this->display,
                 'inline' => $this->inline,
                 'maxSelected' => $this->maxSelected,
-                'localized' => $this->localized,
             ],
                 $this->dynamicAttributes
                     ? ['dynamicAttributes' => $this->dynamicAttributes]

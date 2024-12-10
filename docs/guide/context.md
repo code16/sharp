@@ -2,40 +2,36 @@
 
 Sharp provide a way to grab some request context values in the application code.
 
-## Ask for context
+## Generalities
 
-The class handling the context is `Code16\Sharp\Http\Context\CurrentSharpRequest`, which is a singleton. So at any point in the request, you can get it via:
-
-```php
-app(Code16\Sharp\Http\Context\CurrentSharpRequest::class);
-```
-
-or with the global helper:
+The class handling the context is `Code16\Sharp\Http\Context\SharpContext`; at any point in the request, you can get it via the global helper:
 
 ```php
-currentSharpRequest();
+sharp()->context();
 ```
 
-Here's a quick example:
+## Current context
+
+Let's start with a simple example of how to use the context in a Form to set a field as read-only when the form is in update mode:
 
 ```php
 class MyForm extends SharpForm
 {
-    // [...]
+    // ...
     
     function buildFormFields()
     {
-        $this->addField(
-            SharpFormTextField::make("name")
-                ->setReadOnly(currentSharpRequest()->isUpdate())
-        );
+        $this
+            ->addField(
+                SharpFormTextField::make('key')
+                    ->setReadOnly(sharp()->context()->isUpdate())
+            )
+            ->addFiled(/*...*/);
     }
 }
 ```
 
-The context is often useful in a Form situation to display or hide fields depending on the instance status (creation, update), or in a Validator to add an ID exception in a "unique" rule.
-
-## Methods
+The SharpContext class allows you to get the following information: 
 
 ### `entityKey(): string`
 
@@ -56,18 +52,72 @@ In Form case, check the current status.
 
 In Form and Show Page cases, grab the instance id.
 
-### `breadcrumb(): Collection`
+## Interact with Sharp's Breadcrumb
 
-Returns a Collection of `Code16\Sharp\Http\Context\Util\BreadcrumbItem`s
+To interact with Sharp's breadcrumb, you can call:
 
-### `getCurrentBreadcrumbItem(): BreadcrumbItem`
+```php
+sharp()->context()->breadcrumb();
+```
 
-Get the current breadcrumb item.
+... and then use the following methods:
 
-### `getPreviousShowFromBreadcrumbItems(?string $entityKey = null): ?BreadcrumbItem`
+### `currentSegment(): BreadcrumbItem`
+### `previousSegment(): BreadcrumbItem`
 
-Get (if existing) the closest Show in the breadcrumb.
+Get the current or previous breadcrumb item.
 
-### `globalFilterFor($filterName)`
+### `previousShowSegment(?string $entityKey = null): ?BreadcrumbItem`
+### `previousListSegment(?string $entityKey = null): ?BreadcrumbItem`
+
+Get (if existing) the closest Show or List in the breadcrumb.
+
+### The `BreadcrumbItem` class
+
+A `BreadcrumbItem` instance has the same methods seen above:
+
+#### `entityKey(): string`
+#### `isEntityList(): bool`
+#### `isShow(): bool`
+#### `isForm(): bool`
+#### `isUpdate(): bool`
+#### `isCreation(): bool`
+#### `instanceId(): string`
+
+Here's an example of how this information could be useful: imagine you have a Show for a `Post` instance, with an Embedded Entity List of `Comment`. When creating a new `Comment`, you'll need to set its `post_id` attribute on the Form `update()` method. You can for this make use of the breadcrumb context like this:
+
+```php
+class CommentForm extends SharpForm
+{
+    // ...
+    
+    function update($id, array $data)
+    {
+        $comment = $id 
+            ? Comment::find($id) 
+            : new Comment([
+                'post_id' => sharp()->context()->breadcrumb()->previousShowSegment('post')->instanceId()
+            ]);
+
+        $this->save($comment, $data);
+        
+        return $comment->id;
+    }
+}
+```
+
+## Global and retained filters
+
+### `globalFilterValue(string $handlerClassOrKey): array|string|null`
 
 Get the value of a Global Filter: see the [Global Filter documentation](filters.md) to know more about this feature.
+
+### `retainedFilterValue(string $handlerClassOrKey): array|string|null`
+
+Get the value of a retained Filter: see the [Retained Filter documentation](filters.md) to know more about this feature.
+
+
+## Access instances cached by an Entity List
+
+This feature is really useful to avoid multiple queries on the same instance in a single request. The [specific documentation is available here](avoid-n1-queries-in-entity-lists.md).
+

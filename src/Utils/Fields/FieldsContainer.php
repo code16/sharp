@@ -19,6 +19,9 @@ class FieldsContainer
         return $this;
     }
 
+    /**
+     * @return (SharpFormField|SharpShowField)[]
+     */
     public function getFields(): array
     {
         return $this->fields;
