@@ -40,7 +40,7 @@
         }
 
         if(hasSelectedText.value) {
-            // props.editor.commands.setLink({ href:'#' });
+            props.editor.commands.togglePendingLink(true);
         }
 
         setTimeout(() => {
@@ -49,13 +49,7 @@
     }
 
     function onHide() {
-        if(!inserted.value && hasSelectedText.value) {
-            props.editor.chain()
-                .setTextSelection({ from: selection.value.from, to: selection.value.to })
-                .unsetLink()
-                .setTextSelection(props.editor.state.selection)
-                .run();
-        }
+        props.editor.commands.togglePendingLink(false);
     }
 
     function onSubmit() {
@@ -77,7 +71,7 @@
         } else if(selection.empty) {
             props.editor.chain()
                 .focus()
-                .insertContent(`<a href="${href}">${label || href}</a>`)
+                .insertContent(`<a href="${href.value}">${label.value || href.value}</a>`)
                 .run();
 
         } else {
@@ -111,7 +105,7 @@
 
         <PopoverContent>
             <form @submit.prevent="onSubmit()">
-                <template v-if="!props.editor.isActive('link') && !hasSelectedText">
+                <template v-if="!inserted && !hasSelectedText">
                     <div class="mb-4 grid grid-cols-1 gap-3">
                         <Label :for="`${id}-link-label`">
                             {{ __('sharp::form.editor.dialogs.link.text_label') }}
@@ -127,31 +121,25 @@
                     <Input :id="`${id}-href`" v-model="href" placeholder="https://example.org" autocomplete="off" ref="input" />
                 </div>
 
-                <div class="mt-4">
-                    <div class="row g-2 flex-sm-nowrap">
-                        <div class="col-auto">
-                            <Button type="submit" size="sm">
-                                <template v-if="inserted">
-                                    {{ __('sharp::form.editor.dialogs.link.update_button') }}
-                                </template>
-                                <template v-else>
-                                    {{ __('sharp::form.editor.dialogs.link.insert_button') }}
-                                </template>
-                            </Button>
-                        </div>
-                        <div class="col-auto">
-                            <template v-if="inserted">
-                                <Button type="button" variant="destructive" size="sm" @click="onRemove()">
-                                    {{ __('sharp::form.editor.dialogs.link.remove_button') }}
-                                </Button>
-                            </template>
-                            <template v-else>
-                                <Button type="button" variant="outline" size="sm" @click="open = false; props.editor.commands.focus()">
-                                    {{ __('sharp::modals.cancel_button') }}
-                                </Button>
-                            </template>
-                        </div>
-                    </div>
+                <div class="mt-4 flex gap-3">
+                    <Button type="submit" size="sm">
+                        <template v-if="inserted">
+                            {{ __('sharp::form.editor.dialogs.link.update_button') }}
+                        </template>
+                        <template v-else>
+                            {{ __('sharp::form.editor.dialogs.link.insert_button') }}
+                        </template>
+                    </Button>
+                    <template v-if="inserted">
+                        <Button type="button" variant="destructive" size="sm" @click="onRemove()">
+                            {{ __('sharp::form.editor.dialogs.link.remove_button') }}
+                        </Button>
+                    </template>
+                    <template v-else>
+                        <Button type="button" variant="outline" size="sm" @click="open = false; props.editor.commands.focus()">
+                            {{ __('sharp::modals.cancel_button') }}
+                        </Button>
+                    </template>
                 </div>
             </form>
         </PopoverContent>

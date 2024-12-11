@@ -1,3 +1,4 @@
+import { FormEditorFieldData, FormEditorToolbarButton } from "@/types";
 
 
 export function getAllowedHeadingLevels(toolbar) {
@@ -7,6 +8,10 @@ export function getAllowedHeadingLevels(toolbar) {
         .map(match => Number(match[1]));
 }
 
-export function toolbarHasButton(toolbar, buttonName) {
-    return !toolbar || toolbar.some(button => button === buttonName);
+export function toolbarHasButton(field: FormEditorFieldData, buttonName: FormEditorToolbarButton | FormEditorToolbarButton[]) {
+    return !field.toolbar || field.toolbar.some(button =>
+        Array.isArray(buttonName)
+            ? buttonName.includes(button)
+            : button === buttonName
+    );
 }

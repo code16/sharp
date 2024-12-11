@@ -1,134 +1,71 @@
 import { Extension, getExtensionField, getSchema } from "@tiptap/core";
-import StarterKit from "@tiptap/starter-kit";
-import { Heading } from "@tiptap/extension-heading";
-import { HardBreak } from "@tiptap/extension-hard-break";
-import { Link } from "@tiptap/extension-link";
-import { Image } from "@tiptap/extension-image";
-import { HorizontalRule } from "@tiptap/extension-horizontal-rule";
-import { Placeholder } from "@tiptap/extension-placeholder";
-import { Table } from "@tiptap/extension-table";
-import { TableRow } from "@tiptap/extension-table-row";
-import { TableHeader } from "@tiptap/extension-table-header";
-import { TableCell } from "@tiptap/extension-table-cell";
-import { Highlight } from "@tiptap/extension-highlight";
-import { CodeBlock } from "@tiptap/extension-code-block";
-import { Superscript } from "@tiptap/extension-superscript";
-import { Selected } from "./Selected";
-import { Html } from "./html/Html";
-import { TrailingNode } from "./TrailingNode";
-import { Iframe } from "./iframe/Iframe";
-import { Paste } from "./Paste";
-import { Small } from "./Small";
-import CharacterCount from '@tiptap/extension-character-count';
+import { Document } from '@tiptap/extension-document';
+import { Text } from '@tiptap/extension-text';
+import { Paragraph } from '@tiptap/extension-paragraph';
+import { Blockquote } from '@tiptap/extension-blockquote';
+import { Bold } from '@tiptap/extension-bold';
+import { History } from '@tiptap/extension-history';
+import { Gapcursor } from '@tiptap/extension-gapcursor';
+import { Dropcursor } from '@tiptap/extension-dropcursor';
+import { BulletList } from '@tiptap/extension-bullet-list';
+import { Code } from '@tiptap/extension-code';
+import { Heading } from '@tiptap/extension-heading';
+import { HardBreak } from '@tiptap/extension-hard-break';
+import { Image } from '@tiptap/extension-image';
+import { Italic } from '@tiptap/extension-italic';
+import { ListItem } from '@tiptap/extension-list-item';
+import { HorizontalRule } from '@tiptap/extension-horizontal-rule';
+import { Placeholder } from '@tiptap/extension-placeholder';
+import { Table } from '@tiptap/extension-table';
+import { TableRow } from '@tiptap/extension-table-row';
+import { TableHeader } from '@tiptap/extension-table-header';
+import { TableCell } from '@tiptap/extension-table-cell';
+import { Highlight } from '@tiptap/extension-highlight';
+import { CodeBlock } from '@tiptap/extension-code-block';
+import { Superscript } from '@tiptap/extension-superscript';
+import { OrderedList } from '@tiptap/extension-ordered-list';
+import { Selected } from './Selected';
+import { Html } from './html/Html';
+import { TrailingNode } from './TrailingNode';
+import { Iframe } from './iframe/Iframe';
+import { Link } from './link/Link';
+import { Paste } from './Paste';
+import { Small } from './Small';
+import { CharacterCount } from '@tiptap/extension-character-count';
 import { getAllowedHeadingLevels, toolbarHasButton } from "../utils";
+import { FormEditorFieldData } from "@/types";
 
 
-function getHeadingExtension(toolbar) {
-    if(!toolbar) {
-        return Heading;
-    }
-    const levels = getAllowedHeadingLevels(toolbar);
-    if(levels.length > 0) {
-        return Heading.configure({
-            levels,
-        });
-    }
-}
-
-function getLinkExtension(toolbar) {
-    if(toolbarHasButton(toolbar, 'link')) {
-        return Link.configure({
-            openOnClick: false,
-            HTMLAttributes: {
-                rel: null,
-                target: null,
-            },
-        });
-    }
-}
-
-function getImageExtension(toolbar) {
-    return Image.configure({
-        HTMLAttributes: {
-            class: 'editor__image',
-        },
-    });
-}
-
-function getHorizontalRuleExtension(toolbar) {
-    if(toolbarHasButton(toolbar, 'horizontal-rule')) {
-        return HorizontalRule.extend({
-            selectable: false,
-        });
-    }
-}
-
-function getTableExtensions(toolbar) {
-    if(toolbarHasButton(toolbar, 'table')) {
-        return [
-            Table,
-            TableRow,
-            TableHeader,
-            TableCell,
-        ];
-    }
-}
-
-function getPlaceholderExtension(placeholder) {
-    if(placeholder) {
-        return Placeholder.configure({
-            placeholder,
-        });
-    }
-}
-
-function getIframeExtension(toolbar) {
-    if(toolbarHasButton(toolbar, 'iframe')) {
-        return Iframe;
-    }
-}
-
-function getHighlightExtension(toolbar) {
-    if(toolbarHasButton(toolbar, 'highlight')) {
-        return Highlight;
-    }
-}
-
-function getSmallExtension(toolbar) {
-    if(toolbarHasButton(toolbar, 'small')) {
-        return Small;
-    }
-}
-
-function getCodeBlockExtension(toolbar) {
-    if(toolbarHasButton(toolbar, 'code-block')) {
-        return CodeBlock;
-    }
-}
-
-function getSuperscriptExtension(toolbar) {
-    if(toolbarHasButton(toolbar, 'superscript')) {
-        return Superscript;
-    }
-}
-
-function getPasteExtension({ toolbar, inline }) {
-    const extensions = getToolbarExtensions({
-        toolbar: toolbar ?? [], // if no toolbar, prevent pasting formatted HTML
-        inline,
-    });
-    const schema = getSchema(extensions);
-    return Paste.configure({
-        schema,
-        inline,
-    });
-}
-
-function getHardBreakExtension({ inline }) {
-    return HardBreak
-        .extend({
+export function getExtensionsForEditorField(field: FormEditorFieldData) {
+    const getExtensions = (field: FormEditorFieldData) => [
+        toolbarHasButton(field, 'blockquote') && [
+            Blockquote,
+        ],
+        toolbarHasButton(field, 'bold') && [
+            Bold,
+        ],
+        toolbarHasButton(field, 'bullet-list') && [
+            BulletList,
+        ],
+        Extension.create({
+            addExtensions() { // use addExtension to ensure unique state
+                return [
+                    CharacterCount.configure(),
+                ]
+            }
+        }),
+        toolbarHasButton(field, 'code') && [
+            Code,
+        ],
+        toolbarHasButton(field, 'code-block') && [
+            CodeBlock,
+        ],
+        Document,
+        Dropcursor,
+        Gapcursor,
+        HardBreak.extend({
             addKeyboardShortcuts() {
-                if(inline) {
+                if(field.inline) {
                     return {
                         'Enter': () => this.editor.commands.setHardBreak(),
                         ...this.parent(),
@@ -136,82 +73,83 @@ function getHardBreakExtension({ inline }) {
                 }
                 return this.parent();
             },
-        });
-}
-
-function getTrailingNodeExtension({ inline }) {
-    if(!inline) {
-        return TrailingNode;
-    }
-}
-
-function getCharacterCountExtension() {
-    return Extension.create({
-        addExtensions() { // use addExtension to ensure unique state
-            return [
-                CharacterCount.configure(),
-            ]
-        }
-    });
-}
-
-function getStarterKitExtensions(toolbar) {
-    const bulletList = toolbarHasButton(toolbar, 'bullet-list');
-    const orderedList = toolbarHasButton(toolbar, 'ordered-list');
-    const starterKit = StarterKit.configure({
-        blockquote: toolbarHasButton(toolbar, 'blockquote'),
-        bold: toolbarHasButton(toolbar, 'bold'),
-        bulletList,
-        code: toolbarHasButton(toolbar, 'code'),
-        codeBlock: false,
-        document: true,
-        dropcursor: true,
-        gapcursor: true,
-        hardBreak: false,
-        heading: false,
-        history: true,
-        horizontalRule: false,
-        italic: toolbarHasButton(toolbar, 'italic'),
-        listItem: bulletList || orderedList,
-        orderedList,
-        paragraph: true,
-        strike: false,
-        text: true,
-    });
-    return getExtensionField(starterKit, 'addExtensions', starterKit)();
-}
-
-function getToolbarExtensions({ toolbar, inline }) {
-    const extensions = [
-        getStarterKitExtensions(toolbar),
-        getHeadingExtension(toolbar),
-        getLinkExtension(toolbar),
-        getImageExtension(toolbar),
-        getHorizontalRuleExtension(toolbar),
-        getTableExtensions(toolbar),
-        getHighlightExtension(toolbar),
-        getSmallExtension(toolbar),
-        getIframeExtension(toolbar),
-        getCodeBlockExtension(toolbar),
-        getSuperscriptExtension(toolbar),
-        getHardBreakExtension({ inline }),
-    ];
-    return extensions
-        .flat()
-        .filter(extension => !!extension);
-}
-
-export function getDefaultExtensions({ placeholder, toolbar, inline } = {}) {
-    const extensions = [
-        getToolbarExtensions({ toolbar, inline }),
-        getPasteExtension({ toolbar, inline }),
-        getPlaceholderExtension(placeholder),
-        getTrailingNodeExtension({ inline }),
-        getCharacterCountExtension(),
+        }),
+        History,
+        toolbarHasButton(field, 'highlight') && [
+            Highlight,
+        ],
+        toolbarHasButton(field, ['heading-1', 'heading-2', 'heading-3']) && [
+            Heading.configure({
+                levels: field.toolbar ? getAllowedHeadingLevels(field.toolbar) : [1,2,3],
+            }),
+        ],
+        toolbarHasButton(field, 'horizontal-rule') && [
+            HorizontalRule.extend({
+                selectable: false,
+            }),
+        ],
         Html,
+        toolbarHasButton(field, 'iframe') && [
+            Iframe,
+        ],
+        toolbarHasButton(field, 'italic') && [
+            Italic,
+        ],
+        toolbarHasButton(field, 'link') && [
+            Link.configure({
+                openOnClick: false,
+                HTMLAttributes: {
+                    rel: null,
+                    target: null,
+                },
+            }),
+        ],
+        toolbarHasButton(field, ['bullet-list', 'ordered-list']) && [
+            ListItem,
+        ],
+        Image.configure({
+            HTMLAttributes: {
+                class: 'editor__image',
+            },
+        }),
+        toolbarHasButton(field, 'ordered-list') && [
+            OrderedList,
+        ],
+        Paragraph,
+        field.placeholder && [
+            Placeholder.configure({
+                placeholder: field.placeholder,
+            })
+        ],
         Selected,
-    ];
-    return extensions
+        toolbarHasButton(field, 'small') && [
+            Small,
+        ],
+        toolbarHasButton(field, 'superscript') && [
+            Superscript,
+        ],
+        toolbarHasButton(field, 'table') && [
+            Table,
+            TableRow,
+            TableHeader,
+            TableCell,
+        ],
+        Text,
+        !field.inline && [
+            TrailingNode,
+        ],
+    ]
         .flat()
         .filter(extension => !!extension);
+
+    return [
+        ...getExtensions(field),
+        Paste.configure({
+            schema: getSchema(getExtensions({
+                ...field,
+                toolbar: field.toolbar ?? [], // if no toolbar, prevent pasting formatted HTML
+            })),
+            inline: field.inline,
+        }),
+    ];
 }

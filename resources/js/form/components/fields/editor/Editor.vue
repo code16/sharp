@@ -13,7 +13,7 @@
     import { Iframe } from "@/form/components/fields/editor/extensions/iframe/Iframe";
     import { useParentForm } from "@/form/useParentForm";
     import { trimHTML } from "@/form/components/fields/editor/utils/html";
-    import { getDefaultExtensions } from "@/form/components/fields/editor/extensions";
+    import { getExtensionsForEditorField } from "@/form/components/fields/editor/extensions";
     import { ContentEmbedManager } from "@/content/ContentEmbedManager";
     import { ContentUploadManager } from "@/content/ContentUploadManager";
     import { FormFieldEmits, FormFieldProps } from "@/form/types";
@@ -62,11 +62,7 @@
         (locale) => {
             const { field } = props;
             const extensions = [
-                ...getDefaultExtensions({
-                    placeholder: field.placeholder,
-                    toolbar: field.toolbar,
-                    inline: field.inline,
-                }),
+                ...getExtensionsForEditorField(field),
                 field.markdown && Markdown.configure({
                     breaks: config('sharp.markdown_editor.nl2br'),
                 }),
