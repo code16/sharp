@@ -11,8 +11,8 @@ class DateTimeCustomTransformer implements SharpAttributeTransformer
     {
         $carbonValue = $instance->$attribute;
 
-        return $carbonValue && $carbonValue instanceof Carbon
-            ? $carbonValue->isoFormat('LLLL')
+        return $carbonValue instanceof Carbon
+            ? $carbonValue->isoFormat('LLL')
             : null;
     }
 }
