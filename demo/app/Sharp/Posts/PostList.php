@@ -30,7 +30,7 @@ class PostList extends SharpEntityList
         $fields
             ->addField(
                 EntityListField::make('cover')
-                    ->setWidth(1)
+                    ->setWidth(.1)
                     ->hideOnSmallScreens(),
             )
             ->addField(
@@ -54,6 +54,7 @@ class PostList extends SharpEntityList
             ->addField(
                 EntityListField::make('published_at')
                     ->setLabel('Published at')
+                    ->setWidth(.2)
                     ->setSortable(),
             );
     }
