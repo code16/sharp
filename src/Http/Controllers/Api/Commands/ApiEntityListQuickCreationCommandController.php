@@ -5,6 +5,7 @@ namespace Code16\Sharp\Http\Controllers\Api\Commands;
 use Code16\Sharp\Data\Commands\CommandFormData;
 use Code16\Sharp\Http\Controllers\Api\ApiController;
 use Code16\Sharp\Utils\Uploads\SharpUploadManager;
+use Illuminate\Support\Str;
 
 class ApiEntityListQuickCreationCommandController extends ApiController
 {
@@ -18,7 +19,9 @@ class ApiEntityListQuickCreationCommandController extends ApiController
 
     public function create(string $entityKey)
     {
-        $list = $this->getListInstance($entityKey);
+        $entity = $this->entityManager->entityFor($entityKey);
+        
+        $list = $entity->getListOrFail();
         $list->buildListConfig();
 
         abort_if(
@@ -26,16 +29,19 @@ class ApiEntityListQuickCreationCommandController extends ApiController
             403
         );
         
-        $quickCreationHandler->buildCommandConfig();
-        
-        $form = $this->entityManager->entityFor($entityKey)->getFormOrFail(sharp_normalize_entity_key($entityKey)[1]);
+        $form = $entity->getFormOrFail(sharp_normalize_entity_key($entityKey)[1]);
         $form->buildFormConfig();
-
+        
         $quickCreationHandler
+            ->setEntityKey($entityKey)
+            ->setFormInstance($form)
             ->setTitle(__('sharp::breadcrumb.form.create_entity', [
-                'entity' => $this->entityManager->entityFor($entityKey)->getLabel()
-            ]))
-            ->setFormInstance($form);
+                'entity' => str_contains($entityKey, ':')
+                    ? $entity->getMultiforms()[Str::after($entityKey, ':')][1] ?? $entity->getLabel()
+                    : $entity->getLabel()
+            ]));
+        
+        $quickCreationHandler->buildCommandConfig();
 
         return response()->json(
             CommandFormData::from(
@@ -54,12 +60,12 @@ class ApiEntityListQuickCreationCommandController extends ApiController
             403
         );
         
-        $quickCreationHandler->buildCommandConfig();
-        
         $form = $this->entityManager->entityFor($entityKey)->getFormOrFail(sharp_normalize_entity_key($entityKey)[1]);
         $form->buildFormConfig();
 
-        $quickCreationHandler->setFormInstance($form);
+        $quickCreationHandler
+            ->setEntityKey($entityKey)
+            ->setFormInstance($form);
 
         $formattedData = $quickCreationHandler->formatAndValidateRequestData((array) request('data'));
         $result = $this->returnCommandResult(

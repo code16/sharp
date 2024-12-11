@@ -11,6 +11,7 @@ class QuickCreationCommand extends EntityCommand
 {
     protected ?string $title = null;
     protected SharpForm $sharpForm;
+    protected string $entityKey;
 
     public function __construct(protected ?array $specificFormFields) {}
 
@@ -21,7 +22,10 @@ class QuickCreationCommand extends EntityCommand
     
     public function buildCommandConfig(): void
     {
-        $this->configureFormModalSubmitAndReopenButton();
+        $this
+            ->configureFormModalTitle($this->title)
+            ->configureFormModalButtonLabel(__('sharp::action_bar.form.submit_button.create'))
+            ->configureFormModalSubmitAndReopenButton(__('sharp::entity_list.quick_creation_modal.create_and_reopen'));
     }
     
     public function buildFormFields(FieldsContainer $formFields): void
@@ -63,14 +67,13 @@ class QuickCreationCommand extends EntityCommand
     public function execute(array $data = []): array
     {
         $instanceId = $this->sharpForm->update(null, $data);
-        $entityKey = sharp()->context()->entityKey();
         $currentUrl = sharp()->context()->breadcrumb()->getCurrentSegmentUrl();
 
         return $this->sharpForm->isDisplayShowPageAfterCreation()
             ? $this->link(sprintf(
                 '%s/s-show/%s/%s',
                 $currentUrl,
-                sharp_normalize_entity_key($entityKey)[0],
+                sharp_normalize_entity_key($this->entityKey)[0],
                 $instanceId
             ))
             : $this->reload();
@@ -79,6 +82,13 @@ class QuickCreationCommand extends EntityCommand
     public function setFormInstance(SharpForm $form): self
     {
         $this->sharpForm = $form;
+        
+        return $this;
+    }
+    
+    public function setEntityKey(string $entityKey): self
+    {
+        $this->entityKey = $entityKey;
         
         return $this;
     }
