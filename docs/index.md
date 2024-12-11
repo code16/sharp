@@ -29,7 +29,7 @@ Sharp for Laravel is actively maintained and developed, and is used in all kinds
 - **Search and filters**: define filters for your lists, with various types and options.
 - **State management**: if your entities have some state, you can manage it easily form here.
 
-![Sharp Lists](/docs/img/readme/v9/list.png)
+![Sharp Lists](./img/readme/v9/list.png)
 
 ## Powerful Command system
 
@@ -37,7 +37,7 @@ Sharp for Laravel is actively maintained and developed, and is used in all kinds
 - **Forms**: easily attach forms to commands, with validation and confirmation.
 - **Wizards**: create multi-steps commands with dynamic paths.
 
-![Sharp Commands](/docs/img/readme/v9/command.png)
+![Sharp Commands](./img/readme/v9/command.png)
 
 ## Comprehensive Forms
 
@@ -46,7 +46,7 @@ Sharp for Laravel is actively maintained and developed, and is used in all kinds
 - **Uploads**: manage files with bulk uploads, image transformation, disk and path configuration and precise validation.
 - **Lists**: create lists (repeaters) of custom items in your form.
 
-![Sharp Forms](/docs/img/readme/v9/form.png)
+![Sharp Forms](./img/readme/v9/form.png)
 
 ## Detailed Show Pages
 
@@ -54,14 +54,14 @@ Sharp for Laravel is actively maintained and developed, and is used in all kinds
 - **Embedded lists**: include lists in your show page to present linked data.
 - **Breadcrumb**: help your users to find their way up, allowing hierarchical navigation though embedded lists.
 
-![Sharp Commands](/docs/img/readme/v9/show.png)
+![Sharp Commands](./img/readme/v9/show.png)
 
 ## Insightful Dashboards
 
 - **Widgets**: use various widgets to present synthetic data, graphs and direct links.
 - **Filters and commands**: leverage filters and commands in your dashboards.
 
-![Sharp Commands](/docs/img/readme/v9/dashboard.png)
+![Sharp Commands](./img/readme/v9/dashboard.png)
 
 ## Authentication and authorizations
 
