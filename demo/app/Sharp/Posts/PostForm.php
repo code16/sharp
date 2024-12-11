@@ -168,7 +168,6 @@ class PostForm extends SharpForm
                                 fn ($column) => $column->withField('author_id')
                             )
                             ->withFields('published_at', 'categories')
-                            ->withField('cover')
                             ->withListField('attachments', function (FormLayoutColumn $item) {
                                 $item->withFields(title: 8, is_link: 4)
                                     ->withField('link_url')
@@ -176,7 +175,9 @@ class PostForm extends SharpForm
                             });
                     })
                     ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withField('content');
+                        $column
+                            ->withField('cover')
+                            ->withField('content');
                     });
             })
             ->addTab('Metadata', function (FormLayoutTab $tab) {
