@@ -24,29 +24,29 @@ import { Highlight } from '@tiptap/extension-highlight';
 import { CodeBlock } from '@tiptap/extension-code-block';
 import { Superscript } from '@tiptap/extension-superscript';
 import { OrderedList } from '@tiptap/extension-ordered-list';
-import { Selected } from './Selected';
+import { Link } from '@tiptap/extension-link';
+import { Selection } from './Selection';
 import { Html } from './html/Html';
 import { TrailingNode } from './TrailingNode';
 import { Iframe } from './iframe/Iframe';
-import { Link } from './link/Link';
 import { Paste } from './Paste';
 import { Small } from './Small';
 import { CharacterCount } from '@tiptap/extension-character-count';
-import { getAllowedHeadingLevels, toolbarHasButton } from "../utils";
-import { FormEditorFieldData } from "@/types";
+import { FormEditorFieldData, FormEditorToolbarButton } from "@/types";
 
 
-export function getExtensionsForEditorField(field: FormEditorFieldData) {
-    const getExtensions = (field: FormEditorFieldData) => [
-        toolbarHasButton(field, 'blockquote') && [
-            Blockquote,
-        ],
-        toolbarHasButton(field, 'bold') && [
-            Bold,
-        ],
-        toolbarHasButton(field, 'bullet-list') && [
-            BulletList,
-        ],
+function getExtensions(field: FormEditorFieldData) {
+    const toolbarHas = (buttonName: FormEditorToolbarButton | FormEditorToolbarButton[]) =>
+        !field.toolbar || field.toolbar.some(button =>
+            Array.isArray(buttonName)
+                ? buttonName.includes(button)
+                : button === buttonName
+        );
+
+    return [
+        toolbarHas('blockquote') && Blockquote,
+        toolbarHas('bold') && Bold,
+        toolbarHas('bullet-list') && BulletList,
         Extension.create({
             addExtensions() { // use addExtension to ensure unique state
                 return [
@@ -54,12 +54,8 @@ export function getExtensionsForEditorField(field: FormEditorFieldData) {
                 ]
             }
         }),
-        toolbarHasButton(field, 'code') && [
-            Code,
-        ],
-        toolbarHasButton(field, 'code-block') && [
-            CodeBlock,
-        ],
+        toolbarHas('code') && Code,
+        toolbarHas('code-block') && CodeBlock,
         Document,
         Dropcursor,
         Gapcursor,
@@ -75,73 +71,53 @@ export function getExtensionsForEditorField(field: FormEditorFieldData) {
             },
         }),
         History,
-        toolbarHasButton(field, 'highlight') && [
-            Highlight,
-        ],
-        toolbarHasButton(field, ['heading-1', 'heading-2', 'heading-3']) && [
-            Heading.configure({
-                levels: field.toolbar ? getAllowedHeadingLevels(field.toolbar) : [1,2,3],
-            }),
-        ],
-        toolbarHasButton(field, 'horizontal-rule') && [
-            HorizontalRule.extend({
-                selectable: false,
-            }),
-        ],
+        toolbarHas('highlight') && Highlight,
+        toolbarHas([
+            'heading-1',
+            'heading-2',
+            'heading-3'
+        ]) && Heading.configure({
+            levels: [1,2,3].filter((level: 1|2|3) => toolbarHas(`heading-${level}`)) as (1|2|3)[],
+        }),
+        toolbarHas('horizontal-rule') && HorizontalRule.extend({
+            selectable: false,
+        }),
         Html,
-        toolbarHasButton(field, 'iframe') && [
-            Iframe,
-        ],
-        toolbarHasButton(field, 'italic') && [
-            Italic,
-        ],
-        toolbarHasButton(field, 'link') && [
-            Link.configure({
-                openOnClick: false,
-                HTMLAttributes: {
-                    rel: null,
-                    target: null,
-                },
-            }),
-        ],
-        toolbarHasButton(field, ['bullet-list', 'ordered-list']) && [
-            ListItem,
-        ],
-        Image.configure({
+        toolbarHas('iframe') && Iframe,
+        toolbarHas('italic') && Italic,
+        toolbarHas('link') && Link.extend({
+            inclusive: false,
+        }).configure({
+            openOnClick: false,
             HTMLAttributes: {
-                class: 'editor__image',
+                rel: null,
+                target: null,
             },
         }),
-        toolbarHasButton(field, 'ordered-list') && [
-            OrderedList,
-        ],
+        toolbarHas(['bullet-list', 'ordered-list']) && ListItem,
+        Image,
+        toolbarHas('ordered-list') && OrderedList,
         Paragraph,
-        field.placeholder && [
-            Placeholder.configure({
-                placeholder: field.placeholder,
-            })
-        ],
-        Selected,
-        toolbarHasButton(field, 'small') && [
-            Small,
-        ],
-        toolbarHasButton(field, 'superscript') && [
-            Superscript,
-        ],
-        toolbarHasButton(field, 'table') && [
+        field.placeholder && Placeholder.configure({
+            placeholder: field.placeholder,
+        }),
+        Selection,
+        toolbarHas('small') && Small,
+        toolbarHas('superscript') && Superscript,
+        toolbarHas('table') && [
             Table,
             TableRow,
             TableHeader,
             TableCell,
         ],
         Text,
-        !field.inline && [
-            TrailingNode,
-        ],
+        !field.inline && TrailingNode,
     ]
         .flat()
         .filter(extension => !!extension);
+}
 
+export function getExtensionsForEditor(field: FormEditorFieldData) {
     return [
         ...getExtensions(field),
         Paste.configure({

@@ -1,11 +1,10 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
     import { FormEditorFieldData } from "@/types";
-    import { provide, ref, useTemplateRef, watch } from "vue";
-    import { Editor } from "@tiptap/vue-3";
+    import { provide, ref, watch } from "vue";
+    import { Editor, BubbleMenu, isActive } from "@tiptap/vue-3";
     import debounce from 'lodash/debounce';
     import { EditorContent } from '@tiptap/vue-3';
-    import Toolbar from "./toolbar/Toolbar.vue";
     import { normalizeText } from "@/form/util/text";
     import { useLocalizedEditor } from "@/form/components/fields/editor/useLocalizedEditor";
     import { Markdown } from "tiptap-markdown";
@@ -13,7 +12,7 @@
     import { Iframe } from "@/form/components/fields/editor/extensions/iframe/Iframe";
     import { useParentForm } from "@/form/useParentForm";
     import { trimHTML } from "@/form/components/fields/editor/utils/html";
-    import { getExtensionsForEditorField } from "@/form/components/fields/editor/extensions";
+    import { getExtensionsForEditor } from "@/form/components/fields/editor/extensions";
     import { ContentEmbedManager } from "@/content/ContentEmbedManager";
     import { ContentUploadManager } from "@/content/ContentUploadManager";
     import { FormFieldEmits, FormFieldProps } from "@/form/types";
@@ -26,7 +25,19 @@
     import EditorAttributes from "@/form/components/fields/editor/EditorAttributes.vue";
     import { cn } from "@/utils/cn";
     import StickyTop from "@/components/StickyTop.vue";
-    import { useScroll } from "@vueuse/core";
+    import { Button } from "@/components/ui/button";
+    import { buttons } from "@/form/components/fields/editor/toolbar/config";
+    import LinkDropdown from "@/form/components/fields/editor/toolbar/LinkDropdown.vue";
+    import TableDropdown from "@/form/components/fields/editor/toolbar/TableDropdown.vue";
+    import {
+        DropdownMenu,
+        DropdownMenuContent,
+        DropdownMenuItem,
+        DropdownMenuTrigger
+    } from "@/components/ui/dropdown-menu";
+    import Icon from "@/components/ui/Icon.vue";
+    import { Separator } from "@/components/ui/separator";
+    import { Toggle } from "@/components/ui/toggle";
 
     const emit = defineEmits<FormFieldEmits<FormEditorFieldData>>();
     const props = defineProps<FormFieldProps<FormEditorFieldData>>();
@@ -48,6 +59,7 @@
         }
     });
     const embedModal = ref<InstanceType<typeof EditorEmbedModal>>();
+    const linkDropdown = ref<InstanceType<typeof LinkDropdown>>();
 
     provide<ParentEditor>('editor', {
         props,
@@ -62,7 +74,7 @@
         (locale) => {
             const { field } = props;
             const extensions = [
-                ...getExtensionsForEditorField(field),
+                ...getExtensionsForEditor(field),
                 field.markdown && Markdown.configure({
                     breaks: config('sharp.markdown_editor.nl2br'),
                 }),
@@ -148,13 +160,59 @@
         >
             <template v-if="editor && field.toolbar">
                 <StickyTop class="sticky top-[--top-bar-height] [[role=dialog]_&]:top-0 p-1.5 border-b data-[stuck]:z-10 data-[stuck]:bg-background">
-                    <div ref="header">
-                        <Toolbar
-                            :editor="editor"
-                            v-bind="props"
-                            @upload="uploadModal.open()"
-                            @embed="(embed) => embedModal.open({ embed })"
-                        />
+                    <div class="flex gap-x-1 gap-y-0 flex-wrap" ref="header">
+                        <template v-for="button in props.field.toolbar">
+                            <template v-if="button === 'link'">
+                                <LinkDropdown v-bind="props" :editor="editor" :ref="(c) => linkDropdown = c as InstanceType<typeof LinkDropdown>" />
+                            </template>
+                            <template v-else-if="button === 'table'">
+                                <TableDropdown v-bind="props" :editor="editor" />
+                            </template>
+                            <template v-else-if="button.startsWith('embed:')">
+                                <Toggle
+                                    size="sm"
+                                    :model-value="editor.isActive(button)"
+                                    :disabled="props.field.readOnly"
+                                    :title="props.field.embeds[button.replace('embed:', '')]?.label"
+                                    @click="embedModal.open({ embed: props.field.embeds[button.replace('embed:', '')] })"
+                                >
+                                    <Icon :icon="field.embeds[button.replace('embed:', '')]?.icon" class="size-4" />
+                                </Toggle>
+                            </template>
+                            <template v-else-if="button === '|'">
+                                <Separator orientation="vertical" class="h-4 self-center last:hidden" />
+                            </template>
+                            <template v-else :key="button">
+                                <Toggle
+                                    size="sm"
+                                    :model-value="buttons[button].isActive(editor)"
+                                    :disabled="field.readOnly"
+                                    :title="buttons[button].label()"
+                                    @click="button === 'upload' || button === 'upload-image'
+                                        ? uploadModal.open()
+                                        : buttons[button].command(editor)"
+                                    :data-test="button"
+                                >
+                                    <component :is="buttons[button].icon" class="size-4" />
+                                </Toggle>
+                            </template>
+                        </template>
+                        <template v-if="Object.values(props.field.embeds ?? {}).length > 0">
+                            <DropdownMenu :modal="false">
+                                <DropdownMenuTrigger as-child>
+                                    <Button class="px-3" variant="ghost" :disabled="props.field.readOnly">
+                                        {{ __('sharp::form.editor.dropdown.embeds') }}
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent>
+                                    <template v-for="embed in props.field.embeds">
+                                        <DropdownMenuItem @click="embedModal.open({ embed })">
+                                            {{ embed.label }}
+                                        </DropdownMenuItem>
+                                    </template>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        </template>
                     </div>
                 </StickyTop>
             </template>
@@ -162,6 +220,7 @@
             <EditorAttributes
                 :class="cn(
                     'group/editor content min-h-20 w-full rounded-b-md overflow-y-auto focus:outline-none px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50',
+                    '[&_.selection-highlight]:bg-[Highlight] [&_.selection-highlight]:py-0.5',
                     {
                         'min-h-[--min-height]': field.minHeight,
                         'max-h-[--max-height]': field.maxHeight,
@@ -175,6 +234,16 @@
             >
                 <EditorContent :editor="editor" :key="locale ?? 'editor'" />
             </EditorAttributes>
+
+            <BubbleMenu
+                :editor="editor"
+                :should-show="({ state }) => isActive(state, 'link')"
+                :key="'bubble-menu-' + (props.locale ?? '')"
+            >
+                <Button @click="linkDropdown.open()">
+                    Update link
+                </Button>
+            </BubbleMenu>
 
             <template v-if="props.field.uploads">
                 <EditorUploadModal

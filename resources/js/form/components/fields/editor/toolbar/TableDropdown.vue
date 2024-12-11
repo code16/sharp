@@ -21,7 +21,9 @@
     <DropdownMenu :modal="false">
         <DropdownMenuTrigger as-child>
             <Toggle
-                :model-value="props.editor.isActive('table')"
+                class="data-[state=open]:bg-accent"
+                :class="props.editor.isActive('table') ? 'bg-accent' : ''"
+                size="sm"
                 :disabled="props.field.readOnly"
                 :title="__('sharp::form.editor.toolbar.table.title')"
             >
