@@ -29,15 +29,17 @@ export type CommandData = {
   description: string | null;
   type: CommandType;
   confirmation: { title: string; description: string | null } | null;
-  has_form: boolean;
+  hasForm: boolean;
   authorization: Array<string | number> | boolean;
-  instance_selection: InstanceSelectionMode | null;
+  instanceSelection: InstanceSelectionMode | null;
   primary: boolean | null;
 };
 export type CommandFormConfigData = {
   title: string | null;
   description: string | null;
   buttonLabel: string | null;
+  showSubmitAndReopenButton: boolean;
+  submitAndReopenButtonLabel: string | null;
 };
 export type CommandFormData = {
   data: { [key: string]: FormFieldData["value"] };
@@ -131,6 +133,7 @@ export type EntityListConfigData = {
   deleteHidden: boolean;
   multiformAttribute: string | null;
   createButtonLabel: string | null;
+  quickCreationForm: boolean;
   filters: ConfigFiltersData | null;
   commands: ConfigCommandsData | null;
   state: EntityStateData | null;

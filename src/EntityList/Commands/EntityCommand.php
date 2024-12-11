@@ -8,6 +8,8 @@ abstract class EntityCommand extends Command
 {
     protected ?EntityListQueryParams $queryParams = null;
     protected ?string $instanceSelectionMode = null;
+    protected bool $formModalShowSubmitAndReopenButton = false;
+    protected ?string $formModalSubmitAndReopenButtonLabel = null;
 
     public function type(): string
     {
@@ -31,6 +33,14 @@ abstract class EntityCommand extends Command
     final protected function configureInstanceSelectionNone(): self
     {
         $this->instanceSelectionMode = null;
+
+        return $this;
+    }
+
+    final protected function configureFormModalSubmitAndReopenButton(?string $label = null): self
+    {
+        $this->formModalShowSubmitAndReopenButton = true;
+        $this->formModalSubmitAndReopenButtonLabel = $label;
 
         return $this;
     }
@@ -60,6 +70,16 @@ abstract class EntityCommand extends Command
     final public function getInstanceSelectionMode(): ?string
     {
         return $this->instanceSelectionMode;
+    }
+
+    final public function getFormModalShowSubmitAndReopenButton(): bool
+    {
+        return $this->formModalShowSubmitAndReopenButton;
+    }
+
+    final public function getFormModalSubmitAndReopenButtonLabel(): ?string
+    {
+        return $this->formModalSubmitAndReopenButtonLabel;
     }
 
     final public function selectedIds(): array

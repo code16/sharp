@@ -23,7 +23,7 @@ trait CommonCommandUtils
                             'confirmation' => $handler->getConfirmationDescription() ? [
                                 'description' => $handler->getConfirmationDescription(),
                             ] : null,
-                            'has_form' => count($handler->form()) > 0,
+                            'hasForm' => count($handler->form()) > 0,
                             'authorization' => $instanceId
                                 ? $handler->authorizeFor($instanceId)
                                 : $handler->getGlobalAuthorization(),
@@ -31,7 +31,7 @@ trait CommonCommandUtils
                         ->when(
                             $handler->type() === 'entity',
                             fn (Collection $collection) => $collection->merge([
-                                'instance_selection' => $handler->getInstanceSelectionMode(),
+                                'instanceSelection' => $handler->getInstanceSelectionMode(),
                             ])
                         )
                         ->toArray();

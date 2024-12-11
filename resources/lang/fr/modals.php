@@ -11,6 +11,7 @@ return [
 
     'command.info.title' => 'Information',
     'command.submit_button' => 'Envoyer',
+    'command.submit_and_reopen_button' => 'Envoyer et rouvrir',
     'state.422.title' => "Impossible de modifier l'état",
 
     // Other errors fallback text

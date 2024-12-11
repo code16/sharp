@@ -30,7 +30,8 @@ class PostBlockList extends SharpEntityList
     public function buildListConfig(): void
     {
         $this->configureMultiformAttribute('type')
-            ->configureReorderable(new SimpleEloquentReorderHandler(PostBlock::class));
+            ->configureReorderable(new SimpleEloquentReorderHandler(PostBlock::class))
+            ->configureQuickCreationForm();
     }
 
     protected function getFilters(): ?array

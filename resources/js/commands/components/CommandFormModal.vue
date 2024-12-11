@@ -12,8 +12,8 @@
         DialogTitle
     } from "@/components/ui/dialog";
     import { Button } from "@/components/ui/button";
-    import { Loader2 } from "lucide-vue-next";
     import { __ } from "@/utils/i18n";
+    import { CommandFormExtraData } from "@/commands/types";
 
     const props = defineProps<{
         commands: CommandManager,
@@ -61,6 +61,14 @@
                             {{ __('sharp::modals.cancel_button') }}
                         </Button>
                     </DialogClose>
+                    <template v-if="commands.state.currentCommandForm.config.showSubmitAndReopenButton">
+                        <Button variant="secondary"
+                            :disabled="commands.state.currentCommandFormLoading"
+                            @click="form.submit<CommandFormExtraData>({ _shouldReopen: true })"
+                        >
+                            {{ commands.state.currentCommandForm.config.submitAndReopenButtonLabel ?? __('sharp::modals.command.submit_and_reopen_button') }}
+                        </Button>
+                    </template>
                     <Button :disabled="commands.state.currentCommandFormLoading" @click="form.submit()">
                         {{ commands.state.currentCommandForm.config.buttonLabel ?? __('sharp::modals.command.submit_button') }}
                     </Button>

@@ -6,6 +6,7 @@ return [
     'commands.entity.label' => 'Actions',
     'commands.instance.label' => 'Actions',
     'commands.needs_selection_message' => 'Cette action nécessite que vous sélectionniez d’abord des éléments concernés',
+    'quick_creation_modal.create_and_reopen' => 'Créer et rouvrir',
     'sort_asc' => 'Tri croissant',
     'sort_desc' => 'Tri décroissant',
     'pagination.previous' => 'Précédent',

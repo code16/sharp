@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\EntityList;
 
+use Code16\Sharp\EntityList\Commands\QuickCreate\QuickCreationCommand;
 use Code16\Sharp\EntityList\Commands\ReorderHandler;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\Traits\HandleEntityCommands;
@@ -35,6 +36,8 @@ abstract class SharpEntityList
     protected bool $deleteHidden = false;
     protected ?string $deleteConfirmationText = null;
     protected ?string $createButtonLabel = null;
+    private bool $quickCreationForm = false;
+    private ?array $quickCreationFields = null;
 
     final public function initQueryParams(?array $query): self
     {
@@ -114,6 +117,7 @@ abstract class SharpEntityList
             'deleteConfirmationText' => $this->deleteConfirmationText ?: trans('sharp::show.delete_confirmation_text'),
             'deleteHidden' => $this->deleteHidden,
             'createButtonLabel' => $this->createButtonLabel,
+            'quickCreationForm' => $this->quickCreationForm,
             'filters' => $this->filterContainer()->getFiltersConfigArray(),
         ];
 
@@ -152,6 +156,14 @@ abstract class SharpEntityList
         return $this;
     }
 
+    final public function configureQuickCreationForm(?array $fields = null): self
+    {
+        $this->quickCreationForm = true;
+        $this->quickCreationFields = $fields;
+
+        return $this;
+    }
+
     final public function configureDelete(bool $hide = false, ?string $confirmationText = null): self
     {
         $this->deleteHidden = $hide;
@@ -178,6 +190,13 @@ abstract class SharpEntityList
     final public function reorderHandler(): ?ReorderHandler
     {
         return $this->reorderHandler;
+    }
+
+    final public function quickCreationCommandHandler(): ?QuickCreationCommand
+    {
+        return $this->quickCreationForm
+            ? new QuickCreationCommand($this->quickCreationFields)
+            : null;
     }
 
     private function checkListIsBuilt(): void

@@ -69,8 +69,21 @@ class SharpBreadcrumb
     {
         return $this->findPreviousSegment('s-list', $entityKey);
     }
-
-    public function getUrlOfPreviousSegment(): string
+    
+    public function getCurrentSegmentUrl(): string
+    {
+        return url(
+            sprintf(
+                '%s/%s',
+                sharp()->config()->get('custom_url_segment'),
+                $this->breadcrumbItems()
+                    ->map(fn (BreadcrumbItem $item) => $item->toUri())
+                    ->implode('/')
+            )
+        );
+    }
+    
+    public function getPreviousSegmentUrl(): string
     {
         return url(
             sprintf(

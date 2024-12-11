@@ -11,6 +11,7 @@ use Code16\Sharp\Http\Controllers\Api\Commands\ApiDashboardCommandController;
 use Code16\Sharp\Http\Controllers\Api\Commands\ApiEntityListEntityCommandController;
 use Code16\Sharp\Http\Controllers\Api\Commands\ApiEntityListEntityStateController;
 use Code16\Sharp\Http\Controllers\Api\Commands\ApiEntityListInstanceCommandController;
+use Code16\Sharp\Http\Controllers\Api\Commands\ApiEntityListQuickCreationCommandController;
 use Code16\Sharp\Http\Controllers\Api\Commands\ApiShowEntityStateController;
 use Code16\Sharp\Http\Controllers\Api\Commands\ApiShowInstanceCommandController;
 use Code16\Sharp\Http\Controllers\Api\Embeds\ApiEmbedsFormController;
@@ -26,6 +27,12 @@ Route::group([
 
     Route::post('/dashboard/{dashboardKey}/command/{commandKey}', [ApiDashboardCommandController::class, 'update'])
         ->name('code16.sharp.api.dashboard.command');
+
+    Route::get('/list/{entityKey}/create', [ApiEntityListQuickCreationCommandController::class, 'create'])
+        ->name('code16.sharp.api.list.command.quick-creation-form.create');
+
+    Route::post('/list/{entityKey}/create', [ApiEntityListQuickCreationCommandController::class, 'store'])
+        ->name('code16.sharp.api.list.command.quick-creation-form.store');
 
     // EEL
     Route::get('/list/{entityKey}', [EntityListController::class, 'show'])
