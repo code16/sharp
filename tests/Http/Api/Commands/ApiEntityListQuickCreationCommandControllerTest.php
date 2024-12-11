@@ -173,6 +173,11 @@ it('returns a link action on a quick creation command with a form with configure
         {
             $this->configureDisplayShowPageAfterCreation();
         }
+
+        public function update($id, array $data)
+        {
+            return 4;
+        }
     });
 
     $this->get(route('code16.sharp.list', ['person']));
@@ -183,5 +188,56 @@ it('returns a link action on a quick creation command with a form with configure
             ['data' => ['name' => 'Marie Curie']],
         )
         ->assertOk()
-        ->assertJson(['action' => 'link']);
+        ->assertJson([
+            'action' => 'link',
+            'link' => url('/sharp/s-list/person/s-show/person/4'),
+        ]);
+});
+
+it('returns a link action on a quick creation in an EEL case command with a form with configureDisplayShowPageAfterCreation', function () {
+    sharp()->config()->addEntity('colleague', PersonEntity::class);
+
+    fakeListFor('colleague', new class() extends PersonList
+    {
+        public function buildListConfig(): void
+        {
+            $this->configureQuickCreationForm();
+        }
+    });
+
+    fakeFormFor('colleague', new class() extends PersonForm
+    {
+        public function buildFormConfig(): void
+        {
+            $this->configureDisplayShowPageAfterCreation();
+        }
+
+        public function update($id, array $data)
+        {
+            return 4;
+        }
+    });
+
+    // Simulate a get of the person show page
+    $this
+        ->get(
+            route('code16.sharp.show.show', [
+                'parentUri' => 's-list/person/',
+                'person',
+                1,
+            ])
+        )
+        ->assertOk();
+
+    // Simulate a post of the colleague quick creation command from an EEL
+    $this
+        ->postJson(
+            route('code16.sharp.api.list.command.quick-creation-form.create', ['colleague']),
+            ['data' => ['name' => 'Marie Curie']],
+        )
+        ->assertOk()
+        ->assertJson([
+            'action' => 'link',
+            'link' => url('/sharp/s-list/person/s-show/person/1/s-show/colleague/4'),
+        ]);
 });

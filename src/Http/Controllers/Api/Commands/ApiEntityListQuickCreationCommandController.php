@@ -20,7 +20,7 @@ class ApiEntityListQuickCreationCommandController extends ApiController
     public function create(string $entityKey)
     {
         $entity = $this->entityManager->entityFor($entityKey);
-        
+
         $list = $entity->getListOrFail();
         $list->buildListConfig();
 
@@ -28,19 +28,19 @@ class ApiEntityListQuickCreationCommandController extends ApiController
             ($quickCreationHandler = $list->quickCreationCommandHandler()) === null,
             403
         );
-        
+
         $form = $entity->getFormOrFail(sharp_normalize_entity_key($entityKey)[1]);
         $form->buildFormConfig();
-        
+
         $quickCreationHandler
             ->setEntityKey($entityKey)
             ->setFormInstance($form)
             ->setTitle(__('sharp::breadcrumb.form.create_entity', [
                 'entity' => str_contains($entityKey, ':')
                     ? $entity->getMultiforms()[Str::after($entityKey, ':')][1] ?? $entity->getLabel()
-                    : $entity->getLabel()
+                    : $entity->getLabel(),
             ]));
-        
+
         $quickCreationHandler->buildCommandConfig();
 
         return response()->json(
@@ -59,7 +59,7 @@ class ApiEntityListQuickCreationCommandController extends ApiController
             ($quickCreationHandler = $list->quickCreationCommandHandler()) === null,
             403
         );
-        
+
         $form = $this->entityManager->entityFor($entityKey)->getFormOrFail(sharp_normalize_entity_key($entityKey)[1]);
         $form->buildFormConfig();
 
