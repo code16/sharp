@@ -6,7 +6,7 @@ In Sharp, Wizard are similar to Commands in many ways: they can be scoped to an 
 
 A Wizard Command can not be configured as bulk (meaning: with instance selection). 
 
-![](./img/wizard-command.gif)
+![](./img/v9/wizard-command.gif)
 
 ## Generator
 

@@ -2,7 +2,7 @@
 
 This feature makes it possible to add a message (with an alert or not) at the top of an Entity List, a Form (including a Command Form), a Show Page, a Dashboard or an Embed.
 
-![](./img/page-alert-v8.png)
+![](./img/v9/page-alert.png)
 
 A global page alert can be great to provide feedback to the user, to remind him of a particular state, to warn him of potential consequences of a Command...
 

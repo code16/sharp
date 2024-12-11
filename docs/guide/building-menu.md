@@ -1,12 +1,8 @@
 # Create the main menu
 
-The Sharp UI is organized with two menus: the main one is on a left sidebar, and the user menu is a dropdown located in the top right corner.
+The Sharp UI is organized with two menus: the main one on a left sidebar, and the user menu is a dropdown located in the bottom left corner.
 
-![](./img/menu-v8.png)
-
-All links shares common things: an icon, a label and an URL.
-
-Links can be grouped in categories, like "Blog" in this screenshot.
+All links shares common things: an icon, a label and an URL. Links can be grouped in categories.
 
 ## Create a SharpMenu class
 

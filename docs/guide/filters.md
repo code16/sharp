@@ -274,9 +274,7 @@ class OrderEntityList extends SharpEntityList
 
 ## Global menu Filters
 
-You may want to "scope" the entire data set: an example of this could be a user which can manage several organizations. Instead of adding a filter on almost every Entity List, in this case, you can define a global filter, which will appear like this (on the left menu):
-
-![](./img/global-filters.png)
+You may want to "scope" the entire data set: an example of this could be a user which can manage several organizations. Instead of adding a filter on almost every Entity List, in this case, you can define a global filter, which will appear on top of the global menu.
 
 To achieve this, first write the filter class, like any filter, except it must
 extend `\Code16\Sharp\Utils\Filters\GlobalRequiredFilter` — meaning it must be a required filter.

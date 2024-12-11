@@ -2,7 +2,7 @@
 
 This feature allows the user to globally search across a selected set of entities of your application.
 
-![The global search in action](./img/global-search.png)
+![The global search in action](./img/v9/global-search.png)
 
 ## Configuration
 

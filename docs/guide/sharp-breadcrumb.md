@@ -4,8 +4,6 @@ Under the hood Sharp manages a breadcrumb to keep track of stacked pages.
 
 ## Display the breadcrumb
 
-![A breadcrumb example](./img/breadcrumb-v8.png)
-
 You can activate the breadcrumb display in sharp's configuration: 
 
 ```php

@@ -4,23 +4,6 @@ A map-based field to pick a precise location and return its coordinates (latitud
 
 Class: `Code16\Sharp\Form\Fields\SharpFormGeolocationField`
 
-
-
-<table>
-<tr>
-<td class="p-0">
-
-![](./geolocation-modale.png)
-
-</td>
-<td class="p-0">
-
-![](./geolocation-field.png)
-
-</td>
-</tr>
-</table>
-
 ## Configuration
 
 ### `setDisplayUnitDegreesMinutesSeconds()`
