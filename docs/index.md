@@ -69,6 +69,8 @@ Sharp for Laravel is actively maintained and developed, and is used in all kinds
 - **Remind me, rate limiting, forgotten password, impersonation** included.
 - **2FA**: out-of-the-box 2FA with TOTP or notification.
 
+![Sharp login](./img/readme/v9/login.png)
+
 ## And more
 
 - **Global search**: propose a custom global search to users.
@@ -79,6 +81,8 @@ Sharp for Laravel is actively maintained and developed, and is used in all kinds
 - **Dark mode and theme color**: the UI will adapt itself based on your primary color.
 - **Artisan commands** with prompts to generate lists, forms, commands, etc.
 - **Code-driven configuration** with a clean and documented API.
+  
+- ![Sharp dark mode](./img/readme/v9/dark.png)
 
 # About Sharp
 
