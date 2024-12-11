@@ -1,4 +1,6 @@
 
+@tailwind utilities;
+
 :root {
   --vp-c-brand-1: hsl(211 100% 30%);
   --vp-c-brand-2: hsl(211 100% 40%);
