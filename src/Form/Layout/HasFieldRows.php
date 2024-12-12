@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Form\Layout;
 
 use Closure;
+use Code16\Sharp\Utils\Layout\LayoutColumn;
 use Code16\Sharp\Utils\Layout\LayoutField;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Traits\Conditionable;
@@ -31,7 +32,12 @@ trait HasFieldRows
 
         return $this;
     }
-
+    
+    /**
+     * @param  string  $fieldKey
+     * @param  (\Closure(LayoutColumn): mixed)  $subLayoutCallback
+     * @return $this
+     */
     public function withListField(string $fieldKey, Closure $subLayoutCallback): self
     {
         $this->addRowLayout([
@@ -52,7 +58,13 @@ trait HasFieldRows
 
         return $this;
     }
-
+    
+    /**
+     * @param int $index
+     * @param  string  $fieldKey
+     * @param  (\Closure(LayoutColumn): mixed)|null  $subLayoutCallback
+     * @return $this
+     */
     public function insertSingleFieldAt(int $index, string $fieldKey, ?\Closure $subLayoutCallback = null): self
     {
         $rows = collect($this->rows);

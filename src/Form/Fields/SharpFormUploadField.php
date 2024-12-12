@@ -138,7 +138,11 @@ class SharpFormUploadField extends SharpFormField implements IsUploadField
 
         return $this;
     }
-
+    
+    /**
+     * @param  string|(Closure(): string) $storageBasePath
+     * @return $this
+     */
     public function setStorageBasePath(string|Closure $storageBasePath): self
     {
         $this->storageBasePath = $storageBasePath;

@@ -102,14 +102,22 @@ abstract class Command
     {
         return new SharpNotification($title);
     }
-
+    
+    /**
+     * @param string|(\Closure(array $formData): string) $formModalTitle
+     * @return $this
+     */
     final protected function configureFormModalTitle(string|Closure $formModalTitle): self
     {
         $this->formModalTitle = $formModalTitle;
 
         return $this;
     }
-
+    
+    /**
+     * @param string|(\Closure(array $formData): string) $formModalDescription
+     * @return $this
+     */
     final protected function configureFormModalDescription(string|Closure $formModalDescription): self
     {
         $this->formModalDescription = $formModalDescription;
@@ -117,7 +125,7 @@ abstract class Command
         return $this;
     }
 
-    final protected function configureFormModalButtonLabel(string|Closure $formModalButtonLabel): self
+    final protected function configureFormModalButtonLabel(?string $formModalButtonLabel): self
     {
         $this->formModalButtonLabel = $formModalButtonLabel;
 

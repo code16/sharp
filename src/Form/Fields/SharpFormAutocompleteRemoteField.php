@@ -28,6 +28,11 @@ class SharpFormAutocompleteRemoteField extends SharpFormField implements IsSharp
         return $instance;
     }
 
+    /**
+     * @param (\Closure(string): array)  $closure
+     * @param  array|null  $linkedFields
+     * @return $this
+     */
     public function setRemoteCallback(Closure $closure, ?array $linkedFields = null): self
     {
         $this->remoteCallback = $closure;

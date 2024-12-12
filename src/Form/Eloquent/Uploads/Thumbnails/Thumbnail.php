@@ -47,7 +47,11 @@ class Thumbnail
 
         return $this;
     }
-
+    
+    /**
+     * @param (Closure(bool $wasCreated, string $thumbnailPath, string $thumbnailDisk):void) $closure
+     * @return $this
+     */
     public function setAfterClosure(Closure $closure): self
     {
         $this->afterClosure = $closure;

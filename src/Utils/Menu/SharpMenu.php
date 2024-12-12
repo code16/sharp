@@ -11,7 +11,12 @@ abstract class SharpMenu
 
     protected ?SharpMenuUserMenu $userMenu = null;
     private bool $visible = true;
-
+    
+    /**
+     * @param  string  $title
+     * @param  (\Closure(SharpMenuItemSection): mixed)  $callbackClosure
+     * @return $this
+     */
     final public function addSection(string $title, Closure $callbackClosure): self
     {
         $section = new SharpMenuItemSection($title);
@@ -20,7 +25,11 @@ abstract class SharpMenu
 
         return $this;
     }
-
+    
+    /**
+     * @param  (\Closure(SharpMenuUserMenu): mixed)  $callbackClosure
+     * @return $this
+     */
     final public function setUserMenu(Closure $callbackClosure): self
     {
         $this->userMenu = new SharpMenuUserMenu();
