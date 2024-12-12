@@ -235,15 +235,15 @@
                 <EditorContent :editor="editor" :key="locale ?? 'editor'" />
             </EditorAttributes>
 
-            <BubbleMenu
-                :editor="editor"
-                :should-show="({ state }) => isActive(state, 'link')"
-                :key="'bubble-menu-' + (props.locale ?? '')"
-            >
-                <Button @click="linkDropdown.open()">
-                    Update link
-                </Button>
-            </BubbleMenu>
+<!--            <BubbleMenu-->
+<!--                :editor="editor"-->
+<!--                :should-show="({ state }) => isActive(state, 'link')"-->
+<!--                :key="'bubble-menu-' + (props.locale ?? '')"-->
+<!--            >-->
+<!--                <Button @click="linkDropdown.open()">-->
+<!--                    Update link-->
+<!--                </Button>-->
+<!--            </BubbleMenu>-->
 
             <template v-if="props.field.uploads">
                 <EditorUploadModal
