@@ -7,7 +7,6 @@ use Code16\Sharp\Utils\Layout\LayoutColumn;
 class FormLayoutColumn extends LayoutColumn implements HasLayout
 {
     /**
-     * @param string $name
      * @param  (\Closure(FormLayoutFieldset): mixed)|null  $callback
      * @return $this
      */

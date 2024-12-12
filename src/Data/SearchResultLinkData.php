@@ -11,8 +11,7 @@ final class SearchResultLinkData extends Data
         public string $link,
         public string $label,
         public ?string $detail,
-    ) {
-    }
+    ) {}
 
     public static function from(array $resultLink): self
     {

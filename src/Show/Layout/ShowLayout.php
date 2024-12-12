@@ -11,7 +11,7 @@ class ShowLayout implements HasLayout
     use Conditionable;
 
     protected array $sections = [];
-    
+
     /**
      * @param  string|(\Closure(ShowLayoutSection): mixed)  $label
      * @param  (\Closure(ShowLayoutSection): mixed)|null  $callback

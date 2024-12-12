@@ -159,51 +159,51 @@ abstract class SharpFormEditorEmbed
 
         return $this;
     }
-    
+
     final protected function configureTemplate(string|View $template): self
     {
         $this->formTemplate = $template;
         $this->showTemplate = $template;
-        
+
         return $this;
     }
-    
+
     final protected function configureFormTemplate(string|View $template): self
     {
         $this->formTemplate = $template;
-        
+
         return $this;
     }
-    
+
     final protected function configureShowTemplate(string|View $template): self
     {
         $this->showTemplate = $template;
-        
+
         return $this;
     }
-    
+
     final public function transformDataWithRenderedTemplate(array $data, bool $isForm): array
     {
         $data = $this->transformDataForTemplate($data, $isForm);
-        
+
         return [
             ...$data,
             '_html' => $this->renderTemplate($data, $isForm),
         ];
     }
-    
+
     private function renderTemplate(array $data, bool $isForm): string
     {
         $template = $isForm ? $this->formTemplate : $this->showTemplate;
-        
-        if(!$template) {
+
+        if (! $template) {
             return 'Empty template';
         }
-        
-        if(isset($data['slot'])) {
+
+        if (isset($data['slot'])) {
             $data['slot'] = new HtmlString($data['slot']);
         }
-        
+
         return is_string($template)
             ? Blade::render($template, $data)
             : $template->with($data)->render();

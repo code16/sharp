@@ -8,6 +8,7 @@ Route::get('/', function () {
 
 Route::get('/sharp/remote-autocomplete', function () {
     $query = request('query');
+
     return collect(\App\Sharp\TestModels\TestModelForm::options())
         ->filter(function ($label, $id) use ($query) {
             return str_contains($label, $query);

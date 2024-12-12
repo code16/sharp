@@ -32,7 +32,7 @@ abstract class GlobalRequiredFilter extends SelectRequiredFilter
     {
         return '_sharp_retained_global_filter_'.$this->getKey();
     }
-    
+
     public function authorize(): bool
     {
         return true;

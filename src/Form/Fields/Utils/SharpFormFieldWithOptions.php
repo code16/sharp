@@ -38,7 +38,7 @@ trait SharpFormFieldWithOptions
         }
 
         return collect($options)
-            ->map(fn($values) => $depth > 1
+            ->map(fn ($values) => $depth > 1
                 ? self::formatDynamicOptions($values, $depth - 1, $idAttribute, $format)
                 : self::formatOptions($values, 'id', $format)
             )

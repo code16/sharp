@@ -65,7 +65,7 @@ return [
 
     'editor.extension_node.edit_button' => 'Modifier...',
     'editor.extension_node.remove_button' => 'Supprimer',
-    
+
     'editor.dialogs.upload.title.new' => 'Insérer un fichier',
     'editor.dialogs.upload.title.update' => 'Modifier le fichier',
     'editor.dialogs.upload.legend_field.label' => 'Légende',
@@ -82,7 +82,7 @@ return [
     'editor.dialogs.iframe.insert_title' => 'Insérez un Iframe (video, audio...)',
     'editor.dialogs.iframe.update_title' => 'Modifier l’Iframe (video, audio...)',
     'editor.dialogs.iframe.invalid_message' => 'Le code de l’Iframe est invalide',
-    
+
     'editor.dialogs.embed.submit_button_insert' => 'Insérer',
     'editor.dialogs.embed.submit_button_update' => 'Mettre à jour',
 

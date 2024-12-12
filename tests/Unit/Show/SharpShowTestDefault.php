@@ -173,9 +173,9 @@ it('allows to set an edit button label', function () {
             $this->configureEditButtonLabel('Edit post');
         }
     };
-    
+
     $sharpShow->buildShowConfig();
-    
+
     expect($sharpShow->showConfig(1))
         ->toHaveKey('editButtonLabel', 'Edit post');
 });

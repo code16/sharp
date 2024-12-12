@@ -94,11 +94,11 @@ abstract class SharpShow
 
         return $this;
     }
-    
+
     final public function configureEditButtonLabel(string $label): self
     {
         $this->editButtonLabel = $label;
-        
+
         return $this;
     }
 

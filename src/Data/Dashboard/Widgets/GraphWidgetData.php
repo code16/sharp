@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Data\Dashboard\Widgets;
 
-use Code16\Sharp\Dashboard\Widgets\SharpGraphWidget;
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Enums\GraphWidgetDisplay;
 use Code16\Sharp\Enums\WidgetType;

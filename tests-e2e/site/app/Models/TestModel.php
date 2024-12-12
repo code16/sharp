@@ -11,10 +11,10 @@ class TestModel extends Model
 {
     /** @use HasFactory<\Database\Factories\TestModelFactory> */
     use HasFactory;
+
     use HasTranslations;
 
     protected $guarded = [];
-
     public array $translatable = [
         'text_localized',
         'textarea_localized',

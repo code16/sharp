@@ -29,7 +29,7 @@ it('allows to call an info instance command from a show', function () {
 
                     public function execute($instanceId, array $data = []): array
                     {
-                        return $this->info('ok: ' . $instanceId);
+                        return $this->info('ok: '.$instanceId);
                     }
                 },
             ];

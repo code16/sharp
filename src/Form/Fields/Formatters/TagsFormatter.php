@@ -9,12 +9,12 @@ use Code16\Sharp\Utils\Transformers\ArrayConverter;
 class TagsFormatter extends SharpFieldFormatter
 {
     /**
-     * @param SharpFormTagsField $field
+     * @param  SharpFormTagsField  $field
      */
     public function toFront(SharpFormField $field, $value)
     {
         $options = collect($field->options());
-        
+
         return collect((array) $value)
             ->map(function ($item) use ($field, $options) {
                 $item = ArrayConverter::modelToArray($item);
@@ -33,9 +33,9 @@ class TagsFormatter extends SharpFieldFormatter
             })
             ->all();
     }
-    
+
     /**
-     * @param SharpFormTagsField $field
+     * @param  SharpFormTagsField  $field
      */
     public function fromFront(SharpFormField $field, string $attribute, $value)
     {

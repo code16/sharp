@@ -10,9 +10,8 @@ class FormLayout implements HasLayout
 
     protected array $tabs = [];
     protected bool $tabbed = true;
-    
+
     /**
-     * @param  string  $label
      * @param  (\Closure(FormLayoutTab): mixed)  $callback
      * @return $this
      */

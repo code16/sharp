@@ -32,9 +32,7 @@ class TestModelShow extends SharpShow
             });
     }
 
-    public function buildShowConfig(): void
-    {
-    }
+    public function buildShowConfig(): void {}
 
     public function find($id): array
     {

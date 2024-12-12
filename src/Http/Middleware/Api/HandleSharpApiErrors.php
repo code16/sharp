@@ -3,7 +3,6 @@
 namespace Code16\Sharp\Http\Middleware\Api;
 
 use Closure;
-use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Exceptions\SharpException;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -22,8 +21,8 @@ class HandleSharpApiErrors
             }
 
             $code = $this->getHttpCodeFor($response->exception);
-            
-            if(config('app.debug') && $code >= 500) {
+
+            if (config('app.debug') && $code >= 500) {
                 // return the response in HTML to display it in a modal
                 return app(ExceptionHandler::class)
                     ->render(
@@ -33,7 +32,7 @@ class HandleSharpApiErrors
                         $response->exception
                     );
             }
-            
+
             if ($code != 500) {
                 return response()->json(
                     ['message' => $response->exception->getMessage()],

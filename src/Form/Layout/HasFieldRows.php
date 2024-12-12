@@ -32,9 +32,8 @@ trait HasFieldRows
 
         return $this;
     }
-    
+
     /**
-     * @param  string  $fieldKey
      * @param  (\Closure(LayoutColumn): mixed)  $subLayoutCallback
      * @return $this
      */
@@ -58,10 +57,8 @@ trait HasFieldRows
 
         return $this;
     }
-    
+
     /**
-     * @param int $index
-     * @param  string  $fieldKey
      * @param  (\Closure(LayoutColumn): mixed)|null  $subLayoutCallback
      * @return $this
      */

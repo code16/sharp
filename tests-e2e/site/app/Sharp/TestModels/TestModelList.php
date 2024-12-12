@@ -20,9 +20,7 @@ class TestModelList extends SharpEntityList
             );
     }
 
-    public function buildListConfig(): void
-    {
-    }
+    public function buildListConfig(): void {}
 
     protected function getInstanceCommands(): ?array
     {

@@ -53,7 +53,7 @@ class TestForm extends SharpSingleForm
                             ['id' => 4, 'label' => 'Hugo - Les Misérables'],
                             ['id' => 5, 'label' => 'Hugo - Notre-Dame de Paris'],
                             ['id' => 6, 'label' => 'Hugo - Les Contemplations'],
-                        ]
+                        ],
                     ])
                     ->setLocalValuesLinkedTo('select_list'),
             )
@@ -83,7 +83,7 @@ class TestForm extends SharpSingleForm
             )
             ->addField(
                 SharpFormCheckField::make('check', 'Check')
-//                    ->setReadOnly(),
+                //                    ->setReadOnly(),
             )
             ->addField(
                 SharpFormDateField::make('datetime')
@@ -254,7 +254,7 @@ class TestForm extends SharpSingleForm
                     ->setMultiple()
 //                    ->setReadOnly()
                     ->setDisplayAsList()
-//                    ->setMaxSelected(2),
+                //                    ->setMaxSelected(2),
             )
             ->addField(
                 SharpFormTagsField::make('tags', $this->options())
@@ -390,7 +390,7 @@ class TestForm extends SharpSingleForm
     public function rules(): array
     {
         return [
-//            'date' => 'required|before_or_equal:'.date('Y-m-d'),
+            //            'date' => 'required|before_or_equal:'.date('Y-m-d'),
         ];
     }
 

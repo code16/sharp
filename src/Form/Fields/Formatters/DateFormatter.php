@@ -9,7 +9,7 @@ use Illuminate\Support\Carbon;
 class DateFormatter extends SharpFieldFormatter
 {
     /**
-     * @param SharpFormDateField $field
+     * @param  SharpFormDateField  $field
      */
     public function toFront(SharpFormField $field, $value)
     {
@@ -21,8 +21,8 @@ class DateFormatter extends SharpFieldFormatter
         if (! $value instanceof Carbon) {
             return $value;
         }
-        
-        if($field->hasDate() && $field->hasTime()) {
+
+        if ($field->hasDate() && $field->hasTime()) {
             return $value->toDateTimeLocalString('minute');
         }
 
@@ -30,9 +30,9 @@ class DateFormatter extends SharpFieldFormatter
             ? $value->format('Y-m-d')
             : $value->format('H:i');
     }
-    
+
     /**
-     * @param SharpFormDateField $field
+     * @param  SharpFormDateField  $field
      */
     public function fromFront(SharpFormField $field, string $attribute, $value)
     {

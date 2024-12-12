@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Data;
 
-
 /**
  * @internal
  */
@@ -23,7 +22,7 @@ final class SearchResultSetData extends Data
     {
         $resultSet['resultLinks'] = SearchResultLinkData::collection($resultSet['resultLinks']);
         $resultSet['icon'] = IconData::optional($resultSet['icon']);
-        
+
         return new self(...$resultSet);
     }
 }

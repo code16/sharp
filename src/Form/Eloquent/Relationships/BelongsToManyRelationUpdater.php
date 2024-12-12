@@ -12,7 +12,7 @@ class BelongsToManyRelationUpdater
         $instance->$attribute()->sync(
             $collection
                 ->map(function ($item) use ($instance, $attribute, $keyName) {
-                    if (!is_null($item[$keyName])) {
+                    if (! is_null($item[$keyName])) {
                         return $item;
                     }
 
@@ -25,7 +25,7 @@ class BelongsToManyRelationUpdater
                     $sortConfiguration,
                     fn ($collection) => $collection
                         ->mapWithKeys(fn ($item, $k) => [
-                            $item[$keyName] => [$sortConfiguration['orderAttribute'] => ($k + 1)]
+                            $item[$keyName] => [$sortConfiguration['orderAttribute'] => ($k + 1)],
                         ]),
                     fn ($collection) => $collection->pluck($keyName)
                 )

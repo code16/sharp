@@ -41,7 +41,7 @@ class SharpException extends \Exception
     {
         return $this->statusCode;
     }
-    
+
     public function getHeaders(): array
     {
         return [];

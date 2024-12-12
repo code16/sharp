@@ -9,7 +9,6 @@ use Code16\Sharp\Show\SharpShow;
 
 trait HandlesInstanceCommand
 {
-
     protected function getInstanceCommandHandler(
         SharpEntityList|SharpShow $commandContainer,
         string $commandKey,

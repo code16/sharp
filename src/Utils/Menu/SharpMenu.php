@@ -11,9 +11,8 @@ abstract class SharpMenu
 
     protected ?SharpMenuUserMenu $userMenu = null;
     private bool $visible = true;
-    
+
     /**
-     * @param  string  $title
      * @param  (\Closure(SharpMenuItemSection): mixed)  $callbackClosure
      * @return $this
      */
@@ -25,7 +24,7 @@ abstract class SharpMenu
 
         return $this;
     }
-    
+
     /**
      * @param  (\Closure(SharpMenuUserMenu): mixed)  $callbackClosure
      * @return $this

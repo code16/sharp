@@ -8,7 +8,7 @@ use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
 class SharpFormTagsField extends SharpFormField
 {
     use SharpFormFieldWithPlaceholder;
-    
+
     const FIELD_TYPE = 'tags';
 
     protected bool $creatable = false;

@@ -19,7 +19,7 @@ class QuickCreationCommand extends EntityCommand
     {
         return $this->title;
     }
-    
+
     public function buildCommandConfig(): void
     {
         $this
@@ -27,7 +27,7 @@ class QuickCreationCommand extends EntityCommand
             ->configureFormModalButtonLabel(__('sharp::action_bar.form.submit_button.create'))
             ->configureFormModalSubmitAndReopenButton(__('sharp::entity_list.quick_creation_modal.create_and_reopen'));
     }
-    
+
     public function buildFormFields(FieldsContainer $formFields): void
     {
         $this->sharpForm
@@ -39,12 +39,12 @@ class QuickCreationCommand extends EntityCommand
             )
             ->each(fn (SharpFormField $field) => $formFields->addField($field));
     }
-    
+
     protected function initialData(): array
     {
         return $this->sharpForm->create();
     }
-    
+
     public function rules(): array
     {
         return method_exists($this->sharpForm, 'rules')
@@ -58,12 +58,12 @@ class QuickCreationCommand extends EntityCommand
             ? $this->sharpForm->messages()
             : [];
     }
-    
+
     public function getDataLocalizations(): array
     {
         return $this->sharpForm->getDataLocalizations();
     }
-    
+
     public function execute(array $data = []): array
     {
         $instanceId = $this->sharpForm->update(null, $data);
@@ -82,21 +82,21 @@ class QuickCreationCommand extends EntityCommand
     public function setFormInstance(SharpForm $form): self
     {
         $this->sharpForm = $form;
-        
+
         return $this;
     }
-    
+
     public function setEntityKey(string $entityKey): self
     {
         $this->entityKey = $entityKey;
-        
+
         return $this;
     }
-    
+
     public function setTitle(string $title): self
     {
         $this->title = $title;
-        
+
         return $this;
     }
 }

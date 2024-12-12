@@ -30,7 +30,7 @@ it('allows to format a text value to front as object when localized', function (
     $formatter = new EditorFormatter();
     $field = SharpFormEditorField::make('md')->setLocalized();
     $value = Str::random()."\n\n".Str::random();
-    
+
     expect($formatter->setDataLocalizations(['fr', 'en'])->toFront($field, $value))->toEqual([
         'text' => [
             'fr' => null,
@@ -201,8 +201,7 @@ it('allows to format embeds with uploads to front', function () {
             'disk' => 'local',
         ]))
     );
-    
-    
+
     $data = $formatter->toFront($field, $value);
     $thumbnail = sprintf(
         '/storage/thumbnails/data/Posts/1/200-200_q-90/image.jpg?%s',

@@ -16,7 +16,7 @@ class LinkToShowPage extends SharpLinkTo
 
         return $instance;
     }
-    
+
     /**
      * @param  (\Closure(BreadcrumbBuilder): BreadcrumbBuilder)  $closure
      * @return $this

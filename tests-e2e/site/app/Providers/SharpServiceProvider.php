@@ -3,9 +3,9 @@
 namespace App\Providers;
 
 use App\Sharp\Entities\TestModelEntity;
+use App\Sharp\SharpMenu;
 use Code16\Sharp\Config\SharpConfigBuilder;
 use Code16\Sharp\SharpAppServiceProvider;
-use App\Sharp\SharpMenu;
 
 class SharpServiceProvider extends SharpAppServiceProvider
 {
@@ -19,8 +19,8 @@ class SharpServiceProvider extends SharpAppServiceProvider
 
     protected function declareAccessGate(): void
     {
-//        Gate::define('viewSharp', function ($user) {
-//            return $user->is_sharp_admin;
-//        });
+        //        Gate::define('viewSharp', function ($user) {
+        //            return $user->is_sharp_admin;
+        //        });
     }
 }

@@ -111,7 +111,7 @@ it('we handle creatable attribute from front', function () {
         [['id' => 1], ['id' => 2], ['id' => null, 'name' => 'green']],
         $formatter->fromFront(
             $field, $attribute, [['id' => 1], ['id' => 2], ['id' => null, 'label' => 'green']]),
-        );
+    );
 });
 
 it('we strip null ids if creatable attribute is false from front', function () {
@@ -128,7 +128,7 @@ it('we strip null ids if creatable attribute is false from front', function () {
         [['id' => 1], ['id' => 2]],
         $formatter->fromFront(
             $field, $attribute, [['id' => 1], ['id' => 2], ['id' => null, 'label' => 'green']]),
-        );
+    );
 });
 
 it('we handle id attribute from front', function () {

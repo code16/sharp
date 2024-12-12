@@ -17,11 +17,11 @@ use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 abstract class Command
 {
     use HandleFormFields;
+    use HandleLocalizedFields;
     use HandlePageAlertMessage;
     use HandleValidation;
     use HasModalFormLayout;
     use WithCustomTransformers;
-    use HandleLocalizedFields;
 
     protected int $groupIndex = 0;
     protected ?string $commandKey = null;
@@ -102,9 +102,9 @@ abstract class Command
     {
         return new SharpNotification($title);
     }
-    
+
     /**
-     * @param string|(\Closure(array $formData): string) $formModalTitle
+     * @param  string|(\Closure(array $formData): string)  $formModalTitle
      * @return $this
      */
     final protected function configureFormModalTitle(string|Closure $formModalTitle): self
@@ -113,9 +113,9 @@ abstract class Command
 
         return $this;
     }
-    
+
     /**
-     * @param string|(\Closure(array $formData): string) $formModalDescription
+     * @param  string|(\Closure(array $formData): string)  $formModalDescription
      * @return $this
      */
     final protected function configureFormModalDescription(string|Closure $formModalDescription): self

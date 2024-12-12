@@ -12,10 +12,10 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         //        $this->app->bind(SharpUploadModel::class, Media::class)
-        
+
         $this->app->register(SharpInternalServiceProvider::class);
         $this->app->register(DemoSharpServiceProvider::class);
-        
+
         if (class_exists(SharpDevServiceProvider::class)) {
             $this->app->register(SharpDevServiceProvider::class);
         }
@@ -25,7 +25,5 @@ class AppServiceProvider extends ServiceProvider
         });
     }
 
-    public function boot(): void
-    {
-    }
+    public function boot(): void {}
 }

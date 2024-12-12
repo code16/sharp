@@ -330,8 +330,8 @@ it('allows to configure a create button label', function () {
             $this->configureCreateButtonLabel('New post...');
         }
     };
-    
+
     $list->buildListConfig();
-    
+
     expect($list->listConfig()['createButtonLabel'])->toEqual('New post...');
 });

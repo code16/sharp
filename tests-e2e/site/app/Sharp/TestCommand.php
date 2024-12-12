@@ -2,7 +2,6 @@
 
 namespace App\Sharp;
 
-use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\EntityList\Commands\Wizards\EntityWizardCommand;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
@@ -20,10 +19,10 @@ class TestCommand extends EntityWizardCommand
             ->configureDescription('My description');
     }
 
-//    public function execute(array $data = []): array
-//    {
-//        return $this->reload();
-//    }
+    //    public function execute(array $data = []): array
+    //    {
+    //        return $this->reload();
+    //    }
 
     public function authorize(): bool
     {
@@ -40,7 +39,7 @@ class TestCommand extends EntityWizardCommand
 
     protected function executeFirstStep(array $data): array
     {
-        return  $this->toStep('second_step');
+        return $this->toStep('second_step');
     }
 
     protected function buildFormFieldsForSecondStep(FieldsContainer $formFields): void

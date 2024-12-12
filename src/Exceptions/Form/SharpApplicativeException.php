@@ -15,13 +15,13 @@ class SharpApplicativeException extends SharpException
     {
         return 417;
     }
-    
+
     public function render(Request $request): Response|RedirectResponse|JsonResponse|bool
     {
-        if($request->routeIs('code16.sharp.form.store', 'code16.sharp.form.update')) {
+        if ($request->routeIs('code16.sharp.form.store', 'code16.sharp.form.update')) {
             throw ValidationException::withMessages(['error' => $this->getMessage()]);
         }
-        
+
         return parent::render($request);
     }
 }

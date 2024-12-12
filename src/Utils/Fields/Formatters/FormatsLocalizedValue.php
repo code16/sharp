@@ -28,6 +28,7 @@ trait FormatsLocalizedValue
 
         if ($field instanceof IsSharpFieldWithLocalization && $field->isLocalized()) {
             $value = $value instanceof Arrayable ? $value->toArray() : $value;
+
             return collect([
                 ...collect($this->dataLocalizations ?? [])->mapWithKeys(fn ($locale) => [$locale => null]),
                 ...is_array($value) ? $value : [app()->getLocale() => $value],

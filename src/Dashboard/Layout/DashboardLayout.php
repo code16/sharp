@@ -8,10 +8,9 @@ use Code16\Sharp\Form\Layout\HasLayout;
 class DashboardLayout implements HasLayout
 {
     protected array $sections = [];
-    
+
     /**
-     * @param string $label
-     * @param (\Closure(DashboardLayoutSection): mixed) $callback
+     * @param  (\Closure(DashboardLayoutSection): mixed)  $callback
      * @return $this
      */
     final public function addSection(string $label, \Closure $callback): self
@@ -22,9 +21,9 @@ class DashboardLayout implements HasLayout
 
         return $this;
     }
-    
+
     /**
-     * @param (\Closure(DashboardLayoutRow): mixed) $callback
+     * @param  (\Closure(DashboardLayoutRow): mixed)  $callback
      * @return $this
      */
     final public function addRow(Closure $callback): self

@@ -251,7 +251,7 @@ class TestModelForm extends SharpForm
 //                    ->setInline()
                     ->setMultiple()
                     ->setDisplayAsList()
-//                    ->setMaxSelected(2),
+                //                    ->setMaxSelected(2),
             )
             ->addField(
                 SharpFormTagsField::make('tags', static::options())
@@ -292,39 +292,39 @@ class TestModelForm extends SharpForm
 
     public function buildFormLayout(FormLayout $formLayout): void
     {
-         $formLayout
-             ->addColumn(6, function (FormLayoutColumn $column) {
-                 $column
+        $formLayout
+            ->addColumn(6, function (FormLayoutColumn $column) {
+                $column
                     ->withField('autocomplete_local')
-                     ->withField('autocomplete_remote')
-                     ->withField('autocomplete_remote2')
-                     ->withListField('autocomplete_list', function (FormLayoutColumn $listItem) {
-                         $listItem->withField('item');
-                     })
-                     ->withField('check')
-                     ->withField('date_time')
-                     ->withField('date')
-                     ->withField('time')
-                     ->withField('geolocation')
-                     ->withField('html')
-                     ->withField('list')
-                     ->withField('editor_html')
-                     ->withField('editor_html_localized')
-                     ->withField('editor_markdown');
-             })
-             ->addColumn(6, function (FormLayoutColumn $column) {
-                 $column
-                     ->withField('number')
-                     ->withField('select_dropdown')
-                     ->withField('select_radios')
-                     ->withField('select_checkboxes')
-                     ->withField('tags')
-                     ->withField('textarea')
-                     ->withField('textarea_localized')
-                     ->withField('text')
-                     ->withField('text_localized')
-                     ->withField('upload');
-             });
+                    ->withField('autocomplete_remote')
+                    ->withField('autocomplete_remote2')
+                    ->withListField('autocomplete_list', function (FormLayoutColumn $listItem) {
+                        $listItem->withField('item');
+                    })
+                    ->withField('check')
+                    ->withField('date_time')
+                    ->withField('date')
+                    ->withField('time')
+                    ->withField('geolocation')
+                    ->withField('html')
+                    ->withField('list')
+                    ->withField('editor_html')
+                    ->withField('editor_html_localized')
+                    ->withField('editor_markdown');
+            })
+            ->addColumn(6, function (FormLayoutColumn $column) {
+                $column
+                    ->withField('number')
+                    ->withField('select_dropdown')
+                    ->withField('select_radios')
+                    ->withField('select_checkboxes')
+                    ->withField('tags')
+                    ->withField('textarea')
+                    ->withField('textarea_localized')
+                    ->withField('text')
+                    ->withField('text_localized')
+                    ->withField('upload');
+            });
     }
 
     public function create(): array
@@ -348,8 +348,8 @@ class TestModelForm extends SharpForm
 
     public function rules(): array
     {
-    	return [
-    	];
+        return [
+        ];
     }
 
     public function getDataLocalizations(): array

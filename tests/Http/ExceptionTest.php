@@ -1,6 +1,5 @@
 <?php
 
-
 use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
@@ -20,13 +19,13 @@ it('renders inertia Exception', function () {
             throw new Exception('Test error');
         }
     });
-    
+
     $this->get('/sharp/s-list/person')
         ->assertStatus(500)
         ->assertInertia(fn (Assert $page) => $page
             ->component('Error')
-                ->where('status', 500)
-                ->where('message', 'Test error')
+            ->where('status', 500)
+            ->where('message', 'Test error')
         );
 });
 
@@ -38,7 +37,7 @@ it('renders inertia HttpException', function () {
             abort(404, 'Not found Test error');
         }
     });
-    
+
     $this->get('/sharp/s-list/person')
         ->assertStatus(404)
         ->assertInertia(fn (Assert $page) => $page
@@ -56,7 +55,7 @@ it('renders inertia SharpException', function () {
             throw new SharpAuthorizationException('Unauthorized Test error');
         }
     });
-    
+
     $this->get('/sharp/s-list/person')
         ->assertStatus(403)
         ->assertInertia(fn (Assert $page) => $page
@@ -64,7 +63,7 @@ it('renders inertia SharpException', function () {
             ->where('status', 403)
             ->where('message', 'Unauthorized Test error')
         );
-    
+
     fakeListFor('person', new class() extends PersonList
     {
         public function getListData(): array
@@ -72,7 +71,7 @@ it('renders inertia SharpException', function () {
             throw new SharpApplicativeException('Applicative Test error');
         }
     });
-    
+
     $this->get('/sharp/s-list/person')
         ->assertStatus(417)
         ->assertInertia(fn (Assert $page) => $page
@@ -88,15 +87,16 @@ it('renders debug 500 error', function () {
         public function getListData(): array
         {
             new UnknownClass();
+
             return [];
         }
     });
-    
+
     config()->set('app.debug', true);
-    
+
     $response = $this->get('/sharp/s-list/person')
         ->assertStatus(500);
-    
+
     // response is not rendered in inertia
     expect(fn () => $response->assertInertia())->toThrow('Not a valid Inertia response.');
 });
@@ -107,14 +107,14 @@ it('renders debug 500 API error', function () {
         public function getListData(): array
         {
             new UnknownClass();
+
             return [];
         }
     });
-    
+
     config()->set('app.debug', true);
-    
+
     $this->getJson('/sharp/api/list/person')
         ->assertStatus(500)
         ->assertHeader('Content-Type', 'text/html; charset=UTF-8');
 });
-

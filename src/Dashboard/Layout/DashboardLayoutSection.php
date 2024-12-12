@@ -10,9 +10,9 @@ class DashboardLayoutSection
     protected ?string $sectionKey = null;
 
     public function __construct(protected string $title) {}
-    
+
     /**
-     * @param (\Closure(DashboardLayoutRow): mixed) $callback
+     * @param  (\Closure(DashboardLayoutRow): mixed)  $callback
      * @return $this
      */
     final public function addRow(Closure $callback): self

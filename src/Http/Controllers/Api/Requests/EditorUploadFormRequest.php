@@ -12,7 +12,7 @@ class EditorUploadFormRequest extends FormRequest
             'file' => 'required',
         ];
     }
-    
+
     protected function prepareForValidation()
     {
         $this->merge($this->get('data'));

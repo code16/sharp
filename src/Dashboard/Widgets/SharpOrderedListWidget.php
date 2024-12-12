@@ -14,9 +14,9 @@ class SharpOrderedListWidget extends SharpWidget
     {
         return new static($key, 'list');
     }
-    
+
     /**
-     * @param (\Closure(array): (string|SharpLinkTo)) $itemLinkBuilderClosure
+     * @param  (\Closure(array): (string|SharpLinkTo))  $itemLinkBuilderClosure
      * @return $this
      */
     public function buildItemLink(Closure $itemLinkBuilderClosure): self

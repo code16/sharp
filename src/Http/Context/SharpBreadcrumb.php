@@ -69,7 +69,7 @@ class SharpBreadcrumb
     {
         return $this->findPreviousSegment('s-list', $entityKey);
     }
-    
+
     public function getCurrentSegmentUrl(): string
     {
         return url(
@@ -82,7 +82,7 @@ class SharpBreadcrumb
             )
         );
     }
-    
+
     public function getPreviousSegmentUrl(): string
     {
         return url(

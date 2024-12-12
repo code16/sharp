@@ -395,7 +395,7 @@ it('formats date range filter retained value', function () {
                 'formatted' => [
                     'start' => '2019-09-22',
                     'end' => '2019-09-25',
-                ]
+                ],
             ],
         ],
         'valuated' => ['test_22' => true],
@@ -472,11 +472,11 @@ it('allows to define a date display format for a date range filter', function ()
             ];
         }
     };
-    
+
     // Artificially put retained value in session
     session()->put('_sharp_retained_filter_test_22', '20190922..20190925');
     $list->buildListConfig();
-    
+
     expect($list->filterContainer()->getCurrentFilterValuesForFront(null))->toEqual([
         'default' => ['test_22' => null],
         'current' => [
@@ -487,7 +487,7 @@ it('allows to define a date display format for a date range filter', function ()
                 'formatted' => [
                     'start' => '2019_09_22',
                     'end' => '2019_09_25',
-                ]
+                ],
             ],
         ],
         'valuated' => ['test_22' => true],

@@ -96,24 +96,24 @@ it('allows to configure both form & shows template', function () {
                 SharpFormTextField::make('text')
             );
         }
-        
+
         public function updateContent(array $data = []): array {}
-        
+
         public function buildEmbedConfig(): void
         {
             $this->configureTagName('my-tag')
                 ->configureTemplate('{{ $text }}');
         }
     };
-    
+
     $defaultEmbed->buildEmbedConfig();
-    
+
     expect($defaultEmbed->transformDataWithRenderedTemplate(['id' => 1, 'text' => 'Test'], isForm: false))->toEqual([
         'id' => 1,
         'text' => 'Test',
         '_html' => 'Test',
     ]);
-    
+
     expect($defaultEmbed->transformDataWithRenderedTemplate(['id' => 1, 'text' => 'Test'], isForm: true))->toEqual([
         'id' => 1,
         'text' => 'Test',
@@ -141,13 +141,13 @@ it('allows to configure form template', function () {
     };
 
     $defaultEmbed->buildEmbedConfig();
-    
+
     expect($defaultEmbed->transformDataWithRenderedTemplate(['id' => 1, 'text' => 'Test'], isForm: false))->toEqual([
         'id' => 1,
         'text' => 'Test',
         '_html' => 'Empty template',
     ]);
-    
+
     expect($defaultEmbed->transformDataWithRenderedTemplate(['id' => 1, 'text' => 'Test'], isForm: true))->toEqual([
         'id' => 1,
         'text' => 'Test',
@@ -175,13 +175,13 @@ it('allows to configure show template', function () {
     };
 
     $defaultEmbed->buildEmbedConfig();
-    
+
     expect($defaultEmbed->transformDataWithRenderedTemplate(['id' => 1, 'text' => 'Test'], isForm: false))->toEqual([
         'id' => 1,
         'text' => 'Test',
         '_html' => 'Test',
     ]);
-    
+
     expect($defaultEmbed->transformDataWithRenderedTemplate(['id' => 1, 'text' => 'Test'], isForm: true))->toEqual([
         'id' => 1,
         'text' => 'Test',

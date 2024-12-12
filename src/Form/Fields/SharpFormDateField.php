@@ -4,7 +4,7 @@ namespace Code16\Sharp\Form\Fields;
 
 use Code16\Sharp\Form\Fields\Formatters\DateFormatter;
 
-class   SharpFormDateField extends SharpFormField
+class SharpFormDateField extends SharpFormField
 {
     const FIELD_TYPE = 'date';
 
@@ -70,7 +70,7 @@ class   SharpFormDateField extends SharpFormField
 
         return $this;
     }
-    
+
     /**
      * @deprecated This feature is not available anymore as the native HTML date input is now used
      */

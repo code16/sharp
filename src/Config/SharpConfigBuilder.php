@@ -393,7 +393,7 @@ class SharpConfigBuilder
 
         return $this;
     }
-    
+
     public function loadViteAssets(array|Vite $assets): self
     {
         $this->config['assets'][] = $assets instanceof Vite
@@ -402,11 +402,11 @@ class SharpConfigBuilder
 
         return $this;
     }
-    
+
     public function loadStaticCss(string $url): self
     {
         $this->config['assets'][] = sprintf('<link rel="stylesheet" href="%s">', $url);
-        
+
         return $this;
     }
 

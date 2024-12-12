@@ -18,9 +18,8 @@ class ShowLayoutSection implements HasLayout
     {
         $this->title = $title;
     }
-    
+
     /**
-     * @param  int  $size
      * @param  (\Closure(ShowLayoutColumn): mixed)|null  $callback
      * @return $this
      */
