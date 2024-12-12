@@ -6,11 +6,11 @@ Form's [Editor field](form-fields/editor.md) is a full-featured wysiwyg / markdo
 
 First a quick presentation: an embed is not a structured data, meant to be stored in a database or to be represented by a Model. I will be stored in the content of an Editor text, as a custom HTML tag, with attributes. Here's an example of how a `RelatedPostEmbed` can be presented in the Editor field:
 
-<img src="./img/embed-editor.png" size="500">
+<img src="./img/v9/embed-editor.png" size="500">
 
 Here's how it can be edited, in Sharp:
 
-<img src="./img/embed-form.png" size="250">
+<img src="./img/v9/embed-form.png" size="250">
 
 And here's how it could be stored, as a reference:
 

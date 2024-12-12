@@ -4,9 +4,6 @@ This form field is a rich text editor, with formatting and an optional toolbar.
 
 Class: `Code16\Sharp\Form\Fields\SharpFormEditorField`
 
-<img src="./editor-v8.png" width="500">
-
-
 ## Configuration
 
 ### `setHeight(int $height, int|null $maxHeight = null)`
@@ -223,8 +220,6 @@ Example:
 ## Custom embeds
 
 This feature allows to embed any structured data in the content. A common use case is to embed a reference to another instance, like for example: in a blog post, you want to insert a reference to another post, that would be rendered as a “read also” block / link in the public section.
-
-<img src="./editor-embeds.png">
 
 In practice, the Editor field can allow custom embeds, which defines how the data is stored in the field (as HTML attributes), and how it is edited in the UI, via a full-featured form.
 

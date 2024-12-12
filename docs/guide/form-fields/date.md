@@ -2,8 +2,6 @@
 
 Class: `Code16\Sharp\Form\Fields\SharpFormDateField`
 
-<img src="./date-v8.png" width="500">
-
 ## Configuration
 
 ### `setHasDate($hasDate = true)`

@@ -2,8 +2,6 @@
 
 Class: `Code16\Sharp\Form\Fields\SharpFormUploadField`
 
-<img src="./upload-v8.png" width="500">
-
 ## General configuration
 
 You can define the temp disk and directory where files will be stored until they are moved to the final folder, as well as a global max file size (which can be overriden by each field). Here are the default values:
