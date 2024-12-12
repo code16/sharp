@@ -1,0 +1,1 @@
+import{d as s,o as t,z as o,t as a,h as m}from"./sharp-xia2_OGg.js";const r={key:0,class:"text-sm font-medium text-destructive"},_=s({__name:"FormMessage",props:{message:{}},setup(n){return(e,p)=>e.message?(t(),o("p",r,a(e.message),1)):m("",!0)}});export{_};
