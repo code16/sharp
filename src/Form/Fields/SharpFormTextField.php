@@ -22,7 +22,7 @@ class SharpFormTextField extends SharpFormField implements IsSharpFieldWithLocal
     {
         return new static($key, static::FIELD_TYPE, new TextFormatter());
     }
-
+    
     public function setInputTypeText(): self
     {
         $this->inputType = 'text';
@@ -36,11 +36,32 @@ class SharpFormTextField extends SharpFormField implements IsSharpFieldWithLocal
 
         return $this;
     }
+    
+    public function setInputTypeEmail(): self
+    {
+        $this->inputType = 'email';
+
+        return $this;
+    }
+    
+    public function setInputTypeTel(): self
+    {
+        $this->inputType = 'tel';
+
+        return $this;
+    }
+    
+    public function setInputTypeUrl(): self
+    {
+        $this->inputType = 'url';
+
+        return $this;
+    }
 
     protected function validationRules(): array
     {
         return [
-            'inputType' => 'required|in:text,password',
+            'inputType' => 'required|in:text,password,email,tel,url',
         ];
     }
 

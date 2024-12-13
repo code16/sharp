@@ -28,7 +28,7 @@ export type CommandData = {
   label: string | null;
   description: string | null;
   type: CommandType;
-  confirmation: { title: string; description: string | null } | null;
+  confirmation: { text: string | null } | null;
   hasForm: boolean;
   authorization: Array<string | number> | boolean;
   instanceSelection: InstanceSelectionMode | null;

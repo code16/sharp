@@ -105,8 +105,7 @@ export class CommandManager {
         }
 
         if(command.confirmation) {
-            if(! await showConfirm(command.confirmation.description, {
-                title: command.confirmation.title,
+            if(! await showConfirm(command.confirmation.text, {
                 ...confirmDialogOptions,
             })) {
                 this.finish();
@@ -200,6 +199,13 @@ export class CommandManager {
     }
 
     async postForm(data: CommandFormData['data'] & CommandFormExtraData) {
+
+        if(this.state.currentCommand.confirmation) {
+            if(! await showConfirm(this.state.currentCommand.confirmation.text)) {
+                return;
+            }
+        }
+
         this.state.currentCommandFormLoading = true;
         this.state.currentCommandShouldReopen = data._shouldReopen ?? false;
 

@@ -99,7 +99,7 @@ it('handles confirmation on a command', function () {
     $list->buildListConfig();
 
     expect($list->listConfig()['commands']['entity'][0][0]['confirmation'])->toEqual([
-        'description' => 'Sure?',
+        'text' => 'Sure?',
     ]);
 });
 

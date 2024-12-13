@@ -19,7 +19,7 @@ final class FormTextFieldData extends Data
         public string $key,
         #[LiteralTypeScriptType('"'.FormFieldType::Text->value.'"')]
         public FormFieldType $type,
-        #[LiteralTypeScriptType('"text" | "password"')]
+        #[LiteralTypeScriptType('"text" | "password" | "email" | "tel" | "url"')]
         public string $inputType,
         public ?string $placeholder = null,
         public ?int $maxLength = null,
