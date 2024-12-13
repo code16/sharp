@@ -23,7 +23,7 @@
         "league/commonmark": "^2.4",
         "masterminds/html5": "^2.8",
         "spatie/image-optimizer": "^1.6",
-        "tightenco/ziggy": "^1.8",
+        "tightenco/ziggy": "^2.0",
         "laravel/prompts": "^0.1.12"
     },
     "require-dev": {
