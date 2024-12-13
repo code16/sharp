@@ -160,7 +160,7 @@ public function buildCommandConfig(): void
 
 Here is the full list of available methods:
 
-- `configureConfirmationText(string $confirmationText)`: if set the Command will ask a confirmation to the user before executing
+- `configureConfirmationText(string $confirmationText)`: if set the Command will ask a confirmation to the user before executing (warning: for now, the confirmation will not properly work in a Wizard Command)
 - `configureDescription(string $description)`: this text will appear under the Command label
 - `configureFormModalTitle(string $formModalTitle)`: if the Command has a Form, the title of the modal will be its label, or `$formModalTitle` if defined
 - `configureFormModalButtonLabel(string $formModalButtonLabel)`: if the Command has a Form, the label of the OK button will be `$formModalButtonLabel`
@@ -189,9 +189,7 @@ class OrderList extends SharpEntityList
     function getListData(): array|Arrayble
     {
         return Order::query()
-            ->when($this->queryParams->specificIds(), function (Builder $query, $ids) {
-                $query->whereIn('id', $ids);
-            })
+            ->when($this->queryParams->specificIds(), fn ($query, $ids) => $query->whereIn('id', $ids))
             ->transform($orders->get());
     }
 }
