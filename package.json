@@ -111,7 +111,6 @@
     "vue-template-compiler": "^2.7.14",
     "vue3-apexcharts": "^1.8.0",
     "vuejs-datepicker": "^0.9.16",
-    "vuex": "^4.1.0",
-    "ziggy-js": "^1.8.1"
+    "vuex": "^4.1.0"
   }
 }

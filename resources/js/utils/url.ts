@@ -1,4 +1,4 @@
-import routeFn from 'ziggy-js';
+import { route as routeFn } from 'ziggy-js';
 import { config } from "@/utils/config";
 
 export function getAppendableParentUri() {
