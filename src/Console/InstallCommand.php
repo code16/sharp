@@ -96,20 +96,20 @@ class InstallCommand extends Command
             return;
         }
 
-        $targetContent = file_get_contents($targetFilePath);
+        $targetContent = str(file_get_contents($targetFilePath));
+        if (! $targetContent->contains($search)) {
+            $this->warn("Can’t find string [$search] in file [$targetFilePath]");
+        }
 
-        file_put_contents(
-            $targetFilePath,
-            str_replace($search, $replace, $targetContent)
-        );
+        file_put_contents($targetFilePath, $targetContent->replace($search, $replace));
     }
 
     private function registerSharpProvider(): void
     {
         $this->replaceFileContent(
             app_path('Providers/AppServiceProvider.php'),
-            'public function boot(): void'.PHP_EOL.'    {'.PHP_EOL,
-            'public function boot(): void'.PHP_EOL.'    {'.PHP_EOL.'        $this->app->register(SharpServiceProvider::class);'.PHP_EOL,
+            'public function register(): void'.PHP_EOL.'    {'.PHP_EOL,
+            'public function register(): void'.PHP_EOL.'    {'.PHP_EOL.'        $this->app->register(SharpServiceProvider::class);'.PHP_EOL,
         );
     }
 }
