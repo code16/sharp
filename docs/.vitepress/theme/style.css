@@ -27,13 +27,18 @@
   }
   :is(h3, h4) code {
     font-size: .875em;
-    .token[data-content] {
+    .token {
       opacity: .5;
       &::before {
         content: attr(data-content);
       }
+      .token {
+        &::before {
+          content: "\200B" attr(data-content) "\200B";
+        }
+      }
     }
-    .token.punctuation {
+    .token.punctuation, .token.function {
       opacity: 1;
     }
   }
