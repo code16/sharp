@@ -7,6 +7,7 @@ use App\Models\PostBlock;
 use Code16\Sharp\EntityList\Eloquent\SimpleEloquentReorderHandler;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
+use Code16\Sharp\EntityList\Filters\HiddenFilter;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Str;
@@ -18,7 +19,7 @@ class PostBlockList extends SharpEntityList
         $fields
             ->addField(
                 EntityListField::make('type_label')
-                    ->setWidth(2)
+                    ->setWidth(.15)
                     ->setLabel('Type')
             )
             ->addField(
@@ -29,7 +30,15 @@ class PostBlockList extends SharpEntityList
     public function buildListConfig(): void
     {
         $this->configureMultiformAttribute('type')
-            ->configureReorderable(new SimpleEloquentReorderHandler(PostBlock::class));
+            ->configureReorderable(new SimpleEloquentReorderHandler(PostBlock::class))
+            ->configureQuickCreationForm();
+    }
+
+    protected function getFilters(): ?array
+    {
+        return [
+            HiddenFilter::make('post'),
+        ];
     }
 
     public function getListData(): array|Arrayable

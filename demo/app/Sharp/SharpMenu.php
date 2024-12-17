@@ -11,20 +11,19 @@ class SharpMenu extends BaseSharpMenu
     public function build(): self
     {
         return $this
-//            ->setVisible(false)
             ->setUserMenu(function (SharpMenuUserMenu $userMenu) {
                 $userMenu
-                    ->addEntityLink('profile', 'Profile', 'fa fa-user')
-                    ->addExternalLink('https://sharp.code16.fr/docs', 'Documentation', 'fa fa-book');
+                    ->addEntityLink('profile', 'Profile')
+                    ->addExternalLink('https://sharp.code16.fr/docs', 'Documentation');
             })
             ->addSection('Blog', function (SharpMenuItemSection $section) {
                 $section
                     ->setCollapsible(false)
-                    ->addEntityLink('posts', 'Posts', 'fas fa-file')
-                    ->addEntityLink('categories', 'Categories', 'fas fa-tags')
-                    ->addEntityLink('authors', 'Authors', 'fas fa-users');
+                    ->addEntityLink('posts', 'Posts', icon: 'far-file')
+                    ->addEntityLink('categories', 'Categories', icon: 'fas-sitemap')
+                    ->addEntityLink('authors', 'Authors', icon: 'far-user');
             })
-            ->addEntityLink('dashboard', 'Dashboard', 'fas fa-chart-line')
-            ->addEntityLink('test', 'Fields test', 'fas fa-cog');
+            ->addEntityLink('dashboard', 'Dashboard', icon: 'fas-chart-line')
+            ->addEntityLink('test', 'Fields test', icon: 'fas-cog');
     }
 }

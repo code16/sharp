@@ -13,6 +13,7 @@ class CategoryFactory extends Factory
     {
         return [
             'name' => $this->faker->unique()->randomElement(static::$categoryNames),
+            'description' => $this->faker->paragraph(),
         ];
     }
 }

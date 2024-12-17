@@ -1,4 +1,4 @@
-import {type DefaultTheme, defineConfig, loadEnv} from 'vitepress'
+import { type DefaultTheme, defineConfig, loadEnv } from 'vitepress'
 import * as path from "path";
 import { sidebar } from "./sidebar";
 import { transformContent } from "./transform-content";

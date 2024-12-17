@@ -3,7 +3,6 @@
 namespace Code16\Sharp\Dashboard;
 
 use Code16\Sharp\Dashboard\Layout\DashboardLayout;
-use Code16\Sharp\Dashboard\Widgets\SharpFigureWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
 use Code16\Sharp\Dashboard\Widgets\SharpWidget;
 use Code16\Sharp\Dashboard\Widgets\WidgetsContainer;
@@ -11,7 +10,6 @@ use Code16\Sharp\EntityList\Traits\HandleDashboardCommands;
 use Code16\Sharp\Utils\Filters\HandleFilters;
 use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 
 abstract class SharpDashboard
 {
@@ -24,25 +22,18 @@ abstract class SharpDashboard
     protected array $panelWidgetsData = [];
     protected array $figureWidgetsData = [];
     protected array $orderedListWidgetsData = [];
-    protected ?array $pageAlertData = null;
     protected ?DashboardQueryParams $queryParams;
     protected ?DashboardLayout $dashboardLayout = null;
     protected ?WidgetsContainer $widgetsContainer = null;
 
-    final public function init(): self
+    final public function initQueryParams(?array $query): self
     {
-        $this->putRetainedFilterValuesInSession();
-
-        $this->queryParams = DashboardQueryParams::create()
-            ->fillWithRequest()
-            ->setDefaultFilters($this->getFilterDefaultValues());
+        $this->queryParams = (new DashboardQueryParams(
+            filterContainer: $this->filterContainer(),
+            filterValues: $this->filterContainer()->getCurrentFilterValues($query),
+        ));
 
         return $this;
-    }
-
-    final public function getQueryParams(): ?DashboardQueryParams
-    {
-        return $this->queryParams;
     }
 
     final public function widgets(): array
@@ -97,15 +88,16 @@ abstract class SharpDashboard
 
     final public function dashboardConfig(): array
     {
-        return tap([], function (&$config) {
-            $this->appendFiltersToConfig($config);
+        return tap([
+            'filters' => $this->filterContainer()->getFiltersConfigArray(),
+        ], function (&$config) {
             $this->appendDashboardCommandsToConfig($config);
-            $this->appendGlobalMessageToConfig($config);
         });
     }
 
     final public function data(): array
     {
+        $this->checkDashboardIsBuilt();
         $this->buildWidgetsData();
 
         return collect($this->graphWidgetDataSets)
@@ -130,6 +122,7 @@ abstract class SharpDashboard
                     ->map(fn ($data, $key) => [
                         'key' => $key,
                         'data' => $data,
+                        'html' => $this->findWidgetByKey($key)->render($data),
                     ])
             )
 
@@ -162,11 +155,6 @@ abstract class SharpDashboard
                     })
             )
 
-            // And then, pageAlert
-            ->when(
-                $this->pageAlertData,
-                fn (Collection $data, array $pageAlertData) => $data->merge($pageAlertData)
-            )
             ->toArray();
     }
 
@@ -193,7 +181,7 @@ abstract class SharpDashboard
         $this->figureWidgetsData[$figureWidgetKey] = [
             'figure' => $figure,
             'unit' => $unit,
-            'evolution' => SharpFigureWidget::formatEvolution($evolution),
+            'evolution' => $evolution,
         ];
 
         return $this;
@@ -204,24 +192,6 @@ abstract class SharpDashboard
         $this->orderedListWidgetsData[$panelWidgetKey] = $data;
 
         return $this;
-    }
-
-    final protected function setPageAlertData(array $data): self
-    {
-        $this->pageAlertData = [$this->pageAlertHtmlField->key => $data];
-
-        return $this;
-    }
-
-    final public function dashboardMetaFields(): array
-    {
-        if ($this->pageAlertHtmlField) {
-            return [
-                $this->pageAlertHtmlField->key => $this->pageAlertHtmlField->toArray(),
-            ];
-        }
-
-        return [];
     }
 
     private function checkDashboardIsBuilt(): void

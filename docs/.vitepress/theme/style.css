@@ -1,4 +1,6 @@
 
+@tailwind utilities;
+
 :root {
   --vp-c-brand-1: hsl(211 100% 30%);
   --vp-c-brand-2: hsl(211 100% 40%);
@@ -17,15 +19,26 @@
 }
 
 .vp-doc {
+  h1:not(:first-child) {
+    margin-top: 4rem;
+  }
+  h1 + h2 {
+    margin-top: 2rem;
+  }
   :is(h3, h4) code {
     font-size: .875em;
-    .token[data-content] {
+    .token {
       opacity: .5;
       &::before {
         content: attr(data-content);
       }
+      .token {
+        &::before {
+          content: "\200B" attr(data-content) "\200B";
+        }
+      }
     }
-    .token.punctuation {
+    .token.punctuation, .token.function {
       opacity: 1;
     }
   }

@@ -1,58 +1,39 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Form\Fields;
-
 use Code16\Sharp\Form\Fields\SharpFormNumberField;
-use Code16\Sharp\Tests\SharpTestCase;
 
-class SharpFormNumberFieldTest extends SharpTestCase
-{
-    /** @test */
-    public function only_default_values_are_set()
-    {
-        $formField = SharpFormNumberField::make('text');
+it('sets only default values', function () {
+    $formField = SharpFormNumberField::make('text');
 
-        $this->assertEquals([
+    expect($formField->toArray())
+        ->toEqual([
             'key' => 'text', 'type' => 'number',
             'step' => 1, 'showControls' => false,
-        ], $formField->toArray(),
-        );
-    }
+        ]);
+});
 
-    /** @test */
-    public function we_can_define_min_and_max()
-    {
-        $formField = SharpFormNumberField::make('text')
-            ->setMin(5)
-            ->setMax(15);
+it('allows to define min and max', function () {
+    $formField = SharpFormNumberField::make('text')
+        ->setMin(5)
+        ->setMax(15);
 
-        $this->assertArraySubset(
-            ['min' => 5, 'max' => 15],
-            $formField->toArray(),
-        );
-    }
+    expect($formField->toArray())
+        ->toHaveKey('min', 5)
+        ->toHaveKey('max', 15);
+});
 
-    /** @test */
-    public function we_can_define_a_step()
-    {
-        $formField = SharpFormNumberField::make('text')
-            ->setStep(5);
+it('allows to define a step', function () {
+    $formField = SharpFormNumberField::make('text')
+        ->setStep(5);
 
-        $this->assertArraySubset(
-            ['step' => 5],
-            $formField->toArray(),
-        );
-    }
+    expect($formField->toArray())
+        ->toHaveKey('step', 5);
+});
 
-    /** @test */
-    public function we_can_define_showControls()
-    {
-        $formField = SharpFormNumberField::make('text')
-            ->setShowControls();
+it('allows to define showControls', function () {
+    $formField = SharpFormNumberField::make('text')
+        ->setShowControls();
 
-        $this->assertArraySubset(
-            ['showControls' => true],
-            $formField->toArray(),
-        );
-    }
-}
+    expect($formField->toArray())
+        ->toHaveKey('showControls', true);
+});

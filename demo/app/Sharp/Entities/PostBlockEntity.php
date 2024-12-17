@@ -18,9 +18,9 @@ class PostBlockEntity extends SharpEntity
     public function getMultiforms(): array
     {
         return [
-            'text' => [PostBlockTextForm::class, 'Text'],
-            'visuals' => [PostBlockVisualsForm::class, 'Visuals'],
-            'video' => [PostBlockVideoForm::class, 'Video'],
+            'text' => [PostBlockTextForm::class, 'Text block'],
+            'visuals' => [PostBlockVisualsForm::class, 'Visuals block'],
+            'video' => [PostBlockVideoForm::class, 'Video block'],
         ];
     }
 }

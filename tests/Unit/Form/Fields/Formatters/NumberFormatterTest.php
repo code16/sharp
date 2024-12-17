@@ -1,35 +1,24 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Form\Fields\Formatters;
-
 use Code16\Sharp\Form\Fields\Formatters\NumberFormatter;
 use Code16\Sharp\Form\Fields\SharpFormNumberField;
-use Code16\Sharp\Tests\SharpTestCase;
 
-class NumberFormatterTest extends SharpTestCase
-{
-    /** @test */
-    public function we_can_format_value_to_front()
-    {
-        $formatter = new NumberFormatter();
-        $field = SharpFormNumberField::make('number');
+it('allows to format value to front', function () {
+    $formatter = new NumberFormatter();
+    $field = SharpFormNumberField::make('number');
 
-        $this->assertEquals(10, $formatter->toFront($field, 10));
-        $this->assertEquals(10, $formatter->toFront($field, '10'));
-        $this->assertEquals(0, $formatter->toFront($field, ''));
-        $this->assertEquals(0, $formatter->toFront($field, 'abc'));
-    }
+    expect($formatter->toFront($field, 10))->toEqual(10)
+        ->and($formatter->toFront($field, '10'))->toEqual(10)
+        ->and($formatter->toFront($field, ''))->toEqual(0)
+        ->and($formatter->toFront($field, 'abc'))->toEqual(0);
+});
 
-    /** @test */
-    public function we_can_format_value_from_front()
-    {
-        $formatter = new NumberFormatter();
-        $attribute = 'attribute';
-        $field = SharpFormNumberField::make('number');
+it('allows to format value from front', function () {
+    $formatter = new NumberFormatter();
+    $field = SharpFormNumberField::make('number');
 
-        $this->assertEquals(10, $formatter->fromFront($field, $attribute, 10));
-        $this->assertEquals(10, $formatter->fromFront($field, $attribute, '10'));
-        $this->assertEquals(0, $formatter->fromFront($field, $attribute, ''));
-        $this->assertEquals(0, $formatter->fromFront($field, $attribute, 'abc'));
-    }
-}
+    expect($formatter->fromFront($field, 'attr', 10))->toEqual(10)
+        ->and($formatter->fromFront($field, 'attr', '10'))->toEqual(10)
+        ->and($formatter->fromFront($field, 'attr', ''))->toEqual(0)
+        ->and($formatter->fromFront($field, 'attr', 'abc'))->toEqual(0);
+});

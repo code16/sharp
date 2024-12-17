@@ -1,104 +1,67 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Form\Layout;
-
 use Code16\Sharp\Form\Layout\FormLayout;
-use Code16\Sharp\Form\SharpForm;
-use Code16\Sharp\Tests\SharpTestCase;
-use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Code16\Sharp\Tests\Unit\Form\Fakes\FakeSharpForm;
 
-class FormLayoutTest extends SharpTestCase
-{
-    /** @test */
-    public function we_can_add_a_tab()
+it('allows to add a tab', function () {
+    $form = new class() extends FakeSharpForm
     {
-        $form = new class() extends FormLayoutTestForm
+        public function buildFormLayout(FormLayout $formLayout): void
         {
-            public function buildFormLayout(FormLayout $formLayout): void
-            {
-                $formLayout->addTab('label');
-            }
-        };
+            $formLayout->addTab('label');
+        }
+    };
 
-        $this->assertCount(1, $form->formLayout()['tabs']);
-    }
+    expect($form->formLayout()['tabs'])
+        ->toHaveCount(1);
+});
 
-    /** @test */
-    public function we_can_add_a_column()
+it('allows to add a column', function () {
+    $form = new class() extends FakeSharpForm
     {
-        $form = new class() extends FormLayoutTestForm
+        public function buildFormLayout(FormLayout $formLayout): void
         {
-            public function buildFormLayout(FormLayout $formLayout): void
-            {
-                $formLayout->addColumn(2);
-            }
-        };
+            $formLayout->addColumn(2);
+        }
+    };
 
-        $this->assertCount(1, $form->formLayout()['tabs'][0]['columns']);
-    }
+    expect($form->formLayout()['tabs'][0]['columns'])
+        ->toHaveCount(1);
+});
 
-    /** @test */
-    public function we_can_see_layout_as_array()
+it('allows to see layout as array', function () {
+    $form = new class() extends FakeSharpForm
     {
-        $form = new class() extends FormLayoutTestForm
+        public function buildFormLayout(FormLayout $formLayout): void
         {
-            public function buildFormLayout(FormLayout $formLayout): void
-            {
-                $formLayout->addTab('label');
-            }
-        };
+            $formLayout->addTab('label');
+        }
+    };
 
-        $this->assertArraySubset(
-            ['title' => 'label', 'columns' => []],
-            $form->formLayout()['tabs'][0],
-        );
+    expect($form->formLayout()['tabs'][0])
+        ->toEqual(['title' => 'label', 'columns' => []]);
 
-        $form2 = new class() extends FormLayoutTestForm
+    $form2 = new class() extends FakeSharpForm
+    {
+        public function buildFormLayout(FormLayout $formLayout): void
         {
-            public function buildFormLayout(FormLayout $formLayout): void
-            {
-                $formLayout->addColumn(2);
-            }
-        };
+            $formLayout->addColumn(2);
+        }
+    };
 
-        $this->assertArraySubset(
-            [
-                'columns' => [
-                    ['size' => 2],
-                ],
-            ],
-            $form2->formLayout()['tabs'][0],
-        );
-    }
+    expect($form2->formLayout()['tabs'][0]['columns'][0]['size'])
+        ->toEqual(2);
+});
 
-    /** @test */
-    public function we_can_set_tabbed_to_false()
+it('allows to set tabbed to false', function () {
+    $form = new class() extends FakeSharpForm
     {
-        $form = new class() extends FormLayoutTestForm
+        public function buildFormLayout(FormLayout $formLayout): void
         {
-            public function buildFormLayout(FormLayout $formLayout): void
-            {
-                $formLayout->addTab('label')->setTabbed(false);
-            }
-        };
+            $formLayout->addTab('label')->setTabbed(false);
+        }
+    };
 
-        $this->assertFalse($form->formLayout()['tabbed']);
-    }
-}
-
-abstract class FormLayoutTestForm extends SharpForm
-{
-    public function find($id): array
-    {
-        return [];
-    }
-
-    public function update($id, array $data)
-    {
-        return false;
-    }
-
-    public function delete($id): void {}
-
-    public function buildFormFields(FieldsContainer $formFields): void {}
-}
+    expect($form->formLayout()['tabbed'])
+        ->toBeFalse();
+});

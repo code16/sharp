@@ -3,27 +3,35 @@
 namespace Code16\Sharp\Http\Middleware\Api;
 
 use Closure;
-use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
-use Code16\Sharp\Exceptions\EntityList\SharpInvalidEntityStateException;
-use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
-use Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException;
-use Code16\Sharp\Exceptions\SharpInvalidEntityKeyException;
+use Code16\Sharp\Exceptions\SharpException;
+use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 
 class HandleSharpApiErrors
 {
-    public function handle($request, Closure $next, $guard = null)
+    public function handle($request, Closure $next)
     {
         $response = $next($request);
 
-        if (isset($response->exception) && $response->exception) {
+        if (isset($response->exception)) {
             if ($response->exception instanceof ValidationException) {
                 return $this->handleValidationException($response);
             }
 
             $code = $this->getHttpCodeFor($response->exception);
+
+            if (config('app.debug') && $code >= 500) {
+                // return the response in HTML to display it in a modal
+                return app(ExceptionHandler::class)
+                    ->render(
+                        tap($request->duplicate(), function ($request) {
+                            $request->headers->set('Accept', 'text/html');
+                        }),
+                        $response->exception
+                    );
+            }
 
             if ($code != 500) {
                 return response()->json(
@@ -40,38 +48,18 @@ class HandleSharpApiErrors
 
     private function getHttpCodeFor($exception)
     {
-        if ($exception instanceof SharpApplicativeException) {
-            // This is an applicative exception, we return it as a 417
-            return 417;
-        }
-
-        if ($exception instanceof SharpAuthorizationException) {
-            return 403;
-        }
-
-        if ($exception instanceof SharpInvalidEntityKeyException || $exception instanceof ModelNotFoundException) {
+        if ($exception instanceof ModelNotFoundException) {
             return 404;
         }
 
-        if ($exception instanceof SharpInvalidEntityStateException) {
-            return 422;
-        }
-
-        if ($exception instanceof SharpFormFieldValidationException) {
-            return 500;
-        }
-
-        if (method_exists($exception, 'getStatusCode')) {
+        if ($exception instanceof SharpException || method_exists($exception, 'getStatusCode')) {
             return $exception->getStatusCode();
         }
 
         return 500;
     }
 
-    /**
-     * @return JsonResponse
-     */
-    protected function handleValidationException($response)
+    protected function handleValidationException($response): JsonResponse
     {
         return response()->json([
             'message' => $response->exception->getMessage(),

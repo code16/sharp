@@ -2,20 +2,20 @@
 
 This feature allows the user to globally search across a selected set of entities of your application.
 
-![The global search in action](./img/global-search.png)
+![The global search in action](./img/v9/global-search.png)
 
 ## Configuration
 
 ```php
-// In config/sharp.php
-return [
-   // ...
-   'search' => [
-      'enabled' => true,
-      'placeholder' => 'Search for anything...',
-      'engine' => \App\Sharp\MySearchEngine::class,
-   ],
-];
+class SharpServiceProvider extends SharpAppServiceProvider
+{
+    protected function configureSharp(SharpConfigBuilder $config): void
+    {
+        $config
+            ->enableGlobalSearch(\App\Sharp\MySearchEngine::class, 'Search for anything...')
+            // [...]
+    }
+}
 ```
 
 ## Write the class
@@ -28,10 +28,7 @@ class MySearchEngine extends SharpSearchEngine
     public function searchFor(array $terms): void
     {
         $resultSet = $this
-            ->addResultSet(
-                label: 'Posts',
-                icon: 'fa-file-o',
-            );
+            ->addResultSet('Posts');
 
         $builder = Post::query();
 
@@ -74,10 +71,7 @@ class MySearchEngine extends SharpSearchEngine
     public function searchFor(array $terms): void
     {
         $resultSet = $this
-            ->addResultSet(
-                label: 'Posts',
-                icon: 'fa-file-o',
-            );
+            ->addResultSet('Posts');
             
       if (! $resultSet->validateSearch(
           ['string', 'min:3'], 

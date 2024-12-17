@@ -11,6 +11,10 @@ class FormLayout implements HasLayout
     protected array $tabs = [];
     protected bool $tabbed = true;
 
+    /**
+     * @param  (\Closure(FormLayoutTab): mixed)  $callback
+     * @return $this
+     */
     final public function addTab(string $label, ?\Closure $callback = null): self
     {
         $tab = $this->addTabLayout(new FormLayoutTab($label));

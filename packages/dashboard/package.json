@@ -1,11 +1,6 @@
 {
-    "name": "sharp-dashboard",
+    "name": "@sharp/dashboard",
     "private": true,
     "version": "1.0.0",
-    "main": "src/index.js",
-    "dependencies": {
-        "sharp-commands": "file:../commands",
-        "sharp-filters": "file:../filters",
-        "sharp-ui": "file:../ui"
-    }
+    "main": "src/index.js"
 }

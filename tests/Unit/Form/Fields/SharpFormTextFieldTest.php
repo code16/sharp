@@ -1,60 +1,46 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Form\Fields;
-
 use Code16\Sharp\Form\Fields\SharpFormTextField;
-use Code16\Sharp\Tests\SharpTestCase;
 
-class SharpFormTextFieldTest extends SharpTestCase
-{
-    /** @test */
-    public function we_can_define_inputType()
-    {
-        $defaultFormField = SharpFormTextField::make('name');
+it('allows to define inputType', function () {
+    expect(SharpFormTextField::make('name')->toArray())->toMatchArray([
+        'type' => 'text',
+        'inputType' => 'text',
+    ]);
+    expect(SharpFormTextField::make('name')->setInputTypeText()->toArray())->toMatchArray([
+        'type' => 'text',
+        'inputType' => 'text',
+    ]);
+    expect(SharpFormTextField::make('name')->setInputTypePassword()->toArray())->toMatchArray([
+        'type' => 'text',
+        'inputType' => 'password',
+    ]);
+    expect(SharpFormTextField::make('name')->setInputTypeEmail()->toArray())->toMatchArray([
+        'type' => 'text',
+        'inputType' => 'email',
+    ]);
+    expect(SharpFormTextField::make('name')->setInputTypeTel()->toArray())->toMatchArray([
+        'type' => 'text',
+        'inputType' => 'tel',
+    ]);
+    expect(SharpFormTextField::make('name')->setInputTypeUrl()->toArray())->toMatchArray([
+        'type' => 'text',
+        'inputType' => 'url',
+    ]);
+});
 
-        $textFormField = SharpFormTextField::make('name')
-            ->setInputTypeText();
+it('allows to define placeholder', function () {
+    $formField = SharpFormTextField::make('name')
+        ->setPlaceholder('my placeholder');
 
-        $passwordFormField = SharpFormTextField::make('name')
-            ->setInputTypePassword();
+    expect($formField->toArray())
+        ->toHaveKey('placeholder', 'my placeholder');
+});
 
-        $this->assertArraySubset(
-            ['key' => 'name', 'type' => 'text', 'inputType' => 'text'],
-            $defaultFormField->toArray(),
-        );
+it('allows to define maxLength', function () {
+    $formField = SharpFormTextField::make('text')
+        ->setMaxLength(10);
 
-        $this->assertArraySubset(
-            ['key' => 'name', 'type' => 'text', 'inputType' => 'text'],
-            $textFormField->toArray(),
-        );
-
-        $this->assertArraySubset(
-            ['key' => 'name', 'type' => 'text', 'inputType' => 'password'],
-            $passwordFormField->toArray(),
-        );
-    }
-
-    /** @test */
-    public function we_can_define_placeholder()
-    {
-        $formField = SharpFormTextField::make('name')
-            ->setPlaceholder('placeholder');
-
-        $this->assertArraySubset(
-            ['key' => 'name', 'type' => 'text', 'placeholder' => 'placeholder'],
-            $formField->toArray(),
-        );
-    }
-
-    /** @test */
-    public function we_can_define_maxLength()
-    {
-        $formField = SharpFormTextField::make('text')
-            ->setMaxLength(10);
-
-        $this->assertArraySubset(
-            ['maxLength' => 10],
-            $formField->toArray(),
-        );
-    }
-}
+    expect($formField->toArray())
+        ->toHaveKey('maxLength', 10);
+});

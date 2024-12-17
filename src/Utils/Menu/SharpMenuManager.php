@@ -59,22 +59,14 @@ class SharpMenuManager
     {
         return collect($section->getItems())
             ->filter(fn (SharpMenuItem $item) => $item->isAllowed())
-            ->pipe(fn ($items) => $this->filterSeparators($items));
+            ->pipe(fn ($items) => $this->filterSeparators($items))
+            ->values();
     }
 
     protected function buildMenu(): void
     {
-        if (($sharpMenu = config('sharp.menu')) === null) {
-            $this->menu = null;
-
-            return;
-        }
-
-        $this->menu = is_string($sharpMenu)
-            ? app($sharpMenu)
-            : $sharpMenu;
-
-        $this->menu->build();
+        $this->menu = instanciate(sharp()->config()->get('menu'));
+        $this->menu?->build();
     }
 
     private function filterSeparators(Collection $items): Collection

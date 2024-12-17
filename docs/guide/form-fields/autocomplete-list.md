@@ -12,7 +12,7 @@ You can in fact define the list as this:
 SharpFormAutocompleteListField::make('winners')
         ->setLabel('Winners')
         ->setItemField(
-            SharpFormAutocompleteField::make('item', 'remote')
+            SharpFormAutocompleteRemoteField::make('item')
                 ->setRemoteEndpoint('/players')
                 // [...]
         )
@@ -30,7 +30,7 @@ But why can't we use a classic List for this? Well, the `model->winners` relatio
 
 Configuration is the same as the classic [List](list.md), except for:
 
-### `setItemField(SharpFormAutocompleteField $field)`
+### `setItemField(SharpFormAutocompleteRemoteField $field)`
 
 You can use this function instead of `addItemField`, since items of AutocompleteList have only one field.
 

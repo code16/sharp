@@ -1,136 +1,111 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Form\Eloquent\Relationships;
-
 use Code16\Sharp\Form\Eloquent\Relationships\HasManyRelationUpdater;
 use Code16\Sharp\Tests\Fixtures\Person;
-use Code16\Sharp\Tests\Unit\SharpEloquentBaseTestCase;
+use Code16\Sharp\Tests\Unit\Form\Eloquent\Relationships\Fixtures\PersonWithFixedId;
 
-class HasManyRelationUpdaterTest extends SharpEloquentBaseTestCase
-{
-    /** @test */
-    public function we_can_update_a_hasMany_relation()
-    {
-        $mother = Person::create(['name' => 'Jane Wayne']);
-        $son1 = Person::create(['name' => 'A', 'mother_id' => $mother->id]);
+it('allows to update a hasMany relation', function () {
+    $marie = Person::create(['name' => 'Marie Curie']);
+    $collaborator1 = Person::create(['name' => 'Arthur', 'chief_id' => $marie->id]);
 
-        $updater = new HasManyRelationUpdater();
+    $updater = new HasManyRelationUpdater();
 
-        $updater->update($mother, 'sons', [[
-            'id' => $son1->id,
-            'name' => 'John Wayne',
+    $updater->update($marie, 'collaborators', [[
+        'id' => $collaborator1->id,
+        'name' => 'Arthur',
+    ]]);
+
+    $this->assertDatabaseHas('people', [
+        'id' => $collaborator1->id,
+        'chief_id' => $marie->id,
+        'name' => 'Arthur',
+    ]);
+})->group('eloquent');
+
+it('allows to create a new related item in a hasMany relation', function () {
+    $marie = Person::create(['name' => 'Marie Curie']);
+
+    $updater = new HasManyRelationUpdater();
+
+    $updater->update($marie, 'collaborators', [[
+        'id' => null,
+        'name' => 'Arthur',
+    ]]);
+
+    $this->assertDatabaseHas('people', [
+        'chief_id' => $marie->id,
+        'name' => 'Arthur',
+    ]);
+})->group('eloquent');
+
+it('does not update the id attribute when updating a related item in a hasMany relation', function () {
+    $marie = Person::create(['name' => 'Marie Curie']);
+
+    (new HasManyRelationUpdater())
+        ->update($marie, 'collaborators', [[
+            'id' => 'ABC', // Set an invalid id here to ensure it will be unset
+            'name' => 'Arthur',
         ]]);
 
-        $this->assertDatabaseHas('people', [
-            'id' => $son1->id,
-            'mother_id' => $mother->id,
-            'name' => 'John Wayne',
-        ]);
-    }
+    $arthur = Person::where('chief_id', $marie->id)->where('name', 'Arthur')->first();
+    expect($arthur->id)->not->toBe('ABC');
+})->group('eloquent');
 
-    /** @test */
-    public function we_can_create_a_new_related_item_in_a_hasMany_relation()
-    {
-        $mother = Person::create(['name' => 'Jane Wayne']);
+it('updates the id attribute when updating a related item in a hasMany relation in a non incrementing id case', function () {
+    $marie = PersonWithFixedId::create(['name' => 'Marie Curie']);
 
-        $updater = new HasManyRelationUpdater();
-
-        $updater->update($mother, 'sons', [[
-            'id' => null,
-            'name' => 'John Wayne',
-        ]]);
-
-        $this->assertDatabaseHas('people', [
-            'mother_id' => $mother->id,
-            'name' => 'John Wayne',
-        ]);
-    }
-
-    /** @test */
-    public function we_do_not_update_the_id_attribute_when_updating_a_related_item_in_a_hasMany_relation()
-    {
-        $mother = Person::create(['name' => 'Jane Wayne']);
-
-        (new HasManyRelationUpdater())->update($mother, 'sons', [[
-            'id' => 'ABC', // Set a invalid id here to ensure it will be unset
-            'name' => 'John Wayne',
-        ]]);
-
-        $john = Person::where('mother_id', $mother->id)->where('name', 'John Wayne')->first();
-        $this->assertNotEquals('ABC', $john->id);
-    }
-
-    /** @test */
-    public function we_certainly_do_update_the_id_attribute_when_updating_a_related_item_in_a_hasMany_relation_in_a_non_incrementing_id_case()
-    {
-        $mother = PersonWithFixedId::create(['name' => 'Jane Wayne']);
-
-        (new HasManyRelationUpdater())->update($mother, 'sons', [[
+    (new HasManyRelationUpdater())
+        ->update($marie, 'collaborators', [[
             'id' => 123,
-            'name' => 'John Wayne',
+            'name' => 'Arthur',
         ]]);
 
-        $this->assertDatabaseHas('people', [
-            'mother_id' => $mother->id,
-            'id' => 123,
-        ]);
-    }
+    $this->assertDatabaseHas('people', [
+        'chief_id' => $marie->id,
+        'id' => 123,
+    ]);
+})->group('eloquent');
 
-    /** @test */
-    public function the_optional_getDefaultAttributesFor_method_is_called_on_an_item_creation()
+it('calls the optional getDefaultAttributesFor method on an item creation', function () {
+    $marie = new class() extends Person
     {
-        $mother = new class() extends Person
+        protected $table = 'people';
+
+        public function getDefaultAttributesFor($attribute)
         {
-            protected $table = 'people';
+            return $attribute == 'collaborators' ? ['age' => 18] : [];
+        }
+    };
+    $marie->name = 'Marie Curie';
+    $marie->save();
 
-            public function getDefaultAttributesFor($attribute)
-            {
-                return $attribute == 'sons' ? ['age' => 18] : [];
-            }
-        };
-        $mother->name = 'Jane Wayne';
-        $mother->save();
+    $updater = new HasManyRelationUpdater();
 
-        $updater = new HasManyRelationUpdater();
+    $updater->update($marie, 'collaborators', [[
+        'id' => null, 'name' => 'Arthur',
+    ]]);
 
-        $updater->update($mother, 'sons', [[
-            'id' => null, 'name' => 'John Wayne',
-        ]]);
+    $this->assertDatabaseHas('people', [
+        'chief_id' => $marie->id,
+        'name' => 'Arthur',
+        'age' => 18,
+    ]);
+})->group('eloquent');
 
-        $this->assertDatabaseHas('people', [
-            'mother_id' => $mother->id,
-            'name' => 'John Wayne',
-            'age' => 18,
-        ]);
-    }
+it('allows to delete an existing related item in a hasMany relation', function () {
+    $marie = Person::create(['name' => 'Marie Curie']);
+    $collaborator1 = Person::create(['name' => 'Arthur', 'chief_id' => $marie->id]);
+    $collaborator2 = Person::create(['name' => 'Jeanne', 'chief_id' => $marie->id]);
 
-    /** @test */
-    public function we_can_delete_an_existing_related_item_in_a_hasMany_relation()
-    {
-        $mother = Person::create(['name' => 'Jane Wayne']);
-        $son1 = Person::create(['name' => 'John Wayne', 'mother_id' => $mother->id]);
-        $son2 = Person::create(['name' => 'Mary Wayne', 'mother_id' => $mother->id]);
+    $updater = new HasManyRelationUpdater();
 
-        $updater = new HasManyRelationUpdater();
+    $updater->update($marie, 'collaborators', [[
+        'id' => $collaborator1->id,
+        'name' => 'Arthur',
+    ]]);
 
-        $updater->update($mother, 'sons', [[
-            'id' => $son1->id, 'name' => 'John Wayne',
-        ]]);
-
-        $this->assertDatabaseMissing('people', [
-            'id' => $son2->id,
-            'mother_id' => $mother->id,
-        ]);
-    }
-}
-
-class PersonWithFixedId extends Person
-{
-    protected $table = 'people';
-    public $incrementing = false;
-
-    public function sons()
-    {
-        return $this->hasMany(PersonWithFixedId::class, 'mother_id');
-    }
-}
+    $this->assertDatabaseMissing('people', [
+        'id' => $collaborator2->id,
+        'chief_id' => $marie->id,
+    ]);
+})->group('eloquent');

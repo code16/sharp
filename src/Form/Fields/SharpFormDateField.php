@@ -14,7 +14,6 @@ class SharpFormDateField extends SharpFormField
     protected string $minTime = '00:00';
     protected string $maxTime = '23:59';
     protected int $stepTime = 30;
-    protected ?string $displayFormat = null;
     protected ?string $language = null;
 
     public static function make(string $key): self
@@ -72,10 +71,11 @@ class SharpFormDateField extends SharpFormField
         return $this;
     }
 
+    /**
+     * @deprecated This feature is not available anymore as the native HTML date input is now used
+     */
     public function setDisplayFormat(?string $displayFormat = null): self
     {
-        $this->displayFormat = $displayFormat;
-
         return $this;
     }
 
@@ -94,7 +94,6 @@ class SharpFormDateField extends SharpFormField
         return [
             'hasDate' => 'required|boolean',
             'hasTime' => 'required|boolean',
-            'displayFormat' => 'required',
             'minTime' => 'regex:/[0-9]{2}:[0-9]{2}/',
             'maxTime' => 'regex:/[0-9]{2}:[0-9]{2}/',
             'stepTime' => 'integer|min:1|max:60',
@@ -111,7 +110,6 @@ class SharpFormDateField extends SharpFormField
             'maxTime' => $this->maxTime,
             'stepTime' => $this->stepTime,
             'mondayFirst' => $this->mondayFirst,
-            'displayFormat' => $this->displayFormat ?: $this->detectDisplayFormat(),
             'language' => $this->language,
         ]);
     }
@@ -121,18 +119,5 @@ class SharpFormDateField extends SharpFormField
         return str_pad($hours, 2, '0', STR_PAD_LEFT)
             .':'
             .str_pad($minutes, 2, '0', STR_PAD_LEFT);
-    }
-
-    protected function detectDisplayFormat(): string
-    {
-        if ($this->hasDate()) {
-            if ($this->hasTime()) {
-                return 'YYYY-MM-DD HH:mm';
-            }
-
-            return 'YYYY-MM-DD';
-        }
-
-        return $this->hasTime() ? 'HH:mm' : '';
     }
 }

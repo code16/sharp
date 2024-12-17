@@ -4,36 +4,36 @@ Sharp provides a few assertions and helpers to help you test your Sharp code.
 
 ## The `SharpAssertions` trait
 
-The `Code16\Sharp\Utils\Testing\SharpAssertions` trait is intended to be used in a Feature test. It has to be initialized, like this:
+The `Code16\Sharp\Utils\Testing\SharpAssertions` trait is intended to be used in a Feature test.
 
 ```php
-protected function setUp()
+class PostFormTest extends TestCase
 {
-    parent::setUp();
-
-    $this->initSharpAssertions();
+    use SharpAssertions;
+    
+    // ...
 }
 ```
 
 ### Helpers
 
-First, the trait adds a few helpers:
-
+The trait adds a few helpers:
 
 #### `loginAsSharpUser($user)`
 
 Logs in the given user as a Sharp user.
 
+#### `getSharpShow(string $entityKey, $instanceId)`
+
+Call the Sharp API to display the Show Page for the Entity `$entityKey` and instance `$instanceId`.
 
 #### `getSharpForm(string $entityKey, $instanceId = null)`
 
-Call the Sharp API to display the form for the Entity `$entityKey`. If `$instanceId` is provided, it will be an edit form, and otherwise a create one.
-
+Call the Sharp API to display the Form for the Entity `$entityKey`. If `$instanceId` is provided, it will be an edit form, and otherwise a creation one.
 
 #### `updateSharpForm(string $entityKey, $instanceId, array $data)`
 
 Call the Sharp API to update the Entity `$entityKey` of id `$instanceId`, with `$data`.
-
 
 #### `storeSharpForm(string $entityKey, array $data)`
 
@@ -47,15 +47,15 @@ Call the Sharp API to delete an `$entityKey` instance on the Entity List.
 
 Call the Sharp API to delete an `$entityKey` instance on the Show Page.
 
-#### `callSharpEntityCommandFromList(string $entityKey, string $commandKeyOrClassName, array $data)`
+#### `callSharpEntityCommandFromList(string $entityKey, string $commandKeyOrClassName, array $data, ?string $commandStep = null)`
 
 Call the `$commandKeyOrClassName` Entity Command with the optional `$data`.
 
-#### `callSharpInstanceCommandFromList(string $entityKey, $instanceId, string $commandKeyOrClassName, array $data)`
+#### `callSharpInstanceCommandFromList(string $entityKey, $instanceId, string $commandKeyOrClassName, array $data, ?string $commandStep = null)`
 
 Call the `$commandKeyOrClassName` Instance Command with the optional `$data`.
 
-#### `callSharpInstanceCommandFromShow(string $entityKey, $instanceId, string $commandKeyOrClassName, array $data)`
+#### `callSharpInstanceCommandFromShow(string $entityKey, $instanceId, string $commandKeyOrClassName, array $data, ?string $commandStep = null)`
 
 Call the `$commandKeyOrClassName` Instance Command with the optional `$data`.
 
@@ -76,67 +76,6 @@ For instance:
             ['show', 'leaves', 16],
             ['form', 'leaves', 16],
         ])
-        ->getSharpForm(...)
+        ->getSharpForm(/*...*/)
         ->assertOk();
-```
-
-### Assertions
-
-You can use regular assertions, for instance:
-
-```php
-$this
-    ->updateSharpForm(
-        'orders',
-        $order->id,
-        array_merge($order->toArray(), [
-            'client' => 'test',
-            'payment_delay' => 10
-        ])
-    )
-    ->assertStatus(200);
-```
-
-But sometimes you'll want to test some specific Sharp things. Here's the list of custom assertions added by the `SharpAssertions` trait:
-
-#### `assertSharpHasAuthorization($authorization)`
-#### `assertSharpHasNotAuthorization($authorization)`
-
-Example:
-
-```php
-$this->getSharpForm('orders', $order->id)
-     ->assertSharpHasAuthorization('update')
-     ->assertSharpHasAuthorization('delete');
-```
-
-#### `assertSharpFormHasFields($names)`
-
-Example:
-
-```php
-$this->getSharpForm('orders')
-     ->assertSharpFormHasFields([
-           'number', 'client'
-     ]);
-```
-
-#### `assertSharpFormHasFieldOfType($name, $formFieldClassName)`
-
-Example:
-
-```php
-$this->getSharpForm('orders', $order->id)
-     ->assertSharpFormHasFieldOfType(
-         'number', SharpFormTextField::class
-     );
-```
-
-#### `assertSharpFormDataEquals($name, $value)`
-
-Example:
-
-```php
-$this->getSharpForm('orders', $order->id)
-     ->assertSharpFormDataEquals('number', $order->number);
 ```

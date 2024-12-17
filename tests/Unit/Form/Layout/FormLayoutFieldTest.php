@@ -1,61 +1,34 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Form\Layout;
-
 use Code16\Sharp\Form\Layout\FormLayoutField;
-use Code16\Sharp\Tests\SharpTestCase;
 
-class FormLayoutFieldTest extends SharpTestCase
-{
-    /** @test */
-    public function we_can_set_a_key()
-    {
-        $formTab = new FormLayoutField('name');
+it('allows to set a key', function () {
+    $formTab = new FormLayoutField('name');
 
-        $this->assertEquals('name', $formTab->toArray()['key']);
-    }
+    expect($formTab->toArray()['key'])
+        ->toEqual('name');
+});
 
-    /** @test */
-    public function we_can_set_a_general_size()
-    {
-        $formTab = new FormLayoutField('name|6');
+it('allows to define a size', function () {
+    $formTab = new FormLayoutField('name|6');
 
-        $this->assertArraySubset(
-            ['key' => 'name', 'size' => 6],
-            $formTab->toArray(),
-        );
-    }
+    expect($formTab->toArray())
+        ->toHaveKey('size', 6)
+        ->toHaveKey('key', 'name');
+});
 
-    /** @test */
-    public function we_can_set_a_xs_size()
-    {
-        $formTab = new FormLayoutField('name|6,8');
+it('allows to define a sublayout for a field', function () {
+    $formTab = new FormLayoutField('name', function ($item) {
+        $item->withField('age')
+            ->withField('size');
+    });
 
-        $this->assertArraySubset(
-            ['key' => 'name', 'size' => 6, 'sizeXS' => 8],
-            $formTab->toArray(),
-        );
-    }
-
-    /** @test */
-    public function we_can_define_a_sublayout_for_a_field()
-    {
-        $formTab = new FormLayoutField('name', function ($item) {
-            $item->withSingleField('age')
-                ->withSingleField('size');
-        });
-
-        $this->assertArraySubset([
-            'key' => 'name',
-            'item' => [[
-                [
-                    'key' => 'age',
-                ],
-            ], [
-                [
-                    'key' => 'size',
-                ],
-            ]],
-        ], $formTab->toArray());
-    }
-}
+    expect($formTab->toArray())
+        ->toHaveKey('key', 'name')
+        ->and($formTab->toArray()['item'])
+        ->toEqual([[
+            ['key' => 'age', 'size' => 12],
+        ], [
+            ['key' => 'size', 'size' => 12],
+        ]]);
+});

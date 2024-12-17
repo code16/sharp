@@ -1,40 +1,36 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Show;
-
+use Code16\Sharp\EntityList\Commands\InstanceCommand;
+use Code16\Sharp\Enums\PageAlertLevel;
 use Code16\Sharp\Show\Fields\SharpShowEntityListField;
-use Code16\Sharp\Show\Fields\SharpShowHtmlField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
 use Code16\Sharp\Show\Layout\ShowLayout;
 use Code16\Sharp\Show\Layout\ShowLayoutColumn;
 use Code16\Sharp\Show\Layout\ShowLayoutSection;
-use Code16\Sharp\Tests\SharpTestCase;
-use Code16\Sharp\Tests\Unit\Show\Utils\BaseSharpShowTestDefault;
-use Code16\Sharp\Tests\Unit\Show\Utils\BaseSharpSingleShowTestDefault;
+use Code16\Sharp\Tests\Unit\Show\Fakes\FakeSharpShow;
+use Code16\Sharp\Tests\Unit\Show\Fakes\FakeSharpSingleShow;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Code16\Sharp\Utils\PageAlerts\PageAlert;
 
-class SharpShowTest extends SharpTestCase
-{
-    /** @test */
-    public function we_can_add_an_entity_list_section_to_the_layout()
+it('allows to add an EEL to the layout', function () {
+    $sharpShow = new class() extends FakeSharpShow
     {
-        $sharpShow = new class() extends BaseSharpShowTestDefault
+        public function buildShowFields(FieldsContainer $showFields): void
         {
-            public function buildShowFields(FieldsContainer $showFields): void
-            {
-                $showFields->addField(
-                    SharpShowEntityListField::make('entityList', 'entityKey')
-                        ->setLabel('Test'),
-                );
-            }
+            $showFields->addField(
+                SharpShowEntityListField::make('entityList', 'entityKey')
+                    ->setLabel('Test'),
+            );
+        }
 
-            public function buildShowLayout(ShowLayout $showLayout): void
-            {
-                $showLayout->addEntityListSection('entityList');
-            }
-        };
+        public function buildShowLayout(ShowLayout $showLayout): void
+        {
+            $showLayout->addEntityListSection('entityList');
+        }
+    };
 
-        $this->assertEquals(
+    expect($sharpShow->showLayout())
+        ->toEqual(
             [
                 'sections' => [
                     [
@@ -57,262 +53,244 @@ class SharpShowTest extends SharpTestCase
                         'key' => null,
                     ],
                 ],
-            ],
-            $sharpShow->showLayout()
+            ]
         );
-    }
+});
 
-    /** @test */
-    public function we_can_declare_a_collapsable_section()
+it('allows to declare a collapsable section', function () {
+    $sharpShow = new class() extends FakeSharpShow
     {
-        $sharpShow = new class() extends BaseSharpShowTestDefault
+        public function buildShowFields(FieldsContainer $showFields): void
         {
-            public function buildShowFields(FieldsContainer $showFields): void
-            {
-                $showFields->addField(
-                    SharpShowTextField::make('test')
-                        ->setLabel('Test'),
-                );
-            }
+            $showFields->addField(
+                SharpShowTextField::make('test')
+                    ->setLabel('Test'),
+            );
+        }
 
-            public function buildShowLayout(ShowLayout $showLayout): void
-            {
-                $showLayout->addSection('test', function (ShowLayoutSection $section) {
-                    $section->setCollapsable()
-                        ->addColumn(12, function (ShowLayoutColumn $column) {
-                            $column->withSingleField('test');
-                        });
-                });
-            }
-        };
+        public function buildShowLayout(ShowLayout $showLayout): void
+        {
+            $showLayout->addSection('test', function (ShowLayoutSection $section) {
+                $section->setCollapsable()
+                    ->addColumn(12, function (ShowLayoutColumn $column) {
+                        $column->withField('test');
+                    });
+            });
+        }
+    };
 
-        $this->assertEquals(
-            [
-                'sections' => [
-                    [
-                        'collapsable' => true,
-                        'title' => 'test',
-                        'columns' => [
-                            [
-                                'size' => 12,
-                                'fields' => [
+    expect($sharpShow->showLayout())
+        ->toEqual([
+            'sections' => [
+                [
+                    'collapsable' => true,
+                    'title' => 'test',
+                    'columns' => [
+                        [
+                            'size' => 12,
+                            'fields' => [
+                                [
                                     [
-                                        [
-                                            'key' => 'test',
-                                            'size' => 12,
-                                            'sizeXS' => 12,
-                                        ],
+                                        'key' => 'test',
+                                        'size' => 12,
+                                        'sizeXS' => 12,
                                     ],
                                 ],
                             ],
                         ],
-                        'key' => null,
                     ],
+                    'key' => null,
                 ],
             ],
-            $sharpShow->showLayout()
-        );
-    }
+        ]);
+});
 
-    /** @test */
-    public function we_can_define_a_collapsable_entity_list_section_with_a_boolean()
+it('allows to declare a collapsable EEL with a boolean', function () {
+    $sharpShow = new class() extends FakeSharpShow
     {
-        $sharpShow = new class() extends BaseSharpShowTestDefault
+        public function buildShowFields(FieldsContainer $showFields): void
         {
-            public function buildShowFields(FieldsContainer $showFields): void
-            {
-                $showFields->addField(
-                    SharpShowEntityListField::make('entityList', 'entityKey')
-                        ->setLabel('Test'),
-                );
-            }
+            $showFields->addField(
+                SharpShowEntityListField::make('entityList', 'entityKey')
+                    ->setLabel('Test'),
+            );
+        }
 
-            public function buildShowLayout(ShowLayout $showLayout): void
-            {
-                $showLayout->addEntityListSection('entityList', true);
-            }
-        };
-
-        $this->assertTrue($sharpShow->showLayout()['sections'][0]['collapsable']);
-    }
-
-    /** @test */
-    public function we_can_define_a_custom_key_to_a_section()
-    {
-        $sharpShow = new class() extends BaseSharpShowTestDefault
+        public function buildShowLayout(ShowLayout $showLayout): void
         {
-            public function buildShowFields(FieldsContainer $showFields): void
-            {
-                $showFields->addField(
-                    SharpShowTextField::make('test'),
-                );
-            }
+            $showLayout->addEntityListSection('entityList', true);
+        }
+    };
 
-            public function buildShowLayout(ShowLayout $showLayout): void
-            {
-                $showLayout->addSection('test', function (ShowLayoutSection $section) {
-                    $section
-                        ->setKey('my-section')
-                        ->addColumn(12, function (ShowLayoutColumn $column) {
-                            $column->withSingleField('test');
-                        });
-                });
-            }
-        };
+    expect($sharpShow->showLayout()['sections'][0]['collapsable'])->toBeTrue();
+});
 
-        $this->assertEquals('my-section', $sharpShow->showLayout()['sections'][0]['key']);
-    }
-
-    /** @test */
-    public function we_can_declare_a_multiformAttribute()
+it('allows to define a custom key to a section', function () {
+    $sharpShow = new class() extends FakeSharpShow
     {
-        $sharpShow = new class() extends BaseSharpShowTestDefault
+        public function buildShowFields(FieldsContainer $showFields): void
         {
-            public function buildShowConfig(): void
-            {
-                $this->configureMultiformAttribute('role');
-            }
-        };
+            $showFields->addField(
+                SharpShowTextField::make('test'),
+            );
+        }
 
-        $sharpShow->buildShowConfig();
-
-        $this->assertArraySubset(
-            [
-                'multiformAttribute' => 'role',
-            ],
-            $sharpShow->showConfig(1),
-        );
-    }
-
-    /** @test */
-    public function we_can_declare_a_global_message_field()
-    {
-        $sharpShow = new class() extends BaseSharpShowTestDefault
+        public function buildShowLayout(ShowLayout $showLayout): void
         {
-            public function buildShowConfig(): void
-            {
-                $this->configurePageAlert('template', self::$pageAlertLevelWarning, 'test-key');
-            }
-        };
+            $showLayout->addSection('test', function (ShowLayoutSection $section) {
+                $section
+                    ->setKey('my-section')
+                    ->addColumn(12, function (ShowLayoutColumn $column) {
+                        $column->withField('test');
+                    });
+            });
+        }
+    };
 
-        $sharpShow->buildShowConfig();
+    expect($sharpShow->showLayout()['sections'][0]['key'])->toEqual('my-section');
+});
 
-        $this->assertEquals(
-            'test-key',
-            $sharpShow->showConfig(1)['globalMessage']['fieldKey'],
-        );
-
-        $this->assertEquals(
-            'warning',
-            $sharpShow->showConfig(1)['globalMessage']['alertLevel'],
-        );
-
-        $this->assertEquals(
-            SharpShowHtmlField::make('test-key')->setInlineTemplate('template')->toArray(),
-            $sharpShow->fields()['test-key'],
-        );
-    }
-
-    /** @test */
-    public function we_can_associate_data_to_a_global_message_field()
+it('allows to declare a multiformAttribute', function () {
+    $sharpShow = new class() extends FakeSharpShow
     {
-        $sharpShow = new class() extends BaseSharpShowTestDefault
+        public function buildShowConfig(): void
         {
-            public function buildShowConfig(): void
-            {
-                $this->configurePageAlert('Hello {{name}}', null, 'test-key');
-            }
+            $this->configureMultiformAttribute('role');
+        }
+    };
 
-            public function find($id): array
-            {
-                return [
-                    'test-key' => [
-                        'name' => 'Bob',
-                    ],
-                ];
-            }
-        };
+    $sharpShow->buildShowConfig();
 
-        $sharpShow->buildShowConfig();
+    expect($sharpShow->showConfig(1))
+        ->toHaveKey('multiformAttribute', 'role');
+});
 
-        $this->assertEquals(
-            ['name' => 'Bob'],
-            $sharpShow->instance(1)['test-key'],
-        );
-    }
-
-    /** @test */
-    public function we_can_declare_a_simple_page_title_field()
+it('allows to set an edit button label', function () {
+    $sharpShow = new class() extends FakeSharpShow
     {
-        $sharpShow = new class() extends BaseSharpShowTestDefault
+        public function buildShowConfig(): void
         {
-            public function buildShowConfig(): void
-            {
-                $this->configurePageTitleAttribute('title');
-            }
+            $this->configureEditButtonLabel('Edit post');
+        }
+    };
 
-            public function find($id): array
-            {
-                return [
-                    'title' => 'Some title',
-                ];
-            }
-        };
+    $sharpShow->buildShowConfig();
 
-        $sharpShow->buildShowConfig();
+    expect($sharpShow->showConfig(1))
+        ->toHaveKey('editButtonLabel', 'Edit post');
+});
 
-        $this->assertEquals(
-            'title',
-            $sharpShow->showConfig(1)['titleAttribute'],
-        );
-
-        $this->assertEquals(
-            SharpShowTextField::make('title')->toArray(),
-            $sharpShow->fields()['title'],
-        );
-
-        $this->assertArrayHasKey('title', $sharpShow->instance(1));
-    }
-
-    /** @test */
-    public function we_can_declare_a_localized_page_title_field()
+it('allows to declare a page alert', function () {
+    $sharpShow = new class() extends FakeSharpShow
     {
-        $sharpShow = new class() extends BaseSharpShowTestDefault
+        public function buildPageAlert(PageAlert $pageAlert): void
         {
-            public function buildShowConfig(): void
-            {
-                $this->configurePageTitleAttribute('title', localized: true);
-            }
+            $pageAlert
+                ->setLevelInfo()
+                ->setMessage('My page alert');
+        }
+    };
 
-            public function find($id): array
-            {
-                return [
-                    'title' => ['en' => 'Some title', 'fr' => 'Un titre'],
-                ];
-            }
-        };
+    expect($sharpShow->pageAlert())
+        ->toEqual([
+            'text' => 'My page alert',
+            'level' => PageAlertLevel::Info,
+        ]);
+});
 
-        $sharpShow->buildShowConfig();
-
-        $this->assertEquals(
-            SharpShowTextField::make('title')->setLocalized()->toArray(),
-            $sharpShow->fields()['title'],
-        );
-
-        $this->assertArrayHasKey('title', $sharpShow->instance(1));
-        $this->assertIsArray($sharpShow->instance(1)['title']);
-    }
-
-    /** @test */
-    public function single_shows_have_are_declared_in_config()
+it('allow to declare a simple page title field', function () {
+    $sharpShow = new class() extends FakeSharpShow
     {
-        $sharpShow = new class() extends BaseSharpSingleShowTestDefault {};
+        public function buildShowConfig(): void
+        {
+            $this->configurePageTitleAttribute('title');
+        }
 
-        $this->assertArraySubset(
-            [
-                'isSingle' => true,
-            ],
-            $sharpShow->showConfig(null),
-        );
-    }
-}
+        public function find($id): array
+        {
+            return [
+                'title' => 'Some title',
+            ];
+        }
+    };
+
+    $sharpShow->buildShowConfig();
+
+    expect($sharpShow->showConfig(1))
+        ->toHaveKey('titleAttribute', 'title')
+        ->and($sharpShow->fields()['title'])
+        ->toEqual(SharpShowTextField::make('title')->toArray())
+        ->and($sharpShow->instance(1))
+        ->toHaveKey('title', 'Some title');
+});
+
+it('allow to declare a localized page title field', function () {
+    $sharpShow = new class() extends FakeSharpShow
+    {
+        public function buildShowConfig(): void
+        {
+            $this->configurePageTitleAttribute('title', localized: true);
+        }
+
+        public function find($id): array
+        {
+            return [
+                'title' => ['en' => 'Some title', 'fr' => 'Un titre'],
+            ];
+        }
+    };
+
+    $sharpShow->buildShowConfig();
+
+    expect($sharpShow->fields()['title'])
+        ->toEqual(SharpShowTextField::make('title')->setLocalized()->toArray())
+        ->and($sharpShow->instance(1))
+        ->toHaveKey('title', ['en' => 'Some title', 'fr' => 'Un titre']);
+});
+
+it('returns isSingle in config for single shows', function () {
+    expect((new FakeSharpSingleShow())->showConfig(null))
+        ->toHaveKey('isSingle', true);
+});
+
+it('allows to configure show instance command in sections', function () {
+    $show = new class() extends FakeSharpShow
+    {
+        public function getInstanceCommands(): ?array
+        {
+            return [
+                'cmd1' => new class() extends InstanceCommand
+                {
+                    public function label(): ?string
+                    {
+                        return 'test';
+                    }
+
+                    public function execute(mixed $instanceId, array $data = []): array
+                    {
+                        return [];
+                    }
+                },
+                'my-section' => [
+                    'cmd2' => new class() extends InstanceCommand
+                    {
+                        public function label(): ?string
+                        {
+                            return 'test-2';
+                        }
+
+                        public function execute(mixed $instanceId, array $data = []): array
+                        {
+                            return [];
+                        }
+                    },
+                ],
+            ];
+        }
+    };
+
+    $show->buildShowConfig();
+
+    expect($show->showConfig(1)['commands']['instance'][0][0]['key'])->toEqual('cmd1')
+        ->and($show->showConfig(1)['commands']['my-section'][0][0]['key'])->toEqual('cmd2');
+});

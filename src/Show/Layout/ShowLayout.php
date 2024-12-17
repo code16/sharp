@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Show\Layout;
 
+use Closure;
 use Code16\Sharp\Form\Layout\HasLayout;
 use Illuminate\Support\Traits\Conditionable;
 
@@ -11,8 +12,18 @@ class ShowLayout implements HasLayout
 
     protected array $sections = [];
 
-    final public function addSection(string $label, ?\Closure $callback = null): self
+    /**
+     * @param  string|(\Closure(ShowLayoutSection): mixed)  $label
+     * @param  (\Closure(ShowLayoutSection): mixed)|null  $callback
+     * @return $this
+     */
+    final public function addSection(string|Closure $label, ?Closure $callback = null): self
     {
+        if ($label instanceof Closure) {
+            $callback = $label;
+            $label = '';
+        }
+
         $section = new ShowLayoutSection($label);
         $this->sections[] = $section;
 
@@ -25,16 +36,9 @@ class ShowLayout implements HasLayout
 
     final public function addEntityListSection(string $entityListKey, ?bool $collapsable = null): self
     {
-        $section = new ShowLayoutSection('');
-        $section->addColumn(12, function ($column) use ($entityListKey) {
-            $column->withSingleField($entityListKey);
-        });
-
-        if ($collapsable !== null) {
-            $section->setCollapsable($collapsable);
-        }
-
-        $this->sections[] = $section;
+        $this->sections[] = (new ShowLayoutSection(''))
+            ->addColumn(12, fn ($column) => $column->withField($entityListKey))
+            ->when($collapsable !== null, fn ($section) => $section->setCollapsable($collapsable));
 
         return $this;
     }

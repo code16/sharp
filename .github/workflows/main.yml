@@ -6,8 +6,7 @@ on:
   pull_request:
     branches:
       - main
-      - next
-      - dev
+      - "9.0"
 jobs:
 
   # Unit tests back (phpunit)
@@ -18,17 +17,13 @@ jobs:
         include:
           - php: 8.2
             env:
-              LARAVEL: 10.*
-              TESTBENCH: 8.*
-          - php: 8.3
-            env:
-              LARAVEL: 10.*
-              TESTBENCH: 8.*
-          - php: 8.2
-            env:
               LARAVEL: 11.*
               TESTBENCH: 9.*
           - php: 8.3
+            env:
+              LARAVEL: 11.*
+              TESTBENCH: 9.*
+          - php: 8.4
             env:
               LARAVEL: 11.*
               TESTBENCH: 9.*
@@ -55,8 +50,8 @@ jobs:
         run: |
           composer require "laravel/framework:${LARAVEL}" "orchestra/testbench:${TESTBENCH}" --no-interaction --no-update
           composer update --prefer-stable --prefer-dist --no-interaction
-      - name: Execute tests (Unit and Feature tests) via PHPUnit
-        run: ./vendor/bin/phpunit
+      - name: Execute tests via Pest
+        run: ./vendor/bin/pest --parallel
 
   #  Front unit tests
 #  front-tests:
@@ -79,40 +74,40 @@ jobs:
 #        run: npm run test
 
   # Front e2e tests
-  e2e-tests:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-
-      - name: Update NPM
-        run: npm i -g npm@9
-
-      - name: Install sharp dependencies
-        run: npm ci --production
-
-      - name: Run E2E tests
-        uses: cypress-io/github-action@v2
-        with:
-          command: npm run cy:run-ct
-          working-directory: tests-e2e
-          env: CI=true
-
-      - uses: actions/upload-artifact@v4
-        if: always()
-        continue-on-error: true
-        with:
-          name: e2e-cypress-screenshots
-          path: tests-e2e/cypress/screenshots
+#  e2e-tests:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v2
+#
+#      - name: Setup Node.js
+#        uses: actions/setup-node@v2
+#        with:
+#          node-version: '14'
+#
+#      - name: Update NPM
+#        run: npm i -g npm@9
+#
+#      - name: Install sharp dependencies
+#        run: npm ci --production
+#
+#      - name: Run E2E tests
+#        uses: cypress-io/github-action@v2
+#        with:
+#          command: npm run cy:run-ct
+#          working-directory: tests-e2e
+#          env: CI=true
+#
+#      - uses: actions/upload-artifact@v4
+#        if: always()
+#        continue-on-error: true
+#        with:
+#          name: e2e-cypress-screenshots
+#          path: tests-e2e/cypress/screenshots
 
   slack:
     needs:
       - laravel-tests
-      - e2e-tests
+#      - e2e-tests
     if: failure() && github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:

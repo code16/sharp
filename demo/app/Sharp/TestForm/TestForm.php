@@ -2,8 +2,11 @@
 
 namespace App\Sharp\TestForm;
 
-use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
+use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
+use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteListField;
+use Code16\Sharp\Form\Fields\SharpFormAutocompleteLocalField;
+use Code16\Sharp\Form\Fields\SharpFormAutocompleteRemoteField;
 use Code16\Sharp\Form\Fields\SharpFormCheckField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
@@ -24,75 +27,96 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class TestForm extends SharpSingleForm
 {
-    protected ?string $formValidatorClass = TestValidator::class;
-
     public function buildFormFields(FieldsContainer $formFields): void
     {
         $formFields
             ->addField(
                 SharpFormTextField::make('text')
                     ->setLocalized()
+//                    ->setReadOnly()
                     ->setLabel('Text'),
             )
             ->addField(
-                SharpFormAutocompleteField::make('autocomplete_local', 'local')
-                    ->setLocalized()
+                SharpFormAutocompleteLocalField::make('autocomplete_local')
                     ->setLabel('Autocomplete local')
                     ->setLocalSearchKeys(['label'])
-                    ->setListItemInlineTemplate('{{label}}')
-                    ->setResultItemInlineTemplate('{{label}} ({{id}})')
-                    ->setLocalValues($this->options(true)),
+                    ->setListItemTemplate('{{ $label }}')
+                    ->setResultItemTemplate('{{ $label }} ({{ $id }})')
+//                    ->setReadOnly()
+                    ->setLocalValues([
+                        1 => [
+                            ['id' => 1, 'label' => 'Voltaire - Candide'],
+                            ['id' => 2, 'label' => 'Voltaire - Zadig'],
+                            ['id' => 3, 'label' => 'Voltaire - Micromégas'],
+                        ],
+                        2 => [
+                            ['id' => 4, 'label' => 'Hugo - Les Misérables'],
+                            ['id' => 5, 'label' => 'Hugo - Notre-Dame de Paris'],
+                            ['id' => 6, 'label' => 'Hugo - Les Contemplations'],
+                        ],
+                    ])
+                    ->setLocalValuesLinkedTo('select_list'),
             )
             ->addField(
-                SharpFormAutocompleteField::make('autocomplete_remote', 'remote')
+                SharpFormAutocompleteRemoteField::make('autocomplete_remote')
                     ->setLabel('Autocomplete remote')
                     ->setRemoteSearchAttribute('query')
-                    ->setListItemInlineTemplate('{{name}}')
-                    ->setResultItemInlineTemplate('{{name}} ({{num}})')
-                    ->setRemoteEndpoint(url('/passengers')),
+                    ->setListItemTemplate('{{ $name }}')
+                    ->setResultItemTemplate('{{ $name }} ({{ $id }})')
+//                    ->setReadOnly()
+                    ->setRemoteEndpoint(route('sharp.autocompletes.users.index')),
             )
             ->addField(
                 SharpFormAutocompleteListField::make('autocomplete_list')
                     ->setLabel('Autocomplete_list')
                     ->setAddable()
                     ->setRemovable()
+//                    ->setReadOnly()
                     ->setItemField(
-                        SharpFormAutocompleteField::make('item', 'remote')
+                        SharpFormAutocompleteRemoteField::make('item')
                             ->setLabel('Passenger')
                             ->setPlaceholder('test')
-                            ->setListItemInlineTemplate('{{ name }}')
-                            ->setResultItemInlineTemplate('{{name}} ({{num}})')
-                            ->setRemoteEndpoint(url('/passengers')),
+                            ->setListItemTemplate('{{ $name }}')
+                            ->setResultItemTemplate('{{ $name }} ({{ $id }})')
+                            ->setRemoteEndpoint(route('sharp.autocompletes.users.index')),
                     ),
             )
             ->addField(
-                SharpFormCheckField::make('check', 'Check'),
+                SharpFormCheckField::make('check', 'Check')
+                //                    ->setReadOnly(),
             )
             ->addField(
                 SharpFormDateField::make('datetime')
                     ->setLabel('Datetime')
-                    ->setDisplayFormat('YYYY-MM-DD HH:mm')
+                    ->setMinTime(0, 15)
+//                    ->setReadOnly()
                     ->setHasTime(),
             )
             ->addField(
                 SharpFormDateField::make('date')
                     ->setLabel('Date')
-                    ->setDisplayFormat('YYYY-MM-DD')
+//                    ->setReadOnly()
                     ->setHasTime(false),
             )
             ->addField(
                 SharpFormDateField::make('time')
                     ->setLabel('Time')
-                    ->setDisplayFormat('HH:mm')
                     ->setHasDate(false)
+                    ->setMinTime(0, 15)
+                    ->setMaxTime(22, 15)
+//                    ->setReadOnly()
                     ->setHasTime(),
             )
             ->addField(
                 SharpFormGeolocationField::make('geolocation')
                     ->setLabel('Geolocation')
                     ->setApiKey(env('GMAPS_KEY'))
+                    ->setGoogleMapsMapId(env('GMAPS_MAP_ID'))
+//                    ->setReadOnly()
                     ->setMapsProvider('osm')
                     ->setGeocodingProvider('osm')
+//                    ->setMapsProvider('gmaps')
+//                    ->setGeocodingProvider('gmaps')
     //                ->setDisplayUnitDecimalDegrees()
                     ->setDisplayUnitDegreesMinutesSeconds()
                     ->setGeocoding()
@@ -100,20 +124,21 @@ class TestForm extends SharpSingleForm
             )
             ->addField(
                 SharpFormHtmlField::make('html')
+//                    ->setReadOnly()
                     ->setLabel('Html')
-                    ->setInlineTemplate('Your name is <strong>{{name}}</strong>'),
+                    ->setTemplate('Your name is <strong>{{ $name }}</strong>'),
             )
             ->addField(
                 SharpFormListField::make('list')
                     ->setLabel('List')
                     ->setAddable()
                     ->setSortable()
+//                    ->setReadOnly()
                     ->setRemovable()
                     ->setItemIdAttribute('id')
                     ->addItemField(
                         SharpFormDateField::make('date')
                             ->setLabel('Date')
-                            ->setDisplayFormat('YYYY/MM/DD')
                             ->setHasTime(false),
                     )
                     ->addItemField(
@@ -128,12 +153,12 @@ class TestForm extends SharpSingleForm
                     ),
             )
             ->addField(
-                SharpFormEditorField::make('markdown')
-                    ->setRenderContentAsMarkdown()
+                SharpFormEditorField::make('wysiwyg')
                     ->setPlaceholder('Start typing content here...')
                     ->setMaxLength(200)
+//                    ->setReadOnly()
                     ->setLocalized()
-                    ->setLabel('Markdown')
+                    ->setLabel('Wysiwyg')
                     ->setToolbar([
                         SharpFormEditorField::B,
                         SharpFormEditorField::I,
@@ -159,19 +184,22 @@ class TestForm extends SharpSingleForm
                         SharpFormEditorField::CODE_BLOCK,
                         SharpFormEditorField::SUP,
                     ])
-//                    ->hideToolbar()
-//                    ->setWithoutParagraphs()
-                    ->setCropRatio('1:1')
+                    ->allowUploads(
+                        SharpFormEditorUpload::make()
+                            ->setImageOnly()
+                            ->setImageCropRatio('1:1')
+                            ->setStorageDisk('local')
+                            ->setStorageBasePath('data')
+                    )
                     ->setHeight(350)
-                    ->setStorageDisk('local')
-                    ->setStorageBasePath('data'),
             )
             ->addField(
-                SharpFormEditorField::make('wysiwyg')
-                    ->setRenderContentAsMarkdown(false)
+                SharpFormEditorField::make('markdown')
+                    ->setRenderContentAsMarkdown()
                     ->showCharacterCount()
+//                    ->setReadOnly()
                     ->setLocalized()
-                    ->setLabel('Wysiwyg')
+                    ->setLabel('Markdown')
                     ->setToolbar([
                         SharpFormEditorField::B, SharpFormEditorField::I, SharpFormEditorField::A,
                         SharpFormEditorField::SEPARATOR,
@@ -184,6 +212,13 @@ class TestForm extends SharpSingleForm
                         SharpFormEditorField::SEPARATOR,
                         SharpFormEditorField::CODE_BLOCK,
                     ])
+                    ->allowUploads(
+                        SharpFormEditorUpload::make()
+                            ->setImageOnly()
+                            ->setImageCropRatio('1:1')
+                            ->setStorageDisk('local')
+                            ->setStorageBasePath('data')
+                    )
 //                    ->hideToolbar()
 //                    ->setWithoutParagraphs()
                     ->setHeight(350, 0),
@@ -191,34 +226,40 @@ class TestForm extends SharpSingleForm
             ->addField(
                 SharpFormNumberField::make('number')
                     ->setLabel('Number')
+//                    ->setReadOnly()
                     ->setMin(0)
                     ->setMax(1)
                     ->setStep(.1),
             )
             ->addField(
-                SharpFormSelectField::make('select_dropdown', $this->options(true))
-                    ->setLocalized()
+                SharpFormSelectField::make('select_dropdown', $this->options())
                     ->setLabel('Select dropdown')
+                    ->allowSelectAll()
+//                    ->setClearable()
+//                    ->setReadOnly()
+                    ->setMultiple()
                     ->setDisplayAsDropdown(),
             )
             ->addField(
-                SharpFormSelectField::make('select_list', $this->options(true))
-                    ->setLocalized()
+                SharpFormSelectField::make('select_list', $this->options())
                     ->setLabel('Select list')
+//                    ->setReadOnly()
                     ->setDisplayAsList(),
             )
             ->addField(
-                SharpFormSelectField::make('select_list_multiple', $this->options(true))
-                    ->setLocalized()
+                SharpFormSelectField::make('select_list_multiple', $this->options())
                     ->setLabel('Select list multiple')
+                    ->allowSelectAll()
+//                    ->setInline()
                     ->setMultiple()
+//                    ->setReadOnly()
                     ->setDisplayAsList()
-                    ->setMaxSelected(2),
+                //                    ->setMaxSelected(2),
             )
             ->addField(
-                SharpFormTagsField::make('tags', $this->options(true))
-                    ->setLocalized()
+                SharpFormTagsField::make('tags', $this->options())
                     ->setLabel('Tags')
+//                    ->setReadOnly()
                     ->setCreatable(true)
                     ->setCreateAttribute('label')
                     ->setMaxTagCount(4),
@@ -226,6 +267,7 @@ class TestForm extends SharpSingleForm
             ->addField(
                 SharpFormTextareaField::make('textarea')
                     ->setLocalized()
+//                    ->setReadOnly()
                     ->setLabel('Textarea')
                     ->setMaxLength(50)
                     ->setRowCount(4),
@@ -233,11 +275,13 @@ class TestForm extends SharpSingleForm
             ->addField(
                 SharpFormUploadField::make('upload')
                     ->setLabel('Upload')
-                    ->setFileFilterImages()
-                    ->setCropRatio('1:1')
+                    ->setMaxFileSize(5)
+//                    ->setReadOnly()
+                    ->setImageCropRatio('1:1')
                     ->setStorageDisk('local')
                     ->setStorageBasePath('data'),
-            );
+            )
+            ->addField(CustomField::make('custom'));
     }
 
     public function buildFormLayout(FormLayout $formLayout): void
@@ -246,60 +290,60 @@ class TestForm extends SharpSingleForm
             ->addTab('Simple', function (FormLayoutTab $tab) {
                 $tab
                     ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField('text')
+                        $column->withField('text')
                             ->withFields('datetime')
                             ->withFields('date|6', 'time|6')
-                            ->withSingleField('check');
+                            ->withField('check');
                     })
                     ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField('number')
-                            ->withSingleField('html');
+                        $column->withField('number')
+                            ->withField('html');
                     });
             })
             ->addTab('Textarea', function (FormLayoutTab $tab) {
                 $tab
                     ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField('markdown')
-                            ->withSingleField('textarea');
+                        $column->withField('wysiwyg')
+                            ->withField('textarea');
                     })
                     ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField('wysiwyg');
+                        $column->withField('markdown');
                     });
             })
             ->addTab('Select', function (FormLayoutTab $tab) {
                 $tab
                     ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField('autocomplete_local')
-                            ->withSingleField('autocomplete_remote')
-                            ->withSingleField('select_dropdown');
+                        $column->withField('autocomplete_local')
+                            ->withField('autocomplete_remote')
+                            ->withField('select_dropdown');
                     })
                     ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField('select_list')
-                            ->withSingleField('select_list_multiple')
-                            ->withSingleField('tags');
+                        $column->withField('select_list')
+                            ->withField('select_list_multiple')
+                            ->withField('tags');
                     });
             })
             ->addTab('List', function (FormLayoutTab $tab) {
                 $tab
                     ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField('autocomplete_list', function (FormLayoutColumn $listItem) {
-                            $listItem->withSingleField('item');
+                        $column->withListField('autocomplete_list', function (FormLayoutColumn $listItem) {
+                            $listItem->withField('item');
                         });
                     })
                     ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField('list', function (FormLayoutColumn $listItem) {
+                        $column->withListField('list', function (FormLayoutColumn $listItem) {
                             $listItem->withFields('date|5', 'check|7')
-                                ->withSingleField('markdown2');
+                                ->withField('markdown2');
                         });
                     });
             })
             ->addTab('Special', function (FormLayoutTab $tab) {
                 $tab
                     ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField('upload');
+                        $column->withField('upload');
                     })
                     ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField('geolocation');
+                        $column->withField('geolocation');
                     });
             });
     }
@@ -307,30 +351,26 @@ class TestForm extends SharpSingleForm
     protected function findSingle()
     {
         if (! $rawData = (array) session()->get('sharp_test_form')) {
-            $faker = \Faker\Factory::create();
             $rawData = [
                 'text' => [
-                    'fr' => $faker->words(3, true),
-                    'en' => $faker->words(3, true),
+                    'fr' => fake()->words(3, true),
+                    'en' => fake()->words(3, true),
                 ],
                 'autocomplete_local' => 1,
                 'autocomplete_remote' => null,
                 'autocomplete_list' => null,
                 'check' => true,
-                'datetime' => $faker->date('Y-m-d H:i:s'),
-                'date' => $faker->date('Y-m-d'),
-                'time' => $faker->date('H:i:s'),
-                'html' => [
-                    'name' => $faker->name,
-                ],
+                'datetime' => fake()->date('Y-m-d H:i:s'),
+                'date' => fake()->date('Y-m-d'),
+                'time' => fake()->date('H:i:s'),
                 'markdown' => [
                     'fr' => "Du **texte** avec *style* \n\n",
                     'en' => 'Some **text** with *style*',
                 ],
-                'number' => $faker->numberBetween(1, 100),
+                'number' => fake()->numberBetween(1, 100),
                 'textarea' => [
-                    'fr' => $faker->paragraph(3),
-                    'en' => $faker->paragraph(3),
+                    'fr' => fake()->paragraph(3),
+                    'en' => fake()->paragraph(3),
                 ],
                 'wysiwyg' => [
                     'fr' => '<p>fezfjklez fezjkflezjfkez fezjkflezjfklezjkflezj</p>',
@@ -339,7 +379,19 @@ class TestForm extends SharpSingleForm
             ];
         }
 
-        return $this->transform($rawData);
+        return $this
+            ->setCustomTransformer('upload', (new SharpUploadModelFormAttributeTransformer())->dynamicInstance())
+            ->setCustomTransformer('html', fn () => [
+                'name' => fake()->name,
+            ])
+            ->transform($rawData);
+    }
+
+    public function rules(): array
+    {
+        return [
+            //            'date' => 'required|before_or_equal:'.date('Y-m-d'),
+        ];
     }
 
     protected function updateSingle(array $data)
@@ -352,20 +404,19 @@ class TestForm extends SharpSingleForm
         return ['fr', 'en'];
     }
 
-    protected function options(bool $localized = false): array
+    protected function options(): array
     {
-        if (! $localized) {
-            return [
-                '1' => 'Option one',
-                '2' => 'Option two',
-                '3' => 'Option three',
-            ];
-        }
-
         return [
-            '1' => ['en' => 'Option one', 'fr' => 'Option un'],
-            '2' => ['en' => 'Option two', 'fr' => 'Option deux'],
-            '3' => ['en' => 'Option three', 'fr' => 'Option trois'],
+            '1' => 'Option one',
+            '2' => 'Option two',
+            '3' => 'Option three',
+            '4' => 'Option four',
+            '5' => 'Option five',
+            '6' => 'Option six',
+            '7' => 'Option seven',
+            '8' => 'Option eight',
+            '9' => 'Option nine',
+            '10' => 'Option ten',
         ];
     }
 }

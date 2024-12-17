@@ -14,8 +14,12 @@ use App\Sharp\Utils\Filters\PeriodFilter;
 use App\Sharp\Utils\Filters\StateFilter;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
+use Code16\Sharp\EntityList\Fields\EntityListStateField;
 use Code16\Sharp\EntityList\SharpEntityList;
+use Code16\Sharp\Utils\Filters\DateRangeFilterValue;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
+use Code16\Sharp\Utils\PageAlerts\PageAlert;
+use Code16\Sharp\Utils\Transformers\Attributes\Eloquent\SharpTagsTransformer;
 use Code16\Sharp\Utils\Transformers\Attributes\Eloquent\SharpUploadModelThumbnailUrlTransformer;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Builder;
@@ -27,27 +31,31 @@ class PostList extends SharpEntityList
         $fields
             ->addField(
                 EntityListField::make('cover')
-                    ->setWidth(1)
+                    ->setWidth(.1)
                     ->hideOnSmallScreens(),
             )
             ->addField(
                 EntityListField::make('title')
                     ->setLabel('Title')
-                    ->setWidth(4)
-                    ->setWidthOnSmallScreens(6),
+            )
+            ->addField(
+                EntityListStateField::make()
             )
             ->addField(
                 EntityListField::make('author:name')
                     ->setLabel('Author')
-                    ->setWidth(3)
                     ->hideOnSmallScreens()
                     ->setSortable(),
             )
             ->addField(
+                EntityListField::make('categories')
+                    ->setLabel('Categories')
+                    ->hideOnSmallScreens()
+            )
+            ->addField(
                 EntityListField::make('published_at')
                     ->setLabel('Published at')
-                    ->setWidth(4)
-                    ->setWidthOnSmallScreens(6)
+                    ->setWidth(.2)
                     ->setSortable(),
             );
     }
@@ -55,17 +63,19 @@ class PostList extends SharpEntityList
     public function buildListConfig(): void
     {
         $this
-            ->configurePaginated()
+            ->configureCreateButtonLabel('New post...')
             ->configureEntityState('state', PostStateHandler::class)
             ->configureDefaultSort('published_at', 'desc')
             ->configureDelete(confirmationText: 'Are you sure you want to delete this post (this will permanently delete its data)?')
             ->configureSearchable();
+    }
 
+    protected function buildPageAlert(PageAlert $pageAlert): void
+    {
         if (! auth()->user()->isAdmin()) {
-            $this->configurePageAlert(
-                'As an editor, you can only edit your posts; you can see other posts except those which are still in draft.',
-                static::$pageAlertLevelSecondary,
-            );
+            $pageAlert
+                ->setMessage('As an editor, you can only edit your posts; you can see other posts except those which are still in draft.')
+                ->setLevelSecondary();
         }
     }
 
@@ -98,44 +108,42 @@ class PostList extends SharpEntityList
     public function getListData(): array|Arrayable
     {
         $posts = Post::select('posts.*')
-            ->with('author', 'categories')
+            ->with('author', 'categories', 'cover')
 
             // Handle specific IDs (in case of refresh, called by a state handler or a command)
             ->when(
                 $this->queryParams->specificIds(),
-                function (Builder $builder, array $ids) {
-                    $builder->whereIn('id', $ids);
-                },
+                fn (Builder $builder, array $ids) => $builder->whereIn('id', $ids),
             )
 
             // Handle filters
             ->when(
                 $this->queryParams->filterFor(StateFilter::class),
-                function (Builder $builder, string $state) {
-                    $builder->where('state', $state);
-                },
+                fn (Builder $builder, string $state) => $builder->where('state', $state),
             )
             ->when(
                 $this->queryParams->filterFor(PeriodFilter::class),
-                function (Builder $builder, array $dates) {
-                    $builder->whereBetween('published_at', [$dates['start'], $dates['end']]);
-                },
+                fn (Builder $builder, DateRangeFilterValue $dates) => $builder->whereBetween(
+                    'published_at',
+                    [$dates->getStart(), $dates->getEnd()]
+                ),
             )
             ->when(
                 $this->queryParams->filterFor(AuthorFilter::class),
-                function (Builder $builder, int $authorId) {
-                    $builder->where('author_id', $authorId);
-                },
+                fn (Builder $builder, int $authorId) => $builder->where('author_id', $authorId),
             )
             ->when(
                 $this->queryParams->filterFor(CategoryFilter::class),
                 function (Builder $builder, $categories) {
-                    collect($categories)
-                        ->each(function ($categoryId) use ($builder) {
-                            $builder->whereHas('categories', function (Builder $builder) use ($categoryId) {
-                                return $builder->where('categories.id', $categoryId);
+                    $builder->where(function (Builder $builder) use ($categories) {
+                        collect($categories)
+                            ->each(function ($categoryId) use ($builder) {
+                                $builder->orWhereHas(
+                                    'categories',
+                                    fn (Builder $builder) => $builder->where('categories.id', $categoryId)
+                                );
                             });
-                        });
+                    });
                 },
             )
 
@@ -156,37 +164,31 @@ class PostList extends SharpEntityList
             // Handle sorting
             ->when(
                 $this->queryParams->sortedBy() === 'author:name',
-                function (Builder $builder) {
-                    $builder
-                        ->leftJoin('users', 'posts.author_id', '=', 'users.id')
-                        ->orderBy('users.name', $this->queryParams->sortedDir());
-                },
-                function (Builder $builder) {
-                    $builder->orderBy('published_at', $this->queryParams->sortedDir() ?: 'desc');
-                },
+                fn (Builder $builder) => $builder
+                    ->leftJoin('users', 'posts.author_id', '=', 'users.id')
+                    ->orderBy('users.name', $this->queryParams->sortedDir()),
+                fn (Builder $builder) => $builder->orderBy('published_at', $this->queryParams->sortedDir() ?: 'desc')
             );
 
         return $this
             ->setCustomTransformer('title', function ($value, Post $instance) {
                 return sprintf(
-                    '<div><strong>fr</strong> %s</div><div><strong>en</strong> %s</div><div>%s</div>',
-                    $instance->getTranslation('title', 'fr'),
+                    '<div>%s</div><div><small>[fr] %s</div>',
                     $instance->getTranslation('title', 'en'),
-                    $instance->categories
-                        ->pluck('name')
-                        ->map(fn ($name) => '<span class="badge">'.$name.'</span>')
-                        ->implode(' '),
+                    $instance->getTranslation('title', 'fr')
                 );
             })
             ->setCustomTransformer('author:name', function ($value, $instance) {
-                return $instance->author_id
+                return $value
                     ? LinkToEntityList::make('posts')
-                        ->addFilter(AuthorFilter::class, $instance->author_id)
-                        ->renderAsText($instance->author->name)
+                        ->addFilter(AuthorFilter::class, $instance->id)
+                        ->setTooltip('See '.$value.' posts')
+                        ->renderAsText($value)
                     : null;
             })
             ->setCustomTransformer('cover', (new SharpUploadModelThumbnailUrlTransformer(100))->renderAsImageTag())
             ->setCustomTransformer('published_at', DateTimeCustomTransformer::class)
+            ->setCustomTransformer('categories', (new SharpTagsTransformer('name'))->setFilterLink('posts', CategoryFilter::class))
             ->transform($posts->paginate(20));
     }
 }
