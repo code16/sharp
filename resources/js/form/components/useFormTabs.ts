@@ -14,12 +14,7 @@ export function useFormTabs(props: { form: FormData }) {
     if(props.form.layout.tabbed && props.form.layout.tabs.length > 1) {
         watch(selectedTabSlug, () => {
             const url = location.origin + location.pathname + `?tab=${selectedTabSlug.value}`;
-            // @ts-ignore
-            router.page.url = url;
-            // @ts-ignore
-            history.replaceState(router.page, null, url);
-            // todo inertia v2 router.page doesn't exist so we will have to hack with popstate event
-            // window.dispatchEvent(new PopStateEvent('popstate'));
+            router.replace({ url, preserveState: true });
         }, { immediate: true });
     }
 

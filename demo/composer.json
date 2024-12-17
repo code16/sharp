@@ -7,7 +7,7 @@
         "blade-ui-kit/blade-icons": "^1.6",
         "code16/laravel-content-renderer": "^1.2",
         "guzzlehttp/guzzle": "^7.2",
-        "inertiajs/inertia-laravel": "^1.0",
+        "inertiajs/inertia-laravel": "^2.0",
         "intervention/image": "^3.4",
         "intervention/image-laravel": "^1.2",
         "laravel/framework": "^11.0",
