@@ -12,7 +12,7 @@
         }
     ],
     "require": {
-        "php": "8.2.*|8.3.*",
+        "php": "8.2.*|8.3.*|8.4.*",
         "code16/laravel-content-renderer": "^1.1.0",
         "intervention/image": "^3.4",
         "intervention/image-laravel": "^1.2",
