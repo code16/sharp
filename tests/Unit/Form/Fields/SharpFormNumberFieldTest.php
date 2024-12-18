@@ -45,7 +45,7 @@ class SharpFormNumberFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_show_controls()
+    public function we_can_define_showControls()
     {
         $formField = SharpFormNumberField::make('text')
             ->setShowControls();

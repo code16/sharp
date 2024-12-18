@@ -9,7 +9,7 @@ use Code16\Sharp\Tests\Unit\SharpEloquentBaseTestCase;
 class HasOneRelationUpdaterTest extends SharpEloquentBaseTestCase
 {
     /** @test */
-    public function we_can_update_a_has_one_relation()
+    public function we_can_update_a_hasOne_relation()
     {
         $mother = Person::create(['name' => 'Jane Wayne']);
         $son = Person::create(['name' => 'John Wayne']);
@@ -25,7 +25,7 @@ class HasOneRelationUpdaterTest extends SharpEloquentBaseTestCase
     }
 
     /** @test */
-    public function we_can_create_a_has_one_related()
+    public function we_can_create_a_hasOne_related()
     {
         $mother = Person::create(['name' => 'Jane Wayne']);
 

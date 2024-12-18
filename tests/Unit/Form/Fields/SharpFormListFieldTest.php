@@ -46,7 +46,7 @@ class SharpFormListFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_add_text()
+    public function we_can_define_addText()
     {
         $formField = $this->getDefaultList()
             ->setAddText('Add');
@@ -58,7 +58,7 @@ class SharpFormListFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_item_id_attribute()
+    public function we_can_define_itemIdAttribute()
     {
         $formField = $this->getDefaultList()
             ->setItemIdAttribute('key');
@@ -70,7 +70,7 @@ class SharpFormListFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_order_attribute()
+    public function we_can_define_orderAttribute()
     {
         $formField = $this->getDefaultList()
             ->setOrderAttribute('ordered');
@@ -79,7 +79,7 @@ class SharpFormListFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_max_item_count()
+    public function we_can_define_maxItemCount()
     {
         $formField = $this->getDefaultList()
             ->setMaxItemCount(10);
@@ -98,7 +98,7 @@ class SharpFormListFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_allow_bulk_upload_for_field()
+    public function we_can_define_allowBulkUploadForField()
     {
         $formField = $this->getDefaultList()
             ->allowBulkUploadForField('itemFieldKey');
@@ -117,7 +117,7 @@ class SharpFormListFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_set_bulk_upload_file_count_limit_at_once()
+    public function we_can_define_setBulkUploadFileCountLimitAtOnce()
     {
         $formField = $this->getDefaultList()
             ->setBulkUploadFileCountLimitAtOnce(8);
@@ -129,7 +129,7 @@ class SharpFormListFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_collapsed_item_inline_template()
+    public function we_can_define_collapsedItemInlineTemplate()
     {
         $formField = $this->getDefaultList()
             ->setCollapsedItemInlineTemplate('template');
@@ -141,7 +141,7 @@ class SharpFormListFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_add_an_item_field()
+    public function we_can_add_an_itemField()
     {
         $formField = $this->getDefaultList()
             ->addItemField(
@@ -157,7 +157,7 @@ class SharpFormListFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_find_an_item_field_by_its_key()
+    public function we_can_find_an_itemField_by_its_key()
     {
         $formField = $this->getDefaultList()
             ->addItemField(

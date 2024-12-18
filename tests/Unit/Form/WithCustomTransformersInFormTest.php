@@ -53,7 +53,7 @@ class WithCustomTransformersInFormTest extends SharpEloquentBaseTestCase
     }
 
     /** @test */
-    public function belongs_to_is_handled()
+    public function belongsTo_is_handled()
     {
         $mother = Person::create([
             'name' => 'Jane Wayne',
@@ -74,7 +74,7 @@ class WithCustomTransformersInFormTest extends SharpEloquentBaseTestCase
     }
 
     /** @test */
-    public function has_one_is_handled()
+    public function hasOne_is_handled()
     {
         $mother = Person::create([
             'name' => 'Jane Wayne',
@@ -96,7 +96,7 @@ class WithCustomTransformersInFormTest extends SharpEloquentBaseTestCase
     }
 
     /** @test */
-    public function has_many_is_handled()
+    public function hasMany_is_handled()
     {
         $mother = Person::create([
             'name' => 'Jane Wayne',
@@ -124,7 +124,7 @@ class WithCustomTransformersInFormTest extends SharpEloquentBaseTestCase
     }
 
     /** @test */
-    public function belongs_to_many_is_handled()
+    public function belongsToMany_is_handled()
     {
         $person1 = Person::create([
             'name' => 'John Wayne',
@@ -154,7 +154,7 @@ class WithCustomTransformersInFormTest extends SharpEloquentBaseTestCase
     }
 
     /** @test */
-    public function morph_one_is_handled()
+    public function morphOne_is_handled()
     {
         $person = Person::create(['name' => 'John Wayne']);
         $person->picture()->create(['file' => 'test.jpg']);
@@ -170,7 +170,7 @@ class WithCustomTransformersInFormTest extends SharpEloquentBaseTestCase
     }
 
     /** @test */
-    public function morph_many_is_handled()
+    public function morphMany_is_handled()
     {
         $person = Person::create(['name' => 'John Wayne']);
         $person->pictures()->create(['file' => 'test.jpg']);
@@ -250,7 +250,7 @@ class WithCustomTransformersInFormTest extends SharpEloquentBaseTestCase
     }
 
     /** @test */
-    public function we_can_use_apply_if_attribute_is_missing_in_a_custom_transformer()
+    public function we_can_use_applyIfAttributeIsMissing_in_a_custom_transformer()
     {
         $person = Person::create([
             'name' => 'John Wayne',

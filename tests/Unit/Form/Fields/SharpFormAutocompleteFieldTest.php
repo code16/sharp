@@ -66,7 +66,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_local_values_as_a_id_label_array()
+    public function we_can_define_localValues_as_a_id_label_array()
     {
         $formField = $this->getDefaultLocalAutocomplete([
             ['id' => 1, 'label' => 'Elem 1'],
@@ -83,7 +83,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_local_values_as_an_object_array()
+    public function we_can_define_localValues_as_an_object_array()
     {
         $formField = $this->getDefaultLocalAutocomplete([
             (object) ['id' => 1, 'label' => 'Elem 1'],
@@ -100,7 +100,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_search_min_chars()
+    public function we_can_define_searchMinChars()
     {
         $formField = $this->getDefaultLocalAutocomplete()
             ->setSearchMinChars(3);
@@ -114,7 +114,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_debounce_delay()
+    public function we_can_define_debounceDelay()
     {
         $formField = $this->getDefaultLocalAutocomplete()
             ->setDebounceDelayInMilliseconds(500);
@@ -128,7 +128,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_set_data_wrapper()
+    public function we_can_define_setDataWrapper()
     {
         $formField = $this->getDefaultLocalAutocomplete()
             ->setDataWrapper('test');
@@ -158,7 +158,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_template_data()
+    public function we_can_define_templateData()
     {
         $formField = $this->getDefaultLocalAutocomplete()
             ->setAdditionalTemplateData([
@@ -176,7 +176,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_cant_define_a_remote_autocomplete_without_remote_endpoint()
+    public function we_cant_define_a_remote_autocomplete_without_remoteEndpoint()
     {
         $this->expectException(SharpFormFieldValidationException::class);
 
@@ -187,7 +187,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_linked_local_values_with_dynamic_attributes()
+    public function we_can_define_linked_localValues_with_dynamic_attributes()
     {
         $formField = $this->getDefaultLocalAutocomplete([
             'A' => [
@@ -216,7 +216,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_linked_local_values_with_dynamic_attributes_and_localization()
+    public function we_can_define_linked_localValues_with_dynamic_attributes_and_localization()
     {
         $formField = $this->getDefaultLocalAutocomplete([
             'A' => [
@@ -245,7 +245,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_linked_local_values_with_dynamic_attributes_on_multiple_master_fields()
+    public function we_can_define_linked_localValues_with_dynamic_attributes_on_multiple_master_fields()
     {
         $formField = $this->getDefaultLocalAutocomplete([
             'A' => [

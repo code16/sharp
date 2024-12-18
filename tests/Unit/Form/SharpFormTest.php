@@ -165,7 +165,7 @@ class SharpFormTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_declare_set_display_show_page_after_creation_in_config()
+    public function we_can_declare_setDisplayShowPageAfterCreation_in_config()
     {
         $sharpForm = new class() extends BaseSharpForm
         {

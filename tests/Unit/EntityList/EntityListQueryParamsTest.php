@@ -9,7 +9,7 @@ use Code16\Sharp\Tests\SharpTestCase;
 class EntityListQueryParamsTest extends SharpTestCase
 {
     /** @test */
-    public function we_can_know_there_is_a_search_with_has_search()
+    public function we_can_know_there_is_a_search_with_hasSearch()
     {
         $this->assertTrue($this->buildParams(1, 'test')->hasSearch());
         $this->assertFalse($this->buildParams(1, '')->hasSearch());

@@ -30,7 +30,7 @@ class SharpFormDateFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_has_date_and_has_time()
+    public function we_can_define_hasDate_and_hasTime()
     {
         $dateFormField = SharpFormDateField::make('date')
             ->setHasDate();
@@ -111,7 +111,7 @@ class SharpFormDateFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function default_display_format_depends_on_date_time_configuration()
+    public function default_displayFormat_depends_on_date_time_configuration()
     {
         $dateFormField = SharpFormDateField::make('date')
             ->setHasDate();

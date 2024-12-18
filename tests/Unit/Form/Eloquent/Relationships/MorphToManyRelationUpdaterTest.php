@@ -30,7 +30,7 @@ class MorphToManyRelationUpdaterTest extends SharpEloquentBaseTestCase
     }
 
     /** @test */
-    public function we_can_update_a_morph_to_many_relation()
+    public function we_can_update_a_morphToMany_relation()
     {
         $person = TaggablePerson::create(['name' => 'A']);
         $tag = Tag::create(['name' => 'A']);
@@ -49,7 +49,7 @@ class MorphToManyRelationUpdaterTest extends SharpEloquentBaseTestCase
     }
 
     /** @test */
-    public function we_can_update_an_existing_morph_to_many_relation()
+    public function we_can_update_an_existing_morphToMany_relation()
     {
         $person = TaggablePerson::create(['name' => 'A']);
         $oldTag = Tag::create(['name' => 'A']);

@@ -183,7 +183,7 @@ class EntityListControllerTest extends BaseApiTestCase
     }
 
     /** @test */
-    public function list_config_contains_has_show_page_is_relevant()
+    public function list_config_contains_hasShowPage_is_relevant()
     {
         $this->getJson('/sharp/api/list/person')
             ->assertOk()

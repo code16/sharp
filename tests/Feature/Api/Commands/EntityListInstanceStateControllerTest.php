@@ -76,7 +76,7 @@ class EntityListInstanceStateControllerTest extends BaseApiTestCase
     }
 
     /** @test */
-    public function we_cant_update_the_state_of_an_entity_with_a_wrong_state_id()
+    public function we_cant_update_the_state_of_an_entity_with_a_wrong_stateId()
     {
         $this->buildTheWorld();
 

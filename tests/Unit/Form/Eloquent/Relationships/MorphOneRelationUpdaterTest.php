@@ -10,7 +10,7 @@ use Code16\Sharp\Tests\Unit\SharpEloquentBaseTestCase;
 class MorphOneRelationUpdaterTest extends SharpEloquentBaseTestCase
 {
     /** @test */
-    public function we_can_create_a_morph_one_related()
+    public function we_can_create_a_morphOne_related()
     {
         $person = Person::create(['name' => 'John Wayne']);
 
@@ -26,7 +26,7 @@ class MorphOneRelationUpdaterTest extends SharpEloquentBaseTestCase
     }
 
     /** @test */
-    public function we_can_update_a_morph_one_related()
+    public function we_can_update_a_morphOne_related()
     {
         $person = Person::create(['name' => 'John Wayne']);
         $person->picture()->create([
@@ -45,7 +45,7 @@ class MorphOneRelationUpdaterTest extends SharpEloquentBaseTestCase
     }
 
     /** @test */
-    public function we_ignore_a_morph_one_related_if_null()
+    public function we_ignore_a_morphOne_related_if_null()
     {
         $person = Person::create(['name' => 'John Wayne']);
 

@@ -164,7 +164,7 @@ class SharpShowTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_declare_a_multiform_attribute()
+    public function we_can_declare_a_multiformAttribute()
     {
         $sharpShow = new class() extends BaseSharpShowTestDefault
         {

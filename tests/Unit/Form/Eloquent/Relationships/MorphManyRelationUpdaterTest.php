@@ -9,7 +9,7 @@ use Code16\Sharp\Tests\Unit\SharpEloquentBaseTestCase;
 class MorphManyRelationUpdaterTest extends SharpEloquentBaseTestCase
 {
     /** @test */
-    public function we_can_create_a_morph_many_related()
+    public function we_can_create_a_morphMany_related()
     {
         $person = Person::create(['name' => 'John Wayne']);
 
@@ -28,7 +28,7 @@ class MorphManyRelationUpdaterTest extends SharpEloquentBaseTestCase
     }
 
     /** @test */
-    public function we_can_update_a_morph_many_related()
+    public function we_can_update_a_morphMany_related()
     {
         $person = Person::create(['name' => 'John Wayne']);
         $person->pictures()->create([

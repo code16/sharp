@@ -128,7 +128,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpEloquentBaseTestCase
     }
 
     /** @test */
-    public function we_can_update_a_belongs_to_attribute()
+    public function we_can_update_a_belongsTo_attribute()
     {
         $mother = Person::create(['name' => 'Jane Wayne']);
         $person = Person::create(['name' => 'John Wayne']);
@@ -150,7 +150,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpEloquentBaseTestCase
     }
 
     /** @test */
-    public function we_can_update_a_has_one_attribute()
+    public function we_can_update_a_hasOne_attribute()
     {
         $mother = Person::create(['name' => 'Jane Wayne']);
         $son = Person::create(['name' => 'John Wayne']);
@@ -174,7 +174,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpEloquentBaseTestCase
     }
 
     /** @test */
-    public function we_can_update_a_has_many_attribute()
+    public function we_can_update_a_hasMany_attribute()
     {
         $mother = Person::create(['name' => 'Jane Wayne']);
         $son = Person::create(['name' => 'AAA', 'mother_id' => $mother->id]);
@@ -210,7 +210,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpEloquentBaseTestCase
     }
 
     /** @test */
-    public function we_can_update_a_belongs_to_many_attribute()
+    public function we_can_update_a_belongsToMany_attribute()
     {
         $person1 = Person::create(['name' => 'John Ford']);
         $person2 = Person::create(['name' => 'John Wayne']);
@@ -240,7 +240,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpEloquentBaseTestCase
     }
 
     /** @test */
-    public function we_can_create_a_new_related_in_a_belongs_to_many_attribute()
+    public function we_can_create_a_new_related_in_a_belongsToMany_attribute()
     {
         $person1 = Person::create(['name' => 'John Ford']);
 
@@ -275,7 +275,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpEloquentBaseTestCase
     }
 
     /** @test */
-    public function we_handle_the_order_attribute_in_a_has_many_relation_in_a_creation_case()
+    public function we_handle_the_order_attribute_in_a_hasMany_relation_in_a_creation_case()
     {
         $mother = Person::create(['name' => 'Jane Wayne']);
 
@@ -312,7 +312,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpEloquentBaseTestCase
     }
 
     /** @test */
-    public function we_handle_the_order_attribute_in_a_has_many_relation_in_an_update_case()
+    public function we_handle_the_order_attribute_in_a_hasMany_relation_in_an_update_case()
     {
         $mother = Person::create(['name' => 'A']);
         $son = Person::create(['name' => 'B', 'order' => 30, 'mother_id' => $mother->id]);
@@ -349,7 +349,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpEloquentBaseTestCase
     }
 
     /** @test */
-    public function we_can_update_a_morph_one_attribute()
+    public function we_can_update_a_morphOne_attribute()
     {
         $person = Person::create(['name' => 'John Wayne']);
 
@@ -371,7 +371,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpEloquentBaseTestCase
     }
 
     /** @test */
-    public function the_relation_separator_is_properly_handled_in_a_belongs_to_case()
+    public function the_relation_separator_is_properly_handled_in_a_belongsTo_case()
     {
         $mother = Person::create(['name' => 'AAA']);
         $son = Person::create(['name' => 'John Wayne', 'mother_id' => $mother->id]);
@@ -398,7 +398,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpEloquentBaseTestCase
     }
 
     /** @test */
-    public function the_relation_separator_is_properly_handled_in_a_has_one_case()
+    public function the_relation_separator_is_properly_handled_in_a_hasOne_case()
     {
         $mother = Person::create(['name' => 'Jane Wayne']);
         $son = Person::create(['name' => 'AAA', 'mother_id' => $mother->id]);
@@ -426,7 +426,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpEloquentBaseTestCase
     }
 
     /** @test */
-    public function the_relation_separator_is_properly_handled_in_a_has_one_creation_case()
+    public function the_relation_separator_is_properly_handled_in_a_hasOne_creation_case()
     {
         $mother = Person::create(['name' => 'Jane Wayne']);
 

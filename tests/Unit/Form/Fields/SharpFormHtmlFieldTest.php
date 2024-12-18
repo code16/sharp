@@ -34,7 +34,7 @@ class SharpFormHtmlFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_template_data()
+    public function we_can_define_templateData()
     {
         $formField = SharpFormHtmlField::make('html')
             ->setInlineTemplate('<b>test</b>')

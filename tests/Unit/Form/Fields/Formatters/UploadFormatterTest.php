@@ -172,7 +172,7 @@ class UploadFormatterTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_transform_the_newly_uploaded_file_if_is_transform_original_is_configured()
+    public function we_transform_the_newly_uploaded_file_if_isTransformOriginal_is_configured()
     {
         $uploadedFile = UploadedFile::fake()->image('image.jpg', 600, 600);
         $uploadedFile->storeAs('/tmp', 'image.jpg', ['disk' => 'local']);
@@ -210,7 +210,7 @@ class UploadFormatterTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_transform_an_existing_file_if_is_transform_original_is_configured()
+    public function we_transform_an_existing_file_if_isTransformOriginal_is_configured()
     {
         $existingFile = UploadedFile::fake()->image('image.jpg', 600, 600);
         $existingFile->storeAs('/data/Test', 'image.jpg', ['disk' => 'local']);
@@ -263,7 +263,7 @@ class UploadFormatterTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_get_use_a_closure_as_storage_base_path()
+    public function we_get_use_a_closure_as_storageBasePath()
     {
         UploadedFile::fake()
             ->image('image.jpg')

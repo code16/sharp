@@ -52,7 +52,7 @@ class SharpShowEntityListFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_hide_filter_with_value()
+    public function we_can_define_hideFilterWithValue()
     {
         $field = SharpShowEntityListField::make('entityListField', 'entityKey')
             ->hideFilterWithValue('f1', 'value1');
@@ -68,7 +68,7 @@ class SharpShowEntityListFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_hide_filter_with_value_with_a_callable()
+    public function we_can_define_hideFilterWithValue_with_a_callable()
     {
         $field = SharpShowEntityListField::make('entityListField', 'entityKey')
             ->hideFilterWithValue('f1', function ($instanceId) {
@@ -86,7 +86,7 @@ class SharpShowEntityListFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_show_entity_state()
+    public function we_can_define_showEntityState()
     {
         $field = SharpShowEntityListField::make('entityListField', 'entityKey')
             ->showEntityState(false);
@@ -98,7 +98,7 @@ class SharpShowEntityListFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_show_reorder_button()
+    public function we_can_define_showReorderButton()
     {
         $field = SharpShowEntityListField::make('entityListField', 'entityKey')
             ->showReorderButton(false);
@@ -110,7 +110,7 @@ class SharpShowEntityListFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_show_create_button()
+    public function we_can_define_showCreateButton()
     {
         $field = SharpShowEntityListField::make('entityListField', 'entityKey')
             ->showCreateButton(false);
@@ -122,7 +122,7 @@ class SharpShowEntityListFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_show_search_field()
+    public function we_can_define_showSearchField()
     {
         $field = SharpShowEntityListField::make('entityListField', 'entityKey')
             ->showSearchField(false);
@@ -134,7 +134,7 @@ class SharpShowEntityListFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_show_count()
+    public function we_can_define_showCount()
     {
         $field = SharpShowEntityListField::make('entityListField', 'entityKey')
             ->showCount();
@@ -146,7 +146,7 @@ class SharpShowEntityListFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_hide_entity_commands()
+    public function we_can_define_hideEntityCommands()
     {
         $field = SharpShowEntityListField::make('entityListField', 'entityKey')
             ->hideEntityCommand(['c1', 'c2']);
@@ -177,7 +177,7 @@ class SharpShowEntityListFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_hide_instance_commands()
+    public function we_can_define_hideInstanceCommands()
     {
         $field = SharpShowEntityListField::make('entityListField', 'entityKey')
             ->hideInstanceCommand(['c1', 'c2']);

@@ -21,7 +21,7 @@ class SharpPanelTest extends SharpTestCase
     }
 
     /** @test */
-    public function returned_array_contains_the_sharp_link_to_link()
+    public function returned_array_contains_the_SharpLinkTo_link()
     {
         $widget = SharpPanelWidget::make('name')
             ->setInlineTemplate('<b>test</b>')

@@ -58,7 +58,7 @@ class SharpWidgetTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_an_sharp_link_to_link()
+    public function we_can_define_an_SharpLinkTo_link()
     {
         $widget = SomeTestWidget::make('name')
             ->setLink(LinkToEntityList::make('entity'));

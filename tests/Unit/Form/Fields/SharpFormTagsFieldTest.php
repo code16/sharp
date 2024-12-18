@@ -41,7 +41,7 @@ class SharpFormTagsFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_create_text()
+    public function we_can_define_createText()
     {
         $formField = $this->getDefaultTags()
             ->setCreateText('A');
@@ -53,7 +53,7 @@ class SharpFormTagsFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_max_tags_count()
+    public function we_can_define_maxTagsCount()
     {
         $formField = $this->getDefaultTags()
             ->setMaxTagCount(2);
