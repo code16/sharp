@@ -9,7 +9,7 @@ use Code16\Sharp\Tests\Unit\SharpEloquentBaseTestCase;
 class HasManyRelationUpdaterTest extends SharpEloquentBaseTestCase
 {
     /** @test */
-    public function we_can_update_a_hasMany_relation()
+    public function we_can_update_a_has_many_relation()
     {
         $mother = Person::create(['name' => 'Jane Wayne']);
         $son1 = Person::create(['name' => 'A', 'mother_id' => $mother->id]);
@@ -29,7 +29,7 @@ class HasManyRelationUpdaterTest extends SharpEloquentBaseTestCase
     }
 
     /** @test */
-    public function we_can_create_a_new_related_item_in_a_hasMany_relation()
+    public function we_can_create_a_new_related_item_in_a_has_many_relation()
     {
         $mother = Person::create(['name' => 'Jane Wayne']);
 
@@ -47,7 +47,7 @@ class HasManyRelationUpdaterTest extends SharpEloquentBaseTestCase
     }
 
     /** @test */
-    public function we_do_not_update_the_id_attribute_when_updating_a_related_item_in_a_hasMany_relation()
+    public function we_do_not_update_the_id_attribute_when_updating_a_related_item_in_a_has_many_relation()
     {
         $mother = Person::create(['name' => 'Jane Wayne']);
 
@@ -61,7 +61,7 @@ class HasManyRelationUpdaterTest extends SharpEloquentBaseTestCase
     }
 
     /** @test */
-    public function we_certainly_do_update_the_id_attribute_when_updating_a_related_item_in_a_hasMany_relation_in_a_non_incrementing_id_case()
+    public function we_certainly_do_update_the_id_attribute_when_updating_a_related_item_in_a_has_many_relation_in_a_non_incrementing_id_case()
     {
         $mother = PersonWithFixedId::create(['name' => 'Jane Wayne']);
 
@@ -77,7 +77,7 @@ class HasManyRelationUpdaterTest extends SharpEloquentBaseTestCase
     }
 
     /** @test */
-    public function the_optional_getDefaultAttributesFor_method_is_called_on_an_item_creation()
+    public function the_optional_get_default_attributes_for_method_is_called_on_an_item_creation()
     {
         $mother = new class() extends Person
         {
@@ -105,7 +105,7 @@ class HasManyRelationUpdaterTest extends SharpEloquentBaseTestCase
     }
 
     /** @test */
-    public function we_can_delete_an_existing_related_item_in_a_hasMany_relation()
+    public function we_can_delete_an_existing_related_item_in_a_has_many_relation()
     {
         $mother = Person::create(['name' => 'Jane Wayne']);
         $son1 = Person::create(['name' => 'John Wayne', 'mother_id' => $mother->id]);

@@ -9,7 +9,7 @@ use Code16\Sharp\Tests\Unit\SharpEloquentBaseTestCase;
 class BelongsToRelationUpdaterTest extends SharpEloquentBaseTestCase
 {
     /** @test */
-    public function we_can_update_a_belongsTo_relation()
+    public function we_can_update_a_belongs_to_relation()
     {
         $mother = Person::create(['name' => 'Jane Wayne']);
         $person = Person::create(['name' => 'John Wayne']);
@@ -25,7 +25,7 @@ class BelongsToRelationUpdaterTest extends SharpEloquentBaseTestCase
     }
 
     /** @test */
-    public function we_can_create_a_belongsTo_relation()
+    public function we_can_create_a_belongs_to_relation()
     {
         $person = Person::create(['name' => 'John Wayne']);
 
@@ -43,7 +43,7 @@ class BelongsToRelationUpdaterTest extends SharpEloquentBaseTestCase
     }
 
     /** @test */
-    public function we_set_default_attributes_when_creating_a_belongsTo_relation()
+    public function we_set_default_attributes_when_creating_a_belongs_to_relation()
     {
         $person = PersonWithDefaultAttributes::create(['name' => 'John Wayne']);
 

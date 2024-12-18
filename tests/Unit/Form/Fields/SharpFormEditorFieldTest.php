@@ -55,7 +55,7 @@ class SharpFormEditorFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_height_with_maxHeight()
+    public function we_can_define_height_with_max_height()
     {
         $formField = SharpFormEditorField::make('text');
 
@@ -193,7 +193,7 @@ class SharpFormEditorFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_setWithoutParagraphs()
+    public function we_can_define_set_without_paragraphs()
     {
         $formField = SharpFormEditorField::make('text')
             ->setWithoutParagraphs();
@@ -205,7 +205,7 @@ class SharpFormEditorFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_maxLength_and_showCount()
+    public function we_can_define_max_length_and_show_count()
     {
         $this->assertArraySubset(
             ['maxLength' => 500, 'showCharacterCount' => true],

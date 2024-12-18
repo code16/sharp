@@ -57,7 +57,7 @@ class SharpFormFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_helpMessage()
+    public function we_can_define_help_message()
     {
         $formField = SomeTestFormField::make('name')
             ->setHelpMessage('message');
@@ -69,7 +69,7 @@ class SharpFormFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_conditionalDisplay()
+    public function we_can_define_conditional_display()
     {
         $formField = SomeTestFormField::make('name')
             ->setConditionalDisplayOrOperator()
@@ -105,7 +105,7 @@ class SharpFormFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_readOnly()
+    public function we_can_define_read_only()
     {
         $formField = SomeTestFormField::make('name')
             ->setReadOnly();
@@ -117,7 +117,7 @@ class SharpFormFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_extraStyle()
+    public function we_can_define_extra_style()
     {
         $formField = SomeTestFormField::make('name')
             ->setExtraStyle('font-weight: bold');

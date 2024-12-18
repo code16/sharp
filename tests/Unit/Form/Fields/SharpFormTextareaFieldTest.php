@@ -45,7 +45,7 @@ class SharpFormTextareaFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_maxLength()
+    public function we_can_define_max_length()
     {
         $formField = SharpFormTextareaField::make('text')
             ->setMaxLength(10);

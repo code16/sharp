@@ -120,7 +120,7 @@ class EntityListEntityCommandControllerTest extends BaseApiTestCase
     }
 
     /** @test */
-    public function we_can_call_a_streamDownload_entity_command()
+    public function we_can_call_a_stream_download_entity_command()
     {
         $this->buildTheWorld();
         $this->withoutExceptionHandling();

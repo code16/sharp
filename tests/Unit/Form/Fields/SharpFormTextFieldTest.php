@@ -8,7 +8,7 @@ use Code16\Sharp\Tests\SharpTestCase;
 class SharpFormTextFieldTest extends SharpTestCase
 {
     /** @test */
-    public function we_can_define_inputType()
+    public function we_can_define_input_type()
     {
         $defaultFormField = SharpFormTextField::make('name');
 
@@ -47,7 +47,7 @@ class SharpFormTextFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_maxLength()
+    public function we_can_define_max_length()
     {
         $formField = SharpFormTextField::make('text')
             ->setMaxLength(10);

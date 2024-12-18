@@ -58,7 +58,7 @@ class SharpFormSelectFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_maxSelected()
+    public function we_can_define_max_selected()
     {
         $formField = $this->getDefaultSelect()
             ->setMaxSelected(12);
@@ -106,7 +106,7 @@ class SharpFormSelectFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_showSelectAll()
+    public function we_can_define_show_select_all()
     {
         $formField = $this->getDefaultSelect()
             ->allowSelectAll();

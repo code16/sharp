@@ -178,7 +178,7 @@ class SharpUploadModelFormAttributeTransformerTest extends SharpEloquentBaseTest
     }
 
     /** @test */
-    public function we_can_fake_an_sharpUpload_and_transform_a_single_upload()
+    public function we_can_fake_an_sharp_upload_and_transform_a_single_upload()
     {
         $file = $this->createImage();
 
