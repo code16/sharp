@@ -12,6 +12,7 @@
         "new_with_parentheses": {
             "named_class": true,
             "anonymous_class": true
-        }
+        },
+        "php_unit_method_casing": false
     }
 }
