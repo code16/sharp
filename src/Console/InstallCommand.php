@@ -15,8 +15,7 @@ class InstallCommand extends Command
         $this->publishAssets();
         $this->initSharpMenu();
 
-        $this->components->info('Sharp has been installed!');
-        $this->components->info('You can now generate your first Sharp Entity with [php artisan sharp:generator]');
+        $this->components->info('Sharp has been installed! You can now generate your first Sharp Entity with [php artisan sharp:generator]');
 
         return Command::SUCCESS;
     }
@@ -28,8 +27,6 @@ class InstallCommand extends Command
         ]);
 
         $this->registerSharpProvider();
-
-        $this->components->twoColumnDetail('Service provider', app_path('Providers/SharpServiceProvider.php'));
     }
 
     private function publishAssets(): void
@@ -38,7 +35,7 @@ class InstallCommand extends Command
             '--tag' => 'sharp-assets',
         ]);
 
-        $this->components->twoColumnDetail('Assets', 'public/vendor/sharp');
+        $this->components->info('Sharp assets published');
 
         $this->replaceFileContent(
             base_path('composer.json'),
@@ -46,7 +43,7 @@ class InstallCommand extends Command
             'ComposerScripts::postAutoloadDump",'.PHP_EOL.'            "@php artisan vendor:publish --tag=sharp-assets --force",'.PHP_EOL,
         );
 
-        $this->components->twoColumnDetail('Post autoload script', 'composer.json');
+        $this->components->info('Sharp assets autoload script added to composer.json');
 
         $this->replaceFileContent(
             base_path('.gitignore'),
@@ -54,7 +51,7 @@ class InstallCommand extends Command
             PHP_EOL.'/vendor'.PHP_EOL.'/public/vendor'.PHP_EOL,
         );
 
-        $this->components->twoColumnDetail('Ignore assets in git', '.gitignore');
+        $this->components->info('Sharp assets added to .gitignore');
     }
 
     private function initSharpMenu(): void
@@ -64,8 +61,6 @@ class InstallCommand extends Command
         ]);
 
         $this->addSharpMenuToServiceProvider();
-
-        $this->components->twoColumnDetail('Menu', $this->getSharpRootNamespace().'\\SharpMenu.php');
     }
 
     private function getSharpRootNamespace(): string

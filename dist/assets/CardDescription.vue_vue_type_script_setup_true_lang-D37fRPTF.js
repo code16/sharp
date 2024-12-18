@@ -1,1 +1,0 @@
-import{d as o,o as t,z as r,p as n,U as c,u as l,y as p}from"./sharp-xia2_OGg.js";const u=o({__name:"CardDescription",props:{class:{}},setup(s){const e=s;return(a,m)=>(t(),r("div",{class:c(l(p)("text-sm text-muted-foreground",e.class))},[n(a.$slots,"default")],2))}});export{u as _};

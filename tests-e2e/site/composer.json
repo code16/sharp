@@ -7,9 +7,10 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "ext-json": "*",
         "blade-ui-kit/blade-icons": "^1.7",
         "code16/laravel-content-renderer": "^1.2",
-        "inertiajs/inertia-laravel": "^1.3",
+        "inertiajs/inertia-laravel": "^2.0",
         "intervention/image": "^3.9",
         "intervention/image-laravel": "^1.3",
         "laravel/framework": "^11.31",
@@ -17,8 +18,7 @@
         "spatie/laravel-db-snapshots": "^2.6",
         "spatie/laravel-ray": "^1.37",
         "spatie/laravel-translatable": "^6.8",
-        "tightenco/ziggy": "^2.4",
-        "ext-json": "*"
+        "tightenco/ziggy": "^2.4"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
