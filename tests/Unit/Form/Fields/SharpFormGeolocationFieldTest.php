@@ -24,7 +24,7 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_displayUnit()
+    public function we_can_define_display_unit()
     {
         $formField = SharpFormGeolocationField::make('geo')
             ->setDisplayUnitDegreesMinutesSeconds();
@@ -56,7 +56,7 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_a_global_apiKey()
+    public function we_can_define_a_global_api_key()
     {
         $formField = SharpFormGeolocationField::make('geo')
             ->setApiKey('my-key');
@@ -71,7 +71,7 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_maps_or_geocoding_apiKey()
+    public function we_can_define_maps_or_geocoding_api_key()
     {
         $formField = SharpFormGeolocationField::make('geo')
             ->setMapsApiKey('my-key');
@@ -97,7 +97,7 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_zoomLevel()
+    public function we_can_define_zoom_level()
     {
         $formField = SharpFormGeolocationField::make('geo')
             ->setZoomLevel(15);
@@ -109,7 +109,7 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_initialPosition()
+    public function we_can_define_initial_position()
     {
         $formField = SharpFormGeolocationField::make('geo')
             ->setInitialPosition(12.4, -3.461894989013672);
@@ -125,7 +125,7 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_clear_initialPosition()
+    public function we_can_clear_initial_position()
     {
         $formField = SharpFormGeolocationField::make('geo')
             ->setInitialPosition(12.4, 24.5);

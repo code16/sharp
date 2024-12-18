@@ -26,7 +26,7 @@ class SharpShowTextFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_collapseWordCount()
+    public function we_can_define_collapse_word_count()
     {
         $field = SharpShowTextField::make('textfield')
             ->collapseToWordCount(15);
@@ -44,7 +44,7 @@ class SharpShowTextFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_showIfEmpty()
+    public function we_can_define_show_if_empty()
     {
         $field = SharpShowTextField::make('textfield')
             ->setShowIfEmpty(true);
@@ -78,7 +78,7 @@ class SharpShowTextFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_reset_collapseWordCount()
+    public function we_can_reset_collapse_word_count()
     {
         $field = SharpShowTextField::make('textfield')
             ->collapseToWordCount(15);

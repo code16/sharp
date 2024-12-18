@@ -17,7 +17,7 @@ class BreadcrumbTest extends BaseApiTestCase
     }
 
     /** @test */
-    public function breadcrumb_is_appended_and_built_depending_on_referer_for_API_calls()
+    public function breadcrumb_is_appended_and_built_depending_on_referer_for_ap_i_calls()
     {
         $this->buildTheWorld();
 

@@ -30,7 +30,7 @@ class SharpAssertionsTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_test_getSharpForm()
+    public function we_can_test_get_sharp_form()
     {
         $fake = new class('test') extends SharpTestCase
         {
@@ -53,7 +53,7 @@ class SharpAssertionsTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_test_updateSharpForm()
+    public function we_can_test_update_sharp_form()
     {
         $fake = new class('test') extends SharpTestCase
         {
@@ -82,7 +82,7 @@ class SharpAssertionsTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_test_storeSharpForm()
+    public function we_can_test_store_sharp_form()
     {
         $fake = new class('test') extends SharpTestCase
         {
@@ -111,7 +111,7 @@ class SharpAssertionsTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_test_deleteSharpEntityList()
+    public function we_can_test_delete_sharp_entity_list()
     {
         $fake = new class('test') extends SharpTestCase
         {
@@ -134,7 +134,7 @@ class SharpAssertionsTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_test_deleteSharpShow()
+    public function we_can_test_delete_sharp_show()
     {
         $fake = new class('test') extends SharpTestCase
         {
@@ -157,7 +157,7 @@ class SharpAssertionsTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_test_callSharpInstanceCommandFromList()
+    public function we_can_test_call_sharp_instance_command_from_list()
     {
         $fake = new class('test') extends SharpTestCase
         {
@@ -187,7 +187,7 @@ class SharpAssertionsTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_test_callSharpInstanceCommandFromShow()
+    public function we_can_test_call_sharp_instance_command_from_show()
     {
         $fake = new class('test') extends SharpTestCase
         {
@@ -217,7 +217,7 @@ class SharpAssertionsTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_test_callSharpInstanceCommandFromList_with_a_wizard_step()
+    public function we_can_test_call_sharp_instance_command_from_list_with_a_wizard_step()
     {
         $fake = new class('test') extends SharpTestCase
         {

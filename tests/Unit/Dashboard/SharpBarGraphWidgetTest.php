@@ -44,7 +44,7 @@ class SharpBarGraphWidgetTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_showLegend_attribute()
+    public function we_can_define_show_legend_attribute()
     {
         $widget = SharpBarGraphWidget::make('name')
             ->setShowLegend(false);
@@ -62,7 +62,7 @@ class SharpBarGraphWidgetTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_displayHorizontalAxisAsTimeline_attribute()
+    public function we_can_define_display_horizontal_axis_as_timeline_attribute()
     {
         $widget = SharpBarGraphWidget::make('name')
             ->setDisplayHorizontalAxisAsTimeline();

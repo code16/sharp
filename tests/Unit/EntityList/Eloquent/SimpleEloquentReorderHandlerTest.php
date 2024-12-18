@@ -9,7 +9,7 @@ use Code16\Sharp\Tests\Unit\SharpEloquentBaseTestCase;
 class SimpleEloquentReorderHandlerTest extends SharpEloquentBaseTestCase
 {
     /** @test */
-    public function we_can_use_SimpleEloquentReorderHandler()
+    public function we_can_use_simple_eloquent_reorder_handler()
     {
         Person::create(['id' => 10, 'name' => 'Bob', 'order' => 1]);
         Person::create(['id' => 20, 'name' => 'Bob', 'order' => 2]);
@@ -22,7 +22,7 @@ class SimpleEloquentReorderHandlerTest extends SharpEloquentBaseTestCase
     }
 
     /** @test */
-    public function we_can_use_SimpleEloquentReorderHandler_with_custom_order_attribute()
+    public function we_can_use_simple_eloquent_reorder_handler_with_custom_order_attribute()
     {
         Person::create(['id' => 20, 'name' => 'Bob', 'order' => 3, 'age' => 22]);
         Person::create(['id' => 30, 'name' => 'Bob', 'order' => 2, 'age' => 32]);

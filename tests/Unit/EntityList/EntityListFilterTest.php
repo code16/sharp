@@ -242,7 +242,7 @@ class EntityListFilterTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_searchKeys_on_a_filter()
+    public function we_can_define_search_keys_on_a_filter()
     {
         $list = new class() extends SharpEntityDefaultTestList
         {

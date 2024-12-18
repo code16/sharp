@@ -26,7 +26,7 @@ class SharpFormUploadFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_maxFileSize()
+    public function we_can_define_max_file_size()
     {
         $formField = SharpFormUploadField::make('file')
             ->setMaxFileSize(.5);
@@ -38,7 +38,7 @@ class SharpFormUploadFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_compactThumbnail()
+    public function we_can_define_compact_thumbnail()
     {
         $formField = SharpFormUploadField::make('file')
             ->setCompactThumbnail();
@@ -62,7 +62,7 @@ class SharpFormUploadFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_transformKeepOriginal_with_transformable()
+    public function we_can_define_transform_keep_original_with_transformable()
     {
         $formField = SharpFormUploadField::make('file')
             ->setTransformable(true, false);
@@ -77,7 +77,7 @@ class SharpFormUploadFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_transformKeepOriginal_with_config()
+    public function we_can_define_transform_keep_original_with_config()
     {
         config()->set('sharp.uploads.transform_keep_original_image', false);
 
@@ -93,7 +93,7 @@ class SharpFormUploadFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_fileFilter()
+    public function we_can_define_file_filter()
     {
         $formField = SharpFormUploadField::make('file')
             ->setFileFilter('jpg');
@@ -121,7 +121,7 @@ class SharpFormUploadFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_cropRatio()
+    public function we_can_define_crop_ratio()
     {
         $formField = SharpFormUploadField::make('file')
             ->setCropRatio('16:9');
@@ -133,7 +133,7 @@ class SharpFormUploadFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_transformableFileTypes()
+    public function we_can_define_transformable_file_types()
     {
         $formField = SharpFormUploadField::make('file')
             ->setCropRatio('16:9', ['jpg', 'jpeg']);
@@ -161,7 +161,7 @@ class SharpFormUploadFieldTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_shouldOptimizeImage()
+    public function we_can_define_should_optimize_image()
     {
         $formField = SharpFormUploadField::make('file')
             ->shouldOptimizeImage();

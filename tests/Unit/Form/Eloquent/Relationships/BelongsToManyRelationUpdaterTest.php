@@ -9,7 +9,7 @@ use Code16\Sharp\Tests\Unit\SharpEloquentBaseTestCase;
 class BelongsToManyRelationUpdaterTest extends SharpEloquentBaseTestCase
 {
     /** @test */
-    public function we_can_update_a_belongsToMany_relation()
+    public function we_can_update_a_belongs_to_many_relation()
     {
         $person1 = Person::create(['name' => 'A']);
         $person2 = Person::create(['name' => 'B']);
@@ -29,7 +29,7 @@ class BelongsToManyRelationUpdaterTest extends SharpEloquentBaseTestCase
     }
 
     /** @test */
-    public function we_can_update_an_existing_belongsToMany_relation()
+    public function we_can_update_an_existing_belongs_to_many_relation()
     {
         $person1 = Person::create(['name' => 'A']);
         $person2 = Person::create(['name' => 'B']);
@@ -80,7 +80,7 @@ class BelongsToManyRelationUpdaterTest extends SharpEloquentBaseTestCase
     }
 
     /** @test */
-    public function we_can_handle_order_in_a_belongsToMany_relation()
+    public function we_can_handle_order_in_a_belongs_to_many_relation()
     {
         $person1 = Person::create(['name' => 'A']);
         $person2 = Person::create(['name' => 'B']);
