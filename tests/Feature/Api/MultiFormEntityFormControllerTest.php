@@ -187,7 +187,7 @@ class BigPersonSharpForm extends SmallPersonSharpForm
     {
         return app(SharpEntityManager::class)
             ->entityFor('person')
-                ->multiformValidatorsForTest['big'] ?? null;
+            ->multiformValidatorsForTest['big'] ?? null;
     }
 }
 
