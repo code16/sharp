@@ -8,11 +8,11 @@ class DummyClass extends EntityListSelectFilter
 {
     public function buildFilterConfig(): void
     {
-        $this->configureLabel('My Filter')
+        $this->configureLabel('My Filter');
     }
 
     public function values(): array
     {
-        return []
+        return [];
     }
 }
