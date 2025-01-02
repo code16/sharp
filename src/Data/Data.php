@@ -6,6 +6,9 @@ use Illuminate\Contracts\Support\Arrayable;
 use ReflectionClass;
 use ReflectionParameter;
 
+/**
+ * @internal
+ */
 abstract class Data implements Arrayable
 {
     /** @var ReflectionParameter[][] */
@@ -13,9 +16,9 @@ abstract class Data implements Arrayable
 
     protected array $additionalAttributes = [];
 
-    public static function collection($payload): DataCollection
+    public static function collection($payload): array
     {
-        return DataCollection::make($payload)
+        return collect($payload)
             ->map(function ($item) {
                 if (is_array($item)) {
                     if (method_exists(static::class, 'from')) {
@@ -26,7 +29,8 @@ abstract class Data implements Arrayable
                 }
 
                 return $item;
-            });
+            })
+            ->all();
     }
 
     public static function optional(mixed $payload): ?static
@@ -84,6 +88,10 @@ abstract class Data implements Arrayable
             ->map(function ($value) {
                 if ($value instanceof \BackedEnum) {
                     return $value->value;
+                }
+
+                if (is_array($value)) {
+                    return collect($value)->toArray();
                 }
 
                 return $value;

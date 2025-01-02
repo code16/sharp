@@ -3,7 +3,6 @@
 namespace Code16\Sharp\Data\Form;
 
 use Code16\Sharp\Data\Data;
-use Code16\Sharp\Data\DataCollection;
 use Code16\Sharp\Data\Form\Fields\FormFieldData;
 use Code16\Sharp\Data\InstanceAuthorizationsData;
 use Code16\Sharp\Data\PageAlertData;
@@ -19,8 +18,8 @@ final class FormData extends Data
         public FormConfigData $config,
         #[LiteralTypeScriptType('{ [key:string]: FormFieldData["value"] }')]
         public ?array $data,
-        /** @var DataCollection<string,FormFieldData> */
-        public DataCollection $fields,
+        /** @var array<string,FormFieldData> */
+        public array $fields,
         public FormLayoutData $layout,
         /** @var array<string> */
         public array $locales,

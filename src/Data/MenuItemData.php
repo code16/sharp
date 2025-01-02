@@ -19,8 +19,8 @@ final class MenuItemData extends Data
         public ?string $entityKey = null,
         public bool $isSeparator = false,
         public bool $current = false,
-        /** @var DataCollection<MenuItemData> */
-        public ?DataCollection $children = null,
+        /** @var MenuItemData[]|null */
+        public ?array $children = null,
         public bool $isCollapsible = false,
     ) {}
 

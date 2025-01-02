@@ -3,7 +3,6 @@
 namespace Code16\Sharp\Data\Form;
 
 use Code16\Sharp\Data\Data;
-use Code16\Sharp\Data\DataCollection;
 
 /**
  * @internal
@@ -12,8 +11,8 @@ final class FormLayoutData extends Data
 {
     public function __construct(
         public bool $tabbed,
-        /** @var DataCollection<FormLayoutTabData> */
-        public DataCollection $tabs,
+        /** @var FormLayoutTabData[] */
+        public array $tabs,
     ) {}
 
     public static function from(array $config): self

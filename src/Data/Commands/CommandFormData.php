@@ -3,7 +3,6 @@
 namespace Code16\Sharp\Data\Commands;
 
 use Code16\Sharp\Data\Data;
-use Code16\Sharp\Data\DataCollection;
 use Code16\Sharp\Data\Form\Fields\FormFieldData;
 use Code16\Sharp\Data\Form\FormLayoutData;
 use Code16\Sharp\Data\PageAlertData;
@@ -18,8 +17,8 @@ final class CommandFormData extends Data
         #[LiteralTypeScriptType('{ [key:string]: FormFieldData["value"] }')]
         public ?array $data,
         public CommandFormConfigData $config,
-        /** @var DataCollection<string,FormFieldData> */
-        public ?DataCollection $fields = null,
+        /** @var array<string,FormFieldData> */
+        public ?array $fields = null,
         public ?FormLayoutData $layout = null,
         /** @var array<string> */
         public ?array $locales = null,

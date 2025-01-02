@@ -3,7 +3,6 @@
 namespace Code16\Sharp\Data\Dashboard;
 
 use Code16\Sharp\Data\Data;
-use Code16\Sharp\Data\DataCollection;
 
 /**
  * @internal
@@ -11,8 +10,8 @@ use Code16\Sharp\Data\DataCollection;
 final class DashboardLayoutData extends Data
 {
     public function __construct(
-        /** @var DataCollection<DashboardLayoutSectionData> */
-        public DataCollection $sections,
+        /** @var DashboardLayoutSectionData[] */
+        public array $sections,
     ) {}
 
     public static function from(array $layout): self

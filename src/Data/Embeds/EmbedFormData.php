@@ -3,7 +3,6 @@
 namespace Code16\Sharp\Data\Embeds;
 
 use Code16\Sharp\Data\Data;
-use Code16\Sharp\Data\DataCollection;
 use Code16\Sharp\Data\Form\Fields\FormFieldData;
 use Code16\Sharp\Data\Form\FormLayoutData;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
@@ -16,8 +15,8 @@ final class EmbedFormData extends Data
     public function __construct(
         #[LiteralTypeScriptType('{ [key:string]: FormFieldData["value"] }')]
         public ?array $data,
-        /** @var DataCollection<string,FormFieldData> */
-        public DataCollection $fields,
+        /** @var array<string,FormFieldData> */
+        public array $fields,
         public ?FormLayoutData $layout,
     ) {}
 

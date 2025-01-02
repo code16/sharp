@@ -12,15 +12,18 @@ trait PreloadsShowEntityLists
 {
     protected function addPreloadHeadersForShowEntityLists(ShowData $payload): void
     {
-        $payload->fields->whereInstanceOf(ShowEntityListFieldData::class)
-            ->each(function (ShowEntityListFieldData $entityListField) use ($payload) {
-                $section = $payload->layout->sections->firstWhere(fn (ShowLayoutSectionData $section) => collect($section->columns->map(fn (ShowLayoutColumnData $column) => $column->fields))
-                    ->flatten(2)
-                    ->firstWhere('key', $entityListField->key)
-                );
+        collect($payload->fields)->each(function ($field) use ($payload) {
+            if ($field instanceof ShowEntityListFieldData) {
+                $section = collect($payload->layout->sections)
+                    ->firstWhere(fn (ShowLayoutSectionData $section) => collect($section->columns)
+                        ->map(fn (ShowLayoutColumnData $column) => $column->fields)
+                        ->flatten(2)
+                        ->firstWhere('key', $field->key)
+                    );
                 if ($section && ! $section->collapsable) {
-                    app(AddLinkHeadersForPreloadedRequests::class)->preload($entityListField->endpointUrl);
+                    app(AddLinkHeadersForPreloadedRequests::class)->preload($field->endpointUrl);
                 }
-            });
+            }
+        });
     }
 }

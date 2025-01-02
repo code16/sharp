@@ -3,7 +3,6 @@
 namespace Code16\Sharp\Data\Form\Fields;
 
 use Code16\Sharp\Data\Data;
-use Code16\Sharp\Data\DataCollection;
 use Code16\Sharp\Data\Form\Fields\Common\FormConditionalDisplayData;
 use Code16\Sharp\Data\Form\Fields\Common\FormDynamicAttributeData;
 use Code16\Sharp\Enums\FormFieldType;
@@ -31,8 +30,8 @@ final class FormSelectFieldData extends Data
         #[LiteralTypeScriptType('"list" | "dropdown"')]
         public string $display,
         public bool $inline,
-        /** @var DataCollection<FormDynamicAttributeData> */
-        public ?DataCollection $dynamicAttributes = null,
+        /** @var FormDynamicAttributeData[]|null */
+        public ?array $dynamicAttributes = null,
         public ?int $maxSelected = null,
         public ?bool $localized = null,
         public ?string $label = null,

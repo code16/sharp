@@ -3,7 +3,6 @@
 namespace Code16\Sharp\Data\Show\Fields;
 
 use Code16\Sharp\Data\Data;
-use Code16\Sharp\Data\DataCollection;
 use Code16\Sharp\Data\Embeds\EmbedData;
 use Code16\Sharp\Data\Form\Fields\FormEditorFieldData;
 use Code16\Sharp\Enums\ShowFieldType;
@@ -27,8 +26,8 @@ final class ShowTextFieldData extends Data
         public bool $html,
         public ?bool $localized = null,
         public ?int $collapseToWordCount = null,
-        /** @var DataCollection<string, EmbedData> */
-        public ?DataCollection $embeds = null,
+        /** @var array<string, EmbedData> */
+        public ?array $embeds = null,
         public ?string $label = null,
     ) {}
 

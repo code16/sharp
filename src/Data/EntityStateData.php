@@ -9,8 +9,8 @@ final class EntityStateData extends Data
 {
     public function __construct(
         public string $attribute,
-        /** @var DataCollection<EntityStateValueData> */
-        public DataCollection $values,
+        /** @var EntityStateValueData[] */
+        public array $values,
         /** @var bool|array<string|int> */
         public mixed $authorization,
     ) {}

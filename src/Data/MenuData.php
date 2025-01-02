@@ -11,8 +11,8 @@ use Code16\Sharp\Utils\Menu\SharpMenuManager;
 final class MenuData extends Data
 {
     public function __construct(
-        /** @var DataCollection<MenuItemData> */
-        public DataCollection $items,
+        /** @var MenuItemData[] */
+        public array $items,
         public UserMenuData $userMenu,
         public bool $isVisible,
     ) {}

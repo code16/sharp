@@ -3,7 +3,6 @@
 namespace Code16\Sharp\Data\EntityList;
 
 use Code16\Sharp\Data\Data;
-use Code16\Sharp\Data\DataCollection;
 use Code16\Sharp\Data\EntityListAuthorizationsData;
 use Code16\Sharp\Data\Filters\FilterValuesData;
 use Code16\Sharp\Data\PageAlertData;
@@ -18,14 +17,14 @@ final class EntityListData extends Data
     public function __construct(
         public EntityListAuthorizationsData $authorizations,
         public EntityListConfigData $config,
-        /** @var DataCollection<EntityListFieldData> */
-        public DataCollection $fields,
+        /** @var EntityListFieldData[] */
+        public array $fields,
         #[LiteralTypeScriptType('Array<{ [key: string]: any }>')]
         public array $data,
         public FilterValuesData $filterValues,
         public ?EntityListQueryParamsData $query,
-        /** @var DataCollection<string, EntityListMultiformData> */
-        public ?DataCollection $forms = null,
+        /** @var array<string, EntityListMultiformData>|null */
+        public ?array $forms = null,
         public ?PaginatorMetaData $meta = null,
         public ?PageAlertData $pageAlert = null,
     ) {}

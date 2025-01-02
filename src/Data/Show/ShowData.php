@@ -3,7 +3,6 @@
 namespace Code16\Sharp\Data\Show;
 
 use Code16\Sharp\Data\Data;
-use Code16\Sharp\Data\DataCollection;
 use Code16\Sharp\Data\InstanceAuthorizationsData;
 use Code16\Sharp\Data\PageAlertData;
 use Code16\Sharp\Data\Show\Fields\ShowFieldData;
@@ -19,8 +18,8 @@ final class ShowData extends Data
         public ShowConfigData $config,
         #[LiteralTypeScriptType('{ [key:string]: ShowFieldData["value"] }')]
         public ?array $data,
-        /** @var DataCollection<string,ShowFieldData> */
-        public DataCollection $fields,
+        /** @var array<string,ShowFieldData> */
+        public array $fields,
         public ShowLayoutData $layout,
         /** @var string[] */
         public ?array $locales,

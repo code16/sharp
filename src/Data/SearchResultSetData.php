@@ -10,7 +10,7 @@ final class SearchResultSetData extends Data
     public function __construct(
         public string $label,
         /** @var SearchResultLinkData[] */
-        public DataCollection $resultLinks,
+        public array $resultLinks,
         public ?IconData $icon,
         public ?string $emptyStateLabel = null,
         /** @var string[] */

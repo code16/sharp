@@ -3,7 +3,6 @@
 namespace Code16\Sharp\Data\Show;
 
 use Code16\Sharp\Data\Data;
-use Code16\Sharp\Data\DataCollection;
 
 /**
  * @internal
@@ -15,7 +14,7 @@ final class ShowLayoutSectionData extends Data
         public string $title,
         public bool $collapsable,
         /** @var ShowLayoutColumnData[] */
-        public DataCollection $columns
+        public array $columns
     ) {}
 
     public static function from(array $section): self

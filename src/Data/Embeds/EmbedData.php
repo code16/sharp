@@ -3,7 +3,6 @@
 namespace Code16\Sharp\Data\Embeds;
 
 use Code16\Sharp\Data\Data;
-use Code16\Sharp\Data\DataCollection;
 use Code16\Sharp\Data\Form\Fields\FormFieldData;
 use Code16\Sharp\Data\IconData;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
@@ -25,8 +24,8 @@ final class EmbedData extends Data
         public ?IconData $icon,
         /** @var string[] */
         public array $attributes,
-        /** @var DataCollection<string,FormFieldData> */
-        public DataCollection $fields,
+        /** @var array<string,FormFieldData> */
+        public array $fields,
     ) {}
 
     public static function from(array $embed): self

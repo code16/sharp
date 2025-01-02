@@ -3,7 +3,6 @@
 namespace Code16\Sharp\Data\Form\Fields;
 
 use Code16\Sharp\Data\Data;
-use Code16\Sharp\Data\DataCollection;
 use Code16\Sharp\Data\Form\Fields\Common\FormConditionalDisplayData;
 use Code16\Sharp\Data\Form\Fields\Common\FormDynamicAttributeData;
 use Code16\Sharp\Enums\FormFieldType;
@@ -36,8 +35,8 @@ final class FormAutocompleteLocalFieldData extends Data
         /** @var array<string> */
         public ?array $searchKeys = null,
         public ?bool $localized = null,
-        /** @var DataCollection<FormDynamicAttributeData> */
-        public ?DataCollection $dynamicAttributes = null,
+        /** @var FormDynamicAttributeData[]|null */
+        public ?array $dynamicAttributes = null,
         public ?string $label = null,
         public ?bool $readOnly = null,
         public ?FormConditionalDisplayData $conditionalDisplay = null,

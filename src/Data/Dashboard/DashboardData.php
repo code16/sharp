@@ -4,7 +4,6 @@ namespace Code16\Sharp\Data\Dashboard;
 
 use Code16\Sharp\Data\Dashboard\Widgets\WidgetData;
 use Code16\Sharp\Data\Data;
-use Code16\Sharp\Data\DataCollection;
 use Code16\Sharp\Data\Filters\FilterValuesData;
 use Code16\Sharp\Data\PageAlertData;
 
@@ -14,8 +13,8 @@ use Code16\Sharp\Data\PageAlertData;
 final class DashboardData extends Data
 {
     public function __construct(
-        /** @var DataCollection<WidgetData> */
-        public DataCollection $widgets,
+        /** @var WidgetData[] */
+        public array $widgets,
         public DashboardConfigData $config,
         public DashboardLayoutData $layout,
         /** @var array<string,mixed> */
