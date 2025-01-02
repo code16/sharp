@@ -9,7 +9,7 @@ export type BreadcrumbItemData = {
   url: string;
 };
 export type CheckFilterData = {
-  value?: boolean | null;
+  value?: boolean;
   key: string;
   label: string | null;
   type: "check";
@@ -156,7 +156,7 @@ export type EntityListFieldData = {
   sortable: boolean;
   width: string | null;
   hideOnXS: boolean;
-  html?: boolean | null;
+  html?: boolean;
 };
 export type EntityListMultiformData = {
   key: string;
@@ -535,7 +535,7 @@ export type FormTextFieldData = {
   value: string | null | { [locale: string]: string | null };
   key: string;
   type: "text";
-  inputType: "text" | "password";
+  inputType: "text" | "password" | "email" | "tel" | "url";
   placeholder: string | null;
   maxLength: number | null;
   localized: boolean | null;
@@ -763,7 +763,7 @@ export type ShowData = {
   pageAlert: PageAlertData | null;
 };
 export type ShowEntityListFieldData = {
-  value?: null | null;
+  value?: null;
   key: string;
   type: "entityList";
   emptyVisible: boolean;
