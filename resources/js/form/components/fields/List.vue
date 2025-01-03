@@ -193,7 +193,7 @@
         </template>
         <div class="grid grid-cols-1 gap-y-6">
             <template v-if="value?.length > 0">
-                <div class="relative group/list space-y-6" :ref="(el: HTMLElement) => sortableContainer = el">
+                <div class="relative group/list space-y-6" role="list" :ref="(el: HTMLElement) => sortableContainer = el">
                     <TransitionGroup move-class="transition-transform duration-200" leave-to-class="opacity-0" leave-active-class="!absolute" :css="false">
                         <template v-for="(item, index) in value" :key="`${item[itemKey]}-${sortedKey}`">
                             <Card class="group relative ring-ring ring-offset-2 ring-background p-6 shadow"
@@ -202,6 +202,7 @@
                                     reordering ? 'cursor-grab bg-muted/50' : 'bg-background',
                                     itemShouldHavePaddingTop(item) ? 'pt-10' : ''
                                 ]"
+                                role="listitem"
                             >
                                 <div :inert="reordering">
                                     <FieldGrid class="flex-1 min-w-0 gap-6">
@@ -233,7 +234,11 @@
                                     <template v-if="hasItemDropdown">
                                         <DropdownMenu :modal="false">
                                             <DropdownMenuTrigger as-child>
-                                                <Button data-item-dropdown class="absolute top-0 right-0 z-20" variant="ghost" size="icon">
+                                                <Button class="absolute top-0 right-0 z-20"
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    :aria-label="__('sharp::form.list.item_dropdown_aria_label')"
+                                                >
                                                     <MoreHorizontal class="w-4 h-4" />
                                                 </Button>
                                             </DropdownMenuTrigger>
@@ -268,7 +273,6 @@
                     </TransitionGroup>
                 </div>
             </template>
-
 
             <template v-if="!props.field.readOnly">
                 <div class="relative grid grid-cols-1 gap-y-3"

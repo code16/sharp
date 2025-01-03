@@ -44,16 +44,16 @@ class TestModelForm extends SharpForm
                 SharpFormAutocompleteRemoteField::make('autocomplete_remote')
                     ->setLabel('Autocomplete endpoint remote')
                     ->setRemoteSearchAttribute('query')
-                    ->setListItemTemplate('{{ $name }}')
-                    ->setResultItemTemplate('{{ $name }} ({{ $id }})')
+                    ->setListItemTemplate('{{ $label }}')
+                    ->setResultItemTemplate('{{ $label }} ({{ $id }})')
                     ->setRemoteEndpoint(route('sharp.remote-autocomplete')),
             )
             ->addField(
                 SharpFormAutocompleteRemoteField::make('autocomplete_remote2')
                     ->setLabel('Autocomplete callback remote')
                     ->setRemoteSearchAttribute('query')
-                    ->setListItemTemplate('{{ $name }}')
-                    ->setResultItemTemplate('{{ $name }} ({{ $id }})')
+                    ->setListItemTemplate('{{ $label }}')
+                    ->setResultItemTemplate('{{ $label }} ({{ $id }})')
                     ->allowEmptySearch()
                     ->setRemoteCallback(function ($query) {
                         return collect(static::options())
@@ -61,7 +61,7 @@ class TestModelForm extends SharpForm
                                 return str_contains($label, $query);
                             })
                             ->map(function ($label, $id) {
-                                return ['id' => $id, 'name' => $label];
+                                return ['id' => $id, 'label' => $label];
                             })
                             ->values();
                     }),
@@ -198,6 +198,7 @@ class TestModelForm extends SharpForm
                             ->setStorageBasePath('data')
                     )
                     ->setHeight(350)
+                    ->setLocalized()
             )
             ->addField(
                 SharpFormEditorField::make('editor_markdown')
@@ -336,7 +337,14 @@ class TestModelForm extends SharpForm
 
     public function find($id): array
     {
-        return $this->transform(TestModel::findOrFail($id)->fill([
+        return $this
+            ->setCustomTransformer('autocomplete_remote', function ($value) {
+                return $value ? ['id' => $value, 'label' => static::options()[$value]] : null;
+            })
+            ->setCustomTransformer('autocomplete_remote2', function ($value) {
+                return $value ? ['id' => $value, 'label' => static::options()[$value]] : null;
+            })
+            ->transform(TestModel::findOrFail($id)->fill([
             'html' => ['name' => 'John'],
         ]));
     }

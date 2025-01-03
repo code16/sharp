@@ -14,7 +14,7 @@ Route::get('/sharp/remote-autocomplete', function () {
             return str_contains($label, $query);
         })
         ->map(function ($label, $id) {
-            return ['id' => $id, 'name' => $label];
+            return ['id' => $id, 'label' => $label];
         })
         ->values();
 })

@@ -14,6 +14,7 @@ return [
     'list.bulk_upload.text' => '[Browse]() or drag and drop files...',
     'list.bulk_upload.help_text' => 'Maximum :limit file(s)',
     'list.bulk_upload.validation.limit' => 'Too many files selected (:limit max.)',
+    'list.item_dropdown_aria_label' => 'Actions',
 
     'geolocation.loading' => 'Google Maps is loading...',
     'geolocation.browse_button' => 'Pick a location...',
