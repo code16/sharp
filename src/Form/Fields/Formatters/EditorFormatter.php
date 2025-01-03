@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Form\Fields\Formatters;
 
+use Code16\Sharp\Exceptions\Form\SharpFormFieldDataException;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormField;
 use Illuminate\Support\Collection;
@@ -13,6 +14,13 @@ class EditorFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
      */
     public function toFront(SharpFormField $field, $value)
     {
+        if(is_array($value) && !$field->isLocalized()) {
+            throw new SharpFormFieldDataException(sprintf(
+                'String expected, got an Array for editor field value "%s". If the field is localized, add `‑>setLocalized()`',
+                $field->key()
+            ));
+        }
+        
         return collect([
             'text' => $this->maybeLocalized($field, $value),
         ])
