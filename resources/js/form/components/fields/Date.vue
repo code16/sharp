@@ -305,7 +305,7 @@ function onMinuteChange(minute: string) {
                                     <CommandItem
                                         class="data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
                                         :value="hour"
-                                        v-scroll-into-view="hour === hourValue"
+                                        :autofocus="false"
                                     >
                                         {{ hour.padStart(2, '0') }}
                                     </CommandItem>
@@ -320,7 +320,7 @@ function onMinuteChange(minute: string) {
                                     <CommandItem
                                         class="data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
                                         :value="minute"
-                                        v-scroll-into-view="minute === minuteValue"
+                                        :autofocus="false"
                                     >
                                         {{ minute.padStart(2, '0') }}
                                     </CommandItem>
