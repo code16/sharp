@@ -129,7 +129,7 @@ class ApiFormAutocompleteController extends ApiController
     {
         collect(Route::getRoutes()->getRoutes())
             ->map(fn ($route) => url($route->uri))
-            ->filter(fn ($routeUrl) => $routeUrl == $requestEndpoint)
+            ->filter(fn ($routeUrl) => $routeUrl == str($requestEndpoint)->before('?'))
             ->count() > 0 ?: throw new SharpInvalidConfigException('The endpoint is not a valid internal route.');
 
         preg_match(

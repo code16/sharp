@@ -365,6 +365,34 @@ it('won’t allow external remote endpoint', function () {
         ]);
 })->throws(\Code16\Sharp\Exceptions\SharpInvalidConfigException::class);
 
+it('allows internal remote endpoint with a querystring', function () {
+    $this->withoutExceptionHandling();
+
+    fakeFormFor('person', new class() extends PersonForm
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(
+                SharpFormAutocompleteRemoteField::make('autocomplete_field')
+                    ->setRemoteMethodPOST()
+                    ->setRemoteEndpoint('/my/endpoint')
+            );
+        }
+    });
+
+    Route::post('/my/endpoint', fn () => []);
+
+    $this
+        ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+            'entityKey' => 'person',
+            'autocompleteFieldKey' => 'autocomplete_field',
+        ]), [
+            'endpoint' => url('my/endpoint?param1=one'),
+            'search' => 'my search',
+        ])
+        ->assertOk();
+});
+
 it('allows to call an functional endpoint for a remote autocomplete field in an embed of an Editor field', function () {
     fakeFormFor('person', new class() extends PersonForm
     {
