@@ -262,4 +262,10 @@ class Thumbnail
         // Strip double /
         return Str::replace('//', '/', $thumbnailPath);
     }
+
+    public function __toString()
+    {
+        // If thumbnail is used in a blade template without parameters, we want to return the URL directly
+        return $this->make();
+    }
 }
