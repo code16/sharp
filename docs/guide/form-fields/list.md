@@ -99,8 +99,9 @@ class MyForm extends SharpForm
     function buildFormLayout(FormLayout $formLayout)
     {
         $this->addColumn(6, function (FormLayoutColumn $column) {
-             $column->withSingleField('pieces', function (FormLayoutColumn $listItem) {
-                  $listItem->withField('acquisition_date')
+             $column->withListField('pieces', function (FormLayoutColumn $listItem) {
+                  $listItem
+                      ->withField('acquisition_date')
                       ->withField('title')
                       ->withField('artist_id');
              });
