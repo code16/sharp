@@ -49,6 +49,7 @@ class SharpConfigBuilder
             'login_page_url' => null,
             'display_attribute' => 'name',
             'login_attribute' => 'email',
+            'avatar_attribute' => 'avatar',
             'password_attribute' => 'password',
             'impersonate' => [
                 'enabled' => false,
@@ -323,6 +324,13 @@ class SharpConfigBuilder
     public function setUserDisplayAttribute(string $displayAttribute): self
     {
         $this->config['auth']['display_attribute'] = $displayAttribute;
+
+        return $this;
+    }
+
+    public function setUserAvatarAttribute(string $avatar): self
+    {
+        $this->config['auth']['avatar_attribute'] = $avatar;
 
         return $this;
     }

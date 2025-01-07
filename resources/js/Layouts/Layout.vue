@@ -206,7 +206,10 @@
                                         class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                                     >
                                         <span class="inline-flex items-center justify-center size-8 bg-secondary rounded-lg">
-                                            <CircleUser class="h-5 w-5" />
+                                            <template v-if="auth().user.avatar">
+                                                <img :src="auth().user.avatar" @error="auth().user.avatar = null" class="w-5 h-5 rounded-full" />
+                                            </template>
+                                            <CircleUser v-else class="h-5 w-5" />
                                         </span>
                                         <div class="grid flex-1 text-left text-sm leading-tight">
                                             <span class="truncate font-semibold"> {{ auth().user.name }}</span>
