@@ -33,6 +33,7 @@ import { CalendarRoot } from "reka-ui";
 import { createYear, createYearRange, toDate } from 'reka-ui/date'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { __ } from "@/utils/i18n";
 
 const props = defineProps<FormFieldProps<FormDateFieldData>>();
 const emit = defineEmits<FormFieldEmits<FormDateFieldData>>();
@@ -188,7 +189,11 @@ function onMinuteChange(minute: string) {
                     @click="($refs.input.$el as HTMLInputElement).focus(); open = !isTouch"
                 ></div>
                 <template v-if="props.value">
-                    <Button class="absolute opacity-50 hover:opacity-100 right-px h-[2.375rem] top-1/2 -translate-y-1/2"  variant="ghost" size="icon" @click="$emit('input', null)">
+                    <Button class="absolute opacity-50 hover:opacity-100 right-px h-[2.375rem] top-1/2 -translate-y-1/2"
+                        variant="ghost"
+                        size="icon"
+                        :aria-label="__('sharp::form.date.clear', { field_label: props.field.label })"
+                        @click="$emit('input', null)">
                         <X class="size-4" />
                     </Button>
                 </template>

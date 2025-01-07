@@ -122,9 +122,30 @@ test.describe('form', () => {
     test('date time', async ({ page }) => {
       await init(page);
       await page.goto('/sharp/s-list/test-models/s-form/test-models');
-      await page.getByLabel('Date time').fill('2021-01-01T12:34');
+      const input = page.getByLabel('Date time', { exact: true });
+      await input.fill('2021-01-01T12:34');
+      await page.getByRole('button', { name: 'Clear Date time' }).click();
+      await expect(input).toHaveValue('');
+      await input.fill('2021-01-01T12:34');
       await createForm(page);
-      await expect(page.getByLabel('Date time')).toHaveValue('2021-01-01T12:34');
+      await expect(input).toHaveValue('2021-01-01T12:34');
+    });
+    test('date time picker', async ({ page }) => {
+      await init(page);
+      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      const input = page.getByLabel('Date time', { exact: true });
+      await input.fill('2021-01-01T12:34');
+      await input.click();
+      await page.getByRole('dialog').getByText('January', { exact: true }).click();
+      await page.getByRole('listbox').getByText('March', { exact: true }).click();
+      await page.getByRole('dialog').getByText('2021', { exact: true }).click();
+      await page.getByRole('listbox').getByText('2022', { exact: true }).click();
+      await page.getByRole('dialog').getByText('26').click();
+      await page.getByRole('dialog').getByText('11').last().click();
+      await page.getByRole('dialog').getByText('30').last().click();
+      await expect(input).toHaveValue('2022-03-26T11:30');
+      await createForm(page);
+      await expect(input).toHaveValue('2022-03-26T11:30');
     });
   });
 });

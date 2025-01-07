@@ -55,6 +55,7 @@ return [
     'autocomplete.placeholder' => 'Rechercher...',
 
     'date.validation_error.format' => 'Format de date invalide',
+    'date.clear' => 'Effacer :field_label',
 
     'daterange.start_placeholder' => 'Date de début',
     'daterange.end_placeholder' => 'Date de fin',
