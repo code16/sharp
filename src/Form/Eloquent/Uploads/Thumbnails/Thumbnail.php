@@ -262,4 +262,10 @@ class Thumbnail
         // Strip double /
         return Str::replace('//', '/', $thumbnailPath);
     }
+
+    public function __toString()
+    {
+        // Return URL when Thumbnail is used as a string
+        return $this->make();
+    }
 }

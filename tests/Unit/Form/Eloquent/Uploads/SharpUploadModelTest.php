@@ -1,6 +1,7 @@
 <?php
 
 use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
+use Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\Thumbnail;
 use Code16\Sharp\Tests\Fixtures\Person;
 use Illuminate\Support\Facades\Storage;
 
@@ -41,6 +42,16 @@ it('allows to create thumbnails', function () {
         ->toStartWith('/storage/thumbnails/data/-150_q-90/'.basename($file))
         ->and(Storage::disk('public')->exists('thumbnails/data/-150_q-90/'.basename($file)))
         ->toBeTrue();
+});
+
+it('allows to display thumbnails with no width or height params', function () {
+    $file = createImage();
+    $upload = createSharpUploadModel($file);
+
+    expect($upload->thumbnail())
+        ->toBeInstanceOf(Thumbnail::class)
+        ->and((string) $upload->thumbnail())
+        ->toStartWith('/storage/thumbnails/data/-_q-90/'.basename($file));
 });
 
 it('returns null on error with a thumbnail creation', function () {
