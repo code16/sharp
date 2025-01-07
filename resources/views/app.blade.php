@@ -30,7 +30,7 @@
         @inertiaHead
 
         <x-sharp::vite-wrapper>
-            @if(!Vite::isRunningHot())
+            @if(!\Illuminate\Support\Facades\Vite::isRunningHot())
                 @vite(['vite/legacy-polyfills'], '/vendor/sharp')
             @endif
             @vite('resources/js/sharp.ts', '/vendor/sharp')
