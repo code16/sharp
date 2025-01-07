@@ -50,7 +50,7 @@ it('allows to display thumbnails with no width or height params', function () {
 
     expect($upload->thumbnail())
         ->toBeInstanceOf(Thumbnail::class)
-        ->and($upload->thumbnail()->__toString())
+        ->and((string) $upload->thumbnail())
         ->toStartWith('/storage/thumbnails/data/-_q-90/'.basename($file));
 });
 
