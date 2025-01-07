@@ -265,7 +265,7 @@ class Thumbnail
 
     public function __toString()
     {
-        // If thumbnail is used in a blade template without parameters, we want to return the URL directly
+        // Return URL when Thumbnail is used as a string
         return $this->make();
     }
 }
