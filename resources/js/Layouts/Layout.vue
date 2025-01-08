@@ -56,6 +56,7 @@
     import { useEventListener, useStorage } from "@vueuse/core";
     import GlobalSearch from "@/components/GlobalSearch.vue";
     import { vScrollIntoView } from "@/directives/scroll-into-view";
+    import Content from "@/components/Content.vue";
 
     const dialogs = useDialogs();
     const menu = useMenu();
@@ -316,8 +317,10 @@
                                     {{ dialog.title }}
                                 </AlertDialogTitle>
                             </template>
-                            <AlertDialogDescription class="break-words max-h-[calc(100vh-14rem)] pr-6 -mr-6 overflow-auto" :class="!dialog.title ? 'text-base font-medium text-foreground' : ''">
-                                {{ dialog.text }}
+                            <AlertDialogDescription as="div"
+                                class="break-words max-h-[calc(100vh-14rem)] pr-6 -mr-6 overflow-auto" :class="!dialog.title ? 'text-base font-medium text-foreground' : ''"
+                            >
+                                <Content :html="dialog.text"></Content>
                             </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>

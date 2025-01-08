@@ -29,6 +29,8 @@ abstract class Command
     private string|Closure|null $formModalDescription = null;
     private ?string $formModalButtonLabel = null;
     private ?string $confirmationText = null;
+    private ?string $confirmationTitle = null;
+    private ?string $confirmationButtonLabel = null;
     private ?string $description = null;
 
     protected function info(string $message): array
@@ -138,9 +140,11 @@ abstract class Command
         return $this;
     }
 
-    final protected function configureConfirmationText(string $confirmationText): self
+    final protected function configureConfirmationText(string $confirmationText, ?string $title = null, ?string $buttonLabel = null): self
     {
         $this->confirmationText = $confirmationText;
+        $this->confirmationTitle = $title;
+        $this->confirmationButtonLabel = $buttonLabel;
 
         return $this;
     }
@@ -161,6 +165,16 @@ abstract class Command
     final public function getConfirmationText(): ?string
     {
         return $this->confirmationText;
+    }
+    
+    final public function getConfirmationTitle(): ?string
+    {
+        return $this->confirmationTitle;
+    }
+    
+    final public function getConfirmationButtonLabel(): ?string
+    {
+        return $this->confirmationButtonLabel;
     }
 
     final public function getDescription(): ?string

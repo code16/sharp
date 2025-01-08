@@ -51,9 +51,9 @@ export function showAlert(message: string, props: Partial<RootAlertDialog> = nul
 
 export function showConfirm(message: string, props: Partial<RootAlertDialog> = null) {
     return showDialog(message, {
+        ...props,
         title: props?.title ?? __('sharp::modals.confirm.title'),
-        okTitle: __('sharp::modals.confirm.ok_button'),
-        ...props
+        okTitle: props?.okTitle ?? __('sharp::modals.confirm.ok_button'),
     });
 }
 

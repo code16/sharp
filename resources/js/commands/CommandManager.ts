@@ -106,6 +106,8 @@ export class CommandManager {
 
         if(command.confirmation) {
             if(! await showConfirm(command.confirmation.text, {
+                title: command.confirmation.title,
+                okTitle: command.confirmation.buttonLabel,
                 ...confirmDialogOptions,
             })) {
                 this.finish();
