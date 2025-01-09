@@ -16,6 +16,15 @@ class EntityListFiltersController extends SharpProtectedController
     {
         sharp_check_ability('entity', $entityKey);
 
+        // We have to get rid of the final /filters in the current URL
+        // to prevent SharpBreadcrumb from considering it as a segment
+        //  in case it is built in the functional code (buildListConfig() for instance)
+        sharp()->context()->breadcrumb()->forceRequestSegments(
+            collect(request()->segments())
+                ->slice(1, -1)
+                ->values()
+        );
+
         $list = $this->entityManager->entityFor($entityKey)->getListOrFail();
         $list->buildListConfig();
 
