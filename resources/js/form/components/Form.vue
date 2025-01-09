@@ -22,6 +22,7 @@
     import StickyTop from "@/components/StickyTop.vue";
     import StickyBottom from "@/components/StickyBottom.vue";
     import { Menu } from 'lucide-vue-next';
+    import { Label } from "@/components/ui/label";
 
     const props = defineProps<{
         form: Form
@@ -198,37 +199,37 @@
                                                     <template v-for="fieldLayout in row">
                                                         <template v-if="'legend' in fieldLayout">
                                                             <FieldGridColumn v-show="form.fieldsetShouldBeVisible(fieldLayout)">
-                                                                <Card class="shadow">
-                                                                    <CardHeader>
-                                                                        <CardTitle class="text-base font-light tracking-normal">
-                                                                            {{ fieldLayout.legend }}
-                                                                        </CardTitle>
-                                                                    </CardHeader>
-                                                                    <CardContent >
-                                                                        <FieldGrid class="gap-6">
-                                                                            <template v-for="row in fieldLayout.fields">
-                                                                                <FieldGridRow v-show="form.fieldRowShouldBeVisible(row)">
-                                                                                    <template v-for="fieldLayout in row">
-                                                                                        <FieldGridColumn :layout="fieldLayout" v-show="form.fieldShouldBeVisible(fieldLayout)">
-                                                                                            <SharpFormField
-                                                                                                :field="form.getField(fieldLayout.key)"
-                                                                                                :field-layout="fieldLayout"
-                                                                                                :field-error-key="fieldLayout.key"
-                                                                                                :value="form.data[fieldLayout.key]"
-                                                                                                :locale="(form.getMeta(fieldLayout.key) as FieldMeta)?.locale ?? form.defaultLocale"
-                                                                                                :row="row"
-                                                                                                root
-                                                                                                @input="(value, options) => onFieldInput(fieldLayout.key, value, options)"
-                                                                                                @locale-change="onFieldLocaleChange(fieldLayout.key, $event)"
-                                                                                                @uploading="onFieldUploading(fieldLayout.key, $event)"
-                                                                                            />
-                                                                                        </FieldGridColumn>
-                                                                                    </template>
-                                                                                </FieldGridRow>
-                                                                            </template>
-                                                                        </FieldGrid>
-                                                                    </CardContent>
-                                                                </Card>
+                                                                <fieldset>
+                                                                    <Label class="mb-2.5" as="legend">
+                                                                        {{ fieldLayout.legend }}
+                                                                    </Label>
+                                                                    <Card class="shadow">
+                                                                        <CardContent>
+                                                                            <FieldGrid class="gap-6">
+                                                                                <template v-for="row in fieldLayout.fields">
+                                                                                    <FieldGridRow v-show="form.fieldRowShouldBeVisible(row)">
+                                                                                        <template v-for="fieldLayout in row">
+                                                                                            <FieldGridColumn :layout="fieldLayout" v-show="form.fieldShouldBeVisible(fieldLayout)">
+                                                                                                <SharpFormField
+                                                                                                    :field="form.getField(fieldLayout.key)"
+                                                                                                    :field-layout="fieldLayout"
+                                                                                                    :field-error-key="fieldLayout.key"
+                                                                                                    :value="form.data[fieldLayout.key]"
+                                                                                                    :locale="(form.getMeta(fieldLayout.key) as FieldMeta)?.locale ?? form.defaultLocale"
+                                                                                                    :row="row"
+                                                                                                    root
+                                                                                                    @input="(value, options) => onFieldInput(fieldLayout.key, value, options)"
+                                                                                                    @locale-change="onFieldLocaleChange(fieldLayout.key, $event)"
+                                                                                                    @uploading="onFieldUploading(fieldLayout.key, $event)"
+                                                                                                />
+                                                                                            </FieldGridColumn>
+                                                                                        </template>
+                                                                                    </FieldGridRow>
+                                                                                </template>
+                                                                            </FieldGrid>
+                                                                        </CardContent>
+                                                                    </Card>
+                                                                </fieldset>
                                                             </FieldGridColumn>
                                                         </template>
                                                         <template v-else>
