@@ -207,8 +207,6 @@ class SharpFormUploadField extends SharpFormField implements IsUploadField
             'maxFileSize' => $this->maxFileSize ?: sharp()->config()->get('uploads.max_file_size'),
             'allowedExtensions' => $this->allowedExtensions,
             'validationRule' => $this->buildValidationRule(),
-            'storageBasePath' => $this->storageBasePath,
-            'storageDisk' => $this->storageDisk,
         ]);
     }
 
