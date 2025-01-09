@@ -13,8 +13,6 @@ it('sets only default values', function () {
             'imageCompactThumbnail' => false,
             'imageTransformable' => true,
             'imageTransformKeepOriginal' => true,
-            'storageBasePath' => 'data',
-            'storageDisk' => 'local',
             'maxFileSize' => sharp()->config()->get('uploads.max_file_size'),
             'validationRule' => ['file', 'max:'.sharp()->config()->get('uploads.max_file_size') * 1024],
         ]);
