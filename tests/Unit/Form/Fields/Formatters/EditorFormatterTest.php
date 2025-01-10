@@ -28,11 +28,22 @@ it('allows to format a text value to front', function () {
 });
 
 it('allows to format a text value to front as object when localized', function () {
-    $formatter = new EditorFormatter();
+    $formatter = (new EditorFormatter())->setDataLocalizations(['fr', 'en']);
     $field = SharpFormEditorField::make('md')->setLocalized();
-    $value = ['en' => 'test'];
 
-    expect($formatter->setDataLocalizations(['fr', 'en'])->toFront($field, $value))->toEqual([
+    expect($formatter->toFront($field, ['en' => 'test']))->and($formatter->toFront($field, (object)['en' => 'test']))->toEqual([
+        'text' => [
+            'fr' => null,
+            'en' => 'test',
+        ],
+    ]);
+    expect($formatter->toFront($field, (object)['en' => 'test']))->toEqual([
+        'text' => [
+            'fr' => null,
+            'en' => 'test',
+        ],
+    ]);
+    expect($formatter->toFront($field, collect(['en' => 'test'])))->toEqual([
         'text' => [
             'fr' => null,
             'en' => 'test',
@@ -61,6 +72,50 @@ it('allows to format a text value from front', function () {
             ['text' => $value],
         ),
     );
+});
+
+it('adds missing locales when formatting a localized text value from front in an editor field', function () {
+    $value = Str::random();
+    
+    expect(
+        (new EditorFormatter())
+            ->setDataLocalizations(['fr', 'en', 'es'])
+            ->fromFront(
+                SharpFormEditorField::make('text')->setLocalized(),
+                'attribute',
+                ['text' => ['fr' => $value]],
+            )
+    )
+        ->toEqual(['fr' => $value, 'en' => null, 'es' => null]);
+});
+
+// edge case : we can't safely convert a string to a localized array so we pass the string through
+it('returns a string when formatting a string text value from front in a localized editor field', function () {
+    $value = Str::random();
+    
+    expect(
+        (new EditorFormatter())
+            ->setDataLocalizations(['fr', 'en', 'es'])
+            ->fromFront(
+                SharpFormEditorField::make('md')->setLocalized(),
+                'attribute',
+                ['text' => $value],
+            )
+    )
+        ->toEqual($value);
+});
+
+it('returns null when formatting a null localized text value from front in a localized editor field', function () {
+    expect(
+        (new EditorFormatter())
+            ->setDataLocalizations(['fr', 'en', 'es'])
+            ->fromFront(
+                SharpFormEditorField::make('md')->setLocalized(),
+                'attribute',
+                null,
+            )
+    )
+        ->toBeNull();
 });
 
 it('allows to format a text with uploads to front', function () {
