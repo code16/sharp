@@ -1,9 +1,9 @@
 <script setup lang="ts">
     import { router } from "@inertiajs/vue3";
-    import { config } from "@/utils/config";
     import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
     import { computed, ref } from "vue";
     import TemplateRenderer from "@/components/TemplateRenderer.vue";
+    import { isSharpLink } from "@/utils/url";
 
     const props = defineProps<{
         html: string | null,
@@ -17,9 +17,8 @@
 
     function onClick(e: MouseEvent & { target: HTMLElement }) {
         const link: HTMLAnchorElement = e.target.closest('a[href]');
-        const base = `${location.origin}/${config('sharp.custom_url_segment')}/`;
 
-        if(link?.href.startsWith(base)) {
+        if(link && isSharpLink(link.href)) {
             router.visit(link.href);
             e.preventDefault();
         }

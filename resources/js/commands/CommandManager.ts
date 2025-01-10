@@ -14,6 +14,7 @@ import {
     CommandFormExtraData
 } from "./types";
 import { Form } from "@/form/Form";
+import { isSharpLink } from "@/utils/url";
 
 
 export class CommandManager {
@@ -51,9 +52,8 @@ export class CommandManager {
                     formModal.reloadAndReopen();
                     return;
                 }
-                const url = new URL(link);
-                if(url.origin === location.origin) {
-                    router.visit(url.pathname + url.search);
+                if(isSharpLink(link)) {
+                    router.visit(link);
                 } else {
                     location.href = link;
                 }
