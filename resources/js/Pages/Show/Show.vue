@@ -114,10 +114,10 @@
                     { 'lg:sticky': !entityListNeedsTopBar }
                 ]"
             >
-                <div class="flex flex-wrap justify-end pointer-events-auto gap-3 lg:mr-[--sticky-safe-right-offset]">
+                <div class="flex flex-wrap justify-end gap-3 lg:mr-[--sticky-safe-right-offset]">
                     <template v-if="show.locales?.length">
                         <Select v-model="locale">
-                            <LocaleSelectTrigger class="lg:ml-[--sticky-safe-left-offset] mr-auto" />
+                            <LocaleSelectTrigger class="lg:ml-[--sticky-safe-left-offset] pointer-events-auto mr-auto" />
                             <SelectContent>
                                 <template v-for="locale in show.locales" :key="locale">
                                     <SelectItem :value="locale">
@@ -130,7 +130,7 @@
                     <template v-if="show.config.state">
                         <DropdownMenu>
                             <DropdownMenuTrigger as-child>
-                                <Button class="h-8 -mx-2 disabled:opacity-100" variant="ghost" size="sm" :disabled="!show.config.state.authorization">
+                                <Button class="pointer-events-auto h-8 -mx-2 disabled:opacity-100" variant="ghost" size="sm" :disabled="!show.config.state.authorization">
                                     <Badge variant="outline">
                                         <StateIcon class="-ml-0.5 mr-1.5" :state-value="show.instanceStateValue" />
                                         {{ show.instanceStateValue?.label }}
@@ -153,7 +153,7 @@
                     <template v-if="show.allowedInstanceCommands?.flat().length || show.authorizations.delete || show.config.state">
                         <DropdownMenu>
                             <DropdownMenuTrigger as-child>
-                                <Button class="h-8" variant="outline" size="sm">
+                                <Button class="pointer-events-auto h-8" variant="outline" size="sm">
                                     {{ __('sharp::entity_list.commands.instance.label') }}
                                     <DropdownChevronDown />
                                 </Button>
@@ -199,7 +199,7 @@
                         </DropdownMenu>
                     </template>
                     <template v-if="show.authorizations.update">
-                        <Button class="h-8" size="sm" :disabled="isReordering" as-child>
+                        <Button class="h-8 pointer-events-auto" size="sm" :disabled="isReordering" as-child>
                             <Link :as="isReordering ? 'button' : 'a'" :href="show.formUrl">
                                 {{ props.show.config.editButtonLabel || __('sharp::action_bar.show.edit_button') }}
                             </Link>
