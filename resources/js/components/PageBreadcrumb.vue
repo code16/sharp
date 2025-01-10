@@ -29,9 +29,9 @@
     <Breadcrumb v-if="breadcrumb.items?.length">
         <BreadcrumbList class="flex-nowrap max-w-screen overflow-hidden">
             <template v-if="breadcrumb.items.length > 1">
-                <BreadcrumbItem class="min-w-0">
+                <BreadcrumbItem class="min-w-4">
                     <BreadcrumbLink as-child>
-                        <Link class="truncate" :href="breadcrumb.items[0].url">
+                        <Link class="truncate" :href="breadcrumb.items[0].url" :title="breadcrumb.items[0].label">
                             {{ breadcrumb.items[0].label }}
                         </Link>
                     </BreadcrumbLink>
@@ -61,17 +61,17 @@
                 </div>
             </template>
             <template v-for="item in breadcrumb.items.slice(1).slice(-2, -1)">
-                <BreadcrumbItem class="min-w-0 max-sm:hidden">
+                <BreadcrumbItem class="min-w-4 max-sm:hidden">
                     <BreadcrumbLink as-child>
-                        <Link class="truncate min-w-0" :href="item.url">
+                        <Link class="truncate" :href="item.url" :title="item.label">
                             {{ item.label }}
                         </Link>
                     </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator class="max-sm:hidden" />
             </template>
-            <BreadcrumbItem >
-                <BreadcrumbPage class="truncate w-max min-w-0 max-w-full">
+            <BreadcrumbItem class="w-max min-w-4 max-w-full">
+                <BreadcrumbPage class="truncate" :title="breadcrumb.items.at(-1).label">
                     {{ breadcrumb.items.at(-1).label }}
                 </BreadcrumbPage>
             </BreadcrumbItem>

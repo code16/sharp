@@ -107,16 +107,16 @@
             </div>
         </template>
         <template v-if="form.locales?.length || form.layout.tabbed && form.layout.tabs.length > 1">
-            <StickyTop class="@container relative group flex items-end  pointer-events-none data-[stuck]:z-20"
+            <StickyTop class="@container relative group flex items-end pointer-events-none data-[stuck]:z-20"
                 v-slot="{ stuck, isOverflowing }"
                 :class="[
                     inline ? 'mb-6' : 'mb-4 container overflow-x-clip lg:sticky lg:top-3',
                 ]"
             >
-                <div class="flex-1">
+                <div class="flex-1 self-stretch lg:min-w-[calc(var(--sticky-safe-left-offset)-1rem)]">
                     <template v-if="form.locales?.length">
                         <Select :model-value="form.currentLocale ?? undefined" @update:model-value="onLocaleChange">
-                            <LocaleSelectTrigger class="mr-4 pointer-events-auto lg:ml-[--sticky-safe-left-offset]" />
+                            <LocaleSelectTrigger class="mr-4 pointer-events-auto" />
                             <SelectContent>
                                 <template v-for="locale in form.locales" :key="locale">
                                     <SelectItem :value="locale">

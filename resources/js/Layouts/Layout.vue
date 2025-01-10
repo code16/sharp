@@ -264,11 +264,11 @@
                 </SidebarFooter>
                 <SidebarRail />
             </Sidebar>
-            <SidebarInset>
+            <SidebarInset class="min-w-0">
                 <header class="flex h-14 items-center gap-4 border-b backdrop-blur bg-background/90 px-4 sticky top-0 z-20 lg:px-6
                     transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12
                 ">
-                    <SidebarTrigger class="-ml-1" />
+                    <SidebarTrigger class="-ml-1 shrink-0" />
                     <div class="min-w-0 flex-1 lg:flex-initial">
                         <slot name="breadcrumb" />
                     </div>

@@ -8,7 +8,9 @@
 
     const emit = defineEmits(['update:stuck']);
     const el = ref<HTMLElement>();
+    const content = computed<HTMLElement>(() => el.value?.querySelector('[data-sticky-content]'));
     const selfRect = reactive(useElementBounding(el, { updateTiming: 'next-frame' }));
+    const contentRect = reactive(useElementBounding(content, { updateTiming: 'next-frame' }));
     const topbarSafeRect = reactive(useElementBounding(() => document.querySelector('[data-topbar-sticky-safe-area]') as HTMLElement, { updateTiming: 'next-frame' }));
     const stuck = computed(() => {
         const style = el.value ? window.getComputedStyle(el.value) : null;
@@ -24,7 +26,13 @@
     });
     watch(stuck, () => {
         emit('update:stuck', stuck.value);
-    })
+    });
+    watch([stuck, contentRect], () => {
+        if(content.value) {
+            const topBarSafeArea = (document.querySelector('[data-topbar-sticky-safe-area]') as HTMLElement);
+            topBarSafeArea.style.minWidth = stuck.value ? `${contentRect.width}px` : 'auto';
+        }
+    });
 </script>
 
 <template>
