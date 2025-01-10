@@ -150,7 +150,7 @@
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </template>
-                    <template v-if="show.allowedInstanceCommands?.flat().length || show.authorizations.delete || show.config.state">
+                    <template v-if="show.allowedInstanceCommands?.flat().length || show.authorizations.delete || show.config.state && show.config.state.authorization">
                         <DropdownMenu>
                             <DropdownMenuTrigger as-child>
                                 <Button class="h-8" variant="outline" size="sm">
