@@ -123,9 +123,9 @@
                             <template v-if="item.children">
                                 <Collapsible class="group/collapsible" v-model:open="openedMenu[item.label]" as-child :disabled="!item.isCollapsible">
                                     <SidebarGroup>
-                                        <SidebarGroupLabel class="hover:bg-sidebar-accent hover:text-sidebar-accent-foreground disabled:pointer-events-none" as-child>
+                                        <SidebarGroupLabel class="break-words gap-x-2 text-left h-auto py-2 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground disabled:pointer-events-none" as-child>
                                             <CollapsibleTrigger>
-                                                <span>{{ item.label }}</span>
+                                                <span class="flex-1 min-w-0">{{ item.label }}</span>
                                                 <template v-if="item.isCollapsible">
                                                     <ChevronDown class="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
                                                 </template>
@@ -136,11 +136,11 @@
                                                 <SidebarMenu>
                                                     <template v-for="childItem in item.children" :key="childItem.label">
                                                         <template v-if="childItem.isSeparator">
-                                                            <div class="relative flex items-center  min-h-px gap-2 mx-2">
+                                                            <div class="relative flex items-center min-h-2 my-1 gap-2 mx-2">
                                                                 <SidebarSeparator class="mx-0 absolute inset-x-0 top-1/2" />
                                                                 <template v-if="childItem.label">
-                                                                    <div class="relative text-[.625rem]">
-                                                                        <span class="bg-sidebar text-sidebar-foreground/70 py-0.5 pr-2">
+                                                                    <div class="relative text-[.625rem]/[.875rem]">
+                                                                        <span class="bg-sidebar text-sidebar-foreground/70 py-[.1875rem] pr-2">
                                                                             {{ childItem.label }}
                                                                         </span>
                                                                     </div>
