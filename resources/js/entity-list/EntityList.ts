@@ -114,27 +114,19 @@ export class EntityList implements EntityListData {
             return null;
         }
 
+        const multiform = this.forms && Object.values(this.forms).find(form => form.instances.includes(instanceId));
+
         if(this.config.hasShowPage) {
             return route('code16.sharp.show.show', {
                 parentUri: getAppendableParentUri(),
-                entityKey,
-                instanceId,
-            });
-        }
-
-        if(this.forms) {
-            const multiform = Object.values(this.forms).find(form => form.instances.includes(instanceId));
-
-            return route('code16.sharp.form.edit', {
-                parentUri: getAppendableParentUri(),
-                entityKey: `${entityKey}:${multiform.key}`,
+                entityKey: multiform ? `${entityKey}:${multiform.key}` : entityKey,
                 instanceId,
             });
         }
 
         return route('code16.sharp.form.edit', {
             parentUri: getAppendableParentUri(),
-            entityKey,
+            entityKey: multiform ? `${entityKey}:${multiform.key}` : entityKey,
             instanceId,
         });
     }
