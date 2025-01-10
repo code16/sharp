@@ -10,7 +10,7 @@ Route::get('/', function () {
 });
 
 Route::get('/post/{post}', function (\App\Models\Post $post) {
-    return view('sharp.post-preview', ['post' => $post]);
+    return view('pages.post', ['post' => $post]);
 });
 
 Route::get('/admin/users', function (Request $request) {
