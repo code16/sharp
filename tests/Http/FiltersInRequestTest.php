@@ -395,3 +395,40 @@ it('handles retained required filter', function () {
             ])
         );
 });
+
+it('fakes request segments to fix the breadcrumb in case it is built', function () {
+    fakeListFor('person', new class() extends PersonList
+    {
+        protected function getFilters(): ?array
+        {
+            return [
+                new class() extends EntityListSelectFilter
+                {
+                    public function buildFilterConfig(): void
+                    {
+                        // Build breadcrumb
+                        sharp()->context()->breadcrumb()->getCurrentSegmentUrl();
+
+                        $this->configureKey('job');
+                    }
+
+                    public function values(): array
+                    {
+                        return [
+                            'physicist' => 'Physicist',
+                        ];
+                    }
+                },
+            ];
+        }
+    });
+
+    $this
+        ->post(route('code16.sharp.list.filters.store', ['entityKey' => 'person']), [
+            'filterValues' => [
+                'job' => 'physicist',
+            ],
+        ])
+        ->assertSessionHasNoErrors()
+        ->assertRedirect('/sharp/s-list/person?filter_job=physicist');
+});

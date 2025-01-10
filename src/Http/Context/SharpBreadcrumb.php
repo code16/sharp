@@ -15,6 +15,7 @@ class SharpBreadcrumb
 
     private ?string $currentInstanceLabel = null;
     private ?Collection $breadcrumbItems = null;
+    private ?Collection $forcedSegments = null;
 
     public function setCurrentInstanceLabel(?string $label): self
     {
@@ -286,6 +287,10 @@ class SharpBreadcrumb
 
     protected function getSegmentsFromRequest(): Collection
     {
+        if ($this->forcedSegments) {
+            return $this->forcedSegments;
+        }
+
         if (request()->wantsJson() || request()->segment(2) === 'api') {
             // API case: we use the X-Current-Page-Url header sent by the front
             // for preloaded EEL we look for 'current_page_url' query
@@ -299,5 +304,11 @@ class SharpBreadcrumb
         }
 
         return collect(request()->segments())->slice(1)->values();
+    }
+
+    public function forceRequestSegments(array|Collection $segments): void
+    {
+        $this->breadcrumbItems = null;
+        $this->forcedSegments = collect($segments)->values();
     }
 }
