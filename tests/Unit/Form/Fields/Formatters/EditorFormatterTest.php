@@ -1,5 +1,6 @@
 <?php
 
+use Code16\Sharp\Exceptions\Form\SharpFormFieldDataException;
 use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
 use Code16\Sharp\Form\Fields\Formatters\EditorFormatter;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
@@ -29,14 +30,24 @@ it('allows to format a text value to front', function () {
 it('allows to format a text value to front as object when localized', function () {
     $formatter = new EditorFormatter();
     $field = SharpFormEditorField::make('md')->setLocalized();
-    $value = Str::random()."\n\n".Str::random();
+    $value = ['en' => 'test'];
 
     expect($formatter->setDataLocalizations(['fr', 'en'])->toFront($field, $value))->toEqual([
         'text' => [
             'fr' => null,
-            'en' => $value,
+            'en' => 'test',
         ],
     ]);
+});
+
+it('throws if localized value is invalid to front', function () {
+    expect(fn () => (new EditorFormatter())
+        ->toFront(SharpFormEditorField::make('text')->setLocalized(), 'test')
+    )->toThrow(SharpFormFieldDataException::class);
+    
+    expect(fn () => (new EditorFormatter())
+        ->toFront(SharpFormEditorField::make('text'), ['en' => 'test'])
+    )->toThrow(SharpFormFieldDataException::class);
 });
 
 it('allows to format a text value from front', function () {

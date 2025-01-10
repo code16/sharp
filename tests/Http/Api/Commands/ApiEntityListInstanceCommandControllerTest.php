@@ -527,7 +527,7 @@ it('allows to initialize form data in an instance command', function () {
 
                     public function buildFormFields(FieldsContainer $formFields): void
                     {
-                        $formFields->addField(SharpFormTextField::make('name')->setLocalized());
+                        $formFields->addField(SharpFormTextField::make('name'));
                     }
 
                     public function execute($instanceId, array $data = []): array
@@ -538,7 +538,7 @@ it('allows to initialize form data in an instance command', function () {
                     public function initialData($instanceId): array
                     {
                         return [
-                            'name' => $instanceId == 1 ? 'Marie Curie' : '',
+                            'name' => $instanceId == 1 ? 'Marie Curie' : null,
                         ];
                     }
                 },

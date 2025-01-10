@@ -64,7 +64,7 @@ it('allows to initialize form data in a dashboard command', function () {
 
                     public function buildFormFields(FieldsContainer $formFields): void
                     {
-                        $formFields->addField(SharpFormTextField::make('name')->setLocalized());
+                        $formFields->addField(SharpFormTextField::make('name'));
                     }
 
                     public function execute(array $data = []): array

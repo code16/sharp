@@ -122,10 +122,12 @@
                     ? normalizeText(editor.storage.markdown.getMarkdown() ?? '')
                     : normalizeText(trimHTML(editor.getHTML(), { inline: props.field.inline }));
 
-                if(props.field.localized && typeof props.value?.text === 'object') {
+                if(props.field.localized) {
                     emit('input', {
                         ...props.value,
-                        text: { ...props.value.text, [locale]: content },
+                        text: typeof props.value?.text === 'object'
+                            ? { ...props.value.text, [locale]: content }
+                            : { [locale]: content },
                     }, { error });
                 } else {
                     emit('input', { ...props.value, text: content }, { error });
