@@ -28,3 +28,33 @@ it('throws if localized value is invalid to front', function () {
         ->toFront(SharpFormTextareaField::make('text'), ['en' => 'test'])
     )->toThrow(SharpFormFieldDataException::class);
 });
+
+it('adds missing locales when formatting a localized text value from front in a textarea field', function () {
+    $value = Str::random();
+    
+    expect(
+        (new TextareaFormatter())
+            ->setDataLocalizations(['fr', 'en', 'es'])
+            ->fromFront(
+                SharpFormTextareaField::make('text')->setLocalized(),
+                'attribute',
+                ['fr' => $value],
+            )
+    )
+        ->toEqual(['fr' => $value, 'en' => null, 'es' => null]);
+});
+
+// edge case : we can't safely convert a string to a localized array so we pass the string through
+it('returns a string when formatting a string text value from front in a localized text field', function () {
+    $value = Str::random();
+    
+    expect(
+        (new TextareaFormatter())
+            ->setDataLocalizations(['fr', 'en', 'es'])
+            ->fromFront(
+                SharpFormTextareaField::make('md')->setLocalized(),
+                'attribute',
+                $value,
+            )
+    )->toEqual($value);
+});
