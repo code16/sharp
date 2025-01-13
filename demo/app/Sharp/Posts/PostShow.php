@@ -99,7 +99,7 @@ class PostShow extends SharpShow
         $this
             ->configureEntityState('state', PostStateHandler::class)
             ->configureBreadcrumbCustomLabelAttribute('breadcrumb')
-            ->configurePageTitleAttribute('title', localized: true)
+//            ->configurePageTitleAttribute('title', localized: true)
             ->configureDeleteConfirmationText('Are you sure you want to delete this post (this will permanently delete its data)?');
     }
 

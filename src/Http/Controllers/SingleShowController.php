@@ -31,6 +31,7 @@ class SingleShowController extends SharpProtectedController
         $showData = $show->instance(null);
 
         $payload = ShowData::from([
+            'title' => $showData[$show->titleAttribute()] ?? sharp()->context()->breadcrumb()->getCurrentTitle(),
             'config' => $show->showConfig(null),
             'fields' => $show->fields(),
             'layout' => $show->showLayout(),

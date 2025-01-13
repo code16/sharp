@@ -25,6 +25,7 @@ export class Form implements FormData, CommandFormData {
     layout: FormData['layout'];
     locales: FormData['locales'];
     pageAlert: FormData['pageAlert'];
+    title: FormData['title'];
 
     state = reactive<{
         data: FormData['data'],

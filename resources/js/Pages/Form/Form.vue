@@ -72,7 +72,7 @@
             @submit="submit"
         >
             <template #title>
-                {{ breadcrumb.items.at(-1).documentTitleLabel }}
+                {{ form.title }}
             </template>
             <template #footer>
                 <div class="flex gap-4">

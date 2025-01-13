@@ -20,6 +20,7 @@ export class Show implements ShowData {
     layout: ShowData['layout'];
     locales: ShowData['locales'];
     pageAlert: ShowData['pageAlert'];
+    title: ShowData['title'];
 
     entityKey: string;
     instanceId?: string;
@@ -65,15 +66,10 @@ export class Show implements ShowData {
     }
 
     getTitle(locale: string): string | null {
-        if(!this.config.titleAttribute) {
-            return null;
-        }
-        if(this.fields[this.config.titleAttribute]) {
-            const field = this.fields[this.config.titleAttribute] as ShowTextFieldData;
-            const value = this.data[this.config.titleAttribute] as ShowTextFieldData['value'];
-            return field.localized && typeof value?.text === 'object'
-                ? value?.text?.[locale]
-                : value?.text as string;
+        if(this.title) {
+            return typeof this.title === 'object'
+                ? this.title?.[locale]
+                : this.title;
         }
         return null;
     }

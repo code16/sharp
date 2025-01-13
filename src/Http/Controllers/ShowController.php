@@ -8,6 +8,7 @@ use Code16\Sharp\Data\NotificationData;
 use Code16\Sharp\Data\Show\ShowData;
 use Code16\Sharp\Show\SharpSingleShow;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
+use Code16\Sharp\Utils\Entities\ValueObjects\EntityKey;
 use Inertia\Inertia;
 
 class ShowController extends SharpProtectedController
@@ -22,18 +23,20 @@ class ShowController extends SharpProtectedController
         parent::__construct();
     }
 
-    public function show(string $parentUri, string $entityKey, string $instanceId)
+    public function show(string $parentUri, EntityKey $entityKey, string $instanceId)
     {
         sharp_check_ability('view', $entityKey, $instanceId);
 
-        $show = $this->entityManager->entityFor($entityKey)->getShowOrFail();
+        $entity = $this->entityManager->entityFor($entityKey);
+        $show = $entity->getShowOrFail();
 
         abort_if($show instanceof SharpSingleShow, 404);
 
         $show->buildShowConfig();
-
+        
         $showData = $show->instance($instanceId);
         $payload = ShowData::from([
+            'title' => $showData[$show->titleAttribute()] ?? $entity->getLabel($entityKey->subEntity()),
             'config' => $show->showConfig($instanceId),
             'fields' => $show->fields(),
             'layout' => $show->showLayout(),

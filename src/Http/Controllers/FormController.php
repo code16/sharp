@@ -134,6 +134,11 @@ class FormController extends SharpProtectedController
             : $form->newInstance();
 
         return [
+            'title' => (
+                sharp()->context()->isCreation()
+                    ? $form->getCreateTitle()
+                    : $form->getEditTitle()
+            ) ?: sharp()->context()->breadcrumb()->getCurrentTitle(),
             'fields' => $form->fields(),
             'layout' => $form->formLayout(),
             'config' => $form->formConfig(),

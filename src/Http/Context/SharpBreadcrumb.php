@@ -106,6 +106,12 @@ class SharpBreadcrumb
 
         return $this->breadcrumbItems;
     }
+    
+    public function getCurrentTitle(): string
+    {
+        return $this->getDocumentTitleLabelFor($this->breadcrumbItems()->last(), true)
+            ?: $this->getEntityLabelForInstance($this->breadcrumbItems()->last(), true);
+    }
 
     private function findPreviousSegment(string $type, ?string $entityKey = null): ?BreadcrumbItem
     {

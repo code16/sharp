@@ -149,6 +149,7 @@ export type EntityListData = {
   data: Array<{ [key: string]: any }>;
   filterValues: FilterValuesData;
   query: EntityListQueryParamsData | null;
+  title: string | null;
   forms: { [key: string]: EntityListMultiformData } | null;
   meta: PaginatorMetaData | null;
   pageAlert: PageAlertData | null;
@@ -274,9 +275,7 @@ export type FormConditionalDisplayData = {
   fields: Array<{ key: string; values: string | boolean | Array<string> }>;
 };
 export type FormConfigData = {
-  hasShowPage: boolean;
   isSingle: boolean;
-  breadcrumbAttribute: string | null;
 };
 export type FormCustomFieldData = {
   value?: any;
@@ -295,6 +294,7 @@ export type FormData = {
   fields: { [key: string]: FormFieldData };
   layout: FormLayoutData;
   locales: Array<string>;
+  title: string | null;
   pageAlert: PageAlertData | null;
 };
 export type FormDateFieldData = {
@@ -575,8 +575,6 @@ export type FormUploadFieldData = {
   allowedExtensions: Array<string> | null;
   maxFileSize: number | null;
   validationRule: Array<string> | null;
-  storageBasePath: string | null;
-  storageDisk: string | null;
   label: string | null;
   readOnly: boolean | null;
   conditionalDisplay: FormConditionalDisplayData | null;
@@ -764,6 +762,7 @@ export type ShowData = {
   fields: { [key: string]: ShowFieldData };
   layout: ShowLayoutData;
   locales: Array<string> | null;
+  title: string | { [locale: string]: string } | null;
   pageAlert: PageAlertData | null;
 };
 export type ShowEntityListFieldData = {

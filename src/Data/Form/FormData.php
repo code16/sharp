@@ -14,6 +14,7 @@ use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 final class FormData extends Data
 {
     public function __construct(
+        public ?string $title,
         public InstanceAuthorizationsData $authorizations,
         public FormConfigData $config,
         #[LiteralTypeScriptType('{ [key:string]: FormFieldData["value"] }')]
@@ -29,6 +30,7 @@ final class FormData extends Data
     public static function from(array $form): self
     {
         return new self(
+            title: $form['title'],
             authorizations: InstanceAuthorizationsData::from($form['authorizations']),
             config: FormConfigData::from($form['config']),
             data: $form['data'],
