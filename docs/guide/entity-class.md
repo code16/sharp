@@ -76,6 +76,68 @@ class MyEntity extends SharpEntity
 }
 ```
 
+### Single shows and forms
+
+When you need to configure a "unique" resource that does not fit into a List / Show schema, like for instance an account, or a configuration item, you can use a Single Show or Form. This is a dedicated topic, [documented here](single-show.md).
+
 ### Handle Multiforms
 
-This is a dedicated topic, [documented here](multiforms.md).
+Multiforms allows to declare different forms for the same entity, to hanle variants. This is a dedicated topic, [documented here](multiforms.md).
+
+## Declare the Entity in Sharp configuration
+
+The last step is to declare the entity in Sharp, in the ServiceProvider:
+
+```php
+class SharpServiceProvider extends SharpAppServiceProvider
+{
+    protected function configureSharp(SharpConfigBuilder $config): void
+    {
+        $config
+            ->setName('My new project')
+            ->addEntity('product', ProductEntity::class);
+            // ...
+    }
+}
+```
+
+## Custom Entity Resolver
+
+In some very specific cases, you may want to have more control over the entity declaration, depending on some context. You can use a custom SharpEntityResolver to do that.
+
+```php
+use Code16\Sharp\Utils\Entities\SharpEntityResolver;
+
+class MySharpEntityResolver implements SharpEntityResolver
+{
+    public function entityClassName(string $entityKey): ?string
+    {
+        return match ($entityKey) {
+            'product' => auth()->user()->isAdmin() 
+                ? AdminProductEntity::class
+                : ProductEntity::class,
+            'order' => OrderEntity::class,
+            // ...
+        };
+    }
+}
+```
+
+Then, in the ServiceProvider, you can declare the resolver like this:
+
+```php
+class SharpServiceProvider extends SharpAppServiceProvider
+{
+    protected function configureSharp(SharpConfigBuilder $config): void
+    {
+        $config
+            ->setName('My new project')
+            ->declareEntityResolver(MySharpEntityResolver::class);
+            // ...
+    }
+}
+```
+
+::: warning
+You must remove all `->addEntity()` calls in order to use `->declareEntityResolver()`.
+:::

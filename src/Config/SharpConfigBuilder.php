@@ -6,7 +6,9 @@ use Closure;
 use Code16\Sharp\Auth\Impersonate\SharpDefaultEloquentImpersonationHandler;
 use Code16\Sharp\Auth\Impersonate\SharpImpersonationHandler;
 use Code16\Sharp\Auth\TwoFactor\Sharp2faHandler;
+use Code16\Sharp\Exceptions\SharpInvalidEntityKeyException;
 use Code16\Sharp\Search\SharpSearchEngine;
+use Code16\Sharp\Utils\Entities\SharpEntityResolver;
 use Code16\Sharp\Utils\Filters\GlobalRequiredFilter;
 use Code16\Sharp\Utils\Menu\SharpMenu;
 use Illuminate\Contracts\Auth\PasswordBroker;
@@ -127,12 +129,15 @@ class SharpConfigBuilder
         return $this;
     }
 
-    /**
-     * @deprecated will be removed in a future version. Use regular addEntity() calls instead.
-     */
-    public function declareEntityResolver(string $resolverClassName): self
+    public function declareEntityResolver(SharpEntityResolver|string $resolver): self
     {
-        $this->config['entity_resolver'] = $resolverClassName;
+        $resolver = instanciate($resolver);
+
+        if (! $resolver instanceof SharpEntityResolver) {
+            throw new SharpInvalidEntityKeyException('Invalid entity resolver class: it should extend '.SharpEntityResolver::class.'.');
+        }
+
+        $this->config['entity_resolver'] = instanciate($resolver);
         $this->config['entities'] = [];
 
         return $this;

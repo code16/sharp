@@ -11,24 +11,23 @@ class SharpEntityManager
         $entityKey = sharp_normalize_entity_key($entityKey)[0];
 
         if (count(sharp()->config()->get('entities')) > 0) {
-            $entity = sharp()->config()->get('entities.'.$entityKey) ?: sharp()->config()->get('dashboards.'.$entityKey);
-        } elseif ($sharpEntityResolver = sharp()->config()->get('entity_resolver')) {
-            // A custom SharpEntityResolver is used (this is deprecated in 9.x)
-            if (! app()->bound($sharpEntityResolver)) {
-                app()->singleton($sharpEntityResolver, $sharpEntityResolver);
+            $entity = sharp()->config()->get('entities.'.$entityKey);
+            if (! $entity) {
+                // Legacy dashboard configuration (to be removed in 10.x)
+                $entity = sharp()->config()->get('dashboards.'.$entityKey);
             }
-            if (! ($resolver = app($sharpEntityResolver)) instanceof SharpEntityResolver) {
-                throw new SharpInvalidEntityKeyException($sharpEntityResolver.' is an invalid entity resolver class: it should extend '.SharpEntityResolver::class.'.');
+        } elseif ($sharpEntityResolver = sharp()->config()->get('entity_resolver')) {
+            // A custom SharpEntityResolver is used
+            if (! app()->bound(get_class($sharpEntityResolver))) {
+                app()->singleton(get_class($sharpEntityResolver), fn () => $sharpEntityResolver);
             }
 
-            $entity = $resolver->entityClassName($entityKey);
+            $entity = $sharpEntityResolver->entityClassName($entityKey);
         }
 
         if (isset($entity)) {
             if (! app()->bound($entity)) {
-                app()->singleton($entity, function () use ($entity, $entityKey) {
-                    return (new $entity())->setEntityKey($entityKey);
-                });
+                app()->singleton($entity, fn () => (new $entity())->setEntityKey($entityKey));
             }
 
             return app($entity);
