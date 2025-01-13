@@ -41,8 +41,9 @@ abstract class SharpForm
         return tap(
             [
                 'hasShowPage' => $this->displayShowPageAfterCreation,
-                'editFormTitle' => $this->editFormTitle,
-                'createFormTitle' => $this->displayShowPageAfterCreation,
+//                'title' => sharp()->context()->isCreation()
+//                    ? $this->createFormTitle
+//                    : $this->editFormTitle,
             ],
             function (&$config) {
                 $this->appendBreadcrumbCustomLabelAttribute($config);
@@ -92,16 +93,16 @@ abstract class SharpForm
         return $this;
     }
 
-    protected function configureEditTitle(string $formEditTitle): self
+    protected function configureEditTitle(string $editFormTitle): self
     {
-        $this->editFormTitle = $formEditTitle;
+        $this->editFormTitle = $editFormTitle;
 
         return $this;
     }
 
-    protected function configureCreateTitle(string $formCreateTitle): self
+    protected function configureCreateTitle(string $createFormTitle): self
     {
-        $this->createFormTitle = $formCreateTitle;
+        $this->createFormTitle = $createFormTitle;
 
         return $this;
     }
