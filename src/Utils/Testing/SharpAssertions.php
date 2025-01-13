@@ -72,6 +72,20 @@ trait SharpAssertions
             );
     }
 
+    public function updateSharpSingleForm(string $entityKey, array $data)
+    {
+        return $this
+            ->post(
+                route(
+                    'code16.sharp.form.update', [
+                        $this->buildCurrentParentUri(['list', $entityKey]),
+                        $entityKey,
+                    ]
+                ),
+                $data,
+            );
+    }
+
     public function getSharpShow(string $entityKey, $instanceId)
     {
         return $this

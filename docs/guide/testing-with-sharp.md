@@ -31,9 +31,17 @@ Call the Sharp API to display the Show Page for the Entity `$entityKey` and inst
 
 Call the Sharp API to display the Form for the Entity `$entityKey`. If `$instanceId` is provided, it will be an edit form, and otherwise a creation one.
 
+#### `getSharpSingleForm(string $entityKey)`
+
+Call the Sharp API to display the edit Form for the single Entity `$entityKey`.
+
 #### `updateSharpForm(string $entityKey, $instanceId, array $data)`
 
 Call the Sharp API to update the Entity `$entityKey` of id `$instanceId`, with `$data`.
+
+#### `updateSharpSingleForm(string $entityKey, array $data)`
+
+Call the Sharp API to update the single Entity `$entityKey` with `$data`.
 
 #### `storeSharpForm(string $entityKey, array $data)`
 

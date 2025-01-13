@@ -52,10 +52,10 @@ Route::group([
         Route::post('/{parentUri}/s-form/{entityKey}', [FormController::class, 'store'])
             ->name('code16.sharp.form.store');
 
-        Route::get('/{parentUri}/s-form/{entityKey}/{instanceId}', [FormController::class, 'edit'])
+        Route::get('/{parentUri}/s-form/{entityKey}/{instanceId?}', [FormController::class, 'edit'])
             ->name('code16.sharp.form.edit');
 
-        Route::post('/{parentUri}/s-form/{entityKey}/{instanceId}', [FormController::class, 'update'])
+        Route::post('/{parentUri}/s-form/{entityKey}/{instanceId?}', [FormController::class, 'update'])
             ->name('code16.sharp.form.update');
     });
 

@@ -36,6 +36,15 @@ it('allows to test getSharpForm for edit with a custom breadcrumb', function () 
     );
 });
 
+it('allows to test getSharpForm for single edit', function () {
+    $response = fakeResponse()->getSharpForm('leaves');
+
+    $this->assertEquals(
+        route('code16.sharp.form.edit', ['s-list/leaves', 'leaves']),
+        $response->uri,
+    );
+});
+
 it('allows to test getSharpForm for create', function () {
     $response = fakeResponse()->getSharpForm('leaves');
 
@@ -50,6 +59,21 @@ it('allows to test updateSharpForm for update', function () {
 
     $this->assertEquals(
         route('code16.sharp.form.update', ['s-list/leaves', 'leaves', 6]),
+        $response->uri,
+    );
+
+    $this->assertEquals(
+        ['attr' => 'some_value'],
+        $response->postedData,
+    );
+});
+
+it('allows to test updateSharpForm for single update', function () {
+    $response = fakeResponse()
+        ->updateSharpSingleForm('leaves', ['attr' => 'some_value']);
+
+    $this->assertEquals(
+        route('code16.sharp.form.update', ['s-list/leaves', 'leaves']),
         $response->uri,
     );
 
