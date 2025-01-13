@@ -23,6 +23,8 @@ abstract class SharpForm
 
     protected ?FormLayout $formLayout = null;
     protected bool $displayShowPageAfterCreation = false;
+    protected ?string $editFormTitle = null;
+    protected ?string $createFormTitle = null;
 
     final public function formLayout(): array
     {
@@ -39,6 +41,8 @@ abstract class SharpForm
         return tap(
             [
                 'hasShowPage' => $this->displayShowPageAfterCreation,
+                'editFormTitle' => $this->editFormTitle,
+                'createFormTitle' => $this->displayShowPageAfterCreation,
             ],
             function (&$config) {
                 $this->appendBreadcrumbCustomLabelAttribute($config);
@@ -84,6 +88,20 @@ abstract class SharpForm
     protected function configureDisplayShowPageAfterCreation(bool $displayShowPage = true): self
     {
         $this->displayShowPageAfterCreation = $displayShowPage;
+
+        return $this;
+    }
+
+    protected function configureEditTitle(string $formEditTitle): self
+    {
+        $this->editFormTitle = $formEditTitle;
+
+        return $this;
+    }
+
+    protected function configureCreateTitle(string $formCreateTitle): self
+    {
+        $this->createFormTitle = $formCreateTitle;
 
         return $this;
     }
