@@ -37,7 +37,7 @@ it('allows to test getSharpForm for edit with a custom breadcrumb', function () 
 });
 
 it('allows to test getSharpForm for single edit', function () {
-    $response = fakeResponse()->getSharpForm('leaves');
+    $response = fakeResponse()->getSharpSingleForm('leaves');
 
     $this->assertEquals(
         route('code16.sharp.form.edit', ['s-list/leaves', 'leaves']),
