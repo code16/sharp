@@ -56,7 +56,7 @@ trait WithCustomTransformers
         $this->cacheEntityListInstances(
             match (true) {
                 $models instanceof AbstractPaginator => $models->items(),
-                $models instanceof Arrayable => $models->toArray(),
+                $models instanceof Arrayable => $models->all(),
                 default => $models,
             }
         );

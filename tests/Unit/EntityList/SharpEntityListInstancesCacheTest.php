@@ -26,6 +26,7 @@ it('caches array of entities at transform stage', function () {
     $list->data();
 
     expect(sharp()->context()->findListInstance($this->people[0]->id))
+        ->toBeInstanceOf(Person::class)
         ->name
         ->toEqual($this->people[0]->name);
 });
@@ -44,6 +45,7 @@ it('caches collection of entities at transform stage', function () {
     $list->data();
 
     expect(sharp()->context()->findListInstance($this->people[0]->id))
+        ->toBeInstanceOf(Person::class)
         ->name
         ->toEqual($this->people[0]->name);
 });
@@ -62,6 +64,7 @@ it('caches paginated entities at transform stage', function () {
     $list->data();
 
     expect(sharp()->context()->findListInstance($this->people[0]->id))
+        ->toBeInstanceOf(Person::class)
         ->name
         ->toEqual($this->people[0]->name);
 });
@@ -98,6 +101,7 @@ it('uses configured instance id to check id', function () {
     $list->data();
 
     expect(sharp()->context()->findListInstance($this->people[0]->key))
+        ->toBeInstanceOf(Person::class)
         ->name
         ->toEqual($this->people[0]->name);
 });
@@ -107,10 +111,12 @@ it('callback is called in case of missing entity', function () {
 
     $list->data();
 
-    expect(sharp()->context()->findListInstance(
-        12,
-        fn ($id) => $id == 12 ? new Person(['id' => 12, 'name' => 'test']) : null
-    ))
+    expect(sharp()->context()
+        ->findListInstance(
+            12,
+            fn ($id) => $id == 12 ? new Person(['id' => 12, 'name' => 'test']) : null
+        ))
+        ->toBeInstanceOf(Person::class)
         ->name
         ->toEqual('test');
 });
