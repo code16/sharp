@@ -266,6 +266,6 @@ class Thumbnail
     public function __toString()
     {
         // Return URL when Thumbnail is used as a string
-        return $this->make();
+        return (string) $this->make();
     }
 }
