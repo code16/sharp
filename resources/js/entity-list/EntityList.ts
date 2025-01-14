@@ -49,7 +49,7 @@ export class EntityList implements EntityListData {
     }
 
     get visibleFilters(): Array<FilterData>|null {
-        return this.config.filters?._root.filter(filter => !this.hiddenFilters?.[filter.key]);
+        return this.config.filters?._root.filter(filter => this.hiddenFilters && !(filter.key in this.hiddenFilters));
     }
 
     get visibleCommands(): ConfigCommandsData {
