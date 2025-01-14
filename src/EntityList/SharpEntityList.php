@@ -180,7 +180,7 @@ abstract class SharpEntityList
         return $this;
     }
 
-    final protected function configureMultiformAttribute(string $attribute): self
+    final protected function configureMultiformAttribute(?string $attribute): self
     {
         $this->multiformAttribute = $attribute;
 
