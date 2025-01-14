@@ -205,7 +205,7 @@ class SharpBreadcrumb
         };
     }
     
-    public function getPreviousShowCachedBreadcrumbLabel(): ?string
+    public function getParentShowCachedBreadcrumbLabel(): ?string
     {
         $item = $this->breadcrumbItems()->last();
         
@@ -219,7 +219,7 @@ class SharpBreadcrumb
     {
         $cacheKey = "sharp.breadcrumb.{$item->key}.{$item->type}.{$item->instance}";
 
-        if ($item->isForm() && ($cached = $this->getPreviousShowCachedBreadcrumbLabel())) {
+        if ($item->isForm() && ($cached = $this->getParentShowCachedBreadcrumbLabel())) {
             return $cached;
         }
 
