@@ -135,12 +135,14 @@
         })
         .on('upload-success', (file, response) => {
             emit('input', {
+                ...props.value,
                 ...response.body,
                 thumbnail: transformedImg?.value ?? uppyFile.value.preview,
                 mime_type: file.type,
                 size: file.size,
             });
             emit('success', {
+                ...props.value,
                 ...response.body,
                 thumbnail: transformedImg?.value ?? uppyFile.value.preview,
                 mime_type: file.type,
