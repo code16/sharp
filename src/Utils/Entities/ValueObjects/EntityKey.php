@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Utils\Entities\ValueObjects;
 
 use Illuminate\Contracts\Routing\UrlRoutable;
+use Illuminate\Support\Str;
 use Stringable;
 
 /**
@@ -18,7 +19,7 @@ class EntityKey implements UrlRoutable, Stringable
     public function subEntity(): ?string
     {
         return str_contains($this->key, ':')
-            ? str_split($this->key, ':')[1]
+            ? Str::after($this->key, ':')
             : null;
     }
     

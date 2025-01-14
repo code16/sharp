@@ -212,7 +212,7 @@ it('checks the main entity prohibited actions in case of a sub entity', function
     app(SharpEntityManager::class)
         ->entityFor('person')
         ->setMultiforms([
-            'big' => [FakeSharpForm::class],
+            'big' => [FakeSharpForm::class, 'Big'],
         ])
         ->setProhibitedActions(['delete']);
 

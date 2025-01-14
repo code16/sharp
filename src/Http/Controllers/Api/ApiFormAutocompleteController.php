@@ -10,6 +10,7 @@ use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Http\Controllers\Api\Commands\HandlesEntityCommand;
 use Code16\Sharp\Http\Controllers\Api\Commands\HandlesInstanceCommand;
 use Code16\Sharp\Http\Controllers\Api\Embeds\HandlesEmbed;
+use Code16\Sharp\Utils\Entities\ValueObjects\EntityKey;
 use Code16\Sharp\Utils\Transformers\ArrayConverter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -21,7 +22,7 @@ class ApiFormAutocompleteController extends ApiController
     use HandlesEntityCommand;
     use HandlesInstanceCommand;
 
-    public function index(string $entityKey, string $autocompleteFieldKey)
+    public function index(EntityKey $entityKey, string $autocompleteFieldKey)
     {
         $fieldContainer = $this->getFieldContainer($entityKey);
         $field = $fieldContainer->findFieldByKey($autocompleteFieldKey);
@@ -86,7 +87,7 @@ class ApiFormAutocompleteController extends ApiController
         ]);
     }
 
-    private function getFieldContainer(string $entityKey): SharpFormEditorEmbed|Command|SharpForm
+    private function getFieldContainer(EntityKey $entityKey): SharpFormEditorEmbed|Command|SharpForm
     {
         if (request()->input('embed_key')) {
             return $this->getEmbedFromKey(request()->input('embed_key'));
@@ -117,7 +118,7 @@ class ApiFormAutocompleteController extends ApiController
             );
         }
 
-        return $entity->getFormOrFail(sharp_normalize_entity_key($entityKey)[1]);
+        return $entity->getFormOrFail($entityKey->subEntity());
     }
 
     private function normalizeEndpoint(string $input): string

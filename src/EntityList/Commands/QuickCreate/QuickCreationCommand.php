@@ -73,7 +73,7 @@ class QuickCreationCommand extends EntityCommand
             ? $this->link(sprintf(
                 '%s/s-show/%s/%s',
                 $currentUrl,
-                sharp_normalize_entity_key($this->entityKey)[0],
+                $this->entityKey,
                 $instanceId
             ))
             : $this->reload();

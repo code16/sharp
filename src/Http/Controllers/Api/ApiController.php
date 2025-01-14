@@ -29,11 +29,6 @@ abstract class ApiController extends SharpProtectedController
         return $this->entityManager->entityFor($entityKey)->getShowOrFail();
     }
 
-    protected function getFormInstance(string $entityKey): SharpForm
-    {
-        return $this->entityManager->entityFor($entityKey)->getFormOrFail(sharp_normalize_entity_key($entityKey)[1]);
-    }
-
     protected function getDashboardInstance(string $dashboardKey): ?SharpDashboard
     {
         return $this->entityManager->entityFor($dashboardKey)->getViewOrFail();

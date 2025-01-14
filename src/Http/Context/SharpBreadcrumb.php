@@ -4,6 +4,7 @@ namespace Code16\Sharp\Http\Context;
 
 use Code16\Sharp\Http\Context\Util\BreadcrumbItem;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
+use Code16\Sharp\Utils\Entities\ValueObjects\EntityKey;
 use Code16\Sharp\Utils\Menu\SharpMenuManager;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
@@ -106,12 +107,6 @@ class SharpBreadcrumb
 
         return $this->breadcrumbItems;
     }
-    
-    public function getCurrentTitle(): string
-    {
-        return $this->getDocumentTitleLabelFor($this->breadcrumbItems()->last(), true)
-            ?: $this->getEntityLabelForInstance($this->breadcrumbItems()->last(), true);
-    }
 
     private function findPreviousSegment(string $type, ?string $entityKey = null): ?BreadcrumbItem
     {
@@ -209,6 +204,13 @@ class SharpBreadcrumb
             default => null
         };
     }
+    
+    public function getPreviousShowCachedBreadcrumbLabel(): ?string
+    {
+        $item = $this->breadcrumbItems()->last();
+        
+        return Cache::get("sharp.breadcrumb.{$item->key}.s-show.{$item->instance}");
+    }
 
     /**
      * Only for Shows and Forms.
@@ -217,7 +219,7 @@ class SharpBreadcrumb
     {
         $cacheKey = "sharp.breadcrumb.{$item->key}.{$item->type}.{$item->instance}";
 
-        if ($item->isForm() && ($cached = Cache::get("sharp.breadcrumb.{$item->key}.s-show.{$item->instance}"))) {
+        if ($item->isForm() && ($cached = $this->getPreviousShowCachedBreadcrumbLabel())) {
             return $cached;
         }
 
@@ -234,13 +236,9 @@ class SharpBreadcrumb
             }
         }
 
-        $entity = app(SharpEntityManager::class)->entityFor($item->key);
-
-        if (str_contains($item->key, ':')) {
-            return $entity->getMultiforms()[Str::after($item->key, ':')][1] ?? $entity->getLabel();
-        }
-
-        return $entity->getLabel();
+        return app(SharpEntityManager::class)
+            ->entityFor($item->key)
+            ->getLabel((new EntityKey($item->key))->subEntity());
     }
 
     private function isSameEntityKeys(string $key1, string $key2, bool $compareBaseEntities): bool
