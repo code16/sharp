@@ -12,6 +12,7 @@ class QuickCreationCommand extends EntityCommand
     protected ?string $title = null;
     protected SharpForm $sharpForm;
     protected string $entityKey;
+    protected mixed $instanceId;
 
     public function __construct(protected ?array $specificFormFields) {}
 
@@ -63,10 +64,15 @@ class QuickCreationCommand extends EntityCommand
     {
         return $this->sharpForm->getDataLocalizations();
     }
+    
+    public function getInstanceId(): mixed
+    {
+        return $this->instanceId;
+    }
 
     public function execute(array $data = []): array
     {
-        $instanceId = $this->sharpForm->update(null, $data);
+        $this->instanceId = $this->sharpForm->update(null, $data);
         $currentUrl = sharp()->context()->breadcrumb()->getCurrentSegmentUrl();
 
         return $this->sharpForm->isDisplayShowPageAfterCreation()
@@ -74,7 +80,7 @@ class QuickCreationCommand extends EntityCommand
                 '%s/s-show/%s/%s',
                 $currentUrl,
                 sharp_normalize_entity_key($this->entityKey)[0],
-                $instanceId
+                $this->instanceId
             ))
             : $this->reload();
     }

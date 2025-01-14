@@ -72,7 +72,7 @@ class ApiEntityListQuickCreationCommandController extends ApiController
             $list,
             $quickCreationHandler->execute($formattedData)
         );
-        $this->uploadManager->dispatchJobs();
+        $this->uploadManager->dispatchJobs($quickCreationHandler->getInstanceId());
 
         return $result;
     }
