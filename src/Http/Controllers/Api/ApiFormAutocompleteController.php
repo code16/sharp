@@ -127,16 +127,19 @@ class ApiFormAutocompleteController extends ApiController
 
     private function checkEndpoint(string $requestEndpoint, string $fieldEndpoint): void
     {
+        // Validates that the endpoint defined in the field is the same as the one called
+        preg_match(
+            '#'.str()->of($fieldEndpoint)->replaceMatches('#\\{(.*)\\}#', '(.*)').'#im',
+            $requestEndpoint
+        ) ?: throw new SharpInvalidConfigException('The endpoint is not the one defined in the autocomplete field.');
+
+        // Check that the remote route exists in the app
         collect(Route::getRoutes()->getRoutes())
             ->map(fn ($route) => url($route->uri))
-            ->filter(fn ($routeUrl) => $routeUrl == str($requestEndpoint)->before('?'))
+            ->filter(fn (string $routeUrl) => preg_match(
+                '#'.str()->of($routeUrl)->replaceMatches('#\\{(.*)\\}#', '(.*)').'#im',
+                str($requestEndpoint)->before('?')
+            ))
             ->count() > 0 ?: throw new SharpInvalidConfigException('The endpoint is not a valid internal route.');
-
-        preg_match(
-            '#'.str()
-                ->of(preg_quote($fieldEndpoint))
-                ->replaceMatches('#\\\\{\\\\{(.*)\\\\}\\\\}#', '(.*)').'#im',
-            $requestEndpoint
-        ) ?: throw new SharpInvalidConfigException('The endpoint is not a valid internal route.');
     }
 }
