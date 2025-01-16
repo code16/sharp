@@ -273,6 +273,34 @@ it('validates that the sent remote endpoint is the same that was defined in the 
         ]);
 })->throws(\Code16\Sharp\Exceptions\SharpInvalidConfigException::class);
 
+it('allows the defined endpoint to have a querystring', function () {
+    $this->withoutExceptionHandling();
+
+    fakeFormFor('person', new class() extends PersonForm
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(
+                SharpFormAutocompleteRemoteField::make('autocomplete_field')
+                    ->setRemoteMethodPOST()
+                    ->setRemoteEndpoint('/my/endpoint?param1=one,param2=two')
+            );
+        }
+    });
+
+    Route::post('/my/endpoint', fn () => []);
+
+    $this
+        ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+            'entityKey' => 'person',
+            'autocompleteFieldKey' => 'autocomplete_field',
+        ]), [
+            'endpoint' => '/my/endpoint?param1=one,param2=two',
+            'search' => 'my search',
+        ])
+        ->assertOk();
+});
+
 it('allows full and relative remote endpoint', function () {
     fakeFormFor('person', new class() extends PersonForm
     {

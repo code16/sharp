@@ -129,7 +129,11 @@ class ApiFormAutocompleteController extends ApiController
     {
         // Validates that the endpoint defined in the field is the same as the one called
         preg_match(
-            '#'.str()->of($fieldEndpoint)->replaceMatches('#\\{(.*)\\}#', '(.*)').'#im',
+            '#'
+            .str()
+                ->of(preg_quote($fieldEndpoint))
+                ->replaceMatches('#\\\\{\\\\{(.*)\\\\}\\\\}#', '(.*)')
+            .'#im',
             $requestEndpoint
         ) ?: throw new SharpInvalidConfigException('The endpoint is not the one defined in the autocomplete field.');
 
