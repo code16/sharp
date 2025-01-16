@@ -433,15 +433,26 @@ class ProductForm extends SharpForm
 {
 	// ...
     
-    public function rules(): array
+    public function rules(array $formattedData): array
     {
     	return [
     		'name' => 'required',
 			'price' => ['required', 'numeric'],
 		];
     }
+    
+    public function messages(array $formattedData): array
+    {
+    	return [
+    		'price.numeric' => 'The price must be a number',
+		];
+    }
 }
 ```
+
+::: tip
+The `$formattedData` argument is optional, but can be useful if you need to validate a field based on another one. If you don’t need it, you can safely remove it from the method argument list.
+:::
 
 Or you can manually call `->validate()` in the `update()` method:
 

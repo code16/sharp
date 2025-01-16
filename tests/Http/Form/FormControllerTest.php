@@ -221,6 +221,38 @@ it('validates an instance before store and update with the rules() method', func
         ->assertSessionHasErrors('name');
 });
 
+it('passes the formatted data to the rules() method', function () {
+    fakeFormFor('person', new class() extends PersonForm
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(SharpFormTextField::make('name'))
+                ->addField(SharpFormTextField::make('job'));
+        }
+
+        public function rules(array $data): array
+        {
+            return [
+                'name' => [
+                    'required',
+                    function ($attribute, $value, $fail) use ($data) {
+                        if ($data['job'] == 'Physicist' && $value == 'Marie Curie') {
+                            $fail('Marie Curie is not a physicist');
+                        }
+                    },
+                ],
+            ];
+        }
+    });
+
+    $this
+        ->post('/sharp/s-list/person/s-form/person/1', [
+            'job' => 'Physicist',
+            'name' => 'Marie Curie',
+        ])
+        ->assertSessionHasErrors('name');
+});
+
 it('validates an instance before store and update with a validate() call', function () {
     fakeFormFor('person', new class() extends PersonForm
     {
