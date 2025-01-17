@@ -224,17 +224,7 @@ class Thumbnail
             throw new EncoderException('Encoder class ('.$this->encoderClass.') does not exist or does not implement EncoderInterface.');
         }
 
-        /*
-           workaround for an extension bug :
-           @see https://github.com/Intervention/image/issues/1419
-        */
-        $fullPath = Storage::disk($this->uploadModel->disk)->path($this->uploadModel->file_name);
-        $filename = str($this->uploadModel->file_name)->replaceLast(
-            pathinfo($fullPath, PATHINFO_EXTENSION),
-            strtolower(pathinfo($fullPath, PATHINFO_EXTENSION))
-        );
-
-        return new FilePathEncoder(path: $filename, quality: $this->quality);
+        return new FilePathEncoder(path: $this->uploadModel->file_name, quality: $this->quality);
     }
 
     private function resolveThumbnailExtension(): string
