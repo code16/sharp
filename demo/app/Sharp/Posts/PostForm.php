@@ -192,11 +192,6 @@ class PostForm extends SharpForm
             });
     }
     
-    public function buildPageAlert(PageAlert $pageAlert): void
-    {
-        $pageAlert->setMessage('Test ABDE');
-    }
-    
     public function buildFormConfig(): void
     {
         $this->configureDisplayShowPageAfterCreation()
