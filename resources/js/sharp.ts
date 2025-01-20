@@ -43,9 +43,9 @@ createInertiaApp({
 });
 
 // force reload on previous navigation to invalidate outdated data / state
-window.addEventListener('popstate', () => {
+window.addEventListener('popstate', (e) => {
     document.addEventListener('inertia:navigate', () => {
-        router.reload({ replace: true });
+        router.reload({ headers: { 'X-PopState': '1' }, replace: true });
     }, { once: true });
 });
 

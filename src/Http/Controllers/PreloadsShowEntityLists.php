@@ -12,6 +12,10 @@ trait PreloadsShowEntityLists
 {
     protected function addPreloadHeadersForShowEntityLists(ShowData $payload): void
     {
+        if(request()->hasHeader('X-PopState')) {
+            return;
+        }
+        
         collect($payload->fields)->each(function ($field) use ($payload) {
             if ($field instanceof ShowEntityListFieldData) {
                 $section = collect($payload->layout->sections)

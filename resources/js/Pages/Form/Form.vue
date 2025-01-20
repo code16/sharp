@@ -23,6 +23,11 @@
     const showErrorAlert = ref(false);
     const errorAlertMessage = ref('');
 
+    watch(() => props.form, () => {
+        console.log('changed');
+        Object.assign(form, props.form);
+    });
+
     watch(() => form.errors, () => {
         if(Object.keys(form.errors).length === 0) {
             showErrorAlert.value = false;

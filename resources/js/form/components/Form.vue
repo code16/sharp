@@ -106,6 +106,17 @@
                 </Alert>
             </div>
         </template>
+
+        <template v-if="form.pageAlert">
+            <div class="container">
+                <PageAlert
+                    class="mb-4"
+                    :page-alert="form.pageAlert"
+                />
+            </div>
+
+        </template>
+
         <template v-if="form.locales?.length || form.layout.tabbed && form.layout.tabs.length > 1">
             <StickyTop class="@container relative group flex items-end pointer-events-none data-[stuck]:z-20"
                 v-slot="{ stuck, isOverflowing }"
@@ -170,105 +181,98 @@
             </StickyTop>
         </template>
 
-            <component :is="inline ? 'div' : RootCard">
-                <template v-if="!inline">
-                    <CardHeader>
-                        <div class="flex items-start gap-x-4">
-                            <CardTitle class="-mt-0.5 flex-1 truncate text-2xl/7">
-                                <slot name="title" />
-                            </CardTitle>
-                        </div>
-                    </CardHeader>
-                </template>
-                <CardContent :class="inline ? '!p-0' : ''">
-                    <template v-if="form.pageAlert">
-                        <PageAlert
-                            class="mb-4"
-                            :page-alert="form.pageAlert"
-                        />
-                    </template>
-
-                    <template v-for="tab in form.layout.tabs">
-                        <TabsContent class="mt-0" :tabindex="form.layout.tabs.length > 1 ? 0 : -1" :value="slugify(tab.title)">
-                            <div class="grid gap-8 grid-cols-1 @3xl/root-card:grid-cols-12">
-                                <template v-for="column in tab.columns">
-                                    <div class="@3xl/root-card:col-[span_var(--size)]" :style="{ '--size': `${column.size}` }">
-                                        <FieldGrid class="gap-6 gap-y-7">
-                                            <template v-for="row in column.fields">
-                                                <FieldGridRow v-show="form.fieldRowShouldBeVisible(row)">
-                                                    <template v-for="fieldLayout in row">
-                                                        <template v-if="'legend' in fieldLayout">
-                                                            <FieldGridColumn v-show="form.fieldsetShouldBeVisible(fieldLayout)">
-                                                                <fieldset>
-                                                                    <Label class="mb-2.5" as="legend">
-                                                                        {{ fieldLayout.legend }}
-                                                                    </Label>
-                                                                    <Card class="shadow">
-                                                                        <CardContent>
-                                                                            <FieldGrid class="gap-6">
-                                                                                <template v-for="row in fieldLayout.fields">
-                                                                                    <FieldGridRow v-show="form.fieldRowShouldBeVisible(row)">
-                                                                                        <template v-for="fieldLayout in row">
-                                                                                            <FieldGridColumn :layout="fieldLayout" v-show="form.fieldShouldBeVisible(fieldLayout)">
-                                                                                                <SharpFormField
-                                                                                                    :field="form.getField(fieldLayout.key)"
-                                                                                                    :field-layout="fieldLayout"
-                                                                                                    :field-error-key="fieldLayout.key"
-                                                                                                    :value="form.data[fieldLayout.key]"
-                                                                                                    :locale="(form.getMeta(fieldLayout.key) as FieldMeta)?.locale ?? form.defaultLocale"
-                                                                                                    :row="row"
-                                                                                                    root
-                                                                                                    @input="(value, options) => onFieldInput(fieldLayout.key, value, options)"
-                                                                                                    @locale-change="onFieldLocaleChange(fieldLayout.key, $event)"
-                                                                                                    @uploading="onFieldUploading(fieldLayout.key, $event)"
-                                                                                                />
-                                                                                            </FieldGridColumn>
-                                                                                        </template>
-                                                                                    </FieldGridRow>
-                                                                                </template>
-                                                                            </FieldGrid>
-                                                                        </CardContent>
-                                                                    </Card>
-                                                                </fieldset>
-                                                            </FieldGridColumn>
-                                                        </template>
-                                                        <template v-else>
-                                                            <FieldGridColumn :layout="fieldLayout" v-show="form.fieldShouldBeVisible(fieldLayout)">
-                                                                <SharpFormField
-                                                                    :field="form.getField(fieldLayout.key)"
-                                                                    :field-layout="fieldLayout"
-                                                                    :field-error-key="fieldLayout.key"
-                                                                    :value="form.data[fieldLayout.key]"
-                                                                    :locale="(form.getMeta(fieldLayout.key) as FieldMeta)?.locale ?? form.currentLocale"
-                                                                    :row="row as LayoutFieldData[]"
-                                                                    root
-                                                                    @input="(value, options) => onFieldInput(fieldLayout.key, value, options)"
-                                                                    @locale-change="onFieldLocaleChange(fieldLayout.key, $event)"
-                                                                    @uploading="onFieldUploading(fieldLayout.key, $event)"
-                                                                />
-                                                            </FieldGridColumn>
-                                                        </template>
+        <component :is="inline ? 'div' : RootCard">
+            <template v-if="!inline">
+                <CardHeader>
+                    <div class="flex items-start gap-x-4">
+                        <CardTitle class="-mt-0.5 flex-1 truncate text-2xl/7">
+                            <slot name="title" />
+                        </CardTitle>
+                    </div>
+                </CardHeader>
+            </template>
+            <CardContent :class="inline ? '!p-0' : ''">
+                <template v-for="tab in form.layout.tabs">
+                    <TabsContent class="mt-0" :tabindex="form.layout.tabs.length > 1 ? 0 : -1" :value="slugify(tab.title)">
+                        <div class="grid gap-8 grid-cols-1 @3xl/root-card:grid-cols-12">
+                            <template v-for="column in tab.columns">
+                                <div class="@3xl/root-card:col-[span_var(--size)]" :style="{ '--size': `${column.size}` }">
+                                    <FieldGrid class="gap-6 gap-y-7">
+                                        <template v-for="row in column.fields">
+                                            <FieldGridRow v-show="form.fieldRowShouldBeVisible(row)">
+                                                <template v-for="fieldLayout in row">
+                                                    <template v-if="'legend' in fieldLayout">
+                                                        <FieldGridColumn v-show="form.fieldsetShouldBeVisible(fieldLayout)">
+                                                            <fieldset>
+                                                                <Label class="mb-2.5" as="legend">
+                                                                    {{ fieldLayout.legend }}
+                                                                </Label>
+                                                                <Card class="shadow">
+                                                                    <CardContent>
+                                                                        <FieldGrid class="gap-6">
+                                                                            <template v-for="row in fieldLayout.fields">
+                                                                                <FieldGridRow v-show="form.fieldRowShouldBeVisible(row)">
+                                                                                    <template v-for="fieldLayout in row">
+                                                                                        <FieldGridColumn :layout="fieldLayout" v-show="form.fieldShouldBeVisible(fieldLayout)">
+                                                                                            <SharpFormField
+                                                                                                :field="form.getField(fieldLayout.key)"
+                                                                                                :field-layout="fieldLayout"
+                                                                                                :field-error-key="fieldLayout.key"
+                                                                                                :value="form.data[fieldLayout.key]"
+                                                                                                :locale="(form.getMeta(fieldLayout.key) as FieldMeta)?.locale ?? form.defaultLocale"
+                                                                                                :row="row"
+                                                                                                root
+                                                                                                @input="(value, options) => onFieldInput(fieldLayout.key, value, options)"
+                                                                                                @locale-change="onFieldLocaleChange(fieldLayout.key, $event)"
+                                                                                                @uploading="onFieldUploading(fieldLayout.key, $event)"
+                                                                                            />
+                                                                                        </FieldGridColumn>
+                                                                                    </template>
+                                                                                </FieldGridRow>
+                                                                            </template>
+                                                                        </FieldGrid>
+                                                                    </CardContent>
+                                                                </Card>
+                                                            </fieldset>
+                                                        </FieldGridColumn>
                                                     </template>
-                                                </FieldGridRow>
-                                            </template>
-                                        </FieldGrid>
-                                    </div>
-                                </template>
-                            </div>
-                        </TabsContent>
-                    </template>
-                </CardContent>
-                <template v-if="$slots.footer">
-                    <StickyBottom class="group sticky z-30 -bottom-2 lg:bottom-0 pointer-events-none" sentinel-class="bottom-2 lg:bottom-0">
-                        <CardFooter class="justify-end px-0 pt-4">
-                            <div class="relative pointer-events-auto">
-                                <div class="absolute -inset-4 -bottom-6 @[64rem]:-inset-6 transition-[border-color] border-transparent border-l border-t rounded-tl-lg rounded-br-lg -z-10 group-data-[stuck]:bg-card group-data-[stuck]:border-border"
-                                ></div>
-                                <slot name="footer" />
-                            </div>
-                        </CardFooter>
-                    </StickyBottom>
+                                                    <template v-else>
+                                                        <FieldGridColumn :layout="fieldLayout" v-show="form.fieldShouldBeVisible(fieldLayout)">
+                                                            <SharpFormField
+                                                                :field="form.getField(fieldLayout.key)"
+                                                                :field-layout="fieldLayout"
+                                                                :field-error-key="fieldLayout.key"
+                                                                :value="form.data[fieldLayout.key]"
+                                                                :locale="(form.getMeta(fieldLayout.key) as FieldMeta)?.locale ?? form.currentLocale"
+                                                                :row="row as LayoutFieldData[]"
+                                                                root
+                                                                @input="(value, options) => onFieldInput(fieldLayout.key, value, options)"
+                                                                @locale-change="onFieldLocaleChange(fieldLayout.key, $event)"
+                                                                @uploading="onFieldUploading(fieldLayout.key, $event)"
+                                                            />
+                                                        </FieldGridColumn>
+                                                    </template>
+                                                </template>
+                                            </FieldGridRow>
+                                        </template>
+                                    </FieldGrid>
+                                </div>
+                            </template>
+                        </div>
+                    </TabsContent>
                 </template>
-            </component>
+            </CardContent>
+            <template v-if="$slots.footer">
+                <StickyBottom class="group sticky z-30 -bottom-2 lg:bottom-0 pointer-events-none" sentinel-class="bottom-2 lg:bottom-0">
+                    <CardFooter class="justify-end px-0 pt-4">
+                        <div class="relative pointer-events-auto">
+                            <div class="absolute -inset-4 -bottom-6 @[64rem]:-inset-6 transition-[border-color] border-transparent border-l border-t rounded-tl-lg rounded-br-lg -z-10 group-data-[stuck]:bg-card group-data-[stuck]:border-border"
+                            ></div>
+                            <slot name="footer" />
+                        </div>
+                    </CardFooter>
+                </StickyBottom>
+            </template>
+        </component>
     </Tabs>
 </template>

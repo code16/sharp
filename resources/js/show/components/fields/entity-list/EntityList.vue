@@ -91,7 +91,9 @@
     }
 
     async function init() {
-        const data = await api.get(props.field.endpointUrl)
+        const data = await api.get(props.field.endpointUrl, {
+            fetchOptions: { cache: 'no-store' } as RequestInit,
+        })
             .then(response => response.data as EntityListData);
 
         update(data);

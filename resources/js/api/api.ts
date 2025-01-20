@@ -10,6 +10,7 @@ export function createApi() {
     const api = axios.create({
         baseURL: `/${config('sharp.custom_url_segment')}/api`,
         paramsSerializer,
+        adapter: 'fetch',
     });
     installInterceptors(api);
     installProgressInterceptors(api);
