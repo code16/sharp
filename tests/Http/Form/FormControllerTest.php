@@ -143,22 +143,6 @@ it('returns configured form layout', function () {
         );
 });
 
-it('returns form configuration', function () {
-    fakeFormFor('person', new class() extends PersonForm
-    {
-        public function buildFormConfig(): void
-        {
-            $this->configureBreadcrumbCustomLabelAttribute('name');
-        }
-    });
-
-    $this->get('/sharp/s-list/person/s-form/person/1')
-        ->assertOk()
-        ->assertInertia(fn (Assert $page) => $page
-            ->where('form.config.breadcrumbAttribute', 'name')
-        );
-});
-
 it('stores or updates an instance and redirect to the list', function () {
     $this
         ->post('/sharp/s-list/person/s-form/person', [

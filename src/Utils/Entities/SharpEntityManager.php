@@ -3,12 +3,13 @@
 namespace Code16\Sharp\Utils\Entities;
 
 use Code16\Sharp\Exceptions\SharpInvalidEntityKeyException;
+use Illuminate\Support\Str;
 
 class SharpEntityManager
 {
     public function entityFor(string $entityKey): SharpEntity|SharpDashboardEntity
     {
-        $entityKey = sharp_normalize_entity_key($entityKey)[0];
+        $entityKey = Str::before($entityKey, ':');
 
         if (count(sharp()->config()->get('entities')) > 0) {
             $entity = sharp()->config()->get('entities.'.$entityKey);

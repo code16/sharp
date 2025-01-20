@@ -8,6 +8,7 @@ use Code16\Sharp\Data\Form\FormData;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Form\SharpSingleForm;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
+use Code16\Sharp\Utils\Entities\ValueObjects\EntityKey;
 use Code16\Sharp\Utils\Uploads\SharpUploadManager;
 use Inertia\Inertia;
 
@@ -23,11 +24,11 @@ class FormController extends SharpProtectedController
         parent::__construct();
     }
 
-    public function create(string $parentUri, string $entityKey)
+    public function create(string $parentUri, EntityKey $entityKey)
     {
         $entity = $this->entityManager->entityFor($entityKey);
 
-        $form = $entity->getFormOrFail(sharp_normalize_entity_key($entityKey)[1]);
+        $form = $entity->getFormOrFail($entityKey->subEntity());
 
         if ($form instanceof SharpSingleForm) {
             // There is no creation in SingleForms
@@ -40,14 +41,19 @@ class FormController extends SharpProtectedController
         $data = $this->buildFormData($form, $entityKey);
 
         return Inertia::render('Form/Form', [
-            'form' => FormData::from($data),
+            'form' => FormData::from([
+                ...$data,
+                'title' => $form->getCreateTitle() ?: trans('sharp::breadcrumb.form.create_entity', [
+                    'entity' => $entity->getLabel($entityKey->subEntity()),
+                ]),
+            ]),
             'breadcrumb' => BreadcrumbData::from([
                 'items' => sharp()->context()->breadcrumb()->allSegments(),
             ]),
         ]);
     }
 
-    public function edit(string $parentUri, string $entityKey, ?string $instanceId = null)
+    public function edit(string $parentUri, EntityKey $entityKey, ?string $instanceId = null)
     {
         $entity = $this->entityManager->entityFor($entityKey);
 
@@ -57,7 +63,7 @@ class FormController extends SharpProtectedController
             $instanceId
         );
 
-        $form = $entity->getFormOrFail(sharp_normalize_entity_key($entityKey)[1]);
+        $form = $entity->getFormOrFail($entityKey->subEntity());
 
         abort_if(
             (! $instanceId && ! $form instanceof SharpSingleForm)
@@ -69,20 +75,26 @@ class FormController extends SharpProtectedController
         $data = $this->buildFormData($form, $entityKey, $instanceId);
 
         return Inertia::render('Form/Form', [
-            'form' => FormData::from($data),
+            'form' => FormData::from([
+                ...$data,
+                'title' => $form->getEditTitle() ?: trans('sharp::breadcrumb.form.edit_entity', [
+                    'entity' => sharp()->context()->breadcrumb()->getParentShowCachedBreadcrumbLabel()
+                        ?: $entity->getLabel($entityKey->subEntity()),
+                ]),
+            ]),
             'breadcrumb' => BreadcrumbData::from([
                 'items' => sharp()->context()->breadcrumb()->allSegments(),
             ]),
         ]);
     }
 
-    public function update(string $parentUri, string $entityKey, ?string $instanceId = null)
+    public function update(string $parentUri, EntityKey $entityKey, ?string $instanceId = null)
     {
         sharp_check_ability('update', $entityKey, $instanceId);
 
         $form = $this->entityManager
             ->entityFor($entityKey)
-            ->getFormOrFail(sharp_normalize_entity_key($entityKey)[1]);
+            ->getFormOrFail($entityKey->subEntity());
 
         abort_if(
             (! $instanceId && ! $form instanceof SharpSingleForm)
@@ -97,9 +109,11 @@ class FormController extends SharpProtectedController
         return redirect()->to(sharp()->context()->breadcrumb()->getPreviousSegmentUrl());
     }
 
-    public function store(string $parentUri, string $entityKey)
+    public function store(string $parentUri, EntityKey $entityKey)
     {
-        $form = $this->entityManager->entityFor($entityKey)->getFormOrFail(sharp_normalize_entity_key($entityKey)[1]);
+        $form = $this->entityManager
+            ->entityFor($entityKey)
+            ->getFormOrFail($entityKey->subEntity());
 
         if ($form instanceof SharpSingleForm) {
             // There is no creation in SingleForms
@@ -120,7 +134,7 @@ class FormController extends SharpProtectedController
                 ? sprintf(
                     '%s/s-show/%s/%s',
                     $previousUrl,
-                    sharp_normalize_entity_key($entityKey)[0],
+                    $entityKey,
                     $instanceId
                 )
                 : $previousUrl

@@ -8,6 +8,7 @@ use Code16\Sharp\Data\EntityList\EntityListData;
 use Code16\Sharp\Data\NotificationData;
 use Code16\Sharp\Exceptions\SharpInvalidConfigException;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
+use Code16\Sharp\Utils\Menu\SharpMenuManager;
 use Inertia\Inertia;
 
 class EntityListController extends SharpProtectedController
@@ -58,7 +59,12 @@ class EntityListController extends SharpProtectedController
         }
 
         return Inertia::render('EntityList/EntityList', [
-            'entityList' => EntityListData::from($data),
+            'entityList' => EntityListData::from([
+                ...$data,
+                'title' => app(SharpMenuManager::class)
+                    ->getEntityMenuItem($entityKey)
+                    ?->getLabel() ?: trans('sharp::breadcrumb.entityList'),
+            ]),
             'breadcrumb' => BreadcrumbData::from([
                 'items' => sharp()->context()->breadcrumb()->allSegments(),
             ]),

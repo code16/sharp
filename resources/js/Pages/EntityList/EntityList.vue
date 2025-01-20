@@ -89,7 +89,7 @@
         >
             <template #card-header>
                 <CardTitle>
-                    {{ breadcrumb.items[0].label }}
+                    {{ entityList.title }}
                 </CardTitle>
             </template>
         </EntityListComponent>

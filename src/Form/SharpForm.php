@@ -38,17 +38,7 @@ abstract class SharpForm
 
     public function formConfig(): array
     {
-        return tap(
-            [
-                'hasShowPage' => $this->displayShowPageAfterCreation,
-//                'title' => sharp()->context()->isCreation()
-//                    ? $this->createFormTitle
-//                    : $this->editFormTitle,
-            ],
-            function (&$config) {
-                $this->appendBreadcrumbCustomLabelAttribute($config);
-            },
-        );
+        return [];
     }
 
     final public function instance($id): array
@@ -105,6 +95,16 @@ abstract class SharpForm
         $this->createFormTitle = $createFormTitle;
 
         return $this;
+    }
+    
+    final public function getCreateTitle(): ?string
+    {
+        return $this->createFormTitle;
+    }
+    
+    final public function getEditTitle(): ?string
+    {
+        return $this->editFormTitle;
     }
 
     public function isDisplayShowPageAfterCreation(): bool

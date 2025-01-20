@@ -32,10 +32,7 @@ abstract class BaseSharpEntity
         return $policy;
     }
 
-    final public function getLabel(): string
-    {
-        return $this->label;
-    }
+    abstract public function getLabel(): string;
 
     final public function isDashboard(): bool
     {
