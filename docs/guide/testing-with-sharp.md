@@ -78,12 +78,12 @@ For instance:
 
 ```php
     $this
-        ->withSharpCurrentBreadcrumb([
+        ->withSharpCurrentBreadcrumb(
             ['list', 'trees'],
             ['show', 'trees', 8],
             ['show', 'leaves', 16],
             ['form', 'leaves', 16],
-        ])
+        )
         ->getSharpForm(/*...*/)
         ->assertOk();
 ```
