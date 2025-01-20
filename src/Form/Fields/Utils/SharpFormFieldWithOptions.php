@@ -20,7 +20,7 @@ trait SharpFormFieldWithOptions
 
         if (is_array($firstOption) && isset($firstOption[$idAttribute])) {
             // We assume that we already have ["id", "label"] in this case
-            return $options->map($format)->values()->all();
+            return $options->map(fn ($option) => $format(ArrayConverter::modelToArray($option)))->values()->all();
         }
 
         // Simple [key => value] array case

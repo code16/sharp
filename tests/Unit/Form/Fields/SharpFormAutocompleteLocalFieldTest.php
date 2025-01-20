@@ -1,6 +1,7 @@
 <?php
 
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteLocalField;
+use Code16\Sharp\Tests\Fixtures\Person;
 
 it('sets default values for local autocomplete', function () {
     $autocompleteField = SharpFormAutocompleteLocalField::make('field')
@@ -82,6 +83,24 @@ it('allows to define localValues as attributes array', function () {
         ->setResultItemTemplate('{{ $name }} was chosen')
         ->setLocalValues([['id' => 1, 'name' => 'bob', 'age' => 42]]);
 
+    expect($autocompleteField->toArray()['localValues'])
+        ->toEqual([
+            [
+                'id' => 1,
+                'name' => 'bob',
+                'age' => 42,
+                '_html' => 'Choose bob, he is 42',
+                '_htmlResult' => 'bob was chosen',
+            ],
+        ]);
+});
+
+it('allows to define localValues with models as attributes array', function () {
+    $autocompleteField = SharpFormAutocompleteLocalField::make('field')
+        ->setListItemTemplate('Choose {{ $name }}, he is {{ $age }}')
+        ->setResultItemTemplate('{{ $name }} was chosen')
+        ->setLocalValues([new Person(['id' => 1, 'name' => 'bob', 'age' => 42])]);
+    
     expect($autocompleteField->toArray()['localValues'])
         ->toEqual([
             [
