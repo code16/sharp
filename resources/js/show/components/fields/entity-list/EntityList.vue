@@ -1,30 +1,26 @@
 <script setup lang="ts">
     import { EntityList } from '@/entity-list/EntityList';
     import EntityListComponent from '@/entity-list/components/EntityList.vue'
-    import EntityListTitle from '@/entity-list/components/EntityListTitle.vue'
     import { ChevronsUpDown } from "lucide-vue-next";
     import { ShowFieldProps } from "@/show/types";
     import {
         EntityListData,
-        EntityListQueryParamsData,
         FilterData,
         ShowEntityListFieldData
     } from "@/types";
-    import { nextTick, Ref, ref } from "vue";
+    import { nextTick, Ref, ref, toRaw, onBeforeUnmount } from "vue";
     import { useCommands } from "@/commands/useCommands";
     import { api } from "@/api/api";
-    import { FilterQueryParams, FilterValues } from "@/filters/types";
     import { route } from "@/utils/url";
     import { FilterManager } from "@/filters/FilterManager";
-    import { useParentShow } from "@/show/useParentShow";
     import { useFilters } from "@/filters/useFilters";
     import { CardTitle } from "@/components/ui/card";
     import { Button } from "@/components/ui/button";
+    import { useRemember } from "@inertiajs/vue3";
 
     const props = defineProps<ShowFieldProps<ShowEntityListFieldData>>();
 
     const el = ref();
-    const show = useParentShow();
     const collapsed = ref(props.collapsable);
     const entityList: Ref<EntityList | null> = ref(null);
     const filters: FilterManager = useFilters();
@@ -38,6 +34,31 @@
             formModal.shouldReopen && formModal.reopen();
         },
     });
+    const remembered = useRemember({ height: 0, data: null }, `entityList_${props.field.key}`) as Ref<{ height: number, data: EntityListData | null }>;
+    const restoredData = remembered.value.data;
+
+    onBeforeUnmount(() => {
+        remembered.value.height = el.value.offsetHeight;
+        remembered.value.data = restoredData ? null : toRaw(entityList.value)?.toData();
+    });
+
+    if(restoredData) {
+        update(restoredData);
+        remembered.value.data = null;
+    }
+
+    if(!restoredData && !props.collapsable) {
+        init();
+    }
+
+    async function init() {
+        const data = await api.get(props.field.endpointUrl, {
+            fetchOptions: { cache: 'no-store' } as RequestInit,
+        })
+            .then(response => response.data as EntityListData);
+
+        update(data);
+    }
 
     function update(data: EntityListData) {
         entityList.value = new EntityList(
@@ -50,6 +71,9 @@
             data.config.filters,
             data.filterValues
         );
+        nextTick(() => {
+            remembered.value.height = 0;
+        });
     }
 
     async function onQueryChange(newQuery) {
@@ -90,30 +114,16 @@
         update(data);
     }
 
-    async function init() {
-        const data = await api.get(props.field.endpointUrl, {
-            fetchOptions: { cache: 'no-store' } as RequestInit,
-        })
-            .then(response => response.data as EntityListData);
-
-        update(data);
-    }
-
     function onToggle() {
         collapsed.value = !collapsed.value;
         if(!entityList.value) {
             init();
         }
     }
-
-    if(!props.collapsable) {
-        init();
-    }
 </script>
 
 <template>
-    <div ref="el">
-
+    <div ref="el" :style="{ 'min-height': `${remembered.height}px` }">
        <EntityListComponent
            :entity-list="entityList"
            :entity-key="field.entityListKey"

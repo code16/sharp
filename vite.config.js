@@ -49,7 +49,7 @@ export default defineConfig(({ mode, command }) => {
                 ],
                 publicDirectory: '/dist',
                 refresh: [
-                    // 'demo/app/Sharp/**/*.php',
+                    'demo/app/Sharp/**/*.php',
                 ],
                 // refresh: true,
                 detectTls: env.APP_URL?.startsWith('https')

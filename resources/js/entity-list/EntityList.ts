@@ -37,6 +37,21 @@ export class EntityList implements EntityListData {
         this.hiddenCommands = hiddenCommands;
     }
 
+    toData() {
+        return {
+            authorizations: this.authorizations,
+            config: this.config,
+            data: this.data,
+            fields: this.fields,
+            forms: this.forms,
+            meta: this.meta,
+            pageAlert: this.pageAlert,
+            query: this.query,
+            filterValues: this.filterValues,
+            title: this.title,
+        };
+    }
+
     get count() {
         return this.meta?.total ?? this.data.length;
     }

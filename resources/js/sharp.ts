@@ -45,7 +45,15 @@ createInertiaApp({
 // force reload on previous navigation to invalidate outdated data / state
 window.addEventListener('popstate', (e) => {
     document.addEventListener('inertia:navigate', () => {
-        router.reload({ headers: { 'X-PopState': '1' }, replace: true });
+        document.body.style.minHeight = `${document.body.clientHeight}px`;
+        router.visit(location.href, {
+            preserveScroll: true,
+            preserveState: false,
+            replace: true,
+            onFinish() {
+                document.body.style.minHeight = '';
+            }
+        });
     }, { once: true });
 });
 
