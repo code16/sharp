@@ -7,6 +7,7 @@ import {
 } from "@/types";
 import { getAppendableParentUri, route } from "@/utils/url";
 import { EntityListInstance, InstanceId } from "./types";
+import { toRaw } from "vue";
 
 export class EntityList implements EntityListData {
     authorizations: EntityListData['authorizations'];
@@ -38,18 +39,20 @@ export class EntityList implements EntityListData {
     }
 
     toData() {
-        return {
-            authorizations: this.authorizations,
-            config: this.config,
-            data: this.data,
-            fields: this.fields,
-            forms: this.forms,
-            meta: this.meta,
-            pageAlert: this.pageAlert,
-            query: this.query,
-            filterValues: this.filterValues,
-            title: this.title,
-        };
+        return Object.fromEntries(
+            Object.entries({
+                authorizations: this.authorizations,
+                config: this.config,
+                data: this.data,
+                fields: this.fields,
+                forms: this.forms,
+                meta: this.meta,
+                pageAlert: this.pageAlert,
+                query: this.query,
+                filterValues: this.filterValues,
+                title: this.title,
+            }).map(([key, value]) => [key, toRaw(value)])
+        ) as EntityListData;
     }
 
     get count() {

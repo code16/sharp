@@ -82,6 +82,7 @@ class HandleInertiaRequests extends Middleware
             'globalFilters' => app(GlobalFilters::class)->isEnabled()
                 ? GlobalFiltersData::from(app(GlobalFilters::class)->toArray())
                 : null,
+//            'popState' => $request->hasHeader('X-PopState') || $request->query('popstate'),
             ...auth()->check() ? [
                 'menu' => fn () => MenuData::from(app(SharpMenuManager::class)),
                 'auth' => fn () => [

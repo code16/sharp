@@ -17,6 +17,7 @@
     import { CardTitle } from "@/components/ui/card";
     import { Button } from "@/components/ui/button";
     import { useRemember } from "@inertiajs/vue3";
+    import { hasPoppedState } from "@/router";
 
     const props = defineProps<ShowFieldProps<ShowEntityListFieldData>>();
 
@@ -34,20 +35,22 @@
             formModal.shouldReopen && formModal.reopen();
         },
     });
-    const remembered = useRemember({ height: 0, data: null }, `entityList_${props.field.key}`) as Ref<{ height: number, data: EntityListData | null }>;
-    const restoredData = remembered.value.data;
+    const remembered = useRemember({
+        data: null,
+        collapsed: props.collapsable, // TODO handle remembered collapse state
+    }, `entityList_${props.field.key}`) as Ref<{
+        data: EntityListData | null,
+        collapsed: boolean,
+    }>;
 
-    onBeforeUnmount(() => {
-        remembered.value.height = el.value.offsetHeight;
-        remembered.value.data = restoredData ? null : toRaw(entityList.value)?.toData();
-    });
-
-    if(restoredData) {
-        update(restoredData);
-        remembered.value.data = null;
+    if(remembered.value.data && !props.collapsable) {
+        update(remembered.value.data);
     }
 
-    if(!restoredData && !props.collapsable) {
+    // console.log('hasPoppedState EL', hasPoppedState());
+    // console.log('remembered', remembered.value.data);
+
+    if(!hasPoppedState() && !props.collapsable) {
         init();
     }
 
@@ -71,9 +74,7 @@
             data.config.filters,
             data.filterValues
         );
-        nextTick(() => {
-            remembered.value.height = 0;
-        });
+        remembered.value.data = entityList.value.toData();
     }
 
     async function onQueryChange(newQuery) {
@@ -116,6 +117,7 @@
 
     function onToggle() {
         collapsed.value = !collapsed.value;
+        remembered.value.collapsed = collapsed.value;
         if(!entityList.value) {
             init();
         }
@@ -123,7 +125,7 @@
 </script>
 
 <template>
-    <div ref="el" :style="{ 'min-height': `${remembered.height}px` }">
+    <div ref="el">
        <EntityListComponent
            :entity-list="entityList"
            :entity-key="field.entityListKey"

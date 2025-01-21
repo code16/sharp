@@ -13,8 +13,10 @@ export function useFormTabs(props: { form: FormData }) {
 
     if(props.form.layout.tabbed && props.form.layout.tabs.length > 1) {
         watch(selectedTabSlug, () => {
-            const url = location.origin + location.pathname + `?tab=${selectedTabSlug.value}`;
-            router.replace({ url, preserveState: true });
+            const url = new URL(location.href);
+            url.searchParams.set('tab', selectedTabSlug.value);
+            url.searchParams.delete('popstate');
+            router.replace({ url: url.href, preserveState: true });
         }, { immediate: true });
     }
 
