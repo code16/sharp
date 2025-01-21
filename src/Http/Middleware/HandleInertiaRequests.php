@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Http\Middleware;
 
+use Closure;
 use Code16\Sharp\Data\Filters\GlobalFiltersData;
 use Code16\Sharp\Data\LogoData;
 use Code16\Sharp\Data\MenuData;
@@ -20,7 +21,15 @@ class HandleInertiaRequests extends Middleware
     protected $rootView = 'sharp::app';
 
     public function __construct(protected Filesystem $filesystem) {}
-
+    
+    public function handle(Request $request, Closure $next)
+    {
+        $request->query->remove('popstate');
+        $request->overrideGlobals();
+        
+        return parent::handle($request, $next);
+    }
+    
     public function share(Request $request)
     {
         return [

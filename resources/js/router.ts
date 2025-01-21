@@ -30,13 +30,13 @@ export function initRouter() {
             //     console.timeEnd('prefetching');
             // },
             onSuccess(e) {
-                const url = new URL(location.href);
-                url.searchParams.delete('popstate');
-                router.replace({
-                    url: url.href,
-                    preserveState: true,
-                    preserveScroll: true,
-                });
+                // const url = new URL(location.href);
+                // url.searchParams.delete('popstate');
+                // router.replace({
+                //     url: url.href,
+                //     preserveState: true,
+                //     preserveScroll: true,
+                // });
                 document.body.style.minHeight = '';
             },
         };

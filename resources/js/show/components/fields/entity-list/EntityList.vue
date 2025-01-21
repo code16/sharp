@@ -16,7 +16,7 @@
     import { useFilters } from "@/filters/useFilters";
     import { CardTitle } from "@/components/ui/card";
     import { Button } from "@/components/ui/button";
-    import {  useRemember } from "@inertiajs/vue3";
+    import { useRemember } from "@inertiajs/vue3";
     import { hasPoppedState } from "@/router";
 
     const props = defineProps<ShowFieldProps<ShowEntityListFieldData> & { highlightedInstanceId?: string | number }>();
@@ -50,7 +50,7 @@
     // console.log('hasPoppedState EL', hasPoppedState());
     // console.log('remembered', remembered.value.data);
 
-    if(!hasPoppedState() && !props.collapsable) {
+    if(!hasPoppedState() && !collapsed.value) {
         init();
     }
 
