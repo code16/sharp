@@ -55,7 +55,7 @@
     "@googlemaps/js-api-loader": "^1.16.8",
     "@headlessui/vue": "^1.7.19",
     "@heroicons/vue": "^2.0.18",
-    "@inertiajs/vue3": "^2.0.0",
+    "@inertiajs/vue3": "^2.0.2",
     "@tiptap/core": "^2.2.2",
     "@tiptap/extension-character-count": "^2.2.2",
     "@tiptap/extension-code-block": "^2.2.2",

@@ -6,6 +6,7 @@ export * from './generated.d';
 export type SharpPageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
     locale: string;
     session: SessionData;
+    // popState: boolean;
 };
 
 declare module '@inertiajs/core' {

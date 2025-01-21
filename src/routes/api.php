@@ -36,7 +36,8 @@ Route::group([
 
     // EEL
     Route::get('/list/{entityKey}', [EntityListController::class, 'show'])
-        ->name('code16.sharp.api.list');
+        ->name('code16.sharp.api.list')
+        ->middleware('cache.headers:no_store');
 
     Route::post('/list/{entityKey}/filters', [ApiEntityListFiltersController::class, 'store'])
         ->name('code16.sharp.api.list.filters.store');
