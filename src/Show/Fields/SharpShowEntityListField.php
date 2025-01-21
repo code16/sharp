@@ -136,7 +136,7 @@ class SharpShowEntityListField extends SharpShowField
                             // Filter value can be a Closure
                             if (is_callable($value)) {
                                 // Call it with current instanceId
-                                return $value(currentSharpRequest()->instanceId());
+                                return $value(sharp()->context()->instanceId());
                             }
 
                             return $value;

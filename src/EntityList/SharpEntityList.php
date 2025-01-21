@@ -70,7 +70,7 @@ abstract class SharpEntityList
             ->toArray();
     }
 
-    final public function data(): array
+    final public function data(?array $query = null): array
     {
         $listItems = $this->getListData();
 
@@ -95,11 +95,11 @@ abstract class SharpEntityList
                 ->toArray()
             )
             ->toArray();
-
+        
         return [
             'items' => $items,
             'meta' => $listItems instanceof AbstractPaginator
-                ? Arr::except($listItems->withQueryString()->toArray(), 'data')
+                ? Arr::except($listItems->appends($query)->toArray(), 'data')
                 : null,
         ];
     }

@@ -10,6 +10,7 @@ use Code16\Sharp\Form\SharpSingleForm;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Entities\ValueObjects\EntityKey;
 use Code16\Sharp\Utils\Uploads\SharpUploadManager;
+use Illuminate\Support\Uri;
 use Inertia\Inertia;
 
 class FormController extends SharpProtectedController
@@ -50,6 +51,11 @@ class FormController extends SharpProtectedController
             'breadcrumb' => BreadcrumbData::from([
                 'items' => sharp()->context()->breadcrumb()->allSegments(),
             ]),
+            'endpointUrl' => route('code16.sharp.form.store', [
+                'parentUri' => $parentUri,
+                'entityKey' => $entityKey,
+                'previous_page_url' => $this->getPreviousPageUrlFromReferer(),
+            ]),
         ]);
     }
 
@@ -85,6 +91,12 @@ class FormController extends SharpProtectedController
             'breadcrumb' => BreadcrumbData::from([
                 'items' => sharp()->context()->breadcrumb()->allSegments(),
             ]),
+            'endpointUrl' => route('code16.sharp.form.update', [
+                'parentUri' => $parentUri,
+                'entityKey' => $entityKey,
+                'instanceId' => $instanceId,
+                'previous_page_url' => $this->getPreviousPageUrlFromReferer(),
+            ]),
         ]);
     }
 
@@ -105,8 +117,16 @@ class FormController extends SharpProtectedController
         $formattedData = $form->formatAndValidateRequestData(request()->all(), $instanceId);
         $form->update($instanceId, $formattedData);
         $this->uploadManager->dispatchJobs($instanceId);
-
-        return redirect()->to(sharp()->context()->breadcrumb()->getPreviousSegmentUrl());
+        
+        $previousUrl = request()->query('previous_page_url') ?: sharp()->context()->breadcrumb()->getPreviousSegmentUrl();
+        
+        return redirect()->to(
+            Uri::of($previousUrl)
+                ->when($instanceId)->withQuery([
+                    'highlighted_entity_key' => $entityKey->baseKey(),
+                    'highlighted_instance_id' => $instanceId,
+                ])
+        );
     }
 
     public function store(string $parentUri, EntityKey $entityKey)
@@ -137,8 +157,25 @@ class FormController extends SharpProtectedController
                     $entityKey,
                     $instanceId
                 )
-                : $previousUrl
+                : Uri::of($previousUrl)->withQuery([
+                    'highlighted_entity_key' => $entityKey->baseKey(),
+                    'highlighted_instance_id' => $instanceId,
+                ])
         );
+    }
+    
+    private function getPreviousPageUrlFromReferer(): ?string
+    {
+        if(!request()->header('referer')) {
+            return null;
+        }
+        
+        $referer = Uri::of(request()->header('referer'));
+        $previousSegmentUrl = Uri::of(sharp()->context()->breadcrumb()->getPreviousSegmentUrl());
+        
+        return $referer->path() === $previousSegmentUrl->path()
+            ? $referer->value()
+            : null;
     }
 
     private function buildFormData(SharpForm $form, string $entityKey, $instanceId = null): array

@@ -8,7 +8,7 @@
         FilterData,
         ShowEntityListFieldData
     } from "@/types";
-    import { nextTick, Ref, ref, toRaw, onBeforeUnmount } from "vue";
+    import { nextTick, Ref, ref, toRaw, onBeforeUnmount, watch } from "vue";
     import { useCommands } from "@/commands/useCommands";
     import { api } from "@/api/api";
     import { route } from "@/utils/url";
@@ -16,13 +16,13 @@
     import { useFilters } from "@/filters/useFilters";
     import { CardTitle } from "@/components/ui/card";
     import { Button } from "@/components/ui/button";
-    import { useRemember } from "@inertiajs/vue3";
+    import {  useRemember } from "@inertiajs/vue3";
     import { hasPoppedState } from "@/router";
 
-    const props = defineProps<ShowFieldProps<ShowEntityListFieldData>>();
+    const props = defineProps<ShowFieldProps<ShowEntityListFieldData> & { highlightedInstanceId?: string | number }>();
 
     const el = ref();
-    const collapsed = ref(props.collapsable);
+    const collapsed = ref(props.collapsable && !props.highlightedInstanceId);
     const entityList: Ref<EntityList | null> = ref(null);
     const filters: FilterManager = useFilters();
     const commands = useCommands('entityList', {
@@ -37,13 +37,13 @@
     });
     const remembered = useRemember({
         data: null,
-        collapsed: props.collapsable, // TODO handle remembered collapse state
+        collapsed: collapsed.value, // TODO handle remembered collapse state
     }, `entityList_${props.field.key}`) as Ref<{
         data: EntityListData | null,
         collapsed: boolean,
     }>;
 
-    if(remembered.value.data && !props.collapsable) {
+    if(remembered.value.data && !collapsed.value) {
         update(remembered.value.data);
     }
 
@@ -74,7 +74,7 @@
             data.config.filters,
             data.filterValues
         );
-        remembered.value.data = entityList.value.toData();
+        remembered.value.data = data;
     }
 
     async function onQueryChange(newQuery) {
@@ -135,6 +135,7 @@
            :show-reorder-button="field.showReorderButton"
            :show-search-field="field.showSearchField"
            :show-entity-state="field.showEntityState"
+           :highlighted-instance-id="highlightedInstanceId"
            :collapsed="collapsed"
            :title="field.label"
            inline
@@ -155,28 +156,7 @@
                        </Button>
                    </template>
                </div>
-<!--               <template v-if="collapsable">-->
-<!--                   <details :open="!collapsed" @toggle="onToggle">-->
-<!--                       <summary class="stretched-link">-->
-<!--                           {{ field.label }}-->
-<!--                       </summary>-->
-<!--                   </details>-->
-<!--               </template>-->
-<!--               <template v-else>-->
-<!--                   {{ field.label }}-->
-<!--               </template>-->
            </template>
-<!--               <template v-slot:action-bar="{ props, listeners }">-->
-<!--                   <ActionBar-->
-<!--                       class="ShowEntityListField__action-bar"-->
-<!--                       v-bind="props"-->
-<!--                       v-on="listeners"-->
-<!--                       :collapsed="collapsed"-->
-<!--                       :sticky="sticky"-->
-<!--                   >-->
-<!--                      -->
-<!--                   </ActionBar>-->
-<!--               </template>-->
        </EntityListComponent>
    </div>
 </template>

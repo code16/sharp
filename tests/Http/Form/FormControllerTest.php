@@ -148,13 +148,17 @@ it('stores or updates an instance and redirect to the list', function () {
         ->post('/sharp/s-list/person/s-form/person', [
             'name' => 'Stephen Hawking',
         ])
-        ->assertRedirect('/sharp/s-list/person');
+        ->assertRedirectContains('/sharp/s-list/person')
+        ->assertRedirectContains('highlighted_entity_key=person')
+        ->assertRedirectContains('highlighted_instance_id=1');
 
     $this
         ->post('/sharp/s-list/person/s-form/person/1', [
             'name' => 'Stephen Hawking',
         ])
-        ->assertRedirect('/sharp/s-list/person');
+        ->assertRedirectContains('/sharp/s-list/person')
+        ->assertRedirectContains('highlighted_entity_key=person')
+        ->assertRedirectContains('highlighted_instance_id=1');
 });
 
 it('redirects to the show after an update', function () {
@@ -164,7 +168,9 @@ it('redirects to the show after an update', function () {
         ->post('/sharp/s-list/person/s-show/person/1/s-form/person/1', [
             'name' => 'Stephen Hawking',
         ])
-        ->assertRedirect('/sharp/s-list/person/s-show/person/1');
+        ->assertRedirectContains('/sharp/s-list/person/s-show/person/1')
+        ->assertRedirectContains('highlighted_entity_key=person')
+        ->assertRedirectContains('highlighted_instance_id=1');
 });
 
 it('creates an instance and redirect to the show if configured', function () {

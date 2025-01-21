@@ -15,6 +15,7 @@
         form: FormData,
         breadcrumb: BreadcrumbData,
         errors: { [key:string]: string },
+        endpointUrl: string,
     }>();
 
     const { entityKey, instanceId } = route().params as { entityKey: string, instanceId?: string };
@@ -39,19 +40,11 @@
             errorAlertMessage.value = props.errors.error as string | null;
         }
 
-        if(route().current('code16.sharp.form.create')) {
-            router.post(
-                route('code16.sharp.form.store', { parentUri, entityKey }),
-                form.serializedData,
-                { onStart, onFinish, onError }
-            );
-        } else if(route().current('code16.sharp.form.edit')) {
-            router.post(
-                route('code16.sharp.form.update', { parentUri, entityKey, instanceId }),
-                form.serializedData,
-                { onStart, onFinish, onError }
-            );
-        }
+        router.post(
+            props.endpointUrl,
+            form.serializedData,
+            { onStart, onFinish, onError }
+        );
     }
 </script>
 

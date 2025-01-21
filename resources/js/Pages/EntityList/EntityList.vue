@@ -16,6 +16,7 @@
     import { route } from "@/utils/url";
     import PageBreadcrumb from "@/components/PageBreadcrumb.vue";
     import { CardTitle } from "@/components/ui/card";
+    import { useEntityListHighlightedItem } from "@/composables/useEntityListHighlightedItem";
 
     const props = defineProps<{
         entityList: EntityListData,
@@ -31,6 +32,7 @@
             formModal.shouldReopen && formModal.reopen();
         },
     });
+    const { highlightedEntityKey, highlightedInstanceId } = useEntityListHighlightedItem();
 
     watch(() => props.entityList, () => {
         entityList.value = new EntityList(props.entityList, entityKey);
@@ -83,6 +85,7 @@
             :filters="filters"
             :commands="commands"
             :title="breadcrumb.items[0].label"
+            :highlighted-instance-id="highlightedInstanceId"
             @reset="onReset"
             @filter-change="onFilterChange"
             @update:query="onQueryChange"

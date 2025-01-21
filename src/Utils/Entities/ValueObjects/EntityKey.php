@@ -16,6 +16,13 @@ class EntityKey implements UrlRoutable, Stringable
     ) {
     }
     
+    public function baseKey(): string
+    {
+        return str_contains($this->key, ':')
+            ? Str::before($this->key, ':')
+            : $this->key;
+    }
+    
     public function subEntity(): ?string
     {
         return str_contains($this->key, ':')

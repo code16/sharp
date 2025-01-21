@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { provide, ref } from "vue";
-    import { BreadcrumbData, CommandData, ShowData } from "@/types";
+    import { BreadcrumbData, CommandData, ShowData, ShowEntityListFieldData } from "@/types";
     import WithCommands from "@/commands/components/WithCommands.vue";
     import Section from "@/show/components/Section.vue";
     import { Button } from '@/components/ui/button';
@@ -41,6 +41,7 @@
     import RootCard from "@/components/ui/RootCard.vue";
     import LocaleSelectTrigger from "@/components/LocaleSelectTrigger.vue";
     import DropdownChevronDown from "@/components/ui/DropdownChevronDown.vue";
+    import { useEntityListHighlightedItem } from "@/composables/useEntityListHighlightedItem";
 
     const props = defineProps<{
         show: ShowData,
@@ -53,6 +54,7 @@
     const { isReordering, onEntityListReordering } = useReorderingLists();
     const entityListNeedsTopBar = ref(false);
     const commands = useCommands('show');
+    const { highlightedEntityKey, highlightedInstanceId } = useEntityListHighlightedItem();
 
     provide('show', show);
 
@@ -68,7 +70,7 @@
         });
     }
 
-    function onStateChange(value) {
+    function onStateChange(value: string | number) {
         api.post(route('code16.sharp.api.show.state', { entityKey, instanceId }), { value })
             .then(response => {
                 commands.handleCommandResponse(response.data);
@@ -243,9 +245,10 @@
                                     <template v-for="fieldLayout in row">
                                         <template v-if="show.fields[fieldLayout.key]">
                                             <EntityList
-                                                :field="show.fields[fieldLayout.key]"
+                                                :field="show.fields[fieldLayout.key] as ShowEntityListFieldData"
                                                 :collapsable="section.collapsable"
                                                 :value="null"
+                                                :highlighted-instance-id="highlightedEntityKey === (show.fields[fieldLayout.key] as ShowEntityListFieldData).entityListKey ? highlightedInstanceId : null"
                                                 @reordering="onEntityListReordering(fieldLayout.key, $event)"
                                                 @needs-topbar="entityListNeedsTopBar = $event"
                                             />

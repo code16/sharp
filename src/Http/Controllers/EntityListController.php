@@ -30,7 +30,10 @@ class EntityListController extends SharpProtectedController
         $list->buildListConfig();
         $list->initQueryParams(request()->query());
 
-        $listData = $list->data();
+        $requestQuery = collect(request()->query())
+            ->except(['highlighted_entity_key', 'highlighted_instance_id', 'popstate'])
+            ->all();
+        $listData = $list->data($requestQuery);
         $listConfig = $list->listConfig($this->entityManager->entityFor($entityKey)->hasShow());
 
         $data = [
@@ -50,7 +53,7 @@ class EntityListController extends SharpProtectedController
                 $listConfig,
             ),
             'filterValues' => $list->filterContainer()->getCurrentFilterValuesForFront(request()->all()),
-            'query' => count(request()->query()) ? request()->query() : null,
+            'query' => count($requestQuery) ? $requestQuery : null,
         ];
 
         if (request()->routeIs('code16.sharp.api.list')) {

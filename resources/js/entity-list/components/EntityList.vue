@@ -9,7 +9,7 @@
     } from "@/types";
     import WithCommands from "@/commands/components/WithCommands.vue";
     import { CommandManager } from "@/commands/CommandManager";
-    import { Ref, watchEffect } from "vue";
+    import { Ref } from "vue";
     import { computed, ref, watch } from "vue";
     import { showAlert, showDeleteConfirm } from "@/utils/dialogs";
     import { EntityListInstance, InstanceId } from "../types";
@@ -77,6 +77,7 @@
         showSearchField?: boolean,
         showEntityState?: boolean,
         collapsed?: boolean,
+        highlightedInstanceId?: string | number,
     }>(), {
         showCreateButton: true,
         showReorderButton: true,
@@ -280,6 +281,12 @@
 
     const breakpoints = useBreakpoints();
     const visibleFields = computed(() => props.entityList.fields.filter(field => breakpoints.md ? true : !field.hideOnXS));
+
+    watch([sortableTableBody, () => props.highlightedInstanceId], () => {
+        if(sortableTableBody.value && props.highlightedInstanceId) {
+            (el.value?.querySelector(`[data-instance-row="${props.highlightedInstanceId}"] a`) as HTMLAnchorElement)?.focus();
+        }
+    });
 </script>
 
 <template>
@@ -616,10 +623,11 @@
                                         <template v-for="(item, itemIndex) in reorderedItems ?? entityList.data" :key="entityList.instanceId(item)">
                                             <TableRow
                                                 :class="cn(
-                                                    'relative hover:bg-transparent has-[[data-row-action]:hover]:bg-muted/50 has-[[aria-expanded=true]]:bg-muted/50 lg:first:*:pl-6 lg:last:*:pr-6',
+                                                    'group/row relative hover:bg-transparent has-[[data-row-action]:hover]:bg-muted/50 has-[[aria-expanded=true]]:bg-muted/50 lg:first:*:pl-6 lg:last:*:pr-6',
                                                     reordering ? 'cursor-move hover:bg-muted/50 group-[:has(.sortable-chosen)]:bg-background [&.sortable-chosen]:transition-none' : ''
                                                 )"
                                                 :data-instance-row="entityList.instanceId(item)"
+                                                :data-highlighted="props.highlightedInstanceId && props.highlightedInstanceId == entityList.instanceId(item) ? true : null"
                                             >
                                                 <template v-if="selecting && selectedItems">
                                                     <TableCell>
@@ -672,7 +680,10 @@
                                                                 {{ item[field.key] }}
                                                             </template>
                                                             <template v-if="fieldIndex === 0 && entityList.instanceUrl(item) && !selecting && !reordering">
-                                                                <Link class="absolute inset-0" data-row-action :href="entityList.instanceUrl(item)"></Link>
+                                                                <Link class="absolute inset-0 ring-ring ring-inset focus-visible:outline-none focus-visible:ring-2 focus:group-data-[highlighted]/row:ring-2"
+                                                                    data-row-action
+                                                                    :href="entityList.instanceUrl(item)"
+                                                                ></Link>
                                                             </template>
                                                         </TableCell>
                                                     </template>
