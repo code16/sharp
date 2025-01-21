@@ -233,8 +233,9 @@
                 <template v-for="(section, i) in show.layout.sections">
                     <Section
                         class="min-w-0"
+                        :section="section"
                         v-show="show.sectionShouldBeVisible(section, locale)"
-                        v-slot="{ collapsed, onToggle }"
+                        v-slot="{ collapsed, onCollapseToggle }"
                     >
                         <template v-if="show.sectionHasField(section, 'entityList')">
                             <template v-for="column in section.columns">
@@ -284,7 +285,7 @@
                                                 </CardTitle>
                                             </template>
                                             <template v-if="section.collapsable">
-                                                <Button variant="ghost" size="sm" class="w-9 p-0 -my-1.5" @click="onToggle">
+                                                <Button variant="ghost" size="sm" class="w-9 p-0 -my-1.5" @click="onCollapseToggle">
                                                     <ChevronsUpDown class="w-4 h-4" />
                                                 </Button>
                                             </template>

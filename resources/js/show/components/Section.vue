@@ -1,11 +1,27 @@
 <script setup lang="ts">
-    import { ref } from "vue";
+    import { reactive, ref } from "vue";
+    import { ShowLayoutSectionData } from "@/types";
 
-    const collapsed = ref(false);
+    const props = defineProps<{
+        section: ShowLayoutSectionData,
+    }>();
+
+    const collapsed = ref(props.section.collapsable);
+
+    const slotProps = reactive({
+        collapsed,
+        onCollapseToggle() {
+            collapsed.value = !collapsed.value;
+        },
+    })
+
+    defineSlots<{
+        default(props: typeof slotProps): any
+    }>()
 </script>
 
 <template>
     <section>
-        <slot :collapsed="collapsed" :on-toggle="$event => collapsed = !$event" />
+        <slot v-bind="slotProps" />
     </section>
 </template>
