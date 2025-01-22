@@ -14,6 +14,7 @@ use Code16\Sharp\Utils\Menu\SharpMenuManager;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Inertia\Inertia;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -24,7 +25,13 @@ class HandleInertiaRequests extends Middleware
     
     public function handle(Request $request, Closure $next)
     {
+        Inertia::share([
+            'query' => (object) $request->query(),
+        ]);
+        
         $request->query->remove('popstate');
+        $request->query->remove('highlighted_entity_key');
+        $request->query->remove('highlighted_instance_id');
         $request->overrideGlobals();
         
         return parent::handle($request, $next);

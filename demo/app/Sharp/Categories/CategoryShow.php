@@ -54,7 +54,7 @@ class CategoryShow extends SharpShow
                             ->withField('description');
                     });
             })
-            ->addEntityListSection('posts', collapsable: true);
+            ->addEntityListSection('posts');
     }
 
     public function delete($id): void

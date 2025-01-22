@@ -16,8 +16,7 @@
     import { useFilters } from "@/filters/useFilters";
     import { CardTitle } from "@/components/ui/card";
     import { Button } from "@/components/ui/button";
-    import { useRemember } from "@inertiajs/vue3";
-    import { hasPoppedState } from "@/router";
+    import { hasPoppedState, useRemember } from "@/router";
 
     const props = defineProps<ShowFieldProps<ShowEntityListFieldData> & { highlightedInstanceId?: string | number }>();
 
@@ -36,23 +35,22 @@
         },
     });
     const remembered = useRemember({
-        data: null,
+        data: null as EntityListData | null,
         collapsed: collapsed.value, // TODO handle remembered collapse state
-    }, `entityList_${props.field.key}`) as Ref<{
-        data: EntityListData | null,
-        collapsed: boolean,
-    }>;
+    }, `entityList_${props.field.key}`);
+
 
     if(remembered.value.data && !collapsed.value) {
         update(remembered.value.data);
     }
 
-    // console.log('hasPoppedState EL', hasPoppedState());
-    // console.log('remembered', remembered.value.data);
-
     if(!hasPoppedState() && !collapsed.value) {
         init();
     }
+
+    // console.log('setup', cloneDeep(remembered.value));
+    // console.log('hasPoppedState EL', hasPoppedState());
+    // console.log('remembered', remembered.value.data);
 
     async function init() {
         const data = await api.get(props.field.endpointUrl, {
