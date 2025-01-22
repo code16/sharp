@@ -11,7 +11,7 @@ use Code16\Sharp\Utils\Entities\SharpEntity;
 class PostEntity extends SharpEntity
 {
     protected ?string $list = PostList::class;
-//    protected ?string $show = PostShow::class;
+    protected ?string $show = PostShow::class;
     protected ?string $form = PostForm::class;
     protected ?string $policy = PostPolicy::class;
     protected string $label = 'Post';

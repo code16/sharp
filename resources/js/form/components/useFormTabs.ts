@@ -15,7 +15,6 @@ export function useFormTabs(props: { form: FormData }) {
         watch(selectedTabSlug, () => {
             const url = new URL(location.href);
             url.searchParams.set('tab', selectedTabSlug.value);
-            url.searchParams.delete('popstate');
             router.replace({ url: url.href, preserveState: true });
         }, { immediate: true });
     }

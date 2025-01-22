@@ -11,7 +11,7 @@ return [
 
     'command.info.title' => 'Info',
     'command.submit_button' => 'Submit',
-    'command.submit_and_reopen_button' => 'Submit and reopen',
+    'command.submit_and_reopen_button' => 'Submit & reopen',
     'state.422.title' => "Can't change state",
 
     // Other errors fallback text

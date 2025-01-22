@@ -98,7 +98,10 @@ class SharpBreadcrumb
             )
         );
     }
-
+    
+    /**
+     * @return Collection<int, BreadcrumbItem>
+     */
     public function breadcrumbItems(): Collection
     {
         if (! isset($this->breadcrumbItems)) {

@@ -15,6 +15,7 @@
         form: FormData,
         breadcrumb: BreadcrumbData,
         errors: { [key:string]: string },
+        cancelUrl: string,
         endpointUrl: string,
     }>();
 
@@ -70,7 +71,7 @@
             <template #footer>
                 <div class="flex gap-4">
                     <Button variant="outline" as-child>
-                        <Link :href="breadcrumb.items.at(-2)?.url">
+                        <Link :href="props.cancelUrl">
                             <template v-if="form.canEdit">
                                 {{ __('sharp::action_bar.form.cancel_button') }}
                             </template>

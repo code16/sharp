@@ -9,6 +9,7 @@ use Code16\Sharp\Data\MenuData;
 use Code16\Sharp\Data\SessionData;
 use Code16\Sharp\Data\UserData;
 use Code16\Sharp\Enums\SessionStatusLevel;
+use Code16\Sharp\Http\Requests\SharpInertiaRequest;
 use Code16\Sharp\Utils\Filters\GlobalFilters;
 use Code16\Sharp\Utils\Menu\SharpMenuManager;
 use Illuminate\Filesystem\Filesystem;
@@ -29,12 +30,11 @@ class HandleInertiaRequests extends Middleware
             'query' => (object) $request->query(),
         ]);
         
-        $request->query->remove('popstate');
-        $request->query->remove('highlighted_entity_key');
-        $request->query->remove('highlighted_instance_id');
-        $request->overrideGlobals();
+        $inertiaRequest = SharpInertiaRequest::createFrom($request);
         
-        return parent::handle($request, $next);
+        app()->instance('request', $inertiaRequest);
+        
+        return parent::handle($inertiaRequest, $next);
     }
     
     public function share(Request $request)
@@ -98,7 +98,6 @@ class HandleInertiaRequests extends Middleware
             'globalFilters' => app(GlobalFilters::class)->isEnabled()
                 ? GlobalFiltersData::from(app(GlobalFilters::class)->toArray())
                 : null,
-//            'popState' => $request->hasHeader('X-PopState') || $request->query('popstate'),
             ...auth()->check() ? [
                 'menu' => fn () => MenuData::from(app(SharpMenuManager::class)),
                 'auth' => fn () => [

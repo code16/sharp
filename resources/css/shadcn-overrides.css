@@ -34,8 +34,8 @@
         /*--sidebar-foreground-oklch: from var(--sharp-config-primary) 0.37 0.01 h; !* default levels *!*/
         --sidebar-foreground-oklch: from var(--sharp-config-primary) 0.37 min(c, 0.05) h;
         /*--sidebar-accent-oklch: from var(--sharp-config-primary) 0.97 0 h; !* default levels *!*/
-        --sidebar-accent-oklch: from var(--sharp-config-primary) 0.96 min(c, 0.01) h;
-        /*--sidebar-accent-oklch: from var(--sharp-config-primary) 0.21 0.01 h; !* default levels *!*/
+        --sidebar-accent-oklch: from var(--sharp-config-primary) 0.94 min(c, 0.02) h;
+        /*--sidebar-accent-oklch: from var(--sharp-config-primary) .21 0.01 h; !* default levels *!*/
         --sidebar-accent-foreground-oklch: from var(--sharp-config-primary) 0.21 min(c, 0.2) h;
         /*--sidebar-accent-oklch: from var(--sharp-config-primary) 0.93 0.01 h; !* default levels *!*/
         --sidebar-border-oklch: from var(--sharp-config-primary) 0.93 min(c, 0.015) h;

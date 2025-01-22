@@ -84,8 +84,8 @@ class SharpMenuItemLink extends SharpMenuItem
 
     public function isCurrent(): bool
     {
-        $currentEntityKey = currentSharpRequest()->getCurrentBreadcrumbItem()->key ?? null;
+        $rootEntityKey = sharp()->context()->breadcrumb()->breadcrumbItems()->first()?->entityKey();
 
-        return $this->isEntity() && $currentEntityKey === $this->getEntityKey();
+        return $this->isEntity() && $rootEntityKey === $this->getEntityKey();
     }
 }

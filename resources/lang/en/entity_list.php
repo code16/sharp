@@ -6,7 +6,7 @@ return [
     'commands.entity.label' => 'Actions',
     'commands.instance.label' => 'Actions',
     'commands.needs_selection_message' => 'This action requires you to select relevant items first',
-    'quick_creation_modal.create_and_reopen' => 'Create and reopen',
+    'quick_creation_modal.create_and_reopen' => 'Create & create another',
     'sort_asc' => 'Sort ascending',
     'sort_desc' => 'Sort descending',
     'pagination.previous' => 'Previous',

@@ -284,7 +284,11 @@
 
     watch([sortableTableBody, () => props.highlightedInstanceId], () => {
         if(sortableTableBody.value && props.highlightedInstanceId) {
-            (el.value?.querySelector(`[data-instance-row="${props.highlightedInstanceId}"] a`) as HTMLAnchorElement)?.focus();
+            const link = el.value?.querySelector(`[data-instance-row="${props.highlightedInstanceId}"] a`) as HTMLAnchorElement;
+            if(link) {
+                // link.scrollIntoView({ block: "center" });
+                link.focus();
+            }
         }
     });
 </script>

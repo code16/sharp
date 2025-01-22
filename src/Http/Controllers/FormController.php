@@ -51,6 +51,7 @@ class FormController extends SharpProtectedController
             'breadcrumb' => BreadcrumbData::from([
                 'items' => sharp()->context()->breadcrumb()->allSegments(),
             ]),
+            'cancelUrl' => sharp()->context()->breadcrumb()->getPreviousSegmentUrl(),
             'endpointUrl' => route('code16.sharp.form.store', [
                 'parentUri' => $parentUri,
                 'entityKey' => $entityKey,
@@ -91,6 +92,11 @@ class FormController extends SharpProtectedController
             'breadcrumb' => BreadcrumbData::from([
                 'items' => sharp()->context()->breadcrumb()->allSegments(),
             ]),
+            'cancelUrl' => $this->previousUrlWithHighlightedQuery(
+                sharp()->context()->breadcrumb()->getPreviousSegmentUrl(),
+                $entityKey,
+                $instanceId
+            ),
             'endpointUrl' => route('code16.sharp.form.update', [
                 'parentUri' => $parentUri,
                 'entityKey' => $entityKey,
@@ -120,13 +126,7 @@ class FormController extends SharpProtectedController
         
         $previousUrl = request()->query('previous_page_url') ?: sharp()->context()->breadcrumb()->getPreviousSegmentUrl();
         
-        return redirect()->to(
-            Uri::of($previousUrl)
-                ->when($instanceId)->withQuery([
-                    'highlighted_entity_key' => $entityKey->baseKey(),
-                    'highlighted_instance_id' => $instanceId,
-                ])
-        );
+        return redirect()->to($this->previousUrlWithHighlightedQuery($previousUrl, $entityKey, $instanceId));
     }
 
     public function store(string $parentUri, EntityKey $entityKey)
@@ -157,11 +157,20 @@ class FormController extends SharpProtectedController
                     $entityKey,
                     $instanceId
                 )
-                : Uri::of($previousUrl)->withQuery([
-                    'highlighted_entity_key' => $entityKey->baseKey(),
-                    'highlighted_instance_id' => $instanceId,
-                ])
+                : $this->previousUrlWithHighlightedQuery(
+                    $previousUrl,
+                    $entityKey,
+                    $instanceId
+                )
         );
+    }
+    
+    private function previousUrlWithHighlightedQuery(string $url, EntityKey $entityKey, ?string $instanceId): string
+    {
+        return Uri::of($url)->when($instanceId)->withQuery([
+            'highlighted_entity_key' => $entityKey->baseKey(),
+            'highlighted_instance_id' => $instanceId,
+        ]);
     }
     
     private function getPreviousPageUrlFromReferer(): ?string
