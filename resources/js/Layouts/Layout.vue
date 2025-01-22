@@ -8,7 +8,7 @@
 
 <script setup lang="ts">
     import { onMounted, provide, useTemplateRef } from "vue";
-    import { CircleUser, ChevronsUpDown, LogOut, Moon, Sun, ChevronDown } from "lucide-vue-next";
+    import { CircleUser, ChevronsUpDown, LogOut, Moon, Sun, ChevronDown, ExternalLink } from "lucide-vue-next";
     import Notifications from "@/components/Notifications.vue";
     import { useDialogs } from "@/utils/dialogs";
     import useMenu from "@/composables/useMenu";
@@ -159,6 +159,9 @@
                                                                             <Icon :icon="childItem.icon" class="size-4" />
                                                                         </template>
                                                                         <span>{{ childItem.label }}</span>
+                                                                        <template v-if="childItem.isExternalLink">
+                                                                            <ExternalLink class="ml-auto size-4 opacity-50" />
+                                                                        </template>
                                                                     </component>
                                                                 </SidebarMenuButton>
                                                             </SidebarMenuItem>
@@ -187,6 +190,9 @@
                                                         <span>
                                                             {{ item.label }}
                                                         </span>
+                                                        <template v-if="item.isExternalLink">
+                                                            <ExternalLink class="ml-auto size-4 opacity-50" />
+                                                        </template>
                                                     </component>
                                                 </SidebarMenuButton>
                                             </SidebarMenuItem>
