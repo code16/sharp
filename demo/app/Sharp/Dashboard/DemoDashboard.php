@@ -194,11 +194,14 @@ class DemoDashboard extends SharpDashboard
 
     protected function setBarsGraphDataSet(): void
     {
-        $data = User::withCount([
-            'posts' => fn (Builder $query) => $query->whereBetween(
-                'published_at',
-                [$this->getStartDate(), $this->getEndDate()]
-            )])
+        $data = User::query()
+            ->withCount([
+                'posts' => fn (Builder $query) => $query
+                    ->whereBetween(
+                        'published_at',
+                        [$this->getStartDate(), $this->getEndDate()]
+                    )]
+            )
             ->orderBy('posts_count', 'desc')
             ->limit(8)
             ->get()
@@ -213,13 +216,14 @@ class DemoDashboard extends SharpDashboard
 
     protected function setPieGraphDataSet(): void
     {
-        Category::withCount([
-            'posts' => fn (Builder $query) => $query
-                ->whereBetween('published_at', [
-                    $this->getStartDate(),
-                    $this->getEndDate(),
-                ]),
-        ])
+        Category::query()
+            ->withCount([
+                'posts' => fn (Builder $query) => $query
+                    ->whereBetween('published_at', [
+                        $this->getStartDate(),
+                        $this->getEndDate(),
+                    ]),
+            ])
             ->limit(5)
             ->orderBy('posts_count', 'desc')
             ->get()
@@ -236,10 +240,14 @@ class DemoDashboard extends SharpDashboard
     protected function setOrderedListDataSet(): void
     {
         $this->setOrderedListData('list',
-            Category::withCount([
-                'posts' => function (Builder $query) {
-                    $query->whereBetween('published_at', [$this->getStartDate(), $this->getEndDate()]);
-                }])
+            Category::query()
+                ->withCount([
+                    'posts' => fn (Builder $query) => $query
+                        ->whereBetween('published_at', [
+                            $this->getStartDate(),
+                            $this->getEndDate(),
+                        ]),
+                ])
                 ->orderBy('posts_count', 'desc')
                 ->limit(3)
                 ->get()
