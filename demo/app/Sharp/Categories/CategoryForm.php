@@ -65,7 +65,7 @@ class CategoryForm extends SharpForm
 
         $category = $id
             ? Category::findOrFail($id)
-            : new Category();
+            : Category::make(['order' => 100]);
 
         $this->save($category, $data);
 
