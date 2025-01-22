@@ -27,4 +27,20 @@ class FormLayoutColumn extends LayoutColumn implements HasLayout
     {
         $this->rows[] = [$fieldset];
     }
+    
+    /**
+     * @internal
+     */
+    public function getRows(): array
+    {
+        return $this->rows;
+    }
+    
+    /**
+     * @internal
+     */
+    public function merge(FormLayoutColumn $column): array
+    {
+        return $this->rows = [...$this->rows, ...$column->getRows()];
+    }
 }

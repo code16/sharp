@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Form\Layout;
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\Traits\Conditionable;
 
 class FormLayout implements HasLayout
@@ -51,6 +52,15 @@ class FormLayout implements HasLayout
         $this->tabbed = $tabbed;
 
         return $this;
+    }
+    
+    /**
+     * @internal
+     */
+    public function getAllColumns(): Collection
+    {
+        return collect($this->tabs)
+            ->flatMap(fn (FormLayoutTab $tab) => $tab->getColumns());
     }
 
     private function addTabLayout(FormLayoutTab $tab): FormLayoutTab

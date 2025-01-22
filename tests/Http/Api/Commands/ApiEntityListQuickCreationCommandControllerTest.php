@@ -1,6 +1,9 @@
 <?php
 
+use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
+use Code16\Sharp\Form\Layout\FormLayout;
+use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonForm;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
@@ -45,6 +48,94 @@ it('allows to call a quick creation command with the standard form', function ()
             ],
         ]);
 });
+
+it('allows to call a quick creation command with form layout', function () {
+    fakeListFor('person', new class() extends PersonList
+    {
+        public function buildListConfig(): void
+        {
+            $this->configureQuickCreationForm();
+        }
+    });
+    
+    fakeFormFor('person', new class() extends PersonForm
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields
+                ->addField(SharpFormTextField::make('job'))
+                ->addField(SharpFormTextField::make('name'))
+                ->addField(SharpFormListField::make('collaborators')
+                    ->addItemField(SharpFormTextField::make('name'))
+                );
+        }
+        
+        public function buildFormLayout(FormLayout $formLayout): void
+        {
+            $formLayout->addColumn(6, function(FormLayoutColumn $column) {
+                $column->withField('name');
+            })
+            ->addColumn(6, function(FormLayoutColumn $column) {
+                $column->withField('job')
+                    ->withListField('collaborators', function(FormLayoutColumn $column) {
+                        $column->withField('name');
+                    });
+            });
+        }
+    });
+    
+    $this
+        ->getJson(
+            route('code16.sharp.api.list.command.quick-creation-form.create', ['person']),
+        )
+        ->assertOk()
+        ->assertJson([
+            'layout' => [
+                'tabbed' => false,
+                'tabs' => [
+                    [
+                        'columns' => [
+                            [
+                                'fields' => [
+                                    [
+                                        ['key' => 'name', 'size' => 12],
+                                    ],
+                                    [
+                                        ['key' => 'job', 'size' => 12],
+                                    ],
+                                    [
+                                        [
+                                            'key' => 'collaborators',
+                                            'size' => 12,
+                                            'item' => [
+                                                [
+                                                    ['key' => 'name', 'size' => 12],
+                                                ],
+                                            ]
+                                        ],
+                                    ],
+                                ],
+                                'size' => 12,
+                            ],
+                        ],
+                        'title' => 'one',
+                    ],
+                ],
+            ],
+            'fields' => [
+                'name' => [
+                    'key' => 'name',
+                ],
+                'job' => [
+                    'key' => 'job',
+                ],
+                'collaborators' => [
+                    'key' => 'collaborators',
+                ],
+            ],
+        ]);
+});
+
 
 it('allows to call a quick creation command with custom form fields', function () {
     fakeListFor('person', new class() extends PersonList

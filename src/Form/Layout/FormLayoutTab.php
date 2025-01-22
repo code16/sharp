@@ -48,4 +48,12 @@ class FormLayoutTab implements HasLayout
 
         return $column;
     }
+    
+    /**
+     * @internal
+     */
+    public function getColumns(): array
+    {
+        return $this->columns;
+    }
 }

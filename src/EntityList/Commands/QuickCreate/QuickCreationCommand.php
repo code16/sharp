@@ -4,6 +4,7 @@ namespace Code16\Sharp\EntityList\Commands\QuickCreate;
 
 use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\Form\Fields\SharpFormField;
+use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
@@ -40,7 +41,15 @@ class QuickCreationCommand extends EntityCommand
             )
             ->each(fn (SharpFormField $field) => $formFields->addField($field));
     }
-
+    
+    public function buildFormLayout(FormLayoutColumn &$column): void
+    {
+        $this->sharpForm->getBuiltFormLayout()->getAllColumns()
+            ->each(function (FormLayoutColumn $formLayoutColumn) use (&$column) {
+                $column->merge($formLayoutColumn);
+            });
+    }
+    
     protected function initialData(): array
     {
         return $this->sharpForm->create();

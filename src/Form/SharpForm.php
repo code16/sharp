@@ -28,12 +28,17 @@ abstract class SharpForm
 
     final public function formLayout(): array
     {
+        return $this->getBuiltFormLayout()->toArray();
+    }
+    
+    final public function getBuiltFormLayout(): FormLayout
+    {
         if ($this->formLayout === null) {
             $this->formLayout = new FormLayout();
             $this->buildFormLayout($this->formLayout);
         }
-
-        return $this->formLayout->toArray();
+        
+        return $this->formLayout;
     }
 
     public function formConfig(): array
