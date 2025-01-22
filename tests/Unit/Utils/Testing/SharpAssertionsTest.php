@@ -24,9 +24,10 @@ it('allows to test getSharpForm for edit', function () {
 
 it('allows to test getSharpForm for edit with a custom breadcrumb', function () {
     $response = fakeResponse()
-        ->withSharpCurrentBreadcrumb(
-            ['list', 'leaves'],
-            ['show', 'leaves', 6],
+        ->withSharpBreadcrumb(
+            fn ($builder) => $builder
+                ->appendEntityList('leaves')
+                ->appendShowPage('leaves', 6),
         )
         ->getSharpForm('leaves', 6);
 
@@ -156,10 +157,11 @@ it('allows to test callSharpInstanceCommandFromList with a wizard step', functio
 
 it('allows to define a current breadcrumb', function () {
     $response = fakeResponse()
-        ->withSharpCurrentBreadcrumb(
-            ['list', 'trees'],
-            ['show', 'trees', 2],
-            ['show', 'leaves', 6],
+        ->withSharpBreadcrumb(
+            fn ($builder) => $builder
+                ->appendEntityList('trees')
+                ->appendShowPage('trees', 2)
+                ->appendShowPage('leaves', 6),
         )
         ->getSharpForm('leaves', 6);
 

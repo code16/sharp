@@ -28,12 +28,16 @@ class PostSharpFormTest extends TestCase
         $post = Post::factory()->create();
 
         $this
-            ->withSharpCurrentBreadcrumb(['list', 'posts'])
+            ->withSharpBreadcrumb(
+                fn ($builder) => $builder->appendEntityList('posts')
+            )
             ->getSharpForm('posts', $post->id)
             ->assertOk();
 
         $this
-            ->withSharpCurrentBreadcrumb(['list', 'posts'])
+            ->withSharpBreadcrumb(
+                fn ($builder) => $builder->appendEntityList('posts')
+            )
             ->getSharpForm('posts')
             ->assertOk();
     }
@@ -153,14 +157,17 @@ class PostSharpFormTest extends TestCase
             ->create();
 
         $this
-            ->withSharpCurrentBreadcrumb(['list', 'posts'])
+            ->withSharpBreadcrumb(
+                fn ($builder) => $builder->appendEntityList('posts')
+            )
             ->getSharpShow('posts', $publishedPost->id)
             ->assertOk();
 
         $this
-            ->withSharpCurrentBreadcrumb(
-                ['list', 'posts'],
-                ['show', 'posts', $publishedPost->id],
+            ->withSharpBreadcrumb(
+                fn ($builder) => $builder
+                    ->appendEntityList('posts')
+                    ->appendShowPage('posts', $publishedPost->id),
             )
             ->getSharpForm('posts', $publishedPost->id)
             ->assertForbidden();
@@ -178,7 +185,9 @@ class PostSharpFormTest extends TestCase
             ]);
 
         $this
-            ->withSharpCurrentBreadcrumb(['list', 'posts'])
+            ->withSharpBreadcrumb(
+                fn ($builder) => $builder->appendEntityList('posts')
+            )
             ->getSharpShow('posts', $publishedPost->id)
             ->assertForbidden();
     }
