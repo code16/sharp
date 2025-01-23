@@ -79,7 +79,7 @@ const config = {
                     foreground: "oklch(var(--accent-foreground-oklch) / <alpha-value>)",
                 },
                 popover: {
-                    DEFAULT: "hsl(var(--popover))",
+                    DEFAULT: "oklch(var(--popover-oklch) / <alpha-value>)",
                     foreground: "hsl(var(--popover-foreground))",
                 },
                 card: {

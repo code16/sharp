@@ -58,16 +58,18 @@
         /*--muted-foreground-oklch: from var(--sharp-config-primary) 0.71 0.03 h;*/
 
         /*--accent-oklch: from var(--sharp-config-primary) 0.27 0.01 h; !* default levels *!*/
-        --accent-oklch: from var(--sharp-config-primary) 0.27 min(c, 0.01) h;
+        --accent-oklch: from var(--sharp-config-primary) 0.27 min(c, 0.025) h;
         /*--accent-foreground-oklch: from var(--sharp-config-primary) 0.98 0 h; !* default levels *!*/
         --accent-foreground-oklch: from var(--sharp-config-primary) 0.98 min(c, 0.005) h;
 
         /*--input-oklch: from var(--sharp-config-primary) 0.27 min(c, 0.01) h; !* default levels *!*/
-        --input-oklch: from var(--sharp-config-primary) 0.27 min(0.01) h;
+        --input-oklch: from var(--sharp-config-primary) 0.35 min(0.01) h;
         /*--border-oklch: from var(--sharp-config-primary) 0.27 min(c, 0.01) h; !* default levels *!*/
         --border-oklch: from var(--sharp-config-primary) 0.27 min(0.01) h;
         /*--ring-oklch: from var(--sharp-config-primary) 0.87 min(c, 0.01) h; !* default levels *!*/
         --ring-oklch: from var(--sharp-config-primary) 0.87 min(c, 0.1) h;
+
+        --popover-oklch: from var(--sharp-config-primary) 0.18 min(c, 0.015) h;
 
         /*--sidebar-background-oklch: from var(--sharp-config-primary) 0.21 0.01 h; !* default levels *!*/
         --sidebar-background-oklch: from var(--sharp-config-primary) 0.21 min(c, 0.02) h;
