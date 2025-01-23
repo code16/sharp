@@ -64,7 +64,7 @@ class QuickCreationCommand extends EntityCommand
     {
         return $this->sharpForm->getDataLocalizations();
     }
-    
+
     public function getInstanceId(): mixed
     {
         return $this->instanceId;

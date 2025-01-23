@@ -27,7 +27,6 @@ use Code16\Sharp\Form\Layout\FormLayoutFieldset;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
-use Code16\Sharp\Utils\PageAlerts\PageAlert;
 
 class PostForm extends SharpForm
 {
@@ -191,7 +190,7 @@ class PostForm extends SharpForm
                     });
             });
     }
-    
+
     public function buildFormConfig(): void
     {
         $this->configureDisplayShowPageAfterCreation()

@@ -34,10 +34,11 @@ class CategoryForm extends SharpForm
 
     public function buildFormLayout(FormLayout $formLayout): void
     {
-        $formLayout->addColumn(6, function (FormLayoutColumn $column) {
-            $column->withField('name')
-                ->withField('description');
-        });
+        $formLayout
+            ->addColumn(6, fn (FormLayoutColumn $column) => $column
+                ->withField('name')
+                ->withField('description')
+            );
     }
 
     public function buildFormConfig(): void

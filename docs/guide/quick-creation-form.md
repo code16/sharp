@@ -1,6 +1,6 @@
 # Quick creation form
 
-Sometimes you may want to allow the creation of a new instance directly from the list page, without having to navigate to a dedicated creation page. It's especially useful when the create form does not require a lot of fields, to keep the user in the list context — and since Sharp will display a "submit and reopen" button in the modal, the user can quickly create multiple instances.
+Sometimes you may want to allow the creation of a new instance directly from the list page, without having to navigate to a dedicated creation form. It's especially useful when the create form does not require a lot of fields, to keep the user in the list context — and since Sharp will display a “Create and create another” button in the modal, the user can quickly create many instances.
 
 ## Prerequisites
 
@@ -35,6 +35,10 @@ class MyList extends SharpEntityList
 ```
 
 Of course, ensure that these fields are defined in the Form and that all the required fields are present.
+
+::: warning
+The quick creation form is designed for simple forms. In particular, the layout is entirely ignored, as fields are simply placed one below another. If your form contains many fields or require a specific layout, it is better to use the regular creation form.
+:::
 
 ## Redirect to the Show Page
 
