@@ -19,7 +19,7 @@ declare module '@inertiajs/core' {
     }
 }
 
-declare module '@vue/runtime-core' {
+declare module 'vue' {
     interface ComponentCustomProperties {
         window: Window;
         document: Document;

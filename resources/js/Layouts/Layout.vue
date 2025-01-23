@@ -89,24 +89,22 @@
     <ConfigProvider>
         <SidebarProvider>
             <Sidebar>
-                <SidebarHeader class="h-14 justify-center">
-                    <div class="p-2">
-                        <template v-if="$page.props.logo">
-                            <div class="text-sidebar-accent-foreground">
-                                <Logo />
+                <SidebarHeader class="p-4 h-14 justify-center">
+                    <template v-if="$page.props.logo">
+                        <div class="text-sidebar-accent-foreground">
+                            <Logo />
+                        </div>
+                    </template>
+                    <template v-else>
+                        <div class="flex items-center gap-2 font-semibold">
+                            <div class="grid place-content-center w-6 h-6">
+                                <SharpLogoMini class="w-3 h-3" />
                             </div>
-                        </template>
-                        <template v-else>
-                            <div class="flex items-center gap-2 font-semibold">
-                                <div class="grid place-content-center w-6 h-6">
-                                    <SharpLogoMini class="w-3 h-3" />
-                                </div>
-                                <span>
-                                    {{ config('sharp.name') }}
-                                </span>
-                            </div>
-                        </template>
-                    </div>
+                            <span>
+                                {{ config('sharp.name') }}
+                            </span>
+                        </div>
+                    </template>
                 </SidebarHeader>
                 <SidebarContent ref="sidebarContent">
                     <template v-if="globalFilters">
