@@ -24,7 +24,8 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.single-show": [
         {
-            "name": "entityKey"
+            "name": "entityKey",
+            "binding": "key"
         }
     ],
     "code16.sharp.download.show": [
@@ -40,7 +41,8 @@ declare module 'ziggy-js' {
             "name": "parentUri"
         },
         {
-            "name": "entityKey"
+            "name": "entityKey",
+            "binding": "key"
         },
         {
             "name": "instanceId"
@@ -62,7 +64,8 @@ declare module 'ziggy-js' {
             "name": "parentUri"
         },
         {
-            "name": "entityKey"
+            "name": "entityKey",
+            "binding": "key"
         }
     ],
     "code16.sharp.form.store": [
@@ -70,7 +73,8 @@ declare module 'ziggy-js' {
             "name": "parentUri"
         },
         {
-            "name": "entityKey"
+            "name": "entityKey",
+            "binding": "key"
         }
     ],
     "code16.sharp.form.edit": [
@@ -78,7 +82,8 @@ declare module 'ziggy-js' {
             "name": "parentUri"
         },
         {
-            "name": "entityKey"
+            "name": "entityKey",
+            "binding": "key"
         },
         {
             "name": "instanceId"
@@ -89,7 +94,8 @@ declare module 'ziggy-js' {
             "name": "parentUri"
         },
         {
-            "name": "entityKey"
+            "name": "entityKey",
+            "binding": "key"
         },
         {
             "name": "instanceId"
@@ -118,12 +124,14 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.api.list.command.quick-creation-form.create": [
         {
-            "name": "entityKey"
+            "name": "entityKey",
+            "binding": "key"
         }
     ],
     "code16.sharp.api.list.command.quick-creation-form.store": [
         {
-            "name": "entityKey"
+            "name": "entityKey",
+            "binding": "key"
         }
     ],
     "code16.sharp.api.list": [
@@ -291,7 +299,8 @@ declare module 'ziggy-js' {
     "code16.sharp.api.form.upload": [],
     "code16.sharp.api.form.autocomplete.index": [
         {
-            "name": "entityKey"
+            "name": "entityKey",
+            "binding": "key"
         },
         {
             "name": "autocompleteFieldKey"

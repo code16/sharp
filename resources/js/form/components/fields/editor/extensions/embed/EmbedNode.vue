@@ -13,6 +13,7 @@
         DropdownMenuTrigger
     } from "@/components/ui/dropdown-menu";
     import { MoreHorizontal } from "lucide-vue-next";
+    import EmbedHeader from "@/components/EmbedHeader.vue";
 
     const props = defineProps<ExtensionNodeProps<typeof Embed, EmbedNodeAttributes>>();
 
@@ -43,12 +44,13 @@
         :class="{ 'group-focus/editor:border-primary': props.selected }"
         :node="node"
     >
-        <div class="flex-1" >
-            <template v-if="embedData">
-                <div v-html="embedData?._html"></div>
+        <div class="flex-1 min-w-0">
+            <template v-if="extension.options.embed.displayEmbedHeader">
+                <EmbedHeader :embed="extension.options.embed" />
             </template>
-            <template v-else>
-                {{ extension.options.embed.label }}
+
+            <template v-if="embedData?._html">
+                <div v-html="embedData?._html"></div>
             </template>
         </div>
         <template v-if="!parentEditor.props.field.readOnly">

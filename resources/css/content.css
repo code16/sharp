@@ -65,7 +65,7 @@
       @apply relative p-1.5 -m-1.5 text-primary underline underline-offset-4 decoration-primary/20 hover:decoration-inherit;
     }
     :where(strong) {
-      @apply font-bold;
+      @apply font-[650];
     }
     > :where(:first-child) {
       @apply mt-0;

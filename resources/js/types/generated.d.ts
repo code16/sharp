@@ -114,6 +114,8 @@ export type EmbedData = {
   icon: IconData | null;
   attributes: Array<string>;
   fields: { [key: string]: FormFieldData };
+  displayEmbedHeader: boolean;
+  embedHeaderTitle: string | null;
 };
 export type EmbedFormData = {
   data: { [key: string]: FormFieldData["value"] };
@@ -143,13 +145,13 @@ export type EntityListConfigData = {
   state: EntityStateData | null;
 };
 export type EntityListData = {
+  title: string | null;
   authorizations: EntityListAuthorizationsData;
   config: EntityListConfigData;
   fields: Array<EntityListFieldData>;
   data: Array<{ [key: string]: any }>;
   filterValues: FilterValuesData;
   query: EntityListQueryParamsData | null;
-  title: string | null;
   forms: { [key: string]: EntityListMultiformData } | null;
   meta: PaginatorMetaData | null;
   pageAlert: PageAlertData | null;
@@ -288,13 +290,13 @@ export type FormCustomFieldData = {
   extraStyle: string | null;
 };
 export type FormData = {
+  title: string | null;
   authorizations: InstanceAuthorizationsData;
   config: FormConfigData;
   data: { [key: string]: FormFieldData["value"] };
   fields: { [key: string]: FormFieldData };
   layout: FormLayoutData;
   locales: Array<string>;
-  title: string | null;
   pageAlert: PageAlertData | null;
 };
 export type FormDateFieldData = {
@@ -756,13 +758,13 @@ export type ShowCustomFieldData = {
   emptyVisible: boolean;
 };
 export type ShowData = {
+  title: string | { [locale: string]: string } | null;
   authorizations: InstanceAuthorizationsData;
   config: ShowConfigData;
   data: { [key: string]: ShowFieldData["value"] };
   fields: { [key: string]: ShowFieldData };
   layout: ShowLayoutData;
   locales: Array<string> | null;
-  title: string | { [locale: string]: string } | null;
   pageAlert: PageAlertData | null;
 };
 export type ShowEntityListFieldData = {

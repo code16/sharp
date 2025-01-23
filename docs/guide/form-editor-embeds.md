@@ -61,7 +61,8 @@ This is not required, but you should implement `buildEmbedConfig(): void`, where
 - `configureTemplate(string|View $template): self`: to define the blade as inline string or as a `view('my-template')` for both show & form. If you want to specify different templates between show & form you can use following methods :
   - `configureShowTemplate(string|View $template): self`
   - `configureFormTemplate(string|View $template): self`
-- `configureIcon(string $icon): self` define icon, place it in toolbar...
+- `configureIcon(string $icon): self`: to define an icon used when the embed is placed in the toolbar. The icon is also displayed in the embed header.
+- `configureDisplayEmbedHeader(bool $display = true, ?string $title = null): self`: to hide the default embed header. The title is the label defined in `configureLabel()` but it can be overridden here.
 
 Here's a complete example:
 

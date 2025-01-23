@@ -26,6 +26,8 @@ final class EmbedData extends Data
         public array $attributes,
         /** @var array<string,FormFieldData> */
         public array $fields,
+        public bool $displayEmbedHeader,
+        public ?string $embedHeaderTitle,
     ) {}
 
     public static function from(array $embed): self
