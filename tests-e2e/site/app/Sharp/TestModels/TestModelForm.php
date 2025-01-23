@@ -129,19 +129,9 @@ class TestModelForm extends SharpForm
                     ->setRemovable()
                     ->setItemIdAttribute('id')
                     ->addItemField(
-                        SharpFormDateField::make('date')
-                            ->setLabel('Date')
-                            ->setHasTime(false),
+                        SharpFormTextField::make('item')
+                            ->setLabel('List item text'),
                     )
-                    ->addItemField(
-                        SharpFormCheckField::make('check', 'check this'),
-                    )
-                    ->addItemField(SharpFormEditorField::make('markdown2')
-                        ->setLabel('Markdown')
-                        ->setToolbar([
-                            SharpFormEditorField::B, SharpFormEditorField::I, SharpFormEditorField::A,
-                        ]),
-                    ),
             )
             ->addField(
                 SharpFormEditorField::make('editor_html')
@@ -303,12 +293,14 @@ class TestModelForm extends SharpForm
                         $listItem->withField('item');
                     })
                     ->withField('check')
-                    ->withField('date_time')
                     ->withField('date')
+                    ->withField('date_time')
                     ->withField('time')
                     ->withField('geolocation')
                     ->withField('html')
-                    ->withField('list')
+                    ->withListField('list', function (FormLayoutColumn $listItem) {
+                        $listItem->withField('item');
+                    })
                     ->withField('editor_html')
                     ->withField('editor_html_localized')
                     ->withField('editor_markdown');
@@ -345,8 +337,8 @@ class TestModelForm extends SharpForm
                 return $value ? ['id' => $value, 'label' => static::options()[$value]] : null;
             })
             ->transform(TestModel::findOrFail($id)->fill([
-            'html' => ['name' => 'John'],
-        ]));
+                'html' => ['name' => 'John'],
+            ]));
     }
 
     public function update($id, array $data)

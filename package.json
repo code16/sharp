@@ -11,7 +11,7 @@
     "docs:dev": "cd docs && npm run dev",
     "docs:build": "cd docs && npm run build",
     "test": "jest",
-    "e2e:ui": "cd tests-e2e && npm run ui",
+    "e2e": "cd tests-e2e && npm run ui",
     "update:tiptap": "npm i @tiptap/core @tiptap/pm @tiptap/extension-code-block @tiptap/extension-highlight @tiptap/extension-image @tiptap/extension-link @tiptap/extension-placeholder @tiptap/extension-superscript @tiptap/extension-table @tiptap/extension-table-cell @tiptap/extension-table-header @tiptap/extension-table-row @tiptap/starter-kit @tiptap/vue-3 @tiptap/extension-character-count"
   },
   "devDependencies": {

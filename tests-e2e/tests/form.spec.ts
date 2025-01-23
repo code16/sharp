@@ -119,6 +119,33 @@ test.describe('form', () => {
       await createForm(page);
       await expect(page.getByRole('checkbox', { name: 'Check' })).toBeChecked();
     });
+    test('date', async ({ page }) => {
+      await init(page);
+      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      const input = page.getByLabel('Date', { exact: true });
+      await input.fill('2021-01-01');
+      await page.getByRole('button', { name: 'Clear Date', exact: true }).click();
+      await expect(input).toHaveValue('');
+      await input.fill('2021-01-01');
+      await createForm(page);
+      await expect(input).toHaveValue('2021-01-01');
+    });
+    test('date picker', async ({ page }) => {
+      await init(page);
+      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      const input = page.getByLabel('Date', { exact: true });
+      await input.fill('2021-01-01');
+      await input.click();
+      await page.getByRole('dialog').getByText('January', { exact: true }).click();
+      await page.getByRole('listbox').getByText('March', { exact: true }).click();
+      await page.getByRole('dialog').getByText('2021', { exact: true }).click();
+      await page.getByRole('listbox').getByText('2022', { exact: true }).click();
+      await page.getByRole('dialog').getByText('26').click();
+      await expect(input).toHaveValue('2022-03-26');
+      await page.mouse.click(0, 0);
+      await createForm(page);
+      await expect(input).toHaveValue('2022-03-26');
+    });
     test('date time', async ({ page }) => {
       await init(page);
       await page.goto('/sharp/s-list/test-models/s-form/test-models');
@@ -144,8 +171,73 @@ test.describe('form', () => {
       await page.getByRole('dialog').getByText('11').last().click();
       await page.getByRole('dialog').getByText('30').last().click();
       await expect(input).toHaveValue('2022-03-26T11:30');
+      await page.mouse.click(0, 0);
       await createForm(page);
       await expect(input).toHaveValue('2022-03-26T11:30');
+    });
+    test('time', async ({ page }) => {
+      await init(page);
+      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      const input = page.getByLabel('Time', { exact: true });
+      await input.fill('12:34');
+      await page.getByRole('button', { name: 'Clear Time', exact: true }).click();
+      await expect(input).toHaveValue('');
+      await input.fill('12:34');
+      await createForm(page);
+      await expect(input).toHaveValue('12:34');
+    });
+    test('time picker', async ({ page }) => {
+      await init(page);
+      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      const input = page.getByLabel('Time', { exact: true });
+      await input.fill('12:34');
+      await input.click();
+      await page.getByRole('dialog').getByText('11').last().click();
+      await page.getByRole('dialog').getByText('30').last().click();
+      await expect(input).toHaveValue('11:30');
+      await page.mouse.click(0, 0);
+      await createForm(page);
+      await expect(input).toHaveValue('11:30');
+    });
+    test('geolocation', () => {
+      // todo
+    });
+    test('html', async ({ page }) => {
+      await init(page);
+      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      expect(await page.getByLabel('Html', { exact: true }).innerHTML()).toContain('Your name is <strong>John</strong>');
+    });
+    test('list', async ({ page }) => {
+      await init(page);
+      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      const list = page.getByLabel('List', { exact: true });
+      await list.getByRole('button', { name: 'Add an item' }).click();
+      await list.getByRole('textbox', { name: 'List item text' }).nth(0).fill('example 1');
+      await list.getByRole('button', { name: 'Add an item' }).click();
+      await list.getByRole('textbox', { name: 'List item text' }).nth(1).fill('example 2');
+      await list.getByRole('button', { name: 'Add an item' }).click();
+      await list.getByRole('textbox', { name: 'List item text' }).nth(2).fill('example 3');
+      // remove "example 2"
+      await list.getByRole('listitem').nth(1).getByRole('button', { name: 'Actions' }).click();
+      await page.getByRole('menu').getByRole('menuitem', { name: 'Remove' }).click();
+      // insert "example 4" above "example 1"
+      await list.getByRole('listitem').nth(0).getByRole('button', { name: 'Actions' }).click();
+      await page.getByRole('menu').getByRole('menuitem', { name: 'Insert above' }).click();
+      await list.getByRole('textbox', { name: 'List item text' }).nth(0).fill('example 4');
+      await list.getByRole('button', { name: 'Reorder' }).click();
+      // move "example 1" to the top
+      await list.getByRole('listitem').nth(1).dragTo(list.getByRole('listitem').nth(0), { sourcePosition: { x: 20, y: 20 }, targetPosition: { x: 20, y: 20 } });
+      await expect(list.getByRole('textbox', { name: 'List item text' }).nth(0)).toHaveValue('example 1');
+      await expect(list.getByRole('textbox', { name: 'List item text' }).nth(1)).toHaveValue('example 4');
+      await expect(list.getByRole('textbox', { name: 'List item text' }).nth(2)).toHaveValue('example 3');
+      await createForm(page);
+      await expect(list.getByRole('textbox', { name: 'List item text' }).nth(0)).toHaveValue('example 1');
+      await expect(list.getByRole('textbox', { name: 'List item text' }).nth(1)).toHaveValue('example 4');
+      await expect(list.getByRole('textbox', { name: 'List item text' }).nth(2)).toHaveValue('example 3');
+    });
+    test('editor', async ({ page }) => {
+      await init(page);
+      await page.goto('/sharp/s-list/test-models/s-form/test-models');
     });
   });
 });

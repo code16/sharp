@@ -15,6 +15,7 @@
         props.editor.setOptions({
             editorProps: {
                 attributes: {
+                    ...attrs,
                     class: props.class,
                     style: stringifyStyle(normalizeStyle(props.style)),
                 },
