@@ -202,7 +202,7 @@
                         <template v-if="Object.values(props.field.embeds ?? {}).length > 0">
                             <DropdownMenu :modal="false">
                                 <DropdownMenuTrigger as-child>
-                                    <Button class="px-3" variant="ghost" :disabled="props.field.readOnly">
+                                    <Button class="px-3" variant="ghost" size="sm" :disabled="props.field.readOnly">
                                         {{ __('sharp::form.editor.dropdown.embeds') }}
                                     </Button>
                                 </DropdownMenuTrigger>
