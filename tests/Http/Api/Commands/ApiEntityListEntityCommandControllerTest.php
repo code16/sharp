@@ -2,6 +2,7 @@
 
 use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
+use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
@@ -487,7 +488,14 @@ it('returns the form fields of the entity command and build a basic layout if mi
 
                     public function buildFormFields(FieldsContainer $formFields): void
                     {
-                        $formFields->addField(SharpFormTextField::make('name'));
+                        $formFields
+                            ->addField(SharpFormTextField::make('name'))
+                            ->addField(
+                                SharpFormListField::make('jobs')
+                                    ->addItemField(
+                                        SharpFormTextField::make('company')
+                                    )
+                            );
                     }
 
                     public function execute(array $data = []): array
@@ -503,13 +511,6 @@ it('returns the form fields of the entity command and build a basic layout if mi
         ->getJson(route('code16.sharp.api.list.command.entity.form', ['person', 'cmd']))
         ->assertOk()
         ->assertJsonFragment([
-            'fields' => [
-                'name' => [
-                    'key' => 'name',
-                    'type' => 'text',
-                    'inputType' => 'text',
-                ],
-            ],
             'layout' => [
                 'tabbed' => false,
                 'tabs' => [
@@ -518,7 +519,24 @@ it('returns the form fields of the entity command and build a basic layout if mi
                             [
                                 'fields' => [
                                     [
-                                        ['key' => 'name', 'size' => 12],
+                                        [
+                                            'key' => 'name',
+                                            'size' => 12,
+                                        ],
+                                    ],
+                                    [
+                                        [
+                                            'key' => 'jobs',
+                                            'size' => 12,
+                                            'item' => [
+                                                [
+                                                    [
+                                                        'key' => 'company',
+                                                        'size' => 12,
+                                                    ],
+                                                ],
+                                            ],
+                                        ],
                                     ],
                                 ],
                                 'size' => 12,

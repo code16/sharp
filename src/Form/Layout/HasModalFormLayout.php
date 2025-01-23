@@ -2,6 +2,8 @@
 
 namespace Code16\Sharp\Form\Layout;
 
+use Code16\Sharp\Form\Fields\SharpFormField;
+use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Utils\Fields\HandleFields;
 
 /**
@@ -21,8 +23,17 @@ trait HasModalFormLayout
                     $buildFormLayout($column);
 
                     if (! $column->hasFields()) {
+                        // Handle default layout
                         collect($fields)
-                            ->each(fn ($field) => $column->withField($field->key()));
+                            ->each(fn (SharpFormField $field) => $field instanceof SharpFormListField
+                                ? $column->withListField($field->key, fn ($layout) => $field
+                                    ->itemFields()
+                                    ->each(fn (SharpFormField $itemField) => $layout
+                                        ->withSingleField($itemField->key())
+                                    )
+                                )
+                                : $column->withField($field->key)
+                            );
                     }
                 })
                 ->toArray();
