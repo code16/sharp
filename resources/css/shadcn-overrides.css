@@ -29,6 +29,8 @@
         /*--ring-oklch: from var(--sharp-config-primary) 0.71 min(c, 0.01) h; !* default levels *!*/
         --ring-oklch: from var(--sharp-config-primary) 0.71 min(c, 0.05) h;
 
+        --popover-oklch: 1 0 0;
+
         /*--sidebar-background-oklch: from var(--sharp-config-primary) 0.98 0 h; !* default levels *!*/
         --sidebar-background-oklch: from var(--sharp-config-primary) 0.98 min(c, 0.005) h;
         /*--sidebar-foreground-oklch: from var(--sharp-config-primary) 0.37 0.01 h; !* default levels *!*/
