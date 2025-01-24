@@ -80,7 +80,7 @@ function getExtensions(field: FormEditorFieldData) {
             levels: [1,2,3].filter((level: 1|2|3) => toolbarHas(`heading-${level}`)) as (1|2|3)[],
         }),
         toolbarHas('horizontal-rule') && HorizontalRule.extend({
-            selectable: false,
+            // selectable: false,
         }),
         Html,
         toolbarHas('iframe') && Iframe,

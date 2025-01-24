@@ -11,6 +11,10 @@
 
     const attrs = useAttrs();
 
+    defineOptions({
+        inheritAttrs: false,
+    })
+
     watchEffect(() => {
         props.editor.setOptions({
             editorProps: {

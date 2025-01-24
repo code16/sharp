@@ -238,6 +238,84 @@ test.describe('form', () => {
     test('editor', async ({ page }) => {
       await init(page);
       await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      const editor = page.getByLabel('Editor HTML', { exact: true });
+      await test.step('default text', async () => {
+        await editor.getByRole('textbox').pressSequentially('default');
+        await expect(editor.getByRole('textbox')).toHaveText('default');
+        await editor.getByRole('textbox').pressSequentially(' ');
+      });
+      await test.step('bold', async () => {
+        await editor.getByRole('button', { name: 'Bold' }).click();
+        await editor.getByRole('textbox').pressSequentially('strong');
+        await expect(editor.getByRole('textbox').locator('strong')).toHaveText('strong');
+        await editor.getByRole('button', { name: 'Bold' }).click();
+        await editor.getByRole('textbox').pressSequentially(' ');
+      });
+      await test.step('italic', async () => {
+        await editor.getByRole('button', { name: 'Italic' }).click();
+        await editor.getByRole('textbox').pressSequentially('italic');
+        await expect(editor.getByRole('textbox').locator('em')).toHaveText('italic');
+        await editor.getByRole('button', { name: 'Italic' }).click();
+        await editor.getByRole('textbox').pressSequentially(' ');
+      });
+      await test.step('link', async () => {
+        await editor.getByRole('button', { name: 'Link' }).click();
+        await page.getByRole('dialog').getByRole('textbox', { name: 'text' }).fill('link');
+        await page.getByRole('dialog').getByRole('textbox', { name: 'URL' }).fill('https://example.com');
+        await page.getByRole('dialog').getByRole('button', { name: 'Insert link' }).click();
+        await expect(editor.getByRole('textbox').locator('a')).toHaveText('link');
+        await editor.getByRole('textbox').press('Enter');
+      });
+      await test.step('headings', async () => {
+        await editor.getByRole('button', { name: 'Heading 1' }).click();
+        await expect(editor.getByRole('textbox').locator('h1')).toBeVisible();
+        await editor.getByRole('textbox').pressSequentially('heading 1');
+        await expect(editor.getByRole('textbox').locator('h1')).toHaveText('heading 1');
+        await editor.getByRole('textbox').press('Enter');
+        await editor.getByRole('button', { name: 'Heading 2' }).click();
+        await expect(editor.getByRole('textbox').locator('h2')).toBeVisible();
+        await editor.getByRole('textbox').pressSequentially('heading 2');
+        await expect(editor.getByRole('textbox').locator('h2')).toHaveText('heading 2');
+        await editor.getByRole('textbox').press('Enter');
+        await editor.getByRole('button', { name: 'Heading 3' }).click();
+        await expect(editor.getByRole('textbox').locator('h3')).toBeVisible();
+        await editor.getByRole('textbox').pressSequentially('heading 3');
+        await expect(editor.getByRole('textbox').locator('h3')).toHaveText('heading 3');
+        await editor.getByRole('textbox').press('Enter');
+      });
+      await test.step('horizontal rule', async () => {
+        await editor.getByRole('button', { name: 'Horizontal rule' }).click();
+        await expect(editor.getByRole('textbox').locator('hr')).toBeVisible();
+      });
+      await test.step('ordered list', async () => {
+        await editor.getByRole('button', { name: 'Ordered list', exact: true }).click();
+        await expect(editor.getByRole('textbox').locator('ol')).toBeVisible();
+        await editor.getByRole('textbox').pressSequentially('ordered list');
+        await editor.getByRole('textbox').press('Enter');
+        await editor.getByRole('textbox').pressSequentially('ordered list');
+        await editor.getByRole('textbox').press('Enter');
+        await editor.getByRole('textbox').press('Enter');
+        await expect(editor.getByRole('textbox').locator('ol li').filter({ hasText: 'ordered list' })).toHaveCount(2);
+      });
+      await test.step('unordered list', async () => {
+        await editor.getByRole('button', { name: 'Unordered list' }).click();
+        await expect(editor.getByRole('textbox').locator('ul')).toBeVisible();
+        await editor.getByRole('textbox').pressSequentially('unordered list');
+        await editor.getByRole('textbox').press('Enter');
+        await editor.getByRole('textbox').pressSequentially('unordered list');
+        await editor.getByRole('textbox').press('Enter');
+        await editor.getByRole('textbox').press('Enter');
+        await expect(editor.getByRole('textbox').locator('ul li').filter({ hasText: 'unordered list' })).toHaveCount(2);
+      });
+      await test.step('blockquote', async () => {
+        await editor.getByRole('button', { name: 'Quote' }).click();
+        await expect(editor.getByRole('textbox').locator('blockquote')).toBeVisible();
+        await editor.getByRole('textbox').pressSequentially('quote');
+        await editor.getByRole('textbox').press('Enter');
+        await editor.getByRole('textbox').press('Enter');
+        await expect(editor.getByRole('textbox').locator('blockquote')).toHaveText('quote');
+      });
+      await page.waitForTimeout(1000);
     });
   });
 });

@@ -69,6 +69,7 @@
                 isNew: false,
             });
             modalOpen.value = false;
+            setTimeout(() => props.editor.commands.focus(props.getPos() + 1));
         } else {
             invalid.value = true;
         }

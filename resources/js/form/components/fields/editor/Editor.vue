@@ -153,7 +153,7 @@
 </script>
 
 <template>
-    <FormFieldLayout v-bind="props" v-slot="{ ariaLabelledBy }">
+    <FormFieldLayout v-bind="props" field-group>
         <div class="editor rounded-md border border-input bg-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background"
             :class="{
                 'editor--disabled': field.readOnly,
@@ -223,6 +223,7 @@
                 :class="cn(
                     'group/editor content min-h-20 w-full rounded-b-md overflow-y-auto focus:outline-none px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50',
                     '[&_.selection-highlight]:bg-[Highlight] [&_.selection-highlight]:py-0.5',
+                    '[&_.ProseMirror-selectednode]:!outline-none [&:focus_.ProseMirror-selectednode]:ring-1 [&_.ProseMirror-selectednode]:ring-primary',
                     {
                         'min-h-[--min-height]': field.minHeight,
                         'max-h-[--max-height]': field.maxHeight,
@@ -232,7 +233,6 @@
                     '--min-height': field.minHeight ? `${field.minHeight}px` : null,
                     '--max-height': field.maxHeight ? `${field.maxHeight}px` : null,
                 }"
-                :aria-labelledby="ariaLabelledBy"
                 role="textbox"
             >
                 <EditorContent :editor="editor" :key="locale ?? 'editor'" />

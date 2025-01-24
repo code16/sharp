@@ -47,15 +47,14 @@
             isNew: false,
         });
         modalOpen.value = false;
+        setTimeout(() => props.editor.commands.focus(props.getPos() + 1));
     }
 
     function onModalHidden() {
         if(!props.node.attrs.content) {
             props.deleteNode();
         }
-        setTimeout(() => {
-            props.editor.commands.focus();
-        });
+        setTimeout(() => props.editor.commands.focus());
     }
 </script>
 
