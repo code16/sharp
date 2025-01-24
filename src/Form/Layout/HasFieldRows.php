@@ -15,7 +15,7 @@ trait HasFieldRows
     protected array $rows = [];
 
     /** @deprecated use withField() or withListField() instead */
-    public function withSingleField(string $fieldKey, ?\Closure $subLayoutCallback = null): self
+    public function withSingleField(string $fieldKey, ?\Closure $subLayoutCallback = null): static
     {
         if ($subLayoutCallback) {
             return $this->withListField($fieldKey, $subLayoutCallback);
@@ -24,7 +24,7 @@ trait HasFieldRows
         return $this->withField($fieldKey);
     }
 
-    public function withField(string $fieldKey): self
+    public function withField(string $fieldKey): static
     {
         $this->addRowLayout([
             $this->newLayoutField($this->normalizedFieldsRow([$fieldKey])->first()),
@@ -37,7 +37,7 @@ trait HasFieldRows
      * @param  (\Closure(LayoutColumn): mixed)  $subLayoutCallback
      * @return $this
      */
-    public function withListField(string $fieldKey, Closure $subLayoutCallback): self
+    public function withListField(string $fieldKey, Closure $subLayoutCallback): static
     {
         $this->addRowLayout([
             $this->newLayoutField($fieldKey, $subLayoutCallback),
@@ -46,7 +46,7 @@ trait HasFieldRows
         return $this;
     }
 
-    public function withFields(string|int ...$fieldKeys): self
+    public function withFields(string|int ...$fieldKeys): static
     {
         $this
             ->addRowLayout(
@@ -62,7 +62,7 @@ trait HasFieldRows
      * @param  (\Closure(LayoutColumn): mixed)|null  $subLayoutCallback
      * @return $this
      */
-    public function insertSingleFieldAt(int $index, string $fieldKey, ?\Closure $subLayoutCallback = null): self
+    public function insertSingleFieldAt(int $index, string $fieldKey, ?\Closure $subLayoutCallback = null): static
     {
         $rows = collect($this->rows);
         $rows->splice($index, 0, [[$this->newLayoutField($fieldKey, $subLayoutCallback)]]);
@@ -71,7 +71,7 @@ trait HasFieldRows
         return $this;
     }
 
-    public function insertFieldsAt(int $index, string ...$fieldKeys): self
+    public function insertFieldsAt(int $index, string ...$fieldKeys): static
     {
         $rows = collect($this->rows);
         $rows->splice($index, 0, [
