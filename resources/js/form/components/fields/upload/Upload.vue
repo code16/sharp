@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { FormUploadFieldData } from "@/types";
-    import Uppy from '@uppy/core';
+    import Uppy, { MinimalRequiredUppyFile } from '@uppy/core';
     import type { UppyFile } from "@uppy/core";
     import ThumbnailGenerator from '@uppy/thumbnail-generator';
     import XHRUpload from '@uppy/xhr-upload';
@@ -61,7 +61,7 @@
     }>();
     const form = useParentForm();
     const transformedImg = ref<string>();
-    const uppyFile = ref<UppyFile>();
+    const uppyFile = ref<UppyFile<{}, {}>>();
     const isEditable = computed(() => {
         return props.value && canTransform(props.value.name, props.value.mime_type) && !props.hasError
             || !!props.dropdownEditLabel;
@@ -80,13 +80,14 @@
                 }),
                 youCanOnlyUploadFileTypes: __('sharp::form.upload.message.bad_extension'),
             },
+            pluralize: () => 1,
         },
         autoProceed: true,
         meta: {
             'validation_rule[]': props.field.validationRule,
         },
     })
-        .use(ThumbnailGenerator, { thumbnailWidth: 300, thumbnailHeight: 300 })
+        .use(ThumbnailGenerator, { thumbnailWidth: 300, thumbnailHeight: 300, thumbnailType: 'image/png' })
         .use(XHRUpload, {
             endpoint: route('code16.sharp.api.form.upload'),
             fieldName: 'file',
@@ -154,7 +155,7 @@
         .on('upload-error', (file, error, response) => {
             if(response) {
                 if(response.status === 422) {
-                    emit('error', response.body.errors.file?.join(', '), file.data);
+                    emit('error', (response.body.errors as Record<string, string[]>).file?.join(', '), file.data);
                 } else {
                     const message = getErrorMessage({ data: response.body, status: response.status });
                     handleErrorAlert({ data: response.body, status: response.status, method: 'post' });
@@ -270,11 +271,14 @@
             } else if(uppyFile.value) {
                 editModalImageUrl.value = await new Promise(resolve => {
                     new Uppy()
-                        .use(ThumbnailGenerator, { thumbnailWidth: 1200, thumbnailHeight: 1000 })
+                        .use(ThumbnailGenerator, { thumbnailWidth: 1200, thumbnailHeight: 1000, thumbnailType: 'image/png' })
                         .on('thumbnail:generated', (file, preview) => {
                             resolve(preview);
                         })
-                        .addFile({ ...uppyFile.value, preview: null });
+                        .addFile({
+                            ...(uppyFile.value as MinimalRequiredUppyFile<{}, {}>),
+                            preview: null
+                        });
                 });
             }
         }
@@ -371,8 +375,7 @@
     });
 
     onUnmounted(() => {
-        uppy.close({ reason: 'unmount' });
-        uppy.emit('cancel-all', { reason: 'user' });
+        uppy.destroy();
         emit('uploading', false);
     });
 </script>
