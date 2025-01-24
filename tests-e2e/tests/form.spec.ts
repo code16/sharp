@@ -2,6 +2,7 @@
 
 import { test, expect, Page } from '@playwright/test';
 import { init } from "../helpers";
+import path from "node:path";
 
 
 async function createForm(page: Page) {
@@ -264,9 +265,38 @@ test.describe('form', () => {
         await page.getByRole('dialog').getByRole('textbox', { name: 'URL' }).fill('https://example.com');
         await page.getByRole('dialog').getByRole('button', { name: 'Insert link' }).click();
         await expect(editor.getByRole('textbox').locator('a')).toHaveText('link');
-        await editor.getByRole('textbox').press('Enter');
+        await editor.getByRole('textbox').pressSequentially(' ');
+      });
+      await test.step('highlight', async () => {
+        await editor.getByRole('button', { name: 'Highlight' }).click();
+        await editor.getByRole('textbox').pressSequentially('highlight');
+        await expect(editor.getByRole('textbox').locator('mark')).toHaveText('highlight');
+        await editor.getByRole('button', { name: 'Highlight' }).click();
+        await editor.getByRole('textbox').pressSequentially(' ');
+      });
+      await test.step('small text', async () => {
+        await editor.getByRole('button', { name: 'Small text' }).click();
+        await editor.getByRole('textbox').pressSequentially('small');
+        await expect(editor.getByRole('textbox').locator('small')).toHaveText('small');
+        await editor.getByRole('button', { name: 'Small text' }).click();
+        await editor.getByRole('textbox').pressSequentially(' ');
+      });
+      await test.step('superscript', async () => {
+        await editor.getByRole('button', { name: 'Superscript' }).click();
+        await editor.getByRole('textbox').pressSequentially('superscript');
+        await expect(editor.getByRole('textbox').locator('sup')).toHaveText('superscript');
+        await editor.getByRole('button', { name: 'Superscript' }).click();
+        await editor.getByRole('textbox').pressSequentially(' ');
+      });
+      await test.step('code', async () => {
+        await editor.getByRole('button', { name: 'Code', exact: true }).click();
+        await editor.getByRole('textbox').pressSequentially('code');
+        await expect(editor.getByRole('textbox').locator('code')).toHaveText('code');
+        await editor.getByRole('button', { name: 'Code', exact: true }).click();
+        await editor.getByRole('textbox').pressSequentially(' ');
       });
       await test.step('headings', async () => {
+        await editor.getByRole('textbox').press('Enter');
         await editor.getByRole('button', { name: 'Heading 1' }).click();
         await expect(editor.getByRole('textbox').locator('h1')).toBeVisible();
         await editor.getByRole('textbox').pressSequentially('heading 1');
@@ -314,6 +344,21 @@ test.describe('form', () => {
         await editor.getByRole('textbox').press('Enter');
         await editor.getByRole('textbox').press('Enter');
         await expect(editor.getByRole('textbox').locator('blockquote')).toHaveText('quote');
+      });
+      await test.step('upload', async () => {
+        const fileChooserPromise = page.waitForEvent('filechooser');
+        await editor.getByRole('button', { name: 'Insert file' }).click();
+        const fileChooser = await fileChooserPromise;
+        await fileChooser.setFiles(path.resolve(__dirname, '../fixtures/upload.pdf'));
+        await expect(editor.getByRole('textbox')).toContainText('upload.pdf')
+      });
+      await test.step('upload image', async () => {
+        const fileChooserPromise = page.waitForEvent('filechooser');
+        await editor.getByRole('button', { name: 'Insert image' }).click();
+        const fileChooser = await fileChooserPromise;
+        await fileChooser.setFiles(path.resolve(__dirname, '../fixtures/upload-image.jpg'));
+        await expect(editor.getByRole('textbox').locator('img')).toBeVisible();
+        await expect(editor.getByRole('textbox')).toContainText('upload-image.jpg')
       });
       await page.waitForTimeout(1000);
     });

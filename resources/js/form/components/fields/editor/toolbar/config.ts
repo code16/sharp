@@ -121,19 +121,19 @@ export const buttons: { [key in Exclude<FormEditorToolbarButton, '|' | 'link' | 
         command: editor => editor.chain().focus().insertHtml().run(),
         isActive: editor => editor.isActive('html'),
         icon: CodeXml,
-        label: () => null,
+        label: () => __('sharp::form.editor.toolbar.html.title'),
     },
     'code-block': {
         command: editor => editor.chain().focus().toggleCodeBlock().run(),
         isActive: editor => editor.isActive('codeBlock'),
         icon: FileCode,
-        label: () => null,
+        label: () => __('sharp::form.editor.toolbar.code_block.title'),
     },
     'superscript': {
         command: editor => editor.chain().focus().toggleSuperscript().run(),
         isActive: editor => editor.isActive('superscript'),
         icon: Superscript,
-        label: () => null,
+        label: () => __('sharp::form.editor.toolbar.superscript.title'),
     },
     'undo': {
         command: editor => editor.chain().undo().run(),

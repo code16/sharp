@@ -42,7 +42,12 @@
     } from "@/components/ui/dialog";
     import { rotate, rotateTo } from "@/form/components/fields/upload/util/rotate";
 
-    const props = defineProps<FormFieldProps<FormUploadFieldData> & { asEditorEmbed?: boolean, legend?: string, dropdownEditLabel?: string }>();
+    const props = defineProps<FormFieldProps<FormUploadFieldData> & {
+        asEditorEmbed?: boolean,
+        legend?: string,
+        dropdownEditLabel?: string,
+        ariaLabel?: string,
+    }>();
 
     defineOptions({
         inheritAttrs: false,
@@ -381,7 +386,7 @@
 </script>
 
 <template>
-    <FormFieldLayout v-bind="props">
+    <FormFieldLayout v-bind="props" field-group>
         <template #default="{ id, ariaDescribedBy }">
             <template v-if="value?.path || value?.uploaded || uppyFile">
                 <div :class="{ 'bg-background border rounded-md p-4': !asEditorEmbed }">

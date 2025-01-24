@@ -154,6 +154,7 @@ class TestModelForm extends SharpForm
                         SharpFormEditorField::OL,
                         SharpFormEditorField::UL,
                         SharpFormEditorField::QUOTE,
+                        SharpFormEditorField::UPLOAD,
                         SharpFormEditorField::UPLOAD_IMAGE,
                         SharpFormEditorField::CODE_BLOCK,
                         SharpFormEditorField::SEPARATOR,
@@ -163,7 +164,7 @@ class TestModelForm extends SharpForm
                     ])
                     ->allowUploads(
                         SharpFormEditorUpload::make()
-                            ->setImageOnly()
+//                            ->setImageOnly()
                             ->setImageCropRatio('1:1')
                             ->setStorageDisk('local')
                             ->setStorageBasePath('data')

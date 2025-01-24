@@ -16,6 +16,7 @@
         class?: string,
         fieldGroup?: boolean,
         stickyLabel?: boolean,
+        ariaLabel?: string,
     }>();
     const emit = defineEmits<{
         (e: 'label-click'),
@@ -23,7 +24,7 @@
     }>();
     const form = useParentForm();
     const id = useId(`form-field_${props.fieldErrorKey}`);
-    const ariaLabelledBy = computed(() => `${id}-label`);
+    const ariaLabelledBy = computed(() => props.field.label ? `${id}-label` : null);
     const ariaDescribedBy = computed(() => [
             props.field.helpMessage && `${id}-help-message`,
             form.fieldHasError(props.field, props.fieldErrorKey) && `${id}-error`,
@@ -51,6 +52,7 @@
             props.class,
         )"
         :role="fieldGroup ? 'group' : null"
+        :aria-label="ariaLabel"
         :aria-labelledby="fieldGroup ? ariaLabelledBy : null"
         :aria-describedby="fieldGroup ? ariaDescribedBy : null"
         :aria-invalid="form.fieldHasError(field, fieldErrorKey)"

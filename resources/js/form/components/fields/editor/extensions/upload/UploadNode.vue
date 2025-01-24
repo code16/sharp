@@ -85,6 +85,9 @@
             as-editor-embed
             :legend="upload.legend"
             :dropdown-edit-label="parentEditor.props.field.uploads.fields.legend ? __('sharp::form.editor.extension_node.edit_button') : null"
+            :aria-label="props.node.attrs.isImage
+                ? __('sharp::form.editor.extension_node.upload_image.aria_label')
+                : __('sharp::form.editor.extension_node.upload.aria_label')"
             @thumbnail="onThumbnailGenerated"
             @transform="onUploadTransformed"
             @error="onUploadError"
