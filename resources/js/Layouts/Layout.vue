@@ -269,7 +269,7 @@
                 <SidebarRail />
             </Sidebar>
             <SidebarInset class="min-w-0">
-                <header class="flex h-14 items-center gap-4 border-b backdrop-blur bg-background/90 px-4 sticky top-0 z-20 lg:px-6
+                <header class="flex h-14 items-center gap-4 border-b backdrop-blur bg-background/90 px-4 sticky top-0 z-40 lg:px-6
                     transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12
                 ">
                     <SidebarTrigger class="-ml-1 shrink-0" />
@@ -279,7 +279,7 @@
                     <div class="flex-1 self-stretch hidden -mb-px lg:block" data-topbar-sticky-safe-area>
                     </div>
                 </header>
-                <main class="relative flex-1 pt-4 lg:pt-6 pb-24">
+                <main class="relative flex-1 pb-24">
                     <div class="absolute inset-0 -z-10">
                         <div class="container h-full">
                             <div class="h-full" data-menu-boundary ref="menuBoundary"></div>

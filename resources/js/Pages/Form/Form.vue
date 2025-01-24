@@ -59,42 +59,44 @@
             </template>
         </template>
 
-        <SharpForm
-            :form="form"
-            :show-error-alert="showErrorAlert"
-            :error-alert-message="errorAlertMessage"
-            @submit="submit"
-        >
-            <template #title>
-                {{ form.title }}
-            </template>
-            <template #footer>
-                <div class="flex gap-4">
-                    <Button variant="outline" as-child>
-                        <Link :href="props.cancelUrl">
-                            <template v-if="form.canEdit">
-                                {{ __('sharp::action_bar.form.cancel_button') }}
-                            </template>
-                            <template v-else>
-                                {{ __('sharp::action_bar.form.back_button') }}
-                            </template>
-                        </Link>
-                    </Button>
-                    <template v-if="form.canEdit">
-                        <Button style="min-width: 6.5em" :disabled="form.isUploading || loading" @click="submit">
-                            <template v-if="form.isUploading">
-                                {{ __('sharp::action_bar.form.submit_button.pending.upload') }}
-                            </template>
-                            <template v-else-if="instanceId || form.config.isSingle">
-                                {{ __('sharp::action_bar.form.submit_button.update') }}
-                            </template>
-                            <template v-else>
-                                {{ __('sharp::action_bar.form.submit_button.create') }}
-                            </template>
+        <div :class="form.pageAlert || form.layout.tabbed && form.layout.tabs.length > 1 ? 'pt-4' : 'pt-6 lg:pt-10'">
+            <SharpForm
+                :form="form"
+                :show-error-alert="showErrorAlert"
+                :error-alert-message="errorAlertMessage"
+                @submit="submit"
+            >
+                <template #title>
+                    {{ form.title }}
+                </template>
+                <template #footer>
+                    <div class="flex gap-4">
+                        <Button variant="outline" as-child>
+                            <Link :href="props.cancelUrl">
+                                <template v-if="form.canEdit">
+                                    {{ __('sharp::action_bar.form.cancel_button') }}
+                                </template>
+                                <template v-else>
+                                    {{ __('sharp::action_bar.form.back_button') }}
+                                </template>
+                            </Link>
                         </Button>
-                    </template>
-                </div>
-            </template>
-        </SharpForm>
+                        <template v-if="form.canEdit">
+                            <Button style="min-width: 6.5em" :disabled="form.isUploading || loading" @click="submit">
+                                <template v-if="form.isUploading">
+                                    {{ __('sharp::action_bar.form.submit_button.pending.upload') }}
+                                </template>
+                                <template v-else-if="instanceId || form.config.isSingle">
+                                    {{ __('sharp::action_bar.form.submit_button.update') }}
+                                </template>
+                                <template v-else>
+                                    {{ __('sharp::action_bar.form.submit_button.create') }}
+                                </template>
+                            </Button>
+                        </template>
+                    </div>
+                </template>
+            </SharpForm>
+        </div>
     </Layout>
 </template>

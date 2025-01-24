@@ -23,6 +23,7 @@
     import StickyBottom from "@/components/StickyBottom.vue";
     import { Menu } from 'lucide-vue-next';
     import { Label } from "@/components/ui/label";
+    import RootCardHeader from "@/components/ui/RootCardHeader.vue";
 
     const props = defineProps<{
         form: Form
@@ -107,32 +108,20 @@
             </div>
         </template>
 
-        <template v-if="form.locales?.length || form.layout.tabbed && form.layout.tabs.length > 1">
+        <template v-if="form.layout.tabbed && form.layout.tabs.length > 1">
             <StickyTop class="@container relative group flex items-end pointer-events-none data-[stuck]:z-20"
                 v-slot="{ stuck, isOverflowing }"
                 :class="[
-                    inline ? 'mb-6' : 'mb-4 container overflow-x-clip lg:sticky lg:top-3',
+                    inline ? 'mb-6' : 'mb-3 container overflow-x-clip lg:sticky lg:top-3',
                 ]"
             >
                 <div class="flex-1 self-stretch">
                     <div class="lg:pl-[calc(var(--sticky-safe-left-offset)-1rem)]">
-                        <template v-if="form.locales?.length">
-                            <Select :model-value="form.currentLocale ?? undefined" @update:model-value="onLocaleChange">
-                                <LocaleSelectTrigger class="mr-4 pointer-events-auto " />
-                                <SelectContent>
-                                    <template v-for="locale in form.locales" :key="locale">
-                                        <SelectItem :value="locale">
-                                            <span class="uppercase text-xs">{{ locale }}</span>
-                                        </SelectItem>
-                                    </template>
-                                </SelectContent>
-                            </Select>
-                        </template>
                     </div>
                 </div>
                 <template v-if="form.layout.tabbed && form.layout.tabs.length > 1">
                     <div class="">
-                        <div class="hidden lg:h-8 col-start-1 row-start-1 @2xl:flex flex-col justify-end group-data-[stuck]:!hidden group-data-[overflowing]:opacity-0"
+                        <div class="hidden col-start-1 row-start-1 @2xl:flex flex-col justify-end group-data-[stuck]:!hidden group-data-[overflowing]:opacity-0"
                             :inert="isOverflowing"
                         >
                             <TabsList class="pointer-events-auto">
@@ -183,15 +172,27 @@
         </template>
 
         <component :is="inline ? 'div' : RootCard">
-            <template v-if="!inline">
-                <CardHeader>
-                    <div class="flex items-start gap-x-4">
+            <component :is="inline ? 'div' : RootCardHeader" :sticky="form.locales?.length">
+                <div class="flex items-start gap-x-4">
+                    <template v-if="!inline">
                         <CardTitle class="-mt-0.5 flex-1 truncate text-2xl/7">
                             <slot name="title" />
                         </CardTitle>
-                    </div>
-                </CardHeader>
-            </template>
+                    </template>
+                    <template v-if="form.locales?.length">
+                        <Select :model-value="form.currentLocale ?? undefined" @update:model-value="onLocaleChange">
+                            <LocaleSelectTrigger class="pointer-events-auto" :class="!inline ? 'mr-auto -my-1' : ''" />
+                            <SelectContent>
+                                <template v-for="locale in form.locales" :key="locale">
+                                    <SelectItem :value="locale">
+                                        <span class="uppercase text-xs">{{ locale }}</span>
+                                    </SelectItem>
+                                </template>
+                            </SelectContent>
+                        </Select>
+                    </template>
+                </div>
+            </component>
             <CardContent :class="inline ? '!p-0' : ''">
                 <template v-for="tab in form.layout.tabs">
                     <TabsContent class="mt-0" :tabindex="form.layout.tabs.length > 1 ? 0 : -1" :value="slugify(tab.title)">

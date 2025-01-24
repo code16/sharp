@@ -61,7 +61,7 @@
                 :is="stickyLabel ? StickyTop : 'div'"
                 class="group"
                 :class="[{
-                    'top-[calc(var(--top-bar-height)+.625rem)] [[role=dialog]_&]:top-2.5 z-10 lg:sticky': stickyLabel,
+                    'top-[calc(var(--top-bar-height)+.625rem)] [[role=dialog]_&]:top-2.5 z-[5] lg:sticky': stickyLabel,
                     'hidden @md/field-container:block @3xl/root-card:@md/field-container:block': !hasLabelRow,
                 }]"
                 v-slot="{ stuck = false } = {}"
