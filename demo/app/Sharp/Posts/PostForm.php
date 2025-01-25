@@ -158,7 +158,7 @@ class PostForm extends SharpForm
     public function buildFormLayout(FormLayout $formLayout): void
     {
         $formLayout
-            ->addTab('Content', function (FormLayoutTab $tab) {
+            ->addTab('Content fezfez zefzefezfez', function (FormLayoutTab $tab) {
                 $tab
                     ->addColumn(6, function (FormLayoutColumn $column) {
                         $column
@@ -180,7 +180,7 @@ class PostForm extends SharpForm
                             ->withField('content');
                     });
             })
-            ->addTab('Metadata', function (FormLayoutTab $tab) {
+            ->addTab('Metadata fezfez efzfez ', function (FormLayoutTab $tab) {
                 $tab
                     ->addColumn(6, function (FormLayoutColumn $column) {
                         $column->withFieldset('Meta fields', function (FormLayoutFieldset $fieldset) {
@@ -188,13 +188,14 @@ class PostForm extends SharpForm
                                 ->withField('meta_description');
                         });
                     });
-            });
+            })
+            ->addTab('Metadata fezfez');
     }
 
     public function buildFormConfig(): void
     {
         $this->configureDisplayShowPageAfterCreation()
-            ->configureEditTitle('Edit post')
+            ->configureEditTitle('Edit post fezfnezkfl fzeh fezfez fezfezfezzefjk fjezklfjze fezfk fezkfjezkfl ezjfkezf')
             ->configureCreateTitle('New post');
     }
 

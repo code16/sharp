@@ -2,14 +2,16 @@
     import { Form } from "@/form/Form";
     import Layout from "@/Layouts/Layout.vue";
     import { BreadcrumbData, FormData } from "@/types";
-    import { router, Link } from "@inertiajs/vue3";
+    import { router, Link, usePage } from "@inertiajs/vue3";
     import { route } from "@/utils/url";
     import Title from "@/components/Title.vue";
     import { config } from "@/utils/config";
     import PageBreadcrumb from "@/components/PageBreadcrumb.vue";
-    import { ref, watch } from "vue";
+    import { onUnmounted, ref, useTemplateRef, watch } from "vue";
     import { __ } from "@/utils/i18n";
     import { Button } from '@/components/ui/button';
+    import { useResizeObserver } from "@vueuse/core";
+    import { slugify } from "@/utils";
 
     const props = defineProps<{
         form: FormData,
@@ -47,6 +49,40 @@
             { onStart, onFinish, onError }
         );
     }
+
+    const selectedTabSlug = ref(
+        props.form.layout.tabs
+            .map(tab => slugify(tab.title))
+            .find(tabSlug => new URLSearchParams(location.search).get('tab') == tabSlug)
+        ?? slugify(props.form.layout.tabs?.[0]?.title ?? '')
+    );
+
+    const el = useTemplateRef<HTMLElement>('el');
+    watch(selectedTabSlug, () => {
+        if(el.value && el.value.getBoundingClientRect().top < 56) {
+            el.value.scrollIntoView();
+        }
+        const url = new URL(location.href);
+        url.searchParams.set('tab', selectedTabSlug.value);
+        router.replace({
+            url: url.href,
+            preserveState: true,
+            preserveScroll: true,
+        });
+    }, { immediate: true });
+
+    // lock body height to allow to scroll on tab change
+    useResizeObserver(document.body, (entries) => {
+        const target = entries[0].target as HTMLElement;
+        const minHeight = target.style.minHeight ? parseFloat(target.style.minHeight) : 0;
+        if(target.offsetHeight > window.innerHeight && target.offsetHeight > minHeight) {
+            target.style.minHeight = `${target.offsetHeight}px`;
+        }
+    });
+
+    onUnmounted(() => {
+        document.body.style.minHeight = '';
+    });
 </script>
 
 <template>
@@ -59,44 +95,47 @@
             </template>
         </template>
 
-        <div :class="form.pageAlert || form.layout.tabbed && form.layout.tabs.length > 1 ? 'pt-4' : 'pt-6 lg:pt-10'">
-            <SharpForm
-                :form="form"
-                :show-error-alert="showErrorAlert"
-                :error-alert-message="errorAlertMessage"
-                @submit="submit"
-            >
-                <template #title>
-                    {{ form.title }}
-                </template>
-                <template #footer>
-                    <div class="flex gap-4">
-                        <Button variant="outline" as-child>
-                            <Link :href="props.cancelUrl">
-                                <template v-if="form.canEdit">
-                                    {{ __('sharp::action_bar.form.cancel_button') }}
-                                </template>
-                                <template v-else>
-                                    {{ __('sharp::action_bar.form.back_button') }}
-                                </template>
-                            </Link>
-                        </Button>
-                        <template v-if="form.canEdit">
-                            <Button style="min-width: 6.5em" :disabled="form.isUploading || loading" @click="submit">
-                                <template v-if="form.isUploading">
-                                    {{ __('sharp::action_bar.form.submit_button.pending.upload') }}
-                                </template>
-                                <template v-else-if="instanceId || form.config.isSingle">
-                                    {{ __('sharp::action_bar.form.submit_button.update') }}
-                                </template>
-                                <template v-else>
-                                    {{ __('sharp::action_bar.form.submit_button.create') }}
-                                </template>
+        <div class="@container">
+            <div :class="form.pageAlert ? 'mt-4' : 'mt-6 @3xl:mt-10'" ref="el">
+                <SharpForm
+                    :form="form"
+                    :show-error-alert="showErrorAlert"
+                    :error-alert-message="errorAlertMessage"
+                    v-model:tab="selectedTabSlug"
+                    @submit="submit"
+                >
+                    <template #title>
+                        {{ form.title }}
+                    </template>
+                    <template #footer>
+                        <div class="flex gap-4">
+                            <Button variant="outline" as-child>
+                                <Link :href="props.cancelUrl">
+                                    <template v-if="form.canEdit">
+                                        {{ __('sharp::action_bar.form.cancel_button') }}
+                                    </template>
+                                    <template v-else>
+                                        {{ __('sharp::action_bar.form.back_button') }}
+                                    </template>
+                                </Link>
                             </Button>
-                        </template>
-                    </div>
-                </template>
-            </SharpForm>
+                            <template v-if="form.canEdit">
+                                <Button style="min-width: 6.5em" :disabled="form.isUploading || loading" @click="submit">
+                                    <template v-if="form.isUploading">
+                                        {{ __('sharp::action_bar.form.submit_button.pending.upload') }}
+                                    </template>
+                                    <template v-else-if="instanceId || form.config.isSingle">
+                                        {{ __('sharp::action_bar.form.submit_button.update') }}
+                                    </template>
+                                    <template v-else>
+                                        {{ __('sharp::action_bar.form.submit_button.create') }}
+                                    </template>
+                                </Button>
+                            </template>
+                        </div>
+                    </template>
+                </SharpForm>
+            </div>
         </div>
     </Layout>
 </template>

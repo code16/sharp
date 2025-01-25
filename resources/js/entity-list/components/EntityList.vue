@@ -342,7 +342,7 @@
             </template>
 
             <RootCard :class="reordering ? 'relative z-[12]' : ''">
-                <RootCardHeader>
+                <RootCardHeader :class="reordering || selecting ? 'sticky' : 'data-[overflowing-viewport]:sticky'">
                     <div class="flex flex-wrap md:flex-nowrap gap-y-4 gap-x-2">
                         <div class="flex items-baseline min-w-0">
                             <slot name="card-header" />
@@ -483,22 +483,23 @@
                         <template v-if="showSearchField && entityList.config.searchable">
                             <div class="self-center pointer-events-auto"
                                 :class="{ 'hidden @2xl/root-card:block': entityList.visibleFilters?.length }"
-                                v-show="!reordering && !selecting && !collapsed"
+                                v-show="!collapsed"
                             >
                                 <EntityListSearch
                                     inline
                                     v-model:expanded="searchExpanded"
                                     :entity-list="entityList"
+                                    :disabled="reordering || selecting"
                                     @submit="onSearchSubmit"
                                 />
                             </div>
                         </template>
                         <template v-if="entityList.visibleFilters?.length">
-                            <div class="contents" v-show="!reordering && !selecting && !collapsed">
+                            <div class="contents" v-show="!collapsed">
                                 <div class="flex items-center @2xl/root-card:hidden">
                                     <Dialog>
                                         <DialogTrigger as-child>
-                                            <Button class="h-8 gap-1" variant="outline" size="sm">
+                                            <Button class="h-8 gap-1" variant="outline" :disabled="reordering || selecting" size="sm">
                                                 <Filter class="h-3.5 w-3.5" />
                                                 <span>
                                                     {{ __('sharp::filters.popover_button') }}
@@ -566,7 +567,7 @@
                                         <SharpFilter
                                             :filter="filter"
                                             :value="filters.currentValues[filter.key]"
-                                            :disabled="reordering"
+                                            :disabled="reordering || selecting"
                                             :valuated="filters.isValuated([filter])"
                                             inline
                                             @input="onFilterChange(filter, $event)"
@@ -709,7 +710,7 @@
                                                 </template>
 
                                                 <template v-if="reordering">
-                                                    <TableCell class="w-0 hidden lg:table-cell @5xl:pl-4">
+                                                    <TableCell class="w-0 @5xl:pl-4">
                                                         <div class="flex justify-center w-10"> <!-- same size than dropdown -->
                                                             <GripVertical class="w-4 h-4 opacity-50" />
                                                         </div>

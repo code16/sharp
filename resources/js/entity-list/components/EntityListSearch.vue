@@ -12,6 +12,7 @@
         entityList: EntityListData,
         expanded: boolean,
         inline?: boolean,
+        disabled?: boolean,
     }>();
 
     const emit = defineEmits(['submit', 'update:expanded']);
@@ -80,6 +81,7 @@
                             'sm:!w-[300px]': inline && expanded,
                             'pr-8': props.entityList.query?.search,
                         })"
+                        :disabled="disabled"
                         type="search"
                         ref="input"
                         @input="onInput"
