@@ -335,7 +335,7 @@
                                                             </template>
                                                             <template v-if="show.locales?.length">
                                                                 <Select v-model="locale">
-                                                                    <LocaleSelectTrigger class="pointer-events-auto mr-auto group-data-[stuck]:hidden" />
+                                                                    <LocaleSelectTrigger class="pointer-events-auto mr-auto" />
                                                                     <SelectContent>
                                                                         <template v-for="locale in show.locales" :key="locale">
                                                                             <SelectItem :value="locale">
