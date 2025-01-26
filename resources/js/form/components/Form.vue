@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { FormData, FormFieldData,  LayoutFieldData } from "@/types";
     import PageAlert from "@/components/PageAlert.vue";
-    import { provide, ref } from "vue";
+    import { provide, ref, useTemplateRef } from "vue";
     import { Form } from "../Form";
     import { getDependantFieldsResetData } from "../util";
     import FieldGrid from "@/components/ui/FieldGrid.vue";
@@ -24,6 +24,8 @@
     import { Menu } from 'lucide-vue-next';
     import { Label } from "@/components/ui/label";
     import RootCardHeader from "@/components/ui/RootCardHeader.vue";
+    import { vScrollIntoView } from "@/directives/scroll-into-view";
+    import { useResizeObserver } from "@vueuse/core";
 
     const props = defineProps<{
         form: Form
@@ -84,6 +86,13 @@
         props.form.serializedData = data;
     }
 
+    const title = useTemplateRef<HTMLElement>('title');
+    const titleScrollWidth = ref(0);
+
+    useResizeObserver(title, (e) => {
+        titleScrollWidth.value = e[0].target.scrollWidth;
+    });
+
     defineExpose({ submit });
 </script>
 
@@ -124,14 +133,16 @@
                     form.locales?.length ? 'data-[overflowing-viewport]:sticky' : '',
                 ]"
             >
-                <div class="flex flex-wrap justify-end items-start gap-x-4 gap-y-6">
+                <div class="flex flex-wrap justify-end items-start gap-x-4 gap-y-4">
                     <template v-if="!inline">
-                        <CardTitle class="flex-1 min-w-full sm:min-w-80 line-clamp-2">
-                            <slot name="title" />
-                        </CardTitle>
+                        <div class="flex-1 flex min-w-[min(var(--scroll-width),min(18rem,100%))]" :style="{'--scroll-width':`${titleScrollWidth}px`}">
+                            <CardTitle class="min-w-0 truncate" ref="title">
+                                <slot name="title" />
+                            </CardTitle>
+                        </div>
                     </template>
                     <template v-if="form.locales?.length || form.layout.tabs.length > 1">
-                        <div class="flex gap-4">
+                        <div class="flex min-w-0 gap-4">
                             <template v-if="form.locales?.length">
                                 <Select :model-value="form.currentLocale ?? undefined" @update:model-value="onLocaleChange">
                                     <div class="flex items-center" :class="!inline ? 'h-8' : ''">
@@ -147,10 +158,10 @@
                                 </Select>
                             </template>
                             <template v-if="form.layout.tabs.length > 1">
-                                <div class="hidden @2xl:flex items-center h-8">
+                                <div class="hidden @2xl/root-card:block min-w-0 overflow-auto scroll-px-2 -my-1">
                                     <TabsList>
                                         <template v-for="tab in form.layout.tabs">
-                                            <TabsTrigger :value="slugify(tab.title)">
+                                            <TabsTrigger :value="slugify(tab.title)" v-scroll-into-view.nearest="slugify(tab.title) === selectedTabSlug">
                                                 {{ tab.title }}
                                                 <template v-if="form.tabErrorCount(tab)">
                                                     <Badge class="ml-2" variant="destructive">
@@ -162,7 +173,7 @@
                                     </TabsList>
                                 </div>
                                 <Select v-model="selectedTabSlug">
-                                    <SelectTrigger class="h-8 @2xl:hidden w-auto text-left pointer-events-auto">
+                                    <SelectTrigger class="h-8 @2xl/root-card:hidden w-auto text-left pointer-events-auto">
                                         <Menu class="size-4 shrink-0 mr-2" />
                                         <SelectValue class="font-medium" />
                                     </SelectTrigger>

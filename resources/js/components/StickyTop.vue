@@ -24,9 +24,6 @@
     const isOverflowing = ref(false);
     const isOverflowingViewport = ref(false);
     const { height: innerHeight } = useWindowSize();
-    watch(selfRect, () => {
-        isOverflowing.value = el.value.scrollWidth > el.value.clientWidth;
-    });
     watch([containerRect, innerHeight], () => {
         const style = window.getComputedStyle(el.value);
         isOverflowingViewport.value = (parseFloat(style.top) + containerRect.height) > innerHeight.value;
@@ -45,11 +42,10 @@
 <template>
     <div :style="{
             '--top-bar-height': `${topbarSafeRect.height}px`,
-            '--sticky-safe-left-offset': stuck ? `${Math.max(topbarSafeRect.left - selfRect.left, 0)}px` : '0px',
-            '--sticky-safe-right-offset': stuck ? `${Math.max(selfRect.right - topbarSafeRect.right - parseInt(window.getComputedStyle(el).paddingRight), 0)}px` : '0px',
+            // '--sticky-safe-left-offset': stuck ? `${Math.max(topbarSafeRect.left - selfRect.left, 0)}px` : '0px',
+            // '--sticky-safe-right-offset': stuck ? `${Math.max(selfRect.right - topbarSafeRect.right - parseInt(window.getComputedStyle(el).paddingRight), 0)}px` : '0px',
         }"
         :data-stuck="stuck ? true : null"
-        :data-overflowing="isOverflowing ? true : null"
         :data-overflowing-viewport="isOverflowingViewport ? true : null"
         ref="el"
     >
