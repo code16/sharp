@@ -32,21 +32,17 @@ export class Show implements ShowData {
     }
 
     get formUrl(): string {
-        const multiformKey = this.config.multiformAttribute
-            ? this.data[this.config.multiformAttribute]
-            : null;
-
         if(route().params.instanceId) {
             return route('code16.sharp.form.edit', {
                 parentUri: getAppendableParentUri(),
-                entityKey: multiformKey ? `${this.entityKey}:${multiformKey}` : this.entityKey,
+                entityKey: this.entityKey,
                 instanceId: this.instanceId,
             });
         }
 
         return route('code16.sharp.form.create', {
             parentUri: getAppendableParentUri(),
-            entityKey: multiformKey ? `${this.entityKey}:${multiformKey}` : this.entityKey,
+            entityKey: this.entityKey,
         });
     }
 
