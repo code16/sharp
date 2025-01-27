@@ -63,7 +63,7 @@ class FormLayout implements HasLayout
     private function getLonelyTab(): FormLayoutTab
     {
         if (! count($this->tabs)) {
-            $this->addTabLayout(new FormLayoutTab('one'));
+            $this->addTabLayout(new FormLayoutTab(''));
         }
 
         return $this->tabs[0];

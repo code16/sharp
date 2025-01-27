@@ -39,7 +39,9 @@
     provide('form', props.form);
 
     const loading = ref(false);
-    const selectedTabSlug = defineModel<string>('tab');
+    const selectedTabSlug = defineModel<string>('tab', {
+        default: ''
+    });
 
     function submit<ExtraData extends { [key: string]: any } = any>(extraData?: ExtraData) {
         const { form, postFn } = props;

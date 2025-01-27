@@ -63,7 +63,7 @@ it('displays first step form on the first call of a wizard instance command', fu
                                 'size' => 12,
                             ],
                         ],
-                        'title' => 'one',
+                        'title' => '',
                     ],
                 ],
             ],

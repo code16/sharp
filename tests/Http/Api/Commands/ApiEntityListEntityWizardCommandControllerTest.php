@@ -63,7 +63,7 @@ it('displays first step form on the first call of a wizard entity command', func
                                 'size' => 12,
                             ],
                         ],
-                        'title' => 'one',
+                        'title' => '',
                     ],
                 ],
             ],

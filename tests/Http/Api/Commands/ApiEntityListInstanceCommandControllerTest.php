@@ -406,7 +406,7 @@ it('returns the form of the instance command', function () {
                                 'size' => 12,
                             ],
                         ],
-                        'title' => 'one',
+                        'title' => '',
                     ],
                 ],
             ],

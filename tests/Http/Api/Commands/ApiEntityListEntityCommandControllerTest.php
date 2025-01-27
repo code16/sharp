@@ -542,7 +542,7 @@ it('returns the form fields of the entity command and build a basic layout if mi
                                 'size' => 12,
                             ],
                         ],
-                        'title' => 'one',
+                        'title' => '',
                     ],
                 ],
             ],

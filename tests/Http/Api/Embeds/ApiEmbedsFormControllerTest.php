@@ -45,7 +45,7 @@ it('returns fields and layout of an embed', function () {
                                 'size' => 12,
                             ],
                         ],
-                        'title' => 'one',
+                        'title' => '',
                     ],
                 ],
             ],

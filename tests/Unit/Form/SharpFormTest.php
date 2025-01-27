@@ -47,7 +47,7 @@ it('returns form layout', function () {
         ->toEqual([
             'tabbed' => true,
             'tabs' => [[
-                'title' => 'one',
+                'title' => '',
                 'columns' => [[
                     'size' => 6,
                     'fields' => [[
