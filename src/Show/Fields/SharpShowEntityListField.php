@@ -4,6 +4,8 @@ namespace Code16\Sharp\Show\Fields;
 
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Filters\Filter;
+use Deprecated;
+use Override;
 
 class SharpShowEntityListField extends SharpShowField
 {
@@ -112,6 +114,15 @@ class SharpShowEntityListField extends SharpShowField
     {
         $this->label = $label;
 
+        return $this;
+    }
+
+    /**
+     * @deprecated
+     * @return SharpShowField
+     */
+    public function setShowIfEmpty(bool $showIfEmpty = true): SharpShowField
+    {
         return $this;
     }
 
