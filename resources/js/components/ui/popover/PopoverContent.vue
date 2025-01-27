@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type HTMLAttributes, computed } from 'vue'
+    import { type HTMLAttributes, computed, onMounted, ref, nextTick } from 'vue'
 import {
     injectDialogRootContext,
     PopoverContent,
@@ -32,10 +32,19 @@ const delegatedProps = computed(() => {
 
 const dialogContext = injectDialogRootContext(null);
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
+const parentDialogElement = ref<HTMLElement>();
+
+onMounted(() => {
+    if(dialogContext) {
+        nextTick(() => {
+            parentDialogElement.value = dialogContext.contentElement.value.parentElement;
+        });
+    }
+});
 </script>
 
 <template>
-  <PopoverPortal :to="dialogContext?.contentElement.value?.parentElement">
+  <PopoverPortal :to="parentDialogElement">
     <PopoverContent
       v-bind="{ ...forwarded, ...$attrs }"
       :class="
