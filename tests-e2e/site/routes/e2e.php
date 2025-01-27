@@ -10,11 +10,13 @@ Route::get('/e2e/init', function () {
         'name' => 'e2e-seed',
     ]);
 
+    Storage::disk('local')->deleteDirectory('data');
+
     Storage::disk(sharp()->config()->get('uploads.tmp_disk'))
         ->deleteDirectory(sharp()->config()->get('uploads.tmp_dir'));
 
     Storage::disk(sharp()->config()->get('uploads.thumbnails_disk'))
-        ->deleteDirectory(sharp()->config()->get('uploads.thumbnails_disk'));
+        ->deleteDirectory(sharp()->config()->get('uploads.thumbnails_dir'));
 
     if (request()->input('login')) {
         $user = User::where('email', 'test@example.org')->firstOrFail();

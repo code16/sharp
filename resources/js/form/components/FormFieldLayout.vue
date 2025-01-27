@@ -96,7 +96,7 @@
                     </template>
                     <template v-if="'localized' in field && field.localized">
                         <Select :model-value="props.locale" @update:model-value="emit('locale-change', $event as string)">
-                            <LocaleSelectTrigger class="ml-auto w-auto border-transparent hover:border-input aria-expanded:border-input -my-2" :show-arrow="false" />
+                            <LocaleSelectTrigger class="ml-auto w-auto border-transparent hover:border-input aria-expanded:border-input -my-2" />
                             <SelectContent>
                                 <template v-for="itemLocale in form.locales" :key="itemLocale">
                                     <SelectItem  :value="itemLocale">

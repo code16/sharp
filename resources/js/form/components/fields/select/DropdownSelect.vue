@@ -45,13 +45,16 @@
 </script>
 
 <template>
-    <FormFieldLayout v-bind="props" @label-click="open = true">
+    <FormFieldLayout v-bind="props" @label-click="open = true" v-slot="{ ariaLabelledBy }">
         <DropdownMenu v-model:open="open" :modal="false">
             <DropdownMenuTrigger as-child>
                 <Button
                     class="w-full text-left justify-start font-normal h-auto min-h-10 py-2 gap-1 hover:bg-background"
                     variant="outline"
                     size="sm"
+                    role="combobox"
+                    aria-autocomplete="none"
+                    :aria-labelledby="ariaLabelledBy"
                     :disabled="field.readOnly"
                 >
                     <template v-if="Array.isArray(value) ? value.length : value != null">

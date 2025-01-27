@@ -3,6 +3,7 @@
 namespace App\Sharp\TestModels;
 
 use App\Models\TestModel;
+use App\Sharp\Embeds\TestEmbed;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteListField;
@@ -169,6 +170,9 @@ class TestModelForm extends SharpForm
                             ->setStorageDisk('local')
                             ->setStorageBasePath('data')
                     )
+                    ->allowEmbeds([
+                        TestEmbed::class,
+                    ])
                     ->setHeight(350)
             )
             ->addField(
@@ -264,7 +268,7 @@ class TestModelForm extends SharpForm
             )
             ->addField(
                 SharpFormTextField::make('text')
-                    ->setLabel('text'),
+                    ->setLabel('Text'),
             )
             ->addField(
                 SharpFormTextField::make('text_localized')
@@ -349,12 +353,17 @@ class TestModelForm extends SharpForm
     public function rules(): array
     {
         return [
+            'editor_markdown' => [
+                'nullable',
+                'starts_with:**',
+                'ends_with:**',
+            ],
         ];
     }
 
     public function getDataLocalizations(): array
     {
-        return ['fr', 'en'];
+        return ['en', 'fr'];
     }
 
     public static function options(): array

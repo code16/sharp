@@ -64,7 +64,8 @@ return [
 
     'editor.character_count' => ':count caractères',
     'editor.errors.unknown_file' => 'Unknown file ":path"',
-
+    
+    'editor.extension_node.dropdown_button.aria_label' => 'Actions',
     'editor.extension_node.edit_button' => 'Modifier...',
     'editor.extension_node.remove_button' => 'Supprimer',
     'editor.extension_node.upload.aria_label' => 'Fichier intégré',

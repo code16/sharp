@@ -56,7 +56,7 @@
         <template v-if="!parentEditor.props.field.readOnly">
             <DropdownMenu :modal="false">
                 <DropdownMenuTrigger as-child>
-                    <Button class="shrink-0 self-center" variant="ghost" size="icon">
+                    <Button class="shrink-0 self-center" variant="ghost" size="icon" :aria-label="__('sharp::form.editor.extension_node.dropdown_button.aria_label')">
                         <MoreHorizontal class="size-4" />
                     </Button>
                 </DropdownMenuTrigger>

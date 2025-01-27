@@ -63,12 +63,14 @@
             el.value.scrollIntoView();
         }
         const url = new URL(location.href);
-        url.searchParams.set('tab', selectedTabSlug.value);
-        router.replace({
-            url: url.href,
-            preserveState: true,
-            preserveScroll: true,
-        });
+        if(props.form.layout.tabs.length > 1) {
+            url.searchParams.set('tab', selectedTabSlug.value);
+            router.replace({
+                url: url.href,
+                preserveState: true,
+                preserveScroll: true,
+            });
+        }
     }, { immediate: true });
 
     // lock body height to allow to scroll on tab change

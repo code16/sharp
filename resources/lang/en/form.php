@@ -65,6 +65,7 @@ return [
     'editor.character_count' => ':count characters',
     'editor.errors.unknown_file' => 'Unknown file ":path"',
 
+    'editor.extension_node.dropdown_button.aria_label' => 'Actions',
     'editor.extension_node.edit_button' => 'Edit...',
     'editor.extension_node.remove_button' => 'Remove',
     'editor.extension_node.upload.aria_label' => 'Embedded file',
@@ -119,7 +120,7 @@ return [
     'editor.toolbar.link.title' => 'Link',
     'editor.toolbar.image.title' => 'Image',
     'editor.toolbar.table.title' => 'Table',
-    'editor.toolbar.iframe.title' => 'Web embed',
+    'editor.toolbar.iframe.title' => 'Iframe (embed)',
     'editor.toolbar.html.title' => 'Insert HTML',
     'editor.toolbar.upload.title' => 'Insert file',
     'editor.toolbar.upload_image.title' => 'Insert image',

@@ -9,7 +9,8 @@ async function createForm(page: Page) {
   await test.step('createForm', async () => {
     const responsePromise = page.waitForResponse('**/s-form/test-models');
     await page.getByRole('button', { name: 'Create' }).click();
-    await responsePromise;
+    const response = await responsePromise;
+    expect(await response.headerValue('Location'), 'Should not redirect with errors (422)').not.toBe(page.url());
     await page.goto('/sharp/s-list/test-models/s-form/test-models/1');
   });
 }
@@ -350,7 +351,8 @@ test.describe('form', () => {
         await editor.getByRole('button', { name: 'Insert file' }).click();
         const fileChooser = await fileChooserPromise;
         await fileChooser.setFiles(path.resolve(__dirname, '../fixtures/upload.pdf'));
-        await expect(editor.getByRole('textbox')).toContainText('upload.pdf')
+        await expect(editor.getByRole('textbox')).toContainText('upload.pdf');
+        await editor.getByRole('textbox').press('ArrowDown');
       });
       await test.step('upload image', async () => {
         const fileChooserPromise = page.waitForEvent('filechooser');
@@ -358,13 +360,141 @@ test.describe('form', () => {
         const fileChooser = await fileChooserPromise;
         await fileChooser.setFiles(path.resolve(__dirname, '../fixtures/upload-image.jpg'));
         await expect(editor.getByRole('textbox').locator('img')).toBeVisible();
-        await expect(editor.getByRole('textbox')).toContainText('upload-image.jpg')
+        await expect(editor.getByRole('textbox')).toContainText('upload-image.jpg');
+        await editor.getByRole('textbox').press('ArrowDown');
       });
-      await page.waitForTimeout(1000);
+      await test.step('code block', async () => {
+        await editor.getByRole('button', { name: 'Code block' }).click();
+        await expect(editor.getByRole('textbox').locator('pre')).toBeVisible();
+        await editor.getByRole('textbox').pressSequentially('code block');
+        await editor.getByRole('textbox').press('Enter');
+        await editor.getByRole('textbox').press('Enter');
+        await editor.getByRole('textbox').press('Enter');
+        await expect(editor.getByRole('textbox').locator('pre')).toHaveText('code block');
+      });
+      await test.step('table', async () => {
+        await editor.getByRole('button', { name: 'Table' }).click();
+        await page.getByRole('menu').getByRole('menuitem', { name: 'Insert table' }).click();
+        await expect(editor.getByRole('textbox').locator('table')).toBeVisible();
+        await editor.getByRole('textbox').press('ArrowDown');
+        await editor.getByRole('textbox').press('ArrowDown');
+        await editor.getByRole('textbox').press('ArrowDown');
+      });
+      await test.step('iframe', async () => {
+        await editor.getByRole('button', { name: 'Iframe (embed)' }).click();
+        await page.getByRole('dialog').getByRole('textbox', { name: 'Insert Iframe (embed)' })
+          .fill('<iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=HjUyofIDih68C4mE"></iframe>')
+        await page.getByRole('dialog').getByRole('button', { name: 'Submit' }).click();
+        await expect(editor.getByRole('textbox').locator('iframe')).toBeVisible();
+      });
+      await createForm(page);
+      await expect(editor.getByRole('textbox')).toContainText('default');
+      await expect(editor.getByRole('textbox').locator('strong')).toHaveText('strong');
+      await expect(editor.getByRole('textbox').locator('em')).toHaveText('italic');
+      await expect(editor.getByRole('textbox').locator('a').first()).toHaveText('link');
+      await expect(editor.getByRole('textbox').locator('mark')).toHaveText('highlight');
+      await expect(editor.getByRole('textbox').locator('small')).toHaveText('small');
+      await expect(editor.getByRole('textbox').locator('sup')).toHaveText('superscript');
+      await expect(editor.getByRole('textbox').locator('code').first()).toHaveText('code');
+      await expect(editor.getByRole('textbox').locator('h1')).toHaveText('heading 1');
+      await expect(editor.getByRole('textbox').locator('h2')).toHaveText('heading 2');
+      await expect(editor.getByRole('textbox').locator('h3')).toHaveText('heading 3');
+      await expect(editor.getByRole('textbox').locator('hr')).toBeVisible();
+      await expect(editor.getByRole('textbox').locator('ol li').filter({ hasText: 'ordered list' })).toHaveCount(2);
+      await expect(editor.getByRole('textbox').locator('ul li').filter({ hasText: 'unordered list' })).toHaveCount(2);
+      await expect(editor.getByRole('textbox').locator('blockquote')).toHaveText('quote');
+      await expect(editor.getByRole('textbox')).toContainText('upload.pdf');
+      await expect(editor.getByRole('textbox')).toContainText('upload-image.jpg');
+      await expect(editor.getByRole('textbox').locator('pre')).toHaveText('code block');
+      await expect(editor.getByRole('textbox').locator('table')).toBeVisible();
+      await expect(editor.getByRole('textbox').locator('iframe')).toBeVisible();
+    });
+    test('editor embeds', async ({ page }) => {
+      await init(page);
+      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      const editor = page.getByLabel('Editor HTML', { exact: true });
+      await editor.getByRole('button', { name: 'Insert...' }).click();
+      await page.getByRole('menu').getByRole('menuitem', { name: 'Test embed' }).click();
+      await page.getByRole('dialog').getByRole('button', { name: 'Insert' }).click();
+      await expect(page.getByRole('dialog').getByRole('textbox', { name: 'Title' })).toHaveAccessibleDescription(/required/);
+      await page.getByRole('dialog').getByRole('textbox', { name: 'Title' }).fill('Awesome');
+      await page.getByRole('dialog').getByRole('button', { name: 'Insert' }).click();
+      await expect(editor.getByRole('textbox')).toContainText('Test embed: Awesome');
+      await editor.getByRole('textbox').getByRole('button', { name: 'Actions' }).click();
+      await page.getByRole('menu').getByRole('menuitem', { name: 'Edit...' }).click();
+      await page.getByRole('dialog').getByRole('textbox', { name: 'Title' }).fill('Even more awesome');
+      await page.getByRole('dialog').getByRole('button', { name: 'Update' }).click();
+      await expect(editor.getByRole('textbox')).toContainText('Test embed: Even more awesome');
+      await createForm(page);
+      await expect(editor.getByRole('textbox')).toContainText('Test embed: Even more awesome');
+      await editor.getByRole('textbox').getByRole('button', { name: 'Actions' }).click();
+      await page.getByRole('menu').getByRole('menuitem', { name: 'Remove' }).click();
+      await expect(editor.getByRole('textbox')).toBeEmpty();
+    });
+    test('editor localized', async ({ page }) => {
+      await init(page);
+      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      const editor = page.getByLabel('Editor HTML localized', { exact: true });
+      await editor.getByRole('textbox').pressSequentially('Test EN');
+      await expect(editor.getByRole('combobox', { name: 'Choose a language' })).toHaveText('en');
+      await editor.getByRole('combobox', { name: 'Choose a language' }).click();
+      await page.getByRole('listbox').getByRole('option', { name: 'fr' }).click();
+      await expect(editor.getByRole('combobox', { name: 'Choose a language' })).toHaveText('fr');
+      await editor.getByRole('textbox').pressSequentially('Test FR');
+      await expect(editor.getByRole('textbox')).toHaveText('Test FR');
+      await editor.getByRole('combobox', { name: 'Choose a language' }).click();
+      await page.getByRole('listbox').getByRole('option', { name: 'en' }).click();
+      await expect(editor.getByRole('textbox')).toHaveText('Test EN');
+      await createForm(page);
+      await expect(editor.getByRole('textbox')).toHaveText('Test EN');
+      await editor.getByRole('combobox', { name: 'Choose a language' }).click();
+      await page.getByRole('listbox').getByRole('option', { name: 'fr' }).click();
+      await expect(editor.getByRole('textbox')).toHaveText('Test FR');
+    });
+    test('editor markdown', async ({ page }) => {
+      await init(page);
+      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      const editor = page.getByLabel('Editor markdown', { exact: true });
+      await editor.getByRole('button', { name: 'Bold' }).click();
+      await editor.getByRole('textbox').pressSequentially('strong');
+      await expect(editor.getByRole('textbox').locator('strong')).toHaveText('strong');
+      await page.waitForTimeout(100);
+      await createForm(page);
+      await expect(editor.getByRole('textbox').locator('strong')).toHaveText('strong');
+    });
+    test('number', async ({ page }) => {
+      await init(page);
+      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      const input = page.getByLabel('Number', { exact: true });
+      expect(await input.getAttribute('type')).toBe('number');
+      await input.fill('4');
+      await createForm(page);
+      await expect(input).toHaveValue('4');
+    });
+    test('select dropdown', async ({ page }) => {
+      await init(page);
+      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      await page.getByRole('combobox', { name: 'Select dropdown' }).click();
+      await page.getByRole('menu').getByRole('menuitemcheckbox', { name: 'Option 1', exact: true }).click();
+      await page.getByRole('menu').getByRole('menuitemcheckbox', { name: 'Option 2', exact: true }).click();
+      await page.mouse.click(0, 0);
+      await expect(page.getByRole('combobox', { name: 'Select dropdown' })).toContainText('Option 1');
+      await expect(page.getByRole('combobox', { name: 'Select dropdown' })).toContainText('Option 2');
+      await createForm(page);
+      await expect(page.getByRole('combobox', { name: 'Select dropdown' })).toContainText('Option 1');
+      await expect(page.getByRole('combobox', { name: 'Select dropdown' })).toContainText('Option 2');
+    });
+    test('select radios', async ({ page }) => {
+      await init(page);
+      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      await expect(page.getByLabel('Select radios').getByRole('radio', { name: 'Option 1', exact: true })).toBeChecked();
+      await page.getByLabel('Select radios').getByRole('radio', { name: 'Option 2', exact: true }).click();
+      await expect(page.getByLabel('Select radios').getByRole('radio', { name: 'Option 2', exact: true })).toBeChecked();
+      await createForm(page);
+      await expect(page.getByLabel('Select radios').getByRole('radio', { name: 'Option 2', exact: true })).toBeChecked();
     });
   });
 });
-
 
 
 

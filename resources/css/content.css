@@ -54,9 +54,6 @@
       > :where(code) {
           @apply block py-2 px-4 bg-muted rounded-md [font-size:inherit];
       }
-      .ProseMirror-trailingBreak {
-        @apply hidden;
-      }
     }
     > :where(hr) {
       @apply mt-4;

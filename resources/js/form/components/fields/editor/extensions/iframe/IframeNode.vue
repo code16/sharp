@@ -110,7 +110,7 @@
         <template v-if="!parentEditor.props.field.readOnly">
             <DropdownMenu :modal="false">
                 <DropdownMenuTrigger as-child>
-                    <Button class="shrink-0 self-center" variant="ghost" size="icon">
+                    <Button class="shrink-0 self-center" variant="ghost" size="icon" :aria-label="__('sharp::form.editor.extension_node.dropdown_button.aria_label')">
                         <MoreHorizontal class="size-4" />
                     </Button>
                 </DropdownMenuTrigger>
@@ -147,6 +147,7 @@
                         placeholder="&lt;iframe src=&quot;...&quot;&gt;&lt;/iframe&gt;"
                         v-model="html"
                         rows="6"
+                        :aria-label="__('sharp::form.editor.dialogs.iframe.insert_title')"
                         @update:model-value="debouncedOnModalInputChange"
                         @paste="onModalInputChange"
                         @focus="($event.target as HTMLTextAreaElement).select()"

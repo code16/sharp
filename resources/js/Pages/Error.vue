@@ -10,17 +10,19 @@
 
 <template>
     <Layout>
-        <div class="container">
-            <Card>
-                <CardHeader>
-                    <CardTitle>
-                        Error {{ status }}
-                    </CardTitle>
-                    <CardDescription>
-                        {{ message }}
-                    </CardDescription>
-                </CardHeader>
-            </Card>
+        <div class="@container">
+            <div class="container pt-6 @3xl:pt-10">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>
+                            Error {{ status }}
+                        </CardTitle>
+                        <CardDescription>
+                            {{ message }}
+                        </CardDescription>
+                    </CardHeader>
+                </Card>
+            </div>
         </div>
     </Layout>
 </template>

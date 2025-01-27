@@ -95,13 +95,13 @@ export const buttons: { [key in Exclude<FormEditorToolbarButton, '|' | 'link' | 
     },
     'upload-image': {
         command: () => {}, // handled in MenuBar
-        isActive: editor => editor.isActive('upload') || editor.isActive('image'),
+        isActive: editor => editor.isActive('upload', { isImage: true }),
         icon: ImageIcon,
         label: () => __('sharp::form.editor.toolbar.upload_image.title'),
     },
     'upload': {
         command: () => {}, // handled in MenuBar
-        isActive: editor => editor.isActive('upload'),
+        isActive: editor => editor.isActive('upload', { isImage: false }),
         icon: Paperclip,
         label: () => __('sharp::form.editor.toolbar.upload.title'),
     },
