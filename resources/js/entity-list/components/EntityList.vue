@@ -88,7 +88,7 @@
     });
 
     const el = ref<HTMLElement>();
-    const emit = defineEmits(['update:query', 'filter-change', 'reset', 'reordering', 'needs-topbar']);
+    const emit = defineEmits(['update:query', 'filter-change', 'reset', 'reordering']);
     const selectedItems: Ref<{ [key: InstanceId]: boolean } | null> = ref(null);
     const selecting = computed(() => !!selectedItems.value);
 
@@ -268,19 +268,6 @@
         reorderedItems.value = null;
     }
 
-    const stuck = ref(false);
-    const needsTopBar = computed(() => reordering.value || selecting.value);
-    watch([stuck, needsTopBar], () => {
-        if(stuck.value) {
-            emit('needs-topbar', needsTopBar.value);
-        } else {
-            emit('needs-topbar', false);
-        }
-        if(props.inline) {
-            document.dispatchEvent(new CustomEvent('breadcrumb:updateAppendItem', { detail: stuck.value && needsTopBar.value ? { label: props.title } : null }));
-        }
-    });
-
     const breakpoints = useBreakpoints();
     const visibleFields = computed(() => props.entityList.fields.filter(field => breakpoints.md ? true : !field.hideOnXS));
 
@@ -304,34 +291,6 @@
                 </template>
             </transition>
 
-<!--            <template v-if="entityList">-->
-<!--                <template v-if="-->
-<!--                    showReorderButton && entityList.canReorder-->
-<!--                        || entityList.canSelect-->
-<!--                        || entityList.dropdownEntityCommands(selecting)?.flat().length-->
-<!--                        || entityList.primaryCommand-->
-<!--                        || showCreateButton && entityList.authorizations.create-->
-<!--                ">-->
-<!--                    <StickyTop-->
-<!--                        :class="cn(-->
-<!--                            'group container sticky top-14 border-b -mb-px -mt-4 pt-4 bg-white pb-4 px-4 lg:px-6 flex gap-3 pointer-events-none',-->
-<!--                            'lg:sticky lg:border-0 lg:pt-0 lg:mt-0 lg:top-3 lg:bg-transparent lg:last:*:-translate-x-[&#45;&#45;sticky-safe-right-offset]',-->
-<!--                            {-->
-<!--                                'border-0 lg:top-[6.25rem]': inline,-->
-<!--                                '-top-8 z-0': inline && !needsTopBar,-->
-<!--                                'z-[15]': reordering,-->
-<!--                                'data-[stuck=true]:z-30': true,-->
-<!--                            })"-->
-<!--                        v-model:stuck="stuck"-->
-<!--                    >-->
-<!--                        -->
-<!--                    </StickyTop>-->
-<!--                </template>-->
-<!--            </template>-->
-<!--            <template v-else>-->
-<!--                <div class="h-8 mb-4"></div>-->
-<!--            </template>-->
-
             <template v-if="entityList?.pageAlert">
                 <div class="container px-4 lg:px-6">
                     <PageAlert
@@ -342,7 +301,7 @@
             </template>
 
             <RootCard :class="reordering ? 'relative z-[12]' : ''">
-                <RootCardHeader :class="reordering || selecting ? 'sticky' : 'data-[overflowing-viewport]:sticky'">
+                <RootCardHeader :class="reordering || selecting ? 'sticky' : 'data-[overflowing-viewport]:sticky'" :collapsed="collapsed || !entityList">
                     <div class="flex flex-wrap md:flex-nowrap gap-y-4 gap-x-2">
                         <div class="flex items-baseline min-w-0">
                             <slot name="card-header" />
@@ -358,7 +317,14 @@
                             </template>
                         </div>
                         <template v-if="entityList">
-                            <div class="ml-auto self-start flex -my-1 justify-end pointer-events-auto gap-2" :class="inline ? '' : ''">
+                            <template v-if="
+                                showReorderButton && entityList.canReorder
+                                    || entityList.canSelect
+                                    || entityList.dropdownEntityCommands(selecting)?.flat().length
+                                    || entityList.primaryCommand
+                                    || showCreateButton && entityList.authorizations.create
+                            ">
+                                <div class="ml-auto self-start flex -my-1 justify-end pointer-events-auto gap-2" :class="inline ? '' : ''" v-show="!collapsed">
                                 <template v-if="showReorderButton && entityList.canReorder && !selecting">
                                     <template v-if="reordering">
                                         <Button class="h-8" size="sm" variant="outline" @click="reorderedItems = null">
@@ -475,15 +441,15 @@
                                     </template>
                                 </template>
                             </div>
+                            </template>
                         </template>
                     </div>
                 </RootCardHeader>
                 <template v-if="entityList && (showSearchField && entityList.config.searchable || entityList.visibleFilters?.length)">
-                    <div class="mb-4 flex flex-wrap items-center gap-2" :class="!collapsed && entityList.data?.length ? '@2xl/root-card:mb-4' : ''">
+                    <div class="mb-4 flex flex-wrap items-center gap-2" v-show="!collapsed">
                         <template v-if="showSearchField && entityList.config.searchable">
                             <div class="self-center pointer-events-auto"
                                 :class="{ 'hidden @2xl/root-card:block': entityList.visibleFilters?.length }"
-                                v-show="!collapsed"
                             >
                                 <EntityListSearch
                                     inline
@@ -495,7 +461,7 @@
                             </div>
                         </template>
                         <template v-if="entityList.visibleFilters?.length">
-                            <div class="contents" v-show="!collapsed">
+                            <div class="contents">
                                 <div class="flex items-center @2xl/root-card:hidden">
                                     <Dialog>
                                         <DialogTrigger as-child>

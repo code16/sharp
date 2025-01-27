@@ -142,7 +142,7 @@
                         </div>
                     </template>
                     <template v-if="form.locales?.length || form.layout.tabs.length > 1">
-                        <div class="flex min-w-0 gap-4">
+                        <div class="flex min-w-0 gap-4 -my-1">
                             <template v-if="form.locales?.length">
                                 <Select :model-value="form.currentLocale ?? undefined" @update:model-value="onLocaleChange">
                                     <div class="flex items-center" :class="!inline ? 'h-8' : ''">
