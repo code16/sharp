@@ -745,7 +745,6 @@ export type ShowConfigData = {
   deleteConfirmationText: string;
   isSingle: boolean;
   commands: ConfigCommandsData | null;
-  multiformAttribute: string | null;
   titleAttribute: string | null;
   breadcrumbAttribute: string | null;
   editButtonLabel: string | null;

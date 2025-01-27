@@ -33,7 +33,7 @@ class ShowController extends SharpProtectedController
         abort_if($show instanceof SharpSingleShow, 404);
 
         $show->buildShowConfig();
-        
+
         $showData = $show->instance($instanceId);
         $payload = ShowData::from([
             'title' => $showData[$show->titleAttribute()] ?? $entity->getLabel($entityKey->subEntity()),
