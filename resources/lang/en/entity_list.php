@@ -13,4 +13,6 @@ return [
     'pagination.next' => 'Next',
     'pagination.current' => 'Page :current_page to :last_page',
     'pagination.current_simple' => 'Page :current_page',
+    'select_all_in_page_checkbox.tooltip.select' => 'Select all in current page',
+    'select_all_in_page_checkbox.tooltip.unselect' => 'Unselect all in current page',
 ];

@@ -65,6 +65,7 @@
     import DropdownChevronDown from "@/components/ui/DropdownChevronDown.vue";
     import { useBreakpoints } from "@/composables/useBreakpoints";
     import RootCardHeader from "@/components/ui/RootCardHeader.vue";
+    import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
     const props = withDefaults(defineProps<{
         entityKey: string,
@@ -91,9 +92,20 @@
     const emit = defineEmits(['update:query', 'filter-change', 'reset', 'reordering']);
     const selectedItems: Ref<{ [key: InstanceId]: boolean } | null> = ref(null);
     const selecting = computed(() => !!selectedItems.value);
+    const selectedItemsInPage = computed(() => props.entityList.data.filter(item => selectedItems.value?.[props.entityList.instanceId(item)]));
+
+    function onSelectAll(select: boolean) {
+        selectedItems.value = {
+            ...selectedItems.value,
+            ...Object.fromEntries(props.entityList.data.map(item => [
+                props.entityList.instanceId(item),
+                select
+            ])),
+        };
+    }
 
     function onSelecting() {
-        selectedItems.value = Object.fromEntries(props.entityList.data.map(item => [item.id, false]));
+        selectedItems.value = Object.fromEntries(props.entityList.data.map(item => [props.entityList.instanceId(item), false]));
     }
 
     function onFilterChange(filter: FilterData, value: FilterData['value']) {
@@ -559,6 +571,25 @@
                                             <template v-if="selecting">
                                                 <TableHead>
                                                     <span class="sr-only">Select...</span>
+                                                    <TooltipProvider>
+                                                        <Tooltip :delay-duration="0">
+                                                            <TooltipTrigger as-child>
+                                                                <Checkbox
+                                                                    :model-value="selectedItemsInPage.length === entityList.data.length ? true : selectedItemsInPage.length > 0 ? 'indeterminate' : false"
+                                                                    @update:model-value="onSelectAll"
+                                                                    :aria-label="__('sharp::entity_list.select_all_in_page_checkbox.tooltip.select')"
+                                                                />
+                                                            </TooltipTrigger>
+                                                            <TooltipContent side="top" :side-offset="10">
+                                                                <template v-if="selectedItemsInPage.length === entityList.data.length">
+                                                                    {{ __('sharp::entity_list.select_all_in_page_checkbox.tooltip.unselect') }}
+                                                                </template>
+                                                                <template v-else>
+                                                                    {{ __('sharp::entity_list.select_all_in_page_checkbox.tooltip.select') }}
+                                                                </template>
+                                                            </TooltipContent>
+                                                        </Tooltip>
+                                                    </TooltipProvider>
                                                 </TableHead>
                                             </template>
                                             <template v-for="(field, fieldIndex) in visibleFields" :key="field.key">
