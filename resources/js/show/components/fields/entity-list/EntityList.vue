@@ -145,7 +145,7 @@
        >
            <template #card-header>
                <div class="flex items-center gap-x-4">
-                   <CardTitle>
+                   <CardTitle class="line-clamp-2">
                        {{ field.label }}
                    </CardTitle>
                    <template v-if="collapsable">

@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { FormData, FormFieldData,  LayoutFieldData } from "@/types";
     import PageAlert from "@/components/PageAlert.vue";
-    import { provide, ref } from "vue";
+    import { provide, ref, useTemplateRef } from "vue";
     import { Form } from "../Form";
     import { getDependantFieldsResetData } from "../util";
     import FieldGrid from "@/components/ui/FieldGrid.vue";
@@ -23,6 +23,9 @@
     import StickyBottom from "@/components/StickyBottom.vue";
     import { Menu } from 'lucide-vue-next';
     import { Label } from "@/components/ui/label";
+    import RootCardHeader from "@/components/ui/RootCardHeader.vue";
+    import { vScrollIntoView } from "@/directives/scroll-into-view";
+    import { useResizeObserver } from "@vueuse/core";
 
     const props = defineProps<{
         form: Form
@@ -30,12 +33,13 @@
         postFn?: (data: FormData['data']) => Promise<ApiResponse<any>>,
         showErrorAlert?: boolean,
         errorAlertMessage?: string,
+        tab?: string,
     }>();
 
     provide('form', props.form);
 
     const loading = ref(false);
-    const { selectedTabSlug } = useFormTabs(props);
+    const selectedTabSlug = defineModel<string>('tab');
 
     function submit<ExtraData extends { [key: string]: any } = any>(extraData?: ExtraData) {
         const { form, postFn } = props;
@@ -82,6 +86,13 @@
         props.form.serializedData = data;
     }
 
+    const title = useTemplateRef<HTMLElement>('title');
+    const titleScrollWidth = ref(0);
+
+    useResizeObserver(title, (e) => {
+        titleScrollWidth.value = e[0].target.scrollWidth;
+    });
+
     defineExpose({ submit });
 </script>
 
@@ -107,53 +118,62 @@
             </div>
         </template>
 
-        <template v-if="form.locales?.length || form.layout.tabbed && form.layout.tabs.length > 1">
-            <StickyTop class="@container relative group flex items-end pointer-events-none data-[stuck]:z-20"
-                v-slot="{ stuck, isOverflowing }"
+        <template v-if="form.pageAlert">
+            <div class="container" :class="{ 'px-0': inline }">
+                <PageAlert
+                    class="mb-4"
+                    :page-alert="form.pageAlert"
+                />
+            </div>
+        </template>
+
+        <component :is="inline ? 'div' : RootCard">
+            <component :is="inline ? 'div' : RootCardHeader"
                 :class="[
-                    inline ? 'mb-6' : 'mb-4 container overflow-x-clip lg:sticky lg:top-3',
+                    form.locales?.length ? 'data-[overflowing-viewport]:sticky' : '',
                 ]"
             >
-                <div class="flex-1 self-stretch">
-                    <div class="lg:pl-[calc(var(--sticky-safe-left-offset)-1rem)]">
-                        <template v-if="form.locales?.length">
-                            <Select :model-value="form.currentLocale ?? undefined" @update:model-value="onLocaleChange">
-                                <LocaleSelectTrigger class="mr-4 pointer-events-auto " />
-                                <SelectContent>
-                                    <template v-for="locale in form.locales" :key="locale">
-                                        <SelectItem :value="locale">
-                                            <span class="uppercase text-xs">{{ locale }}</span>
-                                        </SelectItem>
-                                    </template>
-                                </SelectContent>
-                            </Select>
-                        </template>
-                    </div>
-                </div>
-                <template v-if="form.layout.tabbed && form.layout.tabs.length > 1">
-                    <div class="">
-                        <div class="hidden lg:h-8 col-start-1 row-start-1 @2xl:flex flex-col justify-end group-data-[stuck]:!hidden group-data-[overflowing]:opacity-0"
-                            :inert="isOverflowing"
-                        >
-                            <TabsList class="pointer-events-auto">
-                                <template v-for="tab in form.layout.tabs">
-                                    <TabsTrigger :value="slugify(tab.title)">
-                                        {{ tab.title }}
-                                        <template v-if="form.tabErrorCount(tab)">
-                                            <Badge class="ml-2" variant="destructive">
-                                                {{ form.tabErrorCount(tab) }}
-                                            </Badge>
-                                        </template>
-                                    </TabsTrigger>
-                                </template>
-                            </TabsList>
+                <div class="flex flex-wrap justify-end items-start gap-x-4 gap-y-4">
+                    <template v-if="!inline">
+                        <div class="flex-1 flex min-w-[min(var(--scroll-width),min(18rem,100%))]" :style="{'--scroll-width':`${titleScrollWidth}px`}">
+                            <CardTitle class="min-w-0 truncate" ref="title">
+                                <slot name="title" />
+                            </CardTitle>
                         </div>
-                        <div class="@2xl:hidden group-data-[stuck]:!block group-data-[overflowing]:!block"
-                            :class="{ '@2xl:absolute @2xl:bottom-0 @2xl:left-1/2 @2xl:-translate-x-1/2': isOverflowing && !stuck }"
-                        >
-                            <div class="flex items-center">
+                    </template>
+                    <template v-if="form.locales?.length || form.layout.tabs.length > 1">
+                        <div class="flex min-w-0 gap-4 -my-1">
+                            <template v-if="form.locales?.length">
+                                <Select :model-value="form.currentLocale ?? undefined" @update:model-value="onLocaleChange">
+                                    <div class="flex items-center" :class="!inline ? 'h-8' : ''">
+                                        <LocaleSelectTrigger class="pointer-events-auto" />
+                                    </div>
+                                    <SelectContent>
+                                        <template v-for="locale in form.locales" :key="locale">
+                                            <SelectItem :value="locale">
+                                                <span class="uppercase text-xs">{{ locale }}</span>
+                                            </SelectItem>
+                                        </template>
+                                    </SelectContent>
+                                </Select>
+                            </template>
+                            <template v-if="form.layout.tabs.length > 1">
+                                <div class="hidden @2xl/root-card:block min-w-0 overflow-auto scroll-px-2 -my-1">
+                                    <TabsList>
+                                        <template v-for="tab in form.layout.tabs">
+                                            <TabsTrigger :value="slugify(tab.title)" v-scroll-into-view.nearest="slugify(tab.title) === selectedTabSlug">
+                                                {{ tab.title }}
+                                                <template v-if="form.tabErrorCount(tab)">
+                                                    <Badge class="ml-2" variant="destructive">
+                                                        {{ form.tabErrorCount(tab) }}
+                                                    </Badge>
+                                                </template>
+                                            </TabsTrigger>
+                                        </template>
+                                    </TabsList>
+                                </div>
                                 <Select v-model="selectedTabSlug">
-                                    <SelectTrigger class="h-8 w-auto text-left pointer-events-auto">
+                                    <SelectTrigger class="h-8 @2xl/root-card:hidden w-auto text-left pointer-events-auto">
                                         <Menu class="size-4 shrink-0 mr-2" />
                                         <SelectValue class="font-medium" />
                                     </SelectTrigger>
@@ -165,33 +185,11 @@
                                         </template>
                                     </SelectContent>
                                 </Select>
-                            </div>
+                            </template>
                         </div>
-                    </div>
-                </template>
-                <div class="flex-1"></div>
-            </StickyTop>
-        </template>
-
-        <template v-if="form.pageAlert">
-            <div class="container" :class="{ 'px-0': inline }">
-                <PageAlert
-                    class="mb-4"
-                    :page-alert="form.pageAlert"
-                />
-            </div>
-        </template>
-
-        <component :is="inline ? 'div' : RootCard">
-            <template v-if="!inline">
-                <CardHeader>
-                    <div class="flex items-start gap-x-4">
-                        <CardTitle class="-mt-0.5 flex-1 truncate text-2xl/7">
-                            <slot name="title" />
-                        </CardTitle>
-                    </div>
-                </CardHeader>
-            </template>
+                    </template>
+                </div>
+            </component>
             <CardContent :class="inline ? '!p-0' : ''">
                 <template v-for="tab in form.layout.tabs">
                     <TabsContent class="mt-0" :tabindex="form.layout.tabs.length > 1 ? 0 : -1" :value="slugify(tab.title)">

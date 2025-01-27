@@ -37,6 +37,7 @@ const config = {
                 // 'sm': '0 1px 2px 0 oklch(var(--primary-oklch) / .05)',
                 // 'md': '0 4px 6px -1px oklch(var(--primary-oklch) / .1), 0 2px 4px -2px oklch(var(--primary-oklch) / .1);',
                 'l-xl': '0 0px 25px -5px rgb(0 0 0 / 0.1), 0 0px 10px -6px rgb(0 0 0 / 0.1)',
+                'b-md': '0 5px 20px -8px rgb(0 0 0 / 0.1), 0 6px 3px -6px rgb(0 0 0 / 0.1)',
             },
             fontFamily: {
                 'sans': ['geist-sans', ...defaultTheme.fontFamily.sans]

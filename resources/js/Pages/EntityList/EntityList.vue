@@ -79,22 +79,26 @@
             <PageBreadcrumb :breadcrumb="breadcrumb" />
         </template>
 
-        <EntityListComponent
-            :entity-key="entityKey"
-            :entity-list="entityList"
-            :filters="filters"
-            :commands="commands"
-            :title="breadcrumb.items[0].label"
-            :highlighted-instance-id="highlightedInstanceId"
-            @reset="onReset"
-            @filter-change="onFilterChange"
-            @update:query="onQueryChange"
-        >
-            <template #card-header>
-                <CardTitle>
-                    {{ entityList.title }}
-                </CardTitle>
-            </template>
-        </EntityListComponent>
+        <div class="@container">
+            <div :class="entityList.pageAlert ? 'pt-4' : 'pt-6 @3xl:pt-10'">
+                <EntityListComponent
+                    :entity-key="entityKey"
+                    :entity-list="entityList"
+                    :filters="filters"
+                    :commands="commands"
+                    :title="breadcrumb.items[0].label"
+                    :highlighted-instance-id="highlightedInstanceId"
+                    @reset="onReset"
+                    @filter-change="onFilterChange"
+                    @update:query="onQueryChange"
+                >
+                    <template #card-header>
+                        <CardTitle class="line-clamp-2 min-w-0">
+                            {{ entityList.title }}
+                        </CardTitle>
+                    </template>
+                </EntityListComponent>
+            </div>
+        </div>
     </Layout>
 </template>

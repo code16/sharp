@@ -10,11 +10,12 @@
 </script>
 
 <template>
-    <Button as="div" class="relative h-8 border" variant="outline" size="sm">
+    <Button as="div" class="relative h-8 border" variant="outline" :aria-disabled="disabled" size="sm">
         <Label class="flex items-center gap-2">
             <span class="absolute inset-0"></span>
             <Checkbox
                 :model-value="props.value"
+                :disabled="disabled"
                 @update:model-value="emit('input', $event as boolean)"
             />
             {{ props.filter.label }}
