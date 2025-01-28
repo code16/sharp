@@ -15,6 +15,16 @@ async function createForm(page: Page) {
   });
 }
 
+async function updateForm(page: Page) {
+  await test.step('updateForm', async () => {
+    const responsePromise = page.waitForResponse('**/s-form/test-models/1');
+    await page.getByRole('button', { name: 'Update' }).click();
+    const response = await responsePromise;
+    expect(await response.headerValue('Location'), 'Should not redirect with errors (422)').not.toBe(page.url());
+    await page.goto('/sharp/s-list/test-models/s-form/test-models/1');
+  });
+}
+
 test.describe('form', () => {
   test('display create form', async ({ page }) => {
     await init(page);
@@ -492,6 +502,57 @@ test.describe('form', () => {
       await expect(page.getByLabel('Select radios').getByRole('radio', { name: 'Option 2', exact: true })).toBeChecked();
       await createForm(page);
       await expect(page.getByLabel('Select radios').getByRole('radio', { name: 'Option 2', exact: true })).toBeChecked();
+    });
+    test('select checkboxes', async ({ page }) => {
+      await init(page);
+      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      await page.getByLabel('Select checkboxes').getByRole('checkbox', { name: 'Option 1', exact: true }).click();
+      await page.getByLabel('Select checkboxes').getByRole('checkbox', { name: 'Option 2', exact: true }).click();
+      await expect(page.getByLabel('Select checkboxes').getByRole('checkbox', { name: 'Option 1', exact: true })).toBeChecked();
+      await expect(page.getByLabel('Select checkboxes').getByRole('checkbox', { name: 'Option 2', exact: true })).toBeChecked();
+      await createForm(page);
+      await expect(page.getByLabel('Select checkboxes').getByRole('checkbox', { name: 'Option 1', exact: true })).toBeChecked();
+      await expect(page.getByLabel('Select checkboxes').getByRole('checkbox', { name: 'Option 2', exact: true })).toBeChecked();
+    });
+    test('select checkboxes select all', async ({ page }) => {
+      await init(page);
+      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      await page.getByLabel('Select checkboxes').getByRole('checkbox', { name: 'Select all', exact: true }).click();
+      const checkboxes = Array.from({ length: 10 }).map((_, i) =>
+        page.getByLabel('Select checkboxes').getByRole('checkbox', { name: `Option ${i + 1}`, exact: true })
+      );
+      await Promise.all(checkboxes.map(checkbox => expect(checkbox).toBeChecked()));
+      await expect(page.getByLabel('Select checkboxes').getByRole('checkbox', { name: 'Unselect all', exact: true })).toBeChecked();
+      await createForm(page);
+      await Promise.all(checkboxes.map(checkbox => expect(checkbox).toBeChecked()));
+      await expect(page.getByLabel('Select checkboxes').getByRole('checkbox', { name: 'Unselect all', exact: true })).toBeChecked();
+      await page.getByLabel('Select checkboxes').getByRole('checkbox', { name: 'Unselect all', exact: true }).click();
+      await Promise.all(checkboxes.map(checkbox => expect(checkbox).not.toBeChecked()));
+      await expect(page.getByLabel('Select checkboxes').getByRole('checkbox', { name: 'Select all', exact: true })).not.toBeChecked();
+      await updateForm(page);
+      await Promise.all(checkboxes.map(checkbox => expect(checkbox).not.toBeChecked()));
+      await expect(page.getByLabel('Select checkboxes').getByRole('checkbox', { name: 'Select all', exact: true })).not.toBeChecked();
+    });
+    test('tags', async ({ page }) => {
+      await init(page);
+      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      await page.getByLabel('Tags', { exact: true }).getByRole('combobox').click();
+      await page.getByRole('listbox').getByRole('option', { name: 'Tag 1', exact: true }).click();
+      await page.getByRole('listbox').getByRole('option', { name: 'Tag 2', exact: true }).click();
+      await page.getByLabel('Tags', { exact: true }).getByRole('button', { name: 'Delete Tag 1' }).click();
+      await page.getByLabel('Tags', { exact: true }).getByRole('combobox').fill('New');
+      await page.getByRole('listbox').getByRole('option', { name: 'Create “New”', exact: true }).click();
+      await expect(page.getByLabel('Tags', { exact: true }).getByText('Tag 1')).not.toBeVisible();
+      await expect(page.getByLabel('Tags', { exact: true }).getByText('Tag 2')).toBeVisible();
+      await expect(page.getByLabel('Tags', { exact: true }).getByText('New')).toBeVisible();
+      await createForm(page);
+      await expect(page.getByLabel('Tags', { exact: true }).getByText('Tag 1')).toBeVisible();
+      await expect(page.getByLabel('Tags', { exact: true }).getByText('New')).toBeVisible();
+      await page.getByLabel('Tags', { exact: true }).getByRole('button', { name: 'Delete Tag 1' }).click();
+      await page.getByLabel('Tags', { exact: true }).getByRole('button', { name: 'Delete New' }).click();
+      await updateForm(page);
+      await expect(page.getByLabel('Tags', { exact: true }).getByText('Tag 1')).not.toBeVisible();
+      await expect(page.getByLabel('Tags', { exact: true }).getByText('New')).not.toBeVisible();
     });
   });
 });

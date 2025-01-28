@@ -3,6 +3,7 @@
 namespace App\Sharp\TestModels;
 
 use App\Models\TestModel;
+use App\Models\TestTag;
 use App\Sharp\Embeds\TestEmbed;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
@@ -231,7 +232,7 @@ class TestModelForm extends SharpForm
                     ->setLabel('Select dropdown')
                     ->allowSelectAll()
 //                    ->setClearable()
-                    ->setMultiple()
+//                    ->setMultiple()
                     ->setDisplayAsDropdown(),
             )
             ->addField(
@@ -249,7 +250,7 @@ class TestModelForm extends SharpForm
                 //                    ->setMaxSelected(2),
             )
             ->addField(
-                SharpFormTagsField::make('tags', static::options())
+                SharpFormTagsField::make('tags', TestTag::pluck('label', 'id')->toArray())
                     ->setLabel('Tags')
                     ->setCreatable(true)
                     ->setCreateAttribute('label')
@@ -340,7 +341,7 @@ class TestModelForm extends SharpForm
             ->setCustomTransformer('autocomplete_remote2', function ($value) {
                 return $value ? ['id' => $value, 'label' => static::options()[$value]] : null;
             })
-            ->transform(TestModel::findOrFail($id)->fill([
+            ->transform(TestModel::with('tags')->findOrFail($id)->fill([
                 'html' => ['name' => 'John'],
             ]));
     }

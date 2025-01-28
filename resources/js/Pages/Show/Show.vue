@@ -146,7 +146,7 @@
                             <Section
                                 class="min-w-0"
                                 :section="section"
-                                v-show="show.sectionShouldBeVisible(section, locale)"
+                                v-show="show.sectionShouldBeVisible(section, locale) || i == 0"
                                 v-slot="{ collapsed, onCollapseToggle }"
                             >
                                 <template v-if="show.sectionHasField(section, 'entityList')">
@@ -304,7 +304,7 @@
                                                 </div>
                                             </RootCardHeader>
                                         </template>
-                                        <CardContent v-show="!collapsed">
+                                        <CardContent v-show="show.sectionFields(section).length && !collapsed">
                                             <div class="grid grid-cols-1 gap-6 @3xl/root-card:grid-cols-12">
                                                 <template v-for="(column, columnIndex) in section.columns">
                                                     <div class="@3xl/root-card:col-[span_var(--size)]" :style="{ '--size': `${column.size}` }">

@@ -42,6 +42,10 @@
         ]);
     }
 
+    function onDeleteClick(item: FormTagsFieldData['value'][0]) {
+        emit('input', props.value.filter(i => i[itemKey] !== item[itemKey]));
+    }
+
     const { fullTextSearch } = useFullTextSearch(() => props.field.options, { id: 'id', searchKeys: ['label'] });
     const filteredOptions = computed(() => {
         const filtered = searchTerm.value.length > 0
@@ -55,7 +59,7 @@
 </script>
 
 <template>
-    <FormFieldLayout v-bind="props" v-slot="{ id, ariaDescribedBy }">
+    <FormFieldLayout v-bind="props" field-group v-slot="{ id, ariaDescribedBy }">
         <ComboboxRoot
             class="flex-1"
             :model-value="props.value"
@@ -73,7 +77,11 @@
                     <template v-for="item in value" :key="item[itemKey]">
                         <TagsInputItem :value="item">
                             <TagsInputItemText />
-                            <TagsInputItemDelete @click.stop />
+                            <TagsInputItemDelete
+                                :aria-labelledby="null"
+                                :aria-label="__('sharp::form.tags.tag_delete_button.aria_label', { option_label: item.label })"
+                                @click.stop="onDeleteClick(item)"
+                            />
                         </TagsInputItem>
                     </template>
 

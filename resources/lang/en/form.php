@@ -43,6 +43,7 @@ return [
     'multiselect.max_text' => 'Maximum items reached',
 
     'tags.unknown_label' => 'Unknown',
+    'tags.tag_delete_button.aria_label' => 'Delete :option_label',
 
     'select.select_all' => 'Select all',
     'select.unselect_all' => 'Unselect all',

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Spatie\Translatable\HasTranslations;
 
@@ -30,7 +31,6 @@ class TestModel extends Model
             'autocomplete_list' => 'array',
             'select_dropdown' => 'array',
             'select_checkboxes' => 'array',
-            'tags' => 'array',
         ];
     }
 
@@ -38,6 +38,11 @@ class TestModel extends Model
     {
         return $this->morphOne(Media::class, 'model')
             ->where('model_key', 'upload');
+    }
+
+    public function tags(): BelongsToMany
+    {
+        return $this->belongsToMany(TestTag::class);
     }
 
     public function getDefaultAttributesFor($attribute)
