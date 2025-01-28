@@ -29,7 +29,7 @@ class TestModel extends Model
             'date_time' => 'datetime',
             'list' => 'array',
             'autocomplete_list' => 'array',
-            'select_dropdown' => 'array',
+            'select_dropdown_multiple' => 'array',
             'select_checkboxes' => 'array',
         ];
     }

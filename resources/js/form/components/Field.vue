@@ -17,7 +17,7 @@
     import Upload from "./fields/upload/Upload.vue";
     import { useParentForm } from "../useParentForm";
 
-    import { FormFieldProps } from "@/form/types";
+    import { FormFieldEmitInputOptions, FormFieldProps } from "@/form/types";
 
     const props = defineProps<FormFieldProps>();
     const emit = defineEmits(['input', 'locale-change']);
@@ -53,13 +53,13 @@
         }
     }
 
-    function onInput(value: FormFieldData['value'], options?: { force?: boolean, error?: string }) {
+    function onInput(value: FormFieldData['value'], options?: FormFieldEmitInputOptions) {
         if(props.field.readOnly && !options?.force) {
             return;
         }
         if(options?.error) {
             onError(options.error);
-        } else {
+        } else if(!options?.preserveError) {
             onClear();
         }
         emit('input', value, options);

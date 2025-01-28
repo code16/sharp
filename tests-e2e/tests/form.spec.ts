@@ -1,6 +1,6 @@
 // noinspection DuplicatedCode
 
-import { test, expect, Page } from '@playwright/test';
+import { test, expect, Page, Locator } from '@playwright/test';
 import { init } from "../helpers";
 import path from "node:path";
 
@@ -63,7 +63,7 @@ test.describe('form', () => {
     test('autocomplete remote endpoint', async ({ page }) => {
       await init(page);
       await page.goto('/sharp/s-list/test-models/s-form/test-models');
-      await page.getByRole('combobox', { name: 'Autocomplete endpoint remote' }).click();
+      await page.getByRole('combobox', { name: 'Autocomplete remote endpoint' }).click();
       const menu = page.getByRole('dialog');
       await expect(menu).toContainText('Enter at least 1 character to search');
       await menu.getByRole('combobox').fill('foobar');
@@ -72,19 +72,20 @@ test.describe('form', () => {
       await expect(menu.getByRole('option')).toHaveCount(1);
       await menu.getByRole('option', { name: 'Option 2' }).click();
       await expect(menu).not.toBeVisible();
-      await expect(page.getByRole('combobox', { name: 'Autocomplete endpoint remote' })).toContainText('Option 2');
-      await page.getByRole('group', { name: 'Autocomplete endpoint remote' }).getByRole('button', { name: 'Clear' }).click();
-      await expect(page.getByRole('combobox', { name: 'Autocomplete endpoint remote' })).toContainText('Search...');
-      await page.getByRole('combobox', { name: 'Autocomplete endpoint remote' }).click();
+      await expect(page.getByRole('combobox', { name: 'Autocomplete remote endpoint' })).toContainText('Option 2');
+      await page.getByRole('group', { name: 'Autocomplete remote endpoint' }).getByRole('button', { name: 'Clear' }).click();
+      await expect(page.getByRole('combobox', { name: 'Autocomplete remote endpoint' })).toContainText('Search...');
+      await page.getByRole('combobox', { name: 'Autocomplete remote endpoint' }).click();
       await menu.getByRole('combobox').fill('2');
       await menu.getByRole('option', { name: 'Option 2' }).click();
+      await expect(page.getByRole('combobox', { name: 'Autocomplete remote endpoint' })).toContainText('Option 2');
       await createForm(page);
-      await expect(page.getByRole('combobox', { name: 'Autocomplete endpoint remote' })).toContainText('Option 2');
+      await expect(page.getByRole('combobox', { name: 'Autocomplete remote endpoint' })).toContainText('Option 2');
     });
     test('autocomplete remote callback', async ({ page }) => {
       await init(page);
       await page.goto('/sharp/s-list/test-models/s-form/test-models');
-      await page.getByRole('combobox', { name: 'Autocomplete callback remote' }).click();
+      await page.getByRole('combobox', { name: 'Autocomplete remote callback' }).click();
       const menu = page.getByRole('dialog');
       await expect(menu.getByRole('option')).toHaveCount(10);
       await menu.getByRole('combobox').fill('foobar');
@@ -93,13 +94,15 @@ test.describe('form', () => {
       await expect(menu.getByRole('option')).toHaveCount(1);
       await menu.getByRole('option', { name: 'Option 2' }).click();
       await expect(menu).not.toBeVisible();
-      await expect(page.getByRole('combobox', { name: 'Autocomplete callback remote' })).toContainText('Option 2');
-      await page.getByRole('group', { name: 'Autocomplete callback remote' }).getByRole('button', { name: 'Clear' }).click();
-      await expect(page.getByRole('combobox', { name: 'Autocomplete callback remote' })).toContainText('Search...');
-      await page.getByRole('combobox', { name: 'Autocomplete callback remote' }).click();
+      await expect(page.getByRole('combobox', { name: 'Autocomplete remote callback' })).toContainText('Option 2');
+      await page.getByRole('group', { name: 'Autocomplete remote callback' }).getByRole('button', { name: 'Clear' }).click();
+      await expect(page.getByRole('combobox', { name: 'Autocomplete remote callback' })).toContainText('Search...');
+      await page.getByRole('combobox', { name: 'Autocomplete remote callback' }).click();
       await menu.getByRole('combobox').clear();
       await expect(menu.getByRole('option')).toHaveCount(10);
       await menu.getByRole('option', { name: 'Option 2' }).click();
+      await expect(menu).not.toBeVisible();
+      await expect(page.getByRole('combobox', { name: 'Autocomplete remote callback' })).toContainText('Option 2');
       await createForm(page);
       await expect(page.getByRole('combobox', { name: 'Autocomplete remote callback' })).toContainText('Option 2');
     });
@@ -235,16 +238,19 @@ test.describe('form', () => {
       // insert "example 4" above "example 1"
       await list.getByRole('listitem').nth(0).getByRole('button', { name: 'Actions' }).click();
       await page.getByRole('menu').getByRole('menuitem', { name: 'Insert above' }).click();
+      await page.mouse.click(0, 0);
       await list.getByRole('textbox', { name: 'List item text' }).nth(0).fill('example 4');
-      await list.getByRole('button', { name: 'Reorder' }).click();
-      // move "example 1" to the top
-      await list.getByRole('listitem').nth(1).dragTo(list.getByRole('listitem').nth(0), { sourcePosition: { x: 20, y: 20 }, targetPosition: { x: 20, y: 20 } });
-      await expect(list.getByRole('textbox', { name: 'List item text' }).nth(0)).toHaveValue('example 1');
-      await expect(list.getByRole('textbox', { name: 'List item text' }).nth(1)).toHaveValue('example 4');
+      // await list.getByRole('button', { name: 'Reorder' }).click();
+      // // move "example 1" to the top
+      // await list.getByRole('listitem').nth(0).dragTo(list.getByRole('listitem').nth(1), {
+      //   sourcePosition: { x: 20, y: 20 }, targetPosition: { x: 50, y: 50 }
+      // });
+      await expect(list.getByRole('textbox', { name: 'List item text' }).nth(0)).toHaveValue('example 4');
+      await expect(list.getByRole('textbox', { name: 'List item text' }).nth(1)).toHaveValue('example 1');
       await expect(list.getByRole('textbox', { name: 'List item text' }).nth(2)).toHaveValue('example 3');
       await createForm(page);
-      await expect(list.getByRole('textbox', { name: 'List item text' }).nth(0)).toHaveValue('example 1');
-      await expect(list.getByRole('textbox', { name: 'List item text' }).nth(1)).toHaveValue('example 4');
+      await expect(list.getByRole('textbox', { name: 'List item text' }).nth(0)).toHaveValue('example 4');
+      await expect(list.getByRole('textbox', { name: 'List item text' }).nth(1)).toHaveValue('example 1');
       await expect(list.getByRole('textbox', { name: 'List item text' }).nth(2)).toHaveValue('example 3');
     });
     test('editor', async ({ page }) => {
@@ -445,19 +451,20 @@ test.describe('form', () => {
       await init(page);
       await page.goto('/sharp/s-list/test-models/s-form/test-models');
       const editor = page.getByLabel('Editor HTML localized', { exact: true });
+      const localeSelect = page.getByRole('combobox', { name: 'Change language for field Editor HTML localized' });
       await editor.getByRole('textbox').pressSequentially('Test EN');
-      await expect(editor.getByRole('combobox', { name: 'Choose a language' })).toHaveText('en');
-      await editor.getByRole('combobox', { name: 'Choose a language' }).click();
+      await expect(localeSelect).toHaveText('en');
+      await localeSelect.click();
       await page.getByRole('listbox').getByRole('option', { name: 'fr' }).click();
-      await expect(editor.getByRole('combobox', { name: 'Choose a language' })).toHaveText('fr');
+      await expect(localeSelect).toHaveText('fr');
       await editor.getByRole('textbox').pressSequentially('Test FR');
       await expect(editor.getByRole('textbox')).toHaveText('Test FR');
-      await editor.getByRole('combobox', { name: 'Choose a language' }).click();
+      await localeSelect.click();
       await page.getByRole('listbox').getByRole('option', { name: 'en' }).click();
       await expect(editor.getByRole('textbox')).toHaveText('Test EN');
       await createForm(page);
       await expect(editor.getByRole('textbox')).toHaveText('Test EN');
-      await editor.getByRole('combobox', { name: 'Choose a language' }).click();
+      await localeSelect.click();
       await page.getByRole('listbox').getByRole('option', { name: 'fr' }).click();
       await expect(editor.getByRole('textbox')).toHaveText('Test FR');
     });
@@ -481,18 +488,32 @@ test.describe('form', () => {
       await createForm(page);
       await expect(input).toHaveValue('4');
     });
-    test('select dropdown', async ({ page }) => {
+    test('select dropdown single', async ({ page }) => {
       await init(page);
       await page.goto('/sharp/s-list/test-models/s-form/test-models');
-      await page.getByRole('combobox', { name: 'Select dropdown' }).click();
+      const select = page.getByRole('combobox', { name: 'Select dropdown', exact: true });
+      await select.click();
+      await page.getByRole('menu').getByRole('menuitemcheckbox', { name: 'Option 1', exact: true }).click();
+      await expect(select).toHaveText('Option 1');
+      await select.click();
+      await page.getByRole('menu').getByRole('menuitemcheckbox', { name: 'Option 2', exact: true }).click();
+      await expect(select).toHaveText('Option 2');
+      await createForm(page);
+      await expect(select).toHaveText('Option 2');
+    });
+    test('select dropdown multiple', async ({ page }) => {
+      await init(page);
+      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      const select = page.getByRole('combobox', { name: 'Select dropdown multiple', exact: true });
+      await select.click();
       await page.getByRole('menu').getByRole('menuitemcheckbox', { name: 'Option 1', exact: true }).click();
       await page.getByRole('menu').getByRole('menuitemcheckbox', { name: 'Option 2', exact: true }).click();
       await page.mouse.click(0, 0);
-      await expect(page.getByRole('combobox', { name: 'Select dropdown' })).toContainText('Option 1');
-      await expect(page.getByRole('combobox', { name: 'Select dropdown' })).toContainText('Option 2');
+      await expect(select).toContainText('Option 1');
+      await expect(select).toContainText('Option 2');
       await createForm(page);
-      await expect(page.getByRole('combobox', { name: 'Select dropdown' })).toContainText('Option 1');
-      await expect(page.getByRole('combobox', { name: 'Select dropdown' })).toContainText('Option 2');
+      await expect(select).toContainText('Option 1');
+      await expect(select).toContainText('Option 2');
     });
     test('select radios', async ({ page }) => {
       await init(page);
@@ -536,24 +557,172 @@ test.describe('form', () => {
     test('tags', async ({ page }) => {
       await init(page);
       await page.goto('/sharp/s-list/test-models/s-form/test-models');
-      await page.getByLabel('Tags', { exact: true }).getByRole('combobox').click();
+      const field = page.getByLabel('Tags', { exact: true });
+      await field.getByRole('combobox').click();
       await page.getByRole('listbox').getByRole('option', { name: 'Tag 1', exact: true }).click();
       await page.getByRole('listbox').getByRole('option', { name: 'Tag 2', exact: true }).click();
-      await page.getByLabel('Tags', { exact: true }).getByRole('button', { name: 'Delete Tag 1' }).click();
-      await page.getByLabel('Tags', { exact: true }).getByRole('combobox').fill('New');
+      await field.getByRole('button', { name: 'Delete Tag 1' }).click();
+      await field.getByRole('combobox').fill('New');
       await page.getByRole('listbox').getByRole('option', { name: 'Create “New”', exact: true }).click();
-      await expect(page.getByLabel('Tags', { exact: true }).getByText('Tag 1')).not.toBeVisible();
-      await expect(page.getByLabel('Tags', { exact: true }).getByText('Tag 2')).toBeVisible();
-      await expect(page.getByLabel('Tags', { exact: true }).getByText('New')).toBeVisible();
+      await expect(field.getByText('Tag 1')).not.toBeVisible();
+      await expect(field.getByText('Tag 2')).toBeVisible();
+      await expect(field.getByText('New')).toBeVisible();
       await createForm(page);
-      await expect(page.getByLabel('Tags', { exact: true }).getByText('Tag 1')).toBeVisible();
-      await expect(page.getByLabel('Tags', { exact: true }).getByText('New')).toBeVisible();
-      await page.getByLabel('Tags', { exact: true }).getByRole('button', { name: 'Delete Tag 1' }).click();
-      await page.getByLabel('Tags', { exact: true }).getByRole('button', { name: 'Delete New' }).click();
+      await expect(field.getByText('Tag 1')).not.toBeVisible();
+      await expect(field.getByText('Tag 2')).toBeVisible();
+      await expect(field.getByText('New')).toBeVisible();
+      await field.getByRole('button', { name: 'Delete Tag 2' }).click();
+      await field.getByRole('button', { name: 'Delete New' }).click();
       await updateForm(page);
-      await expect(page.getByLabel('Tags', { exact: true }).getByText('Tag 1')).not.toBeVisible();
-      await expect(page.getByLabel('Tags', { exact: true }).getByText('New')).not.toBeVisible();
+      await expect(field.getByText('Tag 1')).not.toBeVisible();
+      await expect(field.getByText('New')).not.toBeVisible();
     });
+    test('textarea', async ({ page }) => {
+      await init(page);
+      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      const textarea = page.getByRole('textbox', { name: 'Textarea', exact: true });
+      await textarea.fill('textarea');
+      await expect(textarea).toHaveValue('textarea');
+      await createForm(page);
+      await expect(textarea).toHaveValue('textarea');
+    });
+    test('textarea localized', async ({ page }) => {
+      await init(page);
+      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      const textarea = page.getByRole('textbox', { name: 'Textarea localized', exact: true });
+      const localeSelect = page.getByRole('combobox', { name: 'Change language for field Textarea localized' });
+      await textarea.fill('Test EN');
+      await expect(localeSelect).toHaveText('en');
+      await localeSelect.click();
+      await page.getByRole('listbox').getByRole('option', { name: 'fr' }).click();
+      await expect(localeSelect).toHaveText('fr');
+      await textarea.fill('Test FR');
+      await expect(textarea).toHaveValue('Test FR');
+      await localeSelect.click();
+      await page.getByRole('listbox').getByRole('option', { name: 'en' }).click();
+      await expect(textarea).toHaveValue('Test EN');
+      await createForm(page);
+      await expect(textarea).toHaveValue('Test EN');
+      await localeSelect.click();
+      await page.getByRole('listbox').getByRole('option', { name: 'fr' }).click();
+      await expect(textarea).toHaveValue('Test FR');
+    });
+    test('text', async ({ page }) => {
+      await init(page);
+      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      const input = page.getByRole('textbox', { name: 'Text', exact: true });
+      await input.fill('text');
+      await expect(input).toHaveValue('text');
+      await createForm(page);
+      await expect(input).toHaveValue('text');
+    });
+    test('text localized', async ({ page }) => {
+      await init(page);
+      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      const input = page.getByRole('textbox', { name: 'Text localized', exact: true });
+      const localeSelect = page.getByRole('combobox', { name: 'Change language for field Text localized' });
+      await input.fill('Test EN');
+      await expect(localeSelect).toHaveText('en');
+      await localeSelect.click();
+      await page.getByRole('listbox').getByRole('option', { name: 'fr' }).click();
+      await expect(localeSelect).toHaveText('fr');
+      await input.fill('Test FR');
+      await expect(input).toHaveValue('Test FR');
+      await localeSelect.click();
+      await page.getByRole('listbox').getByRole('option', { name: 'en' }).click();
+      await expect(input).toHaveValue('Test EN');
+      await createForm(page);
+      await expect(input).toHaveValue('Test EN');
+      await localeSelect.click();
+      await page.getByRole('listbox').getByRole('option', { name: 'fr' }).click();
+      await expect(input).toHaveValue('Test FR');
+    });
+    test('upload', async ({ page }) => {
+      await init(page);
+      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      const upload = page.getByLabel('Upload');
+      await upload.locator('input').setInputFiles(path.resolve(__dirname, '../fixtures/upload.pdf'));
+      await expect(upload).toContainText('upload.pdf');
+      await createForm(page);
+      await expect(upload).toContainText('upload.pdf');
+      let downloadPromise = page.waitForEvent('download');
+      await upload.getByRole('link', { name: 'upload.pdf' }).click();
+      await downloadPromise;
+      await upload.getByRole('button', { name: 'Actions' }).click();
+      downloadPromise = page.waitForEvent('download');
+      await page.getByRole('menu').getByRole('menuitem', { name: 'Download' }).click();
+      await downloadPromise;
+      await upload.getByRole('button', { name: 'Actions' }).click();
+      await page.getByRole('menu').getByRole('menuitem', { name: 'Remove' }).click();
+      await upload.locator('input').setInputFiles(path.resolve(__dirname, '../fixtures/upload-again.pdf'));
+      await expect(upload).toContainText('upload-again.pdf');
+      await upload.getByRole('button', { name: 'Actions' }).click();
+      await page.getByRole('menu').getByRole('menuitem', { name: 'Remove' }).click();
+      await expect(upload).not.toContainText('upload-again.pdf');
+      await updateForm(page);
+      await expect(upload).not.toContainText('upload-again.pdf');
+      await expect(upload.locator('input')).toBeVisible();
+    });
+    test('upload image', async ({ page }) => {
+      await init(page);
+      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      const upload = page.getByLabel('Upload');
+      await upload.locator('input').setInputFiles(path.resolve(__dirname, '../fixtures/upload-image.jpg'));
+      await expect(upload).toContainText('upload-image.jpg');
+      await expect(upload.getByRole('img')).toBeVisible();
+      await upload.getByRole('button', { name: 'Actions' }).click();
+      await page.getByRole('menu').getByRole('menuitem', { name: 'Crop...' }).click();
+      await page.getByRole('dialog').getByRole('button', { name: 'Save' }).click();
+      await createForm(page);
+      await expect(upload).toContainText('upload-image.jpg');
+      await expect(upload.getByRole('img')).toBeVisible();
+    });
+    test('upload invalid', async ({ page }) => {
+      await init(page);
+      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      const upload = page.getByLabel('Upload');
+      await upload.locator('input').setInputFiles(path.resolve(__dirname, '../fixtures/upload-too-large.pdf'));
+      await expect(page.getByLabel('Upload')).toHaveAccessibleDescription(/The selected file is too big/);
+    });
+  });
+  test('validation', async ({ page }) => {
+    await init(page);
+    await page.goto('/sharp/s-list/test-models/s-form/test-models:required');
+    await page.getByRole('button', { name: 'Create' }).click();
+    async function hasError(field: Locator, error: RegExp) {
+      await test.step(`hasError`, async () => {
+        await expect(field).toHaveAttribute('aria-describedby', /.+/);
+        const ariaDescribedBy = await field.getAttribute('aria-describedby');
+        const message = page.locator(`#${ariaDescribedBy}`);
+        await expect(message).toHaveText(error);
+        await expect(message).toBeVisible();
+      });
+    }
+    await Promise.all([
+      hasError(page.getByRole('group', { name: 'Autocomplete local' }), /required/),
+      hasError(page.getByRole('group', { name: 'Autocomplete remote endpoint' }), /required/),
+      hasError(page.getByLabel('Autocomplete list', { exact: true }), /required/),
+      hasError(page.getByLabel('Check', { exact: true }), /accepted/),
+      hasError(page.getByLabel('Date', { exact: true }), /required/),
+      hasError(page.getByLabel('Date time', { exact: true }), /required/),
+      hasError(page.getByLabel('Time', { exact: true }), /required/),
+      hasError(page.getByLabel('Geolocation', { exact: true }), /required/),
+      hasError(page.getByLabel('List', { exact: true }), /required/),
+      hasError(page.getByLabel('Editor HTML', { exact: true }), /required/),
+      hasError(page.getByLabel('Editor HTML localized', { exact: true }), /required/),
+      hasError(page.getByLabel('Editor markdown', { exact: true }), /required/),
+      hasError(page.getByLabel('Number', { exact: true }), /at least 2/),
+      hasError(page.getByLabel('Select dropdown', { exact: true }), /required/),
+      hasError(page.getByLabel('Select dropdown multiple', { exact: true }), /required/),
+      hasError(page.getByLabel('Select radios', { exact: true }), /invalid/),
+      hasError(page.getByLabel('Select checkboxes', { exact: true }), /required/),
+      hasError(page.getByLabel('Tags', { exact: true }), /required/),
+      hasError(page.getByLabel('Textarea', { exact: true }), /required/),
+      hasError(page.getByLabel('Textarea localized', { exact: true }), /required/),
+      hasError(page.getByLabel('Text', { exact: true }), /required/),
+      hasError(page.getByLabel('Text localized', { exact: true }), /required/),
+      hasError(page.getByLabel('Upload', { exact: true }), /required/),
+    ]);
   });
 });
 

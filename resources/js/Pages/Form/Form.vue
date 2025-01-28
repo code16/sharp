@@ -34,19 +34,18 @@
     }, { deep: true });
 
     function submit() {
-        const { parentUri, entityKey, instanceId } = route().params;
-        const onStart = () => { loading.value = true };
-        const onFinish = () => { loading.value = false };
-        const onError = () => {
-            form.errors = props.errors;
-            showErrorAlert.value = true;
-            errorAlertMessage.value = props.errors.error as string | null;
-        }
-
         router.post(
             props.endpointUrl,
             form.serializedData,
-            { onStart, onFinish, onError }
+            {
+                onStart: () => { loading.value = true },
+                onFinish: () => { loading.value = false },
+                onError: () => {
+                    form.errors = props.errors;
+                    showErrorAlert.value = true;
+                    errorAlertMessage.value = props.errors.error as string | null;
+                }
+            },
         );
     }
 

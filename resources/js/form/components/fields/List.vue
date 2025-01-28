@@ -77,12 +77,10 @@
     const errorIndex = Symbol('errorIndex') as unknown as string;
 
     watch(() => form.errors, () => {
-        emit('input', props.value?.map(((item, index) => ({ ...item, [errorIndex]: index }))));
+        emit('input', props.value?.map(((item, index) => ({ ...item, [errorIndex]: index }))), { preserveError: true });
     });
 
     emit('input', props.value?.map(item => ({ ...item, [itemKey]: itemKeyIndex++ })), { force: true });
-
-    watch(form.meta, () => console.log(form.meta), { deep: true });
 
     watchArray(() => props.value ?? [], async (newList, oldList, added) => {
         if(!added.length) {

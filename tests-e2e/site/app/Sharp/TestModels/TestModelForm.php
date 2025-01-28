@@ -5,6 +5,7 @@ namespace App\Sharp\TestModels;
 use App\Models\TestModel;
 use App\Models\TestTag;
 use App\Sharp\Embeds\TestEmbed;
+use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteListField;
@@ -44,7 +45,7 @@ class TestModelForm extends SharpForm
             )
             ->addField(
                 SharpFormAutocompleteRemoteField::make('autocomplete_remote')
-                    ->setLabel('Autocomplete endpoint remote')
+                    ->setLabel('Autocomplete remote endpoint')
                     ->setRemoteSearchAttribute('query')
                     ->setListItemTemplate('{{ $label }}')
                     ->setResultItemTemplate('{{ $label }} ({{ $id }})')
@@ -52,7 +53,7 @@ class TestModelForm extends SharpForm
             )
             ->addField(
                 SharpFormAutocompleteRemoteField::make('autocomplete_remote2')
-                    ->setLabel('Autocomplete callback remote')
+                    ->setLabel('Autocomplete remote callback')
                     ->setRemoteSearchAttribute('query')
                     ->setListItemTemplate('{{ $label }}')
                     ->setResultItemTemplate('{{ $label }} ({{ $id }})')
@@ -230,13 +231,18 @@ class TestModelForm extends SharpForm
             ->addField(
                 SharpFormSelectField::make('select_dropdown', static::options())
                     ->setLabel('Select dropdown')
-                    ->allowSelectAll()
-//                    ->setClearable()
-//                    ->setMultiple()
+                    ->setClearable()
                     ->setDisplayAsDropdown(),
             )
             ->addField(
-                SharpFormSelectField::make('select_radios', static::options())
+                SharpFormSelectField::make('select_dropdown_multiple', static::options())
+                    ->setLabel('Select dropdown multiple')
+                    ->allowSelectAll()
+                    ->setMultiple()
+                    ->setDisplayAsDropdown(),
+            )
+            ->addField(
+                SharpFormSelectField::make('select_radio', static::options())
                     ->setLabel('Select radios')
                     ->setDisplayAsList(),
             )
@@ -279,7 +285,7 @@ class TestModelForm extends SharpForm
             ->addField(
                 SharpFormUploadField::make('upload')
                     ->setLabel('Upload')
-                    ->setMaxFileSize(5)
+                    ->setMaxFileSize(2)
                     ->setImageCropRatio('1:1')
                     ->setStorageDisk('local')
                     ->setStorageBasePath('data'),
@@ -314,7 +320,8 @@ class TestModelForm extends SharpForm
                 $column
                     ->withField('number')
                     ->withField('select_dropdown')
-                    ->withField('select_radios')
+                    ->withField('select_dropdown_multiple')
+                    ->withField('select_radio')
                     ->withField('select_checkboxes')
                     ->withField('tags')
                     ->withField('textarea')
@@ -341,6 +348,7 @@ class TestModelForm extends SharpForm
             ->setCustomTransformer('autocomplete_remote2', function ($value) {
                 return $value ? ['id' => $value, 'label' => static::options()[$value]] : null;
             })
+            ->setCustomTransformer('upload', new SharpUploadModelFormAttributeTransformer())
             ->transform(TestModel::with('tags')->findOrFail($id)->fill([
                 'html' => ['name' => 'John'],
             ]));

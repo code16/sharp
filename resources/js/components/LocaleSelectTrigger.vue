@@ -5,7 +5,7 @@
 </script>
 
 <template>
-    <SelectTrigger class="w-auto h-8" :aria-label="__('sharp::action_bar.locale_selector.label')">
+    <SelectTrigger class="w-auto h-8" :aria-label="$attrs['aria-label'] ?? __('sharp::action_bar.locale_selector.label')">
         <Languages class="size-3 mr-2.5 opacity-50" />
         <SelectValue class="uppercase text-xs" placeholder="-" />
     </SelectTrigger>

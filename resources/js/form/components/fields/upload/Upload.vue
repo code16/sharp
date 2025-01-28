@@ -399,7 +399,7 @@
                                         '--ratio': field.imageCropRatio ? `${field.imageCropRatio[0]} / ${field.imageCropRatio[1]}` : null
                                     }"
                                     :src="transformedImg ?? value?.thumbnail ?? uppyFile.preview"
-                                    alt=""
+                                    :alt="value?.name ?? uppyFile?.name"
                                 >
                                 <template v-if="isEditable && !props.field.readOnly">
                                     <button class="absolute flex justify-center items-center gap-2 inset-0 bg-black/50 transition text-white text-xs font-medium opacity-0 group-hover/img:opacity-100" tabindex="-1" @click="onEdit">
@@ -457,7 +457,7 @@
                         </div>
                         <DropdownMenu :modal="false">
                             <DropdownMenuTrigger as-child>
-                                <Button class="shrink-0 self-center" variant="ghost" size="icon">
+                                <Button class="shrink-0 self-center" variant="ghost" size="icon" :aria-label="__('sharp::form.editor.extension_node.dropdown_button.aria_label')">
                                     <MoreHorizontal class="w-4 h-4" />
                                 </Button>
                             </DropdownMenuTrigger>

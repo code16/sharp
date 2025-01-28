@@ -81,7 +81,10 @@
                                 :id="`${id}-label`"
                                 :as="fieldGroup ? 'div' : 'label'"
                                 class="leading-4 cursor-default"
-                                :class="{ 'text-destructive dark:text-foreground': form.fieldHasError(field, fieldErrorKey) }"
+                                :class="{
+                                    'text-destructive dark:text-foreground': form.fieldHasError(field, fieldErrorKey),
+                                }"
+                                :style="{ '--destructive': '0deg 72.22% 50.59%' }"
                                 :for="id"
                                 @click="$emit('label-click')"
                             >
@@ -96,10 +99,13 @@
                     </template>
                     <template v-if="'localized' in field && field.localized">
                         <Select :model-value="props.locale" @update:model-value="emit('locale-change', $event as string)">
-                            <LocaleSelectTrigger class="ml-auto w-auto border-transparent hover:border-input aria-expanded:border-input -my-2" />
+                            <LocaleSelectTrigger
+                                class="ml-auto w-auto border-transparent hover:border-input aria-expanded:border-input -my-2"
+                                :aria-label="__('sharp::form.field_locale_selector.aria_label', { field_label:field.label })"
+                            />
                             <SelectContent>
                                 <template v-for="itemLocale in form.locales" :key="itemLocale">
-                                    <SelectItem  :value="itemLocale">
+                                    <SelectItem :value="itemLocale">
                                         <div class="flex items-center">
                                             <span class="uppercase text-xs">{{ itemLocale }}</span>
                                             <template v-if="form.fieldLocalesContainingError(fieldErrorKey).includes(itemLocale)">
@@ -159,7 +165,7 @@
                     </template>
 
                     <template v-if="form.fieldHasError(field, fieldErrorKey)">
-                        <div :id="`${id}-error`" class="text-sm font-medium text-destructive leading-4">
+                        <div :id="`${id}-error`" class="mb-1 text-sm text-destructive leading-4">
                             <span class="dark:bg-destructive dark:text-destructive-foreground dark:py-1 dark:px-2 dark:rounded-md">
                                 <template v-if="form.fieldError(fieldErrorKey)">
                                     {{ form.fieldError(fieldErrorKey) }}
