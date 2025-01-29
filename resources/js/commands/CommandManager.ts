@@ -143,6 +143,7 @@ export class CommandManager {
                 await this.reopenCurrentCommand();
                 return;
             }
+            this.state.currentCommandEndpoints.onSuccess?.();
             this.finish();
             return;
         }
@@ -152,6 +153,9 @@ export class CommandManager {
         if(data.action !== 'step') {
             // close form modal
             this.state.currentCommandForm = null;
+            if(!this.state.currentCommandShouldReopen) {
+                this.state.currentCommandEndpoints.onSuccess?.();
+            }
         }
 
         await this.handleCommandResponse(data);

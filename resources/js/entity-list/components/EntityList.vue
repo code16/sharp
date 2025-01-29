@@ -223,9 +223,10 @@
                     .map(([instanceId, selected]) => instanceId),
             },
             entityKey,
+            onSuccess() {
+                selectedItems.value = null;
+            },
         });
-
-        selectedItems.value = null;
     }
 
     async function onDelete(instanceId: InstanceId) {
