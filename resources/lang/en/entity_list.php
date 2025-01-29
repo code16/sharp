@@ -4,6 +4,7 @@ return [
     'empty_text' => 'No results found',
     'filter.search_placeholder' => 'Search',
     'commands.entity.label' => 'Actions',
+    'commands.entity.label.selected' => 'Actions (:count selected)',
     'commands.instance.label' => 'Actions',
     'commands.needs_selection_message' => 'This action requires you to select relevant items first',
     'quick_creation_modal.create_and_reopen' => 'Create & create another',

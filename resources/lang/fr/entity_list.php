@@ -4,6 +4,7 @@ return [
     'empty_text' => 'Aucun résultat',
     'filter.search_placeholder' => 'Rechercher',
     'commands.entity.label' => 'Actions',
+    'commands.entity.label.selected' => 'Actions (:count sélectionné)|Actions (:count sélectionnés)',
     'commands.instance.label' => 'Actions',
     'commands.needs_selection_message' => 'Cette action nécessite que vous sélectionniez d’abord des éléments concernés',
     'quick_creation_modal.create_and_reopen' => 'Créer & créer un nouveau',

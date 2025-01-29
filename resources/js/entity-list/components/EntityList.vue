@@ -383,10 +383,15 @@
                                     <DropdownMenu>
                                         <DropdownMenuTrigger as-child>
                                             <Button class="h-8" :variant="selecting ? 'default' : 'outline'" size="sm" :disabled="reordering">
-                                                {{ __('sharp::entity_list.commands.entity.label') }}
-                                                <template v-if="selecting">
-                                                    ({{ Object.values(selectedItems).filter(Boolean).length }} selected)
-                                                </template>
+                                                {{
+                                                    trans_choice(
+                                                        'sharp::entity_list.commands.entity.label.selected',
+                                                        Object.values(selectedItems).filter(Boolean).length,
+                                                        {
+                                                            count: Object.values(selectedItems).filter(Boolean).length,
+                                                        }
+                                                    )
+                                                }}
                                                 <DropdownChevronDown />
                                             </Button>
                                         </DropdownMenuTrigger>
