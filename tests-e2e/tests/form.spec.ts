@@ -698,31 +698,31 @@ test.describe('form', () => {
         await expect(message).toBeVisible();
       });
     }
-    await Promise.all([
-      hasError(page.getByRole('group', { name: 'Autocomplete local' }), /required/),
-      hasError(page.getByRole('group', { name: 'Autocomplete remote endpoint' }), /required/),
-      hasError(page.getByLabel('Autocomplete list', { exact: true }), /required/),
-      hasError(page.getByLabel('Check', { exact: true }), /accepted/),
-      hasError(page.getByLabel('Date', { exact: true }), /required/),
-      hasError(page.getByLabel('Date time', { exact: true }), /required/),
-      hasError(page.getByLabel('Time', { exact: true }), /required/),
-      hasError(page.getByLabel('Geolocation', { exact: true }), /required/),
-      hasError(page.getByLabel('List', { exact: true }), /required/),
-      hasError(page.getByLabel('Editor HTML', { exact: true }), /required/),
-      hasError(page.getByLabel('Editor HTML localized', { exact: true }), /required/),
-      hasError(page.getByLabel('Editor markdown', { exact: true }), /required/),
-      hasError(page.getByLabel('Number', { exact: true }), /at least 2/),
-      hasError(page.getByLabel('Select dropdown', { exact: true }), /required/),
-      hasError(page.getByLabel('Select dropdown multiple', { exact: true }), /required/),
-      hasError(page.getByLabel('Select radios', { exact: true }), /invalid/),
-      hasError(page.getByLabel('Select checkboxes', { exact: true }), /required/),
-      hasError(page.getByLabel('Tags', { exact: true }), /required/),
-      hasError(page.getByLabel('Textarea', { exact: true }), /required/),
-      hasError(page.getByLabel('Textarea localized', { exact: true }), /required/),
-      hasError(page.getByLabel('Text', { exact: true }), /required/),
-      hasError(page.getByLabel('Text localized', { exact: true }), /required/),
-      hasError(page.getByLabel('Upload', { exact: true }), /required/),
-    ]);
+    // await Promise.all([
+      await hasError(page.getByRole('group', { name: 'Autocomplete local' }), /required/);
+      await hasError(page.getByRole('group', { name: 'Autocomplete remote endpoint' }), /required/);
+      await hasError(page.getByLabel('Autocomplete list', { exact: true }), /required/);
+      await hasError(page.getByLabel('Check', { exact: true }), /accepted/);
+      await hasError(page.getByLabel('Date', { exact: true }), /required/);
+      await hasError(page.getByLabel('Date time', { exact: true }), /required/);
+      await hasError(page.getByLabel('Time', { exact: true }), /required/);
+      await hasError(page.getByLabel('Geolocation', { exact: true }), /required/);
+      await hasError(page.getByLabel('List', { exact: true }), /required/);
+      await hasError(page.getByLabel('Editor HTML', { exact: true }), /required/);
+      await hasError(page.getByLabel('Editor HTML localized', { exact: true }), /required/);
+      await hasError(page.getByLabel('Editor markdown', { exact: true }), /required/);
+      await hasError(page.getByLabel('Number', { exact: true }), /at least 2/);
+      await hasError(page.getByLabel('Select dropdown', { exact: true }), /required/);
+      await hasError(page.getByLabel('Select dropdown multiple', { exact: true }), /required/);
+      await hasError(page.getByLabel('Select radios', { exact: true }), /invalid/);
+      await hasError(page.getByLabel('Select checkboxes', { exact: true }), /required/);
+      await hasError(page.getByLabel('Tags', { exact: true }), /required/);
+      await hasError(page.getByLabel('Textarea', { exact: true }), /required/);
+      await hasError(page.getByLabel('Textarea localized', { exact: true }), /required/);
+      await hasError(page.getByLabel('Text', { exact: true }), /required/);
+      await hasError(page.getByLabel('Text localized', { exact: true }), /required/);
+      await hasError(page.getByLabel('Upload', { exact: true }), /required/);
+    // ]);
   });
 });
 
