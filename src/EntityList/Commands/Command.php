@@ -75,7 +75,7 @@ abstract class Command
     protected function html(string $htmlContent): array
     {
         return [
-            'action' => 'view',
+            'action' => CommandAction::View->value,
             'html' => $htmlContent,
         ];
     }
