@@ -6,6 +6,7 @@ use Code16\Sharp\Tests\Fixtures\User;
 
 beforeEach(function () {
     sharp()->config()->addEntity('person', PersonEntity::class);
+    sharp()->config()->disableImpersonation();
 });
 
 function setTestAuthGuard(): void
