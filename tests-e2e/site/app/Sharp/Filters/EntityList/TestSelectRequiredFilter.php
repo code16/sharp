@@ -31,6 +31,6 @@ class TestSelectRequiredFilter extends EntityListSelectRequiredFilter
 
     public function defaultValue(): mixed
     {
-        return 1;
+        return 7;
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Sharp\TestModels;
 
 use App\Models\TestModel;
+use Code16\Sharp\Show\Fields\SharpShowEntityListField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
 use Code16\Sharp\Show\Layout\ShowLayout;
 use Code16\Sharp\Show\Layout\ShowLayoutColumn;
@@ -18,6 +19,10 @@ class TestModelShow extends SharpShow
             ->addField(
                 SharpShowTextField::make('text')
                     ->setLabel('Text')
+            )
+            ->addField(
+                SharpShowEntityListField::make('test-models')
+                ->setLabel('Test models')
             );
     }
 
@@ -29,7 +34,8 @@ class TestModelShow extends SharpShow
                     ->addColumn(12, function (ShowLayoutColumn $column) {
                         $column->withField('text');
                     });
-            });
+            })
+            ->addEntityListSection('test-models');
     }
 
     public function buildShowConfig(): void {}

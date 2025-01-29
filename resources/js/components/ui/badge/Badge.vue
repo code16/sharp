@@ -2,11 +2,11 @@
 import type { HTMLAttributes } from 'vue'
 import { type BadgeVariants, badgeVariants } from '.'
 import { cn } from '@/utils/cn'
-import { Primitive } from "reka-ui";
+import { Primitive, PrimitiveProps } from "reka-ui";
 
 const props = defineProps<{
   variant?: BadgeVariants['variant']
-  class?: HTMLAttributes['class']
+  class?: HTMLAttributes['class'],
 }>()
 </script>
 

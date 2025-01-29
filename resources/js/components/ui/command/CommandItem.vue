@@ -5,7 +5,9 @@ import { ComboboxItem, useForwardPropsEmits } from 'reka-ui'
 import { cn } from '@/utils/cn'
     import { vScrollIntoViewOverride } from "@/directives/scroll-into-view";
 
-    const props = defineProps<ComboboxItemProps & { class?: HTMLAttributes['class'], autofocus?: false }>()
+    const props = withDefaults(defineProps<ComboboxItemProps & { class?: HTMLAttributes['class'], autofocus?: false }>(), {
+        autofocus: undefined,
+    })
 const emits = defineEmits<ComboboxItemEmits>()
 
 const delegatedProps = computed(() => {

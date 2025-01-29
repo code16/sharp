@@ -383,15 +383,20 @@
                                     <DropdownMenu>
                                         <DropdownMenuTrigger as-child>
                                             <Button class="h-8" :variant="selecting ? 'default' : 'outline'" size="sm" :disabled="reordering">
-                                                {{
-                                                    trans_choice(
-                                                        'sharp::entity_list.commands.entity.label.selected',
-                                                        Object.values(selectedItems).filter(Boolean).length,
-                                                        {
-                                                            count: Object.values(selectedItems).filter(Boolean).length,
-                                                        }
-                                                    )
-                                                }}
+                                                <template v-if="selecting">
+                                                    {{
+                                                        trans_choice(
+                                                            'sharp::entity_list.commands.entity.label.selected',
+                                                            Object.values(selectedItems).filter(Boolean).length,
+                                                            {
+                                                                count: Object.values(selectedItems).filter(Boolean).length,
+                                                            }
+                                                        )
+                                                    }}
+                                                </template>
+                                                <template v-else>
+                                                    {{ __('sharp::entity_list.commands.entity.label') }}
+                                                </template>
                                                 <DropdownChevronDown />
                                             </Button>
                                         </DropdownMenuTrigger>

@@ -80,7 +80,7 @@
                     :placeholder="config('sharp.search.placeholder') ?? __('sharp::menu.global_search.default_placeholder')"
                 />
                 <template v-if="resultSets.length">
-                    <CommandList>
+                    <CommandList class="scroll-py-12">
                         <template v-for="resultSet in resultSets?.filter(set =>
                             set.resultLinks.length
                             || !set.hideWhenEmpty

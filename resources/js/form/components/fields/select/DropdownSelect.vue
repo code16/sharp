@@ -45,7 +45,7 @@
 </script>
 
 <template>
-    <FormFieldLayout v-bind="props" @label-click="open = true" v-slot="{ ariaLabelledBy }">
+    <FormFieldLayout v-bind="props" @label-click="open = true" v-slot="{ ariaLabelledBy, ariaDescribedBy }">
         <DropdownMenu v-model:open="open" :modal="false">
             <DropdownMenuTrigger as-child>
                 <Button
@@ -55,6 +55,7 @@
                     role="combobox"
                     aria-autocomplete="none"
                     :aria-labelledby="ariaLabelledBy"
+                    :aria-describedby="ariaDescribedBy"
                     :disabled="field.readOnly"
                 >
                     <template v-if="Array.isArray(value) ? value.length : value != null">
