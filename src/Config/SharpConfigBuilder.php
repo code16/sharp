@@ -253,8 +253,20 @@ class SharpConfigBuilder
         return $this;
     }
 
-    public function enableImpersonation(SharpImpersonationHandler|string|null $handler = null): self
+    public function enableImpersonation(SharpImpersonationHandler|Closure|string|null $handler = null): self
     {
+        if ($handler instanceof Closure) {
+            $handler = new class($handler) extends SharpImpersonationHandler
+            {
+                public function __construct(private readonly Closure $callback) {}
+
+                public function getUsers(): array
+                {
+                    return call_user_func($this->callback);
+                }
+            };
+        }
+
         $this->config['auth']['impersonate'] = [
             'enabled' => true,
             'handler' => $handler

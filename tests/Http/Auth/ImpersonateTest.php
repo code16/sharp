@@ -34,6 +34,29 @@ it('redirects to impersonation page if enabled and guest', function () {
         ->assertRedirect(route('code16.sharp.impersonate'));
 });
 
+it('redirects to impersonation page if authenticated as non admin user', function () {
+    migrateUsersTable();
+    \Illuminate\Support\Facades\Gate::define('viewSharp', fn ($user) => false);
+
+    sharp()->config()->enableImpersonation(new class() extends SharpImpersonationHandler
+    {
+        public function enabled(): bool
+        {
+            return true;
+        }
+
+        public function getUsers(): array
+        {
+            return [];
+        }
+    });
+
+    $this
+        ->actingAs(User::create(['id' => 1, 'name' => 'Marie Curie']))
+        ->get(route('code16.sharp.home'))
+        ->assertRedirect(route('code16.sharp.impersonate'));
+});
+
 it('displays impersonatable users from a custom handler', function () {
     $users = [
         1 => 'Marie Curie',
@@ -61,19 +84,26 @@ it('displays impersonatable users from a custom handler', function () {
         );
 });
 
+it('displays impersonatable users from a closure', function () {
+    $users = [
+        1 => 'Marie Curie',
+        2 => 'Albert Einstein',
+    ];
+
+    sharp()->config()->enableImpersonation(fn () => $users);
+
+    $this->get(route('code16.sharp.impersonate'))
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('impersonateUsers', $users)
+        );
+});
+
 it('allow to use default eloquent implementation handler', function () {
     migrateUsersTable();
 
     sharp()->config()
         ->setLoginAttributes(login: 'name')
-        // We override the default handler just to skip the enabled() check
-        ->enableImpersonation(new class() extends SharpDefaultEloquentImpersonationHandler
-        {
-            public function enabled(): bool
-            {
-                return true;
-            }
-        });
+        ->enableImpersonation();
 
     User::create(['id' => 10, 'name' => 'Marie Curie']);
     User::create(['id' => 20, 'name' => 'Albert Einstein']);
@@ -104,13 +134,6 @@ it('does not display impersonatable users if impersonation is not enabled', func
     });
 
     sharp()->config()->disableImpersonation();
-    $this->get(route('code16.sharp.impersonate'))
-        ->assertInertia(fn (Assert $page) => $page
-            ->where('impersonateUsers', null)
-        );
-
-    // Even if the handler is enabled, since the env is not "local", it should not display the impersonation
-    sharp()->config()->enableImpersonation();
     $this->get(route('code16.sharp.impersonate'))
         ->assertInertia(fn (Assert $page) => $page
             ->where('impersonateUsers', null)
