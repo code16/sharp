@@ -555,7 +555,7 @@ test.describe('form', () => {
       await expect(page.getByLabel('Select checkboxes').getByRole('checkbox', { name: 'Select all', exact: true })).not.toBeChecked();
     });
     test('tags', async ({ page }) => {
-      await init(page);
+      await init(page, { seed: { tags: true } });
       await page.goto('/sharp/s-list/test-models/s-form/test-models');
       const field = page.getByLabel('Tags', { exact: true });
       await field.getByRole('combobox').click();

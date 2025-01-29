@@ -14,8 +14,11 @@ class SharpServiceProvider extends SharpAppServiceProvider
         $config
             ->setName('E2E')
             ->setSharpMenu(SharpMenu::class)
-            ->addEntity('test-models', TestModelEntity::class)
-            ->enableImpersonation();
+            ->addEntity('test-models', TestModelEntity::class);
+
+        if(env('SHARP_ENABLE_IMPERSONATION')) {
+            $config->enableImpersonation();
+        }
     }
 
     protected function declareAccessGate(): void

@@ -19,6 +19,7 @@
         "spatie/laravel-db-snapshots": "^2.6",
         "spatie/laravel-ray": "^1.37",
         "spatie/laravel-translatable": "^6.8",
+        "spatie/laravel-typescript-transformer": "^2.5",
         "tightenco/ziggy": "^2.4"
     },
     "require-dev": {

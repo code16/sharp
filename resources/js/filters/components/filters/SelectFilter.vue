@@ -105,6 +105,7 @@
                                 <CommandItem
                                     class="pr-6"
                                     :value="selectValue"
+                                    :aria-selected="isSelected(selectValue)"
                                     @select="onSelect(selectValue)"
                                 >
                                     <template v-if="filter.multiple">

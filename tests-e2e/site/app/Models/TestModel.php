@@ -25,6 +25,7 @@ class TestModel extends Model
     protected function casts(): array
     {
         return [
+            'check' => 'bool',
             'date' => 'date',
             'date_time' => 'datetime',
             'list' => 'array',
