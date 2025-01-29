@@ -575,6 +575,7 @@
                                                         <Tooltip :delay-duration="0">
                                                             <TooltipTrigger as-child>
                                                                 <Checkbox
+                                                                    class="block"
                                                                     :model-value="selectedItemsInPage.length === entityList.data.length ? true : selectedItemsInPage.length > 0 ? 'indeterminate' : false"
                                                                     @update:model-value="onSelectAll"
                                                                     :aria-label="__('sharp::entity_list.select_all_in_page_checkbox.tooltip.select')"
