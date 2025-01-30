@@ -4,7 +4,6 @@ namespace Code16\Sharp\Show\Fields;
 
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Filters\Filter;
-use Deprecated;
 
 class SharpShowEntityListField extends SharpShowField
 {
@@ -25,6 +24,10 @@ class SharpShowEntityListField extends SharpShowField
 
     public static function make(string $key, ?string $entityListKey = null): SharpShowEntityListField
     {
+        if (class_exists($key)) {
+            $entityListKey = app(SharpEntityManager::class)->entityKeyFor($key);
+        }
+
         return tap(
             new static($key, static::FIELD_TYPE),
             fn ($instance) => $instance->entityListKey = $entityListKey ?: $key

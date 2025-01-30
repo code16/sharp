@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Utils\Entities;
 
+use Code16\Sharp\Exceptions\SharpInvalidConfigException;
 use Code16\Sharp\Exceptions\SharpInvalidEntityKeyException;
 use Illuminate\Support\Str;
 
@@ -35,5 +36,22 @@ class SharpEntityManager
         }
 
         throw new SharpInvalidEntityKeyException("The entity [{$entityKey}] was not found.");
+    }
+
+    public function entityKeyFor(string|BaseSharpEntity $entity): string
+    {
+        $entityClassName = is_string($entity) ? $entity : get_class($entity);
+        $entities = sharp()->config()->get('entities');
+
+        if (! is_array($entities) || ($entityKey = array_search($entityClassName, $entities)) === false) {
+            throw new SharpInvalidConfigException(
+                sprintf(
+                    'Can’t find entityKey for [%s] (warning: this can’t work with an Entity Resolver).',
+                    $entityClassName
+                )
+            );
+        }
+
+        return $entityKey;
     }
 }
