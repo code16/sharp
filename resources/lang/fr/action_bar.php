@@ -10,6 +10,7 @@ return [
     'list.search.button' => 'Rechercher',
     'list.search.placeholder' => 'Rechercher...',
     'list.search.title' => ':count résultat|:count résultats',
+    'list.search.clear.aria_label' => 'Effacer la recherche',
     'list.create_button' => 'Nouveau...',
     'list.forms_dropdown' => 'Nouveau',
     'list.reorder_button' => 'Réarranger',

@@ -18,7 +18,9 @@ import get from 'lodash/get';
 import set from 'lodash/set';
 import { config } from "@/utils/config";
 
-export class Form implements FormData, CommandFormData {
+export type FormEvents = 'error';
+
+export class Form implements FormData, CommandFormData, EventTarget {
     authorizations: FormData['authorizations'];
     config: FormData['config'] & CommandFormData['config'];
     fields: FormData['fields'];
@@ -157,6 +159,11 @@ export class Form implements FormData, CommandFormData {
         });
     }
 
+    onError(errors: { [key: string]: string | string[] }) {
+        this.errors = errors;
+        this.dispatchEvent(new Event('error'));
+    }
+
     setError(key: string, error: string) {
         this.errors[key] = error;
     }
@@ -275,5 +282,20 @@ export class Form implements FormData, CommandFormData {
             }
             return count;
         }, 0);
+    }
+
+    eventTarget: EventTarget = new EventTarget();
+
+    addEventListener(type: FormEvents, callback: EventListener, options?: AddEventListenerOptions | boolean): void {
+        this.eventTarget.addEventListener(type, callback, options);
+    }
+
+    dispatchEvent(event: Event): boolean {
+        return this.eventTarget.dispatchEvent(event);
+    }
+
+    removeEventListener(type: FormEvents, callback: EventListener, options?: EventListenerOptions | boolean): void {
+        console.log('removeEventListener', type, callback, options);
+        this.eventTarget.removeEventListener(type, callback, options);
     }
 }

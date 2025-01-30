@@ -37,17 +37,23 @@ return [
             'throw' => true,
         ],
 
-        'snapshots' => [
-            'driver' => 'local',
-            'root' => database_path('snapshots'),
-        ],
-
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
             'throw' => true,
+        ],
+
+        'fixtures' => [
+            'driver' => 'local',
+            'root' => database_path('fixtures'),
+            'throw' => true,
+        ],
+
+        'snapshots' => [
+            'driver' => 'local',
+            'root' => database_path('snapshots'),
         ],
 
         's3' => [

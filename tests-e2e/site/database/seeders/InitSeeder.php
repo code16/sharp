@@ -37,16 +37,27 @@ class InitSeeder extends Seeder
                     ['text' => 'check', 'check' => true],
                     ['text' => 'select option 1', 'select_dropdown' => 1],
                     ['text' => 'select option 2', 'select_dropdown' => 2],
+                    ['text' => 'search result'],
                 )
                 ->create();
             TestModel::insert(
                 collect(
                     TestModel::factory()
-                    ->sequence(fn ($sequence) => ['text' => 'Test Model ' . ($sequence->index + 1)])
+                    ->sequence(fn (Sequence $sequence) => [
+                        'text' => 'Test Model ' . ($sequence->index + 1),
+                        'textarea' => 'Textarea ' . $sequence->count() - $sequence->index,
+                    ])
                     ->count(20)
                     ->raw()
                 )->skip(count($models))->all(),
             );
+        }
+
+        if($parameters->show) {
+            TestModel::factory()
+                ->create([
+                    'text' => 'Example',
+                ]);
         }
     }
 }

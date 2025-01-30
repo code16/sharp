@@ -45,6 +45,9 @@
                 @click="onLinkClick"
             >
                 <ChevronsLeft class="h-4 w-4"/>
+                <span class="sr-only">
+                    {{ __('sharp::entity_list.pagination.first') }}
+                </span>
             </Button>
             <Button
                 :as="entityList.meta.prev_page_url ? 'a' : 'button'"
@@ -66,7 +69,10 @@
                     {{ __('sharp::entity_list.pagination.current').split(':current_page')[0] }}
                 </span>
                 <Select :model-value="String(entityList.meta.current_page)" @update:model-value="$emit('change', $event)">
-                    <SelectTrigger class="w-10 justify-center [&_svg]:hidden">
+                    <SelectTrigger
+                        class="w-10 justify-center [&_svg]:hidden"
+                        :aria-label="__('sharp::entity_list.pagination.select.aria_label')"
+                    >
                         {{ entityList.meta.current_page }}
                     </SelectTrigger>
                     <SelectContent :align-offset="-22">
@@ -129,6 +135,9 @@
                 @click="onLinkClick"
             >
                 <ChevronsRight class="h-4 w-4"/>
+                <span class="sr-only">
+                    {{ __('sharp::entity_list.pagination.last') }}
+                </span>
             </Button>
         </div>
     </nav>

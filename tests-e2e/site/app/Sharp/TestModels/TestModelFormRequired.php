@@ -29,6 +29,7 @@ class TestModelFormRequired extends TestModelForm
             'autocomplete_remote2' => 'required',
             'autocomplete_list' => 'required',
             'list' => 'required',
+            'list.*.item' => 'required',
             'geolocation' => 'required',
             'upload' => 'required',
         ]);

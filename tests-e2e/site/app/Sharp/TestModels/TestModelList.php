@@ -3,13 +3,14 @@
 namespace App\Sharp\TestModels;
 
 use App\Models\TestModel;
+use App\Sharp\Commands\TestFormEntityCommand;
+use App\Sharp\Commands\TestFormInstanceCommand;
 use App\Sharp\Filters\EntityList\TestCheckFilter;
 use App\Sharp\Filters\EntityList\TestDateRangeFilter;
 use App\Sharp\Filters\EntityList\TestDateRangeRequiredFilter;
 use App\Sharp\Filters\EntityList\TestSelectFilter;
 use App\Sharp\Filters\EntityList\TestSelectMultipleFilter;
 use App\Sharp\Filters\EntityList\TestSelectRequiredFilter;
-use App\Sharp\TestCommand;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\SharpEntityList;
@@ -23,22 +24,39 @@ class TestModelList extends SharpEntityList
     {
         $fields
             ->addField(
+                EntityListField::make('id')
+                    ->setLabel('Id')
+                    ->setSortable()
+            )
+            ->addField(
                 EntityListField::make('text')
-                    ->setLabel('Text'),
+                    ->setLabel('Text')
+                    ->setSortable()
+            )
+            ->addField(
+                EntityListField::make('textarea')
+                    ->setLabel('Textarea')
             );
     }
 
-    public function buildListConfig(): void {}
+    public function buildListConfig(): void
+    {
+        $this
+            ->configureSearchable()
+            ->configureDefaultSort('id');
+    }
 
     protected function getInstanceCommands(): ?array
     {
-        return [];
+        return [
+            TestFormInstanceCommand::class,
+        ];
     }
 
     protected function getEntityCommands(): ?array
     {
         return [
-            TestCommand::class,
+            TestFormEntityCommand::class,
         ];
     }
 
@@ -59,6 +77,10 @@ class TestModelList extends SharpEntityList
         return $this
             ->transform(
                 TestModel::query()
+                    ->when(
+                        $this->queryParams->specificIds(),
+                        fn (Builder $builder, array $ids) => $builder->whereIn('id', $ids),
+                    )
                     ->when($this->queryParams->filterFor(TestCheckFilter::class), function(Builder $query, $check) {
                         $query->where('check', $check);
                     })
@@ -74,6 +96,14 @@ class TestModelList extends SharpEntityList
                     ->when($this->queryParams->filterFor(TestSelectMultipleFilter::class), function(Builder $query, $value) {
                         $query->whereIn('select_dropdown', $value);
                     })
+                    ->when($this->queryParams->hasSearch(), function(Builder $query) {
+                        collect($this->queryParams->searchWords())->each(function($word) use ($query) {
+                            $query->where(function (Builder $query) use ($word) {
+                                $query->orWhere('text', 'like', $word);
+                            });
+                        });
+                    })
+                    ->orderBy($this->queryParams->sortedBy(), $this->queryParams->sortedDir())
                     ->paginate(5)
             );
     }

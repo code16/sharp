@@ -1,5 +1,17 @@
 {
     "$schema": "https://laravel-ide.com/schema/laravel-ide-v2.json",
+    "completions": [
+        {
+            "complete": "viewName",
+            "condition": [
+                {
+                    "classFqn": ["Code16\\Sharp\\EntityList\\Commands\\Command"],
+                    "methodNames": ["view"],
+                    "parameters": [1]
+                }
+            ]
+        }
+    ],
     "view": {
         "paths": [
             {

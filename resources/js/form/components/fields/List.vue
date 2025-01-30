@@ -20,7 +20,8 @@
     } from "@/components/ui/dropdown-menu";
     import { Card, CardHeader } from "@/components/ui/card";
     import { useSortable } from "@vueuse/integrations/useSortable";
-    import { watchArray } from "@vueuse/core";
+    import { useEventListener, watchArray } from "@vueuse/core";
+    import { FormEvents } from "@/form/Form";
 
     const props = defineProps<FormFieldProps<FormListFieldData>>();
     const emit = defineEmits<FormFieldEmits<FormListFieldData>>();
@@ -76,7 +77,7 @@
     const itemKey = Symbol('itemKey') as unknown as string;
     const errorIndex = Symbol('errorIndex') as unknown as string;
 
-    watch(() => form.errors, () => {
+    useEventListener<FormEvents>(() => form, 'error', function () {
         emit('input', props.value?.map(((item, index) => ({ ...item, [errorIndex]: index }))), { preserveError: true });
     });
 
@@ -89,6 +90,7 @@
         }
         form.setMeta(
             props.field.key,
+            // @ts-ignore
             props.value?.map(item =>
                 (form.meta[props.field.key] as FieldsMeta[])?.find(meta => meta[itemKey] === item[itemKey])
                 ?? ({ [itemKey]: item[itemKey] })

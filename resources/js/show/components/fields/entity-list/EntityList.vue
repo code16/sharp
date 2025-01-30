@@ -18,7 +18,7 @@
     import { Button } from "@/components/ui/button";
     import { hasPoppedState, useRemember } from "@/router";
 
-    const props = defineProps<ShowFieldProps<ShowEntityListFieldData> & { highlightedInstanceId?: string | number }>();
+    const props = defineProps<ShowFieldProps<ShowEntityListFieldData> & { highlightedInstanceId?: string | number, ariaLabelledby?: string }>();
 
     const el = ref();
     const collapsed = ref(props.collapsable && !props.highlightedInstanceId);
@@ -145,7 +145,7 @@
        >
            <template #card-header>
                <div class="flex items-center gap-x-4">
-                   <CardTitle class="line-clamp-2">
+                   <CardTitle :id="ariaLabelledby" class="line-clamp-2">
                        {{ field.label }}
                    </CardTitle>
                    <template v-if="collapsable">

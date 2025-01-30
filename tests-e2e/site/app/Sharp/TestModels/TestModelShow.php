@@ -3,6 +3,7 @@
 namespace App\Sharp\TestModels;
 
 use App\Models\TestModel;
+use App\Sharp\Commands\TestFormInstanceCommand;
 use Code16\Sharp\Show\Fields\SharpShowEntityListField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
 use Code16\Sharp\Show\Layout\ShowLayout;
@@ -29,7 +30,7 @@ class TestModelShow extends SharpShow
     protected function buildShowLayout(ShowLayout $showLayout): void
     {
         $showLayout
-            ->addSection('Section 1', function (ShowLayoutSection $section) {
+            ->addSection(function (ShowLayoutSection $section) {
                 $section
                     ->addColumn(12, function (ShowLayoutColumn $column) {
                         $column->withField('text');
@@ -38,7 +39,16 @@ class TestModelShow extends SharpShow
             ->addEntityListSection('test-models');
     }
 
-    public function buildShowConfig(): void {}
+    public function buildShowConfig(): void {
+        $this->configurePageTitleAttribute('text');
+    }
+
+    public function getInstanceCommands(): ?array
+    {
+        return  [
+            TestFormInstanceCommand::class
+        ];
+    }
 
     public function find($id): array
     {

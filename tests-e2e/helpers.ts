@@ -5,7 +5,7 @@ export async function init(page: Page, props?: { login?: false, seed?: Partial<S
   await test.step('init', async () => {
     const query = new URLSearchParams({
       login: (props?.login ?? true) ? '1' : '',
-      ...props.seed
+      ...props?.seed
         ? Object.fromEntries(Object.entries(props.seed).map(([k, v]) => [`seed[${k}]`, v ? '1' : '']))
         : null,
     });

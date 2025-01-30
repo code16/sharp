@@ -41,7 +41,7 @@
                 onStart: () => { loading.value = true },
                 onFinish: () => { loading.value = false },
                 onError: () => {
-                    form.errors = props.errors;
+                    form.onError(props.errors);
                     showErrorAlert.value = true;
                     errorAlertMessage.value = props.errors.error as string | null;
                 }

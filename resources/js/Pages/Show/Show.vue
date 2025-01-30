@@ -146,6 +146,7 @@
                             <Section
                                 class="min-w-0"
                                 :section="section"
+                                :aria-labelledby="`section-${i}-title`"
                                 v-show="show.sectionShouldBeVisible(section, locale) || i == 0"
                                 v-slot="{ collapsed, onCollapseToggle }"
                             >
@@ -159,6 +160,7 @@
                                                         :collapsable="section.collapsable"
                                                         :value="null"
                                                         :highlighted-instance-id="highlightedEntityKey === (show.fields[fieldLayout.key] as ShowEntityListFieldData).entityListKey ? highlightedInstanceId : null"
+                                                        :aria-labelledby="`section-${i}-title`"
                                                         @reordering="onEntityListReordering(fieldLayout.key, $event)"
                                                     />
                                                 </template>
@@ -176,7 +178,7 @@
                                                 <div class="flex flex-wrap gap-4">
                                                     <div class="flex gap-4">
                                                         <template v-if="section.title || (i == 0 && show.getTitle(locale))">
-                                                            <CardTitle v-html="section.title || (i == 0 && show.getTitle(locale))">
+                                                            <CardTitle :id="`section-${i}-title`" v-html="section.title || (i == 0 && show.getTitle(locale))">
                                                             </CardTitle>
                                                         </template>
                                                         <template v-if="section.collapsable">
@@ -304,7 +306,7 @@
                                                 </div>
                                             </RootCardHeader>
                                         </template>
-                                        <CardContent v-show="!collapsed">
+                                        <CardContent v-show="section.columns.map((column) => column.fields).flat(2).length && !collapsed">
                                             <div class="grid grid-cols-1 gap-6 @3xl/root-card:grid-cols-12">
                                                 <template v-for="(column, columnIndex) in section.columns">
                                                     <div class="@3xl/root-card:col-[span_var(--size)]" :style="{ '--size': `${column.size}` }">

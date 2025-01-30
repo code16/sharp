@@ -3,7 +3,7 @@
     import { FilterManager } from "@/filters/FilterManager";
     import { EntityList } from "../EntityList";
     import {
-        CommandData, EntityListMultiformData,
+        CommandData, EntityListFieldData, EntityListMultiformData, EntityListQueryParamsData,
         EntityStateValueData,
         FilterData
     } from "@/types";
@@ -131,18 +131,22 @@
         });
     }
 
-    function onSortClick(fieldKey: string) {
-        const dir = props.entityList.currentSort === fieldKey
+    function nextSortDir(field: EntityListFieldData): EntityListQueryParamsData['dir'] {
+        return props.entityList.currentSort === field.key
             ? props.entityList.currentSortDir === 'desc'
                 ? props.entityList.config.defaultSort === props.entityList.currentSort
                     ? 'asc'
                     : null
                 : 'desc'
             : 'asc';
+    }
+
+    function onSortClick(field: EntityListFieldData) {
+        const dir = nextSortDir(field);
         emit('update:query', {
             ...props.entityList.query,
             page: 1,
-            sort: dir ? fieldKey : null,
+            sort: dir ? field.key : null,
             dir: dir || null,
         });
     }
@@ -580,7 +584,7 @@
                                     <TableHeader :class="!visibleFields.some(field => field.label) ? 'collapse [&_tr]:border-0' : ''">
                                         <TableRow class="hover:bg-transparent lg:first:*:pl-6 lg:last:*:pr-6">
                                             <template v-if="selecting">
-                                                <TableHead>
+                                                <TableHead scope="col">
                                                     <span class="sr-only">Select...</span>
                                                     <TooltipProvider>
                                                         <Tooltip :delay-duration="0">
@@ -589,7 +593,6 @@
                                                                     class="block"
                                                                     :model-value="selectedItemsInPage.length === entityList.data.length ? true : selectedItemsInPage.length > 0 ? 'indeterminate' : false"
                                                                     @update:model-value="onSelectAll"
-                                                                    :aria-label="__('sharp::entity_list.select_all_in_page_checkbox.tooltip.select')"
                                                                 />
                                                             </TooltipTrigger>
                                                             <TooltipContent side="top" :side-offset="10">
@@ -607,6 +610,7 @@
                                             <template v-for="(field, fieldIndex) in visibleFields" :key="field.key">
                                                 <TableHead
                                                     class="max-w-[70cqw] md:w-[var(--width,auto)]"
+                                                    scope="col"
                                                     :style="{
                                                         '--width':
                                                             field.width === 'fill' ? (100 / visibleFields.length)+'%' :
@@ -619,12 +623,19 @@
                                                             variant="ghost"
                                                             size="sm"
                                                             class="-ml-3 h-8 data-[state=open]:bg-accent"
-                                                            @click="onSortClick(field.key)"
+                                                            @click="onSortClick(field)"
+                                                            :aria-label="
+                                                                nextSortDir(field) === 'asc'
+                                                                    ? __('sharp::entity_list.sort_asc', { field_label: field.label })
+                                                                    : nextSortDir(field) === 'desc'
+                                                                        ? __('sharp::entity_list.sort_desc', { field_label: field.label })
+                                                                        : __('sharp::entity_list.sort_default')
+                                                            "
                                                         >
                                                             <span>{{ field.label }}</span>
                                                             <template v-if="entityList.currentSort === field.key">
                                                                 <ArrowDown v-if="entityList.currentSortDir === 'desc'" class="ml-2 h-3.5 w-3.5" />
-                                                                <ArrowUp v-else-if=" entityList.currentSortDir === 'asc'" class="ml-2 h-3.5 w-3.5" />
+                                                                <ArrowUp v-else-if="entityList.currentSortDir === 'asc'" class="ml-2 h-3.5 w-3.5" />
                                                             </template>
                                                             <template v-else>
                                                                 <ChevronsUpDown class="ml-2 h-3.5 w-3.5" />
@@ -637,12 +648,12 @@
                                                 </TableHead>
                                             </template>
                                             <template v-if="!reordering && !selecting && entityList.data.some(item => entityList.instanceHasActions(item, showEntityState))">
-                                                <TableHead class="w-2">
+                                                <TableHead scope="col" class="w-2">
                                                     <span class="sr-only">Edit</span>
                                                 </TableHead>
                                             </template>
                                             <template v-if="reordering">
-                                                <TableHead>
+                                                <TableHead scope="col">
                                                     <span class="sr-only">Select...</span>
                                                 </TableHead>
                                             </template>
@@ -734,7 +745,11 @@
                                                         </div>
                                                         <DropdownMenu>
                                                             <DropdownMenuTrigger as-child>
-                                                                <Button class="[@media(hover:hover)]:pointer-events-auto relative" variant="ghost" size="icon">
+                                                                <Button class="[@media(hover:hover)]:pointer-events-auto relative"
+                                                                    :aria-label="__('sharp::entity_list.commands.instance.label')"
+                                                                    variant="ghost"
+                                                                    size="icon"
+                                                                >
                                                                     <MoreHorizontal class="w-4 h-4" />
                                                                 </Button>
                                                             </DropdownMenuTrigger>

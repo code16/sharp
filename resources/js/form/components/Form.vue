@@ -54,9 +54,8 @@
 
         return postFn({ ...form.serializedData, ...extraData })
             .catch(error => {
-                console.log('handled', error);
                 if (error.response?.status === 422) {
-                    props.form.errors = error.response.data.errors ?? {};
+                    props.form.onError(error.response.data.errors ?? {})
                 }
                 return Promise.reject(error);
             })
