@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Form\Eloquent\Uploads;
 
 use Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\Thumbnail;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
@@ -27,6 +28,11 @@ class SharpUploadModel extends Model
      */
     public function getAttribute($key)
     {
+        if($key === 'file_name') {
+            // when making the model in embed template (new Media($visual)), there may be a "path" defined instead of "file_name" (< 8.0 content)
+            return parent::getAttribute('file_name') ?? $this->getAttribute('custom_properties')['path'] ?? null;
+        }
+        
         if (! $this->isRealAttribute($key)) {
             return $this->getAttribute('custom_properties')[$key] ?? null;
         }
