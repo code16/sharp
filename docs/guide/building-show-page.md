@@ -50,9 +50,9 @@ class MyShow extends SharpShow
 
 #### Common attributes to all show fields
 
-Each available Show field is detailed below; here are the attributes they all share:
+Each available Show field is detailed below; here are the attributes they all share :
 
-- `setShowIfEmpty(bool $show = true): self`: by default, an empty field (meaning: with null or empty data) is not displayed at all in the Show UI. You can change this behaviour with this attribute.
+- `setShowIfEmpty(bool $show = true): self`: by default, an empty field (meaning: with null or empty data) is not displayed at all in the Show UI. You can change this behaviour with this attribute. This method has no impact for [embedded EntityList](show-fields/embedded-entity-list.md).
 
 #### Available simple Show fields
 
