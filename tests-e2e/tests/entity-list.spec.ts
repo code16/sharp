@@ -1,5 +1,5 @@
 import { test, test as base, expect, TestType } from '@playwright/test';
-import { init } from "../helpers";
+import { init, InitOptions } from "../helpers";
 import { today, getLocalTimeZone } from "@internationalized/date";
 import {
   PlaywrightTestArgs,
@@ -10,7 +10,7 @@ import {
 import { commandSuite, CommandSuiteArgs } from "./commands";
 
 type EntityListSuiteArgs = {
-  init: () => Promise<void>,
+  init: (options?: InitOptions) => Promise<void>,
   goto: () => Promise<void>,
   reload: () => Promise<void>
 }
@@ -24,8 +24,8 @@ test.describe('entity list', () => {
     await expect(page.getByText('20 items', { exact: true }).first()).toBeVisible();
   });
   entityListSuite(base.extend<EntityListSuiteArgs>({
-    init: ({ page }, use) => use(async () => {
-      await init(page, { seed: { entityList: true } });
+    init: ({ page }, use) => use(async (options) => {
+      await init(page, { seed: { entityList: true }, ...options });
     }),
     goto: ({ page }, use) => use(async () => {
       await page.goto('/sharp/s-list/test-models');
@@ -68,8 +68,8 @@ test.describe('entity list', () => {
 
 test.describe('show entity list', () => {
   entityListSuite(base.extend<EntityListSuiteArgs>({
-    init: ({ page }, use) => use(async () => {
-      await init(page, { seed: { entityList: true } });
+    init: ({ page }, use) => use(async (options) => {
+      await init(page, { seed: { entityList: true }, ...options });
     }),
     goto: ({ page }, use) => use(async () => {
       await page.goto('/sharp/s-list/test-models/s-show/test-models/1');
@@ -323,7 +323,11 @@ function entityListSuite(test: TestType<PlaywrightTestArgs & PlaywrightTestOptio
   });
   test('sort', async ({ page, init, goto, reload }) => {
     let tableTextContent = '';
-    await init();
+    await init({
+      session: {
+        default_sort: 'id',
+      }
+    });
     await goto();
     tableTextContent = await page.getByRole('table').textContent();
     await page.getByRole('button', { name: 'Id: Sort descending' }).click();
@@ -353,6 +357,46 @@ function entityListSuite(test: TestType<PlaywrightTestArgs & PlaywrightTestOptio
     await page.getByRole('alertdialog').getByRole('button', { name: 'Delete' }).click();
     await expect(page.getByText('19 items', { exact: true }).first()).toBeVisible();
     await expect(page.getByRole('table')).not.toHaveText(tableTextContent);
+  });
+  test('selection', async ({ page, init, goto, reload }) => {
+    await init();
+    await goto();
+    await page.getByRole('button', { name: 'Select...' }).click();
+    await page.getByRole('checkbox', { name: 'Select row' }).first().click();
+    await page.getByRole('button', { name: 'Actions (1 selected)' }).first().click();
+    await page.getByRole('menu').getByRole('menuitem', { name: 'Test selection command' }).click();
+    await expect(page.getByText('Selection changed')).toHaveCount(1);
+    await page.getByRole('button', { name: 'Select...' }).click();
+    await page.getByRole('checkbox', { name: 'Select all in current page' }).click();
+    for(const checkbox of await page.getByRole('checkbox', { name: 'Select row' }).all()) {
+      await expect(checkbox).toBeChecked();
+    }
+    await page.getByRole('button', { name: 'Actions (5 selected)' }).first().click();
+    await page.getByRole('menu').getByRole('menuitem', { name: 'Test selection command' }).click();
+    await expect(page.getByText('Selection changed')).toHaveCount(5);
+  });
+  test('reorder', async ({ page, init, goto, reload }) => {
+    await init();
+    await goto();
+    const tbody = page.getByRole('rowgroup').nth(1);
+    await page.getByRole('button', { name: 'Reorder' }).click();
+    await expect(page.getByRole('table').getByRole('button', { name: 'Actions' }).first()).toBeHidden();
+    const initialTextContent = await tbody.textContent();
+    await tbody.getByRole('row').nth(0).dragTo(tbody.getByRole('row').nth(1));
+    await expect(tbody).not.toHaveText(initialTextContent);
+    await page.getByRole('button', { name: 'Cancel' }).click();
+    await expect(tbody).toHaveText(initialTextContent);
+    await page.getByRole('button', { name: 'Reorder' }).click();
+    await tbody.getByRole('row').nth(0).dragTo(tbody.getByRole('row').nth(1));
+    await expect(tbody).not.toHaveText(initialTextContent);
+    const reorderedTextContent = await tbody.textContent();
+    await page.getByRole('button', { name: 'Finish' }).click();
+    await expect(page.getByRole('button', { name: 'Finish' })).toBeHidden();
+    await expect(tbody).not.toHaveText(initialTextContent);
+    await expect(tbody).toHaveText(reorderedTextContent);
+    await page.reload();
+    await expect(tbody).not.toHaveText(initialTextContent);
+    await expect(tbody).toHaveText(reorderedTextContent);
   });
 }
 

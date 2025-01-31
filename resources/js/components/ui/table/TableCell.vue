@@ -11,7 +11,8 @@ const props = defineProps<{
   <td
     :class="
       cn(
-        'px-3 py-4 align-middle [&:has([role=checkbox])]:pr-0 first:pl-4 last:pr-4',
+        'px-3 py-4 align-middle first:pl-4 last:pr-4',
+        // '[&:has([role=checkbox])]:pr-0',
         props.class,
       )
     "

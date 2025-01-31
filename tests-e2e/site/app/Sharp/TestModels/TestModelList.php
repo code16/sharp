@@ -5,12 +5,14 @@ namespace App\Sharp\TestModels;
 use App\Models\TestModel;
 use App\Sharp\Commands\TestFormEntityCommand;
 use App\Sharp\Commands\TestFormInstanceCommand;
+use App\Sharp\Commands\TestSelectionCommand;
 use App\Sharp\Filters\EntityList\TestCheckFilter;
 use App\Sharp\Filters\EntityList\TestDateRangeFilter;
 use App\Sharp\Filters\EntityList\TestDateRangeRequiredFilter;
 use App\Sharp\Filters\EntityList\TestSelectFilter;
 use App\Sharp\Filters\EntityList\TestSelectMultipleFilter;
 use App\Sharp\Filters\EntityList\TestSelectRequiredFilter;
+use Code16\Sharp\EntityList\Eloquent\SimpleEloquentReorderHandler;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\SharpEntityList;
@@ -41,9 +43,13 @@ class TestModelList extends SharpEntityList
 
     public function buildListConfig(): void
     {
+        if(session()->get('default_sort')) {
+            $this->configureDefaultSort(session()->get('default_sort'));
+        }
+
         $this
             ->configureSearchable()
-            ->configureDefaultSort('id');
+            ->configureReorderable(new SimpleEloquentReorderHandler(TestModel::class));
     }
 
     protected function getInstanceCommands(): ?array
@@ -57,6 +63,7 @@ class TestModelList extends SharpEntityList
     {
         return [
             TestFormEntityCommand::class,
+            TestSelectionCommand::class,
         ];
     }
 
@@ -103,7 +110,10 @@ class TestModelList extends SharpEntityList
                             });
                         });
                     })
-                    ->orderBy($this->queryParams->sortedBy(), $this->queryParams->sortedDir())
+                    ->when($this->queryParams->sortedBy(),
+                        fn(Builder $query) => $query->orderBy($this->queryParams->sortedBy(), $this->queryParams->sortedDir()),
+                        fn(Builder $query) => $query->orderBy('order')
+                    )
                     ->paginate(5)
             );
     }

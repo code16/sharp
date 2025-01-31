@@ -16,7 +16,8 @@ class TestFormEntityCommand extends EntityCommand
 
     public function buildCommandConfig(): void
     {
-        $this->configureDescription('Test description');
+        $this->configureDescription('Test description')
+            ->configureInstanceSelectionAllowed();
     }
 
     public function buildFormFields(FieldsContainer $formFields): void

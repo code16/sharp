@@ -581,11 +581,13 @@
                         <template v-if="entityList.data?.length > 0">
                             <ScrollArea class="w-full data-[scrollbar-x-visible]:pb-4" type="auto" touch-type="scroll">
                                 <Table no-scroll class="w-max min-w-full max-w-[768px] md:max-w-[1024px] @3xl:w-full @3xl:max-w-none">
-                                    <TableHeader :class="!visibleFields.some(field => field.label) ? 'collapse [&_tr]:border-0' : ''">
+                                    <TableHeader
+                                        :class="!visibleFields.some(field => field.label) ? 'collapse [&_tr]:border-0' : ''"
+                                        role="rowgroup"
+                                    >
                                         <TableRow class="hover:bg-transparent lg:first:*:pl-6 lg:last:*:pr-6">
                                             <template v-if="selecting">
-                                                <TableHead scope="col">
-                                                    <span class="sr-only">Select...</span>
+                                                <TableHead scope="col" class="w-2" aria-label="Select...">
                                                     <TooltipProvider>
                                                         <Tooltip :delay-duration="0">
                                                             <TooltipTrigger as-child>
@@ -593,6 +595,7 @@
                                                                     class="block"
                                                                     :model-value="selectedItemsInPage.length === entityList.data.length ? true : selectedItemsInPage.length > 0 ? 'indeterminate' : false"
                                                                     @update:model-value="onSelectAll"
+                                                                    :aria-label="__('sharp::entity_list.select_all_in_page_checkbox.tooltip.select')"
                                                                 />
                                                             </TooltipTrigger>
                                                             <TooltipContent side="top" :side-offset="10">
@@ -659,7 +662,7 @@
                                             </template>
                                         </TableRow>
                                     </TableHeader>
-                                    <TableBody class="group" ref="sortableTableBody">
+                                    <TableBody class="group" role="rowgroup" ref="sortableTableBody">
                                         <template v-for="(item, itemIndex) in reorderedItems ?? entityList.data" :key="entityList.instanceId(item)">
                                             <TableRow
                                                 :class="cn(
@@ -671,14 +674,14 @@
                                             >
                                                 <template v-if="selecting && selectedItems">
                                                     <TableCell>
-                                                        <Checkbox
-                                                            class="block"
-                                                            :id="`check-${entityKey}-${entityList.instanceId(item)}`"
-                                                            :model-value="selectedItems[entityList.instanceId(item)]"
-                                                            @update:model-value="(checked) => selectedItems[entityList.instanceId(item)] = checked as boolean"
-                                                        />
-                                                        <label class="absolute inset-0 z-20" data-row-action :for="`check-${entityKey}-${entityList.instanceId(item)}`">
-                                                            <span class="sr-only">Select</span>
+                                                        <label data-row-action role="presentation">
+                                                            <span class="absolute inset-0 z-20"></span>
+                                                            <Checkbox
+                                                                class="block relative z-20"
+                                                                :model-value="selectedItems[entityList.instanceId(item)]"
+                                                                :aria-label="__('sharp::entity_list.select_checkbox.aria_label')"
+                                                                @update:model-value="(checked) => selectedItems[entityList.instanceId(item)] = checked as boolean"
+                                                            />
                                                         </label>
                                                     </TableCell>
                                                 </template>

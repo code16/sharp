@@ -41,6 +41,7 @@ return new class() extends Migration
             $table->string('text')->nullable();
             $table->json('text_localized')->nullable();
             $table->unsignedInteger('upload_id')->nullable();
+            $table->unsignedInteger('order')->default(100);
             $table->timestamps();
         });
     }

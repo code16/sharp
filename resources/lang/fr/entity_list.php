@@ -18,6 +18,7 @@ return [
     'pagination.current' => 'Page :current_page sur :last_page',
     'pagination.current_simple' => 'Page :current_page',
     'pagination.select.aria_label' => 'Page actuelle',
+    'select_checkbox.aria_label' => 'Sélectionner la ligne',
     'select_all_in_page_checkbox.tooltip.select' => 'Tout sélectionner dans la page courante',
     'select_all_in_page_checkbox.tooltip.unselect' => 'Tout désélectionner dans la page courante',
 ];

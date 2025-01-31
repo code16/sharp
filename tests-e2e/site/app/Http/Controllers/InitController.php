@@ -30,6 +30,10 @@ class InitController extends Controller
             auth()->login($user);
         }
 
+        if(request()->has('session')) {
+            session()->put(request()->get('session'));
+        }
+
         $seedParameters = new SeedParametersData(...request()->input('seed', []));
 
         (new InitSeeder())->run($seedParameters);
