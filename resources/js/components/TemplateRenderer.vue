@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-    import { Card, CardHeader } from "@/components/ui/card";
+    import { Card, CardContent } from "@/components/ui/card";
     import { computed } from "vue";
     import { Badge } from "@/components/ui/badge";
 
@@ -12,7 +12,7 @@
     const component = computed(() => ({
         components: {
             'sharp-card': Card,
-            'sharp-card-header': CardHeader,
+            'sharp-card-content': CardContent,
             'sharp-badge': Badge,
         },
         template: `<div class="SharpTemplate">${props.template ?? ''}</div>`,

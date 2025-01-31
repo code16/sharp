@@ -37,6 +37,18 @@
                 {
                     "path": "src/View/Components",
                     "namespace": "sharp"
+                },
+                {
+                    "path": "vendor/owenvoke/blade-fontawesome/resources/svg/solid",
+                    "prefix": "fas-"
+                },
+                {
+                    "path": "vendor/owenvoke/blade-fontawesome/resources/svg/regular",
+                    "prefix": "far-"
+                },
+                {
+                    "path": "vendor/owenvoke/blade-fontawesome/resources/svg/brands",
+                    "prefix": "fab-"
                 }
             ]
         }
