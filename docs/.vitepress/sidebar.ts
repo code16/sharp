@@ -44,7 +44,7 @@ export function sidebar(): DefaultTheme.SidebarItem[] {
                 { text: 'List', link: '/guide/form-fields/list.md' },
                 { text: 'AutocompleteList', link: '/guide/form-fields/autocomplete-list.md' },
                 { text: 'Geolocation', link: '/guide/form-fields/geolocation.md' },
-                { text: 'Custom form field', link: '/guide/custom-form-fields.md' }
+                // { text: 'Custom form field', link: '/guide/custom-form-fields.md' }
             ]
         },
         {
@@ -58,7 +58,7 @@ export function sidebar(): DefaultTheme.SidebarItem[] {
                 { text: 'List', link: '/guide/show-fields/list.md' },
                 { text: 'File', link: '/guide/show-fields/file.md' },
                 { text: 'Embedded EntityList', link: '/guide/show-fields/embedded-entity-list.md' },
-                { text: 'Custom show field', link: '/guide/custom-show-fields.md' }
+                // { text: 'Custom show field', link: '/guide/custom-show-fields.md' }
             ]
         },
         {
