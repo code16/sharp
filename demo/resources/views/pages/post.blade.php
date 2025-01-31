@@ -22,10 +22,6 @@
                     {{ $post->title }}
                 </h1>
                 <x-sharp-content :image-thumbnail-width="1200">
-                    <x-sharp-content::attributes
-                        component="sharp-image"
-                        class="img-fluid"
-                    />
                     {!! $post->content !!}
                 </x-sharp-content>
             </div>
