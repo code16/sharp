@@ -17,7 +17,6 @@
   "devDependencies": {
     "@babel/preset-env": "^7.23.9",
     "@csstools/postcss-oklab-function": "^4.0.3",
-    "@sharp/test-utils": "file:packages/test-utils",
     "@tailwindcss/container-queries": "^0.1.1",
     "@tailwindcss/forms": "^0.5.4",
     "@types/google.maps": "^3.54.3",
