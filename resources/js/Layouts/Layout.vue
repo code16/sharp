@@ -89,7 +89,7 @@
     <ConfigProvider>
         <SidebarProvider>
             <Sidebar>
-                <SidebarHeader class="p-4 h-14 justify-center">
+                <SidebarHeader class="p-4 h-14 items-start justify-center">
                     <template v-if="$page.props.logo">
                         <div class="text-sidebar-accent-foreground">
                             <Logo />
