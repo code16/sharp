@@ -3,7 +3,7 @@
     "view": {
         "paths": [
             {
-                "path": "./resources/views"
+                "path": "./demo/resources/views"
             }
         ]
     }

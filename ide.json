@@ -19,10 +19,10 @@
                 "namespace": "fixtures"
             },
             {
-                "path": "demo/resources/views"
+                "path": "./demo/resources/views"
             },
             {
-                "path": "resources/views",
+                "path": "./resources/views",
                 "namespace": "sharp"
             }
         ]

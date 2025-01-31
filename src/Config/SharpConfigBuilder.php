@@ -12,6 +12,7 @@ use Code16\Sharp\Utils\Entities\SharpEntityResolver;
 use Code16\Sharp\Utils\Filters\GlobalRequiredFilter;
 use Code16\Sharp\Utils\Menu\SharpMenu;
 use Illuminate\Contracts\Auth\PasswordBroker;
+use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Vite;
 use Illuminate\Support\Traits\Conditionable;
 
@@ -397,9 +398,9 @@ class SharpConfigBuilder
         return $this;
     }
 
-    public function appendMessageOnLoginForm(string $messageOrBladePath): self
+    public function appendMessageOnLoginForm(string|View $message): self
     {
-        $this->config['auth']['login_form_message'] = $messageOrBladePath;
+        $this->config['auth']['login_form_message'] = $message;
 
         return $this;
     }

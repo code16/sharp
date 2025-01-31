@@ -4,6 +4,7 @@ namespace Code16\Sharp\Http\Controllers\Auth;
 
 use Code16\Sharp\Exceptions\Auth\SharpAuthenticationNeeds2faException;
 use Code16\Sharp\Http\Controllers\Auth\Requests\LoginRequest;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -26,10 +27,14 @@ class LoginController extends Controller
             return redirect()->to($loginPageUrl);
         }
 
+        $message = sharp()->config()->get('auth.login_form_message');
+        
         return Inertia::render('Auth/Login', [
             'loginIsEmail' => sharp()->config()->get('auth.login_attribute') === 'email',
-            'message' => sharp()->config()->get('auth.login_form_message')
-                ? view('sharp::partials.login-form-message')->render()
+            'message' => $message
+                ? $message instanceof View
+                    ? $message->render()
+                    : view('sharp::partials.login-form-message', ['message' => $message])->render()
                 : null,
         ]);
     }

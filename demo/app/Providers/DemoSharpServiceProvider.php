@@ -45,7 +45,7 @@ class DemoSharpServiceProvider extends SharpAppServiceProvider
             ->enable2faCustom(Demo2faNotificationHandler::class)
             ->enableLoginRateLimiting(maxAttempts: 3)
             ->suggestRememberMeOnLoginForm()
-            ->appendMessageOnLoginForm('sharp._login-page-message')
+            ->appendMessageOnLoginForm(view('sharp._login-page-message'))
             ->enableGlobalSearch(AppSearchEngine::class, 'Search for posts or authors...')
             ->appendToMiddlewareWebGroup(PrefillLoginWithExampleCredentials::class)
             ->loadViteAssets([

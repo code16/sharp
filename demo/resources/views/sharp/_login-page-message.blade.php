@@ -1,5 +1,5 @@
 <x-sharp::card>
-    <x-sharp::card-content style="opacity: .5">
+    <x-sharp::card-content class="text-muted-foreground">
         You can log with:
         <ul>
             <li>- admin@example.org / password</li>
