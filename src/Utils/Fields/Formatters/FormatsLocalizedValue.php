@@ -22,7 +22,7 @@ trait FormatsLocalizedValue
     /**
      * @throws SharpFormFieldDataException
      */
-    protected function guardAgainstInvalidLocalizedValue(SharpFormField $field, $value): void
+    protected function guardAgainstInvalidLocalizedValue(SharpFormField|SharpShowField $field, $value): void
     {
         if(!$field instanceof IsSharpFieldWithLocalization) {
             return;
