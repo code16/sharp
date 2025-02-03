@@ -12,7 +12,7 @@
         CommandItem,
         CommandList
     } from "@/components/ui/command";
-    import { useMagicKeys } from "@vueuse/core";
+    import { useEventListener } from "@vueuse/core";
     import { SearchResultSetData } from "@/types";
     import { __ } from '@/utils/i18n';
     import Icon from "@/components/ui/Icon.vue";
@@ -25,11 +25,10 @@
     const loading = ref(false);
     const resultSets = ref<SearchResultSetData[]>([]);
     const searchTerm = ref('');
-    const keys = useMagicKeys({
-        passive: false,
-    });
-    watch(keys['Cmd+K'], (k) => {
-        if(k) {
+
+    useEventListener(window, 'keydown', (event) => {
+        if(event.key?.toLowerCase() === 'k' && (event.metaKey || event.ctrlKey)) {
+            event.preventDefault();
             open.value = !open.value;
         }
     });
