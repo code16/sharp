@@ -24,7 +24,5 @@ class TestModelSingleForm extends SharpSingleForm
         return $this->transform(TestModel::first());
     }
 
-    protected function updateSingle(array $data)
-    {
-    }
+    protected function updateSingle(array $data) {}
 }
