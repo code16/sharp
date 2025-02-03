@@ -3,9 +3,19 @@
 namespace App\Sharp\TestModels;
 
 use App\Models\TestModel;
+use App\Sharp\Commands\TestDownloadEntityCommand;
+use App\Sharp\Commands\TestDownloadInstanceCommand;
 use App\Sharp\Commands\TestFormEntityCommand;
 use App\Sharp\Commands\TestFormInstanceCommand;
+use App\Sharp\Commands\TestInfoEntityCommand;
+use App\Sharp\Commands\TestInfoInstanceCommand;
+use App\Sharp\Commands\TestLinkEntityCommand;
+use App\Sharp\Commands\TestLinkInstanceCommand;
+use App\Sharp\Commands\TestReloadEntityCommand;
+use App\Sharp\Commands\TestReloadInstanceCommand;
 use App\Sharp\Commands\TestSelectionCommand;
+use App\Sharp\Commands\TestViewEntityCommand;
+use App\Sharp\Commands\TestViewInstanceCommand;
 use App\Sharp\Filters\EntityList\TestCheckFilter;
 use App\Sharp\Filters\EntityList\TestDateRangeFilter;
 use App\Sharp\Filters\EntityList\TestDateRangeRequiredFilter;
@@ -47,6 +57,14 @@ class TestModelList extends SharpEntityList
             $this->configureDefaultSort(session()->get('default_sort'));
         }
 
+        if(session()->get('quick_creation_form')) {
+            $this->configureQuickCreationForm();
+        }
+
+        if(session()->get('entity_list_multiform')) {
+            $this->configureMultiformAttribute('form');
+        }
+
         $this
             ->configureSearchable()
             ->configureReorderable(new SimpleEloquentReorderHandler(TestModel::class));
@@ -56,6 +74,11 @@ class TestModelList extends SharpEntityList
     {
         return [
             TestFormInstanceCommand::class,
+            TestDownloadInstanceCommand::class,
+            TestInfoInstanceCommand::class,
+            TestLinkInstanceCommand::class,
+            TestViewInstanceCommand::class,
+            TestReloadInstanceCommand::class
         ];
     }
 
@@ -64,6 +87,11 @@ class TestModelList extends SharpEntityList
         return [
             TestFormEntityCommand::class,
             TestSelectionCommand::class,
+            TestDownloadEntityCommand::class,
+            TestInfoEntityCommand::class,
+            TestLinkEntityCommand::class,
+            TestViewEntityCommand::class,
+            TestReloadEntityCommand::class,
         ];
     }
 

@@ -3,7 +3,13 @@
 namespace App\Sharp\TestModels;
 
 use App\Models\TestModel;
+use App\Sharp\Commands\TestDownloadInstanceCommand;
 use App\Sharp\Commands\TestFormInstanceCommand;
+use App\Sharp\Commands\TestInfoInstanceCommand;
+use App\Sharp\Commands\TestLinkInstanceCommand;
+use App\Sharp\Commands\TestReloadEntityCommand;
+use App\Sharp\Commands\TestReloadInstanceCommand;
+use App\Sharp\Commands\TestViewInstanceCommand;
 use Code16\Sharp\Show\Fields\SharpShowEntityListField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
 use Code16\Sharp\Show\Layout\ShowLayout;
@@ -18,10 +24,6 @@ class TestModelShow extends SharpShow
     {
         $showFields
             ->addField(
-                SharpShowTextField::make('text')
-                    ->setLabel('Text')
-            )
-            ->addField(
                 SharpShowEntityListField::make('test-models')
                 ->setLabel('Test models')
             );
@@ -31,10 +33,7 @@ class TestModelShow extends SharpShow
     {
         $showLayout
             ->addSection(function (ShowLayoutSection $section) {
-                $section
-                    ->addColumn(12, function (ShowLayoutColumn $column) {
-                        $column->withField('text');
-                    });
+
             })
             ->addEntityListSection('test-models');
     }
@@ -46,7 +45,12 @@ class TestModelShow extends SharpShow
     public function getInstanceCommands(): ?array
     {
         return  [
-            TestFormInstanceCommand::class
+            TestFormInstanceCommand::class,
+            TestDownloadInstanceCommand::class,
+            TestInfoInstanceCommand::class,
+            TestLinkInstanceCommand::class,
+            TestViewInstanceCommand::class,
+            TestReloadInstanceCommand::class,
         ];
     }
 

@@ -332,6 +332,13 @@ class TestModelForm extends SharpForm
             });
     }
 
+    public function buildFormConfig(): void
+    {
+        if(session()->get('display_show_page_after_creation')) {
+            $this->configureDisplayShowPageAfterCreation();
+        }
+    }
+
     public function create(): array
     {
         return $this->transform(TestModel::make()->fill([

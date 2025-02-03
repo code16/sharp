@@ -1,3 +1,5 @@
+// noinspection DuplicatedCode
+
 import { test, test as base, expect, TestType } from '@playwright/test';
 import { init, InitOptions } from "../helpers";
 import { today, getLocalTimeZone } from "@internationalized/date";
@@ -398,13 +400,60 @@ function entityListSuite(test: TestType<PlaywrightTestArgs & PlaywrightTestOptio
     await expect(tbody).not.toHaveText(initialTextContent);
     await expect(tbody).toHaveText(reorderedTextContent);
   });
-  test('quick creation form', async ({ page, init, goto, reload }) => {
-    await init({
-      session: {
-        quick_creation_form: '1',
-      }
+  test.describe('quick creation form', () => {
+    test('create new', async ({ page, init, goto, reload }) => {
+      await init({
+        seed: {
+          show: true,
+          entityList: false,
+        },
+        session: {
+          quick_creation_form: '1',
+        },
+      });
+      await goto();
+      await page.getByRole('link', { name: 'New...' }).click();
+      await page.getByRole('dialog').getByRole('textbox', { name: 'Text', exact: true }).fill('quick created');
+      await page.getByRole('dialog').getByRole('button', { name: 'Create', exact: true }).click();
+      await expect(page.getByRole('dialog')).toBeHidden();
+      await expect(page.getByText('quick created', { exact: true })).toBeVisible();
     });
-    await goto();
+    test('validation', async ({ page, init, goto, reload }) => {
+      await init({
+        seed: {
+          show: true,
+          entityList: false,
+        },
+        session: {
+          quick_creation_form: '1',
+          entity_list_multiform: '1',
+        },
+      });
+      await goto();
+      await page.getByRole('button', { name: 'New' }).click();
+      await page.getByRole('menu').getByRole('menuitem', { name: 'required' }).click();
+      await page.getByRole('dialog').getByRole('button', { name: 'Create', exact: true }).click();
+      await expect(page.getByRole('dialog')).toBeVisible();
+      await expect(page.getByText('required.').first()).toBeVisible();
+    });
+    test('create new, redirect to show page', async ({ page, init, goto, reload }) => {
+      await init({
+        seed: {
+          show: true,
+          entityList: false,
+        },
+        session: {
+          quick_creation_form: '1',
+          display_show_page_after_creation: '1',
+        },
+      });
+      await goto();
+      await page.getByRole('link', { name: 'New...' }).click();
+      await page.getByRole('dialog').getByRole('textbox', { name: 'Text', exact: true }).fill('quick created');
+      await page.getByRole('dialog').getByRole('button', { name: 'Create', exact: true }).click();
+      await expect(page.getByRole('dialog')).toBeHidden();
+      await expect(page.getByRole('heading', { name: 'quick created' })).toBeVisible();
+    });
   });
 }
 
