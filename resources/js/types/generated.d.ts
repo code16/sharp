@@ -601,6 +601,9 @@ export type FormUploadFieldValueData = {
   } | null;
   nativeFile?: File;
 };
+export type GlobalSearchData = {
+  config: { placeholder: string };
+};
 export type GlobalFiltersData = {
   config: { filters: ConfigFiltersData };
   filterValues: FilterValuesData;
