@@ -6,6 +6,7 @@ use Closure;
 use Code16\Sharp\Data\Filters\GlobalFiltersData;
 use Code16\Sharp\Data\LogoData;
 use Code16\Sharp\Data\MenuData;
+use Code16\Sharp\Data\Search\GlobalSearchData;
 use Code16\Sharp\Data\SessionData;
 use Code16\Sharp\Data\UserData;
 use Code16\Sharp\Enums\SessionStatusLevel;
@@ -23,20 +24,20 @@ class HandleInertiaRequests extends Middleware
     protected $rootView = 'sharp::app';
 
     public function __construct(protected Filesystem $filesystem) {}
-    
+
     public function handle(Request $request, Closure $next)
     {
         Inertia::share([
             'query' => (object) $request->query(),
         ]);
-        
+
         $inertiaRequest = SharpInertiaRequest::createFrom($request);
-        
+
         app()->instance('request', $inertiaRequest);
-        
+
         return parent::handle($inertiaRequest, $next);
     }
-    
+
     public function share(Request $request)
     {
         return [
@@ -66,10 +67,9 @@ class HandleInertiaRequests extends Middleware
                     'sharp::pages/auth/reset-password',
                     'sharp::show',
                 ])
-                    ->map(function ($group) {
-                        return collect(__($group, [], app()->getFallbackLocale()))
-                            ->mapWithKeys(fn ($value, $key) => ["$group.$key" => __("$group.$key")]);
-                    })
+                    ->map(fn ($group) => collect(__($group, [], app()->getFallbackLocale()))
+                        ->mapWithKeys(fn ($value, $key) => ["$group.$key" => __("$group.$key")])
+                    )
                     ->collapse()
                     ->toArray();
             }),
@@ -82,8 +82,6 @@ class HandleInertiaRequests extends Middleware
                 'sharp.display_sharp_version_in_title' => sharp()->config()->get('display_sharp_version_in_title'),
                 'sharp.display_breadcrumb' => sharp()->config()->get('display_breadcrumb'),
                 'sharp.name' => sharp()->config()->get('name'),
-                'sharp.search.enabled' => sharp()->config()->get('search.enabled'),
-                'sharp.search.placeholder' => sharp()->config()->get('search.placeholder'),
                 'sharp.theme.logo_height' => sharp()->config()->get('theme.logo_height'),
             ],
             'logo' => LogoData::optional(transform(
@@ -95,6 +93,13 @@ class HandleInertiaRequests extends Middleware
                     'url' => $url,
                 ] : null,
             )),
+            'globalSearch' => sharp()->config()->get('search.enabled') && sharp()->config()->get('search.engine')?->authorize()
+                ? GlobalSearchData::from([
+                    'config' => [
+                        'placeholder' => sharp()->config()->get('search.placeholder'),
+                    ],
+                ])
+                : null,
             'globalFilters' => app(GlobalFilters::class)->isEnabled()
                 ? GlobalFiltersData::from(app(GlobalFilters::class)->toArray())
                 : null,

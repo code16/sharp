@@ -5,15 +5,9 @@
     import { ref, watch } from "vue";
     import { Search } from "lucide-vue-next";
     import { Link } from '@inertiajs/vue3';
-    import {
-        Command,
-        CommandGroup,
-        CommandInput,
-        CommandItem,
-        CommandList
-    } from "@/components/ui/command";
+    import { Command, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
     import { useEventListener } from "@vueuse/core";
-    import { SearchResultSetData } from "@/types";
+    import { GlobalSearchData, SearchResultSetData } from "@/types";
     import { __ } from '@/utils/i18n';
     import Icon from "@/components/ui/Icon.vue";
     import { api } from "@/api/api";
@@ -21,6 +15,9 @@
     import debounce from "lodash/debounce";
     import { Dialog, DialogScrollContent } from "@/components/ui/dialog";
 
+    const props = defineProps<{
+      globalSearch: GlobalSearchData,
+    }>();
     const open = ref(false);
     const loading = ref(false);
     const resultSets = ref<SearchResultSetData[]>([]);
@@ -58,11 +55,11 @@
 <template>
     <SidebarGroup v-bind="$attrs">
         <SidebarGroupContent class="relative">
-            <Label for="global-search" class="sr-only">{{ config('sharp.search.placeholder') }}</Label>
+            <Label for="global-search" class="sr-only">{{ props.globalSearch.config.placeholder }}</Label>
             <SidebarInput
                 id="global-search"
                 class="pl-8 text-xs"
-                :placeholder="config('sharp.search.placeholder') ?? __('sharp::menu.global_search.default_placeholder')"
+                :placeholder="props.globalSearch.config.placeholder ?? __('sharp::menu.global_search.default_placeholder')"
                 @click="open = true"
                 readonly
             />

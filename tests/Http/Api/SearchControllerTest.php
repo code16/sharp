@@ -2,7 +2,9 @@
 
 use Code16\Sharp\Search\SharpSearchEngine;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
+use Code16\Sharp\Tests\Fixtures\User;
 use Code16\Sharp\Utils\Links\LinkToShowPage;
+use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
     sharp()->config()->addEntity('person', PersonEntity::class);
@@ -196,4 +198,77 @@ it('allows multiple search terms', function () {
         ->assertJsonFragment([
             'label' => 'John Wayne',
         ]);
+});
+
+it('returns a 404 if not enabled', function () {
+    sharp()->config()->disableGlobalSearch();
+
+    $this
+        ->getJson('/sharp/api/search?q=some-search')
+        ->assertNotFound();
+});
+
+it('returns a 403 if not authorized', function () {
+    sharp()->config()->enableGlobalSearch(
+        new class() extends SharpSearchEngine
+        {
+            public function searchFor(array $terms): void
+            {
+                $resultSet = $this->addResultSet('People');
+                $resultSet->addResultLink(LinkToShowPage::make('person', 1), 'John Wayne');
+            }
+            public function authorize(): bool
+            {
+                return auth()->user()->email == 'authorized-user@test.fr';
+            }
+        }
+    );
+
+    $this
+        ->getJson('/sharp/api/search?q=some-search')
+        ->assertForbidden();
+
+    $this
+        ->actingAs(User::make(['email' => 'authorized-user@test.fr']))
+        ->getJson('/sharp/api/search?q=some-search')
+        ->assertOk();
+});
+
+it('the global search is sent with every inertia request, if enabled and authorized', function () {
+    sharp()->config()->addEntity('person', PersonEntity::class);
+
+    $this
+        ->get('/sharp/s-list/person')
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('globalSearch', null)
+        );
+
+    sharp()->config()->enableGlobalSearch(
+        engine: new class() extends SharpSearchEngine
+        {
+            public function searchFor(array $terms): void {}
+            public function authorize(): bool
+            {
+                return auth()->user()->email == 'authorized-user@test.fr';
+            }
+        },
+        placeholder: 'Search for something'
+    );
+
+    $this
+        ->get('/sharp/s-list/person')
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('globalSearch', null)
+        );
+
+    $this
+        ->actingAs(User::make(['email' => 'authorized-user@test.fr']))
+        ->get('/sharp/s-list/person')
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('globalSearch', [
+                'config' => [
+                    'placeholder' => 'Search for something',
+                ],
+            ])
+        );
 });

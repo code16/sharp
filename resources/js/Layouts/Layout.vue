@@ -1,7 +1,7 @@
 <script lang="ts">
-    import { inject, Ref } from "vue";
+import {inject, Ref} from "vue";
 
-    export function useMenuBoundaryElement() {
+export function useMenuBoundaryElement() {
         return inject<Ref<HTMLElement>>('menuBoundary');
     }
 </script>
@@ -35,7 +35,7 @@
         AlertDialogTitle
     } from "@/components/ui/alert-dialog";
     import { config } from "@/utils/config";
-    import { GlobalFiltersData } from "@/types";
+    import { GlobalSearchData, GlobalFiltersData } from "@/types";
     import GlobalFilters from "@/filters/components/GlobalFilters.vue";
     import SharpLogoMini from '../../svg/logo-mini.svg';
     import ColorModeDropdownItems from "@/components/ColorModeDropdownItems.vue";
@@ -60,6 +60,7 @@
 
     const dialogs = useDialogs();
     const menu = useMenu();
+    const globalSearch = usePage().props.globalSearch as GlobalSearchData | null;
     const globalFilters = usePage().props.globalFilters as GlobalFiltersData | null;
     const menuBoundary = useTemplateRef<HTMLElement>('menuBoundary');
     provide('menuBoundary', menuBoundary);
@@ -112,8 +113,8 @@
                             <GlobalFilters :global-filters="globalFilters" />
                         </SidebarGroup>
                     </template>
-                    <template v-if="config('sharp.search.enabled')">
-                        <GlobalSearch />
+                    <template v-if="globalSearch">
+                        <GlobalSearch :global-search="globalSearch" />
                     </template>
 
                     <template v-if="menu.isVisible">
