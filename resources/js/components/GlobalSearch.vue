@@ -1,21 +1,21 @@
 <script setup lang="ts">
-import {SidebarGroup, SidebarGroupContent, SidebarInput} from "@/components/ui/sidebar";
-import {Label} from "@/components/ui/label";
-import {config} from "@/utils/config";
-import {ref, watch} from "vue";
-import {Search} from "lucide-vue-next";
-import {Link} from '@inertiajs/vue3';
-import {Command, CommandGroup, CommandInput, CommandItem, CommandList} from "@/components/ui/command";
-import {useMagicKeys} from "@vueuse/core";
-import {GlobalSearchData, SearchResultSetData} from "@/types";
-import {__} from '@/utils/i18n';
-import Icon from "@/components/ui/Icon.vue";
-import {api} from "@/api/api";
-import {route} from "@/utils/url";
-import debounce from "lodash/debounce";
-import {Dialog, DialogScrollContent} from "@/components/ui/dialog";
+    import { SidebarGroup, SidebarGroupContent, SidebarInput } from "@/components/ui/sidebar";
+    import { Label } from "@/components/ui/label";
+    import { config } from "@/utils/config";
+    import { ref, watch } from "vue";
+    import { Search } from "lucide-vue-next";
+    import { Link } from '@inertiajs/vue3';
+    import { Command, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+    import { useMagicKeys } from "@vueuse/core";
+    import { GlobalSearchData, SearchResultSetData } from "@/types";
+    import { __ } from '@/utils/i18n';
+    import Icon from "@/components/ui/Icon.vue";
+    import { api } from "@/api/api";
+    import { route } from "@/utils/url";
+    import debounce from "lodash/debounce";
+    import { Dialog, DialogScrollContent } from "@/components/ui/dialog";
 
-const props = defineProps<{
+    const props = defineProps<{
       globalSearch: GlobalSearchData,
     }>();
     const open = ref(false);
