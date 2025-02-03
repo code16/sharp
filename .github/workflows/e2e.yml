@@ -30,7 +30,7 @@ jobs:
         run: npm ci
         working-directory: tests-e2e
       - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
+        run: npx playwright install chromium --with-deps
         working-directory: tests-e2e
       - name: Install Composer dependencies
         run: composer install
@@ -54,5 +54,7 @@ jobs:
         if: ${{ !cancelled() }}
         with:
           name: playwright-report
-          path: tests-e2e/playwright-report/
+          path: |
+            tests-e2e/playwright-report/
+            tests-e2e/site/storage/logs/
           retention-days: 30
