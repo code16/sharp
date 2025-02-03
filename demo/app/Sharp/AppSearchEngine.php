@@ -76,4 +76,9 @@ class AppSearchEngine extends SharpSearchEngine
                 );
             });
     }
+
+    public function authorize(): bool
+    {
+        return true;
+    }
 }

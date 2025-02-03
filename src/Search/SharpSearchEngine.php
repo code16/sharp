@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Search;
 
-use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Collection;
 
 abstract class SharpSearchEngine
@@ -23,7 +22,7 @@ abstract class SharpSearchEngine
 
     abstract public function searchFor(array $terms): void;
 
-    public function authorizeFor(User $user): bool
+    public function authorize(): bool
     {
         return true;
     }

@@ -2,6 +2,7 @@
 
 use Code16\Sharp\Search\SharpSearchEngine;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
+use Code16\Sharp\Tests\Fixtures\User;
 use Code16\Sharp\Utils\Links\LinkToShowPage;
 
 beforeEach(function () {
@@ -196,4 +197,38 @@ it('allows multiple search terms', function () {
         ->assertJsonFragment([
             'label' => 'John Wayne',
         ]);
+});
+
+it('returns a 404 if not enabled', function () {
+    sharp()->config()->disableGlobalSearch();
+
+    $this
+        ->getJson('/sharp/api/search?q=some-search')
+        ->assertNotFound();
+});
+
+it('returns a 403 if not authorized', function () {
+    sharp()->config()->enableGlobalSearch(
+        new class() extends SharpSearchEngine
+        {
+            public function searchFor(array $terms): void
+            {
+                $resultSet = $this->addResultSet('People');
+                $resultSet->addResultLink(LinkToShowPage::make('person', 1), 'John Wayne');
+            }
+            public function authorize(): bool
+            {
+                return auth()->user()->email == 'authorized-user@test.fr';
+            }
+        }
+    );
+
+    $this
+        ->getJson('/sharp/api/search?q=some-search')
+        ->assertForbidden();
+
+    $this
+        ->actingAs(User::make(['email' => 'authorized-user@test.fr']))
+        ->getJson('/sharp/api/search?q=some-search')
+        ->assertOk();
 });

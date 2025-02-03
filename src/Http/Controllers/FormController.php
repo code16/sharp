@@ -123,9 +123,9 @@ class FormController extends SharpProtectedController
         $formattedData = $form->formatAndValidateRequestData(request()->all(), $instanceId);
         $form->update($instanceId, $formattedData);
         $this->uploadManager->dispatchJobs($instanceId);
-        
+
         $previousUrl = request()->query('previous_page_url') ?: sharp()->context()->breadcrumb()->getPreviousSegmentUrl();
-        
+
         return redirect()->to($this->previousUrlWithHighlightedQuery($previousUrl, $entityKey, $instanceId));
     }
 
@@ -164,7 +164,7 @@ class FormController extends SharpProtectedController
                 )
         );
     }
-    
+
     private function previousUrlWithHighlightedQuery(string $url, EntityKey $entityKey, ?string $instanceId): string
     {
         return Uri::of($url)->when($instanceId)->withQuery([
@@ -172,16 +172,16 @@ class FormController extends SharpProtectedController
             'highlighted_instance_id' => $instanceId,
         ]);
     }
-    
+
     private function getPreviousPageUrlFromReferer(): ?string
     {
-        if(!request()->header('referer')) {
+        if (! request()->header('referer')) {
             return null;
         }
-        
+
         $referer = Uri::of(request()->header('referer'));
         $previousSegmentUrl = Uri::of(sharp()->context()->breadcrumb()->getPreviousSegmentUrl());
-        
+
         return $referer->path() === $previousSegmentUrl->path()
             ? $referer->value()
             : null;
