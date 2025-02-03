@@ -2,7 +2,7 @@ name: Deploy
 on:
   push:
     tags:
-    - 'v8.*'
+    - 'v9.*'
 jobs:
   deploy:
     runs-on: ubuntu-latest
