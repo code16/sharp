@@ -89,6 +89,20 @@ class MySearchEngine extends SharpSearchEngine
 
 As you can see in this example, the `validateSearch()` method accepts an array of regular Laravel validation rules, and an optional array of custom validation messages. Sharp will not display results if the validation fails, but a good practice is to return early in this case, to avoid unnecessary queries.
 
+### Authorization
+You may need to enable global search only for a subset of your users. You can do so by overriding the `authorizeFor(User $user)` method in your search engine class:
+
+```php
+class MySearchEngine extends SharpSearchEngine
+{
+    public function authorizeFor(User $user): bool
+    {
+       return $user->can('search');
+    }
+}
+```
+
+
 ## Use the search field
 
 The search field is available in the top bar of Sharp, and can be called with these pretty standard keyboard shortcuts: `Ctrl+K`, `Cmd+K` (Mac) or simply `/`.

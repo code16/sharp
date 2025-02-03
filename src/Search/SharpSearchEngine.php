@@ -2,8 +2,8 @@
 
 namespace Code16\Sharp\Search;
 
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Collection;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 
 abstract class SharpSearchEngine
 {
@@ -23,7 +23,7 @@ abstract class SharpSearchEngine
 
     abstract public function searchFor(array $terms): void;
 
-    public function authorizeFor(Authenticatable $user): bool
+    public function authorizeFor(User $user): bool
     {
         return true;
     }
