@@ -100,7 +100,7 @@ it('allows to define localValues with models as attributes array', function () {
         ->setListItemTemplate('Choose {{ $name }}, he is {{ $age }}')
         ->setResultItemTemplate('{{ $name }} was chosen')
         ->setLocalValues([new Person(['id' => 1, 'name' => 'bob', 'age' => 42])]);
-    
+
     expect($autocompleteField->toArray()['localValues'])
         ->toEqual([
             [

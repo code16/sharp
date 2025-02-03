@@ -96,12 +96,12 @@ abstract class SharpForm
 
         return $this;
     }
-    
+
     final public function getCreateTitle(): ?string
     {
         return $this->createFormTitle;
     }
-    
+
     final public function getEditTitle(): ?string
     {
         return $this->editFormTitle;

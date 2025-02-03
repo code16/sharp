@@ -16,12 +16,13 @@ class TextFormatter extends SharpShowFieldFormatter
 
     /**
      * @param  SharpShowTextField  $field
+     *
      * @throws SharpFormFieldDataException
      */
     public function toFront(SharpShowField $field, $value)
     {
         $this->guardAgainstInvalidLocalizedValue($field, $value);
-        
+
         return collect(['text' => $value])
             ->pipeThrough([
                 fn (Collection $collection) => $collection->merge(

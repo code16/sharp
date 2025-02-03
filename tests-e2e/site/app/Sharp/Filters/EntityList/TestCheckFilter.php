@@ -8,6 +8,6 @@ class TestCheckFilter extends EntityListCheckFilter
 {
     public function buildFilterConfig(): void
     {
-       $this->configureLabel('Check');
+        $this->configureLabel('Check');
     }
 }

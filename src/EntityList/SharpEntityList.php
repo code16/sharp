@@ -95,7 +95,7 @@ abstract class SharpEntityList
                 ->toArray()
             )
             ->toArray();
-        
+
         return [
             'items' => $items,
             'meta' => $listItems instanceof AbstractPaginator

@@ -25,7 +25,7 @@ class SingleShowController extends SharpProtectedController
     public function show(EntityKey $entityKey)
     {
         sharp_check_ability('view', $entityKey);
-        
+
         $entity = $this->entityManager->entityFor($entityKey);
         $show = $entity->getShowOrFail();
 

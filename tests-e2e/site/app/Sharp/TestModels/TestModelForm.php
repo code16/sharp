@@ -340,7 +340,7 @@ class TestModelForm extends SharpForm
 
     public function buildFormConfig(): void
     {
-        if(session()->get('display_show_page_after_creation')) {
+        if (session()->get('display_show_page_after_creation')) {
             $this->configureDisplayShowPageAfterCreation();
         }
     }

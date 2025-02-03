@@ -17,10 +17,11 @@ class SharpServiceProvider extends SharpAppServiceProvider
             ->setName('E2E')
             ->setSharpMenu(SharpMenu::class)
             ->addEntity('test-models', TestModelEntity::class)
-            ->enableImpersonation(new class extends SharpImpersonationHandler {
+            ->enableImpersonation(new class() extends SharpImpersonationHandler
+            {
                 public function enabled(): bool
                 {
-                    return !request()->hasHeader('X-E2E-REQUEST');
+                    return ! request()->hasHeader('X-E2E-REQUEST');
                 }
 
                 public function getUsers(): array

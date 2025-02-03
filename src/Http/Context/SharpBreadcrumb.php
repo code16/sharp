@@ -98,7 +98,7 @@ class SharpBreadcrumb
             )
         );
     }
-    
+
     /**
      * @return Collection<int, BreadcrumbItem>
      */
@@ -207,11 +207,11 @@ class SharpBreadcrumb
             default => null
         };
     }
-    
+
     public function getParentShowCachedBreadcrumbLabel(): ?string
     {
         $item = $this->breadcrumbItems()->last();
-        
+
         return Cache::get("sharp.breadcrumb.{$item->key}.s-show.{$item->instance}");
     }
 

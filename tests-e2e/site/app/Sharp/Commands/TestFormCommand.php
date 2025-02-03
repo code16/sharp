@@ -27,13 +27,13 @@ trait TestFormCommand
 
     public function executeTestFormCommand(mixed $instanceId, array $data = []): array
     {
-        if($data['required']) {
+        if ($data['required']) {
             $this->validate($data, [
-                'text' => 'required'
+                'text' => 'required',
             ]);
         }
 
-        return match($data['test_action']) {
+        return match ($data['test_action']) {
             'download' => $this->download('file.pdf', 'file.pdf', 'fixtures'),
             'info' => $this->info('Info message : '.$data['text']),
             'link' => $this->link('https://example.org'),

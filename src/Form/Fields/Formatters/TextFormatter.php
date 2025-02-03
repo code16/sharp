@@ -9,16 +9,17 @@ use Code16\Sharp\Form\Fields\SharpFormTextField;
 class TextFormatter extends AbstractSimpleFormatter
 {
     /**
-     * @param SharpFormTextField $field
+     * @param  SharpFormTextField  $field
+     *
      * @throws SharpFormFieldDataException
      */
     public function toFront(SharpFormField $field, $value)
     {
         $this->guardAgainstInvalidLocalizedValue($field, $value);
-        
+
         return parent::toFront($field, $value);
     }
-    
+
     /**
      * @param  SharpFormTextField  $field
      */

@@ -12,7 +12,7 @@ class InitSeeder extends Seeder
 {
     public function run(SeedParametersData $parameters)
     {
-        if($parameters->tags) {
+        if ($parameters->tags) {
             TestTag::insert(
                 TestTag::factory()
                     ->forEachSequence(
@@ -31,7 +31,7 @@ class InitSeeder extends Seeder
             );
         }
 
-        if($parameters->entityList) {
+        if ($parameters->entityList) {
             $models = TestModel::factory()
                 ->forEachSequence(
                     ['text' => 'check', 'check' => true],
@@ -43,17 +43,17 @@ class InitSeeder extends Seeder
             TestModel::insert(
                 collect(
                     TestModel::factory()
-                    ->sequence(fn (Sequence $sequence) => [
-                        'text' => 'Test Model ' . ($sequence->index + 1),
-                        'textarea' => 'Textarea ' . $sequence->count() - $sequence->index,
-                    ])
-                    ->count(20)
-                    ->raw()
+                        ->sequence(fn (Sequence $sequence) => [
+                            'text' => 'Test Model '.($sequence->index + 1),
+                            'textarea' => 'Textarea '.$sequence->count() - $sequence->index,
+                        ])
+                        ->count(20)
+                        ->raw()
                 )->skip(count($models))->all(),
             );
         }
 
-        if($parameters->show) {
+        if ($parameters->show) {
             TestModel::factory()
                 ->create([
                     'text' => 'Example',

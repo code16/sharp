@@ -185,7 +185,7 @@ abstract class SharpFormEditorEmbed
 
         return $this;
     }
-    
+
     final protected function configureDisplayEmbedHeader(bool $display = true, ?string $title = null): self
     {
         $this->displayEmbedHeader = $display;

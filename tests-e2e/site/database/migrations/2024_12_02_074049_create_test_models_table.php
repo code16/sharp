@@ -35,7 +35,7 @@ return new class() extends Migration
             $table->json('select_dropdown_multiple')->nullable();
             $table->json('select_checkboxes')->nullable();
             $table->unsignedInteger('select_radio')->nullable();
-//            $table->json('tags')->nullable();
+            //            $table->json('tags')->nullable();
             $table->text('textarea')->nullable();
             $table->json('textarea_localized')->nullable();
             $table->string('text')->nullable();

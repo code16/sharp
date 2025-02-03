@@ -121,7 +121,6 @@ class SharpShowEntityListField extends SharpShowField
 
     /**
      * @deprecated Not used anymore, EEL are shown no matter what.
-     * @return SharpShowField
      */
     public function setShowIfEmpty(bool $showIfEmpty = true): SharpShowField
     {

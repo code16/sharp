@@ -4,7 +4,7 @@ return [
     'validation_error.title' => 'Your input is invalid.',
     'validation_error.description' => 'Please review your input, errors are detailed below each field.',
     'validation_error.localized' => 'There is an error in : :locales',
-    
+
     'field_locale_selector.aria_label' => 'Change language for field :field_label',
 
     'list.add_button' => 'Add an item',

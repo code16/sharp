@@ -166,12 +166,12 @@ abstract class Command
     {
         return $this->confirmationText;
     }
-    
+
     final public function getConfirmationTitle(): ?string
     {
         return $this->confirmationTitle;
     }
-    
+
     final public function getConfirmationButtonLabel(): ?string
     {
         return $this->confirmationButtonLabel;

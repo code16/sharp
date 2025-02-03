@@ -18,23 +18,23 @@ trait FormatsLocalizedValue
 
         return $this;
     }
-    
+
     /**
      * @throws SharpFormFieldDataException
      */
     protected function guardAgainstInvalidLocalizedValue(SharpFormField|SharpShowField $field, $value): void
     {
-        if(!$field instanceof IsSharpFieldWithLocalization) {
+        if (! $field instanceof IsSharpFieldWithLocalization) {
             return;
         }
-        
-        if(!$field->isLocalized() && is_array($value)) {
+
+        if (! $field->isLocalized() && is_array($value)) {
             throw new SharpFormFieldDataException(sprintf(
                 'String expected, got an Array for field value "%s". If the field is localized, add `‑>setLocalized()`',
                 $field->key()
             ));
         }
-        
+
         if ($field->isLocalized() && is_string($value)) {
             throw new SharpFormFieldDataException(sprintf(
                 'Array expected, got a String for field value "%s". The field has `‑>setLocalized()` so its value must be an array like ["en"=>"text"] or null',
@@ -50,7 +50,7 @@ trait FormatsLocalizedValue
     {
         $transformContent ??= fn ($value) => $value;
 
-        if ($field instanceof IsSharpFieldWithLocalization && $field->isLocalized() && !is_string($value)) {
+        if ($field instanceof IsSharpFieldWithLocalization && $field->isLocalized() && ! is_string($value)) {
             return collect($this->dataLocalizations ?? [])
                 ->mapWithKeys(fn ($locale) => [$locale => null])
                 ->merge($value)

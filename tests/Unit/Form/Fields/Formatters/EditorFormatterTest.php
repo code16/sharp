@@ -31,13 +31,13 @@ it('allows to format a text value to front as object when localized', function (
     $formatter = (new EditorFormatter())->setDataLocalizations(['fr', 'en']);
     $field = SharpFormEditorField::make('md')->setLocalized();
 
-    expect($formatter->toFront($field, ['en' => 'test']))->and($formatter->toFront($field, (object)['en' => 'test']))->toEqual([
+    expect($formatter->toFront($field, ['en' => 'test']))->and($formatter->toFront($field, (object) ['en' => 'test']))->toEqual([
         'text' => [
             'fr' => null,
             'en' => 'test',
         ],
     ]);
-    expect($formatter->toFront($field, (object)['en' => 'test']))->toEqual([
+    expect($formatter->toFront($field, (object) ['en' => 'test']))->toEqual([
         'text' => [
             'fr' => null,
             'en' => 'test',
@@ -55,7 +55,7 @@ it('throws if localized value is invalid to front', function () {
     expect(fn () => (new EditorFormatter())
         ->toFront(SharpFormEditorField::make('text')->setLocalized(), 'test')
     )->toThrow(SharpFormFieldDataException::class);
-    
+
     expect(fn () => (new EditorFormatter())
         ->toFront(SharpFormEditorField::make('text'), ['en' => 'test'])
     )->toThrow(SharpFormFieldDataException::class);
@@ -76,7 +76,7 @@ it('allows to format a text value from front', function () {
 
 it('adds missing locales when formatting a localized text value from front in an editor field', function () {
     $value = Str::random();
-    
+
     expect(
         (new EditorFormatter())
             ->setDataLocalizations(['fr', 'en', 'es'])
@@ -92,7 +92,7 @@ it('adds missing locales when formatting a localized text value from front in an
 // edge case : we can't safely convert a string to a localized array so we pass the string through
 it('returns a string when formatting a string text value from front in a localized editor field', function () {
     $value = Str::random();
-    
+
     expect(
         (new EditorFormatter())
             ->setDataLocalizations(['fr', 'en', 'es'])

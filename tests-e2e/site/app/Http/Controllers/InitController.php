@@ -30,7 +30,7 @@ class InitController extends Controller
             auth()->login($user);
         }
 
-        if(request()->has('session')) {
+        if (request()->has('session')) {
             session()->put(request()->get('session'));
         }
 

@@ -3,7 +3,6 @@
 namespace App\Sharp\Commands;
 
 use App\Models\TestModel;
-use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
 
 class TestReloadInstanceCommand extends InstanceCommand

@@ -89,7 +89,7 @@ it('allows to configure label', function () {
         ->toEqual('Some Label');
 });
 
-it('allows to hide embed header', function() {
+it('allows to hide embed header', function () {
     $defaultEmbed = new class() extends SharpFormEditorEmbed
     {
         public function buildFormFields(FieldsContainer $formFields): void

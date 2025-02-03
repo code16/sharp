@@ -8,6 +8,6 @@ class TestDateRangeFilter extends EntityListDateRangeFilter
 {
     public function buildFilterConfig(): void
     {
-       $this->configureLabel('Date Range');
+        $this->configureLabel('Date Range');
     }
 }

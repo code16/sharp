@@ -55,15 +55,15 @@ class TestModelList extends SharpEntityList
 
     public function buildListConfig(): void
     {
-        if(session()->get('default_sort')) {
+        if (session()->get('default_sort')) {
             $this->configureDefaultSort(session()->get('default_sort'));
         }
 
-        if(session()->get('quick_creation_form')) {
+        if (session()->get('quick_creation_form')) {
             $this->configureQuickCreationForm();
         }
 
-        if(session()->get('entity_list_multiform')) {
+        if (session()->get('entity_list_multiform')) {
             $this->configureMultiformAttribute('form');
         }
 
@@ -120,31 +120,31 @@ class TestModelList extends SharpEntityList
                         $this->queryParams->specificIds(),
                         fn (Builder $builder, array $ids) => $builder->whereIn('id', $ids),
                     )
-                    ->when($this->queryParams->filterFor(TestCheckFilter::class), function(Builder $query, $check) {
+                    ->when($this->queryParams->filterFor(TestCheckFilter::class), function (Builder $query, $check) {
                         $query->where('check', $check);
                     })
-                    ->when($this->queryParams->filterFor(TestDateRangeFilter::class), function(Builder $query, DateRangeFilterValue $dateRange) {
+                    ->when($this->queryParams->filterFor(TestDateRangeFilter::class), function (Builder $query, DateRangeFilterValue $dateRange) {
                         $query->whereBetween('date', [
                             $dateRange->getStart(),
                             $dateRange->getEnd(),
                         ]);
                     })
-                    ->when($this->queryParams->filterFor(TestSelectFilter::class), function(Builder $query, $value) {
+                    ->when($this->queryParams->filterFor(TestSelectFilter::class), function (Builder $query, $value) {
                         $query->where('select_dropdown', $value);
                     })
-                    ->when($this->queryParams->filterFor(TestSelectMultipleFilter::class), function(Builder $query, $value) {
+                    ->when($this->queryParams->filterFor(TestSelectMultipleFilter::class), function (Builder $query, $value) {
                         $query->whereIn('select_dropdown', $value);
                     })
-                    ->when($this->queryParams->hasSearch(), function(Builder $query) {
-                        collect($this->queryParams->searchWords())->each(function($word) use ($query) {
+                    ->when($this->queryParams->hasSearch(), function (Builder $query) {
+                        collect($this->queryParams->searchWords())->each(function ($word) use ($query) {
                             $query->where(function (Builder $query) use ($word) {
                                 $query->orWhere('text', 'like', $word);
                             });
                         });
                     })
                     ->when($this->queryParams->sortedBy(),
-                        fn(Builder $query) => $query->orderBy($this->queryParams->sortedBy(), $this->queryParams->sortedDir()),
-                        fn(Builder $query) => $query->orderBy('order')
+                        fn (Builder $query) => $query->orderBy($this->queryParams->sortedBy(), $this->queryParams->sortedDir()),
+                        fn (Builder $query) => $query->orderBy('order')
                     )
                     ->paginate(5)
             );

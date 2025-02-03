@@ -28,7 +28,7 @@ class LoginController extends Controller
         }
 
         $message = sharp()->config()->get('auth.login_form_message');
-        
+
         return Inertia::render('Auth/Login', [
             'loginIsEmail' => sharp()->config()->get('auth.login_attribute') === 'email',
             'message' => $message

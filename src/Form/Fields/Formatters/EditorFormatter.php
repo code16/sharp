@@ -10,13 +10,14 @@ use Illuminate\Support\Collection;
 class EditorFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
 {
     /**
-     * @param SharpFormEditorField $field
+     * @param  SharpFormEditorField  $field
+     *
      * @throws SharpFormFieldDataException
      */
     public function toFront(SharpFormField $field, $value)
     {
         $this->guardAgainstInvalidLocalizedValue($field, $value);
-        
+
         return collect([
             'text' => $this->maybeLocalized($field, $value),
         ])

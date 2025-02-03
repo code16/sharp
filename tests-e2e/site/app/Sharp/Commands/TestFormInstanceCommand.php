@@ -2,7 +2,6 @@
 
 namespace App\Sharp\Commands;
 
-
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 

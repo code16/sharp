@@ -12,7 +12,6 @@ class TestModelFormTabs extends TestModelForm
             ->addTab('Tab 1', function (FormLayoutTab $tab) {
                 $this->buildTestFieldsLayout($tab);
             })
-            ->addTab('Tab 2', function (FormLayoutTab $tab) {
-            });
+            ->addTab('Tab 2', function (FormLayoutTab $tab) {});
     }
 }

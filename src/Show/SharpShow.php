@@ -104,7 +104,7 @@ abstract class SharpShow
 
         return $this;
     }
-    
+
     final public function titleAttribute(): ?string
     {
         return $this->pageTitleField?->key();
