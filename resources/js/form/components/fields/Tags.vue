@@ -55,7 +55,7 @@
             .filter(o => !props.value?.find(v => o.id != null && v.id != null && o.id === v.id)); // show only unselected options
     });
 
-    emit('input', props.value.map(option => withItemKey(option)));
+    emit('input', props.value?.map(option => withItemKey(option)));
 </script>
 
 <template>
