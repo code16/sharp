@@ -13,11 +13,15 @@ class ApiSearchController extends ApiController
     {
         $searchEngine = tap(
             sharp()->config()->get('search.engine'),
-            fn (SharpSearchEngine $engine) => $engine->searchFor(
-                app(StringUtil::class)
-                    ->explodeSearchTerms(request()->input('q', ''))
-                    ->all()
-            )
+            function (SharpSearchEngine $engine) {
+                if ($engine->authorizeFor(auth()->user())) {
+                    $engine->searchFor(
+                        app(StringUtil::class)
+                            ->explodeSearchTerms(request()->input('q', ''))
+                            ->all()
+                    );
+                }
+            }
         );
 
         return response()->json(
