@@ -24,9 +24,9 @@ abstract class SharpShow
     use WithCustomTransformers;
 
     protected ?ShowLayout $showLayout = null;
-    protected ?string $multiformAttribute = null;
     protected ?SharpShowTextField $pageTitleField = null;
     protected ?string $deleteConfirmationText = null;
+    protected ?string $editButtonLabel = null;
 
     final public function showLayout(): array
     {
@@ -47,9 +47,11 @@ abstract class SharpShow
             // Filter model attributes on actual show labels
             ->only(
                 collect($this->getDataKeys())
+                    ->merge(array_keys($this->transformers))
                     ->when($this->breadcrumbAttribute, fn ($collect) => $collect->push($this->breadcrumbAttribute))
                     ->when($this->entityStateAttribute, fn ($collect) => $collect->push($this->entityStateAttribute))
-                    ->when($this->multiformAttribute, fn ($collect) => $collect->push($this->multiformAttribute))
+                    ->unique()
+                    ->values()
                     ->toArray()
             )
             ->all();
@@ -60,10 +62,8 @@ abstract class SharpShow
         $config = collect($config)
             ->merge([
                 'deleteConfirmationText' => $this->deleteConfirmationText ?: trans('sharp::show.delete_confirmation_text'),
+                'editButtonLabel' => $this->editButtonLabel,
             ])
-            ->when($this->multiformAttribute, fn ($collection) => $collection->merge([
-                'multiformAttribute' => $this->multiformAttribute,
-            ]))
             ->when($this->pageTitleField, fn ($collection) => $collection->merge([
                 'titleAttribute' => $this->pageTitleField->key,
             ]))
@@ -73,14 +73,14 @@ abstract class SharpShow
             $this->appendBreadcrumbCustomLabelAttribute($config);
             $this->appendEntityStateToConfig($config, $instanceId);
             $this->appendInstanceCommandsToConfig($config, $instanceId);
-            $this->appendGlobalMessageToConfig($config);
         });
     }
 
+    /**
+     * @deprecated to be deleted, no more useful
+     */
     final protected function configureMultiformAttribute(string $attribute): self
     {
-        $this->multiformAttribute = $attribute;
-
         return $this;
     }
 
@@ -91,11 +91,23 @@ abstract class SharpShow
         return $this;
     }
 
+    final public function configureEditButtonLabel(string $label): self
+    {
+        $this->editButtonLabel = $label;
+
+        return $this;
+    }
+
     final protected function configureDeleteConfirmationText(string $text): self
     {
         $this->deleteConfirmationText = $text;
 
         return $this;
+    }
+    
+    final public function titleAttribute(): ?string
+    {
+        return $this->pageTitleField?->key();
     }
 
     private function buildFormFields(FieldsContainer $fields): void

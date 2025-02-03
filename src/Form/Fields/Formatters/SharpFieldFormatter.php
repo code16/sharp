@@ -3,33 +3,22 @@
 namespace Code16\Sharp\Form\Fields\Formatters;
 
 use Code16\Sharp\Form\Fields\SharpFormField;
+use Code16\Sharp\Utils\Fields\Formatters\FormatsLocalizedValue;
 
 abstract class SharpFieldFormatter
 {
-    protected ?string $instanceId = null;
-    protected ?array $dataLocalizations = null;
+    use FormatsLocalizedValue;
 
-    public function setInstanceId(?string $instanceId): self
+    protected ?string $instanceId = null;
+
+    public function setInstanceId(?string $instanceId): static
     {
         $this->instanceId = $instanceId;
 
         return $this;
     }
 
-    public function setDataLocalizations(array $dataLocalizations): self
-    {
-        $this->dataLocalizations = $dataLocalizations;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
     abstract public function toFront(SharpFormField $field, $value);
 
-    /**
-     * @return mixed
-     */
     abstract public function fromFront(SharpFormField $field, string $attribute, $value);
 }

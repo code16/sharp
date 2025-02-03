@@ -5,108 +5,102 @@
 The primary color is customisable, and is applied to the header and buttons. Although every hue works well, too light colors aren't supported (e.g. works well with [tailwind colors](https://tailwindcss.com/docs/customizing-colors#color-palette-reference) >= 600).
 
 ```php
-// config/sharp.php
-return [
-    // [...]
-    
-    'theme' => [
-        'primary_color' => '#004D40',
-    ],
-];
+class SharpServiceProvider extends SharpAppServiceProvider
+{
+    protected function configureSharp(SharpConfigBuilder $config): void
+    {
+        $config
+            ->setThemeColor('#004D40')
+            // [...]
+    }
+}
 ```
 
-### Login and menu logos
+### Header logo
 
-By default, the `config('sharp.name')` is displayed on the login page and on top of the menu. You can if you wish display images instead: Sharp will look for PNGs named `login-icon.png` and `menu-icon.png`, in a `/public/sharp-assets/` directory. Note that :
-- `login-icon.png` is limited to 200 pixels in width and 100 pixels in height,
-- and `menu-icon.png` must fit in 150 pixels in width and 50 pixels in height.
-
-If you need to configure the image files URLs, you can do it with this config:
+By default, the configured `name` is displayed on the header. If you want to show custom logo, you can do it with this config:
 
 ```php
-// config/sharp.php
-
-return [
-    // [...]
-    
-    'theme' => [
-        'primary_color' => ...,
-        'logo_urls' => [
-            'menu' => '/sharp/subdir/my-custom-menu-icon.png',
-            'login' => '/sharp/subdir/my-custom-login-icon.png',
-        ],
-    ],
-];
+class SharpServiceProvider extends SharpAppServiceProvider
+{
+    protected function configureSharp(SharpConfigBuilder $config): void
+    {
+        $config
+            ->setName('My Sharp App')
+            ->setThemeLogo(
+                logoUrl: '/my-sharp-assets/my-custom-logo.svg',
+                logoHeight: '1.5rem',
+                faviconUrl: '/my-sharp-assets/favicon.png'
+            )
+            // [...]
+    }
+}
 ```
 
-#### Display a custom message on login page
+The file should be an SVG, you can customize the logo height by setting the `logo_height` config.
 
-You can display a custom content under the form on login page; you'll need to create a new template file:
+:::tip
+With the newly added dark theme, it is recommended to use an SVG logo with `fill="currentColor"` to allow the logo to adapt to the theme, Sharp will handle it for you.
+:::
+
+### Login form
+
+You can customize the login form with a custom message.
+
+```php
+class SharpServiceProvider extends SharpAppServiceProvider
+{
+    protected function configureSharp(SharpConfigBuilder $config): void
+    {
+        $config
+            ->appendMessageOnLoginForm('sharp.login-page-message')
+            // or a direct message
+            // ->appendMessageOnLoginForm('Display a custom message to your users')
+            // [...]
+    }
+}
+```
+
+The custom message is displayed under the form; you can either provide HTML or the name of a custom blade template file.
 
 ```blade
-<!-- resources/views/sharp/_login-page-message.blade.php -->
+<!-- resources/views/sharp/login-page-message.blade.php -->
 
-<div class="alert alert-info">
+<x-sharp::card>
     Display a custom message to your users
-</div>
-```
-
-And then define the path to this custom blade in the `config/sharp.php` config file:
-
-```php
-// config/sharp.php
-
-return [
-    // [...]
-
-    'login_page_message_blade_path' => 'sharp/_login-page-message',
-];
+</x-sharp::card>
 ```
 
 ### Favicon
 
-You can define an URL for a favicon that Sharp will use in the config:
+You can define an URL for a favicon that Sharp will as a 3rd argument of the same `setThemeLogo()` method:
 
 ```php
-// config/sharp.php
-
-return [
-    // [...]
-    
-    'theme' => [
-        'favicon_url' => '/sharp-img/favicon.png',
-    ],
-]
+class SharpServiceProvider extends SharpAppServiceProvider
+{
+    protected function configureSharp(SharpConfigBuilder $config): void
+    {
+        $config
+            ->setThemeLogo(
+                faviconUrl: '/my-sharp-assets/favicon.png'
+            )
+            // [...]
+    }
+}
 ```
 
-### Injecting Assets
+### Injecting CSS
 
-You may globally inject custom CSS files after the Sharp assets by defining their paths in the `config/sharp.php` config file.
+If you want to inject custom CSS in Sharp, you can do so by using `loadViteAssets()` or `loadStaticCss()`. Be aware that tailwind classes may clash with Sharp default CSS so you may define a [Tailwind prefix](https://tailwindcss.com/docs/configuration#prefix).
 
 ```php
-// config/sharp.php
-
-return [
-    // [...]
-
-    'extensions' => [
-       'assets' => [
-          'strategy' => 'raw',
-          'head' => [
-             '/css/inject.css', // Outputs <link rel="stylesheet" href="/css/inject.css"> after sharp assets
-          ],
-       ],
-    ],
-];
+class SharpServiceProvider extends SharpAppServiceProvider
+{
+    protected function configureSharp(SharpConfigBuilder $config): void
+    {
+        $config
+            ->loadViteAssets(['resources/css/sharp.css']) // to load a CSS file built with Vite
+            ->loadStaticCss(asset('/css/sharp.css')) // Or to load a static CSS file
+    }
+}
 ```
-
-The comment next to the item within the `head` position show how the output would appear in the HTML.
-
-### Strategy
-
-The `strategy` defines how the asset path will be rendered
-
-- `raw` to output the path in the form it appears in your array
-- `asset` to pass the path to the laravel [`asset()`](https://laravel.com/docs/5.6/helpers#method-asset) function
-- `mix` to pass the path to the laravel [`mix()`](https://laravel.com/docs/5.6/helpers#method-mix) function
-- `vite` to pass to path to the laravel [`Vite::asset()`](https://laravel.com/docs/10.x/vite#blade-processing-static-assets) function

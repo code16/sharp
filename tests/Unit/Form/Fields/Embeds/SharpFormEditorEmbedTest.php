@@ -1,125 +1,245 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Form\Fields\Embeds;
-
 use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
-use Code16\Sharp\Tests\SharpTestCase;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Illuminate\Support\Arr;
 
-class SharpFormEditorEmbedTest extends SharpTestCase
-{
-    /** @test */
-    public function default_values_are_set_in_config()
+it('sets default values in config', function () {
+    $defaultEmbed = new class() extends SharpFormEditorEmbed
     {
-        $defaultEmbed = new DefaultFakeSharpFormEditorEmbed();
-        $defaultEmbed->buildEmbedConfig();
-
-        $this->assertEquals(
-            [
-                'key' => $defaultEmbed->key(),
-                'label' => 'default_fake_sharp_form_editor_embed',
-                'tag' => 'x-default-fake-sharp-form-editor-embed',
-                'attributes' => ['text'],
-                'template' => 'Empty template',
-            ],
-            $defaultEmbed->toConfigArray(true),
-        );
-    }
-
-    /** @test */
-    public function we_can_configure_tag()
-    {
-        $defaultEmbed = new class() extends DefaultFakeSharpFormEditorEmbed
+        public function buildFormFields(FieldsContainer $formFields): void
         {
-            public function buildEmbedConfig(): void
-            {
-                $this->configureTagName('my-tag');
-            }
-        };
+            $formFields->addField(
+                SharpFormTextField::make('text')
+            );
+        }
 
-        $defaultEmbed->buildEmbedConfig();
+        public function updateContent(array $data = []): array {}
 
-        $this->assertEquals(
-            'my-tag',
-            $defaultEmbed->toConfigArray(true)['tag'],
-        );
-    }
-
-    /** @test */
-    public function we_can_configure_label()
-    {
-        $defaultEmbed = new class() extends DefaultFakeSharpFormEditorEmbed
+        public function buildEmbedConfig(): void
         {
-            public function buildEmbedConfig(): void
-            {
-                $this->configureTagName('my-tag')
-                    ->configureLabel('Some Label');
-            }
-        };
+            $this->configureTagName('x-default-fake-sharp-form-editor-embed')
+                ->configureLabel('default_fake_sharp_form_editor_embed');
+        }
+    };
+    $defaultEmbed->buildEmbedConfig();
 
-        $defaultEmbed->buildEmbedConfig();
+    expect(Arr::except($defaultEmbed->toConfigArray(true), ['fields']))
+        ->toEqual([
+            'key' => $defaultEmbed->key(),
+            'label' => 'default_fake_sharp_form_editor_embed',
+            'tag' => 'x-default-fake-sharp-form-editor-embed',
+            'attributes' => ['text'],
+            'icon' => null,
+            'displayEmbedHeader' => true,
+            'embedHeaderTitle' => 'default_fake_sharp_form_editor_embed',
+        ])
+        ->and($defaultEmbed->toConfigArray(true))
+        ->toHaveKey('fields.text')
+        ->toHaveKey('fields.text.type', 'text');
+});
 
-        $this->assertEquals(
-            'Some Label',
-            $defaultEmbed->toConfigArray(true)['label'],
-        );
-    }
-
-    /** @test */
-    public function we_can_configure_form_template()
+it('allows to configure tag', function () {
+    $defaultEmbed = new class() extends SharpFormEditorEmbed
     {
-        $defaultEmbed = new class() extends DefaultFakeSharpFormEditorEmbed
+        public function buildFormFields(FieldsContainer $formFields): void
         {
-            public function buildEmbedConfig(): void
-            {
-                $this->configureTagName('my-tag')
-                    ->configureFormInlineTemplate('{{text}}');
-            }
-        };
+            $formFields->addField(
+                SharpFormTextField::make('text')
+            );
+        }
 
-        $defaultEmbed->buildEmbedConfig();
+        public function updateContent(array $data = []): array {}
 
-        $this->assertEquals(
-            '{{text}}',
-            $defaultEmbed->toConfigArray(true)['template'],
-        );
-    }
-
-    /** @test */
-    public function we_can_configure_show_template()
-    {
-        $defaultEmbed = new class() extends DefaultFakeSharpFormEditorEmbed
+        public function buildEmbedConfig(): void
         {
-            public function buildEmbedConfig(): void
-            {
-                $this->configureTagName('my-tag')
-                    ->configureShowInlineTemplate('show {{text}}');
-            }
-        };
+            $this->configureTagName('my-tag');
+        }
+    };
 
-        $defaultEmbed->buildEmbedConfig();
+    $defaultEmbed->buildEmbedConfig();
 
-        $this->assertEquals(
-            'show {{text}}',
-            $defaultEmbed->toConfigArray(false)['template'],
-        );
+    expect($defaultEmbed->toConfigArray(true)['tag'])
+        ->toEqual('my-tag');
+});
 
-        $this->assertEquals(
-            'Empty template',
-            $defaultEmbed->toConfigArray(true)['template'],
-        );
-    }
-}
-
-class DefaultFakeSharpFormEditorEmbed extends SharpFormEditorEmbed
-{
-    public function buildFormFields(FieldsContainer $formFields): void
+it('allows to configure label', function () {
+    $defaultEmbed = new class() extends SharpFormEditorEmbed
     {
-        $formFields->addField(
-            SharpFormTextField::make('text')
-        );
-    }
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(
+                SharpFormTextField::make('text')
+            );
+        }
 
-    public function updateContent(array $data = []): array {}
-}
+        public function updateContent(array $data = []): array {}
+
+        public function buildEmbedConfig(): void
+        {
+            $this->configureTagName('my-tag')
+                ->configureLabel('Some Label');
+        }
+    };
+
+    $defaultEmbed->buildEmbedConfig();
+
+    expect($defaultEmbed->toConfigArray(true)['label'])
+        ->toEqual('Some Label');
+});
+
+it('allows to hide embed header', function() {
+    $defaultEmbed = new class() extends SharpFormEditorEmbed
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(
+                SharpFormTextField::make('text')
+            );
+        }
+
+        public function updateContent(array $data = []): array {}
+
+        public function buildEmbedConfig(): void
+        {
+            $this->configureTagName('my-tag')
+                ->configureDisplayEmbedHeader(false);
+        }
+    };
+
+    $defaultEmbed->buildEmbedConfig();
+
+    expect($defaultEmbed->toConfigArray(true)['displayEmbedHeader'])
+        ->toBeFalse();
+});
+
+it('allows to configure both form & shows template', function () {
+    $defaultEmbed = new class() extends SharpFormEditorEmbed
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(
+                SharpFormTextField::make('text')
+            );
+        }
+
+        public function updateContent(array $data = []): array {}
+
+        public function buildEmbedConfig(): void
+        {
+            $this->configureTagName('my-tag')
+                ->configureTemplate('{{ $text }}');
+        }
+    };
+
+    $defaultEmbed->buildEmbedConfig();
+
+    expect($defaultEmbed->transformDataWithRenderedTemplate(['id' => 1, 'text' => 'Test'], isForm: false))->toEqual([
+        'id' => 1,
+        'text' => 'Test',
+        '_html' => 'Test',
+    ]);
+
+    expect($defaultEmbed->transformDataWithRenderedTemplate(['id' => 1, 'text' => 'Test'], isForm: true))->toEqual([
+        'id' => 1,
+        'text' => 'Test',
+        '_html' => 'Test',
+    ]);
+});
+
+it('allows to configure form template', function () {
+    $defaultEmbed = new class() extends SharpFormEditorEmbed
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(
+                SharpFormTextField::make('text')
+            );
+        }
+
+        public function updateContent(array $data = []): array {}
+
+        public function buildEmbedConfig(): void
+        {
+            $this->configureTagName('my-tag')
+                ->configureFormTemplate('{{ $text }}');
+        }
+    };
+
+    $defaultEmbed->buildEmbedConfig();
+
+    expect($defaultEmbed->transformDataWithRenderedTemplate(['id' => 1, 'text' => 'Test'], isForm: false))->toEqual([
+        'id' => 1,
+        'text' => 'Test',
+        '_html' => '',
+    ]);
+
+    expect($defaultEmbed->transformDataWithRenderedTemplate(['id' => 1, 'text' => 'Test'], isForm: true))->toEqual([
+        'id' => 1,
+        'text' => 'Test',
+        '_html' => 'Test',
+    ]);
+});
+
+it('allows to configure show template', function () {
+    $defaultEmbed = new class() extends SharpFormEditorEmbed
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(
+                SharpFormTextField::make('text')
+            );
+        }
+
+        public function updateContent(array $data = []): array {}
+
+        public function buildEmbedConfig(): void
+        {
+            $this->configureTagName('my-tag')
+                ->configureShowTemplate('{{ $text }}');
+        }
+    };
+
+    $defaultEmbed->buildEmbedConfig();
+
+    expect($defaultEmbed->transformDataWithRenderedTemplate(['id' => 1, 'text' => 'Test'], isForm: false))->toEqual([
+        'id' => 1,
+        'text' => 'Test',
+        '_html' => 'Test',
+    ]);
+
+    expect($defaultEmbed->transformDataWithRenderedTemplate(['id' => 1, 'text' => 'Test'], isForm: true))->toEqual([
+        'id' => 1,
+        'text' => 'Test',
+        '_html' => '',
+    ]);
+});
+
+it('allows to configure icon', function () {
+    $defaultEmbed = new class() extends SharpFormEditorEmbed
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(
+                SharpFormTextField::make('text')
+            );
+        }
+
+        public function updateContent(array $data = []): array {}
+
+        public function buildEmbedConfig(): void
+        {
+            $this->configureTagName('test')
+                ->configureIcon('testicon-user');
+        }
+    };
+
+    $defaultEmbed->buildEmbedConfig();
+
+    expect($defaultEmbed->toConfigArray(true)['icon'])
+        ->toEqual([
+            'name' => 'testicon-user',
+            'svg' => '<svg><!--user--></svg>',
+        ]);
+});

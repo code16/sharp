@@ -1,53 +1,51 @@
 # Panel widget
 
-This widget is based on the HTML Form field, and is intended to display any useful information to the user.
+This widget is intended to display any useful information to the user, based on a custom blade template.
 
 ## Attributes (setters)
 
 ```php
 $widgetsContainer->addWidget(
     SharpPanelWidget::make('messages')
-        ->setInlineTemplate('{{count}} unread messages')
-        ->setLink(LinkToEntityList::make('messages')->addFilter(MessageStateFilter::class, 'unread'))
+        ->setTemplate('my/blade/template')
 ```
 
-Note that the `setLink()` method is expecting a [LinkTo... instance](../link-to.md).
+The Panel needs a blade template to be rendered:
 
-The Panel needs a view template, that you can provide in two ways:
+### `setTemplate(View|string $template)`
+Pass a blade view path, or a blade content.
 
-### `setInlineTemplate(string $template)`
-Just write the template as a string, using placeholders for data like this: `{{var}}`.
+## Data valuation
+
+Valuation is handled by a dedicated `$this->setPanelData(string $panelWidgetKey, array $data)` in the Dashboard class.
 
 Example:
 
 ```php
-$panel->setInlineTemplate('<strong>{{count}}</strong> unread messages')
-```
-
-### `setTemplatePath(string $templatePath)`
-
-Use this if you need more control: give the path of a full template, in its own file.
-
-The template will be [interpreted by Vue.js](https://vuejs.org/v2/guide/syntax.html), meaning you can add data placeholders, DOM structure but also directives, and anything that Vue will parse. For instance:
-
-```vue
-<div v-if="show">result is {{value}}</div>
-<div v-else>result is unknown</div>
-```
-
-## Data valuation
-
-Valuation is handled by a dedicated `$this->setPanelData(string $panelWidgetKey, array $data)` in the Dashboard class:
-
-```php
-function buildWidgetsData(): void
+class MyDashboard extends SharpDashboard
 {
-    $count = 36; // [...];
-
-    $this->setPanelData(
-        'messages', ['count' => $count]
-    );
+    // ...
+    
+    protected function buildWidgets(WidgetsContainer $widgetsContainer): void
+    {
+        $widgetsContainer
+            ->addWidget(
+                SharpPanelWidget::make('my_panel')
+                    ->setTitle('My custom panel')
+                    ->setTemplate(view('sharp.templates.dashboard_panel')) // Must be an existing blade view
+            );
+    }
+    
+    public function buildWidgetsData(): void
+    {
+        // ...
+        
+        $this->setPanelData('my_panel', [
+            // Add here every data required by the blade template
+            'author' => $author,
+            'post_count' => $count,
+        ]);
+    }
 }
 ```
 
-Pass there the widget `key` and an array with the data required by your template.

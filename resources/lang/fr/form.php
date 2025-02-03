@@ -1,0 +1,136 @@
+<?php
+
+return [
+    'validation_error.title' => 'Votre saisie est invalide.',
+    'validation_error.description' => 'Veuillez contrôler votre saisie, les erreurs sont indiquées sous chaque champ.',
+    'validation_error.localized' => 'Il y a une erreur avec la langue : :locales|Il y a une erreur avec les langues : :locales',
+    
+    'field_locale_selector.aria_label' => 'Changer de langue pour le champ :field_label',
+
+    'list.add_button' => 'Ajouter un élément',
+    'list.remove_button' => 'Supprimer',
+    'list.insert_above_button' => 'Insérer au-dessus',
+    'list.sort_button.inactive' => 'Réarranger...',
+    'list.sort_button.active' => 'Terminer',
+    'list.empty' => 'Liste vide',
+    'list.bulk_upload.text' => '[Parcourir]() ou glisser-déposer des fichiers...',
+    'list.bulk_upload.help_text' => ':limit fichier(s) maximum',
+    'list.bulk_upload.validation.limit' => 'Trop de fichiers sélectionnés (:limit maximum)',
+    'list.item_dropdown_aria_label' => 'Actions',
+
+    'geolocation.loading' => 'Chargement de Google Maps...',
+    'geolocation.browse_button' => 'Choisir un endroit...',
+    'geolocation.remove_button' => 'Supprimer',
+    'geolocation.edit_button' => 'Modifier',
+    'geolocation.modal.title' => 'Recherchez une adresse ou cliquez sur la carte',
+    'geolocation.modal.title-no-geocoding' => 'Cliquez sur la carte',
+    'geolocation.modal.geocode_input.placeholder' => 'Adresse',
+    'geolocation.modal.geocode_input.message.error' => 'Erreur: Impossible de contacter le service de Geocoding',
+    'geolocation.modal.geocode_input.message.no_results' => 'Aucun résultat pour ":query"',
+    'geolocation.modal.search_button' => 'Rechercher',
+
+    'upload.browse_button' => 'Parcourir...',
+    'upload.remove_button' => 'Supprimer',
+    'upload.edit_button' => 'Recadrer...',
+    'upload.download_link' => 'Télécharger',
+    'upload.download_tooltip' => 'Télécharger le fichier',
+    'upload.message.file_too_big' => 'Le fichier sélectionné est trop grand (max. :size)',
+    'upload.message.bad_extension' => 'L\'extension du fichier est invalide',
+    'upload.edit_modal.title' => 'Transformer l’image',
+    'upload.edit_modal.description' => 'Utilisez la molette de la souris pour zoomer. Maintenir la souris pour déplacer l’image ou la zone de recadrage.',
+    'upload.edit_modal.ok_button' => 'Valider',
+    'upload.help_text.max_file_size' => 'jusqu’à :size',
+
+    'multiselect.placeholder' => 'Choisir...',
+    'multiselect.max_text' => 'Maximum atteint',
+
+    'tags.unknown_label' => 'Inconnu',
+    'tags.tag_delete_button.aria_label' => 'Supprimer :option_label',
+
+    'select.select_all' => 'Tout sélectionner',
+    'select.unselect_all' => 'Tout désélectionner',
+    'select.clear' => 'Effacer',
+    'select.validation.max_selected' => 'Trop d’éléments sélectionnés (:max_selected max.)',
+
+    'autocomplete.no_results_text' => 'Pas de résultats',
+    'autocomplete.loading' => 'Chargement...',
+    'autocomplete.query_too_short' => 'Entrez au moins 1 caractère pour rechercher|Entrez au moins :min_chars caractères pour rechercher',
+    'autocomplete.placeholder' => 'Rechercher...',
+
+    'date.validation_error.format' => 'Format de date invalide',
+    'date.clear' => 'Effacer :field_label',
+
+    'daterange.start_placeholder' => 'Date de début',
+    'daterange.end_placeholder' => 'Date de fin',
+
+    'text.validation.maxlength' => 'Le texte est trop long (:maxlength caractères max.)',
+
+    'editor.character_count' => ':count caractères',
+    'editor.errors.unknown_file' => 'Unknown file ":path"',
+    
+    'editor.extension_node.dropdown_button.aria_label' => 'Actions',
+    'editor.extension_node.edit_button' => 'Modifier...',
+    'editor.extension_node.remove_button' => 'Supprimer',
+    'editor.extension_node.upload.aria_label' => 'Fichier intégré',
+    'editor.extension_node.upload_image.aria_label' => 'Image intégré',
+
+    'editor.dialogs.upload.title.new' => 'Insérer un fichier',
+    'editor.dialogs.upload.title.update' => 'Modifier le fichier',
+    'editor.dialogs.upload.legend_field.label' => 'Légende',
+
+    'editor.dialogs.link.text_label' => 'Texte',
+    'editor.dialogs.link.url_label' => 'URL',
+    'editor.dialogs.link.insert_button' => 'Insérer le lien',
+    'editor.dialogs.link.update_button' => 'Mettre à jour',
+    'editor.dialogs.link.remove_button' => 'Supprimer le lien',
+
+    'editor.dialogs.raw_html.insert_title' => 'Insérez du contenu HTML',
+    'editor.dialogs.raw_html.edit_title' => 'Modifier du contenu HTML',
+
+    'editor.dialogs.iframe.insert_title' => 'Insérez un Iframe (video, audio...)',
+    'editor.dialogs.iframe.update_title' => 'Modifier l’Iframe (video, audio...)',
+    'editor.dialogs.iframe.invalid_message' => 'Le code de l’Iframe est invalide',
+
+    'editor.dialogs.embed.submit_button_insert' => 'Insérer',
+    'editor.dialogs.embed.submit_button_update' => 'Mettre à jour',
+
+    'editor.dropdown.table.insert_table' => 'Insérer un tableau',
+    'editor.dropdown.table.toggle_header_cell' => 'Activer/désactiver la cellule comme en-tête',
+    'editor.dropdown.table.insert_row_above' => 'Insérer une ligne au-dessus',
+    'editor.dropdown.table.insert_row_below' => 'Insérer une ligne au-dessous',
+    'editor.dropdown.table.remove_row' => 'Supprimer la ligne',
+    'editor.dropdown.table.insert_col_left' => 'Insérer une colonne à gauche',
+    'editor.dropdown.table.insert_col_right' => 'Insérer une colonne à droite',
+    'editor.dropdown.table.remove_col' => 'Supprimer la colonne',
+    'editor.dropdown.table.remove_table' => 'Supprimer le tableau',
+
+    'editor.dropdown.options.toggle_tight_list' => 'Changer l’espacement de la liste',
+
+    'editor.dropdown.embeds' => 'Insérer...',
+
+    'editor.toolbar.bold.title' => 'Gras',
+    'editor.toolbar.italic.title' => 'Italique',
+    'editor.toolbar.strikethrough.title' => 'Barré',
+    'editor.toolbar.highlight.title' => 'Surligner',
+    'editor.toolbar.small.title' => 'Texte plus petit',
+    'editor.toolbar.superscript.title' => 'Exposant',
+    'editor.toolbar.heading_1.title' => 'Titre 1',
+    'editor.toolbar.heading_2.title' => 'Titre 2',
+    'editor.toolbar.heading_3.title' => 'Titre 3',
+    'editor.toolbar.code.title' => 'Code',
+    'editor.toolbar.code_block.title' => 'Bloc de code',
+    'editor.toolbar.quote.title' => 'Citation',
+    'editor.toolbar.unordered_list.title' => 'Liste',
+    'editor.toolbar.ordered_list.title' => 'Liste ordonnée',
+    'editor.toolbar.link.title' => 'Lien',
+    'editor.toolbar.image.title' => 'Image',
+    'editor.toolbar.table.title' => 'Table',
+    'editor.toolbar.iframe.title' => 'Intégration web',
+    'editor.toolbar.upload.title' => 'Insérer un fichier',
+    'editor.toolbar.html.title' => 'Insérer du HTML',
+    'editor.toolbar.upload_image.title' => 'Insérer une image',
+    'editor.toolbar.horizontal_rule.title' => 'Séparateur',
+    'editor.toolbar.fullscreen.title' => 'Plein écran',
+    'editor.toolbar.undo.title' => 'Annuler',
+    'editor.toolbar.redo.title' => 'Rétablir',
+];

@@ -1,78 +1,56 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Form\Fields;
-
 use Code16\Sharp\Form\Fields\SharpFormTagsField;
-use Code16\Sharp\Tests\SharpTestCase;
 
-class SharpFormTagsFieldTest extends SharpTestCase
-{
-    /** @test */
-    public function only_default_values_are_set()
-    {
-        $options = [
-            '1' => 'Elem 1',
-            '2' => 'Elem 2',
-        ];
+it('sets only default values', function () {
+    $options = [
+        '1' => 'Elem 1',
+        '2' => 'Elem 2',
+    ];
 
-        $formField = $this->getDefaultTags($options);
+    $formField = fakeTagsField($options);
 
-        $this->assertEquals([
-            'key' => 'field', 'type' => 'tags',
+    expect($formField->toArray())
+        ->toEqual([
+            'key' => 'field',
+            'type' => 'tags',
             'options' => [
                 ['id' => '1', 'label' => 'Elem 1'],
                 ['id' => '2', 'label' => 'Elem 2'],
-            ], 'creatable' => false,
+            ],
+            'creatable' => false,
             'createText' => 'Create',
-        ], $formField->toArray(),
-        );
-    }
-
-    /** @test */
-    public function we_can_define_creatable()
-    {
-        $formField = $this->getDefaultTags()
-            ->setCreatable(true);
-
-        $this->assertArraySubset(
-            ['creatable' => true],
-            $formField->toArray(),
-        );
-    }
-
-    /** @test */
-    public function we_can_define_createText()
-    {
-        $formField = $this->getDefaultTags()
-            ->setCreateText('A');
-
-        $this->assertArraySubset(
-            ['createText' => 'A'],
-            $formField->toArray(),
-        );
-    }
-
-    /** @test */
-    public function we_can_define_maxTagsCount()
-    {
-        $formField = $this->getDefaultTags()
-            ->setMaxTagCount(2);
-
-        $this->assertArraySubset(
-            ['maxTagCount' => 2],
-            $formField->toArray(),
-        );
-    }
-
-    /**
-     * @param  array|null  $options
-     * @return SharpFormTagsField
-     */
-    private function getDefaultTags($options = null)
-    {
-        return SharpFormTagsField::make('field', $options ?: [
-            '1' => 'Elem 1',
-            '2' => 'Elem 2',
         ]);
-    }
+});
+
+it('allows to define creatable', function () {
+    $formField = fakeTagsField()
+        ->setCreatable(true);
+
+    expect($formField->toArray())
+        ->toHaveKey('creatable', true);
+});
+
+it('allows to define createText', function () {
+    $formField = fakeTagsField()
+        ->setCreateText('A');
+
+    expect($formField->toArray())
+        ->toHaveKey('createText', 'A');
+});
+
+it('allows to define maxTagsCount', function () {
+    $formField = fakeTagsField()
+        ->setMaxTagCount(2);
+
+    expect($formField->toArray())
+        ->toHaveKey('maxTagCount', 2);
+});
+
+function fakeTagsField(?array $options = null): SharpFormTagsField
+{
+    return SharpFormTagsField::make('field', $options ?: [
+        '1' => 'Elem 1',
+        '2' => 'Elem 2',
+    ]);
 }

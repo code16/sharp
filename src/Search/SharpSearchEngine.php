@@ -21,4 +21,9 @@ abstract class SharpSearchEngine
     }
 
     abstract public function searchFor(array $terms): void;
+
+    public function authorize(): bool
+    {
+        return true;
+    }
 }

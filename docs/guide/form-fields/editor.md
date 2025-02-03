@@ -4,9 +4,6 @@ This form field is a rich text editor, with formatting and an optional toolbar.
 
 Class: `Code16\Sharp\Form\Fields\SharpFormEditorField`
 
-<img src="./editor-v8.png" width="500">
-
-
 ## Configuration
 
 ### `setHeight(int $height, int|null $maxHeight = null)`
@@ -36,8 +33,6 @@ const A = 'link';
 const H1 = 'heading-1';
 const H2 = 'heading-2';
 const H3 = 'heading-3';
-const UPLOAD_IMAGE = 'upload-image';
-const UPLOAD = 'upload';
 const TABLE = 'table';
 const IFRAME = 'iframe';
 const RAW_HTML = 'html';
@@ -53,13 +48,28 @@ Example:
 ```php
 SharpFormEditorField::make("description")
     ->setToolbar([
-        SharpFormEditorField::B, SharpFormEditorField::I,
-        SharpFormEditorField::SEPARATOR,
-        SharpFormEditorField::UPLOAD_IMAGE,
+        SharpFormEditorField::B, 
+        SharpFormEditorField::I,
         SharpFormEditorField::SEPARATOR,
         SharpFormEditorField::A,
      ]);
 ```
+
+If you have editor embeds you can add them to the toolbar alongside other buttons (instead of the embeds dropdown) :
+
+```php
+SharpFormEditorField::make("description")
+    ->setToolbar([
+        SharpFormEditorField::B, 
+        SharpFormEditorField::I,
+        AuthorEmbed::class,
+    ])
+    ->allowEmbeds([
+        AuthorEmbed::class,
+    ]);
+```
+
+See full [embed docs](../form-editor-embeds.md).
 
 ### `setRenderContentAsMarkdown(bool $renderAsMarkdown = true)`
 
@@ -83,54 +93,43 @@ Display a character count in the status bar. Default is false.
 
 ## Embed images and files in content
 
-The Editor field can directly embed images or regular files. This works with `UPLOAD_IMAGE` and `UPLOAD` tools from the toolbar. To use this feature, add the tool in the toolbar and configure the environment:
+The Editor field can embed images or regular files. To use this feature, you must first allow the field to handle uploads:
 
-### `setMaxFileSize(float $sizeInMB)`
+### `allowUploads(SharpFormEditorEmbedUpload $formEditorUpload)`
 
-Max file size allowed.
+This method allows the user to upload files and images in the editor:
 
-### `setTransformable(bool $transformable = true, bool $transformKeepOriginal = true)`
+```php
+$formFields->addField(
+    SharpFormEditorField::make('bio')
+        ->allowUploads(
+            SharpFormEditorEmbedUpload::make()
+                ->setStorageBasePath('posts/embeds')
+                ->setStorageDisk('local')
+        )
+);
+```
 
-Allow the user to crop or rotate a visual, after the upload.  
+The `SharpFormEditorEmbedUpload` can be configured with the same API as the `SharpFormUploadField`: `setMaxFileSize()`, `setImageOnly()`, `setAllowedExtensions()`, ... ([see full documentation](../form-fields/upload.md))
+
+### A note on `setImageTransformable(bool $transformable = true, bool $transformKeepOriginal = true)`
+
+As for a regular upload field, you can allow the user to crop or rotate the visual, after the upload.  
 With `$transformKeepOriginal` set to true, the original file will remain unchanged, meaning the transformations will be stored directly in the `<x-sharp-image/>` tag. For instance:
 
 ```blade
+{{-- (attribute JSON formatted for readability) --}}
 <x-sharp-image 
-    name="filename.jpg"
-    filter-crop="0.1495,0,0.5625,1"
-    path="data/Spaceship/10/markdown/filename.jpg"
-    disk="local">
+    file='{
+      "name":"image.jpg",
+      "path": "data/Posts/1/image.jpg",
+      "disk": "local",
+      "filters": { "crop": { "x":0, "y":0, "width":.5, "height":.5 } } }
+    '>
 </x-sharp-image>
 ```
 
 Then at render Sharp will take care of that for the thumbnail (see *Display embedded files in the public site* below).
-
-### `setCropRatio(string $ratio, array $croppableFileTypes = null)`
-
-Set a ratio constraint to uploaded images, formatted like this: `width:height`. For instance: `16:9`, or `1:1`.
-
-When a crop ratio is set, any uploaded picture will be auto-cropped (centered).
-
-The second argument, `$croppableFileTypes`, provide a way to limit the crop configuration to a list of image files extensions. For instance, it can be useful to define a crop for jpg and png, but not for gif because it would break animation.
-
-### `setStorageDisk(string $storageDisk)`
-
-Set the destination storage disk (as configured in Laravel's  `config/filesystem.php` config file).
-
-### `setStorageBasePath(string $storageBasePath)`
-
-Set the destination base storage path. You can use the `{id}` special placeholder to add the instance id in the path.
-
-For instance:
-`$field->setStorageBasePath('/users/{id}/markdown')`
-
-### `setFileFilter($fileFilter)`
-
-Set the allowed file extensions. You can pass either an array, or a comma-separated list.
-
-### `setFileFilterImages()`
-
-Just a `setFileFilter(['.jpg','.jpeg','.gif','.png'])` shorthand.
 
 ### Store images and files
 
@@ -139,19 +138,25 @@ Sharp takes care of copying the file at the right place (after image transformat
 When inserting a file, the following tag is added in field text value:
 
 ```blade
+{{-- (attribute JSON formatted for readability) --}}
 <x-sharp-file 
-    name="filename.pdf"
-    path="data/Spaceship/10/markdown/filename.pdf"
-    disk="local">
+    file='{
+      "name": "doc.pdf",
+      "path": "data/Posts/1/doc.pdf",
+      "disk": "local"
+    '>
 </x-sharp-file>
 ```
 In case of an image the inserted tag is:
 
 ```blade
+{{-- (attribute JSON formatted for readability) --}}
 <x-sharp-image
-    name="filename.jpg"
-    path="data/Spaceship/10/markdown/filename.jpg"
-    disk="local">
+    file='{
+      "name":"image.jpg",
+      "path": "data/Posts/1/image.jpg",
+      "disk": "local",
+    '>
 </x-sharp-image>
 ```
 
@@ -205,7 +210,7 @@ To add custom attributes to `<x-sharp-image>` component you can use the followin
 You can extend `<x-sharp-file>` and `<x-sharp-image>` components by publishing them:
 
 ```
-php artisan vendor:publish --provider=Code16\\Sharp\\SharpServiceProvider --tag=views
+php artisan vendor:publish --tag=sharp-views
 ```
 
 Here are the parameters passed to the components:
@@ -230,19 +235,13 @@ Example:
 
 ## Custom embeds
 
-This feature allows to embed any structured data in the content. A common use case is to embed a reference to another
-instance, like for example: in a blog post, you want to insert a reference to another post, that would be rendered as
-a "read also" block / link in the public section.
+This feature allows to embed any structured data in the content. A common use case is to embed a reference to another instance, like for example: in a blog post, you want to insert a reference to another post, that would be rendered as a “read also” block / link in the public section.
 
-<img src="./editor-embeds.png">
-
-In practice, the Editor field can allow custom embeds, which defines how the data is stored in the field (as HTML
-attributes), and how it is edited in the UI, via a full-featured form.
+In practice, the Editor field can allow custom embeds, which defines how the data is stored in the field (as HTML attributes), and how it is edited in the UI, via a full-featured form.
 
 ### `allowEmbeds(array $embeds)`
 
-This method expects an array of embeds that could be inserted in the content, declared as full class names. An embed
-class must extend `Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed`.
+This method expects an array of embeds that could be inserted in the content, declared as full class names. An embed class must extend `Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed`.
 
 The [documentation on how to write an Embed class is available here](../form-editor-embeds.md).
 

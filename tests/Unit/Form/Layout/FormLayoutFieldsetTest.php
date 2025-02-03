@@ -1,35 +1,26 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Form\Layout;
-
 use Code16\Sharp\Form\Layout\FormLayoutFieldset;
-use Code16\Sharp\Tests\SharpTestCase;
 
-class FormLayoutFieldsetTest extends SharpTestCase
-{
-    /** @test */
-    public function we_can_set_a_legend()
-    {
-        $formTab = new FormLayoutFieldset('legend');
+it('allows to set a legend', function () {
+    $formTab = new FormLayoutFieldset('legend');
 
-        $this->assertEquals('legend', $formTab->toArray()['legend']);
-    }
+    expect($formTab->toArray()['legend'])
+        ->toEqual('legend');
+});
 
-    /** @test */
-    public function we_can_add_a_field()
-    {
-        $formTab = new FormLayoutFieldset('legend');
-        $formTab->withSingleField('name');
+it('allows to add a field', function () {
+    $formTab = new FormLayoutFieldset('legend');
+    $formTab->withField('name');
 
-        $this->assertCount(1, $formTab->toArray()['fields'][0]);
-    }
+    expect($formTab->toArray()['fields'][0])
+        ->toHaveCount(1);
+});
 
-    /** @test */
-    public function we_can_add_multiple_fields()
-    {
-        $formTab = new FormLayoutFieldset('legend');
-        $formTab->withFields('name', 'age');
+it('allows to add multiple fields', function () {
+    $formTab = new FormLayoutFieldset('legend');
+    $formTab->withFields('name', 'age');
 
-        $this->assertCount(2, $formTab->toArray()['fields'][0]);
-    }
-}
+    expect($formTab->toArray()['fields'][0])
+        ->toHaveCount(2);
+});

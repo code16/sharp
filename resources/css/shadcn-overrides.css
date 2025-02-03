@@ -1,0 +1,87 @@
+
+
+@layer base {
+    :root {
+        /*--primary-oklch: from var(--sharp-config-primary) 0.21 0.04 h; !* default levels *!*/
+        --primary-oklch: from var(--sharp-config-primary) 0.3 min(c, 0.1) h;
+        /*--primary-foreground-oklch: from var(--sharp-config-primary) 0.98 0 h; !* default levels *!*/
+        --primary-foreground-oklch: from var(--sharp-config-primary) 0.98 min(c, 0.02) h;
+
+        /*--secondary-oklch: from var(--sharp-config-primary) 0.97 0 h; !* default levels *!*/
+        --secondary-oklch: from var(--sharp-config-primary) 0.97 min(c, 0.005) h;
+        /*--secondary-foreground-oklch: from var(--sharp-config-primary) 0.21 0.01 h; !* default levels *!*/
+        --secondary-foreground-oklch: from var(--sharp-config-primary) 0.21 min(c, 0.05) h;
+
+        --muted-oklch: from var(--sharp-config-primary) 0.97 0 h; /* default levels */
+        /*--muted-oklch: from var(--sharp-config-primary) 0.97 0.005 h;*/
+        --muted-foreground-oklch: from var(--sharp-config-primary) 0.55 min(c, 0.01) h; /* default levels */
+        /*--muted-foreground-oklch: from var(--sharp-config-primary) 0.55 0.03 h;*/
+
+        /*--accent-oklch: from var(--sharp-config-primary) 0.97 0 h; !* default levels *!*/
+        --accent-oklch: from var(--sharp-config-primary) 0.97 min(c, 0.01) h;
+        /*---accent-oklch: from var(--sharp-config-primary) 0.21 0.01 h; !* default levels *!*/
+        --accent-foreground-oklch: from var(--sharp-config-primary) 0.21 min(c, 0.2) h;
+
+        /*--input-oklch: from var(--sharp-config-primary) 0.92 0 h; !* default levels *!*/
+        --input-oklch: from var(--sharp-config-primary) 0.89 min(c, 0.005) h;
+        /*--border-oklch: from var(--sharp-config-primary) 0.92 0 h; !* default levels *!*/
+        --border-oklch: from var(--sharp-config-primary) 0.92 min(c, 0.005) h;
+        /*--ring-oklch: from var(--sharp-config-primary) 0.71 min(c, 0.01) h; !* default levels *!*/
+        --ring-oklch: from var(--sharp-config-primary) 0.71 min(c, 0.05) h;
+
+        --popover-oklch: 1 0 0;
+
+        /*--sidebar-background-oklch: from var(--sharp-config-primary) 0.98 0 h; !* default levels *!*/
+        --sidebar-background-oklch: from var(--sharp-config-primary) 0.98 min(c, 0.005) h;
+        /*--sidebar-foreground-oklch: from var(--sharp-config-primary) 0.37 0.01 h; !* default levels *!*/
+        --sidebar-foreground-oklch: from var(--sharp-config-primary) 0.37 min(c, 0.05) h;
+        /*--sidebar-accent-oklch: from var(--sharp-config-primary) 0.97 0 h; !* default levels *!*/
+        --sidebar-accent-oklch: from var(--sharp-config-primary) 0.94 min(c, 0.02) h;
+        /*--sidebar-accent-oklch: from var(--sharp-config-primary) .21 0.01 h; !* default levels *!*/
+        --sidebar-accent-foreground-oklch: from var(--sharp-config-primary) 0.21 min(c, 0.2) h;
+        /*--sidebar-accent-oklch: from var(--sharp-config-primary) 0.93 0.01 h; !* default levels *!*/
+        --sidebar-border-oklch: from var(--sharp-config-primary) 0.93 min(c, 0.015) h;
+    }
+
+    .dark {
+        /*--primary-oklch: from var(--sharp-config-primary) 0.98 0 h; !* default levels *!*/
+        --primary-oklch: from var(--sharp-config-primary) 0.98 min(c, 0.1) h;
+        /*--primary-foreground-oklch: from var(--sharp-config-primary) 0.21 0.01 h; !* default levels *!*/
+        --primary-foreground-oklch: from var(--sharp-config-primary) 0.21 min(c, 0.02) h;
+
+        /*--secondary-border-oklch: from var(--sharp-config-primary) 0.27 0.01 h; !* default levels *!*/
+        --secondary-oklch: from var(--sharp-config-primary) 0.27 min(c, 0.01) h;
+        /*--secondary-foreground-oklch: from var(--sharp-config-primary) 0.98 0 h; !* default levels *!*/
+        --secondary-foreground-oklch: from var(--sharp-config-primary) 0.98 min(c, 0.05) h;
+
+        --muted-oklch: from var(--sharp-config-primary) 0.27 min(c, 0.01) h; /* default levels */
+        /*--muted-oklch: from var(--sharp-config-primary) 0.20 0.05 h;*/
+        --muted-foreground-oklch: from var(--sharp-config-primary) 0.71 min(c, 0.01) h; /* default levels */
+        /*--muted-foreground-oklch: from var(--sharp-config-primary) 0.71 0.03 h;*/
+
+        /*--accent-oklch: from var(--sharp-config-primary) 0.27 0.01 h; !* default levels *!*/
+        --accent-oklch: from var(--sharp-config-primary) 0.27 min(c, 0.025) h;
+        /*--accent-foreground-oklch: from var(--sharp-config-primary) 0.98 0 h; !* default levels *!*/
+        --accent-foreground-oklch: from var(--sharp-config-primary) 0.98 min(c, 0.005) h;
+
+        /*--input-oklch: from var(--sharp-config-primary) 0.27 min(c, 0.01) h; !* default levels *!*/
+        --input-oklch: from var(--sharp-config-primary) 0.35 min(0.01) h;
+        /*--border-oklch: from var(--sharp-config-primary) 0.27 min(c, 0.01) h; !* default levels *!*/
+        --border-oklch: from var(--sharp-config-primary) 0.27 min(0.01) h;
+        /*--ring-oklch: from var(--sharp-config-primary) 0.87 min(c, 0.01) h; !* default levels *!*/
+        --ring-oklch: from var(--sharp-config-primary) 0.87 min(c, 0.1) h;
+
+        --popover-oklch: from var(--sharp-config-primary) 0.18 min(c, 0.015) h;
+
+        /*--sidebar-background-oklch: from var(--sharp-config-primary) 0.21 0.01 h; !* default levels *!*/
+        --sidebar-background-oklch: from var(--sharp-config-primary) 0.21 min(c, 0.02) h;
+        /*--sidebar-foreground-oklch: from var(--sharp-config-primary) 0.97 0 h; !* default levels *!*/
+        --sidebar-foreground-oklch: from var(--sharp-config-primary) 0.97 min(c, 0.005) h;
+        /*--sidebar-accent-oklch: from var(--sharp-config-primary) 0.27 0.01 h; !* default levels *!*/
+        --sidebar-accent-oklch: from var(--sharp-config-primary) 0.27 min(c, 0.025) h;
+        /*--sidebar-accent-foreground-oklch: from var(--sharp-config-primary) 0.97 0 h; !* default levels *!*/
+        --sidebar-accent-foreground-oklch: from var(--sharp-config-primary) 1 min(c, 0.1) h;
+        /*--sidebar-border-oklch: from var(--sharp-config-primary) 0.27 0.01 h; !* default levels *!*/
+        --sidebar-border-oklch: from var(--sharp-config-primary) 0.27 min(c, 0.015) h;
+    }
+}

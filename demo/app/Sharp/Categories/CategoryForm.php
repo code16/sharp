@@ -4,6 +4,7 @@ namespace App\Sharp\Categories;
 
 use App\Models\Category;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
+use Code16\Sharp\Form\Fields\SharpFormTextareaField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
@@ -14,8 +15,6 @@ class CategoryForm extends SharpForm
 {
     use WithSharpFormEloquentUpdater;
 
-    protected ?string $formValidatorClass = CategoryValidator::class;
-
     public function buildFormFields(FieldsContainer $formFields): void
     {
         $formFields
@@ -23,19 +22,33 @@ class CategoryForm extends SharpForm
                 SharpFormTextField::make('name')
                     ->setLabel('Name')
                     ->setMaxLength(150),
+            )
+            ->addField(
+                SharpFormTextareaField::make('description')
+                    ->setLabel('Description')
+                    ->setRowCount(4)
+                    ->setLocalized()
+                    ->setMaxLength(500),
             );
     }
 
     public function buildFormLayout(FormLayout $formLayout): void
     {
-        $formLayout->addColumn(6, function (FormLayoutColumn $column) {
-            $column->withSingleField('name');
-        });
+        $formLayout
+            ->addColumn(6, fn (FormLayoutColumn $column) => $column
+                ->withField('name')
+                ->withField('description')
+            );
     }
 
     public function buildFormConfig(): void
     {
         $this->configureDisplayShowPageAfterCreation();
+    }
+
+    public function getDataLocalizations(): array
+    {
+        return ['fr', 'en'];
     }
 
     public function find($id): array
@@ -45,6 +58,12 @@ class CategoryForm extends SharpForm
 
     public function update($id, array $data)
     {
+        $this->validate(
+            $data, [
+                'name' => ['required', 'string', 'max:150'],
+            ]
+        );
+
         $category = $id
             ? Category::findOrFail($id)
             : Category::make(['order' => 100]);

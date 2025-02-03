@@ -2,45 +2,20 @@
 
 namespace Code16\Sharp\Utils\Traits;
 
-use Code16\Sharp\Show\Fields\SharpShowHtmlField;
+use Code16\Sharp\Utils\PageAlerts\PageAlert;
 
 trait HandlePageAlertMessage
 {
-    protected ?SharpShowHtmlField $pageAlertHtmlField = null;
-    protected string $pageAlertLevel;
-    protected static string $pageAlertLevelNone = 'none';
-    protected static string $pageAlertLevelInfo = 'info';
-    protected static string $pageAlertLevelWarning = 'warning';
-    protected static string $pageAlertLevelDanger = 'danger';
-    protected static string $pageAlertLevelPrimary = 'primary';
-    protected static string $pageAlertLevelSecondary = 'secondary';
+    protected PageAlert $pageAlert;
 
-    protected function configurePageAlert(string $template, ?string $alertLevel = null, ?string $fieldKey = null, bool $declareTemplateAsPath = false): self
+    final public function pageAlert(?array $data = []): ?array
     {
-        $this->pageAlertHtmlField = SharpShowHtmlField::make($fieldKey ?: uniqid('f'));
-        $this->pageAlertLevel = $alertLevel ?? static::$pageAlertLevelNone;
+        $this->pageAlert = new PageAlert();
+        $this->pageAlert->setData($data ?: []);
+        $this->buildPageAlert($this->pageAlert);
 
-        if ($declareTemplateAsPath) {
-            $this->pageAlertHtmlField->setTemplatePath($template);
-        } else {
-            $this->pageAlertHtmlField->setInlineTemplate($template);
-        }
-
-        return $this;
+        return $this->pageAlert->toArray();
     }
 
-    /**
-     * Append the commands to the config returned to the front.
-     */
-    protected function appendGlobalMessageToConfig(array &$config): void
-    {
-        if ($this->pageAlertHtmlField) {
-            $config['globalMessage'] = [
-                'fieldKey' => $this->pageAlertHtmlField->key,
-                'alertLevel' => $this->pageAlertLevel !== static::$pageAlertLevelNone
-                    ? $this->pageAlertLevel
-                    : null,
-            ];
-        }
-    }
+    protected function buildPageAlert(PageAlert $pageAlert): void {}
 }

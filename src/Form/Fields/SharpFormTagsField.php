@@ -3,11 +3,11 @@
 namespace Code16\Sharp\Form\Fields;
 
 use Code16\Sharp\Form\Fields\Formatters\TagsFormatter;
-use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithDataLocalization;
+use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
 
 class SharpFormTagsField extends SharpFormField
 {
-    use SharpFormFieldWithDataLocalization;
+    use SharpFormFieldWithPlaceholder;
 
     const FIELD_TYPE = 'tags';
 
@@ -125,7 +125,7 @@ class SharpFormTagsField extends SharpFormField
             'createText' => $this->createText,
             'maxTagCount' => $this->maxTagCount,
             'options' => $this->options,
-            'localized' => $this->localized,
+            'placeholder' => $this->placeholder,
         ]);
     }
 }

@@ -1,6 +1,0 @@
-{
-    "name": "@sharp/test-utils",
-    "private": true,
-    "main": "src/index.js",
-    "version": "1.0.0"
-}

@@ -2,184 +2,190 @@
 
 namespace Code16\Sharp\Utils\Testing;
 
-use Illuminate\Testing\TestResponse;
-use PHPUnit\Framework\Assert as PHPUnit;
+use Closure;
+use Code16\Sharp\Http\Context\SharpBreadcrumb;
+use Code16\Sharp\Utils\Links\BreadcrumbBuilder;
 
 trait SharpAssertions
 {
-    private ?array $currentBreadcrumb = null;
+    private BreadcrumbBuilder $breadcrumbBuilder;
 
     /**
-     * This function must be called before using Sharp's assertions
-     * (in the setUp() for instance).
+     * @deprecated use withSharpBreadcrumb() instead
      */
-    public function initSharpAssertions()
+    public function withSharpCurrentBreadcrumb(...$breadcrumb): self
     {
-        TestResponse::macro('assertSharpHasAuthorization', function ($authorization) {
-            return $this->assertJson(
-                ['authorizations' => [$authorization => true]],
-            );
-        });
+        $this->breadcrumbBuilder = new BreadcrumbBuilder();
 
-        TestResponse::macro('assertSharpHasNotAuthorization', function ($authorization) {
-            return $this->assertJson(
-                ['authorizations' => [$authorization => false]],
-            );
-        });
-
-        TestResponse::macro('assertSharpFormHasFieldOfType', function ($name, $formFieldClassName) {
-            $type = $formFieldClassName::FIELD_TYPE;
-
-            $this->assertJson(
-                ['fields' => [$name => ['key' => $name, 'type' => $type]]],
-            );
-
-            $this->assertSharpFormHasFields($name);
-
-            return $this;
-        });
-
-        TestResponse::macro('assertSharpFormHasFields', function ($names) {
-            foreach ((array) $names as $name) {
-                $this->assertJson(
-                    ['fields' => [$name => ['key' => $name]]],
-                );
-
-                $found = false;
-                foreach ($this->decodeResponseJson()['layout']['tabs'] as $tab) {
-                    foreach ($tab['columns'] as $column) {
-                        foreach ($column['fields'] as $fieldset) {
-                            foreach ($fieldset as $field) {
-                                if (isset($field['legend'])) {
-                                    foreach ($field['fields'] as $fieldsetFields) {
-                                        foreach ($fieldsetFields as $field) {
-                                            if ($field['key'] == $name) {
-                                                $found = true;
-                                                break 6;
-                                            }
-                                        }
-                                    }
-                                } elseif ($field['key'] == $name) {
-                                    $found = true;
-                                    break 4;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if (! $found) {
-                    PHPUnit::fail("The field [$name] was not found on the layout part.");
-                }
-            }
-
-            return $this;
-        });
-
-        TestResponse::macro('assertSharpFormDataEquals', function ($name, $value) {
-            return $this->assertJson(
-                ['data' => [$name => $value]],
-            );
-        });
-    }
-
-    public function withSharpCurrentBreadcrumb(array $breadcrumb): self
-    {
-        $this->currentBreadcrumb = $breadcrumb;
+        collect($breadcrumb)
+            ->each(fn (array $segment) => match ($segment[0]) {
+                'list' => $this->breadcrumbBuilder->appendEntityList($segment[1]),
+                'show' => (count($segment) == 2)
+                    ? $this->breadcrumbBuilder->appendSingleShowPage($segment[1])
+                    : $this->breadcrumbBuilder->appendShowPage($segment[1], $segment[2]),
+            });
 
         return $this;
     }
 
-    public function deleteSharpShow(string $entityKey, $instanceId)
+    /**
+     * @param  (\Closure(BreadcrumbBuilder): BreadcrumbBuilder)  $callback
+     * @return $this
+     */
+    public function withSharpBreadcrumb(Closure $callback): self
+    {
+        $this->breadcrumbBuilder = $callback(new BreadcrumbBuilder());
+
+        return $this;
+    }
+
+    public function deleteFromSharpShow(string $entityKey, $instanceId)
     {
         return $this
-            ->withHeader(
-                'referer',
-                $this->buildRefererUrl([
-                    ['list', $entityKey],
-                    ['show', $entityKey, $instanceId],
-                ]),
-            )
-            ->deleteJson(
-                route('code16.sharp.api.show.delete', [$entityKey, $instanceId]),
+            ->delete(
+                route(
+                    'code16.sharp.show.delete', [
+                        $this->breadcrumbBuilder($entityKey)
+                            ->generateUri(),
+                        $entityKey,
+                        $instanceId,
+                    ]
+                ),
             );
     }
 
-    public function deleteSharpEntityList(string $entityKey, $instanceId)
+    public function deleteFromSharpList(string $entityKey, $instanceId)
     {
         return $this
             ->withHeader(
-                'referer',
-                $this->buildRefererUrl([
-                    ['list', $entityKey],
-                ]),
+                SharpBreadcrumb::CURRENT_PAGE_URL_HEADER,
+                $this->buildCurrentPageUrl(
+                    $this->breadcrumbBuilder($entityKey)
+                ),
             )
-            ->deleteJson(
-                route('code16.sharp.api.list.delete', [$entityKey, $instanceId]),
-            );
+            ->delete(route('code16.sharp.api.list.delete', [$entityKey, $instanceId]));
     }
 
     public function getSharpForm(string $entityKey, $instanceId = null)
     {
         return $this
-            ->withHeader(
-                'referer',
-                $this->buildRefererUrl([
-                    ['list', $entityKey],
-                    ['form', $entityKey, $instanceId],
-                ]),
-            )
-            ->getJson(
+            ->get(
                 $instanceId
-                    ? route('code16.sharp.api.form.edit', [$entityKey, $instanceId])
-                    : route('code16.sharp.api.form.create', $entityKey),
+                    ? route(
+                        'code16.sharp.form.edit',
+                        [
+                            $this->breadcrumbBuilder($entityKey)
+                                ->generateUri(),
+                            $entityKey,
+                            $instanceId,
+                        ]
+                    )
+                    : route(
+                        'code16.sharp.form.create',
+                        [
+                            $this->breadcrumbBuilder($entityKey)
+                                ->generateUri(),
+                            $entityKey,
+                        ]
+                    ),
+            );
+    }
+
+    public function getSharpSingleForm(string $entityKey)
+    {
+        return $this
+            ->get(
+                route(
+                    'code16.sharp.form.edit',
+                    [
+                        $this->breadcrumbBuilder($entityKey)
+                            ->generateUri(),
+                        $entityKey,
+                    ]
+                )
             );
     }
 
     public function updateSharpForm(string $entityKey, $instanceId, array $data)
     {
         return $this
-            ->withHeader(
-                'referer',
-                $this->buildRefererUrl([
-                    ['list', $entityKey],
-                    ['form', $entityKey, $instanceId],
-                ]),
-            )
-            ->postJson(
-                route('code16.sharp.api.form.update', [$entityKey, $instanceId]),
+            ->post(
+                route(
+                    'code16.sharp.form.update', [
+                        $this->breadcrumbBuilder($entityKey)
+                            ->generateUri(),
+                        $entityKey,
+                        $instanceId,
+                    ]
+                ),
                 $data,
+            );
+    }
+
+    public function updateSharpSingleForm(string $entityKey, array $data)
+    {
+        return $this
+            ->post(
+                route(
+                    'code16.sharp.form.update', [
+                        $this->breadcrumbBuilder($entityKey)
+                            ->generateUri(),
+                        $entityKey,
+                    ]
+                ),
+                $data,
+            );
+    }
+
+    public function getSharpShow(string $entityKey, $instanceId)
+    {
+        return $this
+            ->get(
+                route(
+                    'code16.sharp.show.show',
+                    [
+                        $this->breadcrumbBuilder($entityKey)
+                            ->generateUri(),
+                        $entityKey,
+                        $instanceId,
+                    ]
+                ),
             );
     }
 
     public function storeSharpForm(string $entityKey, array $data)
     {
         return $this
-            ->withHeader(
-                'referer',
-                $this->buildRefererUrl([
-                    ['list', $entityKey],
-                    ['form', $entityKey],
-                ]),
-            )
-            ->postJson(
-                route('code16.sharp.api.form.store', $entityKey),
+            ->post(
+                route(
+                    'code16.sharp.form.store',
+                    [
+                        $this->breadcrumbBuilder($entityKey)
+                            ->generateUri(),
+                        $entityKey,
+                    ]
+                ),
                 $data,
             );
     }
 
-    public function callSharpInstanceCommandFromList(string $entityKey, $instanceId, string $commandKeyOrClassName, array $data = [], ?string $commandStep = null)
-    {
+    public function callSharpInstanceCommandFromList(
+        string $entityKey,
+        $instanceId,
+        string $commandKeyOrClassName,
+        array $data = [],
+        ?string $commandStep = null
+    ) {
         $commandKey = class_exists($commandKeyOrClassName)
             ? class_basename($commandKeyOrClassName)
             : $commandKeyOrClassName;
 
         return $this
             ->withHeader(
-                'referer',
-                $this->buildRefererUrl([
-                    ['list', $entityKey],
-                ]),
+                SharpBreadcrumb::CURRENT_PAGE_URL_HEADER,
+                $this->buildCurrentPageUrl(
+                    $this->breadcrumbBuilder($entityKey)
+                ),
             )
             ->postJson(
                 route(
@@ -190,19 +196,23 @@ trait SharpAssertions
             );
     }
 
-    public function callSharpInstanceCommandFromShow(string $entityKey, $instanceId, string $commandKeyOrClassName, array $data = [], ?string $commandStep = null)
-    {
+    public function callSharpInstanceCommandFromShow(
+        string $entityKey,
+        $instanceId,
+        string $commandKeyOrClassName,
+        array $data = [],
+        ?string $commandStep = null
+    ) {
         $commandKey = class_exists($commandKeyOrClassName)
             ? class_basename($commandKeyOrClassName)
             : $commandKeyOrClassName;
 
         return $this
             ->withHeader(
-                'referer',
-                $this->buildRefererUrl([
-                    ['list', $entityKey],
-                    ['show', $entityKey, $instanceId],
-                ]),
+                SharpBreadcrumb::CURRENT_PAGE_URL_HEADER,
+                $this->buildCurrentPageUrl(
+                    $this->breadcrumbBuilder($entityKey, $instanceId)
+                ),
             )
             ->postJson(
                 route(
@@ -213,18 +223,22 @@ trait SharpAssertions
             );
     }
 
-    public function callSharpEntityCommandFromList(string $entityKey, string $commandKeyOrClassName, array $data = [], ?string $commandStep = null)
-    {
+    public function callSharpEntityCommandFromList(
+        string $entityKey,
+        string $commandKeyOrClassName,
+        array $data = [],
+        ?string $commandStep = null
+    ) {
         $commandKey = class_exists($commandKeyOrClassName)
             ? class_basename($commandKeyOrClassName)
             : $commandKeyOrClassName;
 
         return $this
             ->withHeader(
-                'referer',
-                $this->buildRefererUrl([
-                    ['list', $entityKey],
-                ]),
+                SharpBreadcrumb::CURRENT_PAGE_URL_HEADER,
+                $this->buildCurrentPageUrl(
+                    $this->breadcrumbBuilder($entityKey)
+                ),
             )
             ->postJson(
                 route('code16.sharp.api.list.command.entity', compact('entityKey', 'commandKey')),
@@ -234,27 +248,28 @@ trait SharpAssertions
 
     public function loginAsSharpUser($user): self
     {
-        return $this->actingAs($user, config('sharp.auth.guard', config('auth.defaults.guard')));
+        return $this->actingAs($user, sharp()->config()->get('auth.guard') ?: config('auth.defaults.guard'));
     }
 
-    protected function buildRefererUrl(array $segments): string
+    private function breadcrumbBuilder(string $entityKey, ?string $instanceId = null): BreadcrumbBuilder
     {
-        $segments = $this->currentBreadcrumb ?: $segments;
-        $this->currentBreadcrumb = null;
+        if (isset($this->breadcrumbBuilder)) {
+            return $this->breadcrumbBuilder;
+        }
 
-        $uri = collect($segments)
-            ->map(function (array $segment) {
-                if (count($segment) === 2) {
-                    return sprintf('s-%s/%s', $segment[0], $segment[1]);
-                } elseif (count($segment) === 3) {
-                    return sprintf('s-%s/%s/%s', $segment[0], $segment[1], $segment[2]);
-                }
+        return (new BreadcrumbBuilder())
+            ->appendEntityList($entityKey)
+            ->when($instanceId, fn ($builder) => $builder->appendShowPage($entityKey, $instanceId));
+    }
 
-                return null;
-            })
-            ->filter()
-            ->implode('/');
-
-        return url(sprintf('/%s/%s', sharp_base_url_segment(), $uri));
+    private function buildCurrentPageUrl(BreadcrumbBuilder $builder): string
+    {
+        return url(
+            sprintf(
+                '/%s/%s',
+                sharp()->config()->get('custom_url_segment'),
+                $builder->generateUri()
+            )
+        );
     }
 }

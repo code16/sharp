@@ -4,13 +4,15 @@ namespace App\Sharp\Posts;
 
 use App\Models\Category;
 use App\Models\Post;
+use App\Models\User;
 use App\Sharp\Utils\Embeds\AuthorEmbed;
 use App\Sharp\Utils\Embeds\CodeEmbed;
 use App\Sharp\Utils\Embeds\RelatedPostEmbed;
 use App\Sharp\Utils\Embeds\TableOfContentsEmbed;
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
-use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
+use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
+use Code16\Sharp\Form\Fields\SharpFormAutocompleteRemoteField;
 use Code16\Sharp\Form\Fields\SharpFormCheckField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
@@ -29,8 +31,6 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 class PostForm extends SharpForm
 {
     use WithSharpFormEloquentUpdater;
-
-    protected ?string $formValidatorClass = PostValidator::class;
 
     public function buildFormFields(FieldsContainer $formFields): void
     {
@@ -52,20 +52,26 @@ class PostForm extends SharpForm
                         SharpFormEditorField::A,
                         SharpFormEditorField::QUOTE,
                         SharpFormEditorField::SEPARATOR,
-                        SharpFormEditorField::UPLOAD,
                         SharpFormEditorField::IFRAME,
+                        SharpFormEditorField::UPLOAD,
+                        AuthorEmbed::class,
+                        CodeEmbed::class,
                     ])
                     ->allowEmbeds([
                         RelatedPostEmbed::class,
                         AuthorEmbed::class,
-                        CodeEmbed::class,
                         TableOfContentsEmbed::class,
+                        CodeEmbed::class,
                     ])
-                    ->setMaxFileSize(1)
-                    ->setMaxLength(1000)
+                    ->allowUploads(
+                        SharpFormEditorUpload::make()
+                            ->setStorageDisk('local')
+                            ->setStorageBasePath('data/posts/{id}/embed')
+                            ->setMaxFileSize(1)
+                            ->setHasLegend()
+                    )
+                    ->setMaxLength(2000)
                     ->setHeight(300, 0)
-                    ->setStorageDisk('local')
-                    ->setStorageBasePath('data/posts/{id}/embed'),
             )
             ->addField(
                 SharpFormTagsField::make('categories', Category::pluck('name', 'id')->toArray())
@@ -76,9 +82,9 @@ class PostForm extends SharpForm
             ->addField(
                 SharpFormUploadField::make('cover')
                     ->setMaxFileSize(1)
+                    ->setImageOnly()
                     ->setLabel('Cover')
-                    ->setFileFilterImages()
-                    ->setCropRatio('16:9')
+                    ->setImageCropRatio('16:9')
                     ->setStorageDisk('local')
                     ->setStorageBasePath('data/posts/{id}'),
             )
@@ -96,8 +102,7 @@ class PostForm extends SharpForm
             ->addField(
                 SharpFormDateField::make('published_at')
                     ->setLabel('Publication date')
-                    ->setHasTime()
-                    ->setDisplayFormat('MM-DD-YYYY HH:mm'),
+                    ->setHasTime(),
             )
             ->addField(
                 SharpFormListField::make('attachments')
@@ -121,25 +126,33 @@ class PostForm extends SharpForm
                     )
                     ->addItemField(
                         SharpFormUploadField::make('document')
-                            ->setFileFilter(['pdf', 'zip'])
                             ->setMaxFileSize(1)
+                            ->setAllowedExtensions(['pdf', 'zip'])
                             ->setStorageDisk('local')
                             ->setStorageBasePath('data/posts/{id}')
                             ->addConditionalDisplay('!is_link'),
                     ),
-            );
-
-        if (currentSharpRequest()->isUpdate()) {
-            $formFields->addField(
-                SharpFormAutocompleteField::make('author_id', 'remote')
+            )
+            ->when(sharp()->context()->isUpdate(), fn ($formFields) => $formFields->addField(
+                SharpFormAutocompleteRemoteField::make('author_id')
                     ->setReadOnly(! auth()->user()->isAdmin())
                     ->setLabel('Author')
-                    ->setRemoteEndpoint('/api/admin/users')
-                    ->setListItemInlineTemplate('<div>{{name}}</div><div><small>{{email}}</small></div>')
-                    ->setResultItemInlineTemplate('<div>{{name}}</div><div><small>{{email}}</small></div>')
+                    ->allowEmptySearch()
+                    ->setRemoteCallback(function ($search) {
+                        $users = User::orderBy('name')->limit(10);
+
+                        foreach (explode(' ', trim($search)) as $word) {
+                            $users->where(fn ($query) => $query
+                                ->where('name', 'like', "%$word%")
+                                ->orWhere('email', 'like', "%$word%")
+                            );
+                        }
+
+                        return $users->get();
+                    })
+                    ->setListItemTemplate('<div>{{ $name }}</div><div><small>{{ $email }}</small></div>')
                     ->setHelpMessage('This field is only editable by admins.'),
-            );
-        }
+            ));
     }
 
     public function buildFormLayout(FormLayout $formLayout): void
@@ -148,30 +161,31 @@ class PostForm extends SharpForm
             ->addTab('Content', function (FormLayoutTab $tab) {
                 $tab
                     ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField('title');
-                        if (currentSharpRequest()->isUpdate()) {
-                            $column->withSingleField('author_id');
-                        }
                         $column
-                            ->withFields('published_at')
-                            ->withSingleField('categories')
-                            ->withSingleField('cover')
-                            ->withSingleField('attachments', function (FormLayoutColumn $item) {
-                                $item->withFields('title|8', 'is_link|4')
-                                    ->withSingleField('link_url')
-                                    ->withSingleField('document');
+                            ->withField('title')
+                            ->when(
+                                sharp()->context()->isUpdate(),
+                                fn ($column) => $column->withField('author_id')
+                            )
+                            ->withFields('published_at', 'categories')
+                            ->withListField('attachments', function (FormLayoutColumn $item) {
+                                $item->withFields(title: 8, is_link: 4)
+                                    ->withField('link_url')
+                                    ->withField('document');
                             });
                     })
                     ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField('content');
+                        $column
+                            ->withField('cover')
+                            ->withField('content');
                     });
             })
             ->addTab('Metadata', function (FormLayoutTab $tab) {
                 $tab
                     ->addColumn(6, function (FormLayoutColumn $column) {
                         $column->withFieldset('Meta fields', function (FormLayoutFieldset $fieldset) {
-                            $fieldset->withSingleField('meta_title')
-                                ->withSingleField('meta_description');
+                            $fieldset->withField('meta_title')
+                                ->withField('meta_description');
                         });
                     });
             });
@@ -179,18 +193,32 @@ class PostForm extends SharpForm
 
     public function buildFormConfig(): void
     {
-        $this->configureDisplayShowPageAfterCreation();
+        $this->configureDisplayShowPageAfterCreation()
+            ->configureEditTitle('Edit post')
+            ->configureCreateTitle('New post');
     }
 
     public function find($id): array
     {
         return $this
-            ->setCustomTransformer('author_id', function ($value, Post $instance) {
-                return $instance->author;
-            })
+            ->setCustomTransformer('author_id', fn ($value, Post $instance) => $instance->author)
             ->setCustomTransformer('cover', new SharpUploadModelFormAttributeTransformer())
             ->setCustomTransformer('attachments[document]', new SharpUploadModelFormAttributeTransformer())
             ->transform(Post::with('cover', 'attachments', 'categories')->findOrFail($id));
+    }
+
+    public function rules(): array
+    {
+        return [
+            'title.fr' => ['required', 'string', 'max:150'],
+            'title.en' => ['required', 'string', 'max:150'],
+            'content.fr' => ['nullable', 'string', 'max:2000'],
+            'content.en' => ['nullable', 'string', 'max:2000'],
+            'published_at' => ['required', 'date'],
+            'attachments.*.title' => ['required', 'string', 'max:150'],
+            'attachments.*.link_url' => ['required_if:attachments.*.is_link,true,1', 'nullable', 'url', 'max:150'],
+            'attachments.*.document' => ['required_if:attachments.*.is_link,false,0'],
+        ];
     }
 
     public function update($id, array $data)
@@ -205,16 +233,11 @@ class PostForm extends SharpForm
             ->ignore(auth()->user()->isAdmin() ? [] : ['author_id'])
             ->save($post, $data);
 
-        if (currentSharpRequest()->isCreation() && ! $id) {
+        if (sharp()->context()->isCreation()) {
             $this->notify('Your post was created, but not published yet.');
         }
 
         return $post->id;
-    }
-
-    public function delete($id): void
-    {
-        Post::findOrFail($id)->delete();
     }
 
     public function getDataLocalizations(): array

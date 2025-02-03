@@ -4,11 +4,12 @@ namespace Code16\Sharp\Utils\Transformers;
 
 use Closure;
 use Code16\Sharp\EntityList\Commands\Command;
+use Code16\Sharp\Form\Fields\Editor\Uploads\FormEditorUploadForm;
 use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Show\SharpShow;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator as LengthAwarePaginatorContract;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Pagination\AbstractPaginator;
 
 /**
  * This trait allows a class to handle a custom transformers array.
@@ -33,29 +34,36 @@ trait WithCustomTransformers
     /**
      * Transforms a model or a models collection into an array.
      */
-    public function transform($models): array|LengthAwarePaginator
+    public function transform($models): array|AbstractPaginator
     {
-        if ($this instanceof SharpForm || $this instanceof Command || $this instanceof SharpFormEditorEmbed) {
-            // It's a Form (full entity or from a Command), there's only one model.
-            // We must add Form Field Formatters in the process
-            return $this->applyFormatters(
-                $this->applyTransformers($models),
-            );
+        if (
+            $this instanceof SharpForm
+            || $this instanceof Command
+            || $this instanceof SharpFormEditorEmbed
+            || $this instanceof FormEditorUploadForm
+        ) {
+            // Form case: there's only one model
+            return $this->applyTransformers($models);
         }
 
         if ($this instanceof SharpShow) {
-            // It's a Show, there's only one model.
-            return $this->applyTransformers($models, false);
+            // Show case: there's only one model
+            return $this->applyTransformers(model: $models, forceFullObject: false);
         }
 
-        // SharpEntityList case
+        // SharpEntityList case: collection of models (potentially paginated)
 
-        if ($models instanceof LengthAwarePaginatorContract) {
-            return new LengthAwarePaginator(
-                $this->transform($models->items()),
-                $models->total(),
-                $models->perPage(),
-                $models->currentPage(),
+        $this->cacheEntityListInstances(
+            match (true) {
+                $models instanceof AbstractPaginator => $models->items(),
+                $models instanceof Arrayable => $models->all(),
+                default => $models,
+            }
+        );
+
+        if ($models instanceof AbstractPaginator) {
+            return $models->setCollection(
+                collect($this->transform($models->items()))
             );
         }
 
@@ -126,17 +134,15 @@ trait WithCustomTransformers
                     }
                 }
 
-                // This is a BC, even if this is a bugfix: in case of a sub-attribute,
-                // we should pass the related model to the transformer. Will do that in 9.x
-                //                if (($sep = strpos($attribute, ':')) !== false) {
-                //                    $attributes[$attribute] = $transformer->apply(
-                //                        $attributes[$attribute] ?? null,
-                //                        $model[substr($attribute, 0, $sep)] ?? null,
-                //                        substr($attribute, $sep + 1),
-                //                    );
-                //
-                //                    continue;
-                //                }
+                if (($sep = strpos($attribute, ':')) !== false) {
+                    $attributes[$attribute] = $transformer->apply(
+                        $attributes[$attribute] ?? null,
+                        $model[substr($attribute, 0, $sep)] ?? null,
+                        substr($attribute, $sep + 1),
+                    );
+
+                    continue;
+                }
 
                 $attributes[$attribute] = $transformer->apply(
                     $attributes[$attribute] ?? null,
@@ -147,19 +153,6 @@ trait WithCustomTransformers
         }
 
         return $attributes;
-    }
-
-    protected function applyFormatters(array $attributes): array
-    {
-        return collect($attributes)
-            ->map(function ($value, $key) {
-                $field = $this->findFieldByKey($key);
-
-                return $field
-                    ? $field->formatter()->toFront($field, $value)
-                    : $value;
-            })
-            ->all();
     }
 
     /**
@@ -178,5 +171,18 @@ trait WithCustomTransformers
             });
 
         return $attributes;
+    }
+
+    private function cacheEntityListInstances(array $instances): void
+    {
+        $idAttr = $this->instanceIdAttribute;
+
+        sharp()->context()->cacheListInstances(
+            collect($instances)
+                ->filter(fn ($instance) => (((object) $instance)->$idAttr ?? null) !== null)
+                ->mapWithKeys(fn ($instance) => [
+                    ((object) $instance)->$idAttr => $instance,
+                ])
+        );
     }
 }

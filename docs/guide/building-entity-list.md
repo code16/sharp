@@ -2,7 +2,7 @@
 sidebarDepth: 3
 ---
 
-# Building an Entity List
+# Create an Entity List
 
 We need an Entity List to display the list of `instances` for an `entity`. This list can be paginated, searchable, filtered, ... as we'll see below.
 
@@ -26,25 +26,30 @@ Each one is detailed here:
 A field is a column in the `Entity List`. This first function is responsible to describe each column:
 
 ```php
-function buildList(EntityListFieldsContainer $fields)
+class MyList extends SharpEntityList
 {
-    $fields
-        ->addField(
-            EntityListField::make('name')
-                ->setLabel('Full name')
-                ->setSortable()
-                ->setWidth(6)
-                ->setWidthOnSmallScreens(8)
-                ->setHtml()
-        )
-        ->addField([...]);
+    protected function buildList(EntityListFieldsContainer $fields): void
+    {
+        $fields
+            ->addField(
+                EntityListField::make('name')
+                    ->setLabel('Full name')
+                    ->setSortable()
+                    ->setWidth('50%')
+                    ->setHtml()
+            )
+            ->addField(/* ... */);
+    }
+    // [...]
 }
 ```
 
 Setting the label, allowing the column to be sortable and to display html is optional.
 
-The `->setWidth(int)` method accepts an integer on a 12-based grid, and is optional too: if missing, it will be deduced (you can use `->setWidthFill()` to force this last behavior).
-You can also call `->widthOnSmallScreens(int)` or `->widthOnSmallScreensFill)` to define a custom width value for small screens. To hide the column on small screens, use `->hideOnSmallScreens()`.
+The optional `->setWidth()` method accepts either an integer (eg: `20` for 20%), a float (eg: `.2` for 20%) or a string (eg: `'20'` or `'20%'`); if missing, it will be deduced (you can use `->setWidthFill()` to force this last behavior).
+To hide the column on small screens, use `->hideOnSmallScreens()`.
+
+Sorting columns must be handled in the `getListData()` method, see below.
 
 ### `getListData()`
 
@@ -57,24 +62,27 @@ The returned array is meant to be built with 2 rules:
 So for instance, if we defined 2 columns `name` and `price`:
 
 ```php
-function getListData()
+class MyList extends SharpEntityList
 {
-    return [
-        [
-            'id' => 1,
-            'name' => 'Carrot',
-            'price' => '0.5'
-        ], [
-            'id' => 2,
-            'name' => 'Potato',
-            'price' => '0.95'
-        ]
-    ];
+    public function getListData(): array|Arrayable
+    {
+        return [
+            [
+                'id' => 1,
+                'name' => 'Carrot',
+                'price' => '0.5'
+            ], [
+                'id' => 2,
+                'name' => 'Potato',
+                'price' => '0.95'
+            ]
+        ];
+    }
+    // [...]
 }
 ```
 
-Of course, real code would imply some data request in a DB, or a file for instance; the important thing is that Sharp don't care.
-
+Of course, real code would imply some data request in a DB, or a file for instance; the important thing is that Sharp don’t care.
 
 #### Transformers
 
@@ -135,18 +143,22 @@ A filter is referenced by a `filterKey` and has a `value`. So we can grab this c
 
 #### Pagination
 
-It's very common to return in `getListData()` paginated results: return a `Illuminate\Contracts\Pagination\LengthAwarePaginator` in this case.
+It's very common to return in `getListData()` paginated results: return a `Illuminate\Contracts\Pagination\LengthAwarePaginator` or a `Illuminate\Contracts\Pagination\Paginator` in this case.
 
-With `Eloquent` or the `QueryBuilder`, this means calling `->paginate($count)` on the query.
+With `Eloquent` or the `QueryBuilder`, this means calling `->paginate($count)` or `simplePaginate($count)` on the query.
 
 ### `delete($id): void`
 
 Here you might write the code performed on a deletion of the instance. It can be anything, here's an Eloquent example:
 
 ```php
-function delete($id): void
+class MyList extends SharpEntityList
 {
-    Product::findOrFail($id)->delete();
+    function delete($id): void
+    {
+        Product::findOrFail($id)->delete();
+    }
+    // [...]
 }
 ```
 
@@ -157,12 +169,15 @@ Deletion is typically an action you perform [in a Show Page](building-show-page.
 Finally, this last function must describe the list config. Let's see an example:
 
 ```php
-function buildListConfig()
+class MyList extends SharpEntityList
 {
-    $this->configureInstanceIdAttribute('id')
-        ->configureSearchable()
-        ->configureDefaultSort('name', 'asc')
-        ->configurePaginated();
+    public function buildListConfig(): void
+    {
+        $this->configureInstanceIdAttribute('id')
+            ->configureSearchable()
+            ->configureDefaultSort('name', 'asc');
+    }
+    // [...]
 }
 ```
 
@@ -176,9 +191,6 @@ Here is the full list of available methods:
 
 - `configureDefaultSort(string $sortBy, string $sortDir = "asc")`: `EntityListQueryParams $queryParams` will be filled with this default value (see above)
 
-- `configurePaginated(bool $paginated = true)`: this means that `getListData()` must return an instance
-  of `LengthAwarePaginator` (see above) and that Sharp will display pagination links if needed
-
 - `configureMultiformAttribute(string $attribute)`: handle various types of entities; see [detailed doc](multiforms.md)
 
 - `configurePageAlert(string $template, string $alertLevel = null, string $fieldKey = null, bool $declareTemplateAsPath = false)`: display a dynamic message above the list; [see detailed doc](page-alerts.md)
@@ -187,7 +199,11 @@ Here is the full list of available methods:
 
 - `configurePrimaryEntityCommand(string $commandKeyOrClassName)`: define an instance command as "primary", by passing its key or full cass name. The command should be declared for this Entity List ([see related doc](commands.md)).
 
+- `configureQuickCreationForm(?array $fields = null)`: show the creation form in a modal instead of a full page ([see detailed doc](quick-creation-form.md))
+
 - `configureDelete(bool $hide = false, ?string $onfirmationText = null)`: the first argument is to show / hide the delete command on each instance (shown by default); this is only useful to hide the link if you want to only display the delete action in the Show Page (if you have defined one), this is NOT to be used for authorization purpose (see [dedicated documentation on this topic](entity-authorizations.md)). The second argument is the message to display in the confirmation dialog (a sensible default will be used).
+
+- `configureCreateButtonLabel(string $label)` to set a custom "New..." button label.
 
 ## Configure the Entity List
 

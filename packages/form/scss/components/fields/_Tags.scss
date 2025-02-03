@@ -1,7 +1,0 @@
-.SharpTags {
-  .multiselect__option {
-    &:before {
-      content: attr(data-select) " ";
-    }
-  }
-}

@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Search;
 
+use Code16\Sharp\Utils\Icons\IconManager;
 use Code16\Sharp\Utils\Links\SharpLinkTo;
 
 class SearchResultSet
@@ -55,11 +56,11 @@ class SearchResultSet
     {
         return [
             'label' => $this->label,
-            'icon' => $this->icon,
-            'showWhenEmpty' => ! $this->hideWhenEmpty,
+            'icon' => app(IconManager::class)->iconToArray($this->icon),
+            'hideWhenEmpty' => $this->hideWhenEmpty,
             'emptyStateLabel' => $this->emptyStateLabel,
             'validationErrors' => $this->validationErrors,
-            'results' => empty($this->validationErrors)
+            'resultLinks' => empty($this->validationErrors)
                 ? collect($this->resultLinks)
                     ->map(fn (ResultLink $resultLink) => $resultLink->toArray())
                     ->all()

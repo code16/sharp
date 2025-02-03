@@ -19,14 +19,14 @@ export function transformContent(html: string) {
 
     // apply syntax highlight to h3 with sole code element
     [...content.querySelectorAll(':is(h3, h4) > code')]
-        .filter(code =>
-            ![...code.parentElement.childNodes].some(node => node.nodeName === '#text' && node.textContent.trim())
-        )
+        // .filter(code =>
+        //     ![...code.parentElement.childNodes].some(node => node.nodeName === '#text' && node.textContent.trim())
+        // )
         .forEach(code => {
             code.classList.add('inline', 'full');
             code.innerHTML = Prism.highlight(code.innerHTML,  Prism.languages.php, 'php');
             code.querySelectorAll('.token').forEach(token => {
-                if(!token.matches('.function')) {
+                if(!token.matches('.function') && !token.childElementCount) {
                     token.setAttribute('data-content', token.innerHTML);
                     token.innerHTML = '';
                 }

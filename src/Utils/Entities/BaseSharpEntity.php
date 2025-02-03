@@ -25,29 +25,23 @@ abstract class BaseSharpEntity
             return new SharpEntityPolicy();
         }
 
-        if (is_string($policy)) {
-            $policy = app($policy);
-            if (! $policy instanceof SharpEntityPolicy) {
-                throw new SharpException('Policy class '.$policy.' must implement '.SharpEntityPolicy::class);
-            }
+        if (! $policy instanceof SharpEntityPolicy) {
+            throw new SharpException('Policy class must implement '.SharpEntityPolicy::class);
         }
 
         return $policy;
     }
 
-    final public function getLabel(): string
-    {
-        return $this->label;
-    }
+    abstract public function getLabel(): string;
 
     final public function isDashboard(): bool
     {
         return $this->isDashboard;
     }
 
-    protected function getPolicy(): string|SharpEntityPolicy|null
+    protected function getPolicy(): ?SharpEntityPolicy
     {
-        return $this->policy;
+        return $this->policy ? app($this->policy) : null;
     }
 
     abstract public function isActionProhibited(string $action): bool;

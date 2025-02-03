@@ -2,7 +2,10 @@
 
 namespace Code16\Sharp\Form\Layout;
 
+use Closure;
+use Code16\Sharp\Utils\Layout\LayoutColumn;
 use Code16\Sharp\Utils\Layout\LayoutField;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Traits\Conditionable;
 
 trait HasFieldRows
@@ -11,7 +14,30 @@ trait HasFieldRows
 
     protected array $rows = [];
 
-    public function withSingleField(string $fieldKey, ?\Closure $subLayoutCallback = null): self
+    /** @deprecated use withField() or withListField() instead */
+    public function withSingleField(string $fieldKey, ?\Closure $subLayoutCallback = null): static
+    {
+        if ($subLayoutCallback) {
+            return $this->withListField($fieldKey, $subLayoutCallback);
+        }
+
+        return $this->withField($fieldKey);
+    }
+
+    public function withField(string $fieldKey): static
+    {
+        $this->addRowLayout([
+            $this->newLayoutField($this->normalizedFieldsRow([$fieldKey])->first()),
+        ]);
+
+        return $this;
+    }
+
+    /**
+     * @param  (\Closure(LayoutColumn): mixed)  $subLayoutCallback
+     * @return $this
+     */
+    public function withListField(string $fieldKey, Closure $subLayoutCallback): static
     {
         $this->addRowLayout([
             $this->newLayoutField($fieldKey, $subLayoutCallback),
@@ -20,11 +46,11 @@ trait HasFieldRows
         return $this;
     }
 
-    public function withFields(string ...$fieldKeys): self
+    public function withFields(string|int ...$fieldKeys): static
     {
         $this
             ->addRowLayout(
-                collect($fieldKeys)
+                $this->normalizedFieldsRow($fieldKeys)
                     ->map(fn ($key) => $this->newLayoutField($key))
                     ->all(),
             );
@@ -32,7 +58,11 @@ trait HasFieldRows
         return $this;
     }
 
-    public function insertSingleFieldAt(int $index, string $fieldKey, ?\Closure $subLayoutCallback = null): self
+    /**
+     * @param  (\Closure(LayoutColumn): mixed)|null  $subLayoutCallback
+     * @return $this
+     */
+    public function insertSingleFieldAt(int $index, string $fieldKey, ?\Closure $subLayoutCallback = null): static
     {
         $rows = collect($this->rows);
         $rows->splice($index, 0, [[$this->newLayoutField($fieldKey, $subLayoutCallback)]]);
@@ -41,11 +71,11 @@ trait HasFieldRows
         return $this;
     }
 
-    public function insertFieldsAt(int $index, string ...$fieldKeys): self
+    public function insertFieldsAt(int $index, string ...$fieldKeys): static
     {
         $rows = collect($this->rows);
         $rows->splice($index, 0, [
-            collect($fieldKeys)
+            $this->normalizedFieldsRow($fieldKeys)
                 ->map(fn ($key) => $this->newLayoutField($key))
                 ->all(),
         ]);
@@ -63,19 +93,46 @@ trait HasFieldRows
     {
         return [
             'fields' => collect($this->rows)
-                ->map(function ($row) {
-                    return collect($row)
-                        ->map(function ($field) {
-                            return $field->toArray();
-                        })
-                        ->all();
-                })
+                ->map(fn ($row) => collect($row)
+                    ->map(fn ($field) => $field->toArray())
+                    ->all()
+                )
                 ->all(),
         ];
     }
 
-    protected function newLayoutField(string $fieldKey, ?\Closure $subLayoutCallback = null): LayoutField
+    public function hasFields(): bool
+    {
+        return collect($this->rows)
+            ->firstWhere(fn ($row) => count($row) > 0) !== null;
+    }
+
+    protected function newLayoutField(string|array $fieldKey, ?\Closure $subLayoutCallback = null): LayoutField
     {
         return new FormLayoutField($fieldKey, $subLayoutCallback);
+    }
+
+    private function normalizedFieldsRow(array $fieldKeys): Collection
+    {
+        return collect($fieldKeys)
+            ->map(function ($value, $key) use ($fieldKeys) {
+                if (! is_string($key)) {
+                    // ['name'] or ['name|6'] cases
+                    return strpos($value, '|')
+                        ? collect(explode('|', $value))
+                            ->map(fn ($v, $k) => $k == 1 ? (int) $v : $v)
+                            ->all()
+                        : [$value, match (count($fieldKeys)) {
+                            2 => 6,
+                            3 => 4,
+                            4 => 3,
+                            6 => 2,
+                            default => 12,
+                        }];
+                }
+
+                return [$key, $value];
+            })
+            ->values();
     }
 }

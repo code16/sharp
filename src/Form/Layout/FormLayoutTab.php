@@ -12,6 +12,10 @@ class FormLayoutTab implements HasLayout
         $this->title = $title;
     }
 
+    /**
+     * @param  (\Closure(FormLayoutColumn): mixed)|null  $callback
+     * @return $this
+     */
     public function addColumn(int $size, ?\Closure $callback = null): self
     {
         $column = $this->addColumnLayout(new FormLayoutColumn($size));

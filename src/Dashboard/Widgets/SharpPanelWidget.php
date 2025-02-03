@@ -2,45 +2,36 @@
 
 namespace Code16\Sharp\Dashboard\Widgets;
 
-use Code16\Sharp\Form\Fields\SharpFormHtmlField;
+use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Blade;
 
 class SharpPanelWidget extends SharpWidget
 {
-    protected SharpFormHtmlField $htmlFormField;
+    private View|string $template;
 
     public static function make(string $key): self
     {
-        $widget = new static($key, 'panel');
-        $widget->htmlFormField = SharpFormHtmlField::make('panel');
-
-        return $widget;
+        return new static($key, 'panel');
     }
 
     public function toArray(): array
     {
-        return parent::buildArray([
-            'template' => $this->htmlFormField->template(),
-        ]);
+        return parent::buildArray([]);
     }
 
-    public function setTemplatePath(string $templatePath): self
+    public function setTemplate(View|string $template): self
     {
-        $this->htmlFormField->setTemplatePath($templatePath);
+        $this->template = $template;
 
         return $this;
     }
 
-    public function setInlineTemplate(string $template): self
+    public function render(array $data): string
     {
-        $this->htmlFormField->setInlineTemplate($template);
+        if (is_string($this->template)) {
+            return Blade::render($this->template, $data);
+        }
 
-        return $this;
-    }
-
-    protected function validationRules(): array
-    {
-        return [
-            'template' => 'required',
-        ];
+        return $this->template->with($data)->render();
     }
 }

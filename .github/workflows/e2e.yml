@@ -1,0 +1,64 @@
+name: E2E Tests (playwright)
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mbstring, dom, fileinfo, mysql
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Composer dependencies
+        run: composer install
+      - name: Build assets
+        run: npm run build
+      - name: Install dependencies
+        run: npm ci
+        working-directory: tests-e2e
+      - name: Install Playwright Browsers
+        run: npx playwright install chromium --with-deps
+        working-directory: tests-e2e
+      - name: Install Composer dependencies
+        run: composer install
+        working-directory: tests-e2e/site
+      - name: Create .env
+        run: cp .env.e2e.ci .env
+        working-directory: tests-e2e/site
+      - name: Generate app key
+        run: php artisan key:generate
+        working-directory: tests-e2e/site
+      - name: Setup DB
+        run: |
+          touch database/database.sqlite
+          php artisan snapshot:load e2e-seed
+        working-directory: tests-e2e/site
+      - name: Run server
+        run: php artisan serve --host=127.0.0.1 --port=8080 &
+        working-directory: tests-e2e/site
+      - name: Run Playwright tests
+        run: npx playwright test
+        working-directory: tests-e2e
+        env:
+          CI: true
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: report
+          path: |
+            tests-e2e/playwright-report/
+            tests-e2e/site/storage/logs/
+          retention-days: 30

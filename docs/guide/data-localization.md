@@ -39,11 +39,7 @@ class BookForm extends SharpForm
 }
 ```
 
-Once one field at least is localized, here's what appears on the front side:
-
-![Form field localization](./img/form-localization-v8.png))
-
-A global locale selector is added, as well as individual ones on each localized field.
+Once one field at least is localized, the form will present a global locale selector, and additionaly each localized field will have his own locale selector.
 
 ## Transform the data accordingly
 
@@ -130,7 +126,7 @@ class BookForm extends SharpForm
 Validation allows differentiating rules between locales:
 
 ```php
-class BookValidator extends FormRequest
+class BookForm extends SharpForm
 {
     // [...]
     

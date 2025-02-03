@@ -7,13 +7,13 @@ Commands can be defined in an Entity List, in a Show Page or in a Dashboard. Thi
 ## Generator for an 'Entity' command
 
 ```bash
-php artisan sharp:make:entity-command <class_name> [--with-form]
+php artisan sharp:make:entity-command <class_name> [--model=<model_name>,--wizard,--form]
 ```
 
 ## Generator for an 'Instance' command
 
 ```bash
-php artisan sharp:make:instance-command <class_name> [--with-form]
+php artisan sharp:make:instance-command <class_name> [--model=<model_name>,--wizard,--form]
 ```
 
 ## Write the Command class
@@ -45,9 +45,12 @@ The example above is an "entity" case, which is reserved to Entity Lists: Comman
 To create an instance Command (relative to a specific instance, which can be placed on each Entity List row, or in a Show Page), the Command class must extend `Code16\Sharp\EntityList\Commands\InstanceCommand`. The execute method signature is a bit different:
 
 ```php
-public function execute($instanceId, array $params = []): array
+class PromoteToAdminCommand extends InstanceCommand
 {
-    // [...]
+    public function execute($instanceId, array $params = []): array
+    {
+        // ...
+    }
 }
 ```
 
@@ -60,7 +63,7 @@ The second parameter in the `execute()` function is an array named `$data`, whic
 ```php
 class SendInvoiceToCustomerCommand extends InstanceCommand
 {
-    // [...]
+    // ...
     
     function buildFormFields(FieldsContainer $formFields): void
     {
@@ -79,12 +82,12 @@ class SendInvoiceToCustomerCommand extends InstanceCommand
 
 The API is the same as building a standard Form (see [Building an Entity Form](building-form.md)).
 
-Once this method has been declared, a form will be prompted to the user in a modal as he clicks on the Command. Then, in the `execute()` method, you can grab the entered value, and even to handle the validation:
+Once this method has been declared, a form will be prompted to the user in a modal as he clicks on the Command. Then, in the `execute()` method, you can grab the entered value and handle validation:
 
 ```php
 class SendInvoiceToCustomerCommand extends InstanceCommand
 {
-    // [...]
+    // ...
     
     public function execute($instanceId, array $data = []): array
     {
@@ -99,6 +102,10 @@ class SendInvoiceToCustomerCommand extends InstanceCommand
     }
 }
 ```
+
+::: tip
+Validation can be extracted to a dedicated `rules()` method instead.
+:::
 
 #### Initializing form data
 
@@ -118,7 +125,7 @@ For an Instance command, add the `$instanceId` as a parameter:
 ```php
  protected function initialData($instanceId): array
  {
-     // [...]
+     // ...
  }
 ```
 
@@ -153,15 +160,16 @@ public function buildCommandConfig(): void
 
 Here is the full list of available methods:
 
-- `configureConfirmationText(string $confirmationText)`: if set the Command will ask a confirmation to the user before executing
+- `configureConfirmationText(string $confirmationText, ?string $title = null, ?string $buttonLabel = null)`: if set the Command will ask a confirmation to the user before executing (warning: for now, the confirmation will not properly work in a Wizard Command)
 - `configureDescription(string $description)`: this text will appear under the Command label
 - `configureFormModalTitle(string $formModalTitle)`: if the Command has a Form, the title of the modal will be its label, or `$formModalTitle` if defined
 - `configureFormModalButtonLabel(string $formModalButtonLabel)`: if the Command has a Form, the label of the OK button will be `$formModalButtonLabel`
 - `configurePageAlert(string $template, string $alertLevel = null, string $fieldKey = null, bool $declareTemplateAsPath = false)`: display a dynamic message above the Form; [see detailed doc](page-alerts.md)
+- `configureFormModalSubmitAndReopenButton(?string $label = null)`: only useful to Commands with forms; if set, an additional button will be displayed to allow the user to submit the form and immediately reopen the Command; the label of the button will be `$label` if defined.
 
 ### Command return types
 
-Finally, let's review the return possibilities: after a Command has been executed, the code must return something to tell to the front what to do next. There are six of them:
+Finally, let's review the return possibilities: after a Command has been executed, the code must return something to tell to the front what to do next. There are height of them:
 
 - `return $this->info('some text')`: displays the entered text in a modal.
 - `return $this->reload()`: reload the current page (with context).
@@ -177,16 +185,12 @@ Finally, let's review the return possibilities: after a Command has been execute
 ```php
 class OrderList extends SharpEntityList
 {
-    // [...]
-    function getListData()
+    // ...
+    function getListData(): array|Arrayble
     {
-        $orders = Order::query();
-    
-        if($params->specificIds()) {
-            $orders->whereIn('id', $this->queryParams->specificIds());
-        }
-    
-        return $this->transform($orders->get());
+        return Order::query()
+            ->when($this->queryParams->specificIds(), fn ($query, $ids) => $query->whereIn('id', $ids))
+            ->transform($orders->get());
     }
 }
 ```
@@ -198,7 +202,7 @@ In the same fashion as for a Form, you can display notifications after a Command
 ```php
 public function execute($instanceId, array $data= []): array
 {
-    // [...]
+    // ...
 
     $this->notify('This is done.')
          ->setDetail('As you asked.')
@@ -222,7 +226,7 @@ Once the Command class is written, we must add it to the Entity List or Show Pag
 ```php
 class OrderList extends SharpEntityList
 {
-    // [...]
+    // ...
     function getInstanceCommands(): ?array
     {
         return [
@@ -244,7 +248,7 @@ or to the Dashboard:
 ```php
 class SalesDashboard extends SharpDashboard
 {
-    // [...]
+    // ...
     
     function getDashboardCommands(): ?array
     {
@@ -301,7 +305,7 @@ An Entity List can declare one (and only one) of its entity Commands as "primary
 ```php
 class UserList extends SharpEntityList
 {
-    // [...]
+    // ...
     
     function buildListConfig(): void
     {
@@ -335,7 +339,7 @@ To achieve this, you must choose a unique key and attach it to the layout sectio
 ```php
 class PostShow extends SharpShow
 {
-    // [...]
+    // ...
 
     protected function buildShowLayout(ShowLayout $showLayout): void
     {
@@ -382,7 +386,7 @@ As seen before, Entity Commands are executed on multiple instances: either all o
 ```php
 class MyBulkCommand extends EntityCommand
 {
-    // [...]
+    // ...
     
     public function buildCommandConfig(): void
     {
@@ -402,7 +406,7 @@ Use the `$this->selectedIds()` method to retrieve the list of selected instances
 ```php
 class MyBulkCommand extends EntityCommand
 {
-    // [...]
+    // ...
     
     public function execute(array $data = []): array
     {

@@ -3,9 +3,12 @@
 namespace Code16\Sharp\Show\Layout;
 
 use Code16\Sharp\Form\Layout\HasLayout;
+use Illuminate\Support\Traits\Conditionable;
 
 class ShowLayoutSection implements HasLayout
 {
+    use Conditionable;
+
     protected ?string $title = null;
     protected array $columns = [];
     protected bool $collapsable = false;
@@ -16,6 +19,10 @@ class ShowLayoutSection implements HasLayout
         $this->title = $title;
     }
 
+    /**
+     * @param  (\Closure(ShowLayoutColumn): mixed)|null  $callback
+     * @return $this
+     */
     public function addColumn(int $size, ?\Closure $callback = null): self
     {
         $column = $this->addColumnLayout(new ShowLayoutColumn($size));

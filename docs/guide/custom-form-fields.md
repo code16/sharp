@@ -9,8 +9,8 @@ Example of custom sharp field:
 ```vue
 <template>
     <div>
-        <input class="SharpText" :value="value" @change="handleChanged">
-        <i class="fa" :class="icon"></i>
+        <input :value="value" @change="handleChanged">
+        <emoji-picker :emoji-set="emojiSet"></emoji-picker>
     </div>
 </template>
 
@@ -18,7 +18,7 @@ Example of custom sharp field:
     export default {
         props: {
             value: String, // field value
-            icon: String   // custom added props (given in field definition)
+            emojiSet: String   // custom added props (given in field definition)
         },
         methods: {
             handleChanged(e) {
@@ -62,16 +62,16 @@ Add a separated `.js` file in your project to register fields components :
 
 ```js
 import Sharp from 'sharp-plugin';
-import TextIcon from './components/TextIcon.vue';
+import EmojiPicker from './components/EmojiPicker.vue';
 
 
 Vue.use(Sharp, {
     customFields: {
-        'textIcon': TextIcon
+        'emojiPicker': EmojiPicker
     }
 })
 ```
-**Important**: The key must be `'textIcon'` for `FIELD_TYPE = "custom-textIcon"`
+**Important**: The key must be `'emojiPicker'` for `FIELD_TYPE = "custom-emojiPicker"`
 
 Vue is exposed to the window scope, it's the current Vue version used by sharp (cf. package.json).
 
@@ -97,7 +97,7 @@ You can `.version()` this JS file if you want to.
 
 Publish views with:
 ```bash
-php artisan vendor:publish --provider=Code16\\Sharp\\SharpServiceProvider --tag=views
+php artisan vendor:publish --tag=sharp-views
 ```
 
 Add your `.js` file to `resources/views/vendor/sharp/partials/plugin-scripts.blade.php`:
@@ -128,35 +128,28 @@ Next step is to build your form field class. It must extend `Code16\Sharp\Form\F
 Here's an example:
 
 ```php
-class SharpCustomFormFieldTextIcon extends SharpFormField
+class SharpCustomFormFieldEmojiPicker extends SharpFormField
 {
-    const FIELD_TYPE = 'custom-textIcon';
+    const FIELD_TYPE = 'custom-emojiPicker';
 
-    protected $icon;
+    protected string $emojiSet = 'native';
 
     public static function make(string $key): self
     {
         return new static($key, static::FIELD_TYPE, new TextFormatter);
     }
 
-    public function setIcon(string $iconName): self
-    {
-        $this->icon = $iconName;
-
-        return $this;
-    }
-
     protected function validationRules(): array
     {
         return [
-            'icon' => 'required',
+            'emojiSet' => 'in:native,apple,google',
         ];
     }
 
     public function toArray(): array
     {
         return parent::buildArray([
-            'icon' => $this->icon,
+            'emojiSet' => $this->emojiSet,
         ]);
     }
 }
@@ -183,9 +176,8 @@ Next step is using the new form field:
 function buildFormFields(FieldsContainer $formFields): void
 {
     $formFields->addField(
-        SharpCustomFormFieldTextIcon::make('name')
-            ->setLabel('Name')
-            ->setIcon('fa-user')
+        SharpCustomFormFieldEmojiPicker::make('emoji')
+            ->setLabel('Emoji')
     );
 }
 ```

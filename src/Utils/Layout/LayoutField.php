@@ -2,28 +2,27 @@
 
 namespace Code16\Sharp\Utils\Layout;
 
+use Closure;
+
 abstract class LayoutField
 {
     protected string $fieldKey;
-    protected int $size = 12;
-    protected int $sizeXS = 12;
+    protected ?int $size = null;
     protected array $itemLayout = [];
 
-    public function __construct(string $fieldKey, ?\Closure $subLayoutCallback = null)
+    public function __construct(string|array $fieldKey, ?Closure $subLayoutCallback = null)
     {
-        if (strpos($fieldKey, '|')) {
-            [$this->fieldKey, $sizes] = explode('|', $fieldKey);
+        $size = null;
 
-            if (strpos($fieldKey, ',')) {
-                [$this->size, $this->sizeXS] = collect(explode(',', $sizes))->map(function ($size) {
-                    return (int) $size;
-                });
-            } else {
-                $this->size = (int) $sizes;
-            }
+        if (is_array($fieldKey)) {
+            [$this->fieldKey, $size] = $fieldKey;
+        } elseif (strpos($fieldKey, '|')) {
+            [$this->fieldKey, $size] = explode('|', $fieldKey);
         } else {
             $this->fieldKey = $fieldKey;
         }
+
+        $this->size = $size ? (int) $size : null;
 
         if ($subLayoutCallback) {
             $itemFormLayout = $this->getLayoutColumn();
@@ -39,8 +38,7 @@ abstract class LayoutField
         return array_merge(
             [
                 'key' => $this->fieldKey,
-                'size' => $this->size,
-                'sizeXS' => $this->sizeXS,
+                'size' => $this->size ?: 12,
             ],
             $this->itemLayout
                 ? ['item' => $this->itemLayout]

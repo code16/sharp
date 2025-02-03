@@ -1,211 +1,353 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Form\Fields\Formatters;
-
+use Code16\Sharp\Exceptions\Form\SharpFormFieldDataException;
+use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
 use Code16\Sharp\Form\Fields\Formatters\EditorFormatter;
-use Code16\Sharp\Form\Fields\Formatters\UploadFormatter;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
-use Code16\Sharp\Form\Fields\SharpFormField;
-use Code16\Sharp\Tests\SharpTestCase;
+use Code16\Sharp\Tests\Unit\Form\Fields\Formatters\Fixtures\EditorFormatterTestEmbed;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-class EditorFormatterTest extends SharpTestCase
-{
-    protected function setUp(): void
-    {
-        parent::setUp();
+beforeEach(function () {
+    Storage::fake('local');
+    Storage::fake('public');
+});
 
-        Storage::fake('local');
-        Storage::fake('public');
-    }
+it('allows to format a text value to front', function () {
+    $formatter = new EditorFormatter();
+    $field = SharpFormEditorField::make('md');
+    $value = Str::random()."\n\n".Str::random();
 
-    /** @test */
-    public function we_can_format_a_text_value_to_front()
-    {
-        $formatter = new EditorFormatter();
-        $field = SharpFormEditorField::make('md');
-        $value = Str::random()."\n\n".Str::random();
+    $this->assertEquals(
+        [
+            'text' => $value,
+        ],
+        $formatter->toFront($field, $value),
+    );
+});
 
-        $this->assertEquals(
-            [
-                'text' => $value,
+it('allows to format a text value to front as object when localized', function () {
+    $formatter = (new EditorFormatter())->setDataLocalizations(['fr', 'en']);
+    $field = SharpFormEditorField::make('md')->setLocalized();
+
+    expect($formatter->toFront($field, ['en' => 'test']))->and($formatter->toFront($field, (object)['en' => 'test']))->toEqual([
+        'text' => [
+            'fr' => null,
+            'en' => 'test',
+        ],
+    ]);
+    expect($formatter->toFront($field, (object)['en' => 'test']))->toEqual([
+        'text' => [
+            'fr' => null,
+            'en' => 'test',
+        ],
+    ]);
+    expect($formatter->toFront($field, collect(['en' => 'test'])))->toEqual([
+        'text' => [
+            'fr' => null,
+            'en' => 'test',
+        ],
+    ]);
+});
+
+it('throws if localized value is invalid to front', function () {
+    expect(fn () => (new EditorFormatter())
+        ->toFront(SharpFormEditorField::make('text')->setLocalized(), 'test')
+    )->toThrow(SharpFormFieldDataException::class);
+    
+    expect(fn () => (new EditorFormatter())
+        ->toFront(SharpFormEditorField::make('text'), ['en' => 'test'])
+    )->toThrow(SharpFormFieldDataException::class);
+});
+
+it('allows to format a text value from front', function () {
+    $value = Str::random();
+
+    $this->assertEquals(
+        $value,
+        (new EditorFormatter())->fromFront(
+            SharpFormEditorField::make('md'),
+            'attribute',
+            ['text' => $value],
+        ),
+    );
+});
+
+it('adds missing locales when formatting a localized text value from front in an editor field', function () {
+    $value = Str::random();
+    
+    expect(
+        (new EditorFormatter())
+            ->setDataLocalizations(['fr', 'en', 'es'])
+            ->fromFront(
+                SharpFormEditorField::make('text')->setLocalized(),
+                'attribute',
+                ['text' => ['fr' => $value]],
+            )
+    )
+        ->toEqual(['fr' => $value, 'en' => null, 'es' => null]);
+});
+
+// edge case : we can't safely convert a string to a localized array so we pass the string through
+it('returns a string when formatting a string text value from front in a localized editor field', function () {
+    $value = Str::random();
+    
+    expect(
+        (new EditorFormatter())
+            ->setDataLocalizations(['fr', 'en', 'es'])
+            ->fromFront(
+                SharpFormEditorField::make('md')->setLocalized(),
+                'attribute',
+                ['text' => $value],
+            )
+    )
+        ->toEqual($value);
+});
+
+it('returns null when formatting a null localized text value from front in a localized editor field', function () {
+    expect(
+        (new EditorFormatter())
+            ->setDataLocalizations(['fr', 'en', 'es'])
+            ->fromFront(
+                SharpFormEditorField::make('md')->setLocalized(),
+                'attribute',
+                null,
+            )
+    )
+        ->toBeNull();
+});
+
+it('allows to format a text with uploads to front', function () {
+    $formatter = new EditorFormatter();
+    $field = SharpFormEditorField::make('md')
+        ->allowUploads(SharpFormEditorUpload::make());
+
+    UploadedFile::fake()->image('test.jpg', 600, 600)
+        ->storeAs('data/Posts/1', 'image.jpg', ['disk' => 'local']);
+    UploadedFile::fake()->create('doc.pdf')
+        ->storeAs('data/Posts/1', 'doc.pdf', ['disk' => 'local']);
+
+    $value = sprintf('<x-sharp-image file="%s" legend="Legendary"></x-sharp-image><x-sharp-file file="%s"></x-sharp-file>',
+        e(json_encode([
+            'file_name' => 'data/Posts/1/image.jpg',
+            'size' => 120,
+            'mime_type' => 'image/jpeg',
+            'disk' => 'local',
+        ])),
+        e(json_encode([
+            'file_name' => 'data/Posts/1/doc.pdf',
+            'size' => 120,
+            'mime_type' => 'application/pdf',
+            'disk' => 'local',
+        ]))
+    );
+
+    expect($formatter->toFront($field, $value))->toEqual([
+        'text' => '<x-sharp-image data-key="0"></x-sharp-image><x-sharp-file data-key="1"></x-sharp-file>',
+        'uploads' => (object) [
+            '0' => [
+                'file' => [
+                    'name' => 'image.jpg',
+                    'path' => 'data/Posts/1/image.jpg',
+                    'disk' => 'local',
+                    'thumbnail' => sprintf(
+                        '/storage/thumbnails/data/Posts/1/200-200_q-90/image.jpg?%s',
+                        Storage::disk('public')->lastModified('/thumbnails/data/Posts/1/200-200_q-90/image.jpg')
+                    ),
+                    'size' => 120,
+                    'mime_type' => 'image/jpeg',
+                    'filters' => null,
+                    'id' => null,
+                ],
+                'legend' => 'Legendary',
             ],
-            $formatter->toFront($field, $value),
-        );
-    }
+            [
+                'file' => [
+                    'name' => 'doc.pdf',
+                    'path' => 'data/Posts/1/doc.pdf',
+                    'disk' => 'local',
+                    'thumbnail' => null,
+                    'size' => 120,
+                    'mime_type' => 'application/pdf',
+                    'filters' => null,
+                    'id' => null,
+                ],
+                'legend' => null,
+            ],
+        ],
+    ]);
+});
 
-    /** @test */
-    public function we_can_format_a_text_value_from_front()
-    {
-        $value = Str::random();
+it('allows to format text with uploads from front', function () {
+    $formatter = (new EditorFormatter())->setInstanceId(1);
+    $field = SharpFormEditorField::make('md')
+        ->allowUploads(SharpFormEditorUpload::make()->setStorageBasePath('data/Posts/{id}'));
 
-        $this->assertEquals(
-            $value,
-            (new EditorFormatter())->fromFront(
-                SharpFormEditorField::make('md'),
-                'attribute',
-                ['text' => $value],
-            ),
-        );
-    }
+    UploadedFile::fake()->image('uploaded.jpg', 600, 600)
+        ->storeAs('/tmp', 'uploaded.jpg', ['disk' => 'local']);
 
-    /** @test */
-    public function we_can_format_a_unicode_text_value_from_front()
-    {
-        // This test was created to demonstrate preg_replace failure
-        // without the unicode modifier
-        $value = '<p>ąężółść</p>';
+    expect($formatter->fromFront($field, 'attribute', [
+        'text' => <<<'HTML'
+            <x-sharp-image data-key="0"></x-sharp-image>
+            <x-sharp-image data-key="1"></x-sharp-image>
+            <x-sharp-file data-key="2"></x-sharp-file>
+            HTML,
+        'uploads' => [
+            [
+                'file' => [
+                    'name' => 'uploaded.jpg',
+                    'uploaded' => true,
+                ],
+                'legend' => 'Legendary',
+            ],
+            [
+                'file' => [
+                    'name' => 'transformed.jpg',
+                    'path' => 'data/Posts/1/transformed.jpg',
+                    'mime_type' => 'image/jpeg',
+                    'disk' => 'local',
+                    'size' => 120,
+                    'filters' => ['rotate' => ['angle' => 90]],
+                    'transformed' => true,
+                ],
+            ],
+            [
+                'file' => [
+                    'name' => 'doc.pdf',
+                    'path' => 'data/Posts/1/doc.pdf',
+                    'mime_type' => 'application/pdf',
+                    'disk' => 'local',
+                    'size' => 120,
+                ],
+            ],
+        ],
+    ]))->toEqual(sprintf(<<<'HTML'
+        <x-sharp-image file="%s" legend="Legendary"></x-sharp-image>
+        <x-sharp-image file="%s"></x-sharp-image>
+        <x-sharp-file file="%s"></x-sharp-file>
+        HTML,
+        e(json_encode([
+            'file_name' => 'data/Posts/1/uploaded.jpg',
+            'size' => 6467,
+            'mime_type' => 'image/jpeg',
+            'disk' => 'local',
+        ])),
+        e(json_encode([
+            'file_name' => 'data/Posts/1/transformed.jpg',
+            'size' => 120,
+            'mime_type' => 'image/jpeg',
+            'disk' => 'local',
+            'filters' => ['rotate' => ['angle' => 90]],
+        ])),
+        e(json_encode([
+            'file_name' => 'data/Posts/1/doc.pdf',
+            'size' => 120,
+            'mime_type' => 'application/pdf',
+            'disk' => 'local',
+        ]))
+    ));
+});
 
-        $this->assertEquals(
-            $value,
-            (new EditorFormatter())->fromFront(
-                SharpFormEditorField::make('md'),
-                'attribute',
-                ['text' => $value],
-            ),
-        );
-    }
+it('allows to format embeds with uploads to front', function () {
+    $formatter = (new EditorFormatter())->setInstanceId(1);
+    $field = SharpFormEditorField::make('md')
+        ->allowEmbeds([EditorFormatterTestEmbed::class]);
 
-    /** @test */
-    public function we_store_newly_uploaded_files_from_front()
-    {
-        app()->bind(UploadFormatter::class, function () {
-            return new class() extends UploadFormatter
-            {
-                public function fromFront(SharpFormField $field, string $attribute, $value): ?array
-                {
-                    return [
-                        'file_name' => 'data/uploaded_'.$value['name'],
+    $image = UploadedFile::fake()->image('test.jpg', 600, 600);
+    $image->storeAs('data/Posts/1', 'image.jpg', ['disk' => 'local']);
+
+    $value = sprintf(<<<'HTML'
+        <x-embed visual="%s">My <em>contentful</em> content</x-embed>
+        HTML,
+        e(json_encode([
+            'file_name' => 'data/Posts/1/image.jpg',
+            'size' => 120,
+            'mime_type' => 'image/jpeg',
+            'disk' => 'local',
+        ]))
+    );
+
+    $data = $formatter->toFront($field, $value);
+    $thumbnail = sprintf(
+        '/storage/thumbnails/data/Posts/1/200-200_q-90/image.jpg?%s',
+        Storage::disk('public')->lastModified('/thumbnails/data/Posts/1/200-200_q-90/image.jpg')
+    );
+
+    expect($data)->toEqual([
+        'text' => <<<'HTML'
+            <x-embed data-key="0"></x-embed>
+            HTML,
+        'embeds' => [
+            (new EditorFormatterTestEmbed())->key() => (object) [
+                '0' => [
+                    'slot' => 'My <em>contentful</em> content',
+                    'visual' => [
+                        'name' => 'image.jpg',
+                        'path' => 'data/Posts/1/image.jpg',
                         'disk' => 'local',
-                    ];
-                }
-            };
-        });
+                        'thumbnail' => $thumbnail,
+                        'size' => 120,
+                        'mime_type' => 'image/jpeg',
+                        'filters' => null,
+                        'id' => null,
+                    ],
+                    '_html' => sprintf('<img src="%s"> My <em>contentful</em> content',
+                        $thumbnail,
+                    ),
+                ],
+            ],
+        ],
+    ]);
+});
 
-        $value = <<<'EOT'
-                Some content text before
-                
-                <x-sharp-file 
-                    name="test.pdf"
-                    uploaded="true"
-                ></x-sharp-file>
-                
-                <x-sharp-image 
-                    name="test.png"
-                    uploaded="true"
-                ></x-sharp-image>
+it('allows to format embeds with uploads from front', function () {
+    $formatter = (new EditorFormatter())->setInstanceId(1);
+    $field = SharpFormEditorField::make('md')
+        ->allowEmbeds([EditorFormatterTestEmbed::class]);
 
-                Some content text after
-            EOT;
-
-        $result = (new EditorFormatter())
-            ->fromFront(
-                SharpFormEditorField::make('md')
-                    ->setStorageDisk('local')
-                    ->setStorageBasePath('data'),
-                'attribute',
-                [
-                    'text' => $value,
-                    'files' => [
-                        [
-                            'name' => 'test.pdf',
-                            'uploaded' => true,
-                        ], [
-                            'name' => 'test.png',
-                            'uploaded' => true,
-                        ],
+    expect($formatter->fromFront($field, 'attribute', [
+        'text' => <<<'HTML'
+            <x-embed data-key="0"></x-embed>
+            HTML,
+        'embeds' => [
+            (new EditorFormatterTestEmbed())->key() => [
+                '0' => [
+                    'slot' => 'My <em>contentful</em> content',
+                    'visual' => [
+                        'name' => 'image.jpg',
+                        'path' => 'data/Posts/1/image.jpg',
+                        'disk' => 'local',
+                        'thumbnail' => 'thumbnail.jpg',
+                        'size' => 120,
+                        'mime_type' => 'image/jpeg',
+                        'filters' => null,
+                        'id' => null,
                     ],
                 ],
-            );
+            ],
+        ],
+    ]))->toEqual(sprintf('<x-embed visual="%s">My <em>contentful</em> content</x-embed>',
+        e(json_encode([
+            'file_name' => 'data/Posts/1/image.jpg',
+            'size' => 120,
+            'mime_type' => 'image/jpeg',
+            'disk' => 'local',
+        ]))
+    ));
+});
 
-        $this->assertStringContainsString(
-            'Some content text before',
-            $result,
-        );
+it('allows to format a unicode text value from front', function () {
+    // This test was created to demonstrate preg_replace failure
+    // without the unicode modifier
+    $value = '<p>ąężółść</p>';
 
-        $this->assertStringContainsString(
-            'Some content text after',
-            $result,
-        );
-
-        $this->assertStringContainsString(
-            '<x-sharp-file name="uploaded_test.pdf" uploaded="true" path="data/uploaded_test.pdf" disk="local"></x-sharp-file>',
-            $result,
-        );
-
-        $this->assertStringContainsString(
-            '<x-sharp-image name="uploaded_test.png" uploaded="true" path="data/uploaded_test.png" disk="local"></x-sharp-image>',
-            $result,
-        );
-    }
-
-    /** @test */
-    public function we_store_newly_uploaded_files_in_a_localized_field_from_front()
-    {
-        app()->bind(UploadFormatter::class, function () {
-            return new class() extends UploadFormatter
-            {
-                public function fromFront(SharpFormField $field, string $attribute, $value): ?array
-                {
-                    return [
-                        'file_name' => 'data/uploaded_'.$value['name'],
-                        'disk' => 'local',
-                    ];
-                }
-            };
-        });
-
-        $frValue = <<<'EOT'
-                <x-sharp-file 
-                    name="test.pdf"
-                    uploaded="true"
-                ></x-sharp-file>
-
-                Some content text after
-            EOT;
-
-        $enValue = <<<'EOT'
-                <x-sharp-image 
-                    name="test.png"
-                    uploaded="true"
-                ></x-sharp-image>
-
-                Some content text after
-            EOT;
-
-        $result = (new EditorFormatter())
-            ->fromFront(
-                SharpFormEditorField::make('md')
-                    ->setLocalized()
-                    ->setStorageDisk('local')
-                    ->setStorageBasePath('data'),
-                'attribute',
-                [
-                    'text' => [
-                        'fr' => $frValue,
-                        'en' => $enValue,
-                    ],
-                    'files' => [
-                        [
-                            'name' => 'test.pdf',
-                            'uploaded' => true,
-                        ], [
-                            'name' => 'test.png',
-                            'uploaded' => true,
-                        ],
-                    ],
-                ],
-            );
-
-        $this->assertStringContainsString(
-            '<x-sharp-file name="uploaded_test.pdf" uploaded="true" path="data/uploaded_test.pdf" disk="local"></x-sharp-file>',
-            $result['fr'],
-        );
-
-        $this->assertStringContainsString(
-            '<x-sharp-image name="uploaded_test.png" uploaded="true" path="data/uploaded_test.png" disk="local"></x-sharp-image>',
-            $result['en'],
-        );
-    }
-}
+    $this->assertEquals(
+        $value,
+        (new EditorFormatter())->fromFront(
+            SharpFormEditorField::make('md'),
+            'attribute',
+            ['text' => $value],
+        ),
+    );
+});

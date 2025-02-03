@@ -13,7 +13,7 @@ class PostPolicy extends SharpEntityPolicy
             return true;
         }
 
-        if ($post = Post::find($instanceId)) {
+        if ($post = $this->findPost($instanceId)) {
             return $post->isOnline() || $post->author_id === $user->id;
         }
 
@@ -23,11 +23,18 @@ class PostPolicy extends SharpEntityPolicy
     public function update($user, $instanceId): bool
     {
         return $user->isAdmin()
-            || Post::find($instanceId)->author_id === $user->id;
+            || $this->findPost($instanceId)?->author_id === $user->id;
     }
 
     public function delete($user, $instanceId): bool
     {
         return $this->update($user, $instanceId);
+    }
+
+    private function findPost($postId): ?Post
+    {
+        return sharp()
+            ->context()
+            ->findListInstance($postId, fn ($postId) => Post::find($postId));
     }
 }

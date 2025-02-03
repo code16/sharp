@@ -81,4 +81,11 @@ class SharpMenuItemLink extends SharpMenuItem
         return $this->isExternalLink()
             || sharp_has_ability('entity', $this->getEntityKey());
     }
+
+    public function isCurrent(): bool
+    {
+        $rootEntityKey = sharp()->context()->breadcrumb()->breadcrumbItems()->first()?->entityKey();
+
+        return $this->isEntity() && $rootEntityKey === $this->getEntityKey();
+    }
 }

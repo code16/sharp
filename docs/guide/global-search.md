@@ -2,20 +2,20 @@
 
 This feature allows the user to globally search across a selected set of entities of your application.
 
-![The global search in action](./img/global-search.png)
+![The global search in action](./img/v9/global-search.png)
 
 ## Configuration
 
 ```php
-// In config/sharp.php
-return [
-   // ...
-   'search' => [
-      'enabled' => true,
-      'placeholder' => 'Search for anything...',
-      'engine' => \App\Sharp\MySearchEngine::class,
-   ],
-];
+class SharpServiceProvider extends SharpAppServiceProvider
+{
+    protected function configureSharp(SharpConfigBuilder $config): void
+    {
+        $config
+            ->enableGlobalSearch(\App\Sharp\MySearchEngine::class, 'Search for anything...')
+            // ...
+    }
+}
 ```
 
 ## Write the class
@@ -28,10 +28,7 @@ class MySearchEngine extends SharpSearchEngine
     public function searchFor(array $terms): void
     {
         $resultSet = $this
-            ->addResultSet(
-                label: 'Posts',
-                icon: 'fa-file-o',
-            );
+            ->addResultSet('Posts');
 
         $builder = Post::query();
 
@@ -74,10 +71,7 @@ class MySearchEngine extends SharpSearchEngine
     public function searchFor(array $terms): void
     {
         $resultSet = $this
-            ->addResultSet(
-                label: 'Posts',
-                icon: 'fa-file-o',
-            );
+            ->addResultSet('Posts');
             
       if (! $resultSet->validateSearch(
           ['string', 'min:3'], 
@@ -94,6 +88,21 @@ class MySearchEngine extends SharpSearchEngine
 ```
 
 As you can see in this example, the `validateSearch()` method accepts an array of regular Laravel validation rules, and an optional array of custom validation messages. Sharp will not display results if the validation fails, but a good practice is to return early in this case, to avoid unnecessary queries.
+
+### Authorization
+You may need to enable global search only for a subset of your users. You can do so by overriding the `authorize()` method in your search engine class:
+
+```php
+class MySearchEngine extends SharpSearchEngine
+{
+    // ...
+    
+    public function authorize(): bool
+    {
+       return auth()->user()->isAdministrator();
+    }
+}
+```
 
 ## Use the search field
 

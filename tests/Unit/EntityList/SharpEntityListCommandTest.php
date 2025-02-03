@@ -1,503 +1,426 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\EntityList;
-
 use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
-use Code16\Sharp\Form\Layout\FormLayoutColumn;
-use Code16\Sharp\Tests\SharpTestCase;
-use Code16\Sharp\Tests\Unit\EntityList\Utils\SharpEntityDefaultTestList;
-use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Code16\Sharp\Tests\Unit\EntityList\Fakes\FakeSharpEntityList;
 
-class SharpEntityListCommandTest extends SharpTestCase
-{
-    /** @test */
-    public function we_can_get_list_commands_config_with_an_instance()
+it('returns commands config', function () {
+    $list = new class() extends FakeSharpEntityList
     {
-        $list = new class() extends SharpEntityDefaultTestList
+        public function getEntityCommands(): ?array
         {
-            public function getEntityCommands(): ?array
-            {
-                return [
-                    'entityCommand' => new class() extends EntityCommand
+            return [
+                'entityCommand' => new class() extends EntityCommand
+                {
+                    public function label(): string
                     {
-                        public function label(): string
-                        {
-                            return 'My Entity Command';
-                        }
+                        return 'My Entity Command';
+                    }
 
-                        public function execute(array $data = []): array {}
-                    },
-                ];
-            }
+                    public function execute(array $data = []): array {}
+                },
+            ];
+        }
 
-            public function getInstanceCommands(): ?array
-            {
-                return [
-                    'instanceCommand' => new class() extends InstanceCommand
+        public function getInstanceCommands(): ?array
+        {
+            return [
+                'instanceCommand' => new class() extends InstanceCommand
+                {
+                    public function label(): string
                     {
-                        public function label(): string
-                        {
-                            return 'My Instance Command';
-                        }
+                        return 'My Instance Command';
+                    }
 
-                        public function execute($instanceId, array $data = []): array {}
-                    },
-                ];
-            }
-        };
+                    public function execute($instanceId, array $data = []): array {}
+                },
+            ];
+        }
+    };
 
-        $list->buildListConfig();
+    $list->buildListConfig();
 
-        $this->assertEquals(
+    expect($list->listConfig()['commands'])->toEqual([
+        'entity' => [
             [
-                'key' => 'entityCommand',
-                'label' => 'My Entity Command',
-                'type' => 'entity',
-                'authorization' => true,
-                'description' => null,
-                'instance_selection' => null,
-                'confirmation' => null,
-                'modal_title' => null,
-                'modal_confirm_label' => null,
-                'has_form' => false,
+                [
+                    'key' => 'entityCommand',
+                    'label' => 'My Entity Command',
+                    'type' => 'entity',
+                    'authorization' => true,
+                    'description' => null,
+                    'instanceSelection' => null,
+                    'confirmation' => null,
+                    'hasForm' => false,
+                ],
             ],
-            $list->listConfig()['commands']['entity'][0][0]
-        );
-
-        $this->assertEquals(
+        ],
+        'instance' => [
             [
-                'key' => 'instanceCommand',
-                'label' => 'My Instance Command',
-                'type' => 'instance',
-                'authorization' => [],
-                'description' => null,
-                'confirmation' => null,
-                'modal_title' => null,
-                'modal_confirm_label' => null,
-                'has_form' => false,
+                [
+                    'key' => 'instanceCommand',
+                    'label' => 'My Instance Command',
+                    'type' => 'instance',
+                    'authorization' => [],
+                    'description' => null,
+                    'confirmation' => null,
+                    'hasForm' => false,
+                ],
             ],
-            $list->listConfig()['commands']['instance'][0][0]
-        );
-    }
+        ],
+    ]);
+});
 
-    /** @test */
-    public function we_can_get_list_entity_command_config_with_a_class()
+it('handles confirmation on a command', function () {
+    $list = new class() extends FakeSharpEntityList
     {
-        $list = new class() extends SharpEntityDefaultTestList
+        public function getEntityCommands(): ?array
         {
-            public function getEntityCommands(): ?array
-            {
-                return [
-                    'entityCommand' => SharpEntityListCommandTestCommand::class,
-                ];
-            }
-        };
+            return [
+                'entityCommand' => new class() extends EntityCommand
+                {
+                    public function label(): string
+                    {
+                        return 'My Entity Command';
+                    }
 
-        $list->buildListConfig();
+                    public function buildCommandConfig(): void
+                    {
+                        $this->configureConfirmationText('Sure?', title: 'Are you sure?', buttonLabel: 'Yes, do it');
+                    }
 
-        $this->assertEquals('entityCommand', $list->listConfig()['commands']['entity'][0][0]['key']);
-    }
+                    public function execute(array $data = []): array {}
+                },
+            ];
+        }
+    };
 
-    /** @test */
-    public function we_can_ask_for_a_confirmation_on_a_command()
+    $list->buildListConfig();
+
+    expect($list->listConfig()['commands']['entity'][0][0]['confirmation'])->toEqual([
+        'text' => 'Sure?',
+        'title' => 'Are you sure?',
+        'buttonLabel' => 'Yes, do it',
+    ]);
+});
+
+it('allows to declare instance selection mode on a command', function () {
+    $list = new class() extends FakeSharpEntityList
     {
-        $list = new class() extends SharpEntityDefaultTestList
+        public function getEntityCommands(): ?array
         {
-            public function getEntityCommands(): ?array
-            {
-                return [
-                    'entityCommand' => new class() extends EntityCommand
+            return [
+                'command_required' => new class() extends EntityCommand
+                {
+                    public function label(): string
                     {
-                        public function label(): string
-                        {
-                            return 'My Entity Command';
-                        }
+                        return 'My Entity Command';
+                    }
 
-                        public function buildCommandConfig(): void
-                        {
-                            $this->configureConfirmationText('Sure?');
-                        }
+                    public function buildCommandConfig(): void
+                    {
+                        $this->configureInstanceSelectionRequired();
+                    }
 
-                        public function execute(array $data = []): array {}
-                    },
-                ];
-            }
-        };
+                    public function execute(array $data = []): array {}
+                },
+                'command_allowed' => new class() extends EntityCommand
+                {
+                    public function label(): string
+                    {
+                        return 'My Entity Command';
+                    }
 
-        $list->buildListConfig();
+                    public function buildCommandConfig(): void
+                    {
+                        $this->configureInstanceSelectionAllowed();
+                    }
 
-        $this->assertEquals('Sure?', $list->listConfig()['commands']['entity'][0][0]['confirmation']);
-    }
+                    public function execute(array $data = []): array {}
+                },
+                'command_none' => new class() extends EntityCommand
+                {
+                    public function label(): string
+                    {
+                        return 'My Entity Command';
+                    }
 
-    /** @test */
-    public function we_can_declare_instance_selection_mode_on_a_command()
+                    public function buildCommandConfig(): void
+                    {
+                        $this->configureInstanceSelectionNone();
+                    }
+
+                    public function execute(array $data = []): array {}
+                },
+            ];
+        }
+    };
+
+    $list->buildListConfig();
+
+    expect($list->listConfig()['commands']['entity'][0][0]['instanceSelection'])->toEqual('required')
+        ->and($list->listConfig()['commands']['entity'][0][1]['instanceSelection'])->toEqual('allowed')
+        ->and($list->listConfig()['commands']['entity'][0][2]['instanceSelection'])->toBeNull();
+});
+
+it('allows to define a form to a command', function () {
+    $list = new class() extends FakeSharpEntityList
     {
-        $list = new class() extends SharpEntityDefaultTestList
+        public function getEntityCommands(): ?array
         {
-            public function getEntityCommands(): ?array
-            {
-                return [
-                    'command_required' => new class() extends EntityCommand
+            return [
+                'entityCommand' => new class() extends EntityCommand
+                {
+                    public function label(): string
                     {
-                        public function label(): string
-                        {
-                            return 'My Entity Command';
-                        }
+                        return 'My Entity Command';
+                    }
 
-                        public function buildCommandConfig(): void
-                        {
-                            $this->configureInstanceSelectionRequired();
-                        }
-
-                        public function execute(array $data = []): array {}
-                    },
-                    'command_allowed' => new class() extends EntityCommand
+                    public function buildFormFields($formFields): void
                     {
-                        public function label(): string
-                        {
-                            return 'My Entity Command';
-                        }
+                        $formFields->addField(SharpFormTextField::make('message'));
+                    }
 
-                        public function buildCommandConfig(): void
-                        {
-                            $this->configureInstanceSelectionAllowed();
-                        }
-
-                        public function execute(array $data = []): array {}
-                    },
-                    'command_none' => new class() extends EntityCommand
+                    public function buildFormLayout(&$column): void
                     {
-                        public function label(): string
-                        {
-                            return 'My Entity Command';
-                        }
+                        $column->withField('message');
+                    }
 
-                        public function buildCommandConfig(): void
-                        {
-                            $this->configureInstanceSelectionNone();
-                        }
+                    public function execute(array $data = []): array {}
+                },
+            ];
+        }
+    };
 
-                        public function execute(array $data = []): array {}
-                    },
-                ];
-            }
-        };
+    $list->buildListConfig();
 
-        $list->buildListConfig();
+    expect($list->listConfig()['commands']['entity'][0][0]['hasForm'])->toBeTrue();
+});
 
-        $this->assertEquals('required', $list->listConfig()['commands']['entity'][0][0]['instance_selection']);
-        $this->assertEquals('allowed', $list->listConfig()['commands']['entity'][0][1]['instance_selection']);
-        $this->assertNull($list->listConfig()['commands']['entity'][0][2]['instance_selection']);
-    }
-
-    /** @test */
-    public function we_can_define_that_a_command_has_a_form()
+it('handles authorization in an entity command', function () {
+    $list = new class() extends FakeSharpEntityList
     {
-        $list = new class() extends SharpEntityDefaultTestList
+        public function getEntityCommands(): ?array
         {
-            public function getEntityCommands(): ?array
-            {
-                return [
-                    'entityCommand' => new class() extends EntityCommand
+            return [
+                'entityCommand' => new class() extends EntityCommand
+                {
+                    public function label(): string
                     {
-                        public function label(): string
-                        {
-                            return 'My Entity Command';
-                        }
+                        return 'My Entity Command';
+                    }
 
-                        public function buildFormFields(FieldsContainer $formFields): void
-                        {
-                            $formFields->addField(SharpFormTextField::make('message'));
-                        }
+                    public function authorize(): bool
+                    {
+                        return false;
+                    }
 
-                        public function buildFormLayout(FormLayoutColumn &$column): void
-                        {
-                            $column->withSingleField('message');
-                        }
+                    public function execute(array $data = []): array {}
+                },
+            ];
+        }
+    };
 
-                        public function execute(array $data = []): array {}
-                    },
-                ];
-            }
-        };
+    $list->buildListConfig();
 
-        $list->buildListConfig();
+    expect($list->listConfig()['commands']['entity'][0][0]['authorization'])->toBeFalse();
+});
 
-        $this->assertTrue($list->listConfig()['commands']['entity'][0][0]['has_form']);
-    }
-
-    /** @test */
-    public function we_can_define_a_form_modal_title_on_a_command()
+it('handles authorization in an instance command', function () {
+    $list = new class() extends FakeSharpEntityList
     {
-        $list = new class() extends SharpEntityDefaultTestList
+        public function getInstanceCommands(): ?array
         {
-            public function getEntityCommands(): ?array
-            {
-                return [
-                    'entityCommand' => new class() extends EntityCommand
+            return [
+                'command' => new class() extends InstanceCommand
+                {
+                    public function label(): string
                     {
-                        public function label(): string
-                        {
-                            return 'My Entity Command';
-                        }
+                        return 'My Instance Command';
+                    }
 
-                        public function buildCommandConfig(): void
-                        {
-                            $this->configureFormModalTitle('My title');
-                        }
+                    public function authorizeFor($instanceId): bool
+                    {
+                        return $instanceId < 3;
+                    }
 
-                        public function execute(array $data = []): array {}
-                    },
-                ];
-            }
-        };
+                    public function execute($instanceId, array $data = []): array {}
+                },
+            ];
+        }
 
-        $list->buildListConfig();
-
-        $this->assertEquals('My title', $list->listConfig()['commands']['entity'][0][0]['modal_title']);
-    }
-
-    /** @test */
-    public function we_can_handle_authorization_in_an_entity_command()
-    {
-        $list = new class() extends SharpEntityDefaultTestList
+        public function getListData(): array|\Illuminate\Contracts\Support\Arrayable
         {
-            public function getEntityCommands(): ?array
-            {
-                return [
-                    'entityCommand' => new class() extends EntityCommand
-                    {
-                        public function label(): string
-                        {
-                            return 'My Entity Command';
-                        }
+            return [
+                ['id' => 1], ['id' => 2], ['id' => 3],
+                ['id' => 4], ['id' => 5], ['id' => 6],
+            ];
+        }
+    };
 
-                        public function authorize(): bool
-                        {
-                            return false;
-                        }
+    // We need to call data() to trigger the authorization check
+    $list->data();
 
-                        public function execute(array $data = []): array {}
-                    },
-                ];
-            }
-        };
+    expect($list->listConfig()['commands']['instance'][0][0]['authorization'])->toEqual([1, 2]);
+});
 
-        $list->buildListConfig();
-
-        $this->assertFalse($list->listConfig()['commands']['entity'][0][0]['authorization']);
-    }
-
-    /** @test */
-    public function we_can_handle_authorization_in_an_instance_command()
+it('allows to define a description on a command', function () {
+    $list = new class() extends FakeSharpEntityList
     {
-        $list = new class() extends SharpEntityDefaultTestList
+        public function getEntityCommands(): ?array
         {
-            public function getInstanceCommands(): ?array
-            {
-                return [
-                    'command' => new class() extends InstanceCommand
+            return [
+                'entityCommand' => new class() extends EntityCommand
+                {
+                    public function label(): string
                     {
-                        public function label(): string
-                        {
-                            return 'My Instance Command';
-                        }
+                        return 'My Entity Command';
+                    }
 
-                        public function authorizeFor($instanceId): bool
-                        {
-                            return $instanceId < 3;
-                        }
+                    public function buildCommandConfig(): void
+                    {
+                        $this->configureDescription('My Entity Command description');
+                    }
 
-                        public function execute($instanceId, array $data = []): array {}
-                    },
-                ];
-            }
-        };
+                    public function execute(array $data = []): array {}
+                },
+            ];
+        }
+    };
 
-        $list->buildListConfig();
-        $list->data([
-            ['id' => 1], ['id' => 2], ['id' => 3],
-            ['id' => 4], ['id' => 5], ['id' => 6],
-        ]);
+    $list->buildListConfig();
 
-        $this->assertEquals([1, 2], $list->listConfig()['commands']['instance'][0][0]['authorization']);
-    }
+    expect($list->listConfig()['commands']['entity'][0][0]['description'])->toEqual('My Entity Command description');
+});
 
-    /** @test */
-    public function we_can_define_a_description_on_a_command()
+it('allows to define separators in instance commands', function () {
+    $list = new class() extends FakeSharpEntityList
     {
-        $list = new class() extends SharpEntityDefaultTestList
+        public function getInstanceCommands(): ?array
         {
-            public function getEntityCommands(): ?array
-            {
-                return [
-                    'entityCommand' => new class() extends EntityCommand
+            return [
+                'command-1' => new class() extends InstanceCommand
+                {
+                    public function label(): string
                     {
-                        public function label(): string
-                        {
-                            return 'My Entity Command';
-                        }
+                        return '';
+                    }
 
-                        public function buildCommandConfig(): void
-                        {
-                            $this->configureDescription('My Entity Command description');
-                        }
+                    public function execute($instanceId, array $data = []): array {}
+                },
+                'command-2' => new class() extends InstanceCommand
+                {
+                    public function label(): string
+                    {
+                        return '';
+                    }
 
-                        public function execute(array $data = []): array {}
-                    },
-                ];
-            }
-        };
+                    public function execute($instanceId, array $data = []): array {}
+                },
+                '---',
+                'command-3' => new class() extends InstanceCommand
+                {
+                    public function label(): string
+                    {
+                        return '';
+                    }
 
-        $list->buildListConfig();
+                    public function execute($instanceId, array $data = []): array {}
+                },
+            ];
+        }
+    };
 
-        $this->assertEquals('My Entity Command description', $list->listConfig()['commands']['entity'][0][0]['description']);
-    }
+    $list->buildListConfig();
 
-    /** @test */
-    public function we_can_define_separators_in_instance_commands()
+    expect($list->listConfig()['commands']['instance'])->toHaveCount(2)
+        ->and($list->listConfig()['commands']['instance'][0][0]['key'])->toEqual('command-1')
+        ->and($list->listConfig()['commands']['instance'][0][1]['key'])->toEqual('command-2')
+        ->and($list->listConfig()['commands']['instance'][1][0]['key'])->toEqual('command-3');
+});
+
+it('allows to define separators in entity commands', function () {
+    $list = new class() extends FakeSharpEntityList
     {
-        $list = new class() extends SharpEntityDefaultTestList
+        public function getEntityCommands(): ?array
         {
-            public function getInstanceCommands(): ?array
-            {
-                return [
-                    'command-1' => new class() extends InstanceCommand
+            return [
+                'command-1' => new class() extends EntityCommand
+                {
+                    public function label(): string
                     {
-                        public function label(): string
-                        {
-                            return '';
-                        }
+                        return '';
+                    }
 
-                        public function execute($instanceId, array $data = []): array {}
-                    },
-                    'command-2' => new class() extends InstanceCommand
+                    public function execute(array $data = []): array {}
+                },
+                '---',
+                'command-2' => new class() extends EntityCommand
+                {
+                    public function label(): string
                     {
-                        public function label(): string
-                        {
-                            return '';
-                        }
+                        return '';
+                    }
 
-                        public function execute($instanceId, array $data = []): array {}
-                    },
-                    '---',
-                    'command-3' => new class() extends InstanceCommand
+                    public function execute(array $data = []): array {}
+                },
+                'command-3' => new class() extends EntityCommand
+                {
+                    public function label(): string
                     {
-                        public function label(): string
-                        {
-                            return '';
-                        }
+                        return '';
+                    }
 
-                        public function execute($instanceId, array $data = []): array {}
-                    },
-                ];
-            }
-        };
+                    public function execute(array $data = []): array {}
+                },
+            ];
+        }
+    };
 
-        $list->buildListConfig();
+    $list->buildListConfig();
 
-        $this->assertEquals('command-1', $list->listConfig()['commands']['instance'][0][0]['key']);
-        $this->assertEquals('command-2', $list->listConfig()['commands']['instance'][0][1]['key']);
-        $this->assertEquals('command-3', $list->listConfig()['commands']['instance'][1][0]['key']);
-    }
+    expect($list->listConfig()['commands']['entity'])->toHaveCount(2)
+        ->and($list->listConfig()['commands']['entity'][0][0]['key'])->toEqual('command-1')
+        ->and($list->listConfig()['commands']['entity'][1][0]['key'])->toEqual('command-2')
+        ->and($list->listConfig()['commands']['entity'][1][1]['key'])->toEqual('command-3');
+});
 
-    /** @test */
-    public function we_can_define_separators_in_entity_commands()
+it('allows to declare an entity command as primary', function () {
+    $list = new class() extends FakeSharpEntityList
     {
-        $list = new class() extends SharpEntityDefaultTestList
+        public function getEntityCommands(): ?array
         {
-            public function getEntityCommands(): ?array
-            {
-                return [
-                    'command-1' => new class() extends EntityCommand
+            return [
+                'entity' => new class() extends EntityCommand
+                {
+                    public function label(): string
                     {
-                        public function label(): string
-                        {
-                            return '';
-                        }
+                        return 'My Entity Command';
+                    }
 
-                        public function execute(array $data = []): array {}
-                    },
-                    '---',
-                    'command-2' => new class() extends EntityCommand
+                    public function execute(array $data = []): array {}
+                },
+                'primary-entity' => new class() extends EntityCommand
+                {
+                    public function label(): string
                     {
-                        public function label(): string
-                        {
-                            return '';
-                        }
+                        return 'My Primary Entity Command';
+                    }
 
-                        public function execute(array $data = []): array {}
-                    },
-                    'command-3' => new class() extends EntityCommand
-                    {
-                        public function label(): string
-                        {
-                            return '';
-                        }
+                    public function execute(array $data = []): array {}
+                },
+            ];
+        }
 
-                        public function execute(array $data = []): array {}
-                    },
-                ];
-            }
-        };
-
-        $list->buildListConfig();
-
-        $this->assertEquals('command-1', $list->listConfig()['commands']['entity'][0][0]['key']);
-        $this->assertEquals('command-2', $list->listConfig()['commands']['entity'][1][0]['key']);
-        $this->assertEquals('command-3', $list->listConfig()['commands']['entity'][1][1]['key']);
-    }
-
-    /** @test */
-    public function we_can_declare_an_entity_command_as_primary()
-    {
-        $list = new class() extends SharpEntityDefaultTestList
+        public function buildListConfig(): void
         {
-            public function getEntityCommands(): ?array
-            {
-                return [
-                    'entity' => new class() extends EntityCommand
-                    {
-                        public function label(): string
-                        {
-                            return 'My Entity Command';
-                        }
+            $this->configurePrimaryEntityCommand('primary-entity');
+        }
+    };
 
-                        public function execute(array $data = []): array {}
-                    },
-                    'primary-entity' => new class() extends EntityCommand
-                    {
-                        public function label(): string
-                        {
-                            return 'My Primary Entity Command';
-                        }
+    $list->buildListConfig();
 
-                        public function execute(array $data = []): array {}
-                    },
-                ];
-            }
-
-            public function buildListConfig(): void
-            {
-                $this->configurePrimaryEntityCommand('primary-entity');
-            }
-        };
-
-        $list->buildListConfig();
-
-        $this->assertEquals('primary-entity', $list->listConfig()['commands']['entity'][0][1]['key']);
-        $this->assertTrue($list->listConfig()['commands']['entity'][0][1]['primary']);
-    }
-}
-
-class SharpEntityListCommandTestCommand extends EntityCommand
-{
-    public function label(): string
-    {
-        return 'My Entity Command';
-    }
-
-    public function execute(array $data = []): array {}
-}
+    expect($list->listConfig()['commands']['entity'][0][1]['key'])->toEqual('primary-entity')
+        ->and($list->listConfig()['commands']['entity'][0][1]['primary'])->toBeTrue();
+});

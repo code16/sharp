@@ -57,7 +57,7 @@ class SharpAuthorizationManager
             $policy = $entity->getPolicyOrDefault();
 
             $forbidden = true;
-            if (in_array($ability, ['entity', 'create'])) {
+            if (in_array($ability, ['entity', 'create', 'reorder'])) {
                 // Always checked
                 $forbidden = ! $policy->$ability(auth()->user());
             } elseif (in_array($ability, ['view', 'update', 'delete'])) {

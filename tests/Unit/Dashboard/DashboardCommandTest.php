@@ -1,24 +1,50 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Dashboard;
-
 use Code16\Sharp\Dashboard\Commands\DashboardCommand;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
-use Code16\Sharp\Tests\SharpTestCase;
 use Code16\Sharp\Tests\Unit\Dashboard\Fakes\FakeSharpDashboard;
-use Code16\Sharp\Utils\Fields\FieldsContainer;
 
-class DashboardCommandTest extends SharpTestCase
-{
-    /** @test */
-    public function we_can_get_list_commands_config_of_a_dashboard()
+it('returns list commands config of a dashboard', function () {
+    $dashboard = new class() extends FakeSharpDashboard
     {
-        $dashboard = new class() extends FakeSharpDashboard
+        public function getDashboardCommands(): ?array
         {
-            public function getDashboardCommands(): ?array
-            {
-                return [
-                    'dashboardCommand' => new class() extends DashboardCommand
+            return [
+                'dashboardCommand' => new class() extends DashboardCommand
+                {
+                    public function label(): string
+                    {
+                        return 'My Dashboard Command';
+                    }
+
+                    public function execute(array $data = []): array {}
+                },
+            ];
+        }
+    };
+
+    $dashboard->buildDashboardConfig();
+
+    expect($dashboard->dashboardConfig()['commands']['dashboard'][0][0])
+        ->toEqual([
+            'key' => 'dashboardCommand',
+            'label' => 'My Dashboard Command',
+            'type' => 'dashboard',
+            'authorization' => true,
+            'description' => null,
+            'confirmation' => null,
+            'hasForm' => false,
+        ]);
+});
+
+it('handles list section placed commands config of a dashboard', function () {
+    $dashboard = new class() extends FakeSharpDashboard
+    {
+        public function getDashboardCommands(): ?array
+        {
+            return [
+                'section-1' => [
+                    'dashboardSectionCommand' => new class() extends DashboardCommand
                     {
                         public function label(): string
                         {
@@ -27,116 +53,68 @@ class DashboardCommandTest extends SharpTestCase
 
                         public function execute(array $data = []): array {}
                     },
-                ];
-            }
-        };
-
-        $dashboard->buildDashboardConfig();
-        $this->assertEquals(
-            [
-                'key' => 'dashboardCommand',
-                'label' => 'My Dashboard Command',
-                'type' => 'dashboard',
-                'authorization' => true,
-                'description' => null,
-                'confirmation' => null,
-                'modal_title' => null,
-                'modal_confirm_label' => null,
-                'has_form' => false,
-            ],
-            $dashboard->dashboardConfig()['commands']['dashboard'][0][0]
-        );
-    }
-
-    /** @test */
-    public function we_can_get_list_section_placed_commands_config_of_a_dashboard()
-    {
-        $dashboard = new class() extends FakeSharpDashboard
-        {
-            public function getDashboardCommands(): ?array
-            {
-                return [
-                    'section-1' => [
-                        'dashboardSectionCommand' => new class() extends DashboardCommand
-                        {
-                            public function label(): string
-                            {
-                                return 'My Dashboard Command';
-                            }
-
-                            public function execute(array $data = []): array {}
-                        },
-                    ],
-                    'dashboardCommand' => new class() extends DashboardCommand
+                ],
+                'dashboardCommand' => new class() extends DashboardCommand
+                {
+                    public function label(): string
                     {
-                        public function label(): string
-                        {
-                            return 'Another Dashboard Command';
-                        }
+                        return 'Another Dashboard Command';
+                    }
 
-                        public function execute(array $data = []): array {}
-                    },
-                ];
-            }
-        };
+                    public function execute(array $data = []): array {}
+                },
+            ];
+        }
+    };
 
-        $dashboard->buildDashboardConfig();
-        $this->assertEquals(
-            'dashboardSectionCommand',
-            $dashboard->dashboardConfig()['commands']['section-1'][0][0]['key']
-        );
-        $this->assertEquals(
-            'dashboardCommand',
-            $dashboard->dashboardConfig()['commands']['dashboard'][0][0]['key']
-        );
-    }
+    $dashboard->buildDashboardConfig();
 
-    /** @test */
-    public function we_can_define_that_the_dashboard_command_has_a_form()
+    expect($dashboard->dashboardConfig()['commands']['section-1'][0][0]['key'])
+        ->toEqual('dashboardSectionCommand')
+        ->and($dashboard->dashboardConfig()['commands']['dashboard'][0][0]['key'])
+        ->toEqual('dashboardCommand');
+});
+
+it('allows to define that the dashboard command has a form', function () {
+    $dashboard = new class() extends FakeSharpDashboard
     {
-        $dashboard = new class() extends FakeSharpDashboard
+        public function getDashboardCommands(): ?array
         {
-            public function getDashboardCommands(): ?array
-            {
-                return [
-                    'dashboardCommand' => new class() extends DashboardCommand
+            return [
+                'dashboardCommand' => new class() extends DashboardCommand
+                {
+                    public function label(): string
                     {
-                        public function label(): string
-                        {
-                            return 'My Dashboard Command';
-                        }
+                        return 'My Dashboard Command';
+                    }
 
-                        public function buildFormFields(FieldsContainer $formFields): void
-                        {
-                            $formFields->addField(SharpFormTextField::make('message'));
-                        }
+                    public function buildFormFields($formFields): void
+                    {
+                        $formFields->addField(SharpFormTextField::make('message'));
+                    }
 
-                        public function execute(array $data = []): array {}
-                    },
-                ];
-            }
-        };
+                    public function execute(array $data = []): array {}
+                },
+            ];
+        }
+    };
 
-        $dashboard->buildDashboardConfig();
+    $dashboard->buildDashboardConfig();
 
-        $this->assertArraySubset(
-            [
-                'commands' => [
-                    'dashboard' => [
-                        [
-                            [
-                                'key' => 'dashboardCommand',
-                                'label' => 'My Dashboard Command',
-                                'type' => 'dashboard',
-                                'has_form' => true,
-                            ],
-                        ],
+    expect($dashboard->dashboardConfig()['commands'])
+        ->toEqual([
+            'dashboard' => [
+                [
+                    [
+                        'key' => 'dashboardCommand',
+                        'label' => 'My Dashboard Command',
+                        'type' => 'dashboard',
+                        'hasForm' => true,
+                        'authorization' => true,
+                        'confirmation' => null,
+                        'description' => null,
                     ],
                 ],
             ],
-            $dashboard->dashboardConfig(),
-        );
-    }
-
-    // Note: all other command test already are in SharpEntityListCommandTest
-}
+        ]);
+});

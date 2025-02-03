@@ -1,212 +1,127 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Form;
-
-use Code16\Sharp\Exceptions\Form\SharpFormFieldFormattingMustBeDelayedException;
-use Code16\Sharp\Exceptions\Form\SharpFormUpdateException;
-use Code16\Sharp\Form\Fields\Formatters\SharpFieldFormatter;
-use Code16\Sharp\Form\Fields\SharpFormCheckField;
-use Code16\Sharp\Form\Fields\SharpFormEditorField;
-use Code16\Sharp\Form\Fields\SharpFormField;
+use Code16\Sharp\Enums\PageAlertLevel;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Layout\FormLayout;
-use Code16\Sharp\Form\SharpForm;
-use Code16\Sharp\Form\SharpSingleForm;
-use Code16\Sharp\Tests\SharpTestCase;
+use Code16\Sharp\Tests\Unit\Form\Fakes\FakeSharpForm;
+use Code16\Sharp\Tests\Unit\Form\Fakes\FakeSharpSingleForm;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Code16\Sharp\Utils\PageAlerts\PageAlert;
 
-class SharpFormTest extends SharpTestCase
-{
-    /** @test */
-    public function we_get_formatted_data_in_creation_with_the_default_create_function()
+it('returns form fields', function () {
+    $form = new class() extends FakeSharpForm
     {
-        $sharpForm = new class() extends BaseSharpForm
+        public function buildFormFields(FieldsContainer $formFields): void
         {
-            public function buildFormFields(FieldsContainer $formFields): void
-            {
-                $formFields
-                    ->addField(SharpFormEditorField::make('md'))
-                    ->addField(SharpFormCheckField::make('check', 'text'));
-            }
-        };
+            $formFields->addField(SharpFormTextField::make('name'));
+        }
+    };
 
-        $this->assertEquals(
-            [
-                'md' => ['text' => null],
-                'check' => false,
+    expect($form->fields())
+        ->toEqual([
+            'name' => [
+                'key' => 'name',
+                'type' => 'text',
+                'inputType' => 'text',
             ],
-            $sharpForm->newInstance(),
-        );
-    }
-
-    /** @test */
-    public function we_get_formatted_data_in_creation_with_the_default_create_function_with_subclasses()
-    {
-        $sharpForm = new class() extends BaseSharpForm
-        {
-            public function buildFormFields(FieldsContainer $formFields): void
-            {
-                $formFields
-                    ->addField(SharpFormTextField::make('name'))
-                    ->addField(SharpFormEditorField::make('subclass:company'));
-            }
-        };
-
-        $this->assertEquals(
-            [
-                'name' => '',
-                'subclass:company' => ['text' => null],
-            ],
-            $sharpForm->newInstance(),
-        );
-    }
-
-    /** @test */
-    public function if_the_field_formatter_needs_it_we_can_delay_its_execution_after_first_save()
-    {
-        $sharpForm = new class() extends BaseSharpForm
-        {
-            public $instance;
-
-            public function buildFormFields(FieldsContainer $formFields): void
-            {
-                $formFields
-                    ->addField(
-                        SharpFormTextField::make('normal'),
-                    )
-                    ->addField(
-                        SharpFormTextField::make('delayed')
-                            ->setFormatter(new class() extends SharpFieldFormatter
-                            {
-                                public function toFront(SharpFormField $field, $value) {}
-
-                                public function fromFront(SharpFormField $field, string $attribute, $value)
-                                {
-                                    if (! $this->instanceId) {
-                                        throw new SharpFormFieldFormattingMustBeDelayedException();
-                                    }
-
-                                    return $value.'-'.$this->instanceId;
-                                }
-                            }),
-                    );
-            }
-
-            public function update($id, array $data)
-            {
-                if (! $id) {
-                    $this->instance = ['id' => 1] + $data;
-                } else {
-                    $this->instance += $data;
-                }
-
-                return 1;
-            }
-        };
-
-        $sharpForm->storeInstance([
-            'normal' => 'abc',
-            'delayed' => 'abc',
         ]);
+});
 
-        $this->assertEquals(
-            [
-                'id' => 1,
-                'normal' => 'abc',
-                'delayed' => 'abc-1',
-            ],
-            $sharpForm->instance,
-        );
-    }
-
-    /** @test */
-    public function an_exception_is_raised_if_we_try_to_delay_but_the_update_does_not_return_the_instance_id()
+it('returns form layout', function () {
+    $form = new class() extends FakeSharpForm
     {
-        $sharpForm = new class() extends BaseSharpForm
+        public function buildFormFields(FieldsContainer $formFields): void
         {
-            public function buildFormFields(FieldsContainer $formFields): void
-            {
-                $formFields->addField(
-                    SharpFormTextField::make('delayed')
-                        ->setFormatter(new class() extends SharpFieldFormatter
-                        {
-                            public function toFront(SharpFormField $field, $value) {}
+            $formFields->addField(SharpFormTextField::make('name'))
+                ->addField(SharpFormTextField::make('age'));
+        }
 
-                            public function fromFront(SharpFormField $field, string $attribute, $value)
-                            {
-                                throw new SharpFormFieldFormattingMustBeDelayedException();
-                            }
-                        }),
-                );
-            }
-        };
+        public function buildFormLayout(FormLayout $formLayout): void
+        {
+            $formLayout->addColumn(6, fn ($column) => $column->withField('name'))
+                ->addColumn(6, fn ($column) => $column->withField('age'));
+        }
+    };
 
-        $this->expectException(SharpFormUpdateException::class);
-        $sharpForm->storeInstance([
-            'delayed' => 'abc',
+    expect($form->formLayout())
+        ->toEqual([
+            'tabbed' => true,
+            'tabs' => [[
+                'title' => '',
+                'columns' => [[
+                    'size' => 6,
+                    'fields' => [[
+                        [
+                            'key' => 'name',
+                            'size' => 12,
+                        ],
+                    ]],
+                ], [
+                    'size' => 6,
+                    'fields' => [[
+                        [
+                            'key' => 'age',
+                            'size' => 12,
+                        ],
+                    ]],
+                ]],
+            ]],
         ]);
-    }
+});
 
-    /** @test */
-    public function single_forms_are_declared_in_config()
+it('gets an instance', function () {
+    $form = new class() extends FakeSharpForm
     {
-        $sharpForm = new class() extends BaseSharpSingleForm {};
-
-        $sharpForm->buildFormConfig();
-
-        $this->assertEquals(
-            [
-                'isSingle' => true,
-                'hasShowPage' => false,
-                'deleteConfirmationText' => null,
-            ],
-            $sharpForm->formConfig(),
-        );
-    }
-
-    /** @test */
-    public function we_can_declare_setDisplayShowPageAfterCreation_in_config()
-    {
-        $sharpForm = new class() extends BaseSharpForm
+        public function find($id): array
         {
-            public function buildFormConfig(): void
-            {
-                $this->configureDisplayShowPageAfterCreation(true);
-            }
-        };
+            return [
+                'name' => 'Marie Curie',
+                'age' => 22,
+                'job' => 'actor',
+            ];
+        }
 
-        $sharpForm->buildFormConfig();
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(SharpFormTextField::make('name'))
+                ->addField(SharpFormTextField::make('age'));
+        }
+    };
 
-        $this->assertEquals(
-            [
-                'hasShowPage' => true,
-                'deleteConfirmationText' => null,
-            ],
-            $sharpForm->formConfig(),
-        );
-    }
-}
+    expect($form->instance(1))
+        ->toEqual([
+            'name' => 'Marie Curie',
+            'age' => 22,
+        ]);
+});
 
-class BaseSharpForm extends SharpForm
-{
-    public function find($id): array {}
+it('handles single forms', function () {
+    $sharpForm = new FakeSharpSingleForm();
 
-    public function update($id, array $data) {}
+    $sharpForm->buildFormConfig();
 
-    public function delete($id): void {}
+    $this->assertEquals(
+        [
+            'isSingle' => true,
+        ],
+        $sharpForm->formConfig(),
+    );
+});
 
-    public function buildFormFields(FieldsContainer $formFields): void {}
+it('allows to declare a page alert', function () {
+    $sharpForm = new class() extends FakeSharpForm
+    {
+        public function buildPageAlert(PageAlert $pageAlert): void
+        {
+            $pageAlert
+                ->setLevelInfo()
+                ->setMessage('My page alert');
+        }
+    };
 
-    public function buildFormLayout(FormLayout $formLayout): void {}
-}
-
-class BaseSharpSingleForm extends SharpSingleForm
-{
-    public function buildFormFields(FieldsContainer $formFields): void {}
-
-    public function buildFormLayout(FormLayout $formLayout): void {}
-
-    protected function findSingle() {}
-
-    protected function updateSingle(array $data) {}
-}
+    expect($sharpForm->pageAlert())
+        ->toEqual([
+            'text' => 'My page alert',
+            'level' => PageAlertLevel::Info,
+        ]);
+});

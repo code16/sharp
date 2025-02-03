@@ -18,4 +18,9 @@ class DummyGlobalFilter extends GlobalRequiredFilter
     {
         return '1';
     }
+
+    public function authorize(): bool
+    {
+        return auth()->id() === 1;
+    }
 }

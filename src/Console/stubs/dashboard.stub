@@ -3,25 +3,40 @@
 namespace DummyNamespace;
 
 use Code16\Sharp\Dashboard\Layout\DashboardLayout;
+use Code16\Sharp\Dashboard\Layout\DashboardLayoutRow;
+use Code16\Sharp\Dashboard\Layout\DashboardLayoutSection;
 use Code16\Sharp\Dashboard\SharpDashboard;
+use Code16\Sharp\Dashboard\Widgets\SharpFigureWidget;
 use Code16\Sharp\Dashboard\Widgets\WidgetsContainer;
 
 class DummyClass extends SharpDashboard
 {
     protected function buildWidgets(WidgetsContainer $widgetsContainer): void
     {
-        // $widgetsContainer->addWidget(...)
+        $widgetsContainer
+            ->addWidget(
+                SharpFigureWidget::make('my_panel')
+                    ->setTitle('Something')
+            );
     }
 
     protected function buildDashboardLayout(DashboardLayout $dashboardLayout): void
     {
-        // $dashboardLayout->addRow(function (DashboardLayoutRow $row) { ... })
+        $dashboardLayout
+            ->addSection('My section title', function (DashboardLayoutSection $section) {
+                $section
+                    ->addRow(function (DashboardLayoutRow $row) {
+                        $row->addWidget(4, 'my_panel');
+                    });
+            });
     }
 
     protected function buildWidgetsData(): void
     {
-        // $this->setPanelData(...)
-        // $this->addGraphDataSet(...)
-        // $this->setOrderedListData(...)
+        $this
+            ->setFigureData(
+                'my_panel',
+                1234,
+            );
     }
 }

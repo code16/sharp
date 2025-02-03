@@ -1,96 +1,30 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Form\Fields;
-
-use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
-use Code16\Sharp\Form\Fields\SharpFormSelectField;
-use Code16\Sharp\Form\Fields\SharpFormTagsField;
 use Code16\Sharp\Form\Fields\SharpFormTextareaField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
-use Code16\Sharp\Tests\SharpTestCase;
 
-class SharpFormFieldWithDataLocalizationTest extends SharpTestCase
-{
-    /** @test */
-    public function we_can_define_the_localized_attribute_for_text_field()
-    {
-        $formField = SharpFormTextField::make('name')
-            ->setLocalized(false);
+it('allows to define the localized attribute for text field', function () {
+    $formField = SharpFormTextField::make('name')
+        ->setLocalized(false);
 
-        $this->assertArrayNotHasKey(
-            'localized',
-            $formField->toArray(),
-        );
+    expect($formField->toArray())->not->toHaveKey('localized');
 
-        $formField->setLocalized();
+    $formField->setLocalized();
 
-        $this->assertArraySubset(
-            ['localized' => true],
-            $formField->toArray(),
-        );
-    }
+    expect($formField->toArray())->toHaveKey('localized', true);
+});
 
-    /** @test */
-    public function we_can_define_the_localized_attribute_for_textarea_field()
-    {
-        $formField = SharpFormTextareaField::make('name')
-            ->setLocalized();
+it('allows to define the localized attribute for textarea field', function () {
+    $formField = SharpFormTextareaField::make('name')
+        ->setLocalized();
 
-        $this->assertArraySubset(
-            ['localized' => true],
-            $formField->toArray(),
-        );
-    }
+    expect($formField->toArray())->toHaveKey('localized', true);
+});
 
-    /** @test */
-    public function we_can_define_the_localized_attribute_for_editor_field()
-    {
-        $formField = SharpFormEditorField::make('name')
-            ->setLocalized();
+it('allows to define the localized attribute for editor field', function () {
+    $formField = SharpFormEditorField::make('name')
+        ->setLocalized();
 
-        $this->assertArraySubset(
-            ['localized' => true],
-            $formField->toArray(),
-        );
-    }
-
-    /** @test */
-    public function we_can_define_the_localized_attribute_for_select_field()
-    {
-        $formField = SharpFormSelectField::make('name', ['1' => 'one'])
-            ->setLocalized();
-
-        $this->assertArraySubset(
-            ['localized' => true],
-            $formField->toArray(),
-        );
-    }
-
-    /** @test */
-    public function we_can_define_the_localized_attribute_for_autocomplete_field()
-    {
-        $formField = SharpFormAutocompleteField::make('name', 'local')
-            ->setLocalValues(['1' => 'one'])
-            ->setResultItemInlineTemplate('{{id}}')
-            ->setListItemInlineTemplate('{{id}}')
-            ->setLocalized();
-
-        $this->assertArraySubset(
-            ['localized' => true],
-            $formField->toArray(),
-        );
-    }
-
-    /** @test */
-    public function we_can_define_the_localized_attribute_for_tags_field()
-    {
-        $formField = SharpFormTagsField::make('name', ['1' => 'one'])
-            ->setLocalized();
-
-        $this->assertArraySubset(
-            ['localized' => true],
-            $formField->toArray(),
-        );
-    }
-}
+    expect($formField->toArray())->toHaveKey('localized', true);
+});

@@ -1,33 +1,21 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Form\Fields;
-
 use Code16\Sharp\Form\Fields\SharpFormCheckField;
-use Code16\Sharp\Tests\SharpTestCase;
 
-class SharpFormCheckFieldTest extends SharpTestCase
-{
-    /** @test */
-    public function only_default_values_are_set()
-    {
-        $formField = SharpFormCheckField::make('check', 'text');
+it('sets default values are set', function () {
+    $formField = SharpFormCheckField::make('check', 'text');
 
-        $this->assertEquals([
+    expect($formField->toArray())
+        ->toEqual([
             'key' => 'check', 'type' => 'check',
             'text' => 'text',
-        ], $formField->toArray(),
-        );
-    }
+        ]);
+});
 
-    /** @test */
-    public function we_can_define_text()
-    {
-        $formField = SharpFormCheckField::make('check', 'text')
-            ->setText('text 2');
+it('allows to define text', function () {
+    $formField = SharpFormCheckField::make('check', 'text')
+        ->setText('text 2');
 
-        $this->assertArraySubset(
-            ['text' => 'text 2'],
-            $formField->toArray(),
-        );
-    }
-}
+    expect($formField->toArray())
+        ->toHaveKey('text', 'text 2');
+});

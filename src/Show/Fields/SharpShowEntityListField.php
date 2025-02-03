@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Show\Fields;
 
+use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Filters\Filter;
 
 class SharpShowEntityListField extends SharpShowField
@@ -23,6 +24,10 @@ class SharpShowEntityListField extends SharpShowField
 
     public static function make(string $key, ?string $entityListKey = null): SharpShowEntityListField
     {
+        if (class_exists($key)) {
+            $entityListKey = app(SharpEntityManager::class)->entityKeyFor($key);
+        }
+
         return tap(
             new static($key, static::FIELD_TYPE),
             fn ($instance) => $instance->entityListKey = $entityListKey ?: $key
@@ -115,33 +120,54 @@ class SharpShowEntityListField extends SharpShowField
     }
 
     /**
+     * @deprecated Not used anymore, EEL are shown no matter what.
+     * @return SharpShowField
+     */
+    public function setShowIfEmpty(bool $showIfEmpty = true): SharpShowField
+    {
+        return $this;
+    }
+
+    /**
      * Create the properties array for the field, using parent::buildArray().
      */
     public function toArray(): array
     {
-        return parent::buildArray([
-            'label' => $this->label,
-            'entityListKey' => $this->entityListKey,
-            'showEntityState' => $this->showEntityState,
-            'showCreateButton' => $this->showCreateButton,
-            'showReorderButton' => $this->showReorderButton,
-            'showSearchField' => $this->showSearchField,
-            'showCount' => $this->showCount,
-            'hiddenCommands' => $this->hiddenCommands,
-            'hiddenFilters' => count($this->hiddenFilters)
-                ? collect($this->hiddenFilters)
-                    ->map(function ($value) {
-                        // Filter value can be a Closure
-                        if (is_callable($value)) {
-                            // Call it with current instanceId
-                            return $value(currentSharpRequest()->instanceId());
-                        }
+        return tap(
+            parent::buildArray([
+                'label' => $this->label,
+                'entityListKey' => $this->entityListKey,
+                'showEntityState' => $this->showEntityState,
+                'showCreateButton' => $this->showCreateButton,
+                'showReorderButton' => $this->showReorderButton,
+                'showSearchField' => $this->showSearchField,
+                'showCount' => $this->showCount,
+                'hiddenCommands' => $this->hiddenCommands,
+                'hiddenFilters' => count($this->hiddenFilters)
+                    ? collect($this->hiddenFilters)
+                        ->map(function ($value) {
+                            // Filter value can be a Closure
+                            if (is_callable($value)) {
+                                // Call it with current instanceId
+                                return $value(sharp()->context()->instanceId());
+                            }
 
-                        return $value;
-                    })
-                    ->all()
-                : null,
-        ]);
+                            return $value;
+                        })
+                        ->all()
+                    : null,
+            ]),
+            function (array &$options) {
+                $options['endpointUrl'] = route('code16.sharp.api.list', [
+                    'entityKey' => $this->entityListKey,
+                    'current_page_url' => request()->url(),
+                    ...app(SharpEntityManager::class)
+                        ->entityFor($this->entityListKey)
+                        ->getListOrFail()
+                        ->filterContainer()
+                        ->getQueryParamsFromFilterValues($options['hiddenFilters'] ?? []),
+                ]);
+            });
     }
 
     protected function validationRules(): array

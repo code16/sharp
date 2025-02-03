@@ -3,9 +3,10 @@ node_modules
 .idea
 .DS_Store
 .phpunit.result.cache
+.phpunit.cache
 .php-cs-fixer.cache
 /composer.lock
 /public
 /saturn
-/resources/assets/dist/hot
-/.phpunit.cache
+/dist/hot
+/resources/assets/dist

@@ -2,47 +2,51 @@
 
 namespace Code16\Sharp\Form\Fields;
 
+use Code16\Sharp\Enums\FormEditorToolbarButton;
+use Code16\Sharp\Exceptions\SharpInvalidConfigException;
+use Code16\Sharp\Form\Fields\Editor\Uploads\FormEditorUploadForm;
+use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
 use Code16\Sharp\Form\Fields\Formatters\EditorFormatter;
-use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithDataLocalization;
-use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithEmbeds;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithMaxLength;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
-use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithUpload;
+use Code16\Sharp\Utils\Fields\IsSharpFieldWithEmbeds;
+use Code16\Sharp\Utils\Fields\IsSharpFieldWithLocalization;
+use Code16\Sharp\Utils\Fields\SharpFieldWithEmbeds;
+use Code16\Sharp\Utils\Fields\SharpFieldWithLocalization;
 
-class SharpFormEditorField extends SharpFormField
+class SharpFormEditorField extends SharpFormField implements IsSharpFieldWithEmbeds, IsSharpFieldWithLocalization
 {
-    use SharpFormFieldWithDataLocalization;
-    use SharpFormFieldWithEmbeds;
+    use SharpFieldWithEmbeds;
+    use SharpFieldWithLocalization;
     use SharpFormFieldWithMaxLength {
         setMaxLength as protected parentSetMaxLength;
     }
     use SharpFormFieldWithPlaceholder;
-    use SharpFormFieldWithUpload;
 
     const FIELD_TYPE = 'editor';
-    const B = 'bold';
-    const I = 'italic';
-    const HIGHLIGHT = 'highlight';
-    const SMALL = 'small';
-    const UL = 'bullet-list';
-    const OL = 'ordered-list';
-    const SEPARATOR = '|';
-    const A = 'link';
-    const H1 = 'heading-1';
-    const H2 = 'heading-2';
-    const H3 = 'heading-3';
-    const CODE = 'code';
-    const QUOTE = 'blockquote';
-    const UPLOAD_IMAGE = 'upload-image';
-    const UPLOAD = 'upload';
-    const HR = 'horizontal-rule';
-    const TABLE = 'table';
-    const IFRAME = 'iframe';
-    const RAW_HTML = 'html';
-    const CODE_BLOCK = 'code-block';
-    const SUP = 'superscript';
-    const UNDO = 'undo';
-    const REDO = 'redo';
+    const B = FormEditorToolbarButton::Bold;
+    const I = FormEditorToolbarButton::Italic;
+    const HIGHLIGHT = FormEditorToolbarButton::Highlight;
+    const SMALL = FormEditorToolbarButton::Small;
+    const UL = FormEditorToolbarButton::BulletList;
+    const OL = FormEditorToolbarButton::OrderedList;
+    const SEPARATOR = FormEditorToolbarButton::Separator;
+    const A = FormEditorToolbarButton::Link;
+    const H1 = FormEditorToolbarButton::Heading1;
+    const H2 = FormEditorToolbarButton::Heading2;
+    const H3 = FormEditorToolbarButton::Heading3;
+    const CODE = FormEditorToolbarButton::Code;
+    const QUOTE = FormEditorToolbarButton::Blockquote;
+    const UPLOAD_IMAGE = FormEditorToolbarButton::UploadImage;
+    const UPLOAD = FormEditorToolbarButton::Upload;
+    const HR = FormEditorToolbarButton::HorizontalRule;
+    const TABLE = FormEditorToolbarButton::Table;
+    const IFRAME = FormEditorToolbarButton::Iframe;
+    const RAW_HTML = FormEditorToolbarButton::Html;
+    const CODE_BLOCK = FormEditorToolbarButton::CodeBlock;
+    const SUP = FormEditorToolbarButton::Superscript;
+    const UNDO = FormEditorToolbarButton::Undo;
+    const REDO = FormEditorToolbarButton::Redo;
 
     protected int $minHeight = 200;
     protected ?int $maxHeight = null;
@@ -126,6 +130,78 @@ class SharpFormEditorField extends SharpFormField
         return $this;
     }
 
+    public function allowUploads(SharpFormEditorUpload $formEditorUpload): self
+    {
+        $this->uploadsConfig = $formEditorUpload;
+
+        return $this;
+    }
+
+    public function uploadsConfig(): ?SharpFormEditorUpload
+    {
+        return $this->uploadsConfig;
+    }
+
+    protected function innerComponentUploadsConfiguration(): ?array
+    {
+        if (! $this->uploadsConfig) {
+            return null;
+        }
+
+        $form = new FormEditorUploadForm($this->uploadsConfig);
+
+        return [
+            'fields' => $form->fields(),
+            'layout' => $form->formLayout(),
+        ];
+    }
+
+    protected function toolbarArray(): ?array
+    {
+        if (! $this->showToolbar) {
+            return null;
+        }
+
+        return collect($this->toolbar)
+            ->map(function (FormEditorToolbarButton|string $button) {
+                if (is_string($button) && class_exists($button)) {
+                    if ($embed = $this->getAllowedEmbed($button)) {
+                        if (! $embed->toConfigArray(true)['icon']) {
+                            throw new SharpInvalidConfigException(
+                                sprintf('%s ("%s") : %s must have an icon to be in the toolbar',
+                                    class_basename($this),
+                                    $this->key(),
+                                    $button
+                                )
+                            );
+                        }
+
+                        return 'embed:'.$embed->key();
+                    }
+
+                    throw new SharpInvalidConfigException(
+                        sprintf('%s ("%s") : %s must be present in ->allowEmbeds() array to have it in the toolbar',
+                            class_basename($this),
+                            $this->key(),
+                            $button
+                        )
+                    );
+                }
+
+                if (($button === static::UPLOAD || $button === static::UPLOAD_IMAGE) && ! $this->uploadsConfig()) {
+                    throw new SharpInvalidConfigException(
+                        sprintf('%s ("%s") : ->allowUploads() must be called to have upload in the toolbar',
+                            class_basename($this),
+                            $this->key(),
+                        )
+                    );
+                }
+
+                return $button;
+            })
+            ->toArray();
+    }
+
     protected function validationRules(): array
     {
         return [
@@ -147,53 +223,19 @@ class SharpFormEditorField extends SharpFormField
     public function toArray(): array
     {
         return parent::buildArray(
-            array_merge(
-                [
-                    'minHeight' => $this->minHeight,
-                    'maxHeight' => $this->maxHeight,
-                    'toolbar' => $this->showToolbar ? $this->toolbar : null,
-                    'placeholder' => $this->placeholder,
-                    'localized' => $this->localized,
-                    'markdown' => $this->renderAsMarkdown,
-                    'inline' => $this->withoutParagraphs,
-                    'showCharacterCount' => $this->showCharacterCount,
-                    'maxLength' => $this->maxLength,
-                    'embeds' => array_merge(
-                        $this->innerComponentUploadConfiguration(),
-                        $this->innerComponentEmbedsConfiguration()
-                    ),
-                ],
-                $this->editorCustomConfiguration(),
-            ),
+            [
+                'minHeight' => $this->minHeight,
+                'maxHeight' => $this->maxHeight,
+                'toolbar' => $this->toolbarArray(),
+                'placeholder' => $this->placeholder,
+                'localized' => $this->localized,
+                'markdown' => $this->renderAsMarkdown,
+                'inline' => $this->withoutParagraphs,
+                'showCharacterCount' => $this->showCharacterCount,
+                'maxLength' => $this->maxLength,
+                'uploads' => $this->innerComponentUploadsConfiguration(),
+                'embeds' => $this->innerComponentEmbedsConfiguration(),
+            ],
         );
-    }
-
-    protected function innerComponentUploadConfiguration(): array
-    {
-        $uploadConfig = [
-            'maxFileSize' => $this->maxFileSize ?: 2,
-            'transformable' => $this->transformable,
-            'transformKeepOriginal' => $this->transformKeepOriginal(),
-            'transformableFileTypes' => $this->transformableFileTypes,
-            'ratioX' => $this->cropRatio ? (int) $this->cropRatio[0] : null,
-            'ratioY' => $this->cropRatio ? (int) $this->cropRatio[1] : null,
-        ];
-
-        if (! $this->fileFilter) {
-            $this->setFileFilterImages();
-        }
-        $uploadConfig['fileFilter'] = $this->fileFilter;
-
-        return ['upload' => $uploadConfig];
-    }
-
-    protected function editorCustomConfiguration(): array
-    {
-        return $this->renderAsMarkdown
-            ? [
-                'tightListsOnly' => config('sharp.markdown_editor.tight_lists_only', true),
-                'nl2br' => config('sharp.markdown_editor.nl2br', false),
-            ]
-            : [];
     }
 }

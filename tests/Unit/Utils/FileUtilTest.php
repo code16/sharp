@@ -1,60 +1,49 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Utils;
-
-use Code16\Sharp\Tests\SharpTestCase;
 use Code16\Sharp\Utils\FileUtil;
-use Illuminate\Support\Facades\File;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
-class FileUtilTest extends SharpTestCase
-{
-    protected function setUp(): void
-    {
-        parent::setUp();
+beforeEach(function () {
+    Storage::fake('local');
+});
 
-        File::deleteDirectory(storage_path('app/tmp'));
-    }
+it('keeps the file name if it is the first one', function () {
+    $fileUtil = new FileUtil();
 
-    /** @test */
-    public function we_keep_the_file_name_if_it_is_the_first_one()
-    {
-        $fileUtil = new FileUtil();
+    $this->assertEquals(
+        'test.txt',
+        $fileUtil->findAvailableName('test.txt', 'tmp', 'local'),
+    );
+});
 
-        $this->assertEquals(
-            'test.txt',
-            $fileUtil->findAvailableName('test.txt', 'tmp', 'local'),
-        );
-    }
+it('adds a number suffix if needed', function () {
+    $fileUtil = new FileUtil();
 
-    /** @test */
-    public function we_add_a_number_suffix_if_needed()
-    {
-        $fileUtil = new FileUtil();
+    UploadedFile::fake()
+        ->create('test.txt', 1, 'text/plain')
+        ->storeAs('tmp', 'test.txt');
 
-        mkdir(storage_path('app/tmp/'));
-        touch(storage_path('app/tmp/test.txt'));
+    $this->assertEquals(
+        'test-1.txt',
+        $fileUtil->findAvailableName('test.txt', 'tmp', 'local'),
+    );
 
-        $this->assertEquals(
-            'test-1.txt',
-            $fileUtil->findAvailableName('test.txt', 'tmp', 'local'),
-        );
+    UploadedFile::fake()
+        ->create('test.txt', 1, 'text/plain')
+        ->storeAs('tmp', 'test-1.txt');
 
-        touch(storage_path('app/tmp/test-1.txt'));
+    $this->assertEquals(
+        'test-2.txt',
+        $fileUtil->findAvailableName('test.txt', 'tmp', 'local'),
+    );
+});
 
-        $this->assertEquals(
-            'test-2.txt',
-            $fileUtil->findAvailableName('test.txt', 'tmp', 'local'),
-        );
-    }
+it('normalizes file name', function () {
+    $fileUtil = new FileUtil();
 
-    /** @test */
-    public function we_normalize_file_name()
-    {
-        $fileUtil = new FileUtil();
-
-        $this->assertEquals(
-            'test.txt',
-            $fileUtil->findAvailableName('ôéàtest*.txt', 'tmp', 'local'),
-        );
-    }
-}
+    $this->assertEquals(
+        'test.txt',
+        $fileUtil->findAvailableName('ôéàtest*.txt', 'tmp', 'local'),
+    );
+});

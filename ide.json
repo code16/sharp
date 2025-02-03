@@ -1,0 +1,56 @@
+{
+    "$schema": "https://laravel-ide.com/schema/laravel-ide-v2.json",
+    "completions": [
+        {
+            "complete": "viewName",
+            "condition": [
+                {
+                    "classFqn": ["Code16\\Sharp\\EntityList\\Commands\\Command"],
+                    "methodNames": ["view"],
+                    "parameters": [1]
+                }
+            ]
+        }
+    ],
+    "view": {
+        "paths": [
+            {
+                "path": "tests/Fixtures/resources/views",
+                "namespace": "fixtures"
+            },
+            {
+                "path": "./demo/resources/views"
+            },
+            {
+                "path": "./resources/views",
+                "namespace": "sharp"
+            }
+        ]
+    },
+    "blade": {
+        "components": {
+            "viewPaths": [
+                {
+                    "path": "resources/views/components",
+                    "namespace": "sharp"
+                },
+                {
+                    "path": "src/View/Components",
+                    "namespace": "sharp"
+                },
+                {
+                    "path": "vendor/owenvoke/blade-fontawesome/resources/svg/solid",
+                    "prefix": "fas-"
+                },
+                {
+                    "path": "vendor/owenvoke/blade-fontawesome/resources/svg/regular",
+                    "prefix": "far-"
+                },
+                {
+                    "path": "vendor/owenvoke/blade-fontawesome/resources/svg/brands",
+                    "prefix": "fab-"
+                }
+            ]
+        }
+    }
+}

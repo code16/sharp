@@ -24,7 +24,12 @@ abstract class AbstractPostBlockForm extends SharpForm
         $formFields
             ->addField(
                 SharpFormHtmlField::make('type')
-                    ->setInlineTemplate('Post block type: <strong>{{name}}</strong><div class="small" v-if="help">{{help}}</div>'),
+                    ->setTemplate(<<<'blade'
+                        Post block type: <strong>{{ $name }}</strong>
+                        @if($help)
+                            <div><small>{{ $help }}</small></div>
+                        @endif
+                    blade),
             );
 
         if ($field = $this->getContentField()) {
@@ -38,10 +43,9 @@ abstract class AbstractPostBlockForm extends SharpForm
     {
         $formLayout
             ->addColumn(6, function (FormLayoutColumn $column) {
-                $column->withSingleField('type');
-                if ($this->getContentField()) {
-                    $column->withSingleField('content');
-                }
+                $column->withField('type')
+                    ->when($this->getContentField(), fn ($column) => $column->withField('content'));
+
                 $this->addAdditionalFieldsToLayout($column);
             });
     }
@@ -83,7 +87,7 @@ abstract class AbstractPostBlockForm extends SharpForm
             ? PostBlock::findOrFail($id)
             : new PostBlock([
                 'type' => static::$postBlockType,
-                'post_id' => currentSharpRequest()->getPreviousShowFromBreadcrumbItems('posts')->instanceId(),
+                'post_id' => sharp()->context()->breadcrumb()->previousShowSegment('posts')->instanceId(),
             ]);
 
         $this->save($postBlock, $data);

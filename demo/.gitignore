@@ -2,6 +2,7 @@
 /public/storage
 /public/hot
 /storage/*.key
+/storage/clockwork
 /vendor
 /storage/clockwork
 node_modules

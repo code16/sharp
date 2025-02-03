@@ -2,14 +2,14 @@
 sidebarDepth: 3
 ---
 
-# Building a Form
+# Create a Form
 
 Forms as used to create or update instances.
 
 ## Generator
 
 ```bash
-php artisan sharp:make:form <class_name> [--model=<model_name>]
+php artisan sharp:make:form <class_name> [--model=<model_name>,--single]
 ```
 
 ## Write the class
@@ -29,17 +29,22 @@ In short, this method is meant to host the code responsible for the declaration 
 This must be done calling `$formFields->addField`:
 
 ```php
-function buildFormFields(FieldsContainer $formFields)
+class ProductForm extends SharpForm
 {
-    $formFields
-		->addField(
-			SharpFormTextField::make('name')
-				->setLabel('Name')
-		)
-		->addField(
-			SharpFormTextField::make('capacity')
-				->setLabel('Full capacity (x1000)')
-		);
+    // ...
+    
+	public function buildFormFields(FieldsContainer $formFields): void
+	{
+		$formFields
+			->addField(
+				SharpFormTextField::make('name')
+					->setLabel('Name')
+			)
+			->addField(
+				SharpFormTextField::make('capacity')
+					->setLabel('Full capacity (x1000)')
+			);
+	}
 }
 ```
 
@@ -105,12 +110,17 @@ Now let's build the form layout. A form layout is made of `columns`, which conta
 Here's how we can define the layout for the simple two-fields form we built above:
 
 ```php
-function buildFormLayout(FormLayout $formLayout)
+class ProductForm extends SharpForm
 {
-    $formLayout->addColumn(6, function(FormLayoutColumn $column) {
-        $column->withSingleField('name')
-            ->withSingleField('capacity');
-    });
+    // ...
+    
+	public function buildFormLayout(FormLayout $formLayout): void
+	{
+		$formLayout->addColumn(6, function (FormLayoutColumn $column) {
+			$column->withField('name')
+				->withField('capacity');
+		});
+	}
 }
 ```
 
@@ -119,62 +129,83 @@ This will result in a 50% column (columns width are 12-based, like in Entity Lis
 Here's another possible layout, with two unequally large columns:
 
 ```php
-function buildFormLayout(FormLayout $formLayout)
+class ProductForm extends SharpForm
 {
-    $formLayout
-        ->addColumn(7, function(FormLayoutColumn $column) {
-            $column->withSingleField('name');
-    	})
-    	->addColumn(5, function(FormLayoutColumn $column) {
-            $column->withSingleField('capacity');
-    	});
+    // ...
+    
+	public function buildFormLayout(FormLayout $formLayout): void
+	{
+		$formLayout
+			->addColumn(7, function (FormLayoutColumn $column) {
+				$column->withField('name');
+			})
+			->addColumn(5, function (FormLayoutColumn $column) {
+				$column->withField('capacity');
+			});
+	}
 }
 ```
 
 ##### Displaying fields on the same row
 
-One final way is to put fields side by side on the same column:
+Here’s how to put fields side by side on the same row, using the `withFields()` (notice the final S) method:
 
 ```php
-function buildFormLayout(FormLayout $formLayout)
+class ProductForm extends SharpForm
 {
-    $formLayout->addColumn(6, function(FormLayoutColumn $column) {
-        $column->withFields('name', 'capacity');
-    });
+    // ...
+    
+	public function buildFormLayout(FormLayout $formLayout): void
+	{
+		$formLayout->addColumn(6, function (FormLayoutColumn $column) {
+			$column->withFields('name', 'capacity');
+		});
+	}
 }
 ```
 
-This will align the two fields on the row. They'll have the same width (50%), but we can act on this adding a special suffix:
+This will align the two fields on the row. They'll have the same width (50%), but we can act on this referencing a 12-based grid system with either variadic arguments:
 
 ```php
-$column->withFields('name|8', 'capacity|4');
+class ProductForm extends SharpForm
+{
+    // ...
+    
+	public function buildFormLayout(FormLayout $formLayout): void
+	{
+		$formLayout->addColumn(6, function (FormLayoutColumn $column) {
+			$column->withFields(name: 8, capacity: 4);
+		});
+	}
+}
 ```
 
-Once again, it's a 12-based grid, so `name` will take 2/3 of the width, and `capacity` 1/3.
-
-##### A word on small screens
-
-Columns are only used in medium to large screens (768 pixels and up).
-
-Same for fields put on the same row: on smaller screens, they'll be placed on different rows, except if another layout is intentionally configured, using this convention:
+... or using the special `|` character instead: 
 
 ```php
-$column->withFields('name|8,6', 'capacity|4,6');
+class ProductForm extends SharpForm
+{
+    // ...
+    
+	public function buildFormLayout(FormLayout $formLayout): void
+	{
+		$formLayout->addColumn(6, function (FormLayoutColumn $column) {
+			$column->withFields('name|8', 'capacity|4');
+		});
+	}
+}
 ```
-
-Here, `name` will take 8/12 of the width on large screens, and 6/12 on smaller one.
-
 
 #### Fieldsets
 
 Fieldsets are useful to group some fields in a labelled block. Here's how they work:
 
 ```php
-$formLayout->addColumn(6, function(FormLayoutColumn $column) {
-    $column->withFieldset('Details', function(FormLayoutFieldset $fieldset) {
+$formLayout->addColumn(6, function (FormLayoutColumn $column) {
+    $column->withFieldset('Details', function (FormLayoutFieldset $fieldset) {
         return $fieldset
-            ->withSingleField('name')
-            ->withSingleField('capacity');
+            ->withField('name')
+            ->withField('capacity');
     });
 });
 ```
@@ -183,17 +214,27 @@ $formLayout->addColumn(6, function(FormLayoutColumn $column) {
 
 #### Lists of fields
 
-In a `List` case, which is a form fields container [documented here](form-fields/list.md), we have to describe the list item layout. It goes like this:
+In a `List` case, which is a form fields container [documented here](form-fields/list.md), we have to describe the list item layout, using `->withListField()` and passing a Closure as second argument:
 
 ```php
-$column->withSingleField('pictures', function(FormLayoutColumn $listItem) {
+$column->withListField('pictures', function (FormLayoutColumn $listItem) {
     $listItem
-        ->withSingleField('file')
-        ->withSingleField('legend');
+        ->withField('file')
+        ->withField('legend');
 });
 ```
 
-Notice we added a `Closure` on a `withSingleField()` call, meaning we define an "item layout" for this field. The item is made of two fields in this example.
+#### Conditions
+
+Since layout classes apply Laravel’s `Conditionable` trait, you can use the `when()` method to conditionally display a column:
+
+```php
+$column
+	->withField('title')
+	->when(sharp()->context()->isUpdate(), function (FormLayoutColumn $column) {
+		$column->withField('author');
+	});
+```
 
 #### Tabs
 
@@ -201,10 +242,10 @@ Finally, columns can be wrapped in tabs if the form needs to be in parts:
 
 ```php
 $formLayout
-    ->addTab('tab 1', function(FormLayoutTab $tab) {
-        $tab->addColumn(6, function(FormLayoutColumn $column) {
-            $column->withSingleField('name');
-            // [...]
+    ->addTab('tab 1', function (FormLayoutTab $tab) {
+        $tab->addColumn(6, function (FormLayoutColumn $column) {
+            $column->withField('name');
+            // ...
 	    });
     })
     ->addTab([...])
@@ -217,12 +258,17 @@ The tab will here be labelled "tab 1".
 Next, we have to write the code responsible for the instance data (in an update case). The method must return a key-value array:
 
 ```php
-function find($id): array
+class ProductForm extends SharpForm
 {
-    return [
-        'name' => 'USS Enterprise',
-        'capacity' => 3000
-    ];
+    // ...
+    
+	public function find($id): array
+	{
+		return [
+			'name' => 'USS Enterprise',
+			'capacity' => 3000
+		];
+	}
 }
 ```
 
@@ -256,9 +302,9 @@ Sharp also aims to help the applicative code to be as small as possible, and if 
 ```php
 class ProductForm extends SharpForm
 {
-    // [...]
+    // ...
     
-    function update($id, array $data)
+    public function update($id, array $data)
     {
         $instance = $id ? Product::findOrFail($id) : new Product;
     
@@ -281,15 +327,19 @@ Finally, we call `$this->save()` with the instance and the sent data. This metho
 In the `update($id, array $data)` method you may want to throw an exception on a special case, other than validation (which is explained below). Here's how to do that:
 
 ```php
-function update($id, array $data)
+class ProductForm extends SharpForm
 {
-    // [...]
-
-    if($sometingIsWrong) {
-        throw new SharpApplicativeException('Something is wrong');
-    }
-    
-    // [...]
+    // ...
+	public function update($id, array $data)
+	{
+		// ...
+	
+		if($sometingIsWrong) {
+			throw new SharpApplicativeException('Something is wrong');
+		}
+		
+		// ...
+	}
 }
 ```
 
@@ -304,18 +354,23 @@ This method must return the id of the updated or stored instance.
 Sometimes you'll want to display a message to the user, after a creation or an update. Sharp way to do this is to call `->notify()` in the Form code:
 
 ```php
-function update($id, array $data)
+class ProductForm extends SharpForm
 {
-    $instance = $id ? Product::findOrFail($id) : new Product;
+    // ...
 
-    $this->save($instance, $data);
-
-    $this->notify('Product was indeed updated.')
-         ->setDetail('As you asked.')
-         ->setLevelSuccess()
-         ->setAutoHide(false);
-
-    return $instance->id;
+	public function update($id, array $data)
+	{
+		$instance = $id ? Product::findOrFail($id) : new Product;
+	
+		$this->save($instance, $data);
+	
+		$this->notify('Product was indeed updated.')
+			 ->setDetail('As you asked.')
+			 ->setLevelSuccess()
+			 ->setAutoHide(false);
+	
+		return $instance->id;
+	}
 }
 ```
 
@@ -333,9 +388,14 @@ Note that you can add up notifications, calling the `notify()` function multiple
 This method **is not mandatory**, a default implementation is proposed by Sharp, but you can override it if necessary. The aim is to return an array version of a new instance (for the creation form). For instance, with Eloquent and the `Code16\Sharp\Utils\Transformers\SharpAttributeTransformer` trait:
 
 ```php
-function create(): array
+class ProductForm extends SharpForm
 {
-    return $this->transform(new Product(['name' => 'new']));
+    // ...
+    
+	public function create(): array
+	{
+		return $this->transform(new Product(['name' => 'new']));
+	}
 }
 ```
 
@@ -352,57 +412,66 @@ This method, entirely optional, is the place to configure these:
 Example
 
 ```php
-function buildFormConfig(): void
+class ProductForm extends SharpForm
 {
-	$this->configureBreadcrumbCustomLabelAttribute('name')
-		->setDisplayShowPageAfterCreation();
+    // ...
+    
+	public function buildFormConfig(): void
+	{
+		$this->configureBreadcrumbCustomLabelAttribute('name')
+			->setDisplayShowPageAfterCreation();
+	}
 }
 ```
 
 ## Input validation
 
-In order to have an input validation on your form, you can create a [Laravel Form Request class](https://laravel.com/docs/8.x/validation#form-request-validation), and declare it in the Form itself:
+In order to have an input validation on your form, you can either declare a `rules()` methode (and an optional `messages()` one):
 
 ```php
 class ProductForm extends SharpForm
 {
-    protected ?string $formValidatorClass = ProductValidator::class;
+	// ...
     
-    // ...
+    public function rules(array $formattedData): array
+    {
+    	return [
+    		'name' => 'required',
+			'price' => ['required', 'numeric'],
+		];
+    }
+    
+    public function messages(array $formattedData): array
+    {
+    	return [
+    		'price.numeric' => 'The price must be a number',
+		];
+    }
 }
 ```
 
-You can, as an alternative, override the `protected function getFormValidatorClass(): ?string` method, which should return the classname of the validator, in case you need more control.
+::: tip
+The `$formattedData` argument is optional, but can be useful if you need to validate a field based on another one. If you don’t need it, you can safely remove it from the method argument list.
+:::
+
+Or you can manually call `->validate()` in the `update()` method:
+
+```php
+class ProductForm extends SharpForm
+{
+	// ...
+    
+    public function update($id, array $data)
+    {
+    	$this->validate($data, [
+    		'name' => 'required',
+			'price' => ['required', 'numeric'],
+		]);
+    }
+}
+```
 
 Sharp will handle the error display in the form.
-
-### Validate rich text fields (editor fields)
-
-Rich text are structured in a certain way by Sharp. This means that a rule like this will not work out of the box:
-
-```php
-public function rules()
-{
-    return [
-        'bio' => 'required'
-    ];
-}
-```
-
-To make it work, you have two options:
-
-Either add a ".text" suffix to your field key in the rules:
-
-```php
-public function rules()
-{
-    return [
-        'bio.text' => 'required'
-    ];
-}
-```
-
-Or make your FormRequest class extend `Code16\Sharp\Form\Validator\SharpFormRequest` instead of `Illuminate\Foundation\Http\FormRequest`. Note that in this case, if you have to define a `withValidator($validator)` function (see the [Laravel doc](https://laravel.com/docs/5.5/validation#form-request-validation)), make sure you call `parent::withValidator($validator)` in it.
 
 ## Declare the form
 

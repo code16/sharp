@@ -2,92 +2,78 @@
 
 namespace Code16\Sharp\Form\Fields\Formatters;
 
+use Code16\Sharp\Exceptions\Form\SharpFormFieldDataException;
+use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormField;
-use DOMDocument;
-use DOMElement;
-use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
 
-class EditorFormatter extends SharpFieldFormatter
+class EditorFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
 {
+    /**
+     * @param SharpFormEditorField $field
+     * @throws SharpFormFieldDataException
+     */
     public function toFront(SharpFormField $field, $value)
     {
-        return [
-            'text' => $value,
-        ];
+        $this->guardAgainstInvalidLocalizedValue($field, $value);
+        
+        return collect([
+            'text' => $this->maybeLocalized($field, $value),
+        ])
+            ->pipeThrough([
+                fn (Collection $collection) => $collection->merge(
+                    $this->editorUploadsFormatter()->toFront($field, $collection['text'])
+                ),
+                fn (Collection $collection) => $collection->merge(
+                    $this->editorEmbedsFormatter()->toFront($field, $collection['text'])
+                ),
+            ])
+            ->toArray();
     }
 
+    /**
+     * @param  SharpFormEditorField  $field
+     */
     public function fromFront(SharpFormField $field, string $attribute, $value)
     {
-        $content = $value['text'] ?? '';
-        $files = $value['files'] ?? [];
-
-        if ($value !== null && $field->isLocalized()) {
-            return collect(is_array($content) ? $content : [app()->getLocale() => $content])
-                ->union(collect($this->dataLocalizations ?? [])->mapWithKeys(fn ($locale) => [$locale => null]))
-                ->map(function (?string $localizedContent) use ($files, $field, $attribute) {
-                    return $localizedContent
-                        ? preg_replace(
-                            '/\R/', "\n",
-                            $this->handleUploadedFiles($localizedContent, $files, $field, $attribute),
-                        )
-                        : null;
-                })
-                ->toArray();
+        if ($value === null) {
+            return null;
         }
 
-        return preg_replace('/\R/u', "\n", $this->handleUploadedFiles($content, $files, $field, $attribute));
-    }
-
-    protected function handleUploadedFiles(string $text, array $files, SharpFormField $field, string $attribute): string
-    {
-        if (count($files)) {
-            $dom = $this->getDomDocument($text);
-            $uploadFormatter = app(UploadFormatter::class);
-
-            foreach ($files as $file) {
-                /** @var DOMElement $domElement */
-                $domElement = collect($dom->getElementsByTagName('x-sharp-file'))
-                    ->merge($dom->getElementsByTagName('x-sharp-image'))
-                    ->first(function (DOMElement $uploadElement) use ($file) {
-                        return $uploadElement->getAttribute('name') === $file['name'];
-                    });
-
-                if ($domElement) {
-                    $upload = $uploadFormatter
-                        ->setInstanceId($this->instanceId)
-                        ->fromFront($field, $attribute, $file);
-
-                    if (isset($upload['file_name'])) {
-                        // New file was uploaded, or file was updated. We have to update the name of the file in the markdown
-                        $domElement->setAttribute('name', basename($upload['file_name']));
-                        $domElement->setAttribute('path', $upload['file_name']);
-                        $domElement->setAttribute('disk', $upload['disk']);
-                        if ($field->isTransformOriginal()) {
-                            $domElement->removeAttribute('filter-crop');
-                            $domElement->removeAttribute('filter-rotate');
-                        }
-                    }
-                }
-            }
-
-            return $this->formatDomStringValue($dom);
-        }
+        $text = $this->maybeLocalized(
+            $field,
+            $value['text'] ?? null,
+            fn (string $content) => preg_replace('/\R/u', "\n", $content)
+        );
+        $text = $this->editorUploadsFormatter()->fromFront($field, $attribute, [...$value, 'text' => $text]);
+        $text = $this->editorEmbedsFormatter()->fromFront($field, $attribute, [...$value, 'text' => $text]);
 
         return $text;
     }
 
-    protected function getDomDocument(string $content): DOMDocument
+    /**
+     * @param  SharpFormEditorField  $field
+     */
+    public function afterUpdate(SharpFormField $field, string $attribute, mixed $value): array|string|null
     {
-        return tap(new DOMDocument(), function (DOMDocument $dom) use ($content) {
-            $content = mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8');
-            @$dom->loadHTML("<body>$content</body>");
-        });
+        $text = $value;
+        $text = $this->editorUploadsFormatter()->afterUpdate($field, $attribute, $text);
+        $text = $this->editorEmbedsFormatter()->afterUpdate($field, $attribute, $text);
+
+        return $text;
     }
 
-    protected function formatDomStringValue(DOMDocument $dom): string
+    protected function editorUploadsFormatter(): EditorUploadsFormatter
     {
-        $body = $dom->getElementsByTagName('body')->item(0);
+        return (new EditorUploadsFormatter())
+            ->setDataLocalizations($this->dataLocalizations ?? [])
+            ->setInstanceId($this->instanceId);
+    }
 
-        return trim(Str::replace(['<body>', '</body>'], '', $dom->saveHTML($body)));
+    protected function editorEmbedsFormatter(): EditorEmbedsFormatter
+    {
+        return (new EditorEmbedsFormatter())
+            ->setDataLocalizations($this->dataLocalizations ?? [])
+            ->setInstanceId($this->instanceId);
     }
 }

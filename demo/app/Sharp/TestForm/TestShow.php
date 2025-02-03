@@ -20,15 +20,15 @@ class TestShow extends SharpSingleShow
     {
         $showLayout->addSection('', function (ShowLayoutSection $section) {
             $section->addColumn(12, function (ShowLayoutColumn $column) {
-                $column->withSingleField('message');
+                $column->withField('message');
             });
         });
     }
 
     public function findSingle(): array
     {
-        return [
+        return $this->transform([
             'message' => '<h2 class="text-center my-5 py-5">Please stay calm,<br>this is a test.</h2>',
-        ];
+        ]);
     }
 }

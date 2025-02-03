@@ -12,21 +12,21 @@ Here's how we can build this:
 function buildFormFields()
 {
     $this->addField(
-        SharpFormListField::make("pieces")
-            ->setLabel("Art pieces")
+        SharpFormListField::make('pieces')
+            ->setLabel('Art pieces')
             ->setAddable()
             ->setRemovable()
             ->addItemField(
-                SharpFormDateField::make("acquisition_date")
-                    ->setLabel("Acquisition")
+                SharpFormDateField::make('acquisition_date')
+                    ->setLabel('Acquisition')
             )
             ->addItemField(
-                SharpFormTextField::make("title")
-                    ->setLabel("Title")
+                SharpFormTextField::make('title')
+                    ->setLabel('Title')
             )
             ->addItemField(
-                SharpFormSelectField::make("artist_id", [...])
-                    ->setLabel("Artist")
+                SharpFormSelectField::make('artist_id', /*[...]*/)
+                    ->setLabel('Artist')
             )
     );
 }
@@ -63,29 +63,6 @@ Default: false.
 
 This is only useful when using the `WithSharpFormEloquentUpdater` trait. You can define here the name of an numerical order attribute (typically: `order`), and it will be automatically updated in the `save()` process.
 
-### `setCollapsedItemInlineTemplate(string $template)`
-### `setCollapsedItemTemplatePath(string $template)`
-
-The UI for a `sortable` List is to add a "reorder" button, which swaps the list in a readonly state. But for big List items it can be useful to define a special template for this reordering state.
-For inline template, just write the template as a string, using placeholders for data like this: `{{var}}`.
-
-
-Example:
-
-```php
-$list->setCollapsedItemInlineTemplate(
-    "Foreground: <strong>{{color}}</strong>"
-)
-```
-
-For template path, give the relative path of a template file (stating in the views Laravel folder).
-The template will be [interpreted by Vue.js](https://vuejs.org/v2/guide/syntax.html), meaning you can add data placeholders, DOM structure but also directives, and anything that Vue will parse. For instance:
-
-```vue
-<div v-if="show">result is {{value}}</div>
-<div v-else>result is unknown</div>
-```
-
 ### `setRemovable(bool $removable = true)`
 
 Defines if items can be removed by the user.
@@ -110,18 +87,27 @@ Default: 10
 
 ## Layout
 
-The List item layout must be defined like the form itself, in the `buildFormLayout()` function. The item layout is managed as a Form column, with a `FormLayoutColumn` object. To link the column and the item, use the classic `withSingleField()` function with a second argument, a Closure accepting a `FormLayoutColumn`.
+The List item layout must be defined like the form itself, in the `buildFormLayout()` function. The item layout is managed as a Form column, with a `FormLayoutColumn` object. To link the column and the item, use the classic `withField()` function with a second argument, a Closure accepting a `FormLayoutColumn`.
 
 Here's an example for the Museum List defined above:
 
 ```php
-$this->addColumn(6, function(FormLayoutColumn $column) {
-     $column->withSingleField("pieces", function(FormLayoutColumn $listItem) {
-          $listItem->withSingleField("acquisition_date")
-              ->withSingleField("title")
-              ->withSingleField("artist_id");
-     });
- });
+class MyForm extends SharpForm
+{
+    // [...]
+    
+    function buildFormLayout(FormLayout $formLayout)
+    {
+        $this->addColumn(6, function (FormLayoutColumn $column) {
+             $column->withListField('pieces', function (FormLayoutColumn $listItem) {
+                  $listItem
+                      ->withField('acquisition_date')
+                      ->withField('title')
+                      ->withField('artist_id');
+             });
+         });
+    }
+}
 ```
 
 ## Formatter

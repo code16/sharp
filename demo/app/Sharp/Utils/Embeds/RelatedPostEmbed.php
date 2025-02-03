@@ -2,6 +2,7 @@
 
 namespace App\Sharp\Utils\Embeds;
 
+use App\Enums\PostState;
 use App\Models\Post;
 use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
@@ -14,7 +15,18 @@ class RelatedPostEmbed extends SharpFormEditorEmbed
         $this
             ->configureLabel('Related Post')
             ->configureTagName('x-related-post')
-            ->configureFormInlineTemplate('<div><span v-if="online" style="color: blue">●</span><i v-if="!online" style="color: orange">●</i> <i class="fa fa-link"></i> <em>{{ title }}</em></div>');
+            ->configureIcon('fas-link')
+            ->configureTemplate(<<<'blade'
+                <div style="display: flex; gap: .5rem; align-items: center">
+                    @if($online)
+                        <span style="color: blue">●</span>
+                    @else
+                        <span style="color: orange">●</span>
+                    @endif
+                    <em>{{ $title }}</em>
+                </div>
+                blade
+            );
     }
 
     public function buildFormFields(FieldsContainer $formFields): void
@@ -40,7 +52,7 @@ class RelatedPostEmbed extends SharpFormEditorEmbed
                 return $post?->title;
             })
             ->setCustomTransformer('online', function ($value) use ($post) {
-                return $post?->state === 'online';
+                return $post?->state === PostState::ONLINE;
             })
             ->transformForTemplate($data);
     }

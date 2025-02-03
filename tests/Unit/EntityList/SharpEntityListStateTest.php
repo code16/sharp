@@ -1,170 +1,206 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\EntityList;
-
-use Code16\Sharp\EntityList\Commands\EntityState;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
-use Code16\Sharp\Tests\SharpTestCase;
-use Code16\Sharp\Tests\Unit\EntityList\Utils\SharpEntityDefaultTestList;
-use Illuminate\Contracts\Support\Arrayable;
+use Code16\Sharp\EntityList\Fields\EntityListStateField;
+use Code16\Sharp\Tests\Unit\EntityList\Fakes\FakeEntityState;
+use Code16\Sharp\Tests\Unit\EntityList\Fakes\FakeSharpEntityList;
 
-class SharpEntityListStateTest extends SharpTestCase
-{
-    /** @test */
-    public function we_can_get_list_entity_state_config_with_an_instance()
+it('gets list entity state config', function () {
+    $list = new class() extends FakeSharpEntityList
     {
-        $list = new class() extends SharpEntityDefaultTestList
+        public function buildListConfig(): void
         {
-            public function buildListConfig(): void
+            $this->configureEntityState('_state', new class() extends FakeEntityState
             {
-                $this->configureEntityState('_state', new class() extends EntityState
+                protected function buildStates(): void
                 {
-                    protected function buildStates(): void
-                    {
-                        $this->addState('test1', 'Test 1', 'blue');
-                        $this->addState('test2', 'Test 2', 'red');
-                    }
+                    $this->addState('test1', 'Test 1', 'blue');
+                    $this->addState('test2', 'Test 2', 'red');
+                }
+            });
+        }
+    };
 
-                    protected function updateState($instanceId, $stateId): array {}
-                });
-            }
-        };
+    $list->buildListConfig();
 
-        $list->buildListConfig();
+    expect($list->listConfig()['state'])->toEqual([
+        'attribute' => '_state',
+        'values' => [
+            ['value' => 'test1', 'label' => 'Test 1', 'color' => 'blue'],
+            ['value' => 'test2', 'label' => 'Test 2', 'color' => 'red'],
+        ],
+        'authorization' => [],
+    ]);
+});
 
-        $this->assertArraySubset([
-            'state' => [
-                'attribute' => '_state',
-                'values' => [
-                    ['value' => 'test1', 'label' => 'Test 1', 'color' => 'blue'],
-                    ['value' => 'test2', 'label' => 'Test 2', 'color' => 'red'],
-                ],
-            ],
-        ], $list->listConfig());
-    }
-
-    /** @test */
-    public function we_can_get_list_entity_state_config_with_a_class_name()
+it('adds the entity state attribute to the entity data', function () {
+    $list = new class() extends FakeSharpEntityList
     {
-        $list = new class() extends SharpEntityDefaultTestList
+        public function buildList($fields): void
         {
-            public function buildListConfig(): void
-            {
-                $this->configureEntityState('_state', SharpEntityListTestState::class);
-            }
-        };
+            $fields->addField(EntityListField::make('name'));
+        }
 
-        $list->buildListConfig();
-
-        $this->assertArraySubset([
-            'state' => [
-                'attribute' => '_state',
-                'values' => [
-                    ['value' => 'test1', 'label' => 'Test 1', 'color' => 'blue'],
-                    ['value' => 'test2', 'label' => 'Test 2', 'color' => 'red'],
-                ],
-            ],
-        ], $list->listConfig());
-    }
-
-    /** @test */
-    public function entity_state_attribute_is_added_the_entity_data()
-    {
-        $list = new class() extends SharpEntityDefaultTestList
+        public function buildListConfig(): void
         {
-            public function getListData(): array|Arrayable
+            $this->configureEntityState('state', new class() extends FakeEntityState
             {
-                return [
-                    ['id' => 1, 'name' => 'John Wayne', 'state' => true],
-                    ['id' => 2, 'name' => 'Mary Wayne', 'state' => false],
-                ];
-            }
-
-            public function buildListFields(EntityListFieldsContainer $fieldsContainer): void
-            {
-                $fieldsContainer->addField(
-                    EntityListField::make('name'),
-                );
-            }
-
-            public function buildListConfig(): void
-            {
-                $this->configureEntityState('state', new class() extends EntityState
+                protected function buildStates(): void
                 {
-                    protected function buildStates(): void
-                    {
-                        $this->addState(true, 'Test 1', 'blue');
-                        $this->addState(false, 'Test 2', 'red');
-                    }
+                    $this->addState(true, 'Test 1', 'blue');
+                    $this->addState(false, 'Test 2', 'red');
+                }
+            });
+        }
 
-                    protected function updateState($instanceId, $stateId): array {}
-                });
-            }
-        };
-
-        $list->buildListConfig();
-
-        $this->assertEquals(
-            [
-                'items' => [
-                    ['id' => 1, 'name' => 'John Wayne', 'state' => true],
-                    ['id' => 2, 'name' => 'Mary Wayne', 'state' => false],
-                ],
-            ],
-            $list->data()['list'],
-        );
-    }
-
-    /** @test */
-    public function we_can_handle_authorization_in_a_state()
-    {
-        $list = new class() extends SharpEntityDefaultTestList
+        public function getListData(): array|\Illuminate\Contracts\Support\Arrayable
         {
-            public function buildListConfig(): void
+            return [
+                ['id' => 1, 'name' => 'Marie Curie', 'state' => true],
+                ['id' => 2, 'name' => 'Albert Einstein', 'state' => false],
+            ];
+        }
+    };
+
+    $list->buildListConfig();
+
+    expect($list->data()['items'])->toEqual([
+        ['id' => 1, 'name' => 'Marie Curie', 'state' => true],
+        ['id' => 2, 'name' => 'Albert Einstein', 'state' => false],
+    ]);
+});
+
+it('handles authorization in a state', function () {
+    $list = new class() extends FakeSharpEntityList
+    {
+        public function buildListConfig(): void
+        {
+            $this->configureEntityState('_state', new class() extends FakeEntityState
             {
-                $this->configureEntityState('_state', new class() extends EntityState
+                protected function buildStates(): void
                 {
-                    protected function buildStates(): void
-                    {
-                        $this->addState(1, 'Test 1', 'blue');
-                    }
+                    $this->addState(1, 'Test 1', 'blue');
+                }
 
-                    public function authorizeFor($instanceId): bool
-                    {
-                        return $instanceId < 3;
-                    }
+                public function authorizeFor($instanceId): bool
+                {
+                    return $instanceId < 3;
+                }
+            });
+        }
 
-                    protected function updateState($instanceId, $stateId): array {}
-                });
-            }
-        };
+        public function getListData(): array|\Illuminate\Contracts\Support\Arrayable
+        {
+            return [
+                ['id' => 1], ['id' => 2], ['id' => 3],
+                ['id' => 4], ['id' => 5], ['id' => 6],
+            ];
+        }
+    };
 
-        $list->buildListConfig();
-        $list->data([
-            ['id' => 1], ['id' => 2], ['id' => 3],
-            ['id' => 4], ['id' => 5], ['id' => 6],
+    $list->buildListConfig();
+    $list->data();
+
+    expect($list->listConfig()['state'])
+        ->toEqual([
+            'attribute' => '_state',
+            'values' => [
+                ['value' => '1', 'label' => 'Test 1', 'color' => 'blue'],
+            ],
+            'authorization' => [1, 2],
         ]);
+});
 
-        $this->assertArraySubset([
-            'state' => [
-                'attribute' => '_state',
-                'values' => [
-                    ['value' => '1', 'label' => 'Test 1', 'color' => 'blue'],
-                ],
-                'authorization' => [1, 2],
-            ],
-        ], $list->listConfig());
-    }
-}
-
-class SharpEntityListTestState extends EntityState
-{
-    protected function buildStates(): void
+it('allows to add state field as a specific column', function () {
+    $list = new class() extends FakeSharpEntityList
     {
-        $this->addState('test1', 'Test 1', 'blue');
-        $this->addState('test2', 'Test 2', 'red');
-    }
+        public function buildListConfig(): void
+        {
+            $this->configureEntityState('my_state', new class() extends FakeEntityState
+            {
+                protected function buildStates(): void
+                {
+                    $this->addState('test1', 'Test 1', 'blue')
+                        ->addState('test2', 'Test 2', 'red');
+                }
+            });
+        }
 
-    protected function updateState($instanceId, $stateId): array {}
-}
+        public function buildList(EntityListFieldsContainer $fields): void
+        {
+            $fields
+                ->addField(EntityListField::make('name'))
+                ->addField(EntityListStateField::make()->setLabel('State'))
+                ->addField(EntityListField::make('age'));
+        }
+    };
+
+    $list->buildListConfig();
+
+    expect($list->fields())->toEqual([
+        [
+            'type' => 'text',
+            'key' => 'name',
+            'label' => '',
+            'sortable' => false,
+            'html' => true,
+            'width' => null,
+            'hideOnXS' => false,
+        ],
+        [
+            'type' => 'state',
+            'key' => '@state',
+            'label' => 'State',
+            'sortable' => false,
+            'width' => null,
+            'hideOnXS' => false,
+        ],
+        [
+            'type' => 'text',
+            'key' => 'age',
+            'label' => '',
+            'sortable' => false,
+            'html' => true,
+            'width' => null,
+            'hideOnXS' => false,
+        ],
+    ]);
+});
+
+it('sends state field as last column if state configured and not declared as a column', function () {
+    $list = new class() extends FakeSharpEntityList
+    {
+        public function buildListConfig(): void
+        {
+            $this->configureEntityState('my_state', new class() extends FakeEntityState
+            {
+                protected function buildStates(): void
+                {
+                    $this->addState('test1', 'Test 1', 'blue')
+                        ->addState('test2', 'Test 2', 'red');
+                }
+            });
+        }
+
+        public function buildList(EntityListFieldsContainer $fields): void
+        {
+            $fields
+                ->addField(EntityListField::make('name'))
+                ->addField(EntityListField::make('age'))
+                ->addField(EntityListField::make('picture'));
+        }
+    };
+
+    $list->buildListConfig();
+
+    expect($list->fields())->toHaveCount(4)
+        ->and($list->fields()[3])->toEqual([
+            'type' => 'state',
+            'key' => '@state',
+            'label' => '',
+            'sortable' => false,
+            'width' => null,
+            'hideOnXS' => false,
+        ]);
+});

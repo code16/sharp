@@ -1,0 +1,4 @@
+
+body:has([role=dialog][data-state=open]) {
+    --nprogress-color: hsl(0 0% 98%);
+}

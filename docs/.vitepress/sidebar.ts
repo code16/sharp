@@ -1,31 +1,34 @@
-import type { DefaultTheme } from "vitepress";
+import type {DefaultTheme} from "vitepress";
 
 export function sidebar(): DefaultTheme.SidebarItem[] {
     return [
         {
             text: 'Introduction',
             items: [
-                { text: 'Getting started', link: '/guide/index.md' },
-                { text: 'The entity class', link: '/guide/entity-class.md' }
+                { text: 'Getting started and installation', link: '/guide/index.md' },
+                { text: 'The entity class', link: '/guide/entity-class.md' },
+                { text: 'The Menu', link: '/guide/building-menu.md' }
             ]
         },
         {
             text: 'Entity Lists',
             collapsed: true,
             items: [
-                { text: 'Building an Entity List', link: '/guide/building-entity-list.md' },
+                { text: 'Create an Entity List', link: '/guide/building-entity-list.md' },
                 { text: 'Filters', link: '/guide/filters.md' },
                 { text: 'Entity States', link: '/guide/entity-states.md' },
-                { text: 'Reordering instances', link: '/guide/reordering-instances.md' }
+                { text: 'Reordering instances', link: '/guide/reordering-instances.md' },
+                { text: 'Avoid n+1 queries in Entity Lists', link: '/guide/avoid-n1-queries-in-entity-lists.md' }
             ]
         },
         {
             text: 'Forms',
             collapsed: true,
             items: [
-                { text: 'Building a Form', link: '/guide/building-form.md' },
+                { text: 'Create a Form', link: '/guide/building-form.md' },
                 { text: 'Multi-Forms', link: '/guide/multiforms.md' },
                 { text: 'Using Single Form for unique resources', link: '/guide/single-form.md' },
+                { text: 'Quick creation form', link: '/guide/quick-creation-form.md' },
                 { text: 'Write an Embed for the Editor field', link: '/guide/form-editor-embeds.md' },
                 { text: 'Text', link: '/guide/form-fields/text.md' },
                 { text: 'Textarea', link: '/guide/form-fields/textarea.md' },
@@ -41,21 +44,21 @@ export function sidebar(): DefaultTheme.SidebarItem[] {
                 { text: 'List', link: '/guide/form-fields/list.md' },
                 { text: 'AutocompleteList', link: '/guide/form-fields/autocomplete-list.md' },
                 { text: 'Geolocation', link: '/guide/form-fields/geolocation.md' },
-                { text: 'Custom form field', link: '/guide/custom-form-fields.md' }
+                // { text: 'Custom form field', link: '/guide/custom-form-fields.md' }
             ]
         },
         {
             text: 'Show Pages',
             collapsed: true,
             items: [
-                { text: 'Building a Show Page', link: '/guide/building-show-page.md' },
+                { text: 'Create a Show Page', link: '/guide/building-show-page.md' },
                 { text: 'Using Single Show for unique resources', link: '/guide/single-show.md' },
                 { text: 'Text', link: '/guide/show-fields/text.md' },
                 { text: 'Picture', link: '/guide/show-fields/picture.md' },
                 { text: 'List', link: '/guide/show-fields/list.md' },
                 { text: 'File', link: '/guide/show-fields/file.md' },
                 { text: 'Embedded EntityList', link: '/guide/show-fields/embedded-entity-list.md' },
-                { text: 'Custom show field', link: '/guide/custom-show-fields.md' }
+                // { text: 'Custom show field', link: '/guide/custom-show-fields.md' }
             ]
         },
         {
@@ -89,8 +92,7 @@ export function sidebar(): DefaultTheme.SidebarItem[] {
             text: 'Generalities',
             collapsed: true,
             items: [
-                { text: 'Building the menu', link: '/guide/building-menu.md' },
-                { text: "Sharp's breadcrumb", link: '/guide/sharp-breadcrumb.md' },
+                { text: 'Sharp’s breadcrumb', link: '/guide/sharp-breadcrumb.md' },
                 { text: 'Implement global search', link: '/guide/global-search.md' },
                 { text: 'How to transform data', link: '/guide/how-to-transform-data.md' },
                 { text: 'Create links to an entity', link: '/guide/link-to.md' },
@@ -107,6 +109,7 @@ export function sidebar(): DefaultTheme.SidebarItem[] {
             text: 'Migrations guide',
             collapsed: true,
             items: [
+                { text: 'Upgrading from 8.x to 9.x', link: '/guide/upgrading/9.0.md' },
                 { text: 'Upgrading from 7.x to 8.x', link: '/guide/upgrading/8.0.md' },
                 { text: 'Upgrading from 6.x to 7.x', link: '/guide/upgrading/7.0.md' },
                 { text: 'Upgrading from 5.x to 6.x', link: '/guide/upgrading/6.0.md' },

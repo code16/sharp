@@ -13,24 +13,33 @@
     ],
     "require": {
         "php": "8.2.*|8.3.*|8.4.*",
-        "code16/laravel-content-renderer": "^1.1.0",
+        "ext-dom": "*",
+        "blade-ui-kit/blade-icons": "^1.6",
+        "code16/laravel-content-renderer": "^1.1",
+        "inertiajs/inertia-laravel": "^2.0",
         "intervention/image": "^3.4",
         "intervention/image-laravel": "^1.2",
-        "laravel/framework": "^10.0|^11.0",
+        "laravel/framework": "^11.0",
+        "laravel/prompts": "0.*",
         "league/commonmark": "^2.4",
-        "spatie/image-optimizer": "^1.6"
+        "masterminds/html5": "^2.8",
+        "spatie/image-optimizer": "^1.6",
+        "tightenco/ziggy": "^2.0"
     },
     "require-dev": {
-        "brianium/paratest": "^6.3|^7.4",
-        "dms/phpunit-arraysubset-asserts": "^0.4|^0.5",
+        "brianium/paratest": "^7.0",
         "doctrine/dbal": "^3.5",
         "friendsofphp/php-cs-fixer": "^3.8",
         "laravel/pint": "1.18.3",
         "mockery/mockery": "^1.5.0",
-        "nunomaduro/collision": "^7.0|^8.0",
+        "nunomaduro/collision": "^8.0",
         "orchestra/testbench": "^8.0|^9.0",
-        "phpunit/phpunit": "^9.5|^10.5",
-        "spatie/laravel-ray": "^1.26"
+        "pestphp/pest": "^3.0",
+        "pestphp/pest-plugin-laravel": "^3.0",
+        "phpunit/phpunit": "^11.0",
+        "spatie/laravel-ray": "^1.26",
+        "spatie/laravel-typescript-transformer": "^2.3",
+        "spatie/typescript-transformer": "^2.2"
     },
     "autoload": {
         "files": [
@@ -42,16 +51,18 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Code16\\Sharp\\Tests\\": "tests/"
+            "Code16\\Sharp\\Tests\\": "tests/",
+            "App\\": "vendor/orchestra/testbench-core/laravel/app"
         }
     },
     "scripts": {
-        "test": "vendor/bin/testbench package:test --parallel"
+        "test": "vendor/bin/testbench package:test --parallel",
+        "typescript:generate": "php demo/artisan ziggy:generate --types-only; php demo/artisan typescript:transform"
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Code16\\Sharp\\SharpServiceProvider"
+                "Code16\\Sharp\\SharpInternalServiceProvider"
             ]
         }
     },

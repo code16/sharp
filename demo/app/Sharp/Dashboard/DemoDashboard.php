@@ -5,6 +5,8 @@ namespace App\Sharp\Dashboard;
 use App\Models\Category;
 use App\Models\User;
 use App\Sharp\Dashboard\Commands\ExportStatsAsCsvCommand;
+use App\Sharp\Utils\Filters\CategoryFilter;
+use App\Sharp\Utils\Filters\PeriodFilter;
 use App\Sharp\Utils\Filters\PeriodRequiredFilter;
 use App\Sharp\Utils\Filters\StateFilter;
 use Carbon\Carbon;
@@ -17,25 +19,28 @@ use Code16\Sharp\Dashboard\Widgets\SharpBarGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpFigureWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
 use Code16\Sharp\Dashboard\Widgets\SharpLineGraphWidget;
+use Code16\Sharp\Dashboard\Widgets\SharpOrderedListWidget;
+use Code16\Sharp\Dashboard\Widgets\SharpPanelWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpPieGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\WidgetsContainer;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
+use Code16\Sharp\Utils\PageAlerts\PageAlert;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 
 class DemoDashboard extends SharpDashboard
 {
     private static array $colors = [
-        '#7F1D1D',
-        '#F472B6',
-        '#6366F1',
-        '#10B981',
-        '#F59E0B',
-        '#3B82F6',
-        '#064E3B',
-        '#EC4899',
-        '#78350F',
-        '#9CA3AF',
+        '#2a9d90',
+        '#e76e50',
+        '#274754',
+        '#e8c468',
+        '#f4a462',
+        //        '#3B82F6',
+        //        '#064E3B',
+        //        '#EC4899',
+        //        '#78350F',
+        //        '#9CA3AF',
     ];
     private static int $colorsIndex = 0;
 
@@ -69,6 +74,16 @@ class DemoDashboard extends SharpDashboard
                 SharpFigureWidget::make('online_panel')
                     ->setTitle('Online posts')
                     ->setLink(LinkToEntityList::make('posts')->addFilter(StateFilter::class, 'online')),
+            )
+            ->addWidget(
+                SharpOrderedListWidget::make('list')
+                    ->setTitle('Top 3 categories')
+                    ->buildItemLink(fn (array $item) => $item['url'] ?? null)
+            )
+            ->addWidget(
+                SharpPanelWidget::make('highlighted_post')
+                    ->setTitle('On the spotlight')
+                    ->setTemplate(view('sharp.templates.dashboard_ranking'))
             );
     }
 
@@ -85,11 +100,15 @@ class DemoDashboard extends SharpDashboard
             ->addSection('Stats', function (DashboardLayoutSection $section) {
                 $section
                     ->setKey('stats-section')
-                    ->addRow(function (DashboardLayoutRow $row) {
-                        $row->addWidget(6, 'authors_bar')
-                            ->addWidget(6, 'categories_pie');
-                    })
-                    ->addFullWidthWidget('visits_line');
+                    ->addRow(fn (DashboardLayoutRow $row) => $row
+                        ->addWidget(6, 'authors_bar')
+                        ->addWidget(6, 'categories_pie')
+                    )
+                    ->addFullWidthWidget('visits_line')
+                    ->addRow(fn (DashboardLayoutRow $row) => $row
+                        ->addWidget(5, 'list')
+                        ->addWidget(7, 'highlighted_post')
+                    );
             });
     }
 
@@ -111,12 +130,17 @@ class DemoDashboard extends SharpDashboard
         ];
     }
 
-    public function buildDashboardConfig(): void
+    protected function buildPageAlert(PageAlert $pageAlert): void
     {
-        $this->configurePageAlert(
-            'Graphs below are delimited by period {{period}} (and yes, visits figures are randomly generated)',
-            static::$pageAlertLevelSecondary,
-        );
+        $pageAlert
+            ->setLevelSecondary()
+            ->setMessage(
+                sprintf(
+                    'Graphs below are delimited by period %s - %s (and yes, visits figures are randomly generated)',
+                    $this->queryParams->filterFor(PeriodRequiredFilter::class)['start']->isoFormat('L'),
+                    $this->queryParams->filterFor(PeriodRequiredFilter::class)['end']->isoFormat('L'),
+                )
+            );
     }
 
     protected function buildWidgetsData(): void
@@ -124,6 +148,8 @@ class DemoDashboard extends SharpDashboard
         $this->setPieGraphDataSet();
         $this->setBarsGraphDataSet();
         $this->setLineGraphDataSet();
+        $this->setOrderedListDataSet();
+        $this->setCustomPanelDataSet();
 
         $posts = DB::table('posts')
             ->select(DB::raw('state, count(*) as count'))
@@ -141,14 +167,7 @@ class DemoDashboard extends SharpDashboard
                 figure: $posts->where('state', 'online')->first()->count ?? 0,
                 unit: 'post(s)',
                 evolution: '-10%',
-            )
-            ->setPageAlertData([
-                'period' => sprintf(
-                    '%s - %s',
-                    $this->getQueryParams()->filterFor(PeriodRequiredFilter::class)['start']->isoFormat('L'),
-                    $this->getQueryParams()->filterFor(PeriodRequiredFilter::class)['end']->isoFormat('L'),
-                ),
-            ]);
+            );
     }
 
     protected function setLineGraphDataSet(): void
@@ -173,12 +192,16 @@ class DemoDashboard extends SharpDashboard
             );
     }
 
-    protected function setBarsGraphDataSet()
+    protected function setBarsGraphDataSet(): void
     {
-        $data = User::withCount([
-            'posts' => function (Builder $query) {
-                $query->whereBetween('published_at', [$this->getStartDate(), $this->getEndDate()]);
-            }, ])
+        $data = User::query()
+            ->withCount([
+                'posts' => fn (Builder $query) => $query
+                    ->whereBetween(
+                        'published_at',
+                        [$this->getStartDate(), $this->getEndDate()]
+                    )]
+            )
             ->orderBy('posts_count', 'desc')
             ->limit(8)
             ->get()
@@ -193,13 +216,16 @@ class DemoDashboard extends SharpDashboard
 
     protected function setPieGraphDataSet(): void
     {
-        Category::withCount([
-            'posts' => function (Builder $query) {
-                $query->whereBetween('published_at', [$this->getStartDate(), $this->getEndDate()]);
-            }, ])
-            ->limit(8)
-            ->orderBy('posts_count')
+        Category::query()
+            ->withCount([
+                'posts' => fn (Builder $query) => $query
+                    ->whereBetween('published_at', [
+                        $this->getStartDate(),
+                        $this->getEndDate(),
+                    ]),
+            ])
             ->limit(5)
+            ->orderBy('posts_count', 'desc')
             ->get()
             ->each(function (Category $category) {
                 $this->addGraphDataSet(
@@ -209,6 +235,51 @@ class DemoDashboard extends SharpDashboard
                         ->setColor(static::nextColor()),
                 );
             });
+    }
+
+    protected function setOrderedListDataSet(): void
+    {
+        $this->setOrderedListData('list',
+            Category::query()
+                ->withCount([
+                    'posts' => fn (Builder $query) => $query
+                        ->whereBetween('published_at', [
+                            $this->getStartDate(),
+                            $this->getEndDate(),
+                        ]),
+                ])
+                ->orderBy('posts_count', 'desc')
+                ->limit(3)
+                ->get()
+                ->map(fn (Category $category) => [
+                    'label' => $category->name,
+                    'count' => $category->posts_count,
+                    'url' => LinkToEntityList::make('posts')
+                        ->addFilter(CategoryFilter::class, $category->id)
+                        ->addFilter(PeriodFilter::class, sprintf('%s..%s',
+                            $this->getStartDate()->format('Ymd'),
+                            $this->getEndDate()->format('Ymd'),
+                        )),
+                ])
+                ->toArray()
+        );
+    }
+
+    protected function setCustomPanelDataSet(): void
+    {
+        $author = User::query()
+            ->withWhereHas('posts', fn ($query) => $query
+                ->whereBetween('published_at', [$this->getStartDate(), $this->getEndDate()])
+            )
+            ->inRandomOrder()
+            ->first();
+
+        if ($author) {
+            $this->setPanelData('highlighted_post', [
+                'author' => $author,
+                'post' => $author->posts->first(),
+            ]);
+        }
     }
 
     private static function nextColor(): string
@@ -222,13 +293,13 @@ class DemoDashboard extends SharpDashboard
 
     protected function getStartDate(): Carbon
     {
-        return $this->queryParams->filterFor(PeriodRequiredFilter::class)['start'];
+        return $this->queryParams->filterFor(PeriodRequiredFilter::class)->getStart();
     }
 
     protected function getEndDate(): Carbon
     {
         return min(
-            $this->queryParams->filterFor(PeriodRequiredFilter::class)['end'],
+            $this->queryParams->filterFor(PeriodRequiredFilter::class)->getEnd(),
             today()->subDay(),
         );
     }

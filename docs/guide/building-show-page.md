@@ -2,7 +2,7 @@
 sidebarDepth: 3
 ---
 
-# Building a Show Page
+# Create a Show Page
 
 Between an Entity List and a Form, you might want to add a Show page to display a whole instance, and allow the user to interact with it through Commands.
 
@@ -11,7 +11,7 @@ Note that building a Show Page is really optional; but in some situations it cou
 ## Generator
 
 ```bash
-php artisan sharp:make:show-page <class_name> [--model=<model_name>]
+php artisan sharp:make:show-page <class_name> [--model=<model_name>,--single]
 ```
 
 ## Write the class
@@ -30,24 +30,29 @@ In detail:
 Very much like Form's `buildFormFields()`, this method is meant to host the code responsible for the declaration and configuration of each show field. This must be done by calling `$showFields->addField`:
 
 ```php
-function buildShowFields(FieldsContainer $showFields): void
+class MyShow extends SharpShow
 {
-    $showFields
-        ->addField(
-            SharpShowTextField::make('name')
-                ->setLabel('Name')
-        )
-        ->addField(
-            SharpShowPictureField::make('picture')
-        );
+    // ...
+    
+    public function buildShowFields(FieldsContainer $showFields): void
+    {
+        $showFields
+            ->addField(
+                SharpShowTextField::make('name')
+                    ->setLabel('Name')
+            )
+            ->addField(
+                SharpShowPictureField::make('picture')
+            );
+    }
 }
 ```
 
 #### Common attributes to all show fields
 
-Each available Show field is detailed below; here are the attributes they all share:
+Each available Show field is detailed below; here are the attributes they all share :
 
-- `setShowIfEmpty(bool $show = true): self`: by default, an empty field (meaning: with null or empty data) is not displayed at all in the Show UI. You can change this behaviour with this attribute.
+- `setShowIfEmpty(bool $show = true): self`: by default, an empty field (meaning: with null or empty data) is not displayed at all in the Show UI. You can change this behaviour with this attribute. This method has no impact for [embedded EntityList](show-fields/embedded-entity-list.md).
 
 #### Available simple Show fields
 
@@ -63,9 +68,14 @@ A crucial feature in the ability given to add a full Entity List in a Show, to d
 Let's review a simple example: we want to display the product list of an order. In the order Show, we can add a products Entity List as a field:
 
 ```php
-function buildShowFields(FieldsContainer $showFields): void
+class MyShow extends SharpShow
 {
-    SharpShowEntityListField::make('products');
+    // ...
+    
+    public function buildShowFields(FieldsContainer $showFields): void
+    {
+      SharpShowEntityListField::make('products');
+    }
 }
 ```
 
@@ -94,28 +104,39 @@ The show layout is a simplified version of the Form layout, and is made of secti
 A section is just a block of fields, packed in columns:
 
 ```php
-function buildShowLayout(ShowLayout $showLayout): void
+class MyShow extends SharpShow
 {
-    $showLayout->addSection(
-        'Description', 
-        function(ShowLayoutSection $section) {
-            ...
-        }
-    );
+    // ...
+    
+    public function buildShowLayout(ShowLayout $showLayout): void
+    {
+        $showLayout->addSection(
+            'Description', 
+            function (ShowLayoutSection $section) {
+                ...
+            }
+        );
+    }
 }
+
 ```
 
 A section can be declared *collapsable*:
 
 ```php
-function buildShowLayout(ShowLayout $showLayout): void
+class MyShow extends SharpShow
 {
-    $showLayout->addSection(
-        'Description', 
-        function(ShowLayoutSection $section) {
-            $section->setCollapsable();
-        }
-    );
+    // ...
+    
+    public function buildShowLayout(ShowLayout $showLayout): void
+    {
+        $showLayout->addSection(
+            'Description', 
+            function (ShowLayoutSection $section) {
+                $section->setCollapsable();
+            }
+        );
+    }
 }
 ```
 
@@ -124,19 +145,21 @@ function buildShowLayout(ShowLayout $showLayout): void
 Just like for Forms, a `ShowLayoutSection` is made of columns and fields. So completing the example above:
 
 ```php
-function buildShowLayout(ShowLayout $showLayout): void
+class MyShow extends SharpShow
 {
-    $showLayout->addSection(
-        'Description', 
-        function(ShowLayoutSection $section) {
-            $section->addColumn(
-                9, 
-                function(ShowLayoutColumn $column) {
-                    $column->withSingleField('description');
-                }
-            );
-        }
-    );
+    // ...
+    
+    public function buildShowLayout(ShowLayout $showLayout): void
+    {
+        $showLayout->addSection(
+            'Description', 
+            function (ShowLayoutSection $section) {
+                $section->addColumn(9, function (ShowLayoutColumn $column) {
+                    $column->withField('description');
+                });
+            }
+        );
+    }
 }
 ```
 
@@ -147,17 +170,25 @@ A `ShowLayoutColumn`, very much like a `FormLayoutColumn`, can declare single fi
 Like `SharpFormListField` in Forms, a `SharpShowListField` must declare its item layout, in order to describe how fields are displayed, like in this example:
 
 ```php
-function(ShowLayoutSection $section) {
-    $section->addColumn(9, 
-        function(ShowLayoutColumn $column) {
-             $column->withSingleField('pictures', function(ShowLayoutColumn $listItem) {
-                  // Notice that the list item layout is just a ShowLayoutColumn
-                  $listItem
-                      ->withSingleField('file')
-                      ->withSingleField('legend');
-             });
-        }
-    );
+class MyShow extends SharpShow
+{
+    // ...
+    
+    public function buildShowLayout(ShowLayout $showLayout): void
+    {
+        $showLayout->addSection(
+            'Pictures', 
+            function (ShowLayoutSection $section) {
+                $section->addColumn(9, function (ShowLayoutColumn $column) {
+                     $column->withListField('pictures', function (ShowLayoutColumn $listItem) {
+                          // Notice that the list item layout is just a ShowLayoutColumn
+                          $listItem
+                              ->withField('file')
+                              ->withField('legend');
+                     });
+                });
+        );
+    }
 }
 ```
 
@@ -166,18 +197,28 @@ function(ShowLayoutSection $section) {
 An embedded Entity List in treated as a special section; its label will be displayed as section title. 
 
 ```php
-function buildShowLayout(ShowLayout $showLayout): void
+class MyShow extends SharpShow
 {
-    $showLayout->addEntityListSection('members');
+    // ...
+    
+    public function buildShowLayout(ShowLayout $showLayout): void
+    {
+        $showLayout->addEntityListSection('members');
+    }
 }
 ```
 
 Like regular sections, embedded Entity List can be declared *collapsable*.
 
 ```php
-function buildShowLayout(ShowLayout $showLayout): void
+class MyShow extends SharpShow
 {
-    $showLayout->addEntityListSection('members', true);
+    // ...
+    
+    public function buildShowLayout(ShowLayout $showLayout): void
+    {
+        $showLayout->addEntityListSection('members', collapsable: true);
+    }
 }
 ```
 
@@ -186,29 +227,39 @@ function buildShowLayout(ShowLayout $showLayout): void
 As for Forms, the method must return a key-value array:
 
 ```php
-function find($id): array
+class MyShow extends SharpShow
 {
-    return [
-        'name' => 'USS Enterprise',
-        'capacity' => 3000
-    ];
+    // ...
+    
+    public function find($id): array
+    {
+        return [
+            'name' => 'USS Enterprise',
+            'capacity' => 3000
+        ];
+    }
 }
 ```
 
 And as for Forms, you'll want to transform your data before sending it. 
 
 ```php
-function find($id): array
+class MyShow extends SharpShow
 {
-	return $this
-		->setCustomTransformer(
-		    'name', 
-		    fn ($value, $product) => strtoupper($product->name)
-		)
-		->setCustomTransformer(
-		    'picture', 
-		    new SharpUploadModelThumbnailUrlTransformer(600)
-		);
+    // ...
+    
+    public function find($id): array
+    {
+        return $this
+            ->setCustomTransformer(
+                'name', 
+                fn ($value, $product) => strtoupper($product->name)
+            )
+            ->setCustomTransformer(
+                'picture', 
+                new SharpUploadModelThumbnailUrlTransformer(600)
+            );
+    }
 }
 ```
 
@@ -219,9 +270,14 @@ Transformers are explained in the detailed [How to transform data](how-to-transf
 Here you might write the code performed on a deletion of the instance. It can be anything, here's an Eloquent example:
 
 ```php
-function delete($id): void
+class MyShow extends SharpShow
 {
-    Product::findOrFail($id)->delete();
+    // ...
+    
+    public function delete($id): void
+    {
+        Product::findOrFail($id)->delete();
+    }
 }
 ```
 
@@ -230,12 +286,17 @@ function delete($id): void
 Very much like EntityLists, a Show can declare a config with `EntityState` handler, or Breadcrumb configuration; you can also define here an attribute that will be used as page title.
 
 ```php
-function buildShowConfig()
+class MyShow extends SharpShow
 {
-   $this
-        ->configureBreadcrumbCustomLabelAttribute('name')
-        ->configurePageTitleAttribute('title')
-        ->configureEntityState('state', OrderEntityState::class);
+    // ...
+    
+    public function buildShowConfig(): void
+    {
+       $this
+            ->configureBreadcrumbCustomLabelAttribute('name')
+            ->configurePageTitleAttribute('title')
+            ->configureEntityState('state', OrderEntityState::class);
+    }
 }
 ```
 
@@ -247,6 +308,7 @@ Here is the full list of available methods:
   toggle, [see detailed doc](entity-states.md)
 - `configurePageTitleAttribute(string $titleAttribute, bool $localized = false)`: define a title to the Show Page, configuring an attribute that should be part of the `find($id)` array
 - `configureDeleteConfirmationText(string $text)` to add a custom confirm message when the use clicks on the delete button.
+- `configureEditButtonLabel(string $label)` to set a custom "Edit..." button label.
 
 ## Accessing the navigation breadcrumb
 
@@ -262,8 +324,8 @@ class ProductSharpForm extends SharpForm
         $product = $id ? Product::findOrFail($id) : new Product;
         $product = $this->save($product, $data);
         
-        if(currentSharpRequest()->isCreation()) {
-              Order::findOrFail(currentSharpRequest()->getPreviousShowFromBreadcrumbItems()->instanceId())
+        if (sharp()->context()->isCreation()) {
+              Order::findOrFail(sharp()->context()->previousShowSegment()->instanceId())
                   ->products()
                   ->attach($product->id);
         }

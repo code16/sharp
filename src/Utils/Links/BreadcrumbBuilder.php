@@ -4,9 +4,12 @@ namespace Code16\Sharp\Utils\Links;
 
 use Code16\Sharp\Exceptions\SharpInvalidBreadcrumbItemException;
 use Code16\Sharp\Http\Context\Util\BreadcrumbItem;
+use Illuminate\Support\Traits\Conditionable;
 
 class BreadcrumbBuilder
 {
+    use Conditionable;
+
     protected array $breadcrumbParts = [];
 
     public function appendEntityList(string $entityKey): self

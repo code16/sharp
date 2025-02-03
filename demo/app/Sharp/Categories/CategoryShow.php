@@ -27,15 +27,20 @@ class CategoryShow extends SharpShow
     protected function buildShowFields(FieldsContainer $showFields): void
     {
         $showFields
-            ->addField(SharpShowTextField::make('name')->setLabel('Name'))
+            ->addField(
+                SharpShowTextField::make('name')
+                    ->setLabel('Name'))
+            ->addField(
+                SharpShowTextField::make('description')
+                    ->setLocalized()
+                    ->setLabel('Description')
+            )
             ->addField(
                 SharpShowEntityListField::make('posts')
                     ->setLabel('Related posts')
                     ->showCreateButton(false)
                     ->showCount()
-                    ->hideFilterWithValue(CategoryFilter::class, function ($instanceId) {
-                        return $instanceId;
-                    }),
+                    ->hideFilterWithValue(CategoryFilter::class, fn ($instanceId) => $instanceId)
             );
     }
 
@@ -45,14 +50,20 @@ class CategoryShow extends SharpShow
             ->addSection('', function (ShowLayoutSection $section) {
                 $section
                     ->addColumn(6, function (ShowLayoutColumn $column) {
-                        $column->withSingleField('name');
+                        $column->withField('name')
+                            ->withField('description');
                     });
             })
-            ->addEntityListSection('posts', collapsable: true);
+            ->addEntityListSection('posts');
     }
 
     public function delete($id): void
     {
         Category::findOrFail($id)->delete();
+    }
+
+    public function getDataLocalizations(): array
+    {
+        return ['fr', 'en'];
     }
 }

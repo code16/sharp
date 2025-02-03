@@ -10,7 +10,19 @@ Used to set the type to regular `text` (the default).
 
 ### `setInputTypePassword()`
 
-Used to set the type to `password`.
+Used to set the type to `password`. An "eye button" is displayed to show / hide the input value.
+
+### `setInputTypeEmail()`
+
+Used to set the type to `email`.
+
+### `setInputTypeTel()`
+
+Used to set the type to `tel`.
+
+### `setInputTypeUrl()`
+
+Used to set the type to `url`.
 
 ### `setMaxLength(int $maxLength)`
 

@@ -1,64 +1,47 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Form\Fields\Formatters;
-
 use Code16\Sharp\Form\Fields\Formatters\AutocompleteListFormatter;
-use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteListField;
-use Code16\Sharp\Tests\SharpTestCase;
+use Code16\Sharp\Form\Fields\SharpFormAutocompleteRemoteField;
 
-class AutocompleteListFormatterTest extends SharpTestCase
-{
-    /** @test */
-    public function we_can_format_value_to_front()
-    {
-        $formatter = new AutocompleteListFormatter();
-        $field = SharpFormAutocompleteListField::make('list')
-            ->setItemField(SharpFormAutocompleteField::make('item', 'remote')
-                ->setRemoteEndpoint('/endpoint'),
-            );
+it('allows to format value to front', function () {
+    $formatter = new AutocompleteListFormatter();
+    $field = SharpFormAutocompleteListField::make('list')
+        ->setItemField(SharpFormAutocompleteRemoteField::make('item')
+            ->setRemoteEndpoint('/endpoint'),
+        );
 
-        $expectedData = collect($this->getData())->map(function ($item) {
-            return [
-                'id' => $item['id'],
-                'item' => $item,
-            ];
-        })->all();
-
-        $this->assertEquals($expectedData, $formatter->toFront($field, $this->getData()));
-    }
-
-    /** @test */
-    public function we_can_format_value_from_front()
-    {
-        $formatter = new AutocompleteListFormatter();
-        $field = SharpFormAutocompleteListField::make('list')
-            ->setItemField(SharpFormAutocompleteField::make('item', 'remote')
-                ->setRemoteEndpoint('/endpoint'),
-            );
-
-        $expectedData = collect($this->getData())->map(function ($item) {
-            return [
-                'id' => $item['item'],
-            ];
-        })->all();
-
-        $this->assertEquals($expectedData, $formatter->fromFront($field, 'attribute', $this->getData()));
-    }
-
-    /**
-     * @return array
-     */
-    protected function getData()
-    {
-        return [
+    expect(
+        $formatter->toFront(
+            $field,
             [
-                'id' => 1,
-                'item' => 'A',
-            ], [
-                'id' => 2,
-                'item' => 'B',
-            ],
-        ];
-    }
-}
+                ['id' => 1, 'item' => 'A'],
+                ['id' => 2, 'item' => 'B'],
+            ]
+        )
+    )->toBe([
+        ['id' => 1, 'item' => ['id' => 1, 'item' => 'A', '_html' => 1]],
+        ['id' => 2, 'item' => ['id' => 2, 'item' => 'B', '_html' => 2]],
+    ]);
+});
+
+it('allows to format value from front', function () {
+    $formatter = new AutocompleteListFormatter();
+    $field = SharpFormAutocompleteListField::make('list')
+        ->setItemField(SharpFormAutocompleteRemoteField::make('item')
+            ->setRemoteEndpoint('/endpoint'),
+        );
+
+    expect(
+        $formatter->fromFront(
+            $field,
+            'attribute', [
+                ['id' => 1, 'item' => 'A'],
+                ['id' => 2, 'item' => 'B'],
+            ]
+        )
+    )->toBe([
+        ['id' => 'A'],
+        ['id' => 'B'],
+    ]);
+});

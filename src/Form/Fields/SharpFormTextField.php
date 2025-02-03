@@ -3,13 +3,14 @@
 namespace Code16\Sharp\Form\Fields;
 
 use Code16\Sharp\Form\Fields\Formatters\TextFormatter;
-use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithDataLocalization;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithMaxLength;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
+use Code16\Sharp\Utils\Fields\IsSharpFieldWithLocalization;
+use Code16\Sharp\Utils\Fields\SharpFieldWithLocalization;
 
-class SharpFormTextField extends SharpFormField
+class SharpFormTextField extends SharpFormField implements IsSharpFieldWithLocalization
 {
-    use SharpFormFieldWithDataLocalization;
+    use SharpFieldWithLocalization;
     use SharpFormFieldWithMaxLength;
     use SharpFormFieldWithPlaceholder;
 
@@ -21,7 +22,7 @@ class SharpFormTextField extends SharpFormField
     {
         return new static($key, static::FIELD_TYPE, new TextFormatter());
     }
-
+    
     public function setInputTypeText(): self
     {
         $this->inputType = 'text';
@@ -35,11 +36,32 @@ class SharpFormTextField extends SharpFormField
 
         return $this;
     }
+    
+    public function setInputTypeEmail(): self
+    {
+        $this->inputType = 'email';
+
+        return $this;
+    }
+    
+    public function setInputTypeTel(): self
+    {
+        $this->inputType = 'tel';
+
+        return $this;
+    }
+    
+    public function setInputTypeUrl(): self
+    {
+        $this->inputType = 'url';
+
+        return $this;
+    }
 
     protected function validationRules(): array
     {
         return [
-            'inputType' => 'required|in:text,password',
+            'inputType' => 'required|in:text,password,email,tel,url',
         ];
     }
 

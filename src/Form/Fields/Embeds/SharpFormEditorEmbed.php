@@ -2,38 +2,51 @@
 
 namespace Code16\Sharp\Form\Fields\Embeds;
 
+use Code16\Sharp\Form\Fields\Formatters\AbstractSimpleFormatter;
+use Code16\Sharp\Form\Fields\Formatters\ListFormatter;
+use Code16\Sharp\Form\Fields\Formatters\UploadFormatter;
+use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
+use Code16\Sharp\Form\Layout\HasModalFormLayout;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Fields\HandleFields;
+use Code16\Sharp\Utils\Icons\IconManager;
 use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
 use Code16\Sharp\Utils\Traits\HandleValidation;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
+use Illuminate\View\View;
 
 abstract class SharpFormEditorEmbed
 {
     use HandleFields;
     use HandlePageAlertMessage;
     use HandleValidation;
+    use HasModalFormLayout;
     use WithCustomTransformers;
 
     protected ?string $label = null;
     protected ?string $tagName = null;
-    protected array $templates = [];
+    protected ?string $icon = null;
+    protected string|View|null $showTemplate = null;
+    protected string|View|null $formTemplate = null;
+    protected bool $displayEmbedHeader = true;
+    protected ?string $embedHeaderTitle = null;
 
     public function toConfigArray(bool $isForm): array
     {
-        if (! $template = $this->templates[$isForm ? 'form' : 'show'] ?? ($this->templates['form'] ?? null)) {
-            $template = 'Empty template';
-        }
-
         $config = [
             'key' => $this->key(),
             'label' => $this->label ?: Str::snake(class_basename(get_class($this))),
-            'tag' => $this->tagName ?: 'x-'.Str::snake(class_basename(get_class($this)), '-'),
+            'tag' => $this->tagName(),
             'attributes' => collect($this->fields())->keys()->toArray(),
-            'template' => $template,
+            'icon' => app(IconManager::class)->iconToArray($this->icon),
+            'fields' => $this->fields(),
+            'displayEmbedHeader' => $this->displayEmbedHeader,
+            'embedHeaderTitle' => $this->embedHeaderTitle ?: $this->label,
         ];
 
         $this->validate($config, [
@@ -41,7 +54,6 @@ abstract class SharpFormEditorEmbed
             'label' => ['required'],
             'tag' => ['required', 'regex:/^[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*$/'],
             'attributes' => ['array'],
-            'template' => ['required'],
         ], [
             'attributes.required' => 'Your Embed should at least have one form field',
             'tag.regex' => 'the tag name should only contain letters, figures and carets',
@@ -83,30 +95,8 @@ abstract class SharpFormEditorEmbed
 
     final public function formLayout(): ?array
     {
-        if ($fields = $this->fieldsContainer()->getFields()) {
-            $column = new FormLayoutColumn(12);
+        return $this->modalFormLayout(function (FormLayoutColumn $column) {
             $this->buildFormLayout($column);
-
-            if (empty($column->fieldsToArray()['fields'])) {
-                foreach ($fields as $field) {
-                    $column->withSingleField($field->key());
-                }
-            }
-
-            return $column->fieldsToArray()['fields'];
-        }
-
-        return null;
-    }
-
-    final public function formConfig()
-    {
-        if ($this->pageAlertHtmlField === null) {
-            return null;
-        }
-
-        return tap([], function (&$config) {
-            $this->appendGlobalMessageToConfig($config);
         });
     }
 
@@ -122,9 +112,19 @@ abstract class SharpFormEditorEmbed
                     return $value;
                 }
 
-                if (is_a($field, SharpFormUploadField::class)) {
-                    // Uploads are a bit different in this case
-                    $field->formatter()->setAlwaysReturnFullObject();
+                if ($field->formatter() instanceof UploadFormatter) {
+                    // in case of uploads we only want to call formatter on Form store/update
+                    return $value;
+                }
+
+                if ($field->formatter() instanceof ListFormatter) {
+                    $field->formatter()->formatItemFieldUsing(function (SharpFormField $itemField) {
+                        if ($itemField instanceof SharpFormUploadField) {
+                            return new class() extends AbstractSimpleFormatter {};
+                        }
+
+                        return $itemField->formatter();
+                    });
                 }
 
                 // Apply formatter based on field configuration
@@ -157,42 +157,78 @@ abstract class SharpFormEditorEmbed
         return $this;
     }
 
-    final protected function configureFormInlineTemplate(string $template): self
+    final protected function configureIcon(string $icon): self
     {
-        return $this->setTemplate($template, 'form');
-    }
-
-    final protected function configureShowInlineTemplate(string $template): self
-    {
-        return $this->setTemplate($template, 'show');
-    }
-
-    final protected function configureFormTemplatePath(string $templatePath): self
-    {
-        return $this->setTemplate(
-            file_get_contents(resource_path('views/'.$templatePath)),
-            'form',
-        );
-    }
-
-    final protected function configureShowTemplatePath(string $templatePath): self
-    {
-        return $this->setTemplate(
-            file_get_contents(resource_path('views/'.$templatePath)),
-            'show',
-        );
-    }
-
-    private function setTemplate(string $template, string $key): self
-    {
-        $this->templates[$key] = $template;
+        $this->icon = $icon;
 
         return $this;
+    }
+
+    final protected function configureTemplate(string|View $template): self
+    {
+        $this->formTemplate = $template;
+        $this->showTemplate = $template;
+
+        return $this;
+    }
+
+    final protected function configureFormTemplate(string|View $template): self
+    {
+        $this->formTemplate = $template;
+
+        return $this;
+    }
+
+    final protected function configureShowTemplate(string|View $template): self
+    {
+        $this->showTemplate = $template;
+
+        return $this;
+    }
+    
+    final protected function configureDisplayEmbedHeader(bool $display = true, ?string $title = null): self
+    {
+        $this->displayEmbedHeader = $display;
+        $this->embedHeaderTitle = $title;
+
+        return $this;
+    }
+
+    final public function transformDataWithRenderedTemplate(array $data, bool $isForm): array
+    {
+        $data = $this->transformDataForTemplate($data, $isForm);
+
+        return [
+            ...$data,
+            '_html' => $this->renderTemplate($data, $isForm),
+        ];
+    }
+
+    private function renderTemplate(array $data, bool $isForm): string
+    {
+        $template = $isForm ? $this->formTemplate : $this->showTemplate;
+
+        if (! $template) {
+            return '';
+        }
+
+        if (isset($data['slot'])) {
+            $data['slot'] = new HtmlString($data['slot']);
+        }
+
+        return is_string($template)
+            ? Blade::render($template, $data)
+            : $template->with($data)->render();
     }
 
     final public function key(): string
     {
         return Str::replace('\\', '.', get_class($this));
+    }
+
+    final public function tagName(): string
+    {
+        return $this->tagName ?: 'x-'.Str::kebab(class_basename(get_class($this)));
     }
 
     public function getDataLocalizations(): array

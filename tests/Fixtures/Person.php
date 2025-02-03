@@ -2,44 +2,57 @@
 
 namespace Code16\Sharp\Tests\Fixtures;
 
+use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Person extends Model
 {
     protected $guarded = [];
 
-    public function mother()
+    public function partner(): BelongsTo
     {
         return $this->belongsTo(Person::class);
     }
 
-    public function elderSon()
+    public function collaborators(): HasMany
     {
-        return $this->hasOne(Person::class, 'mother_id');
+        return $this->hasMany(Person::class, 'chief_id');
     }
 
-    public function sons()
+    public function director(): HasOne
     {
-        return $this->hasMany(Person::class, 'mother_id');
+        return $this->hasOne(Person::class, 'chief_id')
+            ->orderBy('id');
     }
 
-    public function friends()
+    public function colleagues(): BelongsToMany
     {
-        return $this->belongsToMany(Person::class, 'friends', 'person1_id', 'person2_id');
+        return $this->belongsToMany(Person::class, 'colleagues', 'person1_id', 'person2_id');
     }
 
-    public function picture()
+    public function photo(): MorphOne
     {
         return $this->morphOne(Picture::class, 'picturable');
     }
 
-    public function pictures()
+    public function pictures(): MorphMany
     {
         return $this->morphMany(Picture::class, 'picturable');
     }
 
-    public function getQueueableRelations()
+    public function tags()
     {
-        return [];
+        return $this->morphToMany(Tag::class, 'taggable');
+    }
+
+    public function upload(): MorphOne
+    {
+        return $this->morphOne(SharpUploadModel::class, 'model');
     }
 }

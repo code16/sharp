@@ -11,10 +11,15 @@ abstract class InstanceCommand extends Command
         return 'instance';
     }
 
-    public function formData(mixed $instanceId): array
+    final public function formData(mixed $instanceId): array
     {
-        return collect($this->initialData($instanceId))
-            ->only($this->getDataKeys())
+        return collect()
+            ->merge(collect($this->getDataKeys())->mapWithKeys(fn ($key) => [$key => null]))
+            ->merge($this->initialData($instanceId))
+            ->only([
+                ...$this->getDataKeys(),
+                ...array_keys($this->transformers),
+            ])
             ->all();
     }
 
@@ -33,7 +38,7 @@ abstract class InstanceCommand extends Command
         return true;
     }
 
-    public function checkAndStoreAuthorizationFor(mixed $instanceId)
+    final public function checkAndStoreAuthorizationFor(mixed $instanceId): void
     {
         if ($this->authorizeFor($instanceId)) {
             $this->authorizedInstances[] = $instanceId;

@@ -1,143 +1,111 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Form\Fields;
-
 use Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException;
 use Code16\Sharp\Form\Fields\SharpFormField;
-use Code16\Sharp\Tests\SharpTestCase;
 
-class SharpFormFieldTest extends SharpTestCase
-{
-    /** @test */
-    public function we_must_define_a_key()
-    {
-        $this->expectException(SharpFormFieldValidationException::class);
-        SomeTestFormField::make('')->toArray();
-    }
+it('forces to define a key', function () {
+    $this->expectException(SharpFormFieldValidationException::class);
+    buildFakeFormField('')->toArray();
+});
 
-    /** @test */
-    public function we_must_define_a_type()
-    {
-        $this->expectException(SharpFormFieldValidationException::class);
-        SomeTestFormField::make('name', '')->toArray();
-    }
+it('forces to define a type', function () {
+    $this->expectException(SharpFormFieldValidationException::class);
+    buildFakeFormField('name', '')->toArray();
+});
 
-    /** @test */
-    public function returned_array_contains_key_and_type()
-    {
-        $formField = SomeTestFormField::make('name', 'test');
+it('returns key and type in the array', function () {
+    $formField = buildFakeFormField('name', 'test');
 
-        $this->assertArraySubset(
-            ['key' => 'name', 'type' => 'test'],
-            $formField->toArray(),
-        );
-    }
+    expect($formField->toArray())
+        ->toHaveKey('key', 'name')
+        ->toHaveKey('type', 'test');
+});
 
-    /** @test */
-    public function returned_array_does_not_contain_null_attributes()
-    {
-        $formField = SomeTestFormField::make('name');
+it('does not return null attributes in the array', function () {
+    $formField = buildFakeFormField('name');
 
-        $this->assertEquals(
-            ['key' => 'name', 'type' => 'test'],
-            $formField->toArray(),
-        );
-    }
+    expect($formField->toArray())
+        ->toEqual([
+            'key' => 'name',
+            'type' => 'test',
+        ]);
+});
 
-    /** @test */
-    public function we_can_define_label()
-    {
-        $formField = SomeTestFormField::make('name')
-            ->setLabel('label');
+it('allows to define label', function () {
+    $formField = buildFakeFormField('name')
+        ->setLabel('my label');
 
-        $this->assertArraySubset(
-            ['label' => 'label'],
-            $formField->toArray(),
-        );
-    }
+    expect($formField->toArray())
+        ->toHaveKey('label', 'my label');
+});
 
-    /** @test */
-    public function we_can_define_helpMessage()
-    {
-        $formField = SomeTestFormField::make('name')
-            ->setHelpMessage('message');
+it('allows to define helpMessage', function () {
+    $formField = buildFakeFormField('name')
+        ->setHelpMessage('message');
 
-        $this->assertArraySubset(
-            ['helpMessage' => 'message'],
-            $formField->toArray(),
-        );
-    }
+    expect($formField->toArray())
+        ->toHaveKey('helpMessage', 'message');
+});
 
-    /** @test */
-    public function we_can_define_conditionalDisplay()
-    {
-        $formField = SomeTestFormField::make('name')
-            ->setConditionalDisplayOrOperator()
-            ->addConditionalDisplay('is_displayed')
-            ->addConditionalDisplay('color', ['blue', 'red'])
-            ->addConditionalDisplay('size', '!xl')
-            ->addConditionalDisplay('!hidden')
-            ->addConditionalDisplay('really_hidden', false);
+it('allows to define conditionalDisplay', function () {
+    $formField = buildFakeFormField('name')
+        ->setConditionalDisplayOrOperator()
+        ->addConditionalDisplay('is_displayed')
+        ->addConditionalDisplay('color', ['blue', 'red'])
+        ->addConditionalDisplay('size', '!xl')
+        ->addConditionalDisplay('!hidden')
+        ->addConditionalDisplay('really_hidden', false);
 
-        $this->assertArraySubset([
-            'conditionalDisplay' => [
-                'operator' => 'or',
-                'fields' => [
-                    [
-                        'key' => 'is_displayed',
-                        'values' => true,
-                    ], [
-                        'key' => 'color',
-                        'values' => ['blue', 'red'],
-                    ], [
-                        'key' => 'size',
-                        'values' => '!xl',
-                    ], [
-                        'key' => 'hidden',
-                        'values' => false,
-                    ], [
-                        'key' => 'really_hidden',
-                        'values' => false,
-                    ],
-                ],
+    expect($formField->toArray())
+        ->toHaveKey('conditionalDisplay.operator', 'or')
+        ->toHaveKey('conditionalDisplay.fields', [
+            [
+                'key' => 'is_displayed',
+                'values' => true,
+            ], [
+                'key' => 'color',
+                'values' => ['blue', 'red'],
+            ], [
+                'key' => 'size',
+                'values' => '!xl',
+            ], [
+                'key' => 'hidden',
+                'values' => false,
+            ], [
+                'key' => 'really_hidden',
+                'values' => false,
             ],
-        ], $formField->toArray());
-    }
+        ]);
+});
 
-    /** @test */
-    public function we_can_define_readOnly()
-    {
-        $formField = SomeTestFormField::make('name')
-            ->setReadOnly();
+it('allows to define readOnly', function () {
+    $formField = buildFakeFormField('name')
+        ->setReadOnly();
 
-        $this->assertArraySubset(
-            ['readOnly' => true],
-            $formField->toArray(),
-        );
-    }
+    expect($formField->toArray())
+        ->toHaveKey('readOnly', true);
+});
 
-    /** @test */
-    public function we_can_define_extraStyle()
-    {
-        $formField = SomeTestFormField::make('name')
-            ->setExtraStyle('font-weight: bold');
+it('allows to define_extraStyle', function () {
+    $formField = buildFakeFormField('name')
+        ->setExtraStyle('font-weight: bold');
 
-        $this->assertArraySubset(
-            ['extraStyle' => 'font-weight: bold'],
-            $formField->toArray(),
-        );
-    }
-}
+    expect($formField->toArray())
+        ->toHaveKey('extraStyle', 'font-weight: bold');
+});
 
-class SomeTestFormField extends SharpFormField
+function buildFakeFormField(string $key, string $type = 'test'): SharpFormField
 {
-    public static function make(string $key, $type = 'test')
+    return new class($key, $type) extends SharpFormField
     {
-        return new static($key, $type);
-    }
+        public function __construct(string $key, string $type)
+        {
+            parent::__construct($key, $type);
+        }
 
-    public function toArray(): array
-    {
-        return parent::buildArray([]);
-    }
+        public function toArray(): array
+        {
+            return parent::buildArray([]);
+        }
+    };
 }

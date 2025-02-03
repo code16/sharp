@@ -4,24 +4,31 @@
     "require": {
         "php": "^8.2",
         "bacon/bacon-qr-code": "~2.0",
-        "code16/laravel-content-renderer": "^1.1.0",
+        "blade-ui-kit/blade-icons": "^1.6",
+        "code16/laravel-content-renderer": "^1.2",
         "guzzlehttp/guzzle": "^7.2",
+        "inertiajs/inertia-laravel": "^2.0",
         "intervention/image": "^3.4",
         "intervention/image-laravel": "^1.2",
         "laravel/framework": "^11.0",
-        "laravel/tinker": "^2.7",
+        "laravel/tinker": "^2.9",
+        "masterminds/html5": "^2.8",
+        "owenvoke/blade-fontawesome": "^2.6",
         "pragmarx/google2fa": "^8.0",
         "spatie/image-optimizer": "^1.6",
-        "spatie/laravel-translatable": "^6.0"
+        "spatie/laravel-translatable": "^6.0",
+        "tightenco/ziggy": "^1.8"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
+        "itsgoingd/clockwork": "^5.1",
         "laravel/sail": "^1.0.1",
         "mockery/mockery": "^1.4.4",
-        "nunomaduro/collision": "^8.0",
-        "phpunit/phpunit": "^10.0",
+        "nunomaduro/collision": "^8.1",
+        "phpunit/phpunit": "^10.5",
         "spatie/laravel-ignition": "^2.0",
-        "spatie/laravel-ray": "^1.29"
+        "spatie/laravel-ray": "^1.29",
+        "spatie/laravel-typescript-transformer": "^2.3"
     },
     "autoload": {
         "files": [
@@ -42,11 +49,11 @@
     "scripts": {
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-            "@php artisan vendor:publish --provider=Code16\\\\Sharp\\\\SharpServiceProvider --tag=assets --force",
             "@php artisan package:discover --ansi"
         ],
         "post-update-cmd": [
-            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force",
+            "@php artisan vendor:publish --tag=sharp-assets --force"
         ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""

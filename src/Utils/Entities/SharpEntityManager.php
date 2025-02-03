@@ -2,39 +2,56 @@
 
 namespace Code16\Sharp\Utils\Entities;
 
+use Code16\Sharp\Exceptions\SharpInvalidConfigException;
 use Code16\Sharp\Exceptions\SharpInvalidEntityKeyException;
+use Illuminate\Support\Str;
 
 class SharpEntityManager
 {
     public function entityFor(string $entityKey): SharpEntity|SharpDashboardEntity
     {
-        $entityKey = sharp_normalize_entity_key($entityKey)[0];
+        $entityKey = Str::before($entityKey, ':');
 
-        if (is_array(config('sharp.entities'))) {
-            $entity = config("sharp.entities.$entityKey") ?: config("sharp.dashboards.$entityKey");
-        } elseif (class_exists(config('sharp.entities'))) {
+        if (count(sharp()->config()->get('entities')) > 0) {
+            $entity = sharp()->config()->get('entities.'.$entityKey);
+            if (! $entity) {
+                // Legacy dashboard configuration (to be removed in 10.x)
+                $entity = sharp()->config()->get('dashboards.'.$entityKey);
+            }
+        } elseif ($sharpEntityResolver = sharp()->config()->get('entity_resolver')) {
             // A custom SharpEntityResolver is used
-            $sharpEntityResolver = config('sharp.entities');
-            if (! app()->bound($sharpEntityResolver)) {
-                app()->singleton($sharpEntityResolver, $sharpEntityResolver);
-            }
-            if (! ($resolver = app($sharpEntityResolver)) instanceof SharpEntityResolver) {
-                throw new SharpInvalidEntityKeyException($sharpEntityResolver.' is an invalid entity resolver class: it should extend '.SharpEntityResolver::class.'.');
+            if (! app()->bound(get_class($sharpEntityResolver))) {
+                app()->singleton(get_class($sharpEntityResolver), fn () => $sharpEntityResolver);
             }
 
-            $entity = $resolver->entityClassName($entityKey);
+            $entity = $sharpEntityResolver->entityClassName($entityKey);
         }
 
         if (isset($entity)) {
             if (! app()->bound($entity)) {
-                app()->singleton($entity, function () use ($entity, $entityKey) {
-                    return (new $entity())->setEntityKey($entityKey);
-                });
+                app()->singleton($entity, fn () => (new $entity())->setEntityKey($entityKey));
             }
 
             return app($entity);
         }
 
         throw new SharpInvalidEntityKeyException("The entity [{$entityKey}] was not found.");
+    }
+
+    public function entityKeyFor(string|BaseSharpEntity $entity): string
+    {
+        $entityClassName = is_string($entity) ? $entity : get_class($entity);
+        $entities = sharp()->config()->get('entities');
+
+        if (! is_array($entities) || ($entityKey = array_search($entityClassName, $entities)) === false) {
+            throw new SharpInvalidConfigException(
+                sprintf(
+                    'Can’t find entityKey for [%s] (warning: this can’t work with an Entity Resolver).',
+                    $entityClassName
+                )
+            );
+        }
+
+        return $entityKey;
     }
 }

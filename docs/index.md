@@ -15,82 +15,188 @@ hero:
       link: https://sharp.code16.fr/sharp
 ---
 
-<div class="content">
-<div class="content-container">
-<div class="vp-doc">
 
-Sharp is a content management framework built for Laravel, a toolset which provides help to build a CMS section in a website, with some rules in mind:
-- the public website **should not have any knowledge of the CMS** — the CMS is a part of the system, not the center of it. In fact, removing the CMS should not have any effect on the project.
-- Content administrators **should work with their data and terminology**, not CMS terms. I mean, if the project is about spaceships, space travels and pilots, why would the CMS talk about articles, categories and tags?
-- Developers **should not have to work on the front-end development for the CMS**. Because life is complicated enough, Sharp takes care of all the responsive / CSS / JS stuff.
-- The CMS **should not have any expectations from the persistence layer**: MySQL is cool — but it's not the perfect tool for every problem. And more important, the DB structure has nothing to do with the CMS.
+Sharp is a content management framework built for Laravel as a package, which provides great help to build a CMS section in a project with a clean UI and DX in mind. Sharp is driven by code: everything is manageable through a clean and documented PHP API, using Laravel conventions and coding style. It intends to avoid code adherence — the project should not have any knowledge of it — and is data-agnostic, meaning it does not have any expectations from the persistence layer.
 
-## Build complex lists with total control on how the data is presented
+Sharp for Laravel is actively maintained and developed and is used in all kinds of projects, from content-driven websites to e-commerce platforms and API backends.
 
-![Entity list](./img/readme/v8/list.jpg)
 
-## Organize forms withs various fields, a customizable layout system and data validation
+# Main features
 
-You will find a powerful HTML / Markdown editor, autocompletes with templates, lists (repeaters) with custom items, files with bulk upload and image transformation...
+<section>
 
-![Entity list](./img/readme/v8/form.jpg)
+## Streamlined Lists
 
-## Optionally create show pages for your resources
+### Customizable columns
+Choose and format the data to display, and allow sorting.
 
-You can use show page to present an instance and directly embed in it lists for linked data. The breadcrumb will help your users to find their way up.
+### Search and filters
+Define filters for your lists, with various types and options.
 
-![Show page](./img/readme/v8/show.jpg)
+### State management
+If your entities have some state, you can manage it easily form here.
 
-## Add filters, sortable columns and global search to your lists
+<figure>
 
-Filters could be defined required or not, allowing multiple values or not, or presented as a date range. 
+![Sharp Lists](./img/readme/v9/list.webp)
 
-![Filters](./img/readme/v8/filters.jpg)
+</figure>
 
-## Code individual or bulk commands, with dedicated forms, user confirmation...
+</section>
 
-A Command is an action presented to the user (with permissions handled via policies, like everywhere in Sharp) which can lead to refreshing data after update, previewing a public page, downloading a file...
 
-![Commands](./img/readme/v8/command-form.jpg)
+<section>
 
-![Bulk Commands](./img/readme/v8/command-bulk.jpg)
+## Powerful Command system
 
-## Propose a custom global search to users
+### Individual or bulk
+Create commands to act on a single instance or on a selection (filtered list or user choice).
 
-The search results and their label and link are entirely customizable.
+### Forms
+Easily attach forms to commands, with validation and confirmation.
 
-![Commands](./img/readme/v8/search.jpg)
+### Wizards
+Create multi-steps commands with dynamic paths.
 
-## Present synthetic data, graphs and direct links in dashboards
+<figure>
 
-Various widgets are available, and you can take advantage of filters and commands in dashboards too.
+![Sharp Commands](./img/readme/v9/command.webp)
 
-![Dashboard](./img/readme/v8/dashboard.jpg)
+</figure>
 
-## Built-in authentication system, with out-of-the-box 2fa
+</section>
 
-The optional authentication system provides standard features like remember me token and rate limiting, and you can leverage double authentication with a verification based on a notification or on TOTP.
 
-![Dashboard](./img/readme/v8/2fa.jpg)
+<section>
 
-## Choose your theme color!
+## Comprehensive Forms
 
-Choose one color, and the UI will adapt itself.
+### Fields and layout
+Use one of the many fields available, and organize them in a layout that fits your needs.
 
-![Colors](./img/readme/v8/colors.jpg)
+### Powerful editor with embeds
+Sharp's custom editor really allows to create rich content, and includes a clever system to develop custom embeds.
 
-## Driven by code, with DX in mind
+### Uploads
+Manage files with bulk uploads, image transformation, disk and path configuration and precise validation.
 
-Everything in Sharp is manageable through a clean and documented PHP API, using Laravel conventions and coding style. And again: no frontend development is required.  
+### Lists
+Create lists (repeaters) of custom items in your form.
 
-![Code](./img/readme/v8/code.jpg)
+<figure>
 
-## Try the online demo
+![Sharp Forms](./img/readme/v9/form.webp)
 
-A Sharp instance for a demo project is available online here: **[sharp.code16.fr/sharp/](http://sharp.code16.fr/sharp/)**. 
+</figure>
 
-(Data of this demo is reset each hour) 
+</section>
 
-</div>
-</div>
-</div>
+
+<section>
+
+## Detailed Show Pages
+
+### Present an instance
+Create a page to present an instance with a custom layout, with access to commands and state management.
+
+### Embedded lists
+Include lists in your show page to present linked data.
+
+### Breadcrumb
+Help your users to find their way up, allowing hierarchical navigation though embedded lists.
+
+<figure>
+
+![Sharp Commands](./img/readme/v9/show.webp)
+
+</figure>
+
+</section>
+
+
+<section>
+
+## Insightful Dashboards
+
+### Widgets
+Use various widgets to present synthetic data, graphs and direct links.
+
+### Filters and commands
+Leverage filters and commands in your dashboards.
+
+<figure>
+
+![Sharp Commands](./img/readme/v9/dashboard.webp)
+
+</figure>
+
+</section>
+
+
+<section>
+
+## Authentication and authorizations
+
+### Built-in authentication system
+With fine-grained permissions managed by custom policies.
+
+### Remember me, rate limiting, forgotten password
+And impersonation in dev.
+
+### 2FA
+Out-of-the-box 2FA with TOTP or notification.
+
+<figure>
+
+![Sharp login](./img/readme/v9/login.webp)
+
+</figure>
+
+</section>
+
+
+<section>
+
+## And more
+
+### Global search
+Propose a custom global search to users.
+
+### Global filters
+Ideal for multi-tenant applications.
+
+### Built-in localization
+Manage translations for your entities.
+
+### Quick creation UI
+Allow your user to efficiently create new instances.
+
+### Toast notifications and page alerts
+To inform your users.
+
+### Dark mode and theme color
+The UI will adapt itself based on your primary color.
+
+### Artisan commands
+With prompts to generate lists, forms, commands, etc.
+
+### Code-driven configuration
+With a clean and documented API.
+
+<figure>
+
+![Sharp dark mode](./img/readme/v9/dark.webp)
+
+</figure>
+
+</section>
+
+# About Sharp
+
+Sharp is a long term project developed by [Code 16](https://code16.fr), a web agency based in France, since 2017. We use it in almost all our projects, and we are committed to maintaining and improving it over time.
+
+Sharp 9 relies on Laravel 11, Tailwind CSS, Inertia, Vue and Alpine.JS. 
+
+So far we have not implemented any kind of sponsorship system, but we are open to discussing it in the future.
+
+

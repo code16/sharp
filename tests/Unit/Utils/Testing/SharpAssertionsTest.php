@@ -1,289 +1,227 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Utils\Testing;
-
-use Code16\Sharp\Tests\SharpTestCase;
 use Code16\Sharp\Utils\Testing\SharpAssertions;
-use Illuminate\Testing\TestResponse;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
-class SharpAssertionsTest extends SharpTestCase
+uses(SharpAssertions::class);
+
+it('allows to test getSharpShow', function () {
+    $response = fakeResponse()->getSharpShow('leaves', 6);
+
+    $this->assertEquals(
+        route('code16.sharp.show.show', ['s-list/leaves', 'leaves', 6]),
+        $response->uri,
+    );
+});
+
+it('allows to test getSharpForm for edit', function () {
+    $response = fakeResponse()->getSharpForm('leaves', 6);
+
+    $this->assertEquals(
+        route('code16.sharp.form.edit', ['s-list/leaves', 'leaves', 6]),
+        $response->uri,
+    );
+});
+
+it('allows to test getSharpForm for edit with a custom breadcrumb', function () {
+    $response = fakeResponse()
+        ->withSharpBreadcrumb(
+            fn ($builder) => $builder
+                ->appendEntityList('leaves')
+                ->appendShowPage('leaves', 6),
+        )
+        ->getSharpForm('leaves', 6);
+
+    $this->assertEquals(
+        route('code16.sharp.form.edit', ['s-list/leaves/s-show/leaves/6', 'leaves', 6]),
+        $response->uri,
+    );
+});
+
+it('allows to test getSharpForm for single edit', function () {
+    $response = fakeResponse()->getSharpSingleForm('leaves');
+
+    $this->assertEquals(
+        route('code16.sharp.form.edit', ['s-list/leaves', 'leaves']),
+        $response->uri,
+    );
+});
+
+it('allows to test getSharpForm for create', function () {
+    $response = fakeResponse()->getSharpForm('leaves');
+
+    $this->assertEquals(
+        route('code16.sharp.form.create', ['s-list/leaves', 'leaves']),
+        $response->uri,
+    );
+});
+
+it('allows to test updateSharpForm for update', function () {
+    $response = fakeResponse()->updateSharpForm('leaves', 6, ['attr' => 'some_value']);
+
+    $this->assertEquals(
+        route('code16.sharp.form.update', ['s-list/leaves', 'leaves', 6]),
+        $response->uri,
+    );
+
+    $this->assertEquals(
+        ['attr' => 'some_value'],
+        $response->postedData,
+    );
+});
+
+it('allows to test updateSharpForm for single update', function () {
+    $response = fakeResponse()
+        ->updateSharpSingleForm('leaves', ['attr' => 'some_value']);
+
+    $this->assertEquals(
+        route('code16.sharp.form.update', ['s-list/leaves', 'leaves']),
+        $response->uri,
+    );
+
+    $this->assertEquals(
+        ['attr' => 'some_value'],
+        $response->postedData,
+    );
+});
+
+it('allows to test updateSharpForm for store', function () {
+    $response = fakeResponse()->storeSharpForm('leaves', ['attr' => 'some_value']);
+
+    $this->assertEquals(
+        route('code16.sharp.form.store', ['s-list/leaves', 'leaves']),
+        $response->uri,
+    );
+
+    $this->assertEquals(
+        ['attr' => 'some_value'],
+        $response->postedData,
+    );
+});
+
+it('allows to test deleteFromSharpList', function () {
+    $response = fakeResponse()->deleteFromSharpList('leaves', 6);
+
+    $this->assertEquals(
+        route('code16.sharp.api.list.delete', ['leaves', 6]),
+        $response->uri,
+    );
+});
+
+it('allows to test deleteSharpShow', function () {
+    $response = fakeResponse()->deleteFromSharpShow('leaves', 6);
+
+    $this->assertEquals(
+        route('code16.sharp.show.delete', ['s-list/leaves', 'leaves', 6]),
+        $response->uri,
+    );
+});
+
+it('allows to test callSharpInstanceCommandFromList', function () {
+    $response = fakeResponse()
+        ->callSharpInstanceCommandFromList('leaves', 6, 'command', ['attr' => 'some_value']);
+
+    $this->assertEquals(
+        route('code16.sharp.api.list.command.instance', [
+            'entityKey' => 'leaves',
+            'instanceId' => 6,
+            'commandKey' => 'command',
+        ]),
+        $response->uri,
+    );
+
+    $this->assertEquals('some_value', $response->postedData->data->attr);
+});
+
+it('allows to test callSharpInstanceCommandFromShow', function () {
+    $response = fakeResponse()
+        ->callSharpInstanceCommandFromShow('leaves', 6, 'command', ['attr' => 'some_value']);
+
+    $this->assertEquals(
+        route('code16.sharp.api.show.command.instance', [
+            'entityKey' => 'leaves',
+            'instanceId' => 6,
+            'commandKey' => 'command',
+        ]),
+        $response->uri,
+    );
+
+    $this->assertEquals('some_value', $response->postedData->data->attr);
+});
+
+it('allows to test callSharpInstanceCommandFromList with a wizard step', function () {
+    $response = fakeResponse()
+        ->callSharpInstanceCommandFromList('leaves', 6, 'command', ['attr' => 'some_value'], 'my-step:123');
+
+    $this->assertEquals('my-step:123', $response->postedData->command_step);
+});
+
+it('allows to define a current breadcrumb', function () {
+    $response = fakeResponse()
+        ->withSharpBreadcrumb(
+            fn ($builder) => $builder
+                ->appendEntityList('trees')
+                ->appendShowPage('trees', 2)
+                ->appendShowPage('leaves', 6),
+        )
+        ->getSharpForm('leaves', 6);
+
+    $this->assertEquals(
+        'http://localhost/sharp/s-list/trees/s-show/trees/2/s-show/leaves/6/s-form/leaves/6',
+        $response->uri,
+    );
+});
+
+it('allows to test getSharpForm for edit with a custom breadcrumb with legacy API', function () {
+    $response = fakeResponse()
+        ->withSharpCurrentBreadcrumb(
+            ['list', 'leaves'],
+            ['show', 'leaves', 6],
+        )
+        ->getSharpForm('leaves', 6);
+
+    $this->assertEquals(
+        route('code16.sharp.form.edit', ['s-list/leaves/s-show/leaves/6', 'leaves', 6]),
+        $response->uri,
+    );
+});
+
+it('allows to define a current breadcrumb with legacy API', function () {
+    $response = fakeResponse()
+        ->withSharpCurrentBreadcrumb(
+            ['list', 'trees'],
+            ['show', 'trees', 2],
+            ['show', 'leaves', 6],
+        )
+        ->getSharpForm('leaves', 6);
+
+    $this->assertEquals(
+        'http://localhost/sharp/s-list/trees/s-show/trees/2/s-show/leaves/6/s-form/leaves/6',
+        $response->uri,
+    );
+});
+
+function fakeResponse()
 {
-    use SharpAssertions;
-
-    /** @test */
-    public function we_can_assert_has_authorization()
+    return new class('fake') extends Orchestra\Testbench\TestCase
     {
-        $this->initSharpAssertions();
+        use SharpAssertions;
 
-        $response = TestResponse::fromBaseResponse(
-            new JsonResponse([
-                'authorizations' => [
-                    'create' => true,
-                    'update' => false,
-                ],
-            ]),
-        );
+        public $uri;
+        public $postedData;
 
-        $response->assertSharpHasAuthorization('create');
-        $response->assertSharpHasNotAuthorization('update');
-    }
-
-    /** @test */
-    public function we_can_test_getSharpForm()
-    {
-        $fake = new class('test') extends SharpTestCase
+        public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
         {
-            use SharpAssertions;
+            $this->uri = $uri;
 
-            public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
-            {
-                $this->uri = $uri;
-
-                return $this;
-            }
-        };
-
-        $response = $fake->getSharpForm('leaves', 6);
-
-        $this->assertEquals(
-            route('code16.sharp.api.form.edit', ['leaves', 6]),
-            $response->uri,
-        );
-    }
-
-    /** @test */
-    public function we_can_test_updateSharpForm()
-    {
-        $fake = new class('test') extends SharpTestCase
-        {
-            use SharpAssertions;
-
-            public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
-            {
-                $this->uri = $uri;
-                $this->postedData = get_object_vars(json_decode($content));
-
-                return $this;
-            }
-        };
-
-        $response = $fake->updateSharpForm('leaves', 6, ['attr' => 'some_value']);
-
-        $this->assertEquals(
-            route('code16.sharp.api.form.update', ['leaves', 6]),
-            $response->uri,
-        );
-
-        $this->assertEquals(
-            ['attr' => 'some_value'],
-            $response->postedData,
-        );
-    }
-
-    /** @test */
-    public function we_can_test_storeSharpForm()
-    {
-        $fake = new class('test') extends SharpTestCase
-        {
-            use SharpAssertions;
-
-            public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
-            {
-                $this->uri = $uri;
-                $this->postedData = get_object_vars(json_decode($content));
-
-                return $this;
-            }
-        };
-
-        $response = $fake->storeSharpForm('leaves', ['attr' => 'some_value']);
-
-        $this->assertEquals(
-            route('code16.sharp.api.form.store', ['leaves']),
-            $response->uri,
-        );
-
-        $this->assertEquals(
-            ['attr' => 'some_value'],
-            $response->postedData,
-        );
-    }
-
-    /** @test */
-    public function we_can_test_deleteSharpEntityList()
-    {
-        $fake = new class('test') extends SharpTestCase
-        {
-            use SharpAssertions;
-
-            public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
-            {
-                $this->uri = $uri;
-
-                return $this;
-            }
-        };
-
-        $response = $fake->deleteSharpEntityList('leaves', 6);
-
-        $this->assertEquals(
-            route('code16.sharp.api.list.delete', ['leaves', 6]),
-            $response->uri,
-        );
-    }
-
-    /** @test */
-    public function we_can_test_deleteSharpShow()
-    {
-        $fake = new class('test') extends SharpTestCase
-        {
-            use SharpAssertions;
-
-            public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
-            {
-                $this->uri = $uri;
-
-                return $this;
-            }
-        };
-
-        $response = $fake->deleteSharpShow('leaves', 6);
-
-        $this->assertEquals(
-            route('code16.sharp.api.show.delete', ['leaves', 6]),
-            $response->uri,
-        );
-    }
-
-    /** @test */
-    public function we_can_test_callSharpInstanceCommandFromList()
-    {
-        $fake = new class('test') extends SharpTestCase
-        {
-            use SharpAssertions;
-
-            public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
-            {
-                $this->uri = $uri;
+            if ($parameters) {
+                $this->postedData = $parameters;
+            } elseif ($content) {
                 $this->postedData = json_decode($content);
-
-                return $this;
+            } else {
+                $this->postedData = null;
             }
-        };
 
-        $response = $fake->callSharpInstanceCommandFromList('leaves', 6, 'command', ['attr' => 'some_value']);
-
-        $this->assertEquals(
-            route('code16.sharp.api.list.command.instance', [
-                'entityKey' => 'leaves',
-                'instanceId' => 6,
-                'commandKey' => 'command',
-            ]),
-            $response->uri,
-        );
-
-        $this->assertEquals('some_value', $response->postedData->data->attr);
-    }
-
-    /** @test */
-    public function we_can_test_callSharpInstanceCommandFromShow()
-    {
-        $fake = new class('test') extends SharpTestCase
-        {
-            use SharpAssertions;
-
-            public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
-            {
-                $this->uri = $uri;
-                $this->postedData = json_decode($content);
-
-                return $this;
-            }
-        };
-
-        $response = $fake->callSharpInstanceCommandFromShow('leaves', 6, 'command', ['attr' => 'some_value']);
-
-        $this->assertEquals(
-            route('code16.sharp.api.show.command.instance', [
-                'entityKey' => 'leaves',
-                'instanceId' => 6,
-                'commandKey' => 'command',
-            ]),
-            $response->uri,
-        );
-
-        $this->assertEquals('some_value', $response->postedData->data->attr);
-    }
-
-    /** @test */
-    public function we_can_test_callSharpInstanceCommandFromList_with_a_wizard_step()
-    {
-        $fake = new class('test') extends SharpTestCase
-        {
-            use SharpAssertions;
-
-            public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
-            {
-                $this->uri = $uri;
-                $this->postedData = json_decode($content);
-
-                return $this;
-            }
-        };
-
-        $response = $fake->callSharpInstanceCommandFromList('leaves', 6, 'command', ['attr' => 'some_value'], 'my-step:123');
-
-        $this->assertEquals('my-step:123', $response->postedData->command_step);
-    }
-
-    /** @test */
-    public function we_can_define_a_current_breadcrumb()
-    {
-        $fake = new class('test') extends SharpTestCase
-        {
-            use SharpAssertions;
-
-            public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
-            {
-                $this->referer = $this->defaultHeaders['referer'];
-
-                return $this;
-            }
-        };
-
-        $response = $fake
-            ->withSharpCurrentBreadcrumb([
-                ['list', 'trees'],
-                ['show', 'trees', 2],
-                ['show', 'leaves', 6],
-            ])
-            ->getSharpForm('leaves', 6);
-
-        $this->assertEquals(
-            'http://localhost/sharp/s-list/trees/s-show/trees/2/s-show/leaves/6',
-            $response->referer,
-        );
-    }
-
-    /** @test */
-    public function when_no_current_breadcrumb_is_defined_a_default_one_is_set()
-    {
-        $fake = new class('test') extends SharpTestCase
-        {
-            use SharpAssertions;
-
-            public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
-            {
-                return $this;
-            }
-        };
-
-        $response = $fake->getSharpForm('trees', 6);
-
-        $this->assertEquals(
-            'http://localhost/sharp/s-list/trees/s-form/trees/6',
-            $response->defaultHeaders['referer'],
-        );
-    }
+            return $this;
+        }
+    };
 }

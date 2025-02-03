@@ -8,7 +8,8 @@ class StateFilter extends EntityListSelectFilter
 {
     public function buildFilterConfig(): void
     {
-        $this->configureLabel('State');
+        $this->configureLabel('State')
+            ->configureRetainInSession();
     }
 
     public function values(): array

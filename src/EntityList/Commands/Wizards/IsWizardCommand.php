@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\EntityList\Commands\Wizards;
 
+use Code16\Sharp\Enums\CommandAction;
 use Code16\Sharp\Exceptions\SharpMethodNotImplementedException;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
@@ -11,6 +12,7 @@ trait IsWizardCommand
 {
     protected ?WizardCommandContext $wizardCommandContext = null;
     private string $key;
+    private array $formsBuilt = [];
 
     protected function getWizardContext(): WizardCommandContext
     {
@@ -31,7 +33,7 @@ trait IsWizardCommand
         }
 
         return [
-            'action' => 'step',
+            'action' => CommandAction::Step->value,
             'step' => "{$step}:{$this->getKey()}",
         ];
     }
@@ -100,4 +102,18 @@ trait IsWizardCommand
     protected function buildFormLayoutForFirstStep(FormLayoutColumn &$column): void {}
 
     protected function buildFormLayoutForStep(string $step, FormLayoutColumn &$column): void {}
+
+    /**
+     * Override the default checkFormIsBuilt() in Wizard case, to check the form
+     * given the current step.
+     */
+    protected function checkFormIsBuilt(): void
+    {
+        $step = $this->extractStepFromRequest() ?: '##first_step##';
+        if (! ($this->formsBuilt[$step] ?? false)) {
+            $this->fieldsContainer = null;
+            $this->buildFormFields($this->fieldsContainer());
+            $this->formsBuilt[$step] = count($this->fieldsContainer()->getFields()) > 0;
+        }
+    }
 }

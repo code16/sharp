@@ -1,180 +1,135 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Form\Fields;
-
 use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
-use Code16\Sharp\Tests\SharpTestCase;
 
-class SharpFormListFieldTest extends SharpTestCase
-{
-    /** @test */
-    public function only_default_values_are_set()
-    {
-        $formField = $this->getDefaultList();
+it('sets only default values', function () {
+    $formField = buildFakeListField();
 
-        $this->assertEquals(
-            [
-                'key' => 'field', 'type' => 'list',
-                'addable' => false, 'removable' => false, 'sortable' => false,
-                'addText' => 'Add an item', 'itemIdAttribute' => 'id',
-                'bulkUploadLimit' => 10,
-                'itemFields' => [
-                    'text' => [
-                        'key' => 'text',
-                        'type' => 'text',
-                        'inputType' => 'text',
-                    ],
+    expect($formField->toArray())
+        ->toEqual([
+            'key' => 'field',
+            'type' => 'list',
+            'addable' => false,
+            'removable' => false,
+            'sortable' => false,
+            'addText' => 'Add an item',
+            'itemIdAttribute' => 'id',
+            'bulkUploadLimit' => 10,
+            'itemFields' => [
+                'text' => [
+                    'key' => 'text',
+                    'type' => 'text',
+                    'inputType' => 'text',
                 ],
             ],
-            $formField->toArray(),
-        );
-    }
+        ]);
+});
 
-    /** @test */
-    public function we_can_define_addable_removable_and_sortable()
-    {
-        $formField = $this->getDefaultList()
-            ->setAddable()
-            ->setSortable()
-            ->setRemovable();
+it('allows to define addable removable and sortable', function () {
+    $formField = buildFakeListField()
+        ->setAddable()
+        ->setSortable()
+        ->setRemovable();
 
-        $this->assertArraySubset(
-            ['addable' => true, 'removable' => true, 'sortable' => true],
-            $formField->toArray(),
-        );
-    }
+    expect($formField->toArray())
+        ->toHaveKey('addable', true)
+        ->toHaveKey('removable', true)
+        ->toHaveKey('sortable', true);
+});
 
-    /** @test */
-    public function we_can_define_addText()
-    {
-        $formField = $this->getDefaultList()
-            ->setAddText('Add');
+it('allows to define addText', function () {
+    $formField = buildFakeListField()
+        ->setAddText('Add');
 
-        $this->assertArraySubset(
-            ['addText' => 'Add'],
-            $formField->toArray(),
-        );
-    }
+    expect($formField->toArray())
+        ->toHaveKey('addText', 'Add');
+});
 
-    /** @test */
-    public function we_can_define_itemIdAttribute()
-    {
-        $formField = $this->getDefaultList()
-            ->setItemIdAttribute('key');
+it('allows to define itemIdAttribute', function () {
+    $formField = buildFakeListField()
+        ->setItemIdAttribute('key');
 
-        $this->assertArraySubset(
-            ['itemIdAttribute' => 'key'],
-            $formField->toArray(),
-        );
-    }
+    expect($formField->toArray())
+        ->toHaveKey('itemIdAttribute', 'key');
+});
 
-    /** @test */
-    public function we_can_define_orderAttribute()
-    {
-        $formField = $this->getDefaultList()
-            ->setOrderAttribute('ordered');
+it('allows to define orderAttribute', function () {
+    $formField = buildFakeListField()
+        ->setOrderAttribute('ordered');
 
-        $this->assertEquals('ordered', $formField->orderAttribute());
-    }
+    $this->assertEquals('ordered', $formField->orderAttribute());
+});
 
-    /** @test */
-    public function we_can_define_maxItemCount()
-    {
-        $formField = $this->getDefaultList()
-            ->setMaxItemCount(10);
+it('allows to define maxItemCount', function () {
+    $formField = buildFakeListField()
+        ->setMaxItemCount(10);
 
-        $this->assertArraySubset(
-            ['maxItemCount' => 10],
-            $formField->toArray(),
-        );
+    expect($formField->toArray())
+        ->toHaveKey('maxItemCount', 10);
 
-        $formField->setMaxItemCountUnlimited();
+    $formField->setMaxItemCountUnlimited();
 
-        $this->assertArrayNotHasKey(
-            'maxItemCount',
-            $formField->toArray(),
-        );
-    }
+    expect($formField->toArray())
+        ->not->toHaveKey('maxItemCount');
+});
 
-    /** @test */
-    public function we_can_define_allowBulkUploadForField()
-    {
-        $formField = $this->getDefaultList()
-            ->allowBulkUploadForField('itemFieldKey');
+it('allows to define allowBulkUploadForField', function () {
+    $formField = buildFakeListField()
+        ->allowBulkUploadForField('itemFieldKey');
 
-        $this->assertArraySubset(
-            ['bulkUploadField' => 'itemFieldKey'],
-            $formField->toArray(),
+    expect($formField->toArray())
+        ->toHaveKey('bulkUploadField', 'itemFieldKey');
+
+    $formField->doNotAllowBulkUpload();
+
+    expect($formField->toArray())
+        ->not->toHaveKey('bulkUploadField');
+});
+
+it('allows to define setBulkUploadFileCountLimitAtOnce', function () {
+    $formField = buildFakeListField()
+        ->setBulkUploadFileCountLimitAtOnce(8);
+
+    expect($formField->toArray())
+        ->toHaveKey('bulkUploadLimit', 8);
+});
+
+it('allows to add an itemField', function () {
+    $formField = buildFakeListField()
+        ->addItemField(
+            SharpFormTextField::make('name'),
         );
 
-        $formField->doNotAllowBulkUpload();
+    expect($formField->toArray())
+        ->toHaveKey('itemFields', [
+            'text' => [
+                'key' => 'text',
+                'type' => 'text',
+                'inputType' => 'text',
+            ],
+            'name' => [
+                'key' => 'name',
+                'type' => 'text',
+                'inputType' => 'text',
+            ],
+        ]);
+});
 
-        $this->assertArrayNotHasKey(
-            'bulkUploadField',
-            $formField->toArray(),
+it('allows to find an itemField by its key', function () {
+    $formField = buildFakeListField()
+        ->addItemField(
+            SharpFormTextField::make('name'),
         );
-    }
 
-    /** @test */
-    public function we_can_define_setBulkUploadFileCountLimitAtOnce()
-    {
-        $formField = $this->getDefaultList()
-            ->setBulkUploadFileCountLimitAtOnce(8);
+    expect($formField->findItemFormFieldByKey('name')->toArray())
+        ->toHaveKey('key', 'name');
+});
 
-        $this->assertArraySubset(
-            ['bulkUploadLimit' => 8],
-            $formField->toArray(),
+function buildFakeListField(): SharpFormListField
+{
+    return SharpFormListField::make('field')
+        ->addItemField(
+            SharpFormTextField::make('text'),
         );
-    }
-
-    /** @test */
-    public function we_can_define_collapsedItemInlineTemplate()
-    {
-        $formField = $this->getDefaultList()
-            ->setCollapsedItemInlineTemplate('template');
-
-        $this->assertArraySubset(
-            ['collapsedItemTemplate' => 'template'],
-            $formField->toArray(),
-        );
-    }
-
-    /** @test */
-    public function we_can_add_an_itemField()
-    {
-        $formField = $this->getDefaultList()
-            ->addItemField(
-                SharpFormTextField::make('name'),
-            );
-
-        $this->assertArraySubset([
-            'itemFields' => [
-                'text' => ['key' => 'text', 'type' => 'text', 'inputType' => 'text'],
-                'name' => ['key' => 'name', 'type' => 'text', 'inputType' => 'text'],
-            ], ], $formField->toArray(),
-        );
-    }
-
-    /** @test */
-    public function we_can_find_an_itemField_by_its_key()
-    {
-        $formField = $this->getDefaultList()
-            ->addItemField(
-                SharpFormTextField::make('name'),
-            );
-
-        $this->assertEquals('name', $formField->findItemFormFieldByKey('name')->toArray()['key']);
-    }
-
-    /**
-     * @return SharpFormListField
-     */
-    protected function getDefaultList()
-    {
-        return SharpFormListField::make('field')
-            ->addItemField(
-                SharpFormTextField::make('text'),
-            );
-    }
 }

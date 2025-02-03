@@ -1,33 +1,25 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Show\Fields;
-
 use Code16\Sharp\Show\Fields\SharpShowListField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
-use Code16\Sharp\Tests\SharpTestCase;
 
-class SharpShowListFieldTest extends SharpTestCase
-{
-    /** @test */
-    public function we_can_define_a_list_field()
-    {
-        $field = SharpShowListField::make('listField')
-            ->addItemField(SharpShowTextField::make('textField'))
-            ->setLabel('test');
+it('allows to define a list field', function () {
+    $field = SharpShowListField::make('listField')
+        ->addItemField(SharpShowTextField::make('textField'))
+        ->setLabel('test');
 
-        $this->assertEquals([
-            'key' => 'listField',
-            'type' => 'list',
-            'label' => 'test',
-            'emptyVisible' => false,
-            'itemFields' => [
-                'textField' => [
-                    'key' => 'textField',
-                    'emptyVisible' => false,
-                    'html' => true,
-                    'type' => 'text',
-                ],
+    expect($field->toArray())->toEqual([
+        'key' => 'listField',
+        'type' => 'list',
+        'label' => 'test',
+        'emptyVisible' => false,
+        'itemFields' => [
+            'textField' => [
+                'key' => 'textField',
+                'emptyVisible' => false,
+                'html' => true,
+                'type' => 'text',
             ],
-        ], $field->toArray());
-    }
-}
+        ],
+    ]);
+});
