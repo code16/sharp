@@ -50,8 +50,10 @@ jobs:
         run: php artisan serve --host=127.0.0.1 --port=8080 &
         working-directory: tests-e2e/site
       - name: Run Playwright tests
-        run: npx playwright test -x
+        run: npx playwright test
         working-directory: tests-e2e
+        env:
+          CI: true
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
