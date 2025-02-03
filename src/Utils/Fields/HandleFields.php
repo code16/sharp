@@ -74,7 +74,9 @@ trait HandleFields
             return null;
         }
 
-        return collect($attributes)
+        return collect($this->getDataKeys())
+            ->mapWithKeys(fn ($dataKey) => [$dataKey => null])
+            ->merge($attributes)
             ->map(function ($value, $key) {
                 if (isset($this->pageTitleField) && $this->pageTitleField->key == $key) {
                     return $this->pageTitleField->formatter()->toFront($this->pageTitleField, $value);
