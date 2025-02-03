@@ -42,7 +42,9 @@ jobs:
         run: php artisan key:generate
         working-directory: tests-e2e/site
       - name: Setup DB
-        run: touch database/database.sqlite
+        run: |
+          touch database/database.sqlite
+          php artisan snapshot:load e2e-seed
         working-directory: tests-e2e/site
       - name: Run server
         run: php artisan serve --host=127.0.0.1 --port=8080 &
@@ -53,7 +55,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
-          name: playwright-report
+          name: report
           path: |
             tests-e2e/playwright-report/
             tests-e2e/site/storage/logs/
