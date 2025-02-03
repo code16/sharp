@@ -108,8 +108,8 @@ class TestModelForm extends SharpForm
             ->addField(
                 SharpFormGeolocationField::make('geolocation')
                     ->setLabel('Geolocation')
-                    ->setApiKey(env('GMAPS_KEY'))
-                    ->setGoogleMapsMapId(env('GMAPS_MAP_ID'))
+//                    ->setApiKey(env('GMAPS_KEY'))
+//                    ->setGoogleMapsMapId(env('GMAPS_MAP_ID'))
                     ->setMapsProvider('osm')
                     ->setGeocodingProvider('osm')
 //                    ->setMapsProvider('gmaps')
