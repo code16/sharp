@@ -398,6 +398,14 @@ function entityListSuite(test: TestType<PlaywrightTestArgs & PlaywrightTestOptio
     await expect(tbody).not.toHaveText(initialTextContent);
     await expect(tbody).toHaveText(reorderedTextContent);
   });
+  test('quick creation form', async ({ page, init, goto, reload }) => {
+    await init({
+      session: {
+        quick_creation_form: '1',
+      }
+    });
+    await goto();
+  });
 }
 
 

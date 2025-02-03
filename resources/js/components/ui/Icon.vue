@@ -14,6 +14,9 @@
 </script>
 
 <template>
-    <svg fill="currentColor" :viewBox="svg?.getAttribute('viewBox')" aria-hidden="true" v-html="svg?.innerHTML ?? '<\!-- Undefined icon -->'"></svg>
+    <svg v-bind="Object.fromEntries([...svg?.attributes ?? []].map(attr => [attr.name, attr.value]))"
+        aria-hidden="true"
+        v-html="svg?.innerHTML ?? '<\!-- Undefined icon -->'"
+    ></svg>
 </template>
 
