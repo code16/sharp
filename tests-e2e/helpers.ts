@@ -14,9 +14,7 @@ export async function init(page: Page, options?: InitOptions) {
         ? Object.fromEntries(Object.entries(options.session).map(([k, v]) => [`session[${k}]`, v]))
         : null,
     });
-    const response = await page.goto(`/e2e/init?${query}`, {
-      // waitUntil: 'commit'
-    });
+    const response = await page.goto(`/e2e/init?${query}`, { waitUntil: 'commit' });
     expect(response?.ok(), 'Init ok').toBe(true);
   });
 }

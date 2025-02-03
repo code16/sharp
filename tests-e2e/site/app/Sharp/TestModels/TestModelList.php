@@ -11,6 +11,8 @@ use App\Sharp\Commands\TestInfoEntityCommand;
 use App\Sharp\Commands\TestInfoInstanceCommand;
 use App\Sharp\Commands\TestLinkEntityCommand;
 use App\Sharp\Commands\TestLinkInstanceCommand;
+use App\Sharp\Commands\TestRefreshEntityCommand;
+use App\Sharp\Commands\TestRefreshInstanceCommand;
 use App\Sharp\Commands\TestReloadEntityCommand;
 use App\Sharp\Commands\TestReloadInstanceCommand;
 use App\Sharp\Commands\TestSelectionCommand;
@@ -78,7 +80,8 @@ class TestModelList extends SharpEntityList
             TestInfoInstanceCommand::class,
             TestLinkInstanceCommand::class,
             TestViewInstanceCommand::class,
-            TestReloadInstanceCommand::class
+            TestReloadInstanceCommand::class,
+            TestRefreshInstanceCommand::class,
         ];
     }
 
@@ -92,6 +95,7 @@ class TestModelList extends SharpEntityList
             TestLinkEntityCommand::class,
             TestViewEntityCommand::class,
             TestReloadEntityCommand::class,
+            TestRefreshEntityCommand::class,
         ];
     }
 

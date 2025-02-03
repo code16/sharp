@@ -731,6 +731,26 @@ test.describe('form', () => {
     await page.getByRole('menu').getByRole('menuitem', { name: 'Remove' }).click();
     await hasError(page.getByLabel('List', { exact: true }).getByRole('textbox', { name: 'List item text' }).nth(0), /required/);
   });
+
+  test('tabs', async ({ page }) => {
+    await init(page);
+    await page.goto('/sharp/s-list/test-models/s-form/test-models');
+    await expect(page.getByRole('tablist')).toBeHidden();
+    await page.goto('/sharp/s-list/test-models/s-form/test-models:tabs');
+    await expect(page.getByRole('tablist')).toBeVisible();
+    await expect(page.getByRole('tab', { name: 'Tab 1' })).toHaveAttribute('aria-selected', 'true');
+    await expect(page.getByRole('textbox', { name: 'Text', exact: true })).toBeVisible();
+    await page.getByRole('tab', { name: 'Tab 2' }).click();
+    await expect(page.getByRole('textbox', { name: 'Text', exact: true })).toBeHidden();
+    await expect(page.getByRole('tab', { name: 'Tab 2' })).toHaveAttribute('aria-selected', 'true');
+    await page.reload();
+    await expect(page.getByRole('textbox', { name: 'Text', exact: true })).toBeHidden();
+    await page.getByRole('tab', { name: 'Tab 1' }).click();
+    await expect(page.getByRole('textbox', { name: 'Text', exact: true })).toBeVisible();
+    await page.reload();
+    await expect(page.getByRole('tab', { name: 'Tab 1' })).toHaveAttribute('aria-selected', 'true');
+    await expect(page.getByRole('textbox', { name: 'Text', exact: true })).toBeVisible();
+  });
 });
 
 

@@ -25,6 +25,7 @@ use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
+use Code16\Sharp\Form\Layout\FormLayoutTab;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
@@ -292,9 +293,9 @@ class TestModelForm extends SharpForm
             );
     }
 
-    public function buildFormLayout(FormLayout $formLayout): void
+    protected function buildTestFieldsLayout(FormLayout|FormLayoutTab $layout)
     {
-        $formLayout
+        $layout
             ->addColumn(6, function (FormLayoutColumn $column) {
                 $column
                     ->withField('autocomplete_local')
@@ -330,6 +331,11 @@ class TestModelForm extends SharpForm
                     ->withField('text_localized')
                     ->withField('upload');
             });
+    }
+
+    public function buildFormLayout(FormLayout $formLayout): void
+    {
+        $this->buildTestFieldsLayout($formLayout);
     }
 
     public function buildFormConfig(): void

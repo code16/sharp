@@ -32,6 +32,9 @@ export default defineConfig({
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'retain-on-failure',
 
+    extraHTTPHeaders: {
+      'X-E2E-REQUEST': '1',
+    },
     // actionTimeout: 5000,
   },
 

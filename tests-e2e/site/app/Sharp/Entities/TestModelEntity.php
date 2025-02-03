@@ -5,6 +5,7 @@ namespace App\Sharp\Entities;
 use App\Sharp\TestModels\TestModelForm;
 use App\Sharp\TestModels\TestModelFormReadonly;
 use App\Sharp\TestModels\TestModelFormRequired;
+use App\Sharp\TestModels\TestModelFormTabs;
 use App\Sharp\TestModels\TestModelList;
 use App\Sharp\TestModels\TestModelShow;
 use Code16\Sharp\Utils\Entities\SharpEntity;
@@ -22,6 +23,7 @@ class TestModelEntity extends SharpEntity
         return [
             'required' => [TestModelFormRequired::class, 'Test model (all fields required)'],
             'readonly' => [TestModelFormReadonly::class, 'Test model (all fields read-only)'],
+            'tabs' => [TestModelFormTabs::class, 'Test model (with tabs)'],
         ];
     }
 }

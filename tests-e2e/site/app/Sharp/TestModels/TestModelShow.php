@@ -7,7 +7,7 @@ use App\Sharp\Commands\TestDownloadInstanceCommand;
 use App\Sharp\Commands\TestFormInstanceCommand;
 use App\Sharp\Commands\TestInfoInstanceCommand;
 use App\Sharp\Commands\TestLinkInstanceCommand;
-use App\Sharp\Commands\TestReloadEntityCommand;
+use App\Sharp\Commands\TestRefreshInstanceCommand;
 use App\Sharp\Commands\TestReloadInstanceCommand;
 use App\Sharp\Commands\TestViewInstanceCommand;
 use Code16\Sharp\Show\Fields\SharpShowEntityListField;
@@ -51,6 +51,7 @@ class TestModelShow extends SharpShow
             TestLinkInstanceCommand::class,
             TestViewInstanceCommand::class,
             TestReloadInstanceCommand::class,
+            TestRefreshInstanceCommand::class,
         ];
     }
 

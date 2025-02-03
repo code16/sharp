@@ -9,7 +9,7 @@ import {
   PlaywrightWorkerArgs,
   PlaywrightWorkerOptions
 } from "playwright/types/test";
-import { commandSuite, CommandSuiteArgs } from "./commands";
+import { commandFormResultSuite, commandSuite, CommandSuiteArgs } from "./commands";
 
 type EntityListSuiteArgs = {
   init: (options?: InitOptions) => Promise<void>,
@@ -50,6 +50,20 @@ test.describe('entity list', () => {
         }),
         contentLocator: ({ page }, use) => use(page.getByRole('table')),
       }));
+      test.describe('form result', () => {
+        commandFormResultSuite(base.extend<CommandSuiteArgs>({
+          init: ({ page }, use) => use(async () => {
+            await init(page, { seed: { entityList: true } });
+          }),
+          goto: ({ page }, use) => use(async () => {
+            await page.goto('/sharp/s-list/test-models');
+          }),
+          openCommandDropdown: ({ page }, use) => use(async () => {
+            await page.getByRole('button', { name: 'Actions' }).first().click();
+          }),
+          contentLocator: ({ page }, use) => use(page.getByRole('table')),
+        }));
+      });
     });
     test.describe('instance', () => {
       commandSuite(base.extend<CommandSuiteArgs>({
