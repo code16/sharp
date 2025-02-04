@@ -64,4 +64,5 @@ jobs:
           file_pattern: src/SharpInternalServiceProvider.php
           tagging_message: "v${{ steps.version.outputs.version }}"
 
-      # it will deploy docs here because a tag is created
+      - name: Ping forge to start deploy
+        run: curl https://forge.laravel.com/servers/503638/sites/1462752/deploy/http?token=${{ secrets.FORGE_DEPLOY_TOKEN }}
