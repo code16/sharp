@@ -1,0 +1,67 @@
+name: manual release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (X.X.X or vX.X.X)'
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    name: Release ${{ inputs.version }}
+
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Remove optional "v" prefix
+        id: version
+        run: |
+          echo "version=${VERSION#v}" >> "$GITHUB_OUTPUT"
+        env:
+          VERSION: ${{ inputs.version }}
+
+      - name: Install NPM dependencies
+        run: npm ci
+
+      - name: Install Composer dependencies
+        run: composer install --prefer-stable --prefer-dist --no-interaction
+
+      - name: Build assets
+        run: npm run build
+
+      - name: Commit assets
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Assets"
+          file_pattern: dist
+
+      - name: Update SharpInternalServiceProvider.php version
+        run: sed -i '' "s/const VERSION = '.*';/const VERSION = '${{ steps.version.outputs.version }}';/g" src/SharpInternalServiceProvider.php
+
+      - name: Commit version change
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Update version to v${{ steps.version.outputs.version }}"
+          file_pattern: src/SharpInternalServiceProvider.php
+          tagging_message: "v${{ steps.version.outputs.version }}"
+
+      # it will deploy docs here because a tag is created
