@@ -4,7 +4,7 @@
  */
 @endphp
 
-{{--@if($self->isAssetsOutdated())--}}
+@if($self->isAssetsOutdated())
     <div class="fixed bottom-0 left-0 right-0 bg-background border-t p-4 z-50">
         <div class="container">
             <div class="flex flex-wrap items-center gap-4 md:gap-6">
@@ -32,4 +32,4 @@
             </div>
         </div>
     </div>
-{{--@endif--}}
+@endif
