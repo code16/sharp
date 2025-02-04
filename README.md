@@ -1,10 +1,6 @@
-<div align="center">
+<img src="./docs/img/sharp9-logo.png" alt="Sharp" width="250px"/>
 
-![Sharp](./docs/img/sharp9-logo.png)
-
-</div>
-
-Sharp is a content management framework built for Laravel as a package, which provides great help to build a CMS section in a project with a clean UI and DX in mind. Sharp is driven by code: everything is manageable through a clean and documented PHP API, using Laravel conventions and coding style. It intends to avoid code adherence — the project should not have any knowledge of it — and is data-agnostic, meaning it does not have any expectations from the persistence layer.
+**Sharp is a content management framework built for Laravel as a package**, which provides great help to build a CMS section in a project with a clean UI and DX in mind. Sharp is driven by code: everything is manageable through a clean and documented PHP API, using Laravel conventions and coding style. It intends to avoid code adherence — the project should not have any knowledge of it — and is data-agnostic, meaning it does not have any expectations from the persistence layer.
 
 Sharp for Laravel is actively maintained and developed and is used in all kinds of projects, from content-driven websites to e-commerce platforms and API backends.
 
