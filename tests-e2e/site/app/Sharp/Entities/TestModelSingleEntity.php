@@ -9,6 +9,7 @@ use Code16\Sharp\Utils\Entities\SharpEntity;
 class TestModelSingleEntity extends SharpEntity
 {
     protected string $label = 'Test model single';
+    protected bool $isSingle = true;
     protected ?string $show = TestModelSingleShow::class;
     protected ?string $form = TestModelSingleForm::class;
     protected array $prohibitedActions = [];

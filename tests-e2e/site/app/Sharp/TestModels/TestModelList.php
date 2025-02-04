@@ -24,6 +24,7 @@ use App\Sharp\Filters\EntityList\TestDateRangeRequiredFilter;
 use App\Sharp\Filters\EntityList\TestSelectFilter;
 use App\Sharp\Filters\EntityList\TestSelectMultipleFilter;
 use App\Sharp\Filters\EntityList\TestSelectRequiredFilter;
+use App\Sharp\TestModelStateHandler;
 use Code16\Sharp\EntityList\Eloquent\SimpleEloquentReorderHandler;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
@@ -68,6 +69,7 @@ class TestModelList extends SharpEntityList
         }
 
         $this
+            ->configureEntityState('state', TestModelStateHandler::class)
             ->configureSearchable()
             ->configureReorderable(new SimpleEloquentReorderHandler(TestModel::class));
     }

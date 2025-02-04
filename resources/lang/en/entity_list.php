@@ -8,6 +8,7 @@ return [
     'commands.instance.label' => 'Actions',
     'commands.needs_selection_message' => 'This action requires you to select relevant items first',
     'quick_creation_modal.create_and_reopen' => 'Create & create another',
+    'state_dropdown.aria_label' => 'Update state: :current_state_label',
     'sort_asc' => ':field_label: Sort ascending',
     'sort_desc' => ':field_label: Sort descending',
     'sort_default' => 'Reset to default sort',

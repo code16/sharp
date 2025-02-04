@@ -188,7 +188,10 @@
                                                         </template>
                                                     </div>
                                                     <template v-if="show.sectionCommands(section)?.flat().length">
-                                                        <div class="ml-auto flex -my-1 justify-end" :class="{ 'invisible': collapsed }">
+                                                        <div class="ml-auto flex -my-1 justify-end" :class="{ 'invisible': collapsed }"
+                                                            role="group"
+                                                            :aria-label="__('sharp::show.section_menu.aria_label', { title: section.title })"
+                                                        >
                                                             <DropdownMenu>
                                                                 <DropdownMenuTrigger as-child>
                                                                     <Button class="h-8" size="sm" variant="outline">
@@ -206,11 +209,17 @@
                                                         </div>
                                                     </template>
                                                     <template v-if="i == 0">
-                                                        <div class="ml-auto flex flex-wrap -my-1 justify-end gap-3" :class="{ 'invisible': collapsed }">
+                                                        <div class="ml-auto flex flex-wrap -my-1 justify-end gap-3"
+                                                            :class="{ 'invisible': collapsed }"
+                                                            role="group"
+                                                            :aria-label="__('sharp::show.section_menu.aria_label', { title: show.getTitle(locale) })"
+                                                        >
                                                             <template v-if="show.config.state">
                                                                 <DropdownMenu>
                                                                     <DropdownMenuTrigger as-child>
-                                                                        <Button class="pointer-events-auto h-8 -mx-2 disabled:opacity-100" variant="ghost" size="sm" :disabled="!show.config.state.authorization">
+                                                                        <Button class="pointer-events-auto h-8 -mx-2 disabled:opacity-100" variant="ghost" size="sm" :disabled="!show.config.state.authorization"
+                                                                            :aria-label="__('sharp::show.state_dropdown.aria_label')"
+                                                                        >
                                                                             <Badge variant="outline">
                                                                                 <StateIcon class="-ml-0.5 mr-1.5" :state-value="show.instanceStateValue" />
                                                                                 {{ show.instanceStateValue?.label }}

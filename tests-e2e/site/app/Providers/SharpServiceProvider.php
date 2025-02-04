@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\User;
 use App\Sharp\Entities\TestModelEntity;
+use App\Sharp\Entities\TestModelSingleEntity;
 use App\Sharp\SharpMenu;
 use Code16\Sharp\Auth\Impersonate\SharpImpersonationHandler;
 use Code16\Sharp\Config\SharpConfigBuilder;
@@ -17,7 +18,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
             ->setName('E2E')
             ->setSharpMenu(SharpMenu::class)
             ->addEntity('test-models', TestModelEntity::class)
-            ->addEntity('test-models-single', TestModelEntity::class)
+            ->addEntity('test-models-single', TestModelSingleEntity::class)
             ->enableImpersonation(new class() extends SharpImpersonationHandler
             {
                 public function enabled(): bool

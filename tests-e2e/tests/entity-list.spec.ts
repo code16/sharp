@@ -414,6 +414,31 @@ function entityListSuite(test: TestType<PlaywrightTestArgs & PlaywrightTestOptio
     await expect(tbody).not.toHaveText(initialTextContent);
     await expect(tbody).toHaveText(reorderedTextContent);
   });
+  test('state', async ({ page, init, goto }) => {
+    await init();
+    await goto();
+    const tbody = page.getByRole('rowgroup').nth(1);
+    const stateButton = tbody.getByRole('row').first().getByRole('button', { name: 'Update state' });
+    const actionsButton = tbody.getByRole('row').first().getByRole('button', { name: 'Actions' });
+    await expect(stateButton).toHaveText('Draft');
+    await stateButton.click();
+    await expect(page.getByRole('menu').getByRole('menuitemcheckbox', { name: 'Draft' })).toBeChecked();
+    await page.getByRole('menu').getByRole('menuitemcheckbox', { name: 'Published' }).click();
+    await expect(stateButton).toHaveText('Published');
+    await page.reload();
+    await expect(stateButton).toHaveText('Published');
+    await actionsButton.click();
+    await page.getByRole('menu').getByRole('menuitem', { name: 'Update state' }).click();
+    await expect(page.getByRole('menu').getByRole('menuitemcheckbox', { name: 'Published' })).toBeChecked();
+    await page.getByRole('menu').getByRole('menuitemcheckbox', { name: 'Draft' }).click();
+    await actionsButton.click();
+    await page.getByRole('menu').getByRole('menuitem', { name: 'Update state' }).click();
+    await expect(page.getByRole('menu').getByRole('menuitemcheckbox', { name: 'Draft' })).toBeChecked();
+    await page.mouse.click(0, 0);
+    await expect(stateButton).toHaveText('Draft');
+    await page.reload();
+    await expect(stateButton).toHaveText('Draft');
+  });
   test.describe('quick creation form', () => {
     test('create new', async ({ page, init, goto, reload }) => {
       await init({

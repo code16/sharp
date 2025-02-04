@@ -8,6 +8,7 @@ return [
     'commands.instance.label' => 'Actions',
     'commands.needs_selection_message' => 'Cette action nécessite que vous sélectionniez d’abord des éléments concernés',
     'quick_creation_modal.create_and_reopen' => 'Créer & créer un nouveau',
+    'state_dropdown.aria_label' => 'Modifier l’état : :current_state_label',
     'sort_asc' => ':field_label : Trier dans l’ordre croissant',
     'sort_desc' => ':field_label : Trier dans l’ordre décroissant',
     'sort_default' => 'Réinitialiser le tri par défaut',

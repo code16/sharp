@@ -42,6 +42,7 @@ return new class() extends Migration
             $table->json('text_localized')->nullable();
             $table->unsignedInteger('upload_id')->nullable();
             $table->unsignedInteger('order')->default(100);
+            $table->string('state')->default('draft');
             $table->timestamps();
         });
     }

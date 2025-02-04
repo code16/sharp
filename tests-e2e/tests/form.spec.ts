@@ -753,5 +753,12 @@ test.describe('form', () => {
   });
 });
 
+test.describe('single form', () => {
+  test('display single form', async ({ page }) => {
+    await init(page, { seed: { show: true } });
+    await page.goto('/sharp/s-show/test-models-single/s-form/test-models-single');
+    await expect(page.getByRole('heading', { name: 'Edit “Test model single”' })).toBeVisible();
+  });
+});
 
 

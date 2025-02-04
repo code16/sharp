@@ -690,7 +690,7 @@
                                                         <TableCell class="max-w-[70cqw]">
                                                             <DropdownMenu>
                                                                 <DropdownMenuTrigger as-child>
-                                                                    <Button class="relative disabled:opacity-100 -mx-3" variant="ghost" size="sm" :disabled="!entityList.instanceCanUpdateState(item)">
+                                                                    <Button class="relative disabled:opacity-100 -mx-3" variant="ghost" size="sm" :disabled="!entityList.instanceCanUpdateState(item)" :aria-label="__('sharp::entity_list.state_dropdown.aria_label', { current_state_label: entityList.instanceStateValue(item)?.label })">
                                                                         <Badge variant="outline">
                                                                             <StateIcon class="-ml-0.5 mr-1.5" :state-value="entityList.instanceStateValue(item)" />
                                                                             {{ entityList.instanceStateValue(item)?.label }}

@@ -10,6 +10,7 @@ use App\Sharp\Commands\TestLinkInstanceCommand;
 use App\Sharp\Commands\TestRefreshInstanceCommand;
 use App\Sharp\Commands\TestReloadInstanceCommand;
 use App\Sharp\Commands\TestViewInstanceCommand;
+use App\Sharp\TestModelStateHandler;
 use Code16\Sharp\Show\Fields\SharpShowEntityListField;
 use Code16\Sharp\Show\Layout\ShowLayout;
 use Code16\Sharp\Show\Layout\ShowLayoutSection;
@@ -36,7 +37,8 @@ class TestModelShow extends SharpShow
 
     public function buildShowConfig(): void
     {
-        $this->configurePageTitleAttribute('text');
+        $this->configurePageTitleAttribute('text')
+            ->configureEntityState('state', TestModelStateHandler::class);
     }
 
     public function getInstanceCommands(): ?array
