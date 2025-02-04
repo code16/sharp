@@ -55,7 +55,7 @@ jobs:
           file_pattern: dist
 
       - name: Update SharpInternalServiceProvider.php version
-        run: sed -i '' "s/const VERSION = '.*';/const VERSION = '${{ steps.version.outputs.version }}';/g" src/SharpInternalServiceProvider.php
+        run: sed -i "s/const VERSION = '.*';/const VERSION = '${{ steps.version.outputs.version }}';/g" src/SharpInternalServiceProvider.php
 
       - name: Commit version change
         uses: stefanzweifel/git-auto-commit-action@v5
