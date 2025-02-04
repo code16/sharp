@@ -161,7 +161,7 @@
             }"
         >
             <template v-if="editor && field.toolbar">
-                <StickyTop class="sticky top-[--top-bar-height] [[role=dialog]_&]:top-0 p-1.5 border-b data-[stuck]:z-10 data-[stuck]:bg-background">
+                <StickyTop class="sticky top-[--stacked-top] [[role=dialog]_&]:top-0 p-1.5 border-b data-[stuck]:z-10 data-[stuck]:bg-background">
                     <div class="flex gap-x-1 gap-y-0 flex-wrap" ref="header">
                         <template v-for="button in props.field.toolbar">
                             <template v-if="button === 'link'">

@@ -1,17 +1,12 @@
 <script setup lang="ts">
-    import { useElementBounding, useWindowSize } from "@vueuse/core";
-    import { computed, reactive, ref, watch } from "vue";
+    import { useElementBounding, useEventListener, useWindowSize } from "@vueuse/core";
+    import { computed, reactive, ref, watch, watchEffect } from "vue";
 
-    defineProps<{
-        stuck?: boolean,
-    }>();
+    defineProps<{}>();
 
-    const emit = defineEmits(['update:stuck']);
     const el = ref<HTMLElement>();
-    // const content = computed<HTMLElement>(() => el.value?.querySelector('[data-sticky-content]'));
     const containerRect = reactive(useElementBounding(() => el.value?.parentElement, { updateTiming: 'next-frame' }));
     const selfRect = reactive(useElementBounding(el, { updateTiming: 'next-frame' }));
-    // const contentRect = reactive(useElementBounding(content, { updateTiming: 'next-frame' }));
     const topbarSafeRect = reactive(useElementBounding(() => document.querySelector('[data-topbar-sticky-safe-area]') as HTMLElement, { updateTiming: 'next-frame' }));
     const stuck = computed(() => {
         const style = el.value ? window.getComputedStyle(el.value) : null;
@@ -21,34 +16,40 @@
             && bottom >= 0
             && top <= parseFloat(style.top);
     });
-    const isOverflowing = ref(false);
     const isOverflowingViewport = ref(false);
     const { height: innerHeight } = useWindowSize();
     watch([containerRect, innerHeight], () => {
         const style = window.getComputedStyle(el.value);
         isOverflowingViewport.value = (parseFloat(style.top) + containerRect.height) > innerHeight.value;
     });
-    watch(stuck, () => {
-        emit('update:stuck', stuck.value);
+
+    // Stacked top
+    const stackedTop = ref(0);
+    const parentStickyTopEl = computed(() => el.value?.closest('[data-sticky-top-container]')?.querySelector('[data-sticky-top]') as HTMLElement);
+    const parentStickyTopRect = reactive(useElementBounding(() => parentStickyTopEl.value, { updateTiming: 'next-frame' }));
+    function updateStackedTop() {
+        const parentStickyStyle = parentStickyTopEl.value ? window.getComputedStyle(parentStickyTopEl.value) : null;
+        stackedTop.value = parentStickyTopEl.value && parentStickyStyle.position === 'sticky'
+            ? parentStickyTopRect.height + parseFloat(parentStickyStyle.top || '0')
+            : topbarSafeRect.height;
+    }
+    watchEffect(() => {
+        updateStackedTop();
     });
-    // watch([stuck, contentRect], () => {
-    //     if(content.value) {
-    //         const topBarSafeArea = (document.querySelector('[data-topbar-sticky-safe-area]') as HTMLElement);
-    //         topBarSafeArea.style.minWidth = stuck.value ? `${contentRect.width}px` : 'auto';
-    //     }
-    // });
+    useEventListener(window, 'resize', () => {
+        updateStackedTop();
+    });
 </script>
 
 <template>
     <div :style="{
-            '--top-bar-height': `${topbarSafeRect.height}px`,
-            // '--sticky-safe-left-offset': stuck ? `${Math.max(topbarSafeRect.left - selfRect.left, 0)}px` : '0px',
-            // '--sticky-safe-right-offset': stuck ? `${Math.max(selfRect.right - topbarSafeRect.right - parseInt(window.getComputedStyle(el).paddingRight), 0)}px` : '0px',
+            '--stacked-top': `${stackedTop}px`
         }"
         :data-stuck="stuck ? true : null"
         :data-overflowing-viewport="isOverflowingViewport ? true : null"
+        data-sticky-top
         ref="el"
     >
-        <slot v-bind="{ stuck, largerThanTopbar: selfRect.height > topbarSafeRect.height, isOverflowing }" />
+        <slot v-bind="{ stuck, largerThanTopbar: selfRect.height > topbarSafeRect.height }" />
     </div>
 </template>

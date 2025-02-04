@@ -131,7 +131,7 @@
         <component :is="inline ? 'div' : RootCard">
             <component :is="inline ? 'div' : RootCardHeader"
                 :class="[
-                    form.locales?.length ? 'data-[overflowing-viewport]:sticky' : '',
+                    form.locales?.length || form.layout.tabs.length > 1 ? 'data-[overflowing-viewport]:sticky' : '',
                 ]"
             >
                 <div class="flex flex-wrap justify-end items-start gap-x-4 gap-y-4">
