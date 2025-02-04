@@ -10,6 +10,7 @@ use Code16\Sharp\Utils\Traits\HandleCustomBreadcrumb;
 use Code16\Sharp\Utils\Traits\HandleLocalizedFields;
 use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
 use Code16\Sharp\Utils\Traits\HandleValidation;
+use Code16\Sharp\Utils\Traits\CanNotify;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 abstract class SharpForm
@@ -20,6 +21,7 @@ abstract class SharpForm
     use HandlePageAlertMessage;
     use HandleValidation;
     use WithCustomTransformers;
+    use CanNotify;
 
     protected ?FormLayout $formLayout = null;
     protected bool $displayShowPageAfterCreation = false;

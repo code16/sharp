@@ -10,6 +10,7 @@ use Code16\Sharp\Http\Controllers\GlobalFilterController;
 use Code16\Sharp\Http\Controllers\HomeController;
 use Code16\Sharp\Http\Controllers\ShowController;
 use Code16\Sharp\Http\Controllers\SingleShowController;
+use Code16\Sharp\Http\Controllers\UpdateAssetsController;
 use Illuminate\Support\Facades\Route;
 
 Route::group([
@@ -61,4 +62,7 @@ Route::group([
 
     Route::post('/filters/{filterKey}', [GlobalFilterController::class, 'update'])
         ->name('code16.sharp.filters.update');
+    
+    Route::post('/update-assets', UpdateAssetsController::class)
+        ->name('code16.sharp.update-assets');
 });

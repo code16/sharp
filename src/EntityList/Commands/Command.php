@@ -12,6 +12,7 @@ use Code16\Sharp\Utils\SharpNotification;
 use Code16\Sharp\Utils\Traits\HandleLocalizedFields;
 use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
 use Code16\Sharp\Utils\Traits\HandleValidation;
+use Code16\Sharp\Utils\Traits\CanNotify;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 abstract class Command
@@ -22,6 +23,7 @@ abstract class Command
     use HandleValidation;
     use HasModalFormLayout;
     use WithCustomTransformers;
+    use CanNotify;
 
     protected int $groupIndex = 0;
     protected ?string $commandKey = null;
@@ -97,11 +99,6 @@ abstract class Command
             'content' => $fileContent,
             'name' => $fileName,
         ];
-    }
-
-    public function notify(string $title): SharpNotification
-    {
-        return new SharpNotification($title);
     }
 
     /**
