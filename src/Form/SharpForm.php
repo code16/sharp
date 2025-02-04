@@ -6,22 +6,22 @@ use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Fields\HandleFormFields;
 use Code16\Sharp\Utils\SharpNotification;
+use Code16\Sharp\Utils\Traits\CanNotify;
 use Code16\Sharp\Utils\Traits\HandleCustomBreadcrumb;
 use Code16\Sharp\Utils\Traits\HandleLocalizedFields;
 use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
 use Code16\Sharp\Utils\Traits\HandleValidation;
-use Code16\Sharp\Utils\Traits\CanNotify;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 abstract class SharpForm
 {
+    use CanNotify;
     use HandleCustomBreadcrumb;
     use HandleFormFields;
     use HandleLocalizedFields;
     use HandlePageAlertMessage;
     use HandleValidation;
     use WithCustomTransformers;
-    use CanNotify;
 
     protected ?FormLayout $formLayout = null;
     protected bool $displayShowPageAfterCreation = false;
