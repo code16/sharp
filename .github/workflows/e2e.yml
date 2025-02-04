@@ -23,7 +23,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Install Composer dependencies
-        run: composer install --prefer-stable --prefer-dist --no-interaction
+        run: composer install --prefer-dist --no-interaction --no-progress
       - name: Build assets
         run: npm run build
       - name: Install dependencies

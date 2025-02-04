@@ -1,10 +1,10 @@
-name: manual release
+name: Release
 
 on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version to release (X.X.X or vX.X.X)'
+        description: 'Version to release (X.X.X)'
         required: true
 
 permissions:
@@ -43,7 +43,7 @@ jobs:
         run: npm ci
 
       - name: Install Composer dependencies
-        run: composer install --prefer-stable --prefer-dist --no-interaction
+        run: composer install --prefer-dist --no-interaction --no-progress
 
       - name: Build assets
         run: npm run build
