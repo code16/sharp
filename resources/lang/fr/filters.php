@@ -3,6 +3,7 @@
 return [
     'popover_button' => 'Filtrer',
     'select.reset' => 'Réinitialiser',
+    'select.label.selected' => ':count sélectionné|:count sélectionnés',
     'daterange.confirm' => 'Valider',
     'daterange.preset.today' => 'Aujourd’hui',
     'daterange.preset.yesterday' => 'Hier',

@@ -2,6 +2,7 @@
     import { SelectFilterData } from "@/types";
     import { Badge } from "@/components/ui/badge";
     import { FilterProps } from "@/filters/types";
+    import { trans_choice } from "@/utils/i18n";
 
     const props = defineProps<FilterProps<SelectFilterData>>();
 </script>
@@ -11,7 +12,7 @@
         <template v-if="Array.isArray(value)">
             <template v-if="value.length > 2">
                 <Badge variant="secondary" class="rounded-sm px-1 font-normal">
-                    {{ value.length }} selected
+                    {{ trans_choice('sharp::filters.select.label.selected', value.length, { count: value.length }) }}
                 </Badge>
             </template>
             <template v-else>
