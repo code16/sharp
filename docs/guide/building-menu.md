@@ -35,7 +35,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
     {
         $config
             ->setSharpMenu(MySharpMenu::class)
-            // [...]
+            // ...
     }
 }
 ```
@@ -52,13 +52,13 @@ class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
     public function build(): self
     {
         return $this
-            ->addEntityLink('post', 'Posts')
-            ->addEntityLink('category', 'Categories');
+            ->addEntityLink(PostEntity::class, 'Posts')
+            ->addEntityLink(CategoryEntity::class, 'Categories');
     }
 }
 ```
 
-In this example, "post" and "category" should be entities defined in the config file. Sharp will create a link either to the Entity List, to the Dashboard or to a [single Show Page](single-show.md) (depending on the entity configuration).
+In this example, `PostEntity::class` and `CategoryEntity::class` should be `SharpEntity` classes declared in Sharp’s configuration. Sharp will create a link either to the Entity List, to the Dashboard or to a [single Show Page](single-show.md) (depending on the entity configuration).
 
 ### Link to an external URL
 
@@ -82,8 +82,8 @@ class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
     public function build(): self
     {
         return $this
-            ->addEntityLink('post', 'Posts', icon: 'fas-file')
-            ->addEntityLink('directory', 'Directories', icon: 'heroicon-o-folder')
+            ->addEntityLink(PostEntity::class, 'Posts', icon: 'fas-file')
+            ->addEntityLink(DirectoryEntity::class, 'Directories', icon: 'heroicon-o-folder')
             ->addExternalLink('https://example.org', 'Homepage', icon: 'icon-logo'); // icon defined in the project (e.g. in resources/svg)
     }
 }
@@ -99,10 +99,10 @@ class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
     public function build(): self
     {
         return $this
-            ->addSection('Admin', function(SharpMenuItemSection $section) {
+            ->addSection('Admin', function (SharpMenuItemSection $section) {
                 $section
-                    ->addEntityLink('account', 'My account')
-                    ->addEntityLink('user', 'Sharp users');
+                    ->addEntityLink(AccountEntity::class, 'My account')
+                    ->addEntityLink(UserEntity::class, 'Sharp users');
             });
     }
 }
@@ -118,11 +118,11 @@ class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
     public function build(): self
     {
         return $this
-            ->addSection('Admin', function(SharpMenuItemSection $section) {
+            ->addSection('Admin', function (SharpMenuItemSection $section) {
                 $section
-                    ->addEntityLink('account', 'My account')
+                    ->addEntityLink(AccountEntity::class, 'My account')
                     ->addSeparator('Other users')
-                    ->addEntityLink('user', 'Sharp users');
+                    ->addEntityLink(UserEntity::class, 'Sharp users');
             });
     }
 }
@@ -138,10 +138,10 @@ class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
     public function build(): self
     {
         return $this
-            ->addSection('Admin', function(SharpMenuItemSection $section) {
+            ->addSection('Admin', function (SharpMenuItemSection $section) {
                 $section
                     ->setCollapsible(false)
-                    ->addEntityLink('account', 'My account');
+                    ->addEntityLink(AccountEntity::class, 'My account');
             });
     }
 }
@@ -158,7 +158,7 @@ class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
     {
         return $this
             ->setVisible(auth()->user()->isAdmin())
-            ->addSection(...);
+            ->addSection(/*...*/);
     }
 }
 ```
@@ -174,7 +174,7 @@ class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
     {
         return $this
             ->setUserMenu(function (SharpMenuUserMenu $menu) {
-                $menu->addEntityLink('account', 'My account');
+                $menu->addEntityLink(AccountEntity::class, 'My account');
             });
     }
 }

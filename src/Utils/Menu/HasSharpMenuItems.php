@@ -2,13 +2,21 @@
 
 namespace Code16\Sharp\Utils\Menu;
 
+use Code16\Sharp\Utils\Entities\SharpEntityManager;
+
 trait HasSharpMenuItems
 {
     protected array $items = [];
 
-    public function addEntityLink(string $entityKey, ?string $label = null, ?string $icon = null): self
+    public function addEntityLink(string $entityKeyOrClassName, ?string $label = null, ?string $icon = null): self
     {
-        $this->items[] = (new SharpMenuItemLink($label, $icon))->setEntity($entityKey);
+        if (class_exists($entityKeyOrClassName)) {
+            $entityKeyOrClassName = app(SharpEntityManager::class)
+                ->entityKeyFor($entityKeyOrClassName);
+        }
+
+        $this->items[] = (new SharpMenuItemLink($label, $icon))
+            ->setEntity($entityKeyOrClassName);
 
         return $this;
     }
