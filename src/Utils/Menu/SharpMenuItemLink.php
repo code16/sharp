@@ -44,7 +44,7 @@ class SharpMenuItemLink extends SharpMenuItem
         return $this->entityKey !== null;
     }
 
-    public function getEntityKey(): string
+    public function getEntityKey(): ?string
     {
         return $this->entityKey;
     }
