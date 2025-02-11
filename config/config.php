@@ -101,6 +101,7 @@ return [
         // Name of the login and password attributes of the User Model.
         'login_attribute' => 'email',
         'password_attribute' => 'password',
+        'avatar_attribute' => 'avatar',
 
         'rate_limiting' => [
             'enabled' => true,
