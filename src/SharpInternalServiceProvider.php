@@ -29,6 +29,7 @@ use Code16\Sharp\Console\ServiceProviderMakeCommand;
 use Code16\Sharp\Console\ShowPageMakeCommand;
 use Code16\Sharp\Exceptions\SharpTokenMismatchException;
 use Code16\Sharp\Form\Eloquent\Uploads\Migration\CreateUploadsMigration;
+use Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\SharpImageManager;
 use Code16\Sharp\Http\Context\CurrentSharpRequest;
 use Code16\Sharp\Http\Middleware\AddLinkHeadersForPreloadedRequests;
 use Code16\Sharp\Http\Middleware\SharpAuthenticate;
@@ -46,7 +47,6 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Inertia\ServiceProvider as InertiaServiceProvider;
-use Intervention\Image\ImageManager;
 
 class SharpInternalServiceProvider extends ServiceProvider
 {
@@ -100,10 +100,7 @@ class SharpInternalServiceProvider extends ServiceProvider
                 ? new SharpLegacyConfigBuilder()
                 : new SharpConfigBuilder()
         );
-        $this->app->singleton(
-            ImageManager::class,
-            fn () => new ImageManager(sharp()->config()->get('uploads.image_driver'))
-        );
+        $this->app->singleton(SharpImageManager::class);
         $this->app->singleton(AddLinkHeadersForPreloadedRequests::class);
 
         if (class_exists('\PragmaRX\Google2FA\Google2FA')) {
@@ -128,7 +125,6 @@ class SharpInternalServiceProvider extends ServiceProvider
                 : null;
         });
 
-        $this->app->register(\Intervention\Image\Laravel\ServiceProvider::class);
         $this->app->register(InertiaServiceProvider::class);
     }
 

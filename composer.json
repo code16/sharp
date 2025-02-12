@@ -18,7 +18,6 @@
         "code16/laravel-content-renderer": "^1.1",
         "inertiajs/inertia-laravel": "^2.0",
         "intervention/image": "^3.4",
-        "intervention/image-laravel": "^1.2",
         "laravel/framework": "^11.0",
         "laravel/prompts": "0.*",
         "league/commonmark": "^2.4",
