@@ -2,13 +2,13 @@
 
 namespace Code16\Sharp\Http\Jobs;
 
+use Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\SharpImageManager;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\ImageManager;
 
 class HandleTransformedFileJob implements ShouldQueue
 {
@@ -22,7 +22,7 @@ class HandleTransformedFileJob implements ShouldQueue
         public array $transformFilters,
     ) {}
 
-    public function handle(ImageManager $imageManager): void
+    public function handle(SharpImageManager $imageManager): void
     {
         $img = $imageManager->read(Storage::disk($this->disk)->get($this->filePath));
 

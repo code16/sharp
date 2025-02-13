@@ -9,7 +9,6 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Traits\Conditionable;
-use Intervention\Image\Drivers\Imagick\Driver;
 use Intervention\Image\Encoders\AvifEncoder;
 use Intervention\Image\Encoders\FilePathEncoder;
 use Intervention\Image\Encoders\GifEncoder;
@@ -18,14 +17,13 @@ use Intervention\Image\Encoders\PngEncoder;
 use Intervention\Image\Encoders\WebpEncoder;
 use Intervention\Image\Exceptions\DecoderException;
 use Intervention\Image\Exceptions\EncoderException;
-use Intervention\Image\ImageManager;
 use Intervention\Image\Interfaces\EncoderInterface;
 
 class Thumbnail
 {
     use Conditionable;
 
-    protected ImageManager $imageManager;
+    protected SharpImageManager $imageManager;
     protected ?SharpUploadModel $uploadModel = null;
     protected ?string $encoderClass = null;
     protected int $quality = 90;
@@ -38,7 +36,7 @@ class Thumbnail
     {
         $this->uploadModel = $model;
         $this->transformationFilters = $model?->filters;
-        $this->imageManager = new ImageManager(new Driver());
+        $this->imageManager = app(SharpImageManager::class);
     }
 
     public function setQuality(int $quality): self
