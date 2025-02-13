@@ -14,6 +14,9 @@
     "require": {
         "php": "8.2.*|8.3.*|8.4.*",
         "ext-dom": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*",
+        "ext-intl": "*",
         "blade-ui-kit/blade-icons": "^1.6",
         "code16/laravel-content-renderer": "^1.1",
         "inertiajs/inertia-laravel": "^2.0",
