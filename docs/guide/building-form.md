@@ -12,6 +12,10 @@ Forms as used to create or update instances.
 php artisan sharp:make:form <class_name> [--model=<model_name>,--single]
 ```
 
+::: tip
+The Form name should be singular, in CamelCase and must end with the "Form" suffix. For instance: `ProductForm`.
+:::
+
 ## Write the class
 
 As usual in Sharp, we begin by creating a class dedicated to our Form and make it extend `Code16\Sharp\Form\SharpForm`; and we'll have to implement at least 4 functions:

@@ -12,6 +12,10 @@ We need an Entity List to display the list of `instances` for an `entity`. This 
 php artisan sharp:make:entity-list <class_name> [--model=<model_name>]
 ```
 
+::: tip
+The Entity List name should be singular, in CamelCase and must end with the "List" suffix. For instance: `ProductList`.
+:::
+
 ## Write the class
 
 First let's write the applicative class, and make it extend `Code16\Sharp\EntityList\SharpEntityList`. Therefore, there are two methods to implement:

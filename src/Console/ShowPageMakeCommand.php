@@ -4,6 +4,7 @@ namespace Code16\Sharp\Console;
 
 use Code16\Sharp\Console\Utils\WithModel;
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputOption;
 
 class ShowPageMakeCommand extends GeneratorCommand
@@ -14,8 +15,12 @@ class ShowPageMakeCommand extends GeneratorCommand
     protected $description = 'Create a new Show Page class';
     protected $type = 'SharpShow';
 
-    protected function buildClass($name)
+    protected function buildClass($name): string
     {
+        if (! Str::endsWith($name, 'Show')) {
+            throw new \InvalidArgumentException('The Show Page name should end with "Show"');
+        }
+
         $replace = [];
 
         if ($this->option('model')) {
@@ -29,7 +34,7 @@ class ShowPageMakeCommand extends GeneratorCommand
         );
     }
 
-    protected function getStub()
+    protected function getStub(): string
     {
         if ($this->option('single') !== false) {
             return __DIR__.'/stubs/show-page.single.stub';
@@ -42,12 +47,19 @@ class ShowPageMakeCommand extends GeneratorCommand
         return __DIR__.'/stubs/show-page.model.stub';
     }
 
-    protected function getDefaultNamespace($rootNamespace)
+    protected function getDefaultNamespace($rootNamespace): string
     {
-        return $rootNamespace.'\Sharp';
+        return str($rootNamespace)
+            ->append('\\Sharp\\')
+            ->append(
+                str($this->getNameInput())
+                    ->substr(0, -4)
+                    ->unless($this->option('single') !== false, fn ($name) => $name->plural())
+                    ->toString()
+            );
     }
 
-    protected function getOptions()
+    protected function getOptions(): array
     {
         return [
             ['model', 'm', InputOption::VALUE_REQUIRED, 'The model that the show displays'],

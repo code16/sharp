@@ -10,12 +10,12 @@ class DashboardMakeCommand extends GeneratorCommand
     protected $description = 'Create a new Dashboard';
     protected $type = 'Dashboard';
 
-    protected function getStub()
+    protected function getStub(): string
     {
         return __DIR__.'/stubs/dashboard.stub';
     }
 
-    protected function getDefaultNamespace($rootNamespace)
+    protected function getDefaultNamespace($rootNamespace): string
     {
         return $rootNamespace.'\Sharp';
     }

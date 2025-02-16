@@ -14,6 +14,10 @@ Note that building a Show Page is really optional; but in some situations it cou
 php artisan sharp:make:show-page <class_name> [--model=<model_name>,--single]
 ```
 
+::: tip
+The Show Page name should be singular, in CamelCase and must end with the "Show" suffix. For instance: `ProductShow`.
+:::
+
 ## Write the class
 
 First we build a class dedicated to our Show Page extending `Code16\Sharp\Show\SharpShow`; and we'll have to implement:
