@@ -30,7 +30,7 @@ Each one is detailed here:
 A field is a column in the `Entity List`. This first function is responsible to describe each column:
 
 ```php
-class MyList extends SharpEntityList
+class ProductList extends SharpEntityList
 {
     protected function buildList(EntityListFieldsContainer $fields): void
     {
@@ -66,7 +66,7 @@ The returned array is meant to be built with 2 rules:
 So for instance, if we defined 2 columns `name` and `price`:
 
 ```php
-class MyList extends SharpEntityList
+class ProductList extends SharpEntityList
 {
     public function getListData(): array|Arrayable
     {
@@ -130,14 +130,25 @@ public function searchWords(
 Here's a code sample with an Eloquent Model:
 
 ```php
-if ($this->queryParams->hasSearch()) {
-    foreach ($this->queryParams->searchWords() as $word) {
-        $spaceships->where(function ($query) use ($word) {
-            $query->orWhere('name', 'like', $word)
-                ->orWhere('email', 'like', $word);
-            });
+class ProductList extends SharpEntityList
+{
+    public function getListData(): array|Arrayable
+    {
+        $products = Product::query();
+        
+        if ($this->queryParams->hasSearch()) {
+            foreach ($this->queryParams->searchWords() as $word) {
+                $products->where(fn ($query) => $query
+                    ->orWhere('name', 'like', $word)
+                    ->orWhere('reference', 'like', $word)
+                );
+            }
         }
+        
+        return $this->transform($products->paginate(50));
     }
+    
+    // ...
 }
 ```
 
@@ -153,16 +164,17 @@ With `Eloquent` or the `QueryBuilder`, this means calling `->paginate($count)` o
 
 ### `delete($id): void`
 
-Here you might write the code performed on a deletion of the instance. It can be anything, here's an Eloquent example:
+Here you might write the code performed on a deletion of the instance. It can be anything, here’s an Eloquent example:
 
 ```php
-class MyList extends SharpEntityList
+class ProductList extends SharpEntityList
 {
     function delete($id): void
     {
         Product::findOrFail($id)->delete();
     }
-    // [...]
+    
+    // ...
 }
 ```
 
@@ -173,7 +185,7 @@ Deletion is typically an action you perform [in a Show Page](building-show-page.
 Finally, this last function must describe the list config. Let's see an example:
 
 ```php
-class MyList extends SharpEntityList
+class ProductList extends SharpEntityList
 {
     public function buildListConfig(): void
     {
@@ -181,7 +193,8 @@ class MyList extends SharpEntityList
             ->configureSearchable()
             ->configureDefaultSort('name', 'asc');
     }
-    // [...]
+    
+    // ...
 }
 ```
 

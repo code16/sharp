@@ -33,14 +33,14 @@ You can implement the optional `buildFilterConfig()` method to configure the fil
 ```php
 class ProductCategoryFilter extends EntityListSelectFilter
 {
-    // ...
-    
     public function buildFilterConfig(): void
     {
         $this->configureLabel('Category')
             ->configureKey('cat')
             ->configureRetainInSession();
     }
+    
+    // ...
 }
 ```
 
@@ -55,14 +55,14 @@ Next, in the Entity List, we must declare the filter:
 ```php
 class ProductEntityList extends SharpEntityList
 {
-    // ...
-    
     function getFilters(): ?array
     {
         return [
             ProductCategoryFilter::class,
         ];
     }
+    
+    // ...
 }
 ```
 
@@ -75,20 +75,20 @@ Once the user clicked on a filter, Sharp will call EntityList's `getListData()`;
 Example:
 
 ```php
-class ProductEntityList extends SharpEntityList
+class ProductList extends SharpEntityList
 {
-    // ...
-    
-    function getListData()
+    public function getListData(): array|Arrayable
     {
         $products = Product::query();
     
-        if($cat = $this->queryParams->filterFor(ProductCategoryFilter::class)) {
+        if ($cat = $this->queryParams->filterFor(ProductCategoryFilter::class)) {
             $products->where('category_id', $cat);
         }
     
         // ...
     }
+    
+    // ...
 }
 ```
 
@@ -99,20 +99,20 @@ First, notice that you can have as many filters as you want for an EntityList. T
 In this case, with Eloquent for instance, your might have to modify your code to ensure that you have an array (Sharp will return either null, and id or an array of id, depending on the user selection):
 
 ```php
-class ProductEntityList extends SharpEntityList
+class ProductList extends SharpEntityList
 {
-    // ...
-    
-    function getListData()
+    public function getListData(): array|Arrayable
     {
         $products = Product::query();
     
-        if($categories = $this->queryParams->filterFor(ProductCategoriesFilter::class)) {
+        if ($categories = $this->queryParams->filterFor(ProductCategoriesFilter::class)) {
             $products->whereIn('category_id', $categories);
         }
     
         // ...
     }
+    
+    // ...
 }
 ```
 
@@ -125,10 +125,8 @@ You might find useful to filter list elements on a specific date range. Date ran
 Then you need to adjust the query with selected range; in this case, with Eloquent for instance, you might add a condition like:
 
 ```php
-class ProductEntityList extends SharpEntityList
+class ProductList extends SharpEntityList
 {
-    // ...
-    
     public function getListData(): array|Arrayable;
     {
         $products = Product::query();
@@ -139,6 +137,8 @@ class ProductEntityList extends SharpEntityList
         
         // ...
     }
+    
+    // ...
 }
 ```
 
@@ -150,14 +150,14 @@ With `configureShowPresets()`, a list of buttons is displayed allowing the user 
 ```php
 class ProductCreationDateFilter extends EntityListDateRangeFilter
 {
-    // ...
-    
     public function buildFilterConfig(): void
     {
         $this->configureDateFormat("YYYY-MM-DD")
             ->configureMondayFirst(false)
             ->configureShowPresets();
     }
+    
+    // ...
 }
 ```
 
@@ -170,12 +170,12 @@ Example for a select filter:
 ```php
 class ProductCategoryFilter extends EntityListSelectRequiredFilter
 {
-    [...]
-    
     public function defaultValue(): mixed
     {
         return ProductCategory::orderBy('label')->first()->id;
     }
+    
+    // ...
 }
 ```
 
@@ -193,6 +193,8 @@ class ProductCreationDateFilter extends EntityListDateRangeRequiredFilter
             'end' => Carbon::today(),
         ];
     }
+    
+    // ...
 }
 ```
 
@@ -244,10 +246,8 @@ In order to make this feature work, since filters are generalized, you'll need t
 Sometimes you may want to hide a filter to the user depending on the actual data, or on other filters values. This can be achieved by using the `useFilter()` method in your EntityList class, typically in the `getListData()` method.
 
 ```php
-class OrderEntityList extends SharpEntityList
+class OrderList extends SharpEntityList
 {
-    // ...
-    
     protected function getFilters(): ?array
     {
         return [
@@ -265,6 +265,8 @@ class OrderEntityList extends SharpEntityList
         
         // ...
     }
+    
+    // ...
 }
 ```
 
