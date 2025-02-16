@@ -27,9 +27,7 @@ class PolicyMakeCommand extends GeneratorCommand
             return __DIR__.'/stubs/policy.single.stub';
         }
 
-        return $this->option('entity-only') !== false
-            ? __DIR__.'/stubs/policy.entity.stub'
-            : __DIR__.'/stubs/policy.stub';
+        return __DIR__.'/stubs/policy.stub';
     }
 
     protected function getDefaultNamespace($rootNamespace): string
@@ -47,8 +45,7 @@ class PolicyMakeCommand extends GeneratorCommand
     protected function getOptions(): array
     {
         return [
-            ['entity-only', 'eo', InputOption::VALUE_NONE, 'When policy only needs an entity rule'],
-            ['single', 's', InputOption::VALUE_NONE, 'Relative to a single Entity'],
+            ['single', 's', InputOption::VALUE_NONE, 'Relative to a single Entity or a Dashboard'],
         ];
     }
 }

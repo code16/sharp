@@ -9,7 +9,6 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use ReflectionClass;
-
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\search;
 use function Laravel\Prompts\select;
@@ -407,50 +406,6 @@ class GeneratorCommand extends Command
         }
     }
 
-    private function generateDashboardEntity(): array
-    {
-        $name = text(
-            label: 'What is the name of your Dashboard?',
-            placeholder: 'E.g. Activity',
-            required: true,
-            hint: 'A "DashboardEntity" suffix will be added automatically (E.g. ActivityDashboardEntity.php).',
-        );
-        $name = Str::ucfirst(Str::camel($name));
-
-        $needsPolicy = confirm(
-            label: 'Do you need a Policy?',
-            default: false,
-        );
-
-        $this->call('sharp:make:dashboard', [
-            'name' => 'Dashboards\\'.$name.'Dashboard',
-        ]);
-
-        $this->components->twoColumnDetail('Dashboard', $this->getSharpRootNamespace().'\\Dashboards\\'.$name.'Dashboard.php');
-
-        if ($needsPolicy) {
-            $this->call('sharp:make:policy', [
-                'name' => 'Dashboards\\'.$name.'DashboardPolicy',
-                '--entity-only' => '',
-            ]);
-
-            $this->components->twoColumnDetail('Policy', $this->getSharpRootNamespace().'\\Dashboards\\'.$name.'DashboardPolicy.php');
-        }
-
-        $this->call('sharp:make:entity', [
-            'name' => 'Entities\\'.$name.'DashboardEntity',
-            '--dashboard' => '',
-            ...($needsPolicy ? ['--policy' => ''] : []),
-        ]);
-
-        $this->components->twoColumnDetail('Entity', $this->getSharpRootNamespace().'\\Entities\\'.$name.'DashboardEntity.php');
-
-        return [
-            $this->getSharpRootNamespace().'\\Entities\\'.$name.'DashboardEntity',
-            Str::snake($name),
-        ];
-    }
-
     private function generateRegularEntity(): array
     {
         $name = text(
@@ -642,6 +597,64 @@ class GeneratorCommand extends Command
             'name' => $name,
             '--label' => $label,
             '--single' => '',
+            ...($needsPolicy ? ['--policy' => ''] : []),
+        ]);
+
+        $this->components->twoColumnDetail(
+            'Entity',
+            $this->getSharpRootNamespace().'\\Entities\\'.$name.'.php'
+        );
+
+        return [
+            $this->getSharpRootNamespace().'\\Entities\\'.$name,
+            Str::snake($baseName),
+        ];
+    }
+
+    private function generateDashboardEntity(): array
+    {
+        $name = text(
+            label: 'What is the name of your Dashboard (singular)?',
+            placeholder: 'E.g. Activity',
+            required: true,
+            hint: 'An "Entity" suffix will be added automatically if needed (E.g. ActivityEntity.php).',
+        );
+
+        $name = str($name)
+            ->camel()
+            ->ucfirst()
+            ->when(! str($name)->endsWith('Entity'), fn ($name) => $name.'Entity');
+        $baseName = str($name)->substr(0, -6)->toString();
+
+        $needsPolicy = confirm(
+            label: 'Do you need a Policy?',
+            default: false,
+        );
+
+        $this->call('sharp:make:dashboard', [
+            'name' => $baseName.'Dashboard',
+        ]);
+
+        $this->components->twoColumnDetail(
+            'Dashboard',
+            $this->getSharpRootNamespace().'\\'.$baseName.'\\'.$baseName.'Dashboard.php'
+        );
+
+        if ($needsPolicy) {
+            $this->call('sharp:make:policy', [
+                'name' => $baseName.'Policy',
+                '--single' => '',
+            ]);
+
+            $this->components->twoColumnDetail(
+                'Policy',
+                $this->getSharpRootNamespace().'\\'.$baseName.'\\'.$baseName.'Policy.php'
+            );
+        }
+
+        $this->call('sharp:make:entity', [
+            'name' => $name,
+            '--dashboard' => '',
             ...($needsPolicy ? ['--policy' => ''] : []),
         ]);
 

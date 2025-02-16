@@ -3,17 +3,14 @@
 use Code16\Sharp\Config\SharpConfigBuilder;
 use Code16\Sharp\Tests\Fixtures\ClosedPeriod;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 beforeEach(function () {
     login();
+
+    File::deleteDirectory(base_path('app/Sharp'));
 });
 
 it('can generate a new full sharp entity from console and we can create, display, update and delete an item', function () {
-    if (file_exists(base_path('app/Sharp/Entities/ClosedPeriodEntity.php'))) {
-        unlink(base_path('app/Sharp/Entities/ClosedPeriodEntity.php'));
-    }
-
     Schema::create('closed_periods', function (Blueprint $table) {
         $table->increments('id');
         $table->string('my_field');
@@ -145,14 +142,14 @@ it('can generate a new sharp dashboard from console', function () {
     $this->artisan('sharp:generator')
         ->expectsQuestion('What do you need?', 'A new Entity')
         ->expectsQuestion('What is the type of your Entity?', 'Dashboard')
-        ->expectsQuestion('What is the name of your Dashboard?', 'Financial')
+        ->expectsQuestion('What is the name of your Dashboard (singular)?', 'Financial')
         ->expectsConfirmation('Do you need a Policy?', 'yes')
         ->expectsConfirmation('Do you want to automatically declare this Entity in the Sharp configuration?', 'no')
         ->assertExitCode(0);
 
     // Manually add this new Entity to the Sharp config
-    app(\Code16\Sharp\Config\SharpConfigBuilder::class)
-        ->addEntity('financial', '\App\Sharp\Entities\FinancialDashboardEntity');
+    app(SharpConfigBuilder::class)
+        ->addEntity('financial', '\App\Sharp\Entities\FinancialEntity');
 
     $this->get(
         route('code16.sharp.dashboard', [

@@ -29,10 +29,10 @@ class EntityMakeCommand extends GeneratorCommand
 
         $replace = [
             'DummyEntitiesNamespace' => $entityClassNamespace,
-            'DummyDashboardClass' => $entityName,
-            'DummyFullDashboardClass' => $sharpRootNamespace.'\\Dashboards\\'.$entityName,
+            'DummyDashboardClass' => $entityName.'Dashboard',
+            'DummyFullDashboardClass' => $sharpRootNamespace.'\\'.$entityName.'\\'.$entityName.'Dashboard',
             'DummyDashboardPolicyClass' => $entityName.'Policy',
-            'DummyFullDashboardPolicyClass' => $sharpRootNamespace.'\\Dashboards\\'.$entityName.'Policy',
+            'DummyFullDashboardPolicyClass' => $sharpRootNamespace.'\\'.$entityName.'\\'.$entityName.'Policy',
             'DummyEntityListClass' => $entityName.'List',
             'DummyFullEntityListClass' => $sharpRootNamespace.'\\'.$pluralEntityName.'\\'.$entityName.'List',
             'DummyShowClass' => $entityName.'Show',
