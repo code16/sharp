@@ -29,19 +29,23 @@ class PageReorderHandler implements ReorderHandler
 }
 ```
 
+::: tip
+This simple implementation could be replaced using the `SimpleEloquentReorderHandler` class, see below. 
+:::
+
 ## Configure reorder for the front-end
 
 Then, in your Entity List you have to configure your reorder handler:
 
 ```php
-class PageEntityList extends SharpEntityList
+class PageList extends SharpEntityList
 {
-    // ...
-    
     public function buildListConfig()
     {
         $this->configureReorderable(new PageReorderHandler());
     }
+    
+    // ...
 }
 ```
 
@@ -58,10 +62,8 @@ The reorder action depends on the `reorder` permission. You can define it in the
 Sometimes you may need to restrict the reorder action depending on the actual data, or on some filters values. This can be achieved by using the `disableReorder()` method in your EntityList class, typically in the `getListData()` method.
 
 ```php
-class PostEntityList extends SharpEntityList
+class PostList extends SharpEntityList
 {
-    // ...
-    
     public function buildListConfig()
     {
         $this->configureReorderable(new PostReorderHandler());
@@ -74,6 +76,8 @@ class PostEntityList extends SharpEntityList
         
         // ...
     }
+    
+    // ...
 }
 ```
 
@@ -86,24 +90,22 @@ If you need to abort the process, for any reason, you can raise a `Code16\Sharp\
 A common pattern with an Eloquent model is to simply define an `order` attribute. In this simple case, you can leverage a default implementation built in Sharp:
 
 ```php
-class PageEntityList extends SharpEntityList
+class PageList extends SharpEntityList
 {
-    // [...]
- 
     public function buildListConfig()
     {
         $this->configureReorderable(new SimpleEloquentReorderHandler(MyModel::class));
     }
+    
+    // ...
 }
 ```
 
 The `Code16\Sharp\EntityList\Eloquent\SimpleEloquentReorderHandler` class expects the full classname of the Eloquent Model to reorder, and will use the `id` and `order` attribute by default. You can change this default behavior with the dedicated methods:
 
 ```php
-class PageEntityList extends SharpEntityList
+class PageList extends SharpEntityList
 {
-    // [...]
- 
     public function buildListConfig()
     {
         $this->configureReorderable(
@@ -112,5 +114,7 @@ class PageEntityList extends SharpEntityList
                 ->setOrderAttribute('position')
         );
     }
+    
+    // ...
 }
 ```

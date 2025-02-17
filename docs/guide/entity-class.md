@@ -14,6 +14,10 @@ The `entity class` is the place where you can declare the entity configuration: 
 php artisan sharp:make:entity <class_name> [--label,--dashboard,--show,--form,--policy,--single]
 ```
 
+::: tip
+The Entity name should be singular, in CamelCase and must end with the "Entity" suffix. For instance: `ProductEntity`.
+:::
+
 ## Write the class
 
 The class must extend `Code16\Sharp\Entities\SharpEntity`. The easiest way to declare your attached classes is to simply override a bunch of protected attributes: 

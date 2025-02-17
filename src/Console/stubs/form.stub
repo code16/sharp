@@ -32,7 +32,7 @@ class DummyClass extends SharpForm
     {
         return $this->transform(
             [
-                "my_field" => "My value"
+                'my_field' => 'My value'
             ]
         );
     }

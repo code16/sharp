@@ -11,8 +11,6 @@ Let’s consider this simple example: a Post entity with a `PostPolicy` and a `P
 ```php
 class PostList extends SharpEntityList
 {
-    // [...]
-
     public function getInstanceCommands(): ?array
     {
         return [
@@ -28,6 +26,8 @@ class PostList extends SharpEntityList
 
         return $this->transform($posts);
     }
+    
+    // ...
 }
 ```
 
@@ -48,8 +48,6 @@ class PostPolicy extends SharpEntityPolicy
 ```php
 class PreviewPostCommand extends InstanceCommand
 {
-    // [...]
-
     public function authorizeFor(mixed $instanceId): bool
     {
         if (auth()->user()->isAdmin()) {
@@ -58,6 +56,8 @@ class PreviewPostCommand extends InstanceCommand
 
         return Post::find($instanceId)->isOnline();
     }
+    
+    // ...
 }
 ```
 

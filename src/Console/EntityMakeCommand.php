@@ -15,7 +15,7 @@ class EntityMakeCommand extends GeneratorCommand
     protected $description = 'Create a new Entity class';
     protected $type = 'SharpEntity';
 
-    protected function buildClass($name)
+    protected function buildClass($name): string
     {
         if (! Str::endsWith($name, 'Entity')) {
             throw new \InvalidArgumentException('The entity name should end with "Entity"');
@@ -24,33 +24,33 @@ class EntityMakeCommand extends GeneratorCommand
         $entityName = class_basename(substr($name, 0, -6));
         $pluralEntityName = Str::plural($entityName);
 
-        $sharpRootNamespace = $this->getDefaultNamespace(
-            trim($this->rootNamespace(), '\\')
-        );
+        $entityClassNamespace = $this->getDefaultNamespace(trim($this->rootNamespace(), '\\'));
+        $sharpRootNamespace = substr($entityClassNamespace, 0, -9);
 
         $replace = [
-            'DummyEntitiesNamespace' => $sharpRootNamespace.'\Entities',
-            'DummyDashboardClass' => $entityName,
-            'DummyFullDashboardClass' => $sharpRootNamespace.'\\Dashboards\\'.$entityName,
+            'DummyEntitiesNamespace' => $entityClassNamespace,
+            'DummyDashboardClass' => $entityName.'Dashboard',
+            'DummyFullDashboardClass' => $sharpRootNamespace.'\\'.$entityName.'\\'.$entityName.'Dashboard',
             'DummyDashboardPolicyClass' => $entityName.'Policy',
-            'DummyFullDashboardPolicyClass' => $sharpRootNamespace.'\\Dashboards\\'.$entityName.'Policy',
-            'DummyEntityListClass' => $entityName.'EntityList',
-            'DummyFullEntityListClass' => $sharpRootNamespace.'\\'.$pluralEntityName.'\\'.$entityName.'EntityList',
+            'DummyFullDashboardPolicyClass' => $sharpRootNamespace.'\\'.$entityName.'\\'.$entityName.'Policy',
+            'DummyEntityListClass' => $entityName.'List',
+            'DummyFullEntityListClass' => $sharpRootNamespace.'\\'.$pluralEntityName.'\\'.$entityName.'List',
             'DummyShowClass' => $entityName.'Show',
             'DummyFullShowClass' => $sharpRootNamespace.'\\'.$pluralEntityName.'\\'.$entityName.'Show',
             'DummyFormClass' => $entityName.'Form',
             'DummyFullFormClass' => $sharpRootNamespace.'\\'.$pluralEntityName.'\\'.$entityName.'Form',
-            'DummySingleShowClass' => $entityName.'SingleShow',
-            'DummyFullSingleShowClass' => $sharpRootNamespace.'\\'.$entityName.'\\'.$entityName.'SingleShow',
-            'DummySingleFormClass' => $entityName.'SingleForm',
-            'DummyFullSingleFormClass' => $sharpRootNamespace.'\\'.$entityName.'\\'.$entityName.'SingleForm',
+            'DummySingleShowClass' => $entityName.'Show',
+            'DummyFullSingleShowClass' => $sharpRootNamespace.'\\'.$entityName.'\\'.$entityName.'Show',
+            'DummySingleFormClass' => $entityName.'Form',
+            'DummyFullSingleFormClass' => $sharpRootNamespace.'\\'.$entityName.'\\'.$entityName.'Form',
             'DummyPolicyClass' => $entityName.'Policy',
             'DummyFullPolicyClass' => $sharpRootNamespace.'\\'.$pluralEntityName.'\\'.$entityName.'Policy',
             'DummySinglePolicyClass' => $entityName.'Policy',
             'DummyFullSinglePolicyClass' => $sharpRootNamespace.'\\'.$entityName.'\\'.$entityName.'Policy',
-            ...($this->option('label') ? [
-                'My dummy label' => $this->option('label'),
-            ] : []),
+            ...($this->option('label')
+                ? ['My dummy label' => $this->option('label')]
+                : []
+            ),
         ];
 
         return str_replace(
@@ -60,7 +60,7 @@ class EntityMakeCommand extends GeneratorCommand
         );
     }
 
-    protected function getStub()
+    protected function getStub(): string
     {
         if ($this->option('dashboard') !== false) {
             return $this->option('policy') !== false
@@ -97,12 +97,12 @@ class EntityMakeCommand extends GeneratorCommand
             : __DIR__.'/stubs/entity.list.stub';
     }
 
-    protected function getDefaultNamespace($rootNamespace)
+    protected function getDefaultNamespace($rootNamespace): string
     {
-        return $rootNamespace.'\Sharp';
+        return $rootNamespace.'\\Sharp\\Entities';
     }
 
-    protected function getOptions()
+    protected function getOptions(): array
     {
         return [
             ['label', 'la', InputOption::VALUE_REQUIRED, 'The label of the entity'],

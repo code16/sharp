@@ -10,12 +10,12 @@ class MenuMakeCommand extends GeneratorCommand
     protected $description = 'Create a new Menu class';
     protected $type = 'Menu';
 
-    protected function getStub()
+    protected function getStub(): string
     {
         return __DIR__.'/stubs/menu.stub';
     }
 
-    protected function getDefaultNamespace($rootNamespace)
+    protected function getDefaultNamespace($rootNamespace): string
     {
         return $rootNamespace.'\Sharp';
     }

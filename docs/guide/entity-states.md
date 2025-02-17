@@ -19,16 +19,16 @@ You'll have to implement two functions: `buildStates()` and `updateState($instan
 The goal is to declare the available states for the entity, using `$this->addState()`:
 
 ```php
-class ProductEntityState extends EntityState
+class ProductState extends EntityState
 {
-    // ...
-    
     protected function buildStates()
     {
         $this->addState('active', 'Active', 'green')
             ->addState('inactive', 'Retired', 'orange')
             ->addState('coming', 'Coming soon', '#ddd');
     }
+    
+    // ...
 }
 ```
 
@@ -44,10 +44,8 @@ For the color, you may indicate anything that the browser would understand (an H
 When the user clicks on a state to update it, the `updateState()` method is called.
 
 ```php
-class ProductEntityState extends EntityState
+class ProductState extends EntityState
 {
-    // ...
-    
     public function updateState($instanceId, $stateId): array
     {
         Product::findOrFail($instanceId)
@@ -55,6 +53,8 @@ class ProductEntityState extends EntityState
     
         return $this->refresh($instanceId);
     }
+    
+    // ...
 }
 ```
 
@@ -65,14 +65,14 @@ About the `return $this->refresh($instanceId);`: Entity states can return either
 Once the Entity state class is defined, we have to add it in the Entity List or in the Show Page config:
 
 ```php
-class ProductEntityList extends SharpEntityList
+class ProductList extends SharpEntityList
 {
-    // ...
-    
     function buildListConfig(): void
     {
-        $this->configureEntityState('state', SpaceshipEntityState::class)
+        $this->configureEntityState('state', ProductState::class)
     }
+    
+    // ...
 }
 ```
 
@@ -85,7 +85,7 @@ The state will be displayed in the top section of the Show Page (if you have one
 In the Entity List, it will be displayed in a new column at the end of the list, unless you have declared a specific column (in this case, you can choose where to place it):
 
 ```php
-class ProductEntityList extends SharpEntityList
+class ProductList extends SharpEntityList
 {
     protected function buildList(EntityListFieldsContainer $fields): void
     {
@@ -104,14 +104,14 @@ class ProductEntityList extends SharpEntityList
 Entity states can declare an authorization check very much like Instance Commands:
 
 ```php
-class ProductEntityState extends EntityState
+class ProductState extends EntityState
 {
-    // ...
-    
     public function authorizeFor($instanceId): bool 
     {
         return Product::findOrFail($instanceId)->owner_id == auth()->id();
     }
+    
+    // ...
 }
 ```
 

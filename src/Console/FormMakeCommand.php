@@ -4,6 +4,7 @@ namespace Code16\Sharp\Console;
 
 use Code16\Sharp\Console\Utils\WithModel;
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputOption;
 
 class FormMakeCommand extends GeneratorCommand
@@ -13,9 +14,14 @@ class FormMakeCommand extends GeneratorCommand
     protected $name = 'sharp:make:form';
     protected $description = 'Create a new Form class';
     protected $type = 'SharpForm';
+    private ?string $entityName = null;
 
-    protected function buildClass($name)
+    protected function buildClass($name): string
     {
+        if (! Str::endsWith($name, 'Form')) {
+            throw new \InvalidArgumentException('The form name should end with "Form"');
+        }
+
         $replace = [];
 
         if ($this->option('model')) {
@@ -29,7 +35,7 @@ class FormMakeCommand extends GeneratorCommand
         );
     }
 
-    protected function getStub()
+    protected function getStub(): string
     {
         if ($this->option('single') !== false) {
             return __DIR__.'/stubs/form.single.stub';
@@ -42,12 +48,19 @@ class FormMakeCommand extends GeneratorCommand
         return __DIR__.'/stubs/form.model.stub';
     }
 
-    protected function getDefaultNamespace($rootNamespace)
+    protected function getDefaultNamespace($rootNamespace): string
     {
-        return $rootNamespace.'\Sharp';
+        return str($rootNamespace)
+            ->append('\\Sharp\\')
+            ->append(
+                str($this->getNameInput())
+                    ->substr(0, -4)
+                    ->unless($this->option('single') !== false, fn ($name) => $name->plural())
+                    ->toString()
+            );
     }
 
-    protected function getOptions()
+    protected function getOptions(): array
     {
         return [
             ['model', 'm', InputOption::VALUE_REQUIRED, 'The model that the form handles'],
