@@ -137,7 +137,7 @@
                 <div class="flex flex-wrap justify-end items-start gap-x-4 gap-y-4">
                     <template v-if="!inline">
                         <div class="flex-1 flex min-w-[min(var(--scroll-width),min(18rem,100%))]" :style="{'--scroll-width':`${titleScrollWidth}px`}">
-                            <CardTitle class="min-w-0 truncate" ref="title">
+                            <CardTitle class="min-w-0 truncate py-1 -my-1" ref="title">
                                 <slot name="title" />
                             </CardTitle>
                         </div>
