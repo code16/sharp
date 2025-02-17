@@ -29,7 +29,7 @@
 
     const props = defineProps<{
         form: Form
-        inline?: boolean,
+        modal?: boolean,
         postFn?: (data: FormData['data']) => Promise<ApiResponse<any>>,
         showErrorAlert?: boolean,
         errorAlertMessage?: string,
@@ -120,7 +120,7 @@
         </template>
 
         <template v-if="form.pageAlert">
-            <div class="container" :class="{ 'px-0': inline }">
+            <div class="container" :class="{ 'px-0': modal }">
                 <PageAlert
                     class="mb-4"
                     :page-alert="form.pageAlert"
@@ -128,14 +128,15 @@
             </div>
         </template>
 
-        <component :is="inline ? 'div' : RootCard">
-            <component :is="inline ? 'div' : RootCardHeader"
+        <component :is="modal ? 'div' : RootCard">
+            <component :is="modal ? 'div' : RootCardHeader"
                 :class="[
                     form.locales?.length || form.layout.tabs.length > 1 ? 'data-[overflowing-viewport]:sticky' : '',
+                    modal ? '-mt-2 mb-6' : ''
                 ]"
             >
-                <div class="flex flex-wrap justify-end items-start gap-x-4 gap-y-4">
-                    <template v-if="!inline">
+                <div class="flex flex-wrap items-start gap-x-4 gap-y-4" :class="modal ? 'justify-start' : 'justify-end'">
+                    <template v-if="!modal">
                         <div class="flex-1 flex min-w-[min(var(--scroll-width),min(18rem,100%))]" :style="{'--scroll-width':`${titleScrollWidth}px`}">
                             <CardTitle class="min-w-0 truncate py-1 -my-1" ref="title">
                                 <slot name="title" />
@@ -143,10 +144,10 @@
                         </div>
                     </template>
                     <template v-if="form.locales?.length || form.layout.tabs.length > 1">
-                        <div class="flex min-w-0 gap-4 -my-1">
+                        <div class="flex min-w-0 gap-4" :class="!modal ? '-my-1' : ''">
                             <template v-if="form.locales?.length">
                                 <Select :model-value="form.currentLocale ?? undefined" @update:model-value="onLocaleChange">
-                                    <div class="flex items-center" :class="!inline ? 'h-8' : ''">
+                                    <div class="flex items-center" :class="!modal ? 'h-8' : ''">
                                         <LocaleSelectTrigger class="pointer-events-auto" />
                                     </div>
                                     <SelectContent>
@@ -191,7 +192,7 @@
                     </template>
                 </div>
             </component>
-            <CardContent :class="inline ? '!p-0' : ''">
+            <CardContent :class="modal ? '!p-0' : ''">
                 <template v-for="tab in form.layout.tabs">
                     <TabsContent class="mt-0" :tabindex="form.layout.tabs.length > 1 ? 0 : -1" :value="slugify(tab.title)">
                         <div class="grid gap-8 grid-cols-1 @3xl/root-card:grid-cols-12">

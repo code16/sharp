@@ -104,7 +104,7 @@
             <SharpForm
                 :form="modalUpload.form"
                 :post-fn="postForm"
-                inline
+                modal
                 ref="modalForm"
             />
 

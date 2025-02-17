@@ -51,7 +51,7 @@
                         :form="commands.state.currentCommandForm"
                         @loading="(loading) => commands.state.currentCommandFormLoading = loading"
                         :key="`form-${currentFormUpdatedKey}`"
-                        inline
+                        modal
                         ref="form"
                     />
                 </div>
