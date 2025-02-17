@@ -101,6 +101,7 @@
                 }, immediate ? 0 : props.field.debounceDelay)
             } else {
                 clearTimeout(timeout);
+                loading.value = false;
                 results.value = [];
             }
         } else {
@@ -211,7 +212,7 @@
                             <CommandEmpty>
                                 {{ __('sharp::form.autocomplete.no_results_text') }}
                             </CommandEmpty>
-                            <CommandGroup>
+                            <CommandGroup v-show="results.length">
                                 <template v-for="item in results" :key="item[props.field.itemIdAttribute]">
                                     <CommandItem
                                         class="group/item"
