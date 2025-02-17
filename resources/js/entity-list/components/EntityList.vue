@@ -186,7 +186,7 @@
                     entityKey: form ? `${entityKey}:${form.key}` : entityKey,
                 }),
                 query: props.entityList.query,
-                entityKey,
+                entityKey: form ? `${entityKey}:${form.key}` : entityKey,
             });
         } else {
             router.visit(route('code16.sharp.form.create', {

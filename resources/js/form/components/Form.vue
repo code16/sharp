@@ -129,69 +129,71 @@
         </template>
 
         <component :is="modal ? 'div' : RootCard">
-            <component :is="modal ? 'div' : RootCardHeader"
-                :class="[
-                    form.locales?.length || form.layout.tabs.length > 1 ? 'data-[overflowing-viewport]:sticky' : '',
-                    modal ? '-mt-2 mb-6' : ''
-                ]"
-            >
-                <div class="flex flex-wrap items-start gap-x-4 gap-y-4" :class="modal ? 'justify-start' : 'justify-end'">
-                    <template v-if="!modal">
-                        <div class="flex-1 flex min-w-[min(var(--scroll-width),min(18rem,100%))]" :style="{'--scroll-width':`${titleScrollWidth}px`}">
-                            <CardTitle class="min-w-0 truncate py-1 -my-1" ref="title">
-                                <slot name="title" />
-                            </CardTitle>
-                        </div>
-                    </template>
-                    <template v-if="form.locales?.length || form.layout.tabs.length > 1">
-                        <div class="flex min-w-0 gap-4" :class="!modal ? '-my-1' : ''">
-                            <template v-if="form.locales?.length">
-                                <Select :model-value="form.currentLocale ?? undefined" @update:model-value="onLocaleChange">
-                                    <div class="flex items-center" :class="!modal ? 'h-8' : ''">
-                                        <LocaleSelectTrigger class="pointer-events-auto" />
+            <template v-if="!modal || form.locales?.length || form.layout.tabs.length > 1">
+                <component :is="modal ? 'div' : RootCardHeader"
+                    :class="[
+                        form.locales?.length || form.layout.tabs.length > 1 ? 'data-[overflowing-viewport]:sticky' : '',
+                        modal ? '-mt-2 mb-6' : ''
+                    ]"
+                >
+                    <div class="flex flex-wrap items-start gap-x-4 gap-y-4" :class="modal ? 'justify-start' : 'justify-end'">
+                        <template v-if="!modal">
+                            <div class="flex-1 flex min-w-[min(var(--scroll-width),min(18rem,100%))]" :style="{'--scroll-width':`${titleScrollWidth}px`}">
+                                <CardTitle class="min-w-0 truncate py-1 -my-1" ref="title">
+                                    <slot name="title" />
+                                </CardTitle>
+                            </div>
+                        </template>
+                        <template v-if="form.locales?.length || form.layout.tabs.length > 1">
+                            <div class="flex min-w-0 gap-4" :class="!modal ? '-my-1' : ''">
+                                <template v-if="form.locales?.length">
+                                    <Select :model-value="form.currentLocale ?? undefined" @update:model-value="onLocaleChange">
+                                        <div class="flex items-center" :class="!modal ? 'h-8' : ''">
+                                            <LocaleSelectTrigger class="pointer-events-auto" />
+                                        </div>
+                                        <SelectContent>
+                                            <template v-for="locale in form.locales" :key="locale">
+                                                <SelectItem :value="locale">
+                                                    <span class="uppercase text-xs">{{ locale }}</span>
+                                                </SelectItem>
+                                            </template>
+                                        </SelectContent>
+                                    </Select>
+                                </template>
+                                <template v-if="form.layout.tabs.length > 1">
+                                    <div class="hidden @2xl/root-card:block min-w-0 overflow-auto scroll-px-2 -my-1">
+                                        <TabsList>
+                                            <template v-for="tab in form.layout.tabs">
+                                                <TabsTrigger :value="slugify(tab.title)" v-scroll-into-view.nearest="slugify(tab.title) === selectedTabSlug">
+                                                    {{ tab.title }}
+                                                    <template v-if="form.tabErrorCount(tab)">
+                                                        <Badge class="ml-2" variant="destructive">
+                                                            {{ form.tabErrorCount(tab) }}
+                                                        </Badge>
+                                                    </template>
+                                                </TabsTrigger>
+                                            </template>
+                                        </TabsList>
                                     </div>
-                                    <SelectContent>
-                                        <template v-for="locale in form.locales" :key="locale">
-                                            <SelectItem :value="locale">
-                                                <span class="uppercase text-xs">{{ locale }}</span>
-                                            </SelectItem>
-                                        </template>
-                                    </SelectContent>
-                                </Select>
-                            </template>
-                            <template v-if="form.layout.tabs.length > 1">
-                                <div class="hidden @2xl/root-card:block min-w-0 overflow-auto scroll-px-2 -my-1">
-                                    <TabsList>
-                                        <template v-for="tab in form.layout.tabs">
-                                            <TabsTrigger :value="slugify(tab.title)" v-scroll-into-view.nearest="slugify(tab.title) === selectedTabSlug">
-                                                {{ tab.title }}
-                                                <template v-if="form.tabErrorCount(tab)">
-                                                    <Badge class="ml-2" variant="destructive">
-                                                        {{ form.tabErrorCount(tab) }}
-                                                    </Badge>
-                                                </template>
-                                            </TabsTrigger>
-                                        </template>
-                                    </TabsList>
-                                </div>
-                                <Select v-model="selectedTabSlug">
-                                    <SelectTrigger class="h-8 @2xl/root-card:hidden w-auto text-left pointer-events-auto">
-                                        <Menu class="size-4 shrink-0 mr-2" />
-                                        <SelectValue class="font-medium" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <template v-for="(tab, i) in form.layout.tabs">
-                                            <SelectItem :value="slugify(tab.title)">
-                                                {{ tab.title }}
-                                            </SelectItem>
-                                        </template>
-                                    </SelectContent>
-                                </Select>
-                            </template>
-                        </div>
-                    </template>
-                </div>
-            </component>
+                                    <Select v-model="selectedTabSlug">
+                                        <SelectTrigger class="h-8 @2xl/root-card:hidden w-auto text-left pointer-events-auto">
+                                            <Menu class="size-4 shrink-0 mr-2" />
+                                            <SelectValue class="font-medium" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <template v-for="(tab, i) in form.layout.tabs">
+                                                <SelectItem :value="slugify(tab.title)">
+                                                    {{ tab.title }}
+                                                </SelectItem>
+                                            </template>
+                                        </SelectContent>
+                                    </Select>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+                </component>
+            </template>
             <CardContent :class="modal ? '!p-0' : ''">
                 <template v-for="tab in form.layout.tabs">
                     <TabsContent class="mt-0" :tabindex="form.layout.tabs.length > 1 ? 0 : -1" :value="slugify(tab.title)">
