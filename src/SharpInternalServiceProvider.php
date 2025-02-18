@@ -87,8 +87,6 @@ class SharpInternalServiceProvider extends ServiceProvider
 
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'sharp');
-
         $this->app->singleton(SharpAuthorizationManager::class);
         $this->app->singleton(CurrentSharpRequest::class);
         $this->app->singleton(SharpMenuManager::class);
