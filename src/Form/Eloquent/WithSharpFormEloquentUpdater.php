@@ -21,7 +21,9 @@ trait WithSharpFormEloquentUpdater
     }
 
     /**
-     * Update an Eloquent Model with $data (which is already Form Field formatted).
+     * @template TModel of Model
+     * @param TModel $instance
+     * @return TModel
      */
     public function save(Model $instance, array $data): Model
     {
