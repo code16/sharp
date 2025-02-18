@@ -4,15 +4,16 @@ on:
   push:
     branches:
       - main
-#      - 9.0
   workflow_dispatch:
+
 jobs:
   lint:
     runs-on: ubuntu-latest
+
     strategy:
       fail-fast: true
       matrix:
-        php: [8.3]
+        php: ['8.2', 8.3, '8.3', '8.4']
 
     steps:
       - name: Checkout code
@@ -34,4 +35,4 @@ jobs:
       - name: Commit linted files
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "CS fix"
+          commit_message: CS fix
