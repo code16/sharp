@@ -22,7 +22,8 @@ trait WithSharpFormEloquentUpdater
 
     /**
      * @template TModel of Model
-     * @param TModel $instance
+     *
+     * @param  TModel  $instance
      * @return TModel
      */
     public function save(Model $instance, array $data): Model
