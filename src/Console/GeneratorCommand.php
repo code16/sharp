@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Console;
 
+use Code16\Sharp\Config\SharpConfigBuilder;
 use Code16\Sharp\Utils\Links\LinkToDashboard;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\Links\LinkToSingleShowPage;
@@ -9,7 +10,6 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use ReflectionClass;
-
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\search;
 use function Laravel\Prompts\select;
@@ -690,7 +690,7 @@ class GeneratorCommand extends Command
 
     private function getSharpEntitiesList(?string $search = null): array
     {
-        return collect(config('sharp.entities'))
+        return collect(app(SharpConfigBuilder::class)->get('entities'))
             ->map(fn ($class) => str_replace(
                 ['App\Sharp\Entities\\', 'Entity'],
                 ['', ''],
