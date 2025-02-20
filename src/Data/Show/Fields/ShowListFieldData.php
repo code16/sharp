@@ -21,9 +21,9 @@ final class ShowListFieldData extends Data
         #[LiteralTypeScriptType('"'.ShowFieldType::List->value.'"')]
         public ShowFieldType $type,
         public bool $emptyVisible,
-        public ?string $label,
         /** @var array<string,ShowFieldData> */
         public array $itemFields,
+        public ?string $label = null,
     ) {}
 
     public static function from(array $list): self
