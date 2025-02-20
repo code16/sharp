@@ -116,6 +116,7 @@
     function onSearchSubmit(search: string) {
         emit('update:query', {
             ...props.entityList.query,
+            page: null,
             search,
         });
     }
@@ -145,7 +146,7 @@
         const dir = nextSortDir(field);
         emit('update:query', {
             ...props.entityList.query,
-            page: 1,
+            page: null,
             sort: dir ? field.key : null,
             dir: dir || null,
         });
@@ -577,7 +578,7 @@
                     </div>
                 </template>
                 <template v-if="entityList">
-                    <CardContent :class="entityList.count > 0 ? 'pb-2 !px-0' : ''" v-show="!collapsed">
+                    <CardContent :class="entityList.data?.length > 0 ? 'pb-2 !px-0' : ''" v-show="!collapsed">
                         <template v-if="entityList.data?.length > 0">
                             <ScrollArea class="w-full data-[scrollbar-x-visible]:pb-4" type="auto" touch-type="scroll">
                                 <Table no-scroll class="w-max min-w-full max-w-[768px] md:max-w-[1024px] @3xl:w-full @3xl:max-w-none">
@@ -823,7 +824,7 @@
                             </ScrollArea>
                         </template>
                         <template v-else>
-                            <div class="text-muted-foreground">
+                            <div class="pt-2 text-muted-foreground">
                                 {{ __('sharp::entity_list.empty_text') }}
                             </div>
                         </template>
