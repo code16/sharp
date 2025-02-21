@@ -1,0 +1,1 @@
+import{d as s,o as t,A as o,t as a,i as m}from"./sharp-Tkep75eY.js";const r={key:0,class:"text-sm font-medium text-destructive"},i=s({__name:"FormMessage",props:{message:{}},setup(n){return(e,p)=>e.message?(t(),o("p",r,a(e.message),1)):m("",!0)}});export{i as _};

@@ -91,7 +91,7 @@ it('allows to configure filters with hidden filters', function () {
                 new class() extends EntityListSelectFilter
                 {
                     public function buildFilterConfig(): void {}
-                    
+
                     public function values(): array
                     {
                         return [1 => 'A', 2 => 'B'];
@@ -100,9 +100,9 @@ it('allows to configure filters with hidden filters', function () {
             ];
         }
     };
-    
+
     $list->buildListConfig();
-    
+
     expect($list->listConfig()['filters']['_root'][0]['key'])
         ->toEqual(class_basename(get_class($list->getFilters()[1])));
 });
