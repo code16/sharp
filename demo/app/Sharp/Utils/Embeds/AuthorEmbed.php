@@ -26,7 +26,7 @@ class AuthorEmbed extends SharpFormEditorEmbed
     protected function buildPageAlert(PageAlert $pageAlert): void
     {
         $pageAlert
-            ->setLevelSecondary()
+            ->setLevelInfo()
             ->setMessage('Please fill author detail below');
     }
 

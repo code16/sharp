@@ -75,7 +75,7 @@ class PostList extends SharpEntityList
         if (! auth()->user()->isAdmin()) {
             $pageAlert
                 ->setMessage('As an editor, you can only edit your posts; you can see other posts except those which are still in draft.')
-                ->setLevelSecondary();
+                ->setLevelInfo();
         }
     }
 

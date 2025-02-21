@@ -133,7 +133,7 @@ class DemoDashboard extends SharpDashboard
     protected function buildPageAlert(PageAlert $pageAlert): void
     {
         $pageAlert
-            ->setLevelSecondary()
+            ->setLevelInfo()
             ->setMessage(
                 sprintf(
                     'Graphs below are delimited by period %s - %s (and yes, visits figures are randomly generated)',
