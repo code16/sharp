@@ -58,6 +58,7 @@ trait BuildsFiltersConfigArray
                     });
             })
             ->filter(fn (Collection $filters) => count($filters) > 0)
+            ->values()
             ->toArray()
             ?: null;
     }
