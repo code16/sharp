@@ -41,6 +41,10 @@ class EditorFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
             return null;
         }
 
+        if (is_string($value)) {
+            $value = ['text' => $value];
+        }
+
         $text = $this->maybeLocalized(
             $field,
             $value['text'] ?? null,
