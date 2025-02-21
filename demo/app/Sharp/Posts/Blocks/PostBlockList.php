@@ -54,7 +54,11 @@ class PostBlockList extends SharpEntityList
             ->setCustomTransformer('content', function ($value, PostBlock $instance) {
                 return match ($instance->type) {
                     'text' => Str::limit($instance->content, 150),
-                    'video' => sprintf('<i class="fa fa-play-circle"></i> %s', Str::match('/\ssrc="(.*)"/mU', $instance->content)),
+                    'video' => sprintf(
+                        '%s %s',
+                        svg('far-play-circle')->toHtml(),
+                        Str::match('/\ssrc="(.*)"/mU', $instance->content)
+                    ),
                     'visuals' => $instance->files
                         ->map(function (Media $visual) {
                             if ($url = $visual->thumbnail(null, 30)) {
