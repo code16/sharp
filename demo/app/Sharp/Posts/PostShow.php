@@ -24,7 +24,6 @@ use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\Links\LinkToShowPage;
 use Code16\Sharp\Utils\PageAlerts\PageAlert;
 use Code16\Sharp\Utils\Transformers\Attributes\Eloquent\SharpUploadModelThumbnailUrlTransformer;
-use Illuminate\Support\Str;
 
 class PostShow extends SharpShow
 {
@@ -110,7 +109,7 @@ class PostShow extends SharpShow
             ->setMessage(function (array $data) {
                 return $data['publication']['is_planned']
                     ? sprintf(
-                        '<i class="fa fa-calendar"></i> This post is planned for publication, on %s',
+                        'This post is planned for publication, on %s',
                         $data['publication']['published_at'],
                     )
                     : null;
@@ -130,40 +129,39 @@ class PostShow extends SharpShow
 
     public function find(mixed $id): array
     {
+        $post = Post::with('attachments', 'attachments.document')->findOrFail($id);
+
         return $this
-            ->setCustomTransformer('breadcrumb', function ($value, $instance) {
-                return Str::limit($instance->getTranslation('title', 'en'), 30);
-            })
-            ->setCustomTransformer('publication', function ($value, Post $instance) {
-                return [
-                    'is_planned' => $instance->isOnline() && $instance->published_at->isFuture(),
-                    'published_at' => $instance->published_at->isoFormat('LLL'),
-                ];
-            })
-            ->setCustomTransformer('author', function ($value, $instance) {
-                return $instance->author_id
-                    ? LinkToEntityList::make('authors')
-                        ->setSearch($instance->author->email)
-                        ->renderAsText($instance->author->name)
-                    : null;
-            })
-            ->setCustomTransformer('categories', function ($value, Post $instance) {
-                return $instance->categories
-                    ->map(fn ($category) => LinkToShowPage::make('categories', $category->id)
-                        ->renderAsText($category->name))
-                    ->implode(', ');
-            })
+            ->setCustomTransformer('breadcrumb', fn ($value, $instance) => str()
+                ->of($instance->getTranslation('title', 'en'))
+                ->limit(30)
+            )
+            ->setCustomTransformer('publication', fn ($value, Post $instance) => [
+                'is_planned' => $instance->isOnline() && $instance->published_at->isFuture(),
+                'published_at' => $instance->published_at->isoFormat('LLL'),
+            ])
+            ->setCustomTransformer('author', fn ($value, $instance) => $instance->author_id
+                ? LinkToEntityList::make('authors')
+                    ->setSearch($instance->author->email)
+                    ->renderAsText($instance->author->name)
+                : null
+            )
+            ->setCustomTransformer('categories', fn ($value, Post $instance) => $instance
+                ->categories
+                ->map(fn ($category) => LinkToShowPage::make('categories', $category->id)
+                    ->renderAsText($category->name))
+                ->implode(', ')
+            )
             ->setCustomTransformer('cover', new SharpUploadModelThumbnailUrlTransformer(500))
             ->setCustomTransformer(
                 'attachments[document]',
                 new SharpUploadModelFormAttributeTransformer(withThumbnails: true)
             )
-            ->setCustomTransformer('attachments[link_url]', function ($value, $instance) {
-                return $instance->is_link
-                    ? sprintf('<a href="%s" alt="">%s</a>', $value, str($value)->limit(30))
-                    : null;
-            })
-            ->transform(Post::with('attachments', 'attachments.document')->findOrFail($id));
+            ->setCustomTransformer('attachments[link_url]', fn ($value, $instance) => $instance->is_link
+                ? sprintf('<a href="%s" alt="">%s</a>', $value, str($value)->limit(30))
+                : null
+            )
+            ->transform($post);
     }
 
     public function delete(mixed $id): void
