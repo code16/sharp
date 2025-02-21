@@ -312,7 +312,7 @@
             <template v-if="entityList?.pageAlert">
                 <div class="container px-4 lg:px-6">
                     <PageAlert
-                        class="mb-3"
+                        class="mb-4"
                         :page-alert="entityList.pageAlert"
                     />
                 </div>
