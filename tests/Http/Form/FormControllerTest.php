@@ -2,6 +2,7 @@
 
 use Code16\Sharp\Enums\PageAlertLevel;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
+use Code16\Sharp\Exceptions\Form\SharpFormUpdateException;
 use Code16\Sharp\Form\Fields\SharpFormCheckField;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
@@ -14,6 +15,7 @@ use Code16\Sharp\Tests\Fixtures\Sharp\PersonSingleForm;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\PageAlerts\PageAlert;
+use Illuminate\Support\Facades\Exceptions;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
@@ -187,6 +189,22 @@ it('creates an instance and redirect to the show if configured', function () {
             'name' => 'Stephen Hawking',
         ])
         ->assertRedirect('/sharp/s-list/person/s-show/person/1');
+});
+
+it('logs an error if the update() method does not return the instance id', function () {
+    Exceptions::fake();
+
+    fakeFormFor('person', new class() extends PersonForm
+    {
+        public function update(mixed $id, array $data) {}
+    });
+
+    $this
+        ->post('/sharp/s-list/person/s-form/person')
+        ->assertRedirect()
+        ->assertSessionDoesntHaveErrors();
+
+    Exceptions::assertReported(SharpFormUpdateException::class);
 });
 
 it('validates an instance before store and update with the rules() method', function () {

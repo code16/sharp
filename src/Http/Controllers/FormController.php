@@ -5,6 +5,7 @@ namespace Code16\Sharp\Http\Controllers;
 use Code16\Sharp\Auth\SharpAuthorizationManager;
 use Code16\Sharp\Data\BreadcrumbData;
 use Code16\Sharp\Data\Form\FormData;
+use Code16\Sharp\Exceptions\Form\SharpFormUpdateException;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Form\SharpSingleForm;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
@@ -145,6 +146,11 @@ class FormController extends SharpProtectedController
 
         $formattedData = $form->formatAndValidateRequestData(request()->all());
         $instanceId = $form->update(null, $formattedData);
+
+        if ($instanceId === null) {
+            report(new SharpFormUpdateException('The update() method in '.get_class($form).' must return the newly created instance id'));
+        }
+
         $this->uploadManager->dispatchJobs($instanceId);
 
         $previousUrl = sharp()->context()->breadcrumb()->getPreviousSegmentUrl();
