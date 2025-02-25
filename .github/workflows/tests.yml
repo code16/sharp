@@ -6,7 +6,6 @@ on:
   pull_request:
     branches:
       - main
-      - "9.0"
 jobs:
 
   # Unit tests back (phpunit)
@@ -15,10 +14,6 @@ jobs:
     strategy:
       matrix:
         include:
-          - php: 8.2
-            env:
-              LARAVEL: 11.*
-              TESTBENCH: 9.*
           - php: 8.3
             env:
               LARAVEL: 11.*
@@ -27,6 +22,15 @@ jobs:
             env:
               LARAVEL: 11.*
               TESTBENCH: 9.*
+          - php: 8.3
+            env:
+              LARAVEL: 12.*
+              TESTBENCH: 10.*
+          - php: 8.4
+            env:
+              LARAVEL: 12.*
+              TESTBENCH: 10.*
+
     env: ${{ matrix.env }}
     steps:
       - uses: actions/checkout@v2
