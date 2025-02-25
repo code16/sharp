@@ -21,7 +21,7 @@
         "code16/laravel-content-renderer": "^1.1",
         "inertiajs/inertia-laravel": "^2.0",
         "intervention/image": "^3.4",
-        "laravel/framework": "^12.0",
+        "laravel/framework": "^11.0|^12.0",
         "laravel/prompts": "0.*",
         "league/commonmark": "^2.4",
         "masterminds/html5": "^2.8",
