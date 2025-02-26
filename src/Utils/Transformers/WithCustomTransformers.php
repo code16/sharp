@@ -6,6 +6,7 @@ use Closure;
 use Code16\Sharp\EntityList\Commands\Command;
 use Code16\Sharp\Form\Fields\Editor\Uploads\FormEditorUploadForm;
 use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
+use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Show\SharpShow;
 use Illuminate\Contracts\Support\Arrayable;
@@ -18,8 +19,10 @@ trait WithCustomTransformers
 {
     protected array $transformers = [];
 
-    public function setCustomTransformer(string $attribute, string|Closure|SharpAttributeTransformer $transformer): self
+    public function setCustomTransformer(string|SharpFormField $attribute, string|Closure|SharpAttributeTransformer $transformer): self
     {
+        $attribute = $attribute instanceof SharpFormField ? $attribute->key() : $attribute;
+        
         if (! $transformer instanceof SharpAttributeTransformer) {
             $transformer = $transformer instanceof Closure
                 ? $this->normalizeToSharpAttributeTransformer($transformer)

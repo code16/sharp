@@ -5,6 +5,7 @@ namespace Code16\Sharp\Utils\Fields;
 use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Show\Fields\SharpShowField;
 use Illuminate\Support\Collection;
+use ReflectionClass;
 
 trait HandleFields
 {
@@ -26,8 +27,18 @@ trait HandleFields
     final public function getBuiltFields(): Collection
     {
         $this->checkFormIsBuilt();
-
+        
         return collect($this->fieldsContainer()->getFields())
+            ->merge(
+                collect((new ReflectionClass($this))->getProperties())
+                    ->filter(fn (\ReflectionProperty $p) =>
+                        $p->getType() instanceof \ReflectionNamedType
+                        && is_subclass_of($p->getType()->getName(), SharpFormField::class)
+                    )
+                    ->mapWithKeys(fn (\ReflectionProperty $p) => [
+                        $p->getName() => $p->getValue($this),
+                    ])
+            )
             ->mapWithKeys(fn (SharpFormField|SharpShowField $field) => [
                 $field->key => $field,
             ]);

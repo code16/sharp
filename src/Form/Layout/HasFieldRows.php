@@ -3,6 +3,8 @@
 namespace Code16\Sharp\Form\Layout;
 
 use Closure;
+use Code16\Sharp\Form\Fields\SharpFormField;
+use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Utils\Layout\LayoutColumn;
 use Code16\Sharp\Utils\Layout\LayoutField;
 use Illuminate\Support\Collection;
@@ -24,7 +26,7 @@ trait HasFieldRows
         return $this->withField($fieldKey);
     }
 
-    public function withField(string $fieldKey): static
+    public function withField(string|SharpFormField $fieldKey): static
     {
         $this->addRowLayout([
             $this->newLayoutField($this->normalizedFieldsRow([$fieldKey])->first()),
@@ -37,16 +39,16 @@ trait HasFieldRows
      * @param  (\Closure(LayoutColumn): mixed)  $subLayoutCallback
      * @return $this
      */
-    public function withListField(string $fieldKey, Closure $subLayoutCallback): static
+    public function withListField(SharpFormListField|string $fieldKey, Closure $subLayoutCallback): static
     {
         $this->addRowLayout([
-            $this->newLayoutField($fieldKey, $subLayoutCallback),
+            $this->newLayoutField($fieldKey instanceof SharpFormField ? $fieldKey->key() : $fieldKey, $subLayoutCallback),
         ]);
 
         return $this;
     }
 
-    public function withFields(string|int ...$fieldKeys): static
+    public function withFields(string|int|SharpFormField ...$fieldKeys): static
     {
         $this
             ->addRowLayout(
@@ -116,6 +118,8 @@ trait HasFieldRows
     {
         return collect($fieldKeys)
             ->map(function ($value, $key) use ($fieldKeys) {
+                $value = $value instanceof SharpFormField ? $value->key() : $value;
+                
                 if (! is_string($key)) {
                     // ['name'] or ['name|6'] cases
                     return strpos($value, '|')
