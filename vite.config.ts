@@ -2,7 +2,6 @@ import { defineConfig, loadEnv } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue';
 import * as path from 'node:path';
-import ignoreImport from 'rollup-plugin-ignore-import';
 import legacy from '@vitejs/plugin-legacy'
 import svgLoader from 'vite-svg-loader';
 
@@ -63,11 +62,6 @@ export default defineConfig(({ mode, command }) => {
                         includeAbsolute: false,
                     },
                 },
-            }),
-            ignoreImport({
-                include: [
-                    /moment\/locale\/(?!fr\.js$).*\.js$/,
-                ],
             }),
             ...command === 'build' ? [
                 legacy({
