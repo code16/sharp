@@ -51,6 +51,19 @@ abstract class SharpEntity extends BaseSharpEntity
         return $form instanceof SharpForm ? $form : app($form);
     }
 
+    final public function getLabelOrFail(?string $subEntity = null): string
+    {
+        $label = $subEntity
+            ? $this->getMultiforms()[$subEntity][1] ?? null
+            : $this->getLabel();
+
+        if ($label === null) {
+            throw new SharpInvalidEntityKeyException("The label of the subform for the entity [{$this->entityKey}:{$subEntity}] was not found.");
+        }
+
+        return $label;
+    }
+
     final public function isActionProhibited(string $action): bool
     {
         return in_array($action, $this->prohibitedActions);
@@ -61,14 +74,9 @@ abstract class SharpEntity extends BaseSharpEntity
         return $this->isSingle;
     }
 
-    protected function label(): ?string
+    protected function getLabel(): string
     {
-        return null;
-    }
-
-    final public function getLabel(?string $subEntity = null): string
-    {
-        return $subEntity ? $this->getMultiforms()[$subEntity][1] : ($this->label() ?? $this->label);
+        return $this->label;
     }
 
     protected function getList(): ?SharpEntityList

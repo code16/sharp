@@ -1,9 +1,8 @@
 <?php
 
-use Code16\Sharp\Tests\Fixtures\Entities\DynamicLabelPersonEntity;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
+use Code16\Sharp\Tests\Fixtures\Entities\PersonWithDynamicLabelEntity;
 use Code16\Sharp\Tests\Fixtures\Entities\SinglePersonEntity;
-use Code16\Sharp\Tests\Fixtures\Sharp\PersonForm;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonShow;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Inertia\Testing\AssertableInertia as Assert;
@@ -132,27 +131,5 @@ it('uses custom labels on leaves if configured, based on unformatted data', func
             ->where('breadcrumb.items.1.label', 'Marie Curie')
             // Data is formatted for fields:
             ->where('show.data.name', ['text' => 'Marie Curie'])
-        );
-});
-
-it("handles dynamic label in entity", function() {
-    sharp()->config()
-        ->displayBreadcrumb()
-        ->addEntity('dynamic_person', DynamicLabelPersonEntity::class);
-
-    fakeFormFor('dynamic_person', new class() extends PersonForm {});
-
-    $this
-        ->get(
-            route('code16.sharp.form.create', [
-                'parentUri' => 's-list/dynamic_person/',
-                'dynamic_person',
-                1,
-            ])
-        )
-        ->assertOk()
-        ->assertInertia(fn (Assert $page) => $page
-            ->where('form.title', 'New “'.__('dynamic_label').'”')
-            ->where('breadcrumb.items.1.documentTitleLabel', 'New “'.__('dynamic_label').'”')
         );
 });

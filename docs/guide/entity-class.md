@@ -25,19 +25,16 @@ The class must extend `Code16\Sharp\Entities\SharpEntity`. The easiest way to de
 ```php
 class ProductEntity extends SharpEntity
 {
+    protected string $label = 'Product';
     protected ?string $list = ProductList::class;
     protected ?string $show = ProductShow::class;
     protected ?string $form = ProductForm::class;
-    
-    protected string $label = 'Product';
-    // or
-    protected function label(): ?string { return __('Product'); } 
+}
 ```
 
 Here is the full list:
 - `$list`, `$show`, `$form` and `$policy` may be set to a full classname of a corresponding type. The following sections of this documentation describe all this in detail, allowing you to build your Sharp backend.
-- `string $label` is used in the breadcrumb, as a default ([see the breadcrumb documentation for more on this](sharp-breadcrumb.md)). You can simply put your entity name here. \
-You can also define a `protected function label(): ?string` method in the entity class to return a dynamic label (i.e: a translated label).
+- `string $label` is used in the breadcrumb, as a default ([see the breadcrumb documentation for more on this](sharp-breadcrumb.md)). You can simply put your entity name here.
 - `bool $isSingle` must be set only if you are dealing [with a single show](single-show.md)
 - and finally `array $prohibitedActions` can be used to set globally prohibited actions on the entity, [as documented here](entity-authorizations.md).
 
@@ -58,6 +55,7 @@ class SalesDashboardEntity extends SharpDashboardEntity
 If you need more control, you can override these instead of the attributes:
 
 ```php
+protected function getLabel(): string {}
 protected function getList(): ?string {}
 protected function getShow(): ?string {}
 protected function getForm(): ?string {}
@@ -69,7 +67,7 @@ The last one, `getPolicy()`, allows you to return a `SharpEntityPolicy` implemen
 ```php
 class MyEntity extends SharpEntity
 {
-    // [...]
+    // ...
 
     protected function getPolicy(): string|SharpEntityPolicy|null
     {

@@ -24,7 +24,7 @@ abstract class SharpDashboardEntity extends BaseSharpEntity
         return $this->getView() !== null;
     }
 
-    final public function getLabel(): string
+    protected function getLabel(): string
     {
         return $this->label;
     }
