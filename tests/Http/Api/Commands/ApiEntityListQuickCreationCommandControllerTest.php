@@ -1,10 +1,12 @@
 <?php
 
+use Code16\Sharp\Exceptions\Form\SharpFormUpdateException;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonForm;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Illuminate\Support\Facades\Exceptions;
 
 beforeEach(function () {
     sharp()->config()->addEntity('person', PersonEntity::class);
@@ -120,6 +122,33 @@ it('allows to post a quick creation command', function () {
         )
         ->assertOk()
         ->assertJson(['action' => 'reload']);
+});
+
+it('logs an error if the form’s update() method does not return the instance id', function () {
+    Exceptions::fake();
+
+    fakeListFor('person', new class() extends PersonList
+    {
+        public function buildListConfig(): void
+        {
+            $this->configureQuickCreationForm();
+        }
+    });
+
+    fakeFormFor('person', new class() extends PersonForm
+    {
+        public function update($id, array $data) {}
+    });
+
+    $this
+        ->postJson(
+            route('code16.sharp.api.list.command.quick-creation-form.create', ['person']),
+            ['data' => []],
+        )
+        ->assertOk()
+        ->assertJson(['action' => 'reload']);
+
+    Exceptions::assertReported(SharpFormUpdateException::class);
 });
 
 it('validates posted data of a quick creation command', function () {

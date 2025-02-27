@@ -17,10 +17,10 @@ class AddLinkHeadersForPreloadedRequests
     public function handle(Request $request, $next)
     {
         // Disable preloading fetch in Safari/Firefox as it is not taken into account
-        if(!str_contains($request->userAgent(), 'Chrome')) {
+        if (! str_contains($request->userAgent(), 'Chrome')) {
             return $next($request);
         }
-        
+
         return tap($next($request), function (Response $response) {
             if ($this->preloadedRequests !== []) {
                 if ($link = $response->headers->get('Link', '')) {
