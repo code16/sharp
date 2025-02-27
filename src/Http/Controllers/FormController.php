@@ -46,7 +46,7 @@ class FormController extends SharpProtectedController
             'form' => FormData::from([
                 ...$data,
                 'title' => $form->getCreateTitle() ?: trans('sharp::breadcrumb.form.create_entity', [
-                    'entity' => $entity->getLabel($entityKey->subEntity()),
+                    'entity' => $entity->getLabelOrFail($entityKey->subEntity()),
                 ]),
             ]),
             'breadcrumb' => BreadcrumbData::from([
@@ -86,8 +86,10 @@ class FormController extends SharpProtectedController
             'form' => FormData::from([
                 ...$data,
                 'title' => $form->getEditTitle() ?: trans('sharp::breadcrumb.form.edit_entity', [
-                    'entity' => sharp()->context()->breadcrumb()->getParentShowCachedBreadcrumbLabel()
-                        ?: $entity->getLabel($entityKey->subEntity()),
+                    'entity' => sharp()
+                        ->context()
+                        ->breadcrumb()
+                        ->getParentShowCachedBreadcrumbLabel() ?: $entity->getLabelOrFail($entityKey->subEntity()),
                 ]),
             ]),
             'breadcrumb' => BreadcrumbData::from([

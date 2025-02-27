@@ -241,7 +241,7 @@ class SharpBreadcrumb
 
         return app(SharpEntityManager::class)
             ->entityFor($item->key)
-            ->getLabel((new EntityKey($item->key))->subEntity());
+            ->getLabelOrFail((new EntityKey($item->key))->subEntity());
     }
 
     private function isSameEntityKeys(string $key1, string $key2, bool $compareBaseEntities): bool
