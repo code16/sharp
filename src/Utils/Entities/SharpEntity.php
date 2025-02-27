@@ -61,9 +61,14 @@ abstract class SharpEntity extends BaseSharpEntity
         return $this->isSingle;
     }
 
+    protected function label(): ?string
+    {
+        return null;
+    }
+
     final public function getLabel(?string $subEntity = null): string
     {
-        return $subEntity ? $this->getMultiforms()[$subEntity][1] : $this->label;
+        return $subEntity ? $this->getMultiforms()[$subEntity][1] : ($this->label() ?? $this->label);
     }
 
     protected function getList(): ?SharpEntityList

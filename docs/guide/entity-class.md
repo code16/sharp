@@ -28,12 +28,16 @@ class ProductEntity extends SharpEntity
     protected ?string $list = ProductList::class;
     protected ?string $show = ProductShow::class;
     protected ?string $form = ProductForm::class;
+    
     protected string $label = 'Product';
+    // or
+    protected function label(): ?string { return __('Product'); } 
 ```
 
 Here is the full list:
 - `$list`, `$show`, `$form` and `$policy` may be set to a full classname of a corresponding type. The following sections of this documentation describe all this in detail, allowing you to build your Sharp backend.
-- `string $label` is used in the breadcrumb, as a default ([see the breadcrumb documentation for more on this](sharp-breadcrumb.md)). You can simply put your entity name here.
+- `string $label` is used in the breadcrumb, as a default ([see the breadcrumb documentation for more on this](sharp-breadcrumb.md)). You can simply put your entity name here. \
+You can also define a `protected function label(): ?string` method in the entity class to return a dynamic label (i.e: a translated label).
 - `bool $isSingle` must be set only if you are dealing [with a single show](single-show.md)
 - and finally `array $prohibitedActions` can be used to set globally prohibited actions on the entity, [as documented here](entity-authorizations.md).
 
