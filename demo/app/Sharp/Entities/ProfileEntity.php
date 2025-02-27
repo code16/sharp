@@ -11,7 +11,8 @@ class ProfileEntity extends SharpEntity
     protected bool $isSingle = true;
     protected ?string $show = ProfileSingleShow::class;
     protected ?string $form = ProfileSingleForm::class;
-    protected function label(): ?string
+
+    protected function getLabel(): string
     {
         return __('profile');
     }

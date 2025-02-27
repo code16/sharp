@@ -36,7 +36,7 @@ class ApiEntityListQuickCreationCommandController extends ApiController
             ->setEntityKey($entityKey)
             ->setFormInstance($form)
             ->setTitle(__('sharp::breadcrumb.form.create_entity', [
-                'entity' => $entity->getLabel($entityKey->subEntity()),
+                'entity' => $entity->getLabelOrFail($entityKey->subEntity()),
             ]));
 
         $quickCreationHandler->buildCommandConfig();
