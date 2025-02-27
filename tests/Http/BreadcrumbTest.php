@@ -1,7 +1,6 @@
 <?php
 
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
-use Code16\Sharp\Tests\Fixtures\Entities\PersonWithDynamicLabelEntity;
 use Code16\Sharp\Tests\Fixtures\Entities\SinglePersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonShow;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
