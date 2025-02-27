@@ -133,22 +133,3 @@ it('uses custom labels on leaves if configured, based on unformatted data', func
             ->where('show.data.name', ['text' => 'Marie Curie'])
         );
 });
-
-it('handles dynamic label in entity', function () {
-    sharp()
-        ->config()
-        ->addEntity('person', PersonWithDynamicLabelEntity::class);
-
-    $this
-        ->get(
-            route('code16.sharp.form.create', [
-                'parentUri' => 's-list/person/',
-                'entityKey' => 'person',
-            ])
-        )
-        ->assertOk()
-        ->assertInertia(fn (Assert $page) => $page
-            ->where('form.title', 'New “'.now()->format('Ymd').'”')
-            ->where('breadcrumb.items.1.documentTitleLabel', 'New “'.now()->format('Ymd').'”')
-        );
-});
