@@ -25,10 +25,11 @@ The class must extend `Code16\Sharp\Entities\SharpEntity`. The easiest way to de
 ```php
 class ProductEntity extends SharpEntity
 {
+    protected string $label = 'Product';
     protected ?string $list = ProductList::class;
     protected ?string $show = ProductShow::class;
     protected ?string $form = ProductForm::class;
-    protected string $label = 'Product';
+}
 ```
 
 Here is the full list:
@@ -54,6 +55,7 @@ class SalesDashboardEntity extends SharpDashboardEntity
 If you need more control, you can override these instead of the attributes:
 
 ```php
+protected function getLabel(): string {}
 protected function getList(): ?string {}
 protected function getShow(): ?string {}
 protected function getForm(): ?string {}
@@ -65,7 +67,7 @@ The last one, `getPolicy()`, allows you to return a `SharpEntityPolicy` implemen
 ```php
 class MyEntity extends SharpEntity
 {
-    // [...]
+    // ...
 
     protected function getPolicy(): string|SharpEntityPolicy|null
     {

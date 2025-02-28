@@ -36,7 +36,7 @@ class ShowController extends SharpProtectedController
 
         $showData = $show->instance($instanceId);
         $payload = ShowData::from([
-            'title' => $showData[$show->titleAttribute()] ?? $entity->getLabel($entityKey->subEntity()),
+            'title' => $showData[$show->titleAttribute()] ?? $entity->getLabelOrFail($entityKey->subEntity()),
             'config' => $show->showConfig($instanceId),
             'fields' => $show->fields(),
             'layout' => $show->showLayout(),
