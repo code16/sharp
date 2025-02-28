@@ -16,6 +16,7 @@ use Code16\Sharp\Utils\Menu\SharpMenuManager;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Inertia\Middleware;
 
@@ -93,22 +94,24 @@ class HandleInertiaRequests extends Middleware
                     'url' => $url,
                 ] : null,
             )),
-            'globalSearch' => sharp()->config()->get('search.enabled') && sharp()->config()->get('search.engine')?->authorize()
-                ? GlobalSearchData::from([
-                    'config' => [
-                        'placeholder' => sharp()->config()->get('search.placeholder'),
+            ...auth()->check() && (!Gate::has('viewSharp') || Gate::allows('viewSharp'))
+                ? [
+                    'globalSearch' => sharp()->config()->get('search.enabled') && sharp()->config()->get('search.engine')?->authorize()
+                        ? GlobalSearchData::from([
+                            'config' => [
+                                'placeholder' => sharp()->config()->get('search.placeholder'),
+                            ],
+                        ])
+                        : null,
+                    'globalFilters' => app(GlobalFilters::class)->isEnabled()
+                        ? GlobalFiltersData::from(app(GlobalFilters::class)->toArray())
+                        : null,
+                    'menu' => fn () => MenuData::from(app(SharpMenuManager::class)),
+                    'auth' => fn () => [
+                        'user' => UserData::from(auth()->user()),
                     ],
-                ])
-                : null,
-            'globalFilters' => app(GlobalFilters::class)->isEnabled()
-                ? GlobalFiltersData::from(app(GlobalFilters::class)->toArray())
-                : null,
-            ...auth()->check() ? [
-                'menu' => fn () => MenuData::from(app(SharpMenuManager::class)),
-                'auth' => fn () => [
-                    'user' => UserData::from(auth()->user()),
-                ],
-            ] : [],
+                ]
+                : [],
         ];
     }
 }
