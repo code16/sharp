@@ -94,7 +94,7 @@ class HandleInertiaRequests extends Middleware
                     'url' => $url,
                 ] : null,
             )),
-            ...auth()->check() && (!Gate::has('viewSharp') || Gate::allows('viewSharp'))
+            ...auth()->check() && (! Gate::has('viewSharp') || Gate::allows('viewSharp'))
                 ? [
                     'globalSearch' => sharp()->config()->get('search.enabled') && sharp()->config()->get('search.engine')?->authorize()
                         ? GlobalSearchData::from([
