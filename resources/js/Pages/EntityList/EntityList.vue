@@ -93,7 +93,7 @@
                     @update:query="onQueryChange"
                 >
                     <template #card-header>
-                        <CardTitle class="line-clamp-2 min-w-0">
+                        <CardTitle class="line-clamp-2 py-1 -my-1 min-w-0">
                             {{ entityList.title }}
                         </CardTitle>
                     </template>
