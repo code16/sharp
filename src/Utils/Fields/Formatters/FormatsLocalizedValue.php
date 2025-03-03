@@ -19,7 +19,7 @@ trait FormatsLocalizedValue
 
         return $this;
     }
-    
+
     /**
      * @throws SharpFormFieldDataException
      * @throws SharpInvalidConfigException
@@ -43,8 +43,8 @@ trait FormatsLocalizedValue
                 $field->key()
             ));
         }
-        
-        if ($field->isLocalized() && !count($this->dataLocalizations ?? [])) {
+
+        if ($field->isLocalized() && ! count($this->dataLocalizations ?? [])) {
             throw new SharpInvalidConfigException(sprintf(
                 'The "%s" field is localized but no locales are defined. Use the `getDataLocalizations()` method to define them.',
                 $field->key()
