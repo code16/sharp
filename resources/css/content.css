@@ -17,10 +17,22 @@
       @apply mb-4;
     }
     > :where(ul) {
-      @apply mb-4 ml-6 list-disc [&>li]:mt-2;
+      @apply mb-4 ml-6 list-disc;
+      > :where(li) {
+        @apply mb-2;
+      }
+      > :where(:last-child) {
+        @apply mb-0;
+      }
     }
     > :where(ol) {
-      @apply mb-4 ml-6 list-decimal [&>li]:mt-2;
+      @apply mb-4 ml-6 list-decimal;
+      > :where(li) {
+        @apply mb-2;
+      }
+      > :where(:last-child) {
+        @apply mb-0;
+      }
     }
     > :where(blockquote) {
       @apply mb-4 relative flow-root pl-4 border-l-2 before:block before:-mt-0.5;
