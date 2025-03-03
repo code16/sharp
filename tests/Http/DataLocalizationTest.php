@@ -67,9 +67,9 @@ it('throws when a localized field is configured without form locales', function 
             return [];
         }
     });
-    
+
     $this->withoutExceptionHandling();
-    
+
     $this->get('/sharp/s-list/person/s-form/person');
 })
     ->throws(\Code16\Sharp\Exceptions\SharpInvalidConfigException::class, 'The "name" field is localized but no locales are defined');
