@@ -63,7 +63,7 @@
         class="my-4 first:mt-0 last:mb-0 border rounded-md items-center p-4 flex gap-4"
         :class="{ 'group-focus/editor:border-primary': selected }"
     >
-        <div class="flex-1">
+        <div class="flex-1 min-w-0">
             <pre>{{ node.attrs.content }}</pre>
         </div>
         <template v-if="!parentEditor.props.field.readOnly">
