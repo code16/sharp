@@ -4,6 +4,7 @@ namespace Code16\Sharp\Utils\Fields\Formatters;
 
 use Closure;
 use Code16\Sharp\Exceptions\Form\SharpFormFieldDataException;
+use Code16\Sharp\Exceptions\SharpInvalidConfigException;
 use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Show\Fields\SharpShowField;
 use Code16\Sharp\Utils\Fields\IsSharpFieldWithLocalization;
@@ -18,9 +19,10 @@ trait FormatsLocalizedValue
 
         return $this;
     }
-
+    
     /**
      * @throws SharpFormFieldDataException
+     * @throws SharpInvalidConfigException
      */
     protected function guardAgainstInvalidLocalizedValue(SharpFormField|SharpShowField $field, $value): void
     {
@@ -38,6 +40,13 @@ trait FormatsLocalizedValue
         if ($field->isLocalized() && is_string($value)) {
             throw new SharpFormFieldDataException(sprintf(
                 'Array expected, got a String for field value "%s". The field has `‑>setLocalized()` so its value must be an array like ["en"=>"text"] or null',
+                $field->key()
+            ));
+        }
+        
+        if ($field->isLocalized() && !count($this->dataLocalizations ?? [])) {
+            throw new SharpInvalidConfigException(sprintf(
+                'The "%s" field is localized but no locales are defined. Use the `getDataLocalizations()` method to define them.',
                 $field->key()
             ));
         }

@@ -85,7 +85,9 @@ trait HandleFields
                 $field = $this->findFieldByKey($key);
 
                 return $field
-                    ? $field->formatter()->toFront($field, $value)
+                    ? $field->formatter()
+                        ->setDataLocalizations($this->getDataLocalizations())
+                        ->toFront($field, $value)
                     : $value;
             })
             ->all();

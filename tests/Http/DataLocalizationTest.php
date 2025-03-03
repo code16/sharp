@@ -51,7 +51,7 @@ it('adds the locales array if configured to the form', function () {
         );
 });
 
-it('does not add the locales array if not configured', function () {
+it('throws when a localized field is configured without form locales', function () {
     fakeFormFor('person', new class() extends FakeSharpForm
     {
         public function buildFormFields(FieldsContainer $formFields): void
@@ -67,13 +67,12 @@ it('does not add the locales array if not configured', function () {
             return [];
         }
     });
-
-    $this->get('/sharp/s-list/person/s-form/person')
-        ->assertOk()
-        ->assertInertia(fn (Assert $page) => $page
-            ->where('form.locales', [])
-        );
-});
+    
+    $this->withoutExceptionHandling();
+    
+    $this->get('/sharp/s-list/person/s-form/person');
+})
+    ->throws(\Code16\Sharp\Exceptions\SharpInvalidConfigException::class, 'The "name" field is localized but no locales are defined');
 
 it('does not add the locales array if configured but there is no localized field', function () {
     fakeFormFor('person', new class() extends FakeSharpForm
