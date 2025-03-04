@@ -4,6 +4,8 @@ namespace App\Sharp;
 
 use App\Models\Post;
 use App\Models\User;
+use App\Sharp\Entities\AuthorEntity;
+use App\Sharp\Entities\PostEntity;
 use Code16\Sharp\Search\SharpSearchEngine;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\Links\LinkToShowPage;
@@ -41,7 +43,7 @@ class AppSearchEngine extends SharpSearchEngine
             ->get()
             ->each(function (Post $post) use ($resultSet) {
                 $resultSet->addResultLink(
-                    link: LinkToShowPage::make('posts', $post->id),
+                    link: LinkToShowPage::make(PostEntity::class, $post->id),
                     label: $post->title,
                     detail: $post->author->name,
                 );
@@ -70,7 +72,7 @@ class AppSearchEngine extends SharpSearchEngine
             ->get()
             ->each(function (User $author) use ($resultSet) {
                 $resultSet->addResultLink(
-                    link: LinkToEntityList::make('authors')->setSearch($author->email),
+                    link: LinkToEntityList::make(AuthorEntity::class)->setSearch($author->email),
                     label: $author->name,
                     detail: $author->email,
                 );

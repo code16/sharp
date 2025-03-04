@@ -91,7 +91,7 @@ class PostShow extends SharpShow
                         $column->withField('content');
                     });
             })
-            ->addEntityListSection('blocks');
+            ->addEntityListSection(PostBlockEntity::class);
     }
 
     public function buildShowConfig(): void
