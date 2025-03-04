@@ -14,8 +14,12 @@ Depending on your target, you'll want to use either:
 
 To create an instance, use the static `make` method, which may take one or two arguments:
 
-- For `LinkToEntityList`, `LinkToSingleShowPage`, `LinkToSingleForm` and `LinkToDashboard`: `::make($entityKey)`
-- For `LinkToForm` and `LinkToShowPage`: `::make($entityKey, $instanceId)`
+- For `LinkToEntityList`, `LinkToSingleShowPage`, `LinkToSingleForm` and `LinkToDashboard`: `::make($entityClassOrKey)`
+- For `LinkToForm` and `LinkToShowPage`: `::make($entityClassOrKey, $instanceId)`
+
+::: tip
+Prefer using the full class name of the entity instead of an entity key, as it will be more robust to potential renaming. This means you should use `LinkToForm::make(PlayerEntity::class, $id)` instead of `LinkToForm::make('players', $id)`.
+:::
 
 ## Link use case
 
@@ -26,14 +30,14 @@ Let’s see an example, in which we want to list the players of a team in an Ent
 ```php
 class TeamsList extends \Code16\Sharp\EntityList\SharpEntityList 
 {
-   // [...]
+   // ...
    
    function getListData(EntityListQueryParams $params)
    {
       return $this
           ->setCustomTransformer('players', function($value, $yeam) {
               return $yeam->players
-                  ->map(fn ($player) => LinkToForm::make('player', $player->id)
+                  ->map(fn ($player) => LinkToForm::make(PlayerEntity::class, $player->id)
                       ->renderAsText($pilot->name); // This will render a full <a...> tag
                   )
                   ->implode('<br>');
@@ -52,7 +56,7 @@ If you only need the URL and not the `<a>` tag, use `$link->renderAsUrl()`.
 In Form or Show Page cases, you may want to handle the breadcrumb. The most common case is to insert a Show Page between an Entity List and a Form. To do so, you can use the `throughShowPage` method:
 
 ```php
-LinkToForm::make('player', 3)->throughShowPage()->renderAsUrl();
+LinkToForm::make(PlayerEntity::class, 3)->throughShowPage()->renderAsUrl();
 ```
 
 This will generate the URL corresponding to the breadcrumb 
@@ -65,7 +69,7 @@ This will generate the URL corresponding to the breadcrumb
 In more complex cases you can also handle the full breadcrumb, by using the `withBreadcrumb()` method:
 
 ```php
-LinkToShowPage::make('player', 1)
+LinkToShowPage::make(PlayerEntity::class, 1)
     ->withBreadcrumb(function (BreadcrumbBuilder $builder) {
         return $builder
             ->appendEntityList('team')

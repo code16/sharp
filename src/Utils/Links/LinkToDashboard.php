@@ -4,9 +4,9 @@ namespace Code16\Sharp\Utils\Links;
 
 class LinkToDashboard extends SharpLinkTo
 {
-    public static function make(string $entityKey): self
+    public static function make(string $entityClassOrKey): self
     {
-        return new static($entityKey);
+        return new static($entityClassOrKey);
     }
 
     public function renderAsUrl(): string

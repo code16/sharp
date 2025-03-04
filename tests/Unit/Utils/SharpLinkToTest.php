@@ -1,6 +1,8 @@
 <?php
 
+use Code16\Sharp\Config\SharpConfigBuilder;
 use Code16\Sharp\Exceptions\SharpInvalidBreadcrumbItemException;
+use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Utils\Filters\SelectFilter;
 use Code16\Sharp\Utils\Links\BreadcrumbBuilder;
 use Code16\Sharp\Utils\Links\LinkToDashboard;
@@ -56,6 +58,16 @@ it('allows to generate a link to a dashboard page', function () {
         '<a href="http://localhost/sharp/s-dashboard/my-entity" title="">test</a>',
         LinkToDashboard::make('my-entity')
             ->renderAsText('test'),
+    );
+});
+
+it('allows to generate a link to a show page passing an SharpEntity class', function () {
+    app(SharpConfigBuilder::class)
+        ->addEntity('person', PersonEntity::class);
+
+    $this->assertEquals(
+        '<a href="http://localhost/sharp/s-list/person/s-show/person/23" title="">test</a>',
+        LinkToShowPage::make(PersonEntity::class, 23)->renderAsText('test'),
     );
 });
 

@@ -2,14 +2,18 @@
 
 namespace Code16\Sharp\Utils\Links;
 
+use Code16\Sharp\Utils\Entities\SharpEntityManager;
+
 abstract class SharpLinkTo
 {
     protected string $entityKey;
     protected string $tooltip = '';
 
-    protected function __construct(string $entityKey)
+    protected function __construct(string $entityClassOrKey)
     {
-        $this->entityKey = $entityKey;
+        $this->entityKey = class_exists($entityClassOrKey)
+            ? app(SharpEntityManager::class)->entityKeyFor($entityClassOrKey)
+            : $entityClassOrKey;
     }
 
     public function setTooltip($tooltip): self

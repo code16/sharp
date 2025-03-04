@@ -3,6 +3,7 @@
 namespace App\Sharp\Posts;
 
 use App\Models\Post;
+use App\Sharp\Entities\PostEntity;
 use App\Sharp\Posts\Commands\BulkPublishPostsCommand;
 use App\Sharp\Posts\Commands\ComposeEmailWithPostsWizardCommand;
 use App\Sharp\Posts\Commands\EvaluateDraftPostWizardCommand;
@@ -180,7 +181,7 @@ class PostList extends SharpEntityList
             })
             ->setCustomTransformer('author:name', function ($value, $instance) {
                 return $value
-                    ? LinkToEntityList::make('posts')
+                    ? LinkToEntityList::make(PostEntity::class)
                         ->addFilter(AuthorFilter::class, $instance->id)
                         ->setTooltip('See '.$value.' posts')
                         ->renderAsText($value)
