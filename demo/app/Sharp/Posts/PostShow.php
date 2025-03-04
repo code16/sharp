@@ -5,6 +5,7 @@ namespace App\Sharp\Posts;
 use App\Models\Post;
 use App\Sharp\Entities\AuthorEntity;
 use App\Sharp\Entities\CategoryEntity;
+use App\Sharp\Entities\PostBlockEntity;
 use App\Sharp\Posts\Commands\EvaluateDraftPostWizardCommand;
 use App\Sharp\Posts\Commands\PreviewPostCommand;
 use App\Sharp\Utils\Embeds\AuthorEmbed;
