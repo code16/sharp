@@ -295,13 +295,16 @@ it('does not dispatch HandlePostedFilesJob when temporary', function () {
         }
     });
     
+    UploadedFile::fake()
+        ->image('image.jpg')
+        ->storeAs('/tmp', 'image.jpg', ['disk' => 'local']);
+    
     $this
         ->post('/sharp/s-list/person/s-form/person/2', [
             'name' => 'Stephen Hawking',
             'file' => [
-                'name' => 'doc.pdf',
-                'path' => 'data/test/doc.pdf',
-                'disk' => 'local',
+                'name' => 'image.jpg',
+                'uploaded' => true,
             ],
         ])
         ->assertSessionHasNoErrors()
@@ -311,9 +314,8 @@ it('does not dispatch HandlePostedFilesJob when temporary', function () {
         ->post('/sharp/s-list/person/s-form/person', [
             'name' => 'Marie Curie',
             'file' => [
-                'name' => 'doc.pdf',
-                'path' => 'data/test/doc.pdf',
-                'disk' => 'local',
+                'name' => 'image.jpg',
+                'uploaded' => true,
             ],
         ])
         ->assertSessionHasNoErrors()
