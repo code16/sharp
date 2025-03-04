@@ -4,16 +4,15 @@ namespace Code16\Sharp\Form\Fields;
 
 use Closure;
 use Code16\Sharp\Form\Fields\Formatters\UploadFormatter;
-use Code16\Sharp\Form\Fields\Utils\IsUploadField;
 use Code16\Sharp\Utils\Fields\Validation\SharpFileValidation;
 use Code16\Sharp\Utils\Fields\Validation\SharpImageValidation;
 use Illuminate\Validation\Rules\Dimensions;
 
-class SharpFormUploadField extends SharpFormField implements IsUploadField
+class SharpFormUploadField extends SharpFormField
 {
     const FIELD_TYPE = 'upload';
 
-    protected string $storageDisk = 'local';
+    protected ?string $storageDisk = 'local';
     protected string|Closure $storageBasePath = 'data';
     protected ?float $maxFileSize = null;
     protected ?float $minFileSize = null;
@@ -138,6 +137,13 @@ class SharpFormUploadField extends SharpFormField implements IsUploadField
 
         return $this;
     }
+    
+    public function setStorageTemporary(): self
+    {
+        $this->storageDisk = null;
+
+        return $this;
+    }
 
     /**
      * @param  string|(Closure(): string)  $storageBasePath
@@ -157,7 +163,7 @@ class SharpFormUploadField extends SharpFormField implements IsUploadField
         return $this;
     }
 
-    public function storageDisk(): string
+    public function storageDisk(): ?string
     {
         return $this->storageDisk;
     }

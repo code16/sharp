@@ -31,31 +31,35 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
             );
 
             return tap($this->normalizeFromFront($value, [
-                'file_name' => sprintf(
-                    '%s/%s',
-                    str($field->storageBasePath())->replace('{id}', $this->instanceId ?? '{id}'),
-                    app(FileUtil::class)->findAvailableName(
-                        $value['name'], $field->storageBasePath(), $field->storageDisk(),
+                'file_name' => $field->storageDisk()
+                    ? sprintf(
+                        '%s/%s',
+                        str($field->storageBasePath())->replace('{id}', $this->instanceId ?? '{id}'),
+                        app(FileUtil::class)->findAvailableName(
+                            $value['name'], $field->storageBasePath(), $field->storageDisk(),
+                        )
                     )
-                ),
+                    : $uploadedFieldRelativePath,
                 'size' => Storage::disk(sharp()->config()->get('uploads.tmp_disk'))
                     ->size($uploadedFieldRelativePath),
                 'mime_type' => Storage::disk(sharp()->config()->get('uploads.tmp_disk'))
                     ->mimeType($uploadedFieldRelativePath),
-                'disk' => $field->storageDisk(),
+                'disk' => $field->storageDisk() ?: sharp()->config()->get('uploads.tmp_disk'),
                 'filters' => $field->isImageTransformOriginal()
                     ? null
                     : $value['filters'] ?? null,
             ]), function ($formatted) use ($field, $value) {
-                app(SharpUploadManager::class)->queueHandleUploadedFile(
-                    uploadedFileName: $value['name'],
-                    disk: $field->storageDisk(),
-                    filePath: $formatted['file_name'],
-                    shouldOptimizeImage: $field->isImageOptimize(),
-                    transformFilters: $field->isImageTransformOriginal()
-                        ? ($value['filters'] ?? null)
-                        : null,
-                );
+                if($field->storageDisk()) {
+                    app(SharpUploadManager::class)->queueHandleUploadedFile(
+                        uploadedFileName: $value['name'],
+                        disk: $field->storageDisk(),
+                        filePath: $formatted['file_name'],
+                        shouldOptimizeImage: $field->isImageOptimize(),
+                        transformFilters: $field->isImageTransformOriginal()
+                            ? ($value['filters'] ?? null)
+                            : null,
+                    );
+                }
             });
         }
 

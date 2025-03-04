@@ -282,6 +282,48 @@ it('does not dispatch HandlePostedFilesJob if not needed', function () {
     Queue::assertNotPushed(HandleUploadedFileJob::class);
 });
 
+it('does not dispatch HandlePostedFilesJob when temporary', function () {
+    fakeFormFor('person', new class() extends PersonForm
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields
+                ->addField(
+                    SharpFormUploadField::make('file')
+                        ->setStorageTemporary()
+                );
+        }
+    });
+    
+    UploadedFile::fake()
+        ->image('image.jpg')
+        ->storeAs('/tmp', 'image.jpg', ['disk' => 'local']);
+    
+    $this
+        ->post('/sharp/s-list/person/s-form/person/2', [
+            'name' => 'Stephen Hawking',
+            'file' => [
+                'name' => 'image.jpg',
+                'uploaded' => true,
+            ],
+        ])
+        ->assertSessionHasNoErrors()
+        ->assertRedirect();
+    
+    $this
+        ->post('/sharp/s-list/person/s-form/person', [
+            'name' => 'Marie Curie',
+            'file' => [
+                'name' => 'image.jpg',
+                'uploaded' => true,
+            ],
+        ])
+        ->assertSessionHasNoErrors()
+        ->assertRedirect();
+    
+    Queue::assertNotPushed(HandleUploadedFileJob::class);
+});
+
 it('handles isTransformOriginal to transform the image on a newly uploaded file', function ($transformKeepOriginal) {
     fakeFormFor('person', new class($transformKeepOriginal) extends PersonForm
     {

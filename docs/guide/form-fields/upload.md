@@ -39,6 +39,10 @@ Set the destination base storage path.
 If you want to use a `{id}` special placeholder to add the instance id in the path (for instance: `$field->setStorageBasePath('/users/{id}/avatar')`), you must be the Eloquent case, leveraging `Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater` (see [Eloquent form](../building-form#eloquent-case-where-the-magic-happens))
 :::
 
+### `setStorageTemporary()`
+
+Keep the file only in the upload directory/disk (configured [here](#general-configuration)). `setStorageDisk()` and `setStorageBasePath()` will be ignored.
+
 ### `setAllowedExtensions(string|array $allowedExtensions)`
 
 Define the allowed file extensions. 
