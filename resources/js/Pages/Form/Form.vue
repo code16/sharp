@@ -71,19 +71,6 @@
             });
         }
     }, { immediate: true });
-
-    // lock body height to allow to scroll on tab change
-    useResizeObserver(document.body, (entries) => {
-        const target = entries[0].target as HTMLElement;
-        const minHeight = target.style.minHeight ? parseFloat(target.style.minHeight) : 0;
-        if(target.offsetHeight > window.innerHeight && target.offsetHeight > minHeight) {
-            target.style.minHeight = `${target.offsetHeight}px`;
-        }
-    });
-
-    onUnmounted(() => {
-        document.body.style.minHeight = '';
-    });
 </script>
 
 <template>

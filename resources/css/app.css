@@ -9,33 +9,40 @@
 @tailwind utilities;
 
 @layer base {
-    [type="search"]::-webkit-search-decoration,
-    [type="search"]::-webkit-search-cancel-button {
-        appearance: none;
-    }
-    body {
-        overflow-y: scroll;
-    }
+  [type="search"]::-webkit-search-decoration,
+  [type="search"]::-webkit-search-cancel-button {
+    appearance: none;
+  }
 
-    tr.relative {
-        transform: scale(100%);
-        clip-path: inset(0);
+  html {
+    &:not(:has([data-stuck]:focus-within),:has(header:focus-within)) {
+      @apply scroll-pt-36;
     }
+  }
 
-    .dark {
-        color-scheme: dark;
-    }
+  body {
+    overflow-y: scroll;
+  }
+
+  tr.relative {
+    transform: scale(100%);
+    clip-path: inset(0);
+  }
+
+  .dark {
+    color-scheme: dark;
+  }
 }
 
 @layer components {
-    .container {
-        @apply px-4 lg:px-6;
-    }
+  .container {
+    @apply px-4 lg:px-6;
+  }
 }
 
 @layer utilities {
-    /* tailwindcss-animate allow to set animation duration with "duration-" classes but it clashes with items in TransitionGroup */
-    [class*="transition"] {
-        animation-duration: 0s;
-    }
+  /* tailwindcss-animate allow to set animation duration with "duration-" classes but it clashes with items in TransitionGroup */
+  [class*="transition"] {
+    animation-duration: 0s;
+  }
 }
