@@ -22,11 +22,17 @@ class ListFormatter extends SharpShowFieldFormatter
                             // It's a sub attribute (like mother:name)
                             [$attribute, $subAttribute] = explode(':', $key);
                             $itemArray[$key] = isset($item[$attribute][$subAttribute])
-                                ? $itemField->formatter()->toFront($itemField, $item[$attribute][$subAttribute])
+                                ? $itemField
+                                    ->formatter()
+                                    ->setDataLocalizations($this->dataLocalizations ?: [])
+                                    ->toFront($itemField, $item[$attribute][$subAttribute])
                                 : null;
                         } else {
                             $itemArray[$key] = isset($item[$key])
-                                ? $itemField->formatter()->toFront($itemField, $item[$key])
+                                ? $itemField
+                                    ->formatter()
+                                    ->setDataLocalizations($this->dataLocalizations ?: [])
+                                    ->toFront($itemField, $item[$key])
                                 : null;
                         }
                     });

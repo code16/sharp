@@ -79,7 +79,10 @@ trait HandleFields
             ->merge($attributes)
             ->map(function ($value, $key) {
                 if (isset($this->pageTitleField) && $this->pageTitleField->key == $key) {
-                    return $this->pageTitleField->formatter()->toFront($this->pageTitleField, $value);
+                    return $this->pageTitleField
+                        ->formatter()
+                        ->setDataLocalizations($this->getDataLocalizations())
+                        ->toFront($this->pageTitleField, $value);
                 }
 
                 $field = $this->findFieldByKey($key);
