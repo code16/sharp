@@ -3,7 +3,8 @@
 namespace App\Sharp\Posts;
 
 use App\Models\Post;
-use App\Sharp\Entities\PostBlockEntity;
+use App\Sharp\Entities\AuthorEntity;
+use App\Sharp\Entities\CategoryEntity;
 use App\Sharp\Posts\Commands\EvaluateDraftPostWizardCommand;
 use App\Sharp\Posts\Commands\PreviewPostCommand;
 use App\Sharp\Utils\Embeds\AuthorEmbed;
@@ -142,14 +143,14 @@ class PostShow extends SharpShow
                 'published_at' => $instance->published_at->isoFormat('LLL'),
             ])
             ->setCustomTransformer('author', fn ($value, $instance) => $instance->author_id
-                ? LinkToEntityList::make('authors')
+                ? LinkToEntityList::make(AuthorEntity::class)
                     ->setSearch($instance->author->email)
                     ->renderAsText($instance->author->name)
                 : null
             )
             ->setCustomTransformer('categories', fn ($value, Post $instance) => $instance
                 ->categories
-                ->map(fn ($category) => LinkToShowPage::make('categories', $category->id)
+                ->map(fn ($category) => LinkToShowPage::make(CategoryEntity::class, $category->id)
                     ->renderAsText($category->name))
                 ->implode(', ')
             )

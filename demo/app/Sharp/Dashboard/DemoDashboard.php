@@ -5,6 +5,7 @@ namespace App\Sharp\Dashboard;
 use App\Models\Category;
 use App\Models\User;
 use App\Sharp\Dashboard\Commands\ExportStatsAsCsvCommand;
+use App\Sharp\Entities\PostEntity;
 use App\Sharp\Utils\Filters\CategoryFilter;
 use App\Sharp\Utils\Filters\PeriodFilter;
 use App\Sharp\Utils\Filters\PeriodRequiredFilter;
@@ -68,12 +69,12 @@ class DemoDashboard extends SharpDashboard
             ->addWidget(
                 SharpFigureWidget::make('draft_panel')
                     ->setTitle('Draft posts')
-                    ->setLink(LinkToEntityList::make('posts')->addFilter(StateFilter::class, 'draft')),
+                    ->setLink(LinkToEntityList::make(PostEntity::class)->addFilter(StateFilter::class, 'draft')),
             )
             ->addWidget(
                 SharpFigureWidget::make('online_panel')
                     ->setTitle('Online posts')
-                    ->setLink(LinkToEntityList::make('posts')->addFilter(StateFilter::class, 'online')),
+                    ->setLink(LinkToEntityList::make(PostEntity::class)->addFilter(StateFilter::class, 'online')),
             )
             ->addWidget(
                 SharpOrderedListWidget::make('list')
@@ -254,7 +255,7 @@ class DemoDashboard extends SharpDashboard
                 ->map(fn (Category $category) => [
                     'label' => $category->name,
                     'count' => $category->posts_count,
-                    'url' => LinkToEntityList::make('posts')
+                    'url' => LinkToEntityList::make(PostEntity::class)
                         ->addFilter(CategoryFilter::class, $category->id)
                         ->addFilter(PeriodFilter::class, sprintf('%s..%s',
                             $this->getStartDate()->format('Ymd'),

@@ -9,9 +9,9 @@ class LinkToShowPage extends SharpLinkTo
     protected string $instanceId;
     protected BreadcrumbBuilder $breadcrumbBuilder;
 
-    public static function make(string $entityKey, string $instanceId): self
+    public static function make(string $entityClassOrKey, string $instanceId): self
     {
-        $instance = new static($entityKey);
+        $instance = new static($entityClassOrKey);
         $instance->instanceId = $instanceId;
 
         return $instance;
