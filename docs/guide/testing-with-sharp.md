@@ -77,11 +77,11 @@ it('allow the user to display a leaf form', function () {
         ->loginAsSharpUser()
         ->withSharpBreadcrumb(function (BreadcrumbBuilder $builder) {
             return $builder
-                ->appendEntityList('trees')
-                ->appendShowPage('trees', 6)
-                ->appendShowPage('leaves', 16);
+                ->appendEntityList(TreeEntity::class)
+                ->appendShowPage(TreeEntity::class, 6)
+                ->appendShowPage(LeafEntity::class, 16);
         })
-        ->getSharpForm('leaves', 16)
+        ->getSharpForm(LeafEntity::class, 16)
         ->assertOk();
 });
 ```

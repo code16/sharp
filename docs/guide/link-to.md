@@ -70,11 +70,10 @@ In more complex cases you can also handle the full breadcrumb, by using the `wit
 
 ```php
 LinkToShowPage::make(PlayerEntity::class, 1)
-    ->withBreadcrumb(function (BreadcrumbBuilder $builder) {
-        return $builder
-            ->appendEntityList('team')
-            ->appendShowPage('team', 6);
-    })
+    ->withBreadcrumb(fn (BreadcrumbBuilder $builder) => $builder
+        ->appendEntityList(TeamEntity::class)
+        ->appendShowPage(TeamEntity::class, 6)
+    )
     ->renderAsUrl(),
 ```
 

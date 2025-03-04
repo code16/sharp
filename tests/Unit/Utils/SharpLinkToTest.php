@@ -61,7 +61,7 @@ it('allows to generate a link to a dashboard page', function () {
     );
 });
 
-it('allows to generate a link to a show page passing an SharpEntity class', function () {
+it('allows to generate a link to a show page passing a SharpEntity class', function () {
     app(SharpConfigBuilder::class)
         ->addEntity('person', PersonEntity::class);
 
@@ -79,6 +79,22 @@ it('allows to generate an url to a show page with a specific breadcrumb', functi
                 return $builder
                     ->appendEntityList('base-entity')
                     ->appendShowPage('base-entity', 3);
+            })
+            ->renderAsUrl(),
+    );
+});
+
+it('allows to generate an url to a show page with a specific breadcrumb passing a SharpEntity class', function () {
+    app(SharpConfigBuilder::class)
+        ->addEntity('person', PersonEntity::class);
+
+    $this->assertEquals(
+        'http://localhost/sharp/s-list/person/s-show/person/3/s-show/person/4',
+        LinkToShowPage::make(PersonEntity::class, 4)
+            ->withBreadcrumb(function (BreadcrumbBuilder $builder) {
+                return $builder
+                    ->appendEntityList(PersonEntity::class)
+                    ->appendShowPage(PersonEntity::class, 3);
             })
             ->renderAsUrl(),
     );
