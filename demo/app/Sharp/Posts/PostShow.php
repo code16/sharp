@@ -5,6 +5,7 @@ namespace App\Sharp\Posts;
 use App\Models\Post;
 use App\Sharp\Entities\AuthorEntity;
 use App\Sharp\Entities\CategoryEntity;
+use App\Sharp\Entities\PostBlockEntity;
 use App\Sharp\Posts\Commands\EvaluateDraftPostWizardCommand;
 use App\Sharp\Posts\Commands\PreviewPostCommand;
 use App\Sharp\Utils\Embeds\AuthorEmbed;
@@ -63,7 +64,7 @@ class PostShow extends SharpShow
                     )
             )
             ->addField(
-                SharpShowEntityListField::make('blocks')
+                SharpShowEntityListField::make(PostBlockEntity::class)
                     ->setLabel('Blocks')
                     ->hideFilterWithValue('post', fn ($instanceId) => $instanceId)
             );
@@ -92,7 +93,7 @@ class PostShow extends SharpShow
                         $column->withField('content');
                     });
             })
-            ->addEntityListSection('blocks');
+            ->addEntityListSection(PostBlockEntity::class);
     }
 
     public function buildShowConfig(): void

@@ -6,15 +6,23 @@ use Closure;
 use Code16\Sharp\Auth\Impersonate\SharpDefaultEloquentImpersonationHandler;
 use Code16\Sharp\Auth\Impersonate\SharpImpersonationHandler;
 use Code16\Sharp\Auth\TwoFactor\Sharp2faHandler;
+use Code16\Sharp\Exceptions\SharpInvalidConfigException;
 use Code16\Sharp\Exceptions\SharpInvalidEntityKeyException;
 use Code16\Sharp\Search\SharpSearchEngine;
+use Code16\Sharp\Utils\Entities\SharpDashboardEntity;
+use Code16\Sharp\Utils\Entities\SharpEntity;
 use Code16\Sharp\Utils\Entities\SharpEntityResolver;
 use Code16\Sharp\Utils\Filters\GlobalRequiredFilter;
 use Code16\Sharp\Utils\Menu\SharpMenu;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Vite;
+use Illuminate\Support\Str;
 use Illuminate\Support\Traits\Conditionable;
+use ReflectionClass;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
+use Throwable;
 
 class SharpConfigBuilder
 {
@@ -140,6 +148,38 @@ class SharpConfigBuilder
 
         $this->config['entity_resolver'] = instanciate($resolver);
         $this->config['entities'] = [];
+
+        return $this;
+    }
+
+    public function autodiscoverEntities(string $path = 'Sharp/Entities'): self
+    {
+        $entityClasses = collect((new Finder())->files()->in(app_path($path)))
+            ->map(fn (SplFileInfo $file) => $this->fullQualifiedClassNameFromFile($file))
+            ->filter(function (string $entityClass) {
+                try {
+                    return (
+                        is_subclass_of($entityClass, SharpEntity::class)
+                        || is_subclass_of($entityClass, SharpDashboardEntity::class)
+                    ) && (new ReflectionClass($entityClass))->isInstantiable();
+                } catch (Throwable) {
+                    return false;
+                }
+            })
+            ->flatten()
+            ->each(fn (string $entityClass) => $this
+                ->addEntity(
+                    str(class_basename($entityClass))
+                        ->before('Entity')
+                        ->kebab()
+                        ->toString(),
+                    $entityClass
+                )
+            );
+
+        if (empty($entityClasses)) {
+            throw new SharpInvalidConfigException('Autodiscover failed: no entities found in the given path.');
+        }
 
         return $this;
     }
@@ -446,5 +486,16 @@ class SharpConfigBuilder
         }
 
         return $this->config[$key] ?? null;
+    }
+
+    private function fullQualifiedClassNameFromFile(SplFileInfo $file): string
+    {
+        $class = trim(Str::replaceFirst(base_path(), '', $file->getRealPath()), DIRECTORY_SEPARATOR);
+
+        return str_replace(
+            [DIRECTORY_SEPARATOR, 'App\\'],
+            ['\\', app()->getNamespace()],
+            ucfirst(Str::replaceLast('.php', '', $class))
+        );
     }
 }

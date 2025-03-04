@@ -40,6 +40,11 @@ class SharpEntityManager
 
     public function entityKeyFor(string|BaseSharpEntity $entity): string
     {
+        if (is_string($entity) && ! class_exists($entity)) {
+            // Should be an entity key
+            return $entity;
+        }
+
         $entityClassName = is_string($entity) ? $entity : get_class($entity);
         $entities = sharp()->config()->get('entities');
 

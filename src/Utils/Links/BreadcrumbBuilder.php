@@ -58,8 +58,6 @@ class BreadcrumbBuilder
 
     private function resolveEntityKey(string $entityClassNameOrKey): string
     {
-        return class_exists($entityClassNameOrKey)
-            ? app(SharpEntityManager::class)->entityKeyFor($entityClassNameOrKey)
-            : $entityClassNameOrKey;
+        return app(SharpEntityManager::class)->entityKeyFor($entityClassNameOrKey);
     }
 }
