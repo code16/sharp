@@ -6,8 +6,11 @@ use Closure;
 use Code16\Sharp\Auth\Impersonate\SharpDefaultEloquentImpersonationHandler;
 use Code16\Sharp\Auth\Impersonate\SharpImpersonationHandler;
 use Code16\Sharp\Auth\TwoFactor\Sharp2faHandler;
+use Code16\Sharp\Exceptions\SharpInvalidConfigException;
 use Code16\Sharp\Exceptions\SharpInvalidEntityKeyException;
 use Code16\Sharp\Search\SharpSearchEngine;
+use Code16\Sharp\Utils\Entities\SharpDashboardEntity;
+use Code16\Sharp\Utils\Entities\SharpEntity;
 use Code16\Sharp\Utils\Entities\SharpEntityResolver;
 use Code16\Sharp\Utils\Filters\GlobalRequiredFilter;
 use Code16\Sharp\Utils\Menu\SharpMenu;
@@ -15,6 +18,7 @@ use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Vite;
 use Illuminate\Support\Traits\Conditionable;
+use Spatie\StructureDiscoverer\Discover;
 
 class SharpConfigBuilder
 {
@@ -140,6 +144,30 @@ class SharpConfigBuilder
 
         $this->config['entity_resolver'] = instanciate($resolver);
         $this->config['entities'] = [];
+
+        return $this;
+    }
+
+    public function autodiscoverEntities(string $path = 'Sharp/Entities'): self
+    {
+        $entityClasses = Discover::in(app_path($path))
+            ->extending(SharpEntity::class, SharpDashboardEntity::class)
+            ->get();
+
+        if (empty($entityClasses)) {
+            throw new SharpInvalidConfigException('Autodiscover failed: no entities found in the given path.');
+        }
+
+        collect($entityClasses)
+            ->each(fn (string $entityClass) => $this
+                ->addEntity(
+                    str(class_basename($entityClass))
+                        ->before('Entity')
+                        ->kebab()
+                        ->toString(),
+                    $entityClass
+                )
+            );
 
         return $this;
     }

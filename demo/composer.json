@@ -17,6 +17,7 @@
         "pragmarx/google2fa": "^8.0",
         "spatie/image-optimizer": "^1.6",
         "spatie/laravel-translatable": "^6.0",
+        "spatie/php-structure-discoverer": "*",
         "tightenco/ziggy": "^1.8"
     },
     "require-dev": {
