@@ -17,8 +17,12 @@ use Code16\Sharp\Utils\Menu\SharpMenu;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Vite;
+use Illuminate\Support\Str;
 use Illuminate\Support\Traits\Conditionable;
-use Spatie\StructureDiscoverer\Discover;
+use ReflectionClass;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
+use Throwable;
 
 class SharpConfigBuilder
 {
@@ -150,15 +154,19 @@ class SharpConfigBuilder
 
     public function autodiscoverEntities(string $path = 'Sharp/Entities'): self
     {
-        $entityClasses = Discover::in(app_path($path))
-            ->extending(SharpEntity::class, SharpDashboardEntity::class)
-            ->get();
-
-        if (empty($entityClasses)) {
-            throw new SharpInvalidConfigException('Autodiscover failed: no entities found in the given path.');
-        }
-
-        collect($entityClasses)
+        $entityClasses = collect((new Finder())->files()->in(app_path($path)))
+            ->map(fn (SplFileInfo $file) => $this->fullQualifiedClassNameFromFile($file))
+            ->filter(function (string $entityClass) {
+                try {
+                    return (
+                        is_subclass_of($entityClass, SharpEntity::class)
+                        || is_subclass_of($entityClass, SharpDashboardEntity::class)
+                    ) && (new ReflectionClass($entityClass))->isInstantiable();
+                } catch (Throwable) {
+                    return false;
+                }
+            })
+            ->flatten()
             ->each(fn (string $entityClass) => $this
                 ->addEntity(
                     str(class_basename($entityClass))
@@ -169,6 +177,10 @@ class SharpConfigBuilder
                     $entityClass
                 )
             );
+
+        if (empty($entityClasses)) {
+            throw new SharpInvalidConfigException('Autodiscover failed: no entities found in the given path.');
+        }
 
         return $this;
     }
@@ -475,5 +487,16 @@ class SharpConfigBuilder
         }
 
         return $this->config[$key] ?? null;
+    }
+
+    private function fullQualifiedClassNameFromFile(SplFileInfo $file): string
+    {
+        $class = trim(Str::replaceFirst(base_path(), '', $file->getRealPath()), DIRECTORY_SEPARATOR);
+
+        return str_replace(
+            [DIRECTORY_SEPARATOR, 'App\\'],
+            ['\\', app()->getNamespace()],
+            ucfirst(Str::replaceLast('.php', '', $class))
+        );
     }
 }
