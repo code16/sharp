@@ -172,7 +172,6 @@ class SharpConfigBuilder
                     str(class_basename($entityClass))
                         ->before('Entity')
                         ->kebab()
-                        ->plural()
                         ->toString(),
                     $entityClass
                 )

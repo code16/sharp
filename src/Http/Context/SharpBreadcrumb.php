@@ -62,14 +62,14 @@ class SharpBreadcrumb
         return $this->breadcrumbItems()->reverse()->skip(1)->first();
     }
 
-    public function previousShowSegment(?string $entityKey = null): ?BreadcrumbItem
+    public function previousShowSegment(?string $entityKeyOrClassName = null): ?BreadcrumbItem
     {
-        return $this->findPreviousSegment('s-show', $entityKey);
+        return $this->findPreviousSegment('s-show', $entityKeyOrClassName);
     }
 
-    public function previousListSegment(?string $entityKey = null): ?BreadcrumbItem
+    public function previousListSegment(?string $entityKeyOrClassName = null): ?BreadcrumbItem
     {
-        return $this->findPreviousSegment('s-list', $entityKey);
+        return $this->findPreviousSegment('s-list', $entityKeyOrClassName);
     }
 
     public function getCurrentSegmentUrl(): string
@@ -111,23 +111,24 @@ class SharpBreadcrumb
         return $this->breadcrumbItems;
     }
 
-    private function findPreviousSegment(string $type, ?string $entityKey = null): ?BreadcrumbItem
+    private function findPreviousSegment(string $type, ?string $entityKeyOrClassName = null): ?BreadcrumbItem
     {
         $modeNotEquals = false;
-        if ($entityKey && Str::startsWith($entityKey, '!')) {
-            $entityKey = Str::substr($entityKey, 1);
+        if ($entityKeyOrClassName && Str::startsWith($entityKeyOrClassName, '!')) {
+            $entityKeyOrClassName = Str::substr($entityKeyOrClassName, 1);
             $modeNotEquals = true;
         }
 
         return $this->breadcrumbItems()
             ->reverse()
             ->filter(fn (BreadcrumbItem $item) => $item->type === $type)
-            ->when($entityKey !== null, fn ($items) => $items
-                ->filter(function (BreadcrumbItem $breadcrumbItem) use ($entityKey, $modeNotEquals) {
-                    return $modeNotEquals
-                        ? $breadcrumbItem->entityKey() !== $entityKey
-                        : $breadcrumbItem->entityKey() === $entityKey;
-                })
+            ->when($entityKeyOrClassName !== null, fn ($items) => $items
+                ->filter(fn (BreadcrumbItem $breadcrumbItem) => $modeNotEquals
+                    ? $breadcrumbItem->entityKey() !== app(SharpEntityManager::class)
+                        ->entityKeyFor($entityKeyOrClassName)
+                    : $breadcrumbItem->entityKey() === app(SharpEntityManager::class)
+                        ->entityKeyFor($entityKeyOrClassName)
+                )
             )
             ->first();
     }

@@ -4,6 +4,7 @@ namespace App\Sharp\Posts\Blocks;
 
 use App\Models\Post;
 use App\Models\PostBlock;
+use App\Sharp\Entities\PostEntity;
 use Code16\Sharp\Auth\SharpEntityPolicy;
 
 class PostBlockPolicy extends SharpEntityPolicy
@@ -17,6 +18,6 @@ class PostBlockPolicy extends SharpEntityPolicy
     public function create($user): bool
     {
         return $user->isAdmin()
-            || Post::find(sharp()->context()->breadcrumb()->previousShowSegment('posts')->instanceId())?->author_id === $user->id;
+            || Post::find(sharp()->context()->breadcrumb()->previousShowSegment(PostEntity::class)->instanceId())?->author_id === $user->id;
     }
 }

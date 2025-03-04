@@ -11,9 +11,7 @@ abstract class SharpLinkTo
 
     protected function __construct(string $entityClassOrKey)
     {
-        $this->entityKey = class_exists($entityClassOrKey)
-            ? app(SharpEntityManager::class)->entityKeyFor($entityClassOrKey)
-            : $entityClassOrKey;
+        $this->entityKey = app(SharpEntityManager::class)->entityKeyFor($entityClassOrKey);
     }
 
     public function setTooltip($tooltip): self

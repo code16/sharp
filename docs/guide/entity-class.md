@@ -112,7 +112,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
 ```
 
 The `autodiscoverEntities()` method will scan the given directory (path relative to `app_path()`) for all Entity classes, and declare them in Sharp. There are a few catches though:
-- The entity key will be the class name, minus the Entity suffix, in kebab-case, pluralized. For instance, `ProductEntity` will be declared as `products`.
+- The entity key will be the class name, minus the Entity suffix, in kebab-case. For instance, `BestProductEntity` will be declared as `best-product`.
 - Each php file must correspond to one class, named after the file name (this should always be the case if you follow PSR-4).
 
 ::: note
