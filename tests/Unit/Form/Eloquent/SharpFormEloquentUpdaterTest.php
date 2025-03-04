@@ -175,6 +175,29 @@ it('allows to manually ignore multiple field', function () {
     ]);
 });
 
+it('allows to have a field with the same name of a model method but not a relation', function () {
+    $person = Person::create(['name' => 'Marie Curry']);
+
+    $form = new class() extends FakeSharpForm
+    {
+        use WithSharpFormEloquentUpdater;
+
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(SharpFormTextField::make('unrelated'));
+        }
+
+        public function update($id, array $data)
+        {
+            return $this->save(Person::findOrFail($id), $data);
+        }
+    };
+
+    $form->update($person->id, $form->formatAndValidateRequestData(['unrelated' => 'Marie Curie']));
+
+    expect($person->fresh()->unrelated)->toBe('Marie Curie');
+});
+
 it('allows to update a belongsTo attribute', function () {
     $pierre = Person::create(['name' => 'Pierre Curie']);
     $marie = Person::create(['name' => 'Marie Curie']);

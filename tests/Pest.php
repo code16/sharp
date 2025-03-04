@@ -20,6 +20,7 @@ uses()
             $table->unsignedTinyInteger('order')->nullable();
             $table->unsignedInteger('partner_id')->nullable();
             $table->unsignedInteger('chief_id')->nullable();
+            $table->string('unrelated')->nullable();
             $table->timestamps();
         });
 

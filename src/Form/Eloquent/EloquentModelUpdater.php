@@ -5,7 +5,10 @@ namespace Code16\Sharp\Form\Eloquent;
 use Closure;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use ReflectionClass;
+use ReflectionMethod;
+use ReflectionNamedType;
 
 class EloquentModelUpdater
 {
@@ -73,7 +76,18 @@ class EloquentModelUpdater
 
     protected function isRelationship(Model $instance, string $attribute): bool
     {
-        return str($attribute)->contains(':') || $instance->isRelation($attribute);
+        if(str($attribute)->contains(':')) {
+            return true;
+        }
+
+        if($instance->isRelation($attribute)) {
+            $returnType = (new ReflectionMethod($instance, $attribute))->getReturnType();
+
+            return $returnType instanceof ReflectionNamedType
+                && is_subclass_of($returnType->getName(), Relation::class);
+        }
+
+        return false;
     }
 
     protected function saveRelationships(Model $instance): void

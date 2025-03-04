@@ -55,4 +55,9 @@ class Person extends Model
     {
         return $this->morphOne(SharpUploadModel::class, 'model');
     }
+
+    public function unrelated(): string
+    {
+        return 'unrelated';
+    }
 }
