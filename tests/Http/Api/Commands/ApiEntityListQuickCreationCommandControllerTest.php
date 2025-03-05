@@ -9,7 +9,7 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Illuminate\Support\Facades\Exceptions;
 
 beforeEach(function () {
-    sharp()->config()->addEntity('person', PersonEntity::class);
+    sharp()->config()->declareEntity(PersonEntity::class);
     login();
 });
 

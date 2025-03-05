@@ -16,7 +16,7 @@ uses(InteractsWithViews::class);
 
 beforeEach(function () {
     $this->withoutExceptionHandling();
-    sharp()->config()->addEntity('person', PersonEntity::class);
+    sharp()->config()->declareEntity(PersonEntity::class);
     Storage::fake('local');
     login();
 });

@@ -84,6 +84,17 @@ it('allows to get previous show of a given key from request', function () {
         ->previousShowSegment('person')->instanceId()->toEqual(42);
 });
 
+it('allows to get previous show of a given entity class name from request', function () {
+    app(\Code16\Sharp\Config\SharpConfigBuilder::class)->declareEntity(PersonEntity::class);
+    $this->fakeBreadcrumbWithUrl('/sharp/s-list/person/s-show/person/31/s-show/person/42/s-show/child/84/s-form/child/84');
+
+    expect(sharp()->context()->breadcrumb())
+        ->previousShowSegment()->entityKey()->toBe('child')
+        ->previousShowSegment()->instanceId()->toEqual(84)
+        ->previousShowSegment(PersonEntity::class)->entityKey()->toBe('person')
+        ->previousShowSegment(PersonEntity::class)->instanceId()->toEqual(42);
+});
+
 it('allows to get previous url from request', function () {
     $this->fakeBreadcrumbWithUrl('/sharp/s-list/person/s-show/person/42/s-form/child/2');
 
@@ -92,7 +103,7 @@ it('allows to get previous url from request', function () {
 });
 
 it('allow to retrieve retained filters value in the context', function () {
-    sharp()->config()->addEntity('person', PersonEntity::class);
+    sharp()->config()->declareEntity(PersonEntity::class);
     login();
 
     fakeListFor('person', new class() extends PersonList

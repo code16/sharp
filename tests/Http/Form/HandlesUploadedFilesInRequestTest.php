@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Storage;
 
 beforeEach(function () {
     $this->withoutExceptionHandling();
-    sharp()->config()->addEntity('person', PersonEntity::class);
+    sharp()->config()->declareEntity(PersonEntity::class);
     login();
     Storage::fake('local');
     Queue::fake();

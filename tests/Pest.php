@@ -2,6 +2,7 @@
 
 use Code16\Sharp\Tests\Fixtures\User;
 use Code16\Sharp\Tests\TestCase;
+use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Schema;
@@ -75,37 +76,53 @@ function login(?User $user = null)
     );
 }
 
-function fakeListFor(string $entityKey, $fakeImplementation)
+function fakeListFor(string $entityKeyOrClass, $fakeImplementation)
 {
-    app(\Code16\Sharp\Utils\Entities\SharpEntityManager::class)
-        ->entityFor($entityKey)
+    app(SharpEntityManager::class)
+        ->entityFor(
+            class_exists($entityKeyOrClass)
+                ? $entityKeyOrClass::$entityKey
+                : $entityKeyOrClass
+        )
         ->setList($fakeImplementation);
 
     return test();
 }
 
-function fakeShowFor(string $entityKey, $fakeImplementation)
+function fakeShowFor(string $entityKeyOrClass, $fakeImplementation)
 {
-    app(\Code16\Sharp\Utils\Entities\SharpEntityManager::class)
-        ->entityFor($entityKey)
+    app(SharpEntityManager::class)
+        ->entityFor(
+            class_exists($entityKeyOrClass)
+                ? ($entityKeyOrClass::$entityKey ?? null)
+                : $entityKeyOrClass
+        )
         ->setShow($fakeImplementation);
 
     return test();
 }
 
-function fakeFormFor(string $entityKey, $fakeImplementation)
+function fakeFormFor(string $entityKeyOrClass, $fakeImplementation)
 {
-    app(\Code16\Sharp\Utils\Entities\SharpEntityManager::class)
-        ->entityFor($entityKey)
+    app(SharpEntityManager::class)
+        ->entityFor(
+            class_exists($entityKeyOrClass)
+                ? $entityKeyOrClass::$entityKey
+                : $entityKeyOrClass
+        )
         ->setForm($fakeImplementation);
 
     return test();
 }
 
-function fakePolicyFor(string $entityKey, $fakeImplementation)
+function fakePolicyFor(string $entityKeyOrClass, $fakeImplementation)
 {
-    app(\Code16\Sharp\Utils\Entities\SharpEntityManager::class)
-        ->entityFor($entityKey)
+    app(SharpEntityManager::class)
+        ->entityFor(
+            class_exists($entityKeyOrClass)
+                ? $entityKeyOrClass::$entityKey
+                : $entityKeyOrClass
+        )
         ->setPolicy($fakeImplementation);
 
     return test();

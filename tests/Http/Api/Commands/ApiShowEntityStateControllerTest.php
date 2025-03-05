@@ -11,9 +11,9 @@ beforeEach(function () {
 });
 
 it('updates the state of an instance from a show and return a "refresh" action by default', function () {
-    sharp()->config()->addEntity('person', PersonEntity::class);
+    sharp()->config()->declareEntity(PersonEntity::class);
 
-    fakeShowFor('person', new class() extends PersonShow
+    fakeShowFor(PersonEntity::class, new class() extends PersonShow
     {
         public function buildShowConfig(): void
         {
@@ -49,9 +49,9 @@ it('updates the state of an instance from a show and return a "refresh" action b
 });
 
 it('allows to update the state of an instance from a single show', function () {
-    sharp()->config()->addEntity('person', SinglePersonEntity::class);
+    sharp()->config()->declareEntity(SinglePersonEntity::class);
 
-    fakeShowFor('person', new class() extends SinglePersonShow
+    fakeShowFor(SinglePersonEntity::class, new class() extends SinglePersonShow
     {
         public function buildShowConfig(): void
         {
@@ -73,7 +73,7 @@ it('allows to update the state of an instance from a single show', function () {
 
     $this
         ->postJson(
-            route('code16.sharp.api.show.state', ['person']),
+            route('code16.sharp.api.show.state', ['single-person']),
             [
                 'attribute' => 'state',
                 'value' => 'ok',

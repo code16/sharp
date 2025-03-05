@@ -3,6 +3,7 @@
 namespace App\Sharp\Posts\Blocks;
 
 use App\Models\PostBlock;
+use App\Sharp\Entities\PostEntity;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Fields\SharpFormHtmlField;
@@ -87,7 +88,7 @@ abstract class AbstractPostBlockForm extends SharpForm
             ? PostBlock::findOrFail($id)
             : new PostBlock([
                 'type' => static::$postBlockType,
-                'post_id' => sharp()->context()->breadcrumb()->previousShowSegment('posts')->instanceId(),
+                'post_id' => sharp()->context()->breadcrumb()->previousShowSegment(PostEntity::class)->instanceId(),
             ]);
 
         $this->save($postBlock, $data);

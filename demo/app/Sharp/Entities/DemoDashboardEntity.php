@@ -7,5 +7,6 @@ use Code16\Sharp\Utils\Entities\SharpDashboardEntity;
 
 class DemoDashboardEntity extends SharpDashboardEntity
 {
+    public static string $entityKey = 'dashboard';
     protected ?string $view = DemoDashboard::class;
 }

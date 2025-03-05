@@ -41,7 +41,7 @@ This is a simple example to illustrate the main concepts of Sharp: we'll see in 
 
 ## Installation
 
-Sharp 9 needs Laravel 11+ and PHP 8.2+.
+Sharp 9 needs Laravel 11+ and PHP 8.3+.
 
 - Add the package with composer: `composer require code16/sharp`
 - Then run: `php artisan sharp:install`
@@ -64,11 +64,15 @@ class SharpServiceProvider extends SharpAppServiceProvider
         $config
             ->setName('My new project')
             ->setSharpMenu(SharpMenu::class)
-            ->addEntity('product', ProductEntity::class);
+            ->declareEntity(ProductEntity::class);
             // ...
     }
 }
 ```
+
+::: tip
+As shown in the [Entity class](entity-class.md) documentation, you can also let Sharp autodiscover your entities.
+:::
 
 This `ProductEntity` class could be written like this:
 
@@ -109,7 +113,6 @@ class SharpServiceProvider extends SharpAppServiceProvider
     {
         $config
             ->setCustomUrlSegment('admin')
-            ->addEntity('product', ProductEntity::class)
             // ...
     }
 }

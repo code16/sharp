@@ -9,7 +9,7 @@ use Inertia\Testing\AssertableInertia as Assert;
 beforeEach(function () {
     sharp()->config()
         ->displayBreadcrumb()
-        ->addEntity('person', PersonEntity::class);
+        ->declareEntity(PersonEntity::class);
     login();
 });
 
@@ -33,19 +33,21 @@ it('builds the breadcrumb for a show page', function () {
         )
         ->assertOk();
 
-    expect(sharp()->context()->isShow())->toBeTrue()
-        ->and(sharp()->context()->breadcrumb()->allSegments())->toHaveCount(2);
+    expect(sharp()->context())
+        ->isShow()->toBeTrue()
+        ->breadcrumb()->allSegments()->toHaveCount(2);
 });
 
 it('builds the breadcrumb for a single show page', function () {
-    sharp()->config()->addEntity('single-person', SinglePersonEntity::class);
+    sharp()->config()->declareEntity(SinglePersonEntity::class);
 
     $this
         ->get(route('code16.sharp.single-show', 'single-person'))
         ->assertOk();
 
-    expect(sharp()->context()->isShow())->toBeTrue()
-        ->and(sharp()->context()->breadcrumb()->allSegments())->toHaveCount(1);
+    expect(sharp()->context())
+        ->isShow()->toBeTrue()
+        ->breadcrumb()->allSegments()->toHaveCount(1);
 });
 
 it('builds the breadcrumb for a form', function () {
@@ -59,8 +61,9 @@ it('builds the breadcrumb for a form', function () {
         )
         ->assertOk();
 
-    expect(sharp()->context()->isForm())->toBeTrue()
-        ->and(sharp()->context()->breadcrumb()->allSegments())->toHaveCount(2);
+    expect(sharp()->context())
+        ->isForm()->toBeTrue()
+        ->breadcrumb()->allSegments()->toHaveCount(2);
 });
 
 it('builds the breadcrumb for a form through a show page', function () {
@@ -74,8 +77,9 @@ it('builds the breadcrumb for a form through a show page', function () {
         )
         ->assertOk();
 
-    expect(sharp()->context()->isForm())->toBeTrue()
-        ->and(sharp()->context()->breadcrumb()->allSegments())->toHaveCount(3);
+    expect(sharp()->context())
+        ->isForm()->toBeTrue()
+        ->breadcrumb()->allSegments()->toHaveCount(3);
 });
 
 it('uses labels defined for entities in the config', function () {

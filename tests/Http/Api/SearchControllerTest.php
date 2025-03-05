@@ -7,7 +7,7 @@ use Code16\Sharp\Utils\Links\LinkToShowPage;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
-    sharp()->config()->addEntity('person', PersonEntity::class);
+    sharp()->config()->declareEntity(PersonEntity::class);
     login();
 });
 
@@ -235,7 +235,7 @@ it('returns a 403 if not authorized', function () {
 });
 
 it('the global search is sent with every inertia request, if enabled and authorized', function () {
-    sharp()->config()->addEntity('person', PersonEntity::class);
+    sharp()->config()->declareEntity(PersonEntity::class);
 
     $this
         ->get('/sharp/s-list/person')

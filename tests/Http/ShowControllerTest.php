@@ -17,7 +17,7 @@ use Code16\Sharp\Utils\PageAlerts\PageAlert;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
-    sharp()->config()->addEntity('person', PersonEntity::class);
+    sharp()->config()->declareEntity(PersonEntity::class);
     login();
 });
 
@@ -197,7 +197,7 @@ it('returns show configuration', function () {
 });
 
 it('gets show data for an instance in a single show case', function () {
-    sharp()->config()->addEntity('single-person', SinglePersonEntity::class);
+    sharp()->config()->declareEntity(SinglePersonEntity::class);
 
     fakeShowFor('single-person', new class() extends PersonSingleShow
     {

@@ -2,6 +2,7 @@
 
 namespace App\Sharp\Posts\Blocks;
 
+use App\Sharp\Entities\PostEntity;
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Fields\SharpFormListField;
@@ -37,7 +38,7 @@ class PostBlockVisualsForm extends AbstractPostBlockForm
                         ->setStorageBasePath(function () {
                             return sprintf(
                                 'data/posts/%s/blocks/{id}',
-                                sharp()->context()->breadcrumb()->previousShowSegment('posts')->instanceId(),
+                                sharp()->context()->breadcrumb()->previousShowSegment(PostEntity::class)->instanceId(),
                             );
                         }),
                 )

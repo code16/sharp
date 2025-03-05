@@ -63,7 +63,7 @@ it('allows to generate a link to a dashboard page', function () {
 
 it('allows to generate a link to a show page passing a SharpEntity class', function () {
     app(SharpConfigBuilder::class)
-        ->addEntity('person', PersonEntity::class);
+        ->declareEntity(PersonEntity::class);
 
     $this->assertEquals(
         '<a href="http://localhost/sharp/s-list/person/s-show/person/23" title="">test</a>',
@@ -86,7 +86,7 @@ it('allows to generate an url to a show page with a specific breadcrumb', functi
 
 it('allows to generate an url to a show page with a specific breadcrumb passing a SharpEntity class', function () {
     app(SharpConfigBuilder::class)
-        ->addEntity('person', PersonEntity::class);
+        ->declareEntity(PersonEntity::class);
 
     $this->assertEquals(
         'http://localhost/sharp/s-list/person/s-show/person/3/s-show/person/4',

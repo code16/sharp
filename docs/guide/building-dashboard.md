@@ -103,8 +103,8 @@ class SharpServiceProvider extends SharpAppServiceProvider
     protected function configureSharp(SharpConfigBuilder $config): void
     {
         $config
-            ->addEntity('company_dashboard', CompanyDashboardEntity::class)
-            // [...]
+            ->declareEntity(CompanyDashboardEntity::class);
+            // ...
     }
 }
 ```
@@ -117,7 +117,7 @@ class AppSharpMenu extends SharpMenu
     public function build(): self
     {
         return $this
-            ->addEntityLink('company_dashboard', 'Dashboard')
+            ->addEntityLink(CompanyDashboardEntity::class, 'Dashboard');
             // ...
     }
 }

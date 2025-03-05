@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Exceptions;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
-    sharp()->config()->addEntity('person', PersonEntity::class);
+    sharp()->config()->declareEntity(PersonEntity::class);
     login();
 });
 
@@ -319,7 +319,7 @@ it('handles application exception as 417', function () {
 });
 
 it('gets form data for an instance in a single form case', function () {
-    sharp()->config()->addEntity('single-person', SinglePersonEntity::class);
+    sharp()->config()->declareEntity(SinglePersonEntity::class);
 
     fakeFormFor('single-person', new class() extends PersonSingleForm
     {
@@ -339,7 +339,7 @@ it('gets form data for an instance in a single form case', function () {
 });
 
 it('updates an instance on a single form case', function () {
-    sharp()->config()->addEntity('single-person', SinglePersonEntity::class);
+    sharp()->config()->declareEntity(SinglePersonEntity::class);
 
     $this
         ->post('/sharp/s-show/single-person/s-form/single-person', [
