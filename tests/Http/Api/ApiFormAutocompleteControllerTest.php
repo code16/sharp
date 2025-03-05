@@ -15,7 +15,7 @@ use Code16\Sharp\Tests\Http\Api\Fixtures\ApiFormAutocompleteControllerAutocomple
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 beforeEach(function () {
-    sharp()->config()->addEntity('person', PersonEntity::class);
+    sharp()->config()->declareEntity(PersonEntity::class);
 
     login();
 });

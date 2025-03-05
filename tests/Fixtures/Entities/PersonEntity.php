@@ -13,10 +13,10 @@ use Code16\Sharp\Utils\Entities\SharpEntity;
 
 class PersonEntity extends SharpEntity
 {
+    public string $entityKey = 'person';
     public ?string $validatorForTest = null;
     public array $multiformValidatorsForTest = [];
     public ?array $fakeMultiforms = null;
-    protected string $entityKey = 'person';
     protected string $label = 'person';
     protected ?string $list = PersonList::class;
     protected ?SharpEntityList $fakeList;

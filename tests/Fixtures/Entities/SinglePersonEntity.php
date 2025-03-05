@@ -6,6 +6,7 @@ use Code16\Sharp\Tests\Fixtures\Sharp\PersonSingleForm;
 
 class SinglePersonEntity extends PersonEntity
 {
+    public string $entityKey = 'single-person';
     protected bool $isSingle = true;
     protected ?string $form = PersonSingleForm::class;
 }

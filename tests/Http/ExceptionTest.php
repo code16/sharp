@@ -7,7 +7,7 @@ use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
-    sharp()->config()->addEntity('person', PersonEntity::class);
+    sharp()->config()->declareEntity(PersonEntity::class);
     login();
 });
 

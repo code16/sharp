@@ -29,13 +29,13 @@ class SharpEntityManager
 
         if (isset($entity)) {
             if (! app()->bound($entity)) {
-                app()->singleton($entity, fn () => (new $entity())->setEntityKey($entityKey));
+                app()->singleton($entity);
             }
 
             return app($entity);
         }
 
-        throw new SharpInvalidEntityKeyException("The entity [{$entityKey}] was not found.");
+        throw new SharpInvalidEntityKeyException("The entity for key [{$entityKey}] was not found.");
     }
 
     public function entityKeyFor(string|BaseSharpEntity $entity): string

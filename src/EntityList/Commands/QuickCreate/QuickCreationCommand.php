@@ -82,12 +82,7 @@ class QuickCreationCommand extends EntityCommand
         $currentUrl = sharp()->context()->breadcrumb()->getCurrentSegmentUrl();
 
         return $this->sharpForm->isDisplayShowPageAfterCreation()
-            ? $this->link(sprintf(
-                '%s/s-show/%s/%s',
-                $currentUrl,
-                $this->entityKey,
-                $this->instanceId
-            ))
+            ? $this->link(sprintf('%s/s-show/%s/%s', $currentUrl, $this->entityKey, $this->instanceId))
             : $this->reload();
     }
 

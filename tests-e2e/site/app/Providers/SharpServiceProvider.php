@@ -17,8 +17,8 @@ class SharpServiceProvider extends SharpAppServiceProvider
         $config
             ->setName('E2E')
             ->setSharpMenu(SharpMenu::class)
-            ->addEntity('test-models', TestModelEntity::class)
-            ->addEntity('test-models-single', TestModelSingleEntity::class)
+            ->declareEntity(TestModelEntity::class)
+            ->declareEntity(TestModelSingleEntity::class)
             ->enableImpersonation(new class() extends SharpImpersonationHandler
             {
                 public function enabled(): bool

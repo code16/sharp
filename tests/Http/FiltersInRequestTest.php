@@ -9,7 +9,7 @@ use Illuminate\Contracts\Support\Arrayable;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
-    sharp()->config()->addEntity('person', PersonEntity::class);
+    sharp()->config()->declareEntity(PersonEntity::class);
     login();
 });
 

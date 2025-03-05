@@ -9,6 +9,7 @@ use Code16\Sharp\Auth\TwoFactor\Sharp2faHandler;
 use Code16\Sharp\Exceptions\SharpInvalidConfigException;
 use Code16\Sharp\Exceptions\SharpInvalidEntityKeyException;
 use Code16\Sharp\Search\SharpSearchEngine;
+use Code16\Sharp\Utils\Entities\BaseSharpEntity;
 use Code16\Sharp\Utils\Entities\SharpDashboardEntity;
 use Code16\Sharp\Utils\Entities\SharpEntity;
 use Code16\Sharp\Utils\Entities\SharpEntityResolver;
@@ -130,9 +131,34 @@ class SharpConfigBuilder
         return $this;
     }
 
+    /** @deprecated use declareEntity instead, and set the entityKey in the SharpEntity class */
     public function addEntity(string $key, string $entityClass): self
     {
         $this->config['entities'][$key] = $entityClass;
+        $this->config['entity_resolver'] = null;
+
+        return $this;
+    }
+
+    public function declareEntity(string $entityClass): self
+    {
+        $entity = new $entityClass();
+        if (! $entity instanceof BaseSharpEntity) {
+            throw new SharpInvalidEntityKeyException(
+                'Invalid entity class: it should extend either '
+                .SharpEntity::class.' or '.SharpDashboardEntity::class.'.'
+            );
+        }
+
+        $entityKey = $entity->entityKey ?? null;
+        if ($entityKey === null) {
+            $entityKey = str(class_basename($entityClass))
+                ->before('Entity')
+                ->kebab()
+                ->toString();
+        }
+
+        $this->config['entities'][$entityKey] = $entityClass;
         $this->config['entity_resolver'] = null;
 
         return $this;
@@ -167,15 +193,7 @@ class SharpConfigBuilder
                 }
             })
             ->flatten()
-            ->each(fn (string $entityClass) => $this
-                ->addEntity(
-                    str(class_basename($entityClass))
-                        ->before('Entity')
-                        ->kebab()
-                        ->toString(),
-                    $entityClass
-                )
-            );
+            ->each(fn (string $entityClass) => $this->declareEntity($entityClass));
 
         if (empty($entityClasses)) {
             throw new SharpInvalidConfigException('Autodiscover failed: no entities found in the given path.');

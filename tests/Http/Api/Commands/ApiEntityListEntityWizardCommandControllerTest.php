@@ -7,7 +7,7 @@ use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 beforeEach(function () {
-    sharp()->config()->addEntity('person', PersonEntity::class);
+    sharp()->config()->declareEntity(PersonEntity::class);
     login();
 });
 
