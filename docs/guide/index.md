@@ -64,7 +64,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
         $config
             ->setName('My new project')
             ->setSharpMenu(SharpMenu::class)
-            ->addEntity('product', ProductEntity::class);
+            ->declareEntity(ProductEntity::class);
             // ...
     }
 }
@@ -109,7 +109,6 @@ class SharpServiceProvider extends SharpAppServiceProvider
     {
         $config
             ->setCustomUrlSegment('admin')
-            ->addEntity('product', ProductEntity::class)
             // ...
     }
 }

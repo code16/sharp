@@ -112,16 +112,28 @@ class SharpServiceProvider extends SharpAppServiceProvider
 ```
 
 The `autodiscoverEntities()` method will scan the given directory (path relative to `app_path()`) for all Entity classes, and declare them in Sharp. There are a few catches though:
-- The entity key will be the class name, minus the Entity suffix, in kebab-case. For instance, `BestProductEntity` will be declared as `best-product`.
+- The entity key will be the class name, minus the Entity suffix, in kebab-case. For instance, `BestProductEntity` will be declared as `best-product` (more on this below).
 - Each php file must correspond to one class, named after the file name (this should always be the case if you follow PSR-4).
 
 ::: note
-A note on entity keys: Sharp is using the entity key everywhere internally (starting in the URL). The only rule here is to have a unique key for each entity, which should always be the case with the autodiscovery mechanism (apart in tricky cases like one `ProductEntity` and another `ProductsEntity`: don’t do that).
+A note on entity keys: Sharp is using the entity key everywhere internally (starting in the URL). The only rule here is to have a unique key for each entity, which should always be the case with the autodiscovery mechanism (apart in tricky cases like one `ProductEntity` and another `ProductsEntity`: if you really need to do that, check the next chapter "choosing your own entity key").
 :::
+
+### Choosing your own entity key
+
+If for whatever reason you want to choose your own entity key, you can set it in the entity class:
+
+```php
+class ProductEntity extends SharpEntity
+{
+    public string $entityKey = 'my-product';
+    // ...
+}
+```
 
 ### Manual declaration
 
-If you want to have control over the entity declaration, you can instead declare them manually:
+If you want to have control over the entity declaration, you can declare them manually instead of using autodiscovery:
 
 ```php
 class SharpServiceProvider extends SharpAppServiceProvider
@@ -130,7 +142,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
     {
         $config
             ->setName('My new project')
-            ->addEntity('products', ProductEntity::class);
+            ->declareEntity(ProductEntity::class);
             // ...
     }
 }
@@ -174,7 +186,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
 ```
 
 ::: warning
-You must remove all `->addEntity()` calls in order to use `->declareEntityResolver()`.
+You must remove all `->declareEntity()` calls in order to use `->declareEntityResolver()`.
 :::
 
 ::: warning
