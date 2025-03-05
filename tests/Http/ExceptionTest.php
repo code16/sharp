@@ -25,7 +25,7 @@ it('renders inertia Exception', function () {
         ->assertInertia(fn (Assert $page) => $page
             ->component('Error')
             ->where('status', 500)
-            ->where('message', 'Test error')
+            ->where('message', 'Server error')
         );
 });
 
