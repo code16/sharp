@@ -430,7 +430,7 @@ function entityListSuite(test: TestType<PlaywrightTestArgs & PlaywrightTestOptio
     await actionsButton.click();
     await page.getByRole('menuitem', { name: 'Update state' }).click();
     await expect(page.getByRole('menuitemcheckbox', { name: 'Published' })).toBeChecked();
-    await page.getByRole('menuitemcheckbox', { name: 'Draft' }).click();
+    await page.getByRole('menuitemcheckbox', { name: 'Draft' }).click({ force: true });
     await actionsButton.click();
     await page.getByRole('menuitem', { name: 'Update state' }).click();
     await expect(page.getByRole('menuitemcheckbox', { name: 'Draft' })).toBeChecked();
