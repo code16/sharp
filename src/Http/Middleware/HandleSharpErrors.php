@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 class HandleSharpErrors
 {
@@ -24,11 +24,11 @@ class HandleSharpErrors
         if (isset($response->exception) && ! ($response->exception instanceof SharpException)) {
             return (
                 new SharpException(
-                    $response->exception->getMessage(),
+                    $response->exception instanceof HttpExceptionInterface ? $response->exception->getMessage() : __('Server error'),
                     match (true) {
-                        $response->exception instanceof HttpException => $response->getStatusCode(),
+                        $response->exception instanceof HttpExceptionInterface => $response->getStatusCode(),
                         $response->exception instanceof ModelNotFoundException => 404,
-                        default => 500
+                        default => 500,
                     },
                     $response->exception
                 )
