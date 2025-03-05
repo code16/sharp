@@ -13,7 +13,7 @@ use Code16\Sharp\Utils\Entities\SharpEntity;
 
 class PersonEntity extends SharpEntity
 {
-    public string $entityKey = 'person';
+    public static string $entityKey = 'person';
     public ?string $validatorForTest = null;
     public array $multiformValidatorsForTest = [];
     public ?array $fakeMultiforms = null;

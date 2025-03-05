@@ -8,7 +8,7 @@ use Code16\Sharp\Exceptions\SharpException;
 abstract class BaseSharpEntity
 {
     protected bool $isDashboard = false;
-    public string $entityKey;
+    public static string $entityKey;
     protected ?string $policy = null;
     protected string $label = 'entity';
 

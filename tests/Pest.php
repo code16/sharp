@@ -80,7 +80,7 @@ function fakeListFor(string $entityKeyOrClass, $fakeImplementation)
     app(SharpEntityManager::class)
         ->entityFor(
             class_exists($entityKeyOrClass)
-                ? (new $entityKeyOrClass())->entityKey
+                ? $entityKeyOrClass::$entityKey
                 : $entityKeyOrClass
         )
         ->setList($fakeImplementation);
@@ -93,7 +93,7 @@ function fakeShowFor(string $entityKeyOrClass, $fakeImplementation)
     app(SharpEntityManager::class)
         ->entityFor(
             class_exists($entityKeyOrClass)
-                ? (new $entityKeyOrClass())->entityKey
+                ? ($entityKeyOrClass::$entityKey ?? null)
                 : $entityKeyOrClass
         )
         ->setShow($fakeImplementation);
@@ -106,7 +106,7 @@ function fakeFormFor(string $entityKeyOrClass, $fakeImplementation)
     app(SharpEntityManager::class)
         ->entityFor(
             class_exists($entityKeyOrClass)
-                ? (new $entityKeyOrClass())->entityKey
+                ? $entityKeyOrClass::$entityKey
                 : $entityKeyOrClass
         )
         ->setForm($fakeImplementation);
@@ -119,7 +119,7 @@ function fakePolicyFor(string $entityKeyOrClass, $fakeImplementation)
     app(SharpEntityManager::class)
         ->entityFor(
             class_exists($entityKeyOrClass)
-                ? (new $entityKeyOrClass())->entityKey
+                ? $entityKeyOrClass::$entityKey
                 : $entityKeyOrClass
         )
         ->setPolicy($fakeImplementation);

@@ -12,8 +12,8 @@ use Code16\Sharp\Utils\Entities\SharpEntity;
 
 class TestModelEntity extends SharpEntity
 {
+    public static string $entityKey = 'test-models';
     protected string $label = 'Test model';
-    public string $entityKey = 'test-models';
     protected ?string $list = TestModelList::class;
     protected ?string $show = TestModelShow::class;
     protected ?string $form = TestModelForm::class;

@@ -142,18 +142,19 @@ class SharpConfigBuilder
 
     public function declareEntity(string $entityClass): self
     {
-        $entity = new $entityClass();
-        if (! $entity instanceof BaseSharpEntity) {
+        if (! is_subclass_of($entityClass, BaseSharpEntity::class)) {
             throw new SharpInvalidEntityKeyException(
-                'Invalid entity class: it should extend either '
-                .SharpEntity::class.' or '.SharpDashboardEntity::class.'.'
+                sprintf(
+                    '%s is an invalid entity class: it should extend either %s or %s.',
+                    $entityClass, SharpEntity::class, SharpDashboardEntity::class
+                )
             );
         }
 
-        $entityKey = $entity->entityKey ?? null;
-        if ($entityKey === null) {
+        $entityKey = $entityClass::$entityKey ?? null;
+        if (! $entityKey) {
             $entityKey = str(class_basename($entityClass))
-                ->before('Entity')
+                ->beforeLast('Entity')
                 ->kebab()
                 ->toString();
         }

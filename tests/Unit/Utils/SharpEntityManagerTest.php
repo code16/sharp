@@ -13,7 +13,7 @@ it('returns an entity declared in configuration', function () {
         ->toBeInstanceOf(PersonEntity::class);
 });
 
-it('returns an entity declared in the old deprecated way in configuration', function () {
+it('returns an entity declared in the deprecated way in configuration', function () {
     sharp()->config()->addEntity('another-person', PersonEntity::class);
 
     expect(app(SharpEntityManager::class)->entityFor('another-person'))

@@ -126,7 +126,7 @@ If for whatever reason you want to choose your own entity key, you can set it in
 ```php
 class ProductEntity extends SharpEntity
 {
-    public string $entityKey = 'my-product';
+    public static string $entityKey = 'my-product';
     // ...
 }
 ```
