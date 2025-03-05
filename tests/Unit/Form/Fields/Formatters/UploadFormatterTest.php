@@ -125,13 +125,13 @@ it('returns full object after transformations', function () {
 
 it('format temporary upload from front', function () {
     $formatter = app(UploadFormatter::class);
-    
+
     UploadedFile::fake()
         ->image('image.jpg')
         ->storeAs('/tmp', 'image.jpg', ['disk' => 'local']);
-    
+
     $field = SharpFormUploadField::make('upload')->setStorageTemporary();
-    
+
     expect(
         $formatter
             ->fromFront($field, 'attr', [

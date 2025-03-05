@@ -49,7 +49,7 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
                     ? null
                     : $value['filters'] ?? null,
             ]), function ($formatted) use ($field, $value) {
-                if($field->storageDisk()) {
+                if ($field->storageDisk()) {
                     app(SharpUploadManager::class)->queueHandleUploadedFile(
                         uploadedFileName: $value['name'],
                         disk: $field->storageDisk(),

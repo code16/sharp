@@ -294,11 +294,11 @@ it('does not dispatch HandlePostedFilesJob when temporary', function () {
                 );
         }
     });
-    
+
     UploadedFile::fake()
         ->image('image.jpg')
         ->storeAs('/tmp', 'image.jpg', ['disk' => 'local']);
-    
+
     $this
         ->post('/sharp/s-list/person/s-form/person/2', [
             'name' => 'Stephen Hawking',
@@ -309,7 +309,7 @@ it('does not dispatch HandlePostedFilesJob when temporary', function () {
         ])
         ->assertSessionHasNoErrors()
         ->assertRedirect();
-    
+
     $this
         ->post('/sharp/s-list/person/s-form/person', [
             'name' => 'Marie Curie',
@@ -320,7 +320,7 @@ it('does not dispatch HandlePostedFilesJob when temporary', function () {
         ])
         ->assertSessionHasNoErrors()
         ->assertRedirect();
-    
+
     Queue::assertNotPushed(HandleUploadedFileJob::class);
 });
 

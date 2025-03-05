@@ -14,7 +14,7 @@ class SharpFormEditorUpload extends SharpFormUploadField
     {
         return new static($key, 'upload', app(UploadFormatter::class));
     }
-    
+
     /**
      * @throws SharpInvalidConfigException
      */
@@ -22,7 +22,7 @@ class SharpFormEditorUpload extends SharpFormUploadField
     {
         throw new SharpInvalidConfigException('Temporary storage is not available for editor uploads');
     }
-    
+
     public function setHasLegend(bool $hasLegend = true): self
     {
         $this->hasLegend = $hasLegend;
