@@ -76,11 +76,11 @@ class EloquentModelUpdater
 
     protected function isRelationship(Model $instance, string $attribute): bool
     {
-        if(str($attribute)->contains(':')) {
+        if (str($attribute)->contains(':')) {
             return true;
         }
 
-        if($instance->isRelation($attribute)) {
+        if ($instance->isRelation($attribute)) {
             $returnType = (new ReflectionMethod($instance, $attribute))->getReturnType();
 
             return $returnType instanceof ReflectionNamedType
