@@ -27,3 +27,14 @@ it('allows to declare an entity with an entity key', function () {
 
     expect(sharp()->config()->get('entities'))->toHaveKey('my-entity');
 });
+
+it('allows to discover entities automatically', function () {
+    sharp()->config()->discoverEntities([
+        __DIR__.'/../../Fixtures/Entities',
+    ]);
+
+    expect(sharp()->config()->get('entities'))
+        ->toHaveKey('dashboard')
+        ->toHaveKey('person')
+        ->toHaveKey('single-person');
+});
