@@ -105,19 +105,29 @@ class SharpServiceProvider extends SharpAppServiceProvider
     {
         $config
             ->setName('My new project')
-            ->discoverEntities('Sharp/Entities');
+            ->discoverEntities();
             // ...
     }
 }
 ```
 
-The `discoverEntities()` method will scan the given directory (path relative to `app_path()`) for all Entity classes, and declare them in Sharp. There are a few catches though:
-- The entity key will be the class name, minus the Entity suffix, in kebab-case. For instance, `BestProductEntity` will be declared as `best-product` (more on this below).
-- Each php file must correspond to one class, named after the file name (this should always be the case if you follow PSR-4).
+The `discoverEntities()` method will scan the `app_path('Sharp/Entities')` directory for all Entity classes, and declare them in Sharp. You can pass an array of other paths to scan if needed:
 
-::: note
-A note on entity keys: Sharp is using the entity key everywhere internally (starting in the URL). The only rule here is to have a unique key for each entity, which should always be the case with the autodiscovery mechanism (apart in tricky cases like one `ProductEntity` and another `ProductsEntity`: if you really need to do that, check the next chapter "choosing your own entity key").
-:::
+```php
+class SharpServiceProvider extends SharpAppServiceProvider
+{
+    protected function configureSharp(SharpConfigBuilder $config): void
+    {
+        $config
+            ->setName('My new project')
+            ->discoverEntities([__DIR__ . '../Domain/OtherEntities']);
+            // ...
+    }
+}
+```
+
+Each Entity is keyed by and entity key, used everywhere in Sharp (starting with the URL).
+When using autodiscovery, the entity key is automatically set to the class name, in kebab-case. For instance, `ProductEntity` will have the entity key `product`.
 
 ### Choosing your own entity key
 
@@ -133,7 +143,7 @@ class ProductEntity extends SharpEntity
 
 ### Manual declaration
 
-If you want to have control over the entity declaration, you can declare them manually instead of using autodiscovery:
+If you want to have control over the entity declaration, you can declare them manually instead of using discovery:
 
 ```php
 class SharpServiceProvider extends SharpAppServiceProvider
