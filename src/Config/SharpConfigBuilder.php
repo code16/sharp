@@ -58,6 +58,7 @@ class SharpConfigBuilder
         ],
         'auth' => [
             'login_page_url' => null,
+            'logout_page_url' => null,
             'display_attribute' => 'name',
             'login_attribute' => 'email',
             'password_attribute' => 'password',
@@ -476,6 +477,13 @@ class SharpConfigBuilder
     public function redirectLoginToUrl(?string $url): self
     {
         $this->config['auth']['login_page_url'] = $url;
+
+        return $this;
+    }
+
+    public function redirectLogoutToUrl(?string $url): self
+    {
+        $this->config['auth']['logout_page_url'] = $url;
 
         return $this;
     }
