@@ -55,8 +55,8 @@ class LoginController extends Controller
 
     public function destroy(Request $request): RedirectResponse
     {
-        if (sharp()->config()->get('auth.logout_page_url')) {
-            return redirect()->to(sharp()->config()->get('auth.logout_page_url'));
+        if ($logoutPageUrl = sharp()->config()->get('auth.logout_page_url')) {
+            return redirect()->to($logoutPageUrl);
         }
 
         Auth::guard(sharp()->config()->get('auth.guard'))->logout();
