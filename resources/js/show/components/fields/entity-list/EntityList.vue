@@ -27,8 +27,13 @@
     const filters: FilterManager = useFilters();
     const commands = useCommands('entityList', {
         reload: (data, { formModal }) => {
-            init();
-            router.reload();
+            onQueryChange(entityList.value.query);
+            router.reload({
+                headers: {
+                    'X-No-Preload': '1',
+                },
+                only: ['notifications'],
+            });
             formModal.shouldReopen && formModal.reopen();
         },
         refresh: (data, { formModal }) => {
@@ -50,7 +55,7 @@
         init();
     }
 
-    // console.log('setup', cloneDeep(remembered.value));
+    // console.log('setup', remembered.value);
     // console.log('hasPoppedState EL', hasPoppedState());
     // console.log('remembered', remembered.value.data);
 

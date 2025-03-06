@@ -368,7 +368,7 @@ function entityListSuite(test: TestType<PlaywrightTestArgs & PlaywrightTestOptio
     await init();
     await goto();
     tableTextContent = await page.getByRole('table').textContent();
-    await page.getByRole('table').getByRole('button', { name: 'Actions' }).first().click();
+    await page.getByRole('table').getByRole('button', { name: 'Actions' }).nth(1).click();
     await page.getByRole('menu').getByRole('menuitem', { name: 'Delete...' }).click();
     await page.getByRole('alertdialog').getByRole('button', { name: 'Delete' }).click();
     await expect(page.getByText('19 items', { exact: true }).first()).toBeVisible();

@@ -21,6 +21,10 @@ class AddLinkHeadersForPreloadedRequests
             return $next($request);
         }
 
+        if ($request->hasHeader('X-No-Preload')) {
+            return $next($request);
+        }
+
         return tap($next($request), function (Response $response) {
             if ($this->preloadedRequests !== []) {
                 if ($link = $response->headers->get('Link', '')) {

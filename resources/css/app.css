@@ -14,11 +14,16 @@
     appearance: none;
   }
 
-  html {
-    &:not(:has([data-stuck]:focus-within),:has(header:focus-within)) {
-      @apply scroll-pt-36;
-    }
-  }
+  /* disabling scroll padding top because it changes scroll position when hovering a select */
+  /*html {*/
+  /*  &:not(*/
+  /*    :has([data-stuck]:focus-within),*/
+  /*    :has(header:focus-within),*/
+  /*    :has(:is([role="menu"],[role="dialog"]):focus-within)*/
+  /*  ) {*/
+  /*    @apply scroll-pt-36;*/
+  /*  }*/
+  /*}*/
 
   body {
     overflow-y: scroll;
