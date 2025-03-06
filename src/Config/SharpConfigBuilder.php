@@ -18,7 +18,6 @@ use Code16\Sharp\Utils\Menu\SharpMenu;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Vite;
-use Illuminate\Support\Str;
 use Illuminate\Support\Traits\Conditionable;
 use ReflectionClass;
 use Symfony\Component\Finder\Finder;
@@ -179,25 +178,34 @@ class SharpConfigBuilder
         return $this;
     }
 
-    public function discoverEntities(string $path = 'Sharp/Entities'): self
+    public function discoverEntities(array $paths = []): self
     {
-        $entityClasses = collect((new Finder())->files()->in(app_path($path)))
-            ->map(fn (SplFileInfo $file) => $this->fullQualifiedClassNameFromFile($file))
-            ->filter(function (string $entityClass) {
-                try {
-                    return (
-                        is_subclass_of($entityClass, SharpEntity::class)
-                        || is_subclass_of($entityClass, SharpDashboardEntity::class)
-                    ) && (new ReflectionClass($entityClass))->isInstantiable();
-                } catch (Throwable) {
-                    return false;
-                }
-            })
-            ->flatten()
-            ->each(fn (string $entityClass) => $this->declareEntity($entityClass));
+        $entityClasses = collect($paths)
+            ->map(fn (string $path) => str($path)->startsWith('/')
+                ? $path
+                : app_path($path)
+            )
+            ->add(app_path('Sharp/Entities'))
+            ->unique()
+            ->map(fn (string $path) => collect((new Finder())->files()->in($path))
+                ->map(fn (SplFileInfo $file) => $this->fullQualifiedClassNameFromFile($file))
+                ->whereNotNull()
+                ->filter(function (string $entityClass) {
+                    try {
+                        return (
+                            is_subclass_of($entityClass, SharpEntity::class)
+                            || is_subclass_of($entityClass, SharpDashboardEntity::class)
+                        ) && (new ReflectionClass($entityClass))->isInstantiable();
+                    } catch (Throwable) {
+                        return false;
+                    }
+                })
+                ->flatten()
+                ->each(fn (string $entityClass) => $this->declareEntity($entityClass))
+            );
 
         if (empty($entityClasses)) {
-            throw new SharpInvalidConfigException('Autodiscover failed: no entities found in the given path.');
+            throw new SharpInvalidConfigException('discoverEntities failed: no entities found in the given path.');
         }
 
         return $this;
@@ -507,14 +515,24 @@ class SharpConfigBuilder
         return $this->config[$key] ?? null;
     }
 
-    private function fullQualifiedClassNameFromFile(SplFileInfo $file): string
+    private function fullQualifiedClassNameFromFile(SplFileInfo $file): ?string
     {
-        $class = trim(Str::replaceFirst(base_path(), '', $file->getRealPath()), DIRECTORY_SEPARATOR);
+        //        $class = trim(Str::replaceFirst(base_path(), '', $file->getRealPath()), DIRECTORY_SEPARATOR);
 
-        return str_replace(
-            [DIRECTORY_SEPARATOR, 'App\\'],
-            ['\\', app()->getNamespace()],
-            ucfirst(Str::replaceLast('.php', '', $class))
-        );
+        //        return str_replace(
+        //            [DIRECTORY_SEPARATOR, 'App\\'],
+        //            ['\\', app()->getNamespace()],
+        //            ucfirst(Str::replaceLast('.php', '', $class))
+        //        );
+
+        $lines = file($file->getRealPath());
+        if ($namespaceLine = collect(preg_grep('/^namespace /', $lines))->first()) {
+            preg_match('/^namespace (.*);$/', $namespaceLine, $match);
+            if ($namespace = $match[1] ?? null) {
+                return $namespace.str($file->getFilename())->beforeLast('.php')->prepend('\\');
+            }
+        }
+
+        return null;
     }
 }
