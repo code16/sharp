@@ -34,7 +34,7 @@ class SharpException extends \Exception
             'message' => $this->getMessage(),
             'previous' => $this->getPrevious() && $this->getPrevious()->getMessage() !== $this->getMessage() ? [
                 'message' => $this->getPrevious()->getMessage(),
-            ] : null
+            ] : null,
         ])
             ->toResponse($request)
             ->setStatusCode($this->getStatusCode());
