@@ -17,6 +17,7 @@
     import { CardTitle } from "@/components/ui/card";
     import { Button } from "@/components/ui/button";
     import { hasPoppedState, useRemember } from "@/router";
+    import { router } from "@inertiajs/vue3";
 
     const props = defineProps<ShowFieldProps<ShowEntityListFieldData> & { highlightedInstanceId?: string | number, ariaLabelledby?: string }>();
 
@@ -27,6 +28,7 @@
     const commands = useCommands('entityList', {
         reload: (data, { formModal }) => {
             init();
+            router.reload();
             formModal.shouldReopen && formModal.reopen();
         },
         refresh: (data, { formModal }) => {
