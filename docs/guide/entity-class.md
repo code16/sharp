@@ -96,7 +96,7 @@ The last step is to declare the entity in Sharp, in your `SharpAppServiceProvide
 
 ### Autodiscovery
 
-The easiest way is to let Sharp autodiscover your entities:
+The easiest way is to let Sharp discover your entities:
 
 ```php
 class SharpServiceProvider extends SharpAppServiceProvider
@@ -105,13 +105,13 @@ class SharpServiceProvider extends SharpAppServiceProvider
     {
         $config
             ->setName('My new project')
-            ->autodiscoverEntities('Sharp/Entities');
+            ->discoverEntities('Sharp/Entities');
             // ...
     }
 }
 ```
 
-The `autodiscoverEntities()` method will scan the given directory (path relative to `app_path()`) for all Entity classes, and declare them in Sharp. There are a few catches though:
+The `discoverEntities()` method will scan the given directory (path relative to `app_path()`) for all Entity classes, and declare them in Sharp. There are a few catches though:
 - The entity key will be the class name, minus the Entity suffix, in kebab-case. For instance, `BestProductEntity` will be declared as `best-product` (more on this below).
 - Each php file must correspond to one class, named after the file name (this should always be the case if you follow PSR-4).
 

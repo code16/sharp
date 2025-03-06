@@ -179,7 +179,7 @@ class SharpConfigBuilder
         return $this;
     }
 
-    public function autodiscoverEntities(string $path = 'Sharp/Entities'): self
+    public function discoverEntities(string $path = 'Sharp/Entities'): self
     {
         $entityClasses = collect((new Finder())->files()->in(app_path($path)))
             ->map(fn (SplFileInfo $file) => $this->fullQualifiedClassNameFromFile($file))

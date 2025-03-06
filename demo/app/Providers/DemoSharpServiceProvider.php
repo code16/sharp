@@ -17,7 +17,7 @@ class DemoSharpServiceProvider extends SharpAppServiceProvider
     {
         $config
             ->setName('Demo project')
-            ->autodiscoverEntities()
+            ->discoverEntities()
             ->addGlobalFilter(DummyGlobalFilter::class)
             ->configureUploadsThumbnailCreation(uploadModelClass: Media::class)
             ->setSharpMenu(SharpMenu::class)
