@@ -186,6 +186,7 @@ class SharpConfigBuilder
                 : app_path($path)
             )
             ->add(app_path('Sharp/Entities'))
+            ->filter(fn (string $path) => file_exists($path))
             ->unique()
             ->map(fn (string $path) => collect((new Finder())->files()->in($path))
                 ->map(fn (SplFileInfo $file) => $this->fullQualifiedClassNameFromFile($file))
