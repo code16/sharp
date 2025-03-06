@@ -8,6 +8,7 @@
     import { FormUploadFieldData } from "@/types";
     import { ExtensionNodeProps } from "@/form/components/fields/editor/types";
     import { useParentEditor } from "@/form/components/fields/editor/useParentEditor";
+    import { useEditorNode } from "@/form/components/fields/editor/useEditorNode";
 
     const props = defineProps<ExtensionNodeProps<typeof UploadExtension, UploadNodeAttributes>>();
 
@@ -16,6 +17,15 @@
     const uploadManager = useParentEditor().uploadManager;
     const uploadComponent = ref<InstanceType<typeof Upload>>();
     const upload = computed(() => uploadManager.getUpload(props.node.attrs['data-key']));
+
+    useEditorNode({
+        onAdded: () => {
+            uploadManager.restoreUpload(props.node.attrs['data-key']);
+        },
+        onRemoved: () => {
+            uploadManager.removeUpload(props.node.attrs['data-key']);
+        },
+    });
 
     function onThumbnailGenerated(preview: string) {
         uploadManager.updateUpload(props.node.attrs['data-key'], {
@@ -59,14 +69,6 @@
             uploadModal.value.open(props.node.attrs['data-key']);
         }
     }
-
-    onMounted(() => {
-        uploadManager.restoreUpload(props.node.attrs['data-key']);
-    });
-
-    onBeforeUnmount(() => {
-        uploadManager.removeUpload(props.node.attrs['data-key']);
-    });
 </script>
 
 <template>

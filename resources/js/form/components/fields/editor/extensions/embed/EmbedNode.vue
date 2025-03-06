@@ -14,6 +14,7 @@
     } from "@/components/ui/dropdown-menu";
     import { MoreHorizontal } from "lucide-vue-next";
     import EmbedHeader from "@/components/EmbedHeader.vue";
+    import { useEditorNode } from "@/form/components/fields/editor/useEditorNode";
 
     const props = defineProps<ExtensionNodeProps<typeof Embed, EmbedNodeAttributes>>();
 
@@ -29,12 +30,13 @@
         });
     }
 
-    onMounted(() => {
-        embedManager.restoreEmbed(props.node.attrs['data-key'], props.extension.options.embed)
-    });
-
-    onBeforeUnmount(() => {
-        embedManager.removeEmbed(props.node.attrs['data-key'], props.extension.options.embed);
+    useEditorNode({
+        onAdded: () => {
+            embedManager.restoreEmbed(props.node.attrs['data-key'], props.extension.options.embed)
+        },
+        onRemoved: () => {
+            embedManager.removeEmbed(props.node.attrs['data-key'], props.extension.options.embed);
+        },
     });
 </script>
 
