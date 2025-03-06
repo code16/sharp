@@ -518,14 +518,6 @@ class SharpConfigBuilder
 
     private function fullQualifiedClassNameFromFile(SplFileInfo $file): ?string
     {
-        //        $class = trim(Str::replaceFirst(base_path(), '', $file->getRealPath()), DIRECTORY_SEPARATOR);
-
-        //        return str_replace(
-        //            [DIRECTORY_SEPARATOR, 'App\\'],
-        //            ['\\', app()->getNamespace()],
-        //            ucfirst(Str::replaceLast('.php', '', $class))
-        //        );
-
         $lines = file($file->getRealPath());
         if ($namespaceLine = collect(preg_grep('/^namespace /', $lines))->first()) {
             preg_match('/^namespace (.*);$/', $namespaceLine, $match);
