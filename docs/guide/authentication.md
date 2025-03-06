@@ -385,6 +385,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
     {
         $config
             ->redirectLoginToUrl('/my_login')
+            ->redirectLogoutToUrl('/my_logout')
             // [...]
     }
 }
