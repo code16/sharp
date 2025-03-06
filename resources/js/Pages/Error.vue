@@ -1,10 +1,11 @@
 <script setup lang="ts">
     import Layout from "@/Layouts/Layout.vue";
-    import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+    import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
     defineProps<{
         status: number,
         message: string,
+        previous?: { message: string }
     }>()
 </script>
 
@@ -18,7 +19,21 @@
                             Error {{ status }}
                         </CardTitle>
                         <CardDescription>
-                            {{ message }}
+                            <template v-if="previous">
+                                <details class="marker:text-xs">
+                                    <summary>
+                                        <span class="ml-1">
+                                            {{ message }}
+                                        </span>
+                                    </summary>
+                                    <div class="mt-2">
+                                        {{ previous.message }}
+                                    </div>
+                                </details>
+                            </template>
+                            <template v-else>
+                                {{ message }}
+                            </template>
                         </CardDescription>
                     </CardHeader>
                 </Card>
