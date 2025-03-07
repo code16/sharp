@@ -25,6 +25,7 @@ class TestModelShow extends SharpShow
             ->addField(
                 SharpShowEntityListField::make('test-models')
                     ->setLabel('Test models')
+                    ->showCount()
             );
     }
 
