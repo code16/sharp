@@ -26,6 +26,11 @@ class HandleInertiaRequests extends Middleware
 
     public function __construct(protected Filesystem $filesystem) {}
 
+    public function version(Request $request)
+    {
+        return md5_file(public_path('vendor/sharp/manifest.json'));
+    }
+
     public function handle(Request $request, Closure $next)
     {
         Inertia::share([
