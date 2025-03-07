@@ -136,6 +136,7 @@
            :entity-key="field.entityListKey"
            :filters="filters"
            :commands="commands"
+           :show-count="field.showCount"
            :show-create-button="field.showCreateButton"
            :show-reorder-button="field.showReorderButton"
            :show-search-field="field.showSearchField"

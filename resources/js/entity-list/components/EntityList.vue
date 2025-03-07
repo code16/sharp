@@ -74,6 +74,7 @@
         commands: CommandManager,
         title: string,
         inline?: boolean,
+        showCount?: boolean,
         showCreateButton?: boolean,
         showReorderButton?: boolean,
         showSearchField?: boolean,
@@ -82,6 +83,7 @@
         highlightedInstanceId?: string | number,
     }>(), {
         inline: true,
+        showCount: true,
         showCreateButton: true,
         showReorderButton: true,
         showSearchField: true,
@@ -323,7 +325,7 @@
                     <div class="flex flex-wrap md:flex-nowrap gap-y-4 gap-x-2">
                         <div class="flex items-baseline min-w-0">
                             <slot name="card-header" />
-                            <template v-if="entityList">
+                            <template v-if="entityList && props.showCount">
                                 <CardDescription class="hidden @2xl/root-card:block text-xs text-muted-foreground ml-4 mr-2 lg:ml-6 whitespace-nowrap" :class="[inline ? 'lg:mr-9' : 'lg:mr-5']">
                                     <template v-if="entityList.query?.search">
                                         {{ trans_choice('sharp::action_bar.list.search.title', entityList.count, { count: entityList.count, search: entityList.query.search }) }}
