@@ -62,3 +62,10 @@ jobs:
             tests-e2e/playwright-report/
             tests-e2e/site/storage/logs/
           retention-days: 30
+      - uses: 8398a7/action-slack@v2.4.0
+        if: failure() && github.event_name == 'push'
+        with:
+          status: failure
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
