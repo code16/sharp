@@ -38,18 +38,11 @@ class TestModel extends Model
     public function upload(): MorphOne
     {
         return $this->morphOne(Media::class, 'model')
-            ->where('model_key', 'upload');
+            ->withAttributes(['model_key' => 'upload']);
     }
 
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(TestTag::class);
-    }
-
-    public function getDefaultAttributesFor($attribute)
-    {
-        return in_array($attribute, ['upload'])
-            ? ['model_key' => $attribute]
-            : [];
     }
 }

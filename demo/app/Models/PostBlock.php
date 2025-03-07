@@ -21,13 +21,6 @@ class PostBlock extends Model
     public function files(): MorphMany
     {
         return $this->morphMany(Media::class, 'model')
-            ->where('model_key', 'files');
-    }
-
-    public function getDefaultAttributesFor($attribute)
-    {
-        return in_array($attribute, ['files'])
-            ? ['model_key' => $attribute]
-            : [];
+            ->withAttributes(['model_key' => 'files']);
     }
 }
