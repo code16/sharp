@@ -22,6 +22,7 @@ export default defineConfig(({ mode, command }) => {
             alias: {
                 'vue': 'vue/dist/vue.esm-browser.js',
                 'ziggy-js': path.resolve(__dirname, 'vendor/tightenco/ziggy'),
+                // ...rekaAliases()
             }
         },
         server: {
@@ -72,3 +73,73 @@ export default defineConfig(({ mode, command }) => {
         ],
     }
 });
+
+// dev only method
+function rekaAliases()
+{
+    return {
+        'reka-ui': path.resolve(__dirname, '../reka-ui/packages/core/src'),
+        ...Object.fromEntries([
+            'Accordion',
+            'AlertDialog',
+            'AspectRatio',
+            'Avatar',
+            'Calendar',
+            'Checkbox',
+            'Collapsible',
+            'Collection',
+            'Combobox',
+            'ConfigProvider',
+            'ContextMenu',
+            'date',
+            'DateField',
+            'DatePicker',
+            'DateRangeField',
+            'DateRangePicker',
+            'Dialog',
+            'DismissableLayer',
+            'DropdownMenu',
+            'Editable',
+            'FocusGuards',
+            'FocusScope',
+            'HoverCard',
+            'Label',
+            'Listbox',
+            'Menu',
+            'Menubar',
+            'NavigationMenu',
+            'NumberField',
+            'Pagination',
+            'PinInput',
+            'Popover',
+            'Popper',
+            'Presence',
+            'Primitive',
+            'Progress',
+            'RadioGroup',
+            'RangeCalendar',
+            'RovingFocus',
+            'ScrollArea',
+            'Select',
+            'Separator',
+            'shared',
+            'Slider',
+            'Splitter',
+            'Stepper',
+            'Switch',
+            'Tabs',
+            'TagsInput',
+            'Teleport',
+            'test',
+            'TimeField',
+            'Toast',
+            'Toggle',
+            'ToggleGroup',
+            'Toolbar',
+            'Tooltip',
+            'Tree',
+            'Viewport',
+            'VisuallyHidden'
+        ].map(c => [`@/${c}`, path.resolve(__dirname, `../reka-ui/packages/core/src/${c}`)])),
+    }
+}
