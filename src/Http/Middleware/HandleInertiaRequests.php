@@ -28,6 +28,10 @@ class HandleInertiaRequests extends Middleware
 
     public function version(Request $request)
     {
+        if (app()->environment('testing')) {
+            return null;
+        }
+
         return md5_file(public_path('vendor/sharp/manifest.json'));
     }
 
