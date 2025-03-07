@@ -4,6 +4,7 @@ namespace Code16\Sharp\Utils\Testing;
 
 use Closure;
 use Code16\Sharp\Http\Context\SharpBreadcrumb;
+use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Links\BreadcrumbBuilder;
 
 trait SharpAssertions
@@ -39,8 +40,10 @@ trait SharpAssertions
         return $this;
     }
 
-    public function deleteFromSharpShow(string $entityKey, $instanceId)
+    public function deleteFromSharpShow(string $entityClassNameOrKey, $instanceId)
     {
+        $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
+
         return $this
             ->delete(
                 route(
@@ -54,8 +57,10 @@ trait SharpAssertions
             );
     }
 
-    public function deleteFromSharpList(string $entityKey, $instanceId)
+    public function deleteFromSharpList(string $entityClassNameOrKey, $instanceId)
     {
+        $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
+
         return $this
             ->withHeader(
                 SharpBreadcrumb::CURRENT_PAGE_URL_HEADER,
@@ -66,8 +71,10 @@ trait SharpAssertions
             ->delete(route('code16.sharp.api.list.delete', [$entityKey, $instanceId]));
     }
 
-    public function getSharpForm(string $entityKey, $instanceId = null)
+    public function getSharpForm(string $entityClassNameOrKey, $instanceId = null)
     {
+        $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
+
         return $this
             ->get(
                 $instanceId
@@ -91,8 +98,10 @@ trait SharpAssertions
             );
     }
 
-    public function getSharpSingleForm(string $entityKey)
+    public function getSharpSingleForm(string $entityClassNameOrKey)
     {
+        $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
+
         return $this
             ->get(
                 route(
@@ -106,8 +115,10 @@ trait SharpAssertions
             );
     }
 
-    public function updateSharpForm(string $entityKey, $instanceId, array $data)
+    public function updateSharpForm(string $entityClassNameOrKey, $instanceId, array $data)
     {
+        $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
+
         return $this
             ->post(
                 route(
@@ -122,8 +133,10 @@ trait SharpAssertions
             );
     }
 
-    public function updateSharpSingleForm(string $entityKey, array $data)
+    public function updateSharpSingleForm(string $entityClassNameOrKey, array $data)
     {
+        $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
+
         return $this
             ->post(
                 route(
@@ -137,8 +150,10 @@ trait SharpAssertions
             );
     }
 
-    public function getSharpShow(string $entityKey, $instanceId)
+    public function getSharpShow(string $entityClassNameOrKey, $instanceId)
     {
+        $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
+
         return $this
             ->get(
                 route(
@@ -153,8 +168,10 @@ trait SharpAssertions
             );
     }
 
-    public function storeSharpForm(string $entityKey, array $data)
+    public function storeSharpForm(string $entityClassNameOrKey, array $data)
     {
+        $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
+
         return $this
             ->post(
                 route(
@@ -170,12 +187,14 @@ trait SharpAssertions
     }
 
     public function callSharpInstanceCommandFromList(
-        string $entityKey,
+        string $entityClassNameOrKey,
         $instanceId,
         string $commandKeyOrClassName,
         array $data = [],
         ?string $commandStep = null
     ) {
+        $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
+
         $commandKey = class_exists($commandKeyOrClassName)
             ? class_basename($commandKeyOrClassName)
             : $commandKeyOrClassName;
@@ -197,12 +216,14 @@ trait SharpAssertions
     }
 
     public function callSharpInstanceCommandFromShow(
-        string $entityKey,
+        string $entityClassNameOrKey,
         $instanceId,
         string $commandKeyOrClassName,
         array $data = [],
         ?string $commandStep = null
     ) {
+        $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
+
         $commandKey = class_exists($commandKeyOrClassName)
             ? class_basename($commandKeyOrClassName)
             : $commandKeyOrClassName;
@@ -224,11 +245,13 @@ trait SharpAssertions
     }
 
     public function callSharpEntityCommandFromList(
-        string $entityKey,
+        string $entityClassNameOrKey,
         string $commandKeyOrClassName,
         array $data = [],
         ?string $commandStep = null
     ) {
+        $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
+
         $commandKey = class_exists($commandKeyOrClassName)
             ? class_basename($commandKeyOrClassName)
             : $commandKeyOrClassName;
@@ -271,5 +294,10 @@ trait SharpAssertions
                 $builder->generateUri()
             )
         );
+    }
+
+    private function resolveEntityKey(string $entityClassNameOrKey): string
+    {
+        return app(SharpEntityManager::class)->entityKeyFor($entityClassNameOrKey);
     }
 }
