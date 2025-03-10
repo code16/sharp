@@ -106,7 +106,7 @@ class Book extends Model
 ```
 
 ::: tip
-Prefer the Laravel 12+ syntax: it’s a clear way, but more importantly it will allow you to simplify the update part avoiding the need to add another method, see below.
+Prefer the Laravel 12+ syntax: it offers clarity and, more importantly, simplifies updates by eliminating the need for an additional method (see below).
 :::
 
 ## Use it!
