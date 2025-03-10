@@ -24,13 +24,6 @@ class PostAttachment extends Model
     public function document(): MorphOne
     {
         return $this->morphOne(Media::class, 'model')
-            ->where('model_key', 'document');
-    }
-
-    public function getDefaultAttributesFor($attribute)
-    {
-        return in_array($attribute, ['document'])
-            ? ['model_key' => $attribute]
-            : [];
+            ->withAttributes(['model_key' => 'document']);
     }
 }
