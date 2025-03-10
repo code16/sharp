@@ -25,7 +25,7 @@ class SharpException extends \Exception
             return false;
         }
 
-        if ($request->routeIs('code16.sharp.api.*')) {
+        if ($request->routeIs('code16.sharp.api.*') || $request->routeIs('code16.sharp.download.show')) {
             return false;
         }
 
