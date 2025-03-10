@@ -66,6 +66,28 @@ class CreateMediasTable extends Migration
 
 Now, you need to define the relationships. Let's say you have a Book model, and you want the user to be able to upload its cover and PDF version.
 
+**With Laravel 12:**
+
+```php
+class Book extends Model
+{
+	public function cover()
+    {
+        return $this->morphOne(Media::class, 'model')
+            ->withAttributes(['model_key' => 'cover']);
+    }
+
+    public function pdf()
+    {
+        return $this->morphOne(Media::class, 'model')
+            ->withAttributes(['model_key' => 'pdf']);
+    }
+}
+```
+
+**Before Laravel 12:**
+(The `withAttributes` method is not available before Laravel 12)
+
 ```php
 class Book extends Model
 {
@@ -82,6 +104,10 @@ class Book extends Model
     }
 }
 ```
+
+::: tip
+Prefer the Laravel 12+ syntax: it’s a clear way, but more importantly it will allow you to simplify the update part avoiding the need to add another method, see below.
+:::
 
 ## Use it!
 
@@ -120,7 +146,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
                 thumbnailsDisk: 'public',
                 thumbnailsDir: 'thumbnails',
             )
-            // [...]
+            // ...
     }
 }
 ```
@@ -190,52 +216,64 @@ You can provide a custom Modifier; you’ll need to create a class that extends 
 
 The best part is this: Sharp will take care of everything related to update and store.
 
-First declare your upload, like usual:
+Declare your upload, as usual, and add a transformer:
 
 ```php
-function buildFormFields()
-{
-    $this->addField(
-        SharpFormUploadField::make('cover')
-            ->setLabel('Cover')
-            ->setImageOnly()
-            ->setImageCropRatio('1:1')
-            ->setStorageDisk('local')
-            ->setStorageBasePath('data/Books')
-    );
-}
-```
 
-Then add a customTransformer:
+use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
+// ...
 
-```php
-function find($id): array
+class MyForm extends SharpForm
 {
-    return $this
-        ->setCustomTransformer(
-            'cover',
-            new SharpUploadModelFormAttributeTransformer()
-        )
-        ->transform(
-            Book::with('cover')->findOrFail($id)
+    function buildFormFields()
+    {
+        $this->addField(
+            SharpFormUploadField::make('cover')
+                ->setLabel('Cover')
+                ->setImageOnly()
+                ->setImageCropRatio('1:1')
+                ->setStorageDisk('local')
+                ->setStorageBasePath('data/Books')
         );
+        // ...
+    }
+    
+    function find($id): array
+    {
+        return $this
+            ->setCustomTransformer('cover', new SharpUploadModelFormAttributeTransformer())
+            ->transform(Book::with('cover')->findOrFail($id));
+    }
+    
+    // ...
 }
 ```
 
-The full path of this transformer is `Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer`.
+### Updating custom attributes (Laravel 11 and below)
 
-And finally, and this is a sad exception to the "don't touch the applicative code for Sharp", add this in your Model that declares an upload relationship (Book, in our example):
+If you use the Laravel 12+ syntax for the relationships, you are done. **Otherwise, you need to add a `getDefaultAttributesFor()` method in your Model**:
 
 ```php
-public function getDefaultAttributesFor($attribute)
+class Book extends Model
 {
-    return in_array($attribute, ['cover'])
-        ? ['model_key' => $attribute]
-        : [];
+	public function cover()
+    {
+        return $this->morphOne(Media::class, 'model')
+            ->where('model_key', 'cover');
+    }
+    
+    public function getDefaultAttributesFor($attribute)
+    {
+        return $attribute === 'cover'
+            ? ['model_key' => $attribute]
+            : [];
+    }
+    
+    // ...
 }
 ```
 
-This will tell SharpEloquentUpdater to add the necessary `model_key`attribute when creating a new upload.
+This will tell SharpEloquentUpdater to add the necessary `model_key` attribute when creating a new upload. Again, this is not needed if you declare the relationship with Laravel 12+ syntax (`->withAttributes(['model_key' => 'cover'])`).
 
 And... voilà! From there, Sharp will handle the rest.
 
@@ -286,31 +324,14 @@ $this->addField(
 
 Note that we use the special `file` key for the SharpFormUploadField in the item.
 
-You'll have next to update your Model special `getDefaultAttributesFor()` function:
-
-```php
-public function getDefaultAttributesFor($attribute)
-{
-    return in_array($attribute, ['cover','pictures'])
-        ? ['model_key' => $attribute]
-        : [];
-}
-```
-
-All set.
-
 #### Updating custom attributes in upload lists
 
 ```php
 $this->addField(
     SharpFormListField::make('pictures')
-        // [...]
-        ->addItemField(
-            SharpFormUploadField::make('file')
-        )
-        ->addItemField(
-            SharpFormTextField::make('legend')
-        )
+        // ...
+        ->addItemField(SharpFormUploadField::make('file'))
+        ->addItemField(SharpFormTextField::make('legend'))
 );
 ```
 
