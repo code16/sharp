@@ -83,8 +83,8 @@ class EloquentModelUpdater
         if ($instance->isRelation($attribute)) {
             $returnType = (new ReflectionMethod($instance, $attribute))->getReturnType();
 
-            return $returnType instanceof ReflectionNamedType
-                && is_subclass_of($returnType->getName(), Relation::class);
+            return $returnType === null
+                || ($returnType instanceof ReflectionNamedType && is_subclass_of($returnType->getName(), Relation::class));
         }
 
         return false;

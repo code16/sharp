@@ -198,6 +198,32 @@ it('allows to have a field with the same name of a model method but not a relati
     expect($person->fresh()->unrelated)->toBe('Marie Curie');
 });
 
+it('allows to have a relation without type hinting', function () {
+    $marie = Person::create(['name' => 'Marie Curie']);
+    $pierre = Person::create(['name' => 'Pierre Curie']);
+
+    $form = new class() extends FakeSharpForm
+    {
+        use WithSharpFormEloquentUpdater;
+
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(SharpFormTextField::make('notTypedHintPartner'));
+        }
+
+        public function update($id, array $data)
+        {
+            return $this->save(Person::findOrFail($id), $data);
+        }
+    };
+
+    $form->update($marie->id, $form->formatAndValidateRequestData([
+        'notTypedHintPartner' => $pierre->id,
+    ]));
+
+    expect($marie->fresh()->notTypedHintPartner->id)->toBe($pierre->id);
+});
+
 it('allows to update a belongsTo attribute', function () {
     $pierre = Person::create(['name' => 'Pierre Curie']);
     $marie = Person::create(['name' => 'Marie Curie']);
