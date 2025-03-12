@@ -224,6 +224,35 @@ it('allows to have a relation without type hinting', function () {
     expect($marie->fresh()->notTypedHintPartner->id)->toBe($pierre->id);
 });
 
+it('allows to have a relation defined with a relation resolver', function () {
+    $marie = Person::create(['name' => 'Marie Curie']);
+    $pierre = Person::create(['name' => 'Pierre Curie']);
+    Person::resolveRelationUsing('marriedPartner', fn (Person $person) => $person
+        ->belongsTo(Person::class, 'partner_id')
+    );
+
+    $form = new class() extends FakeSharpForm
+    {
+        use WithSharpFormEloquentUpdater;
+
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(SharpFormTextField::make('marriedPartner'));
+        }
+
+        public function update($id, array $data)
+        {
+            return $this->save(Person::findOrFail($id), $data);
+        }
+    };
+
+    $form->update($marie->id, $form->formatAndValidateRequestData([
+        'marriedPartner' => $pierre->id,
+    ]));
+
+    expect($marie->fresh()->marriedPartner->id)->toBe($pierre->id);
+});
+
 it('allows to update a belongsTo attribute', function () {
     $pierre = Person::create(['name' => 'Pierre Curie']);
     $marie = Person::create(['name' => 'Marie Curie']);

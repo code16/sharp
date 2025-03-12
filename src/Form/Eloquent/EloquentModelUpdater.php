@@ -81,6 +81,12 @@ class EloquentModelUpdater
         }
 
         if ($instance->isRelation($attribute)) {
+            if ($instance->relationResolver(get_class($instance), $attribute)) {
+                // Custom relation resolver
+                return true;
+            }
+
+            // Check return type to (try to) ignore non relation methods by their return type
             $returnType = (new ReflectionMethod($instance, $attribute))->getReturnType();
 
             return $returnType === null
