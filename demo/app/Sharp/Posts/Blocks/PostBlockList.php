@@ -62,12 +62,11 @@ class PostBlockList extends SharpEntityList
                     'visuals' => $instance->files
                         ->map(function (Media $visual) {
                             if ($url = $visual->thumbnail(null, 30)) {
-                                return sprintf('<img src="%s" alt="" class="img-fluid">', $url);
+                                return sprintf('<img src="%s" alt="" style="display: inline-block">', $url);
                             }
 
                             return null;
-                        },
-                        )
+                        })
                         ->implode(' ')
                 };
             })
