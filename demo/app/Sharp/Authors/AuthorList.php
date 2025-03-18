@@ -94,7 +94,11 @@ class AuthorList extends SharpEntityList
             ->setCustomTransformer('email', function ($value, User $user) {
                 return $user->hasVerifiedEmail()
                     ? $value
-                    : sprintf('<div>%s</div><div style="color: darkred">pending invitation...</div>', $value);
+                    : sprintf(
+                        '<div>%s</div><div style="color: darkorange">%s pending invitation...</div>',
+                        $value,
+                        svg('far-envelope')->toHtml()
+                    );
             })
             ->transform($users->get());
     }
