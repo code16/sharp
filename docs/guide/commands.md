@@ -171,7 +171,7 @@ Here is the full list of available methods:
 
 Finally, let's review the return possibilities: after a Command has been executed, the code must return something to tell to the front what to do next. There are height of them:
 
-- `return $this->info('some text')`: displays the entered text in a modal.
+- `return $this->info('some text', reload: true)`: displays the entered text in a modal. The second argument, optional (default is `false`), is a boolean to also mark Sharp to reload the page.
 - `return $this->reload()`: reload the current page (with context).
 - `return $this->refresh(1)`*: refresh only the instance with an id on `1`. We can pass an id array also to refresh more than one instance.
 - `return $this->view('view.name', ['some'=>'params'])`: display a view right in Sharp; useful for page previews.

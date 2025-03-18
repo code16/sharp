@@ -31,7 +31,7 @@ abstract class EntityState extends InstanceCommand
         throw new SharpInvalidConfigException('View return type is not supported for a state.');
     }
 
-    protected function info(string $message): array
+    protected function info(string $message, bool $reload = false): array
     {
         throw new SharpInvalidConfigException('Info return type is not supported for a state.');
     }
