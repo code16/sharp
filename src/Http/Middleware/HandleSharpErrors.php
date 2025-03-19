@@ -4,6 +4,7 @@ namespace Code16\Sharp\Http\Middleware;
 
 use Closure;
 use Code16\Sharp\Exceptions\SharpException;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -19,7 +20,8 @@ class HandleSharpErrors
         /** @var Response $response */
         $response = $next($request);
 
-        if ($response->exception instanceof ValidationException) {
+        if ($response->exception instanceof ValidationException
+            || $response->exception instanceof AuthenticationException) {
             return $response;
         }
 
