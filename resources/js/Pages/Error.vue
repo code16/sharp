@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import Layout from "@/Layouts/Layout.vue";
-    import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+    import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
     defineProps<{
         status: number,

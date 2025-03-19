@@ -17,7 +17,6 @@
     import CommandDropdownItems from "@/commands/components/CommandDropdownItems.vue";
     import { watch } from "vue";
     import DropdownChevronDown from "@/components/ui/DropdownChevronDown.vue";
-    import useMenu from "@/composables/useMenu";
     import PageBreadcrumb from "@/components/PageBreadcrumb.vue";
     import { config } from "@/utils/config";
     import EntityListSearch from "@/entity-list/components/EntityListSearch.vue";
@@ -30,7 +29,6 @@
         DialogTrigger
     } from "@/components/ui/dialog";
     import { Filter } from "lucide-vue-next";
-    import RootCard from "@/components/ui/RootCard.vue";
     import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
     import { Badge } from "@/components/ui/badge";
 

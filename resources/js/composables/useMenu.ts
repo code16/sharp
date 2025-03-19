@@ -22,5 +22,7 @@ class Menu implements MenuData {
 }
 
 export default function useMenu() {
-    return new Menu(usePage().props.menu as MenuData);
+    return usePage().props.menu
+        ? new Menu(usePage().props.menu as MenuData)
+        : null;
 }
