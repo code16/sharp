@@ -4,8 +4,8 @@ namespace Code16\Sharp\Exceptions;
 
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Inertia\Inertia;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 class SharpAuthenticationException extends AuthenticationException
 {
