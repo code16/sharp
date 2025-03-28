@@ -19,3 +19,6 @@ indent_size = 2
 
 [*.config.js]
 indent_size = 2
+
+[generated.d.ts]
+indent_size = 2

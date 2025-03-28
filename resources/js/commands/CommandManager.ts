@@ -41,11 +41,15 @@ export class CommandManager {
 
     get defaultCommandResponseHandlers(): CommandResponseHandlers {
         return {
-            info: async ({ message }, { formModal }) => {
+            info: async ({ message, reload }, { formModal }) => {
                 await showAlert(message, {
                     title: __('sharp::modals.command.info.title'),
                 });
-                formModal.shouldReopen && formModal.reloadAndReopen();
+                if(formModal.shouldReopen) {
+                    formModal.reloadAndReopen();
+                } else if(reload) {
+                    await this.handleCommandResponse({ action: 'reload' });
+                }
             },
             link: ({ link }, { formModal }) => {
                 if(formModal.shouldReopen) {

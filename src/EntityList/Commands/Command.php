@@ -34,11 +34,12 @@ abstract class Command
     private ?string $confirmationButtonLabel = null;
     private ?string $description = null;
 
-    protected function info(string $message): array
+    protected function info(string $message, bool $reload = false): array
     {
         return [
             'action' => CommandAction::Info->value,
             'message' => $message,
+            'reload' => $reload,
         ];
     }
 

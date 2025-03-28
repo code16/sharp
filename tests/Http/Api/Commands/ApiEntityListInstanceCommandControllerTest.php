@@ -41,6 +41,7 @@ it('allows to call an info instance command', function () {
         ->assertJson([
             'action' => 'info',
             'message' => 'ok',
+            'reload' => false,
         ]);
 });
 
@@ -70,6 +71,37 @@ it('allows to call a reload instance command', function () {
         ->assertOk()
         ->assertJson([
             'action' => 'reload',
+        ]);
+});
+
+it('allows to call an info + reload instance command', function () {
+    fakeListFor('person', new class() extends PersonList
+    {
+        protected function getInstanceCommands(): ?array
+        {
+            return [
+                'instance_info' => new class() extends InstanceCommand
+                {
+                    public function label(): ?string
+                    {
+                        return 'my command';
+                    }
+
+                    public function execute($instanceId, array $data = []): array
+                    {
+                        return $this->info('ok', reload: true);
+                    }
+                },
+            ];
+        }
+    });
+
+    $this->postJson(route('code16.sharp.api.list.command.instance', ['person', 'instance_info', 1]))
+        ->assertOk()
+        ->assertJson([
+            'action' => 'info',
+            'message' => 'ok',
+            'reload' => true,
         ]);
 });
 
