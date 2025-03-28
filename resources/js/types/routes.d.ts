@@ -106,6 +106,7 @@ declare module 'ziggy-js' {
             "name": "filterKey"
         }
     ],
+    "code16.sharp.update-assets": [],
     "code16.sharp.api.dashboard.command.form": [
         {
             "name": "dashboardKey"

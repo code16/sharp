@@ -55,7 +55,7 @@ export type CommandFormData = {
 };
 export type CommandResponseData =
   | { action: "link"; link: string }
-  | { action: "info"; message: string }
+  | { action: "info"; message: string; reload: boolean }
   | { action: "refresh"; items?: Array<{ [key: string]: any }> }
   | { action: "reload" }
   | { action: "step"; step: string }
@@ -601,12 +601,12 @@ export type FormUploadFieldValueData = {
   } | null;
   nativeFile?: File;
 };
-export type GlobalSearchData = {
-  config: { placeholder: string };
-};
 export type GlobalFiltersData = {
   config: { filters: ConfigFiltersData };
   filterValues: FilterValuesData;
+};
+export type GlobalSearchData = {
+  config: { placeholder: string };
 };
 export type GraphWidgetData = {
   value?: {
@@ -830,8 +830,8 @@ export type ShowListFieldData = {
   key: string;
   type: "list";
   emptyVisible: boolean;
-  label: string | null;
   itemFields: { [key: string]: ShowFieldData };
+  label: string | null;
 };
 export type ShowPictureFieldData = {
   value?: string;
