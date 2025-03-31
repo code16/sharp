@@ -61,7 +61,7 @@
 
     async function init() {
         const data = await api.get(props.field.endpointUrl, {
-            fetchOptions: { cache: 'no-store' } as RequestInit,
+            preloaded: true,
         })
             .then(response => response.data as EntityListData);
 

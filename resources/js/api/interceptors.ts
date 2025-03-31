@@ -2,10 +2,28 @@ import { parseBlobJSONContent } from "@/utils/request";
 import { handleErrorAlert } from "./errors";
 import { Axios, AxiosError, isCancel } from "axios";
 
+declare module 'axios' {
+    interface AxiosRequestConfig {
+        preloaded?: boolean;
+    }
+}
+
 
 export function installInterceptors(api: Axios) {
     api.interceptors.request.use(request => {
-        request.headers['X-Current-Page-Url'] = location.href;
+        if(request.preloaded) {
+            request.adapter = 'fetch';
+            request.headers['Accept'] = '*/*';
+            request.withXSRFToken = false;
+            if(navigator.userAgent.includes('Safari') && !navigator.userAgent.includes('Chrome')) {
+                request.fetchOptions = {
+                    ...request.fetchOptions,
+                    mode: 'no-cors',
+                } as RequestInit;
+            }
+        } else {
+            request.headers['X-Current-Page-Url'] = location.href;
+        }
         return request;
     });
 

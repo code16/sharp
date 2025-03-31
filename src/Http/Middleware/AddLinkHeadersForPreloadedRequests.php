@@ -16,27 +16,32 @@ class AddLinkHeadersForPreloadedRequests
 
     public function handle(Request $request, $next)
     {
-        // Disable preloading fetch in Safari/Firefox as it is not taken into account
-        if (! str_contains($request->userAgent(), 'Chrome')) {
-            return $next($request);
-        }
-
         if ($request->hasHeader('X-No-Preload')) {
             return $next($request);
         }
 
-        return tap($next($request), function (Response $response) {
+        return tap($next($request), function (Response $response) use ($request) {
             if ($this->preloadedRequests !== []) {
                 if ($link = $response->headers->get('Link', '')) {
                     $link .= ', ';
                 }
 
                 $link .= collect($this->preloadedRequests)
-                    ->map(fn ($url) => sprintf('<%s>; rel="preload"; as="fetch"; type="application/json"; crossorigin="anonymous"', $url))
+                    ->map(fn ($url) => sprintf(
+                        '<%s>; rel="preload"; as="fetch"; type="application/json"; %s',
+                        $url,
+                        $this->isSafari() ? '' : 'crossorigin="anonymous"'
+                    ))
                     ->join(', ');
 
                 $response->headers->set('Link', $link);
             }
         });
+    }
+
+    private function isSafari(): bool
+    {
+        return str_contains(request()->userAgent(), 'Safari')
+            && !str_contains(request()->userAgent(), 'Chrome');
     }
 }
