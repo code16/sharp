@@ -80,17 +80,7 @@ class AuthorList extends SharpEntityList
                     }
                 },
             )
-
-            // Handle sorting
-            ->when(
-                $this->queryParams->sortedBy() === 'email',
-                function (Builder $builder) {
-                    $builder->orderBy('email', $this->queryParams->sortedDir());
-                },
-                function (Builder $builder) {
-                    $builder->orderBy('name', $this->queryParams->sortedDir() ?: 'asc');
-                },
-            );
+            ->orderBy($this->queryParams->sortedBy(), $this->queryParams->sortedDir());
 
         return $this
             ->setCustomTransformer('avatar', (new SharpUploadModelThumbnailUrlTransformer(100))->renderAsImageTag())
@@ -100,6 +90,15 @@ class AuthorList extends SharpEntityList
                     'editor' => 'Editor',
                     default => 'Unknown',
                 };
+            })
+            ->setCustomTransformer('email', function ($value, User $user) {
+                return $user->hasVerifiedEmail()
+                    ? $value
+                    : sprintf(
+                        '<div>%s</div><div style="color: darkorange">%s pending invitation...</div>',
+                        $value,
+                        svg('far-envelope')->toHtml()
+                    );
             })
             ->transform($users->get());
     }

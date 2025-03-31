@@ -42,6 +42,7 @@ it('allows to call an info entity command', function () {
         ->assertJson([
             'action' => 'info',
             'message' => 'ok',
+            'reload' => false,
         ]);
 });
 
@@ -71,6 +72,37 @@ it('allows to call a reload entity command', function () {
         ->assertOk()
         ->assertJson([
             'action' => 'reload',
+        ]);
+});
+
+it('allows to call an info + reload entity command', function () {
+    fakeListFor('person', new class() extends PersonList
+    {
+        protected function getEntityCommands(): ?array
+        {
+            return [
+                'cmd' => new class() extends EntityCommand
+                {
+                    public function label(): ?string
+                    {
+                        return 'entity';
+                    }
+
+                    public function execute(array $data = []): array
+                    {
+                        return $this->info('ok', reload: true);
+                    }
+                },
+            ];
+        }
+    });
+
+    $this->postJson(route('code16.sharp.api.list.command.entity', ['person', 'cmd']))
+        ->assertOk()
+        ->assertJson([
+            'action' => 'info',
+            'message' => 'ok',
+            'reload' => true,
         ]);
 });
 
