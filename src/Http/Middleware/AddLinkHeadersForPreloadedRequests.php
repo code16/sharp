@@ -20,7 +20,7 @@ class AddLinkHeadersForPreloadedRequests
             return $next($request);
         }
 
-        return tap($next($request), function (Response $response) use ($request) {
+        return tap($next($request), function (Response $response) {
             if ($this->preloadedRequests !== []) {
                 if ($link = $response->headers->get('Link', '')) {
                     $link .= ', ';
@@ -42,6 +42,6 @@ class AddLinkHeadersForPreloadedRequests
     private function isSafari(): bool
     {
         return str_contains(request()->userAgent(), 'Safari')
-            && !str_contains(request()->userAgent(), 'Chrome');
+            && ! str_contains(request()->userAgent(), 'Chrome');
     }
 }
