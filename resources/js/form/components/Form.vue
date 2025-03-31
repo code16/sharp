@@ -103,9 +103,12 @@
             <div class="container">
                 <Alert class="mb-4" variant="destructive">
                     <template v-if="errorAlertMessage">
-                        <AlertTitle class="mb-0">
-                            {{ errorAlertMessage }}
+                        <AlertTitle>
+                            {{ __('sharp::modals.error.title') }}
                         </AlertTitle>
+                        <AlertDescription>
+                            {{ errorAlertMessage }}
+                        </AlertDescription>
                     </template>
                     <template v-else>
                         <AlertTitle>
