@@ -48,12 +48,7 @@ export function useApexCharts(
                     enabled: false,
                 },
                 toolbar: {
-                    show: zoomed.value,
-                    tools: {
-                        pan: false,
-                        zoom: true,
-                        download: false,
-                    },
+                    show: false,
                 },
                 locales: [
                     en, fr, ru, es, de,
