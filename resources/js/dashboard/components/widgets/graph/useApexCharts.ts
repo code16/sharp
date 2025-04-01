@@ -11,6 +11,7 @@ import { VueApexChartsComponent } from "vue3-apexcharts";
 import { useResizeObserver } from "@vueuse/core";
 import { DashboardWidgetProps } from "@/dashboard/types";
 import debounce from "lodash/debounce";
+import { useColorMode } from "@/composables/useColorMode";
 
 export function useApexCharts(
     props: DashboardWidgetProps<GraphWidgetData>,
@@ -25,6 +26,7 @@ export function useApexCharts(
         width.value = el.value.clientWidth;
         el.value.style.overflow = 'visible';
     }, 100);
+    const mode = useColorMode();
     useResizeObserver(apexChartsComponent, () => {
         el.value.style.overflow = 'hidden';
         if(!width.value) {
@@ -56,10 +58,14 @@ export function useApexCharts(
                 defaultLocale: document.documentElement.lang,
                 redrawOnParentResize: false,
                 redrawOnWindowResize: false,
+                background: 'transparent',
             },
             legend: {
                 show: widget.showLegend && !widget.minimal,
                 showForSingleSeries: true,
+            },
+            theme: {
+                mode: mode.value
             },
             tooltip: {
                 y: {
