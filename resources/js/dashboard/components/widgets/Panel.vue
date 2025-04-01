@@ -35,8 +35,10 @@
                 </MaybeInertiaLink>
             </CardHeader>
         </template>
-        <CardContent>
-            <Content class="content-sm text-sm" :html="value.html" />
-        </CardContent>
+        <template v-if="value">
+            <CardContent>
+                <Content class="content-sm text-sm" :html="value.html" />
+            </CardContent>
+        </template>
     </Card>
 </template>

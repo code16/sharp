@@ -1,6 +1,5 @@
 <script setup lang="ts">
     import { useApexCharts } from "@/dashboard/components/widgets/graph/useApexCharts";
-    import { computed, useTemplateRef } from "vue";
     import { normalizeColor } from "@/dashboard/utils/chart";
     import { GraphWidgetData } from "@/types";
     import ApexChart from "vue3-apexcharts";
@@ -27,7 +26,7 @@
             },
             colors: value?.datasets?.map(dataset => normalizeColor(dataset.color)),
             dataLabels: {
-                enabled: false
+                enabled: false,
             },
             labels: value?.labels,
             legend: {
@@ -43,7 +42,6 @@
             },
             xaxis: {
                 type: widget.dateLabels ? 'datetime' : 'category',
-
             },
             yaxis: {
                 show: !widget.minimal,
