@@ -1,0 +1,8 @@
+#!/bin/sh
+
+files=$(git diff --cached --name-only --diff-filter=ACM -- '*.php');
+
+if [ -n "$files" ]; then
+    vendor/bin/pint $files
+    git add $files
+fi
