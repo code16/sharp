@@ -56,6 +56,13 @@
                     />
                 </div>
                 <DialogFooter>
+                    <div class="flex-1 self-center">
+                        <template v-if="commands.state.currentCommandForm.hasErrors">
+                            <div class="text-destructive self-center font-medium text-sm">
+                                {{ __('sharp::form.validation_error.title') }}
+                            </div>
+                        </template>
+                    </div>
                     <DialogClose as-child>
                         <Button variant="outline">
                             {{ __('sharp::modals.cancel_button') }}
