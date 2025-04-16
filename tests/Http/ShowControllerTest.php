@@ -36,6 +36,7 @@ it('gets formatted show data for an instance', function () {
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('show.data.name', ['text' => 'James Clerk Maxwell'])
+            ->where('show.title', 'person')
         );
 });
 
@@ -357,5 +358,64 @@ it('passes through transformers to return show data for an instance', function (
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('show.data.name', ['text' => 'JAMES CLERK MAXWELL'])
+        );
+});
+
+it('allows to configure a title attribute', function () {
+    fakeShowFor('person', new class() extends PersonShow
+    {
+        public function buildShowConfig(): void
+        {
+            $this->configurePageTitleAttribute('name');
+        }
+
+        public function find($id): array
+        {
+            return $this
+                ->transform([
+                    'name' => 'James Clerk Maxwell',
+                ]);
+        }
+    });
+
+    $this->get('/sharp/s-list/person/s-show/person/1')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('show.title', 'James Clerk Maxwell')
+        );
+});
+
+it('allows to configure a localized title attribute', function () {
+    fakeShowFor('person', new class() extends PersonShow
+    {
+        public function buildShowConfig(): void
+        {
+            $this->configurePageTitleAttribute('job', localized: true);
+        }
+
+        public function find($id): array
+        {
+            return $this
+                ->transform([
+                    'job' => [
+                        'fr' => 'Physicien',
+                        'en' => 'Physicist',
+                    ],
+                ]);
+        }
+
+        public function getDataLocalizations(): array
+        {
+            return ['fr', 'en'];
+        }
+    });
+
+    $this->get('/sharp/s-list/person/s-show/person/1')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('show.title', [
+                'fr' => 'Physicien',
+                'en' => 'Physicist',
+            ])
         );
 });

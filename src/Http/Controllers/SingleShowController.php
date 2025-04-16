@@ -50,6 +50,10 @@ class SingleShowController extends SharpProtectedController
             ],
         ]);
 
+        sharp()->context()
+            ->breadcrumb()
+            ->setCurrentInstanceLabel($showData[$show->getBreadcrumbCustomLabelAttribute()] ?? null);
+
         $this->addPreloadHeadersForShowEntityLists($payload);
 
         return Inertia::render('Show/Show', [

@@ -40,11 +40,12 @@ class FormController extends SharpProtectedController
         sharp_check_ability('create', $entityKey);
 
         $form->buildFormConfig();
-        $data = $this->buildFormData($form, $entityKey);
+
+        $formData = $form->newInstance();
 
         return Inertia::render('Form/Form', [
             'form' => FormData::from([
-                ...$data,
+                ...$this->buildFormData($form, $formData, $entityKey),
                 'title' => $form->getCreateTitle() ?: trans('sharp::breadcrumb.form.create_entity', [
                     'entity' => $entity->getLabelOrFail($entityKey->subEntity()),
                 ]),
@@ -80,16 +81,26 @@ class FormController extends SharpProtectedController
         );
 
         $form->buildFormConfig();
-        $data = $this->buildFormData($form, $entityKey, $instanceId);
+
+        $formData = $form instanceof SharpSingleForm || $instanceId !== null
+            ? $form->instance($instanceId)
+            : $form->newInstance();
+
+        if ($breadcrumbLabel = $formData[$form->getBreadcrumbCustomLabelAttribute()] ?? false) {
+            sharp()->context()->breadcrumb()->setCurrentInstanceLabel($breadcrumbLabel);
+            $titleEntityLabel = $breadcrumbLabel;
+        }
+
+        $titleEntityLabel ??= sharp()
+            ->context()
+            ->breadcrumb()
+            ->getParentShowCachedBreadcrumbLabel() ?: $entity->getLabelOrFail($entityKey->subEntity());
 
         return Inertia::render('Form/Form', [
             'form' => FormData::from([
-                ...$data,
+                ...$this->buildFormData($form, $formData, $entityKey, $instanceId),
                 'title' => $form->getEditTitle() ?: trans('sharp::breadcrumb.form.edit_entity', [
-                    'entity' => sharp()
-                        ->context()
-                        ->breadcrumb()
-                        ->getParentShowCachedBreadcrumbLabel() ?: $entity->getLabelOrFail($entityKey->subEntity()),
+                    'entity' => $titleEntityLabel,
                 ]),
             ]),
             'breadcrumb' => BreadcrumbData::from([
@@ -195,12 +206,8 @@ class FormController extends SharpProtectedController
             : null;
     }
 
-    private function buildFormData(SharpForm $form, string $entityKey, $instanceId = null): array
+    private function buildFormData(SharpForm $form, array $formData, string $entityKey, $instanceId = null): array
     {
-        $formData = $form instanceof SharpSingleForm || $instanceId !== null
-            ? $form->instance($instanceId)
-            : $form->newInstance();
-
         return [
             'fields' => $form->fields(),
             'layout' => $form->formLayout(),

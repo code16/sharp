@@ -53,9 +53,9 @@ class ShowController extends SharpProtectedController
             ],
         ]);
 
-        if ($breadcrumbAttr = $showData[$payload->config->breadcrumbAttribute] ?? false) {
-            sharp()->context()->breadcrumb()->setCurrentInstanceLabel($breadcrumbAttr);
-        }
+        sharp()->context()
+            ->breadcrumb()
+            ->setCurrentInstanceLabel($showData[$show->getBreadcrumbCustomLabelAttribute()] ?? false);
 
         $this->addPreloadHeadersForShowEntityLists($payload);
 

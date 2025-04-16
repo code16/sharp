@@ -163,7 +163,10 @@ class SharpBreadcrumb
                 // A Form is always a leaf
                 $previousItem = $this->breadcrumbItems()[$item->depth - 1];
 
-                if ($previousItem->type === 's-show' && ! $this->isSameEntityKeys($previousItem->key, $item->key, true)) {
+                if (
+                    ($previousItem->isShow() && ! $this->isSameEntityKeys($previousItem->key, $item->key, true))
+                    || ($item->isForm() && $this->currentInstanceLabel)
+                ) {
                     // The form entityKey is different from the previous entityKey in the breadcrumb: we are in a EEL case.
                     return isset($item->instance)
                         ? trans('sharp::breadcrumb.form.edit_entity', [
@@ -223,14 +226,14 @@ class SharpBreadcrumb
     {
         $cacheKey = "sharp.breadcrumb.{$item->key}.{$item->type}.{$item->instance}";
 
-        if ($item->isForm() && ($cached = $this->getParentShowCachedBreadcrumbLabel())) {
-            return $cached;
-        }
-
         if ($isLeaf && $this->currentInstanceLabel) {
             Cache::put($cacheKey, $this->currentInstanceLabel, now()->addMinutes(30));
 
             return $this->currentInstanceLabel;
+        }
+
+        if ($item->isForm() && ($cached = $this->getParentShowCachedBreadcrumbLabel())) {
+            return $cached;
         }
 
         if (! $isLeaf) {

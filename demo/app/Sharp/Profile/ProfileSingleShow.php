@@ -40,7 +40,8 @@ class ProfileSingleShow extends SharpSingleShow
 
     public function buildShowConfig(): void
     {
-        $this->configurePageTitleAttribute('name');
+        $this->configurePageTitleAttribute('name')
+            ->configureBreadcrumbCustomLabelAttribute('name');
     }
 
     public function getInstanceCommands(): ?array

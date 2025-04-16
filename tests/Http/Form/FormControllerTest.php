@@ -11,6 +11,7 @@ use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Entities\SinglePersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonForm;
+use Code16\Sharp\Tests\Fixtures\Sharp\PersonShow;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonSingleForm;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
@@ -38,6 +39,7 @@ it('gets form data for an instance', function () {
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('form.data.name', 'James Clerk Maxwell')
+            ->where('form.title', 'Edit “person”')
         );
 });
 
@@ -56,6 +58,7 @@ it('gets form initial data for an entity in creation', function () {
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('form.data.name', 'Who is this guy?')
+            ->where('form.title', 'New “person”')
         );
 });
 
@@ -468,4 +471,99 @@ it('allows to use the legacy validation', function () {
             'name' => '',
         ])
         ->assertSessionHasErrors('name');
+});
+
+it('formats form title based on parent show breadcrumb', function () {
+    fakeShowFor('person', new class() extends PersonShow
+    {
+        public function buildShowConfig(): void
+        {
+            $this->configureBreadcrumbCustomLabelAttribute('name');
+        }
+
+        public function find($id): array
+        {
+            return $this->transform([
+                'id' => 1,
+                'name' => 'Marie Curie',
+            ]);
+        }
+    });
+
+    fakeFormFor('person', new PersonForm());
+
+    $this->get('/sharp/s-list/person/s-show/person/1')
+        ->assertOk();
+
+    $this->get('/sharp/s-list/person/s-show/person/1/s-form/person/1')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('form.title', 'Edit “Marie Curie”')
+        );
+});
+
+it('formats form title based on configured breadcrumb attribute', function () {
+    fakeShowFor('person', new class() extends PersonShow
+    {
+        public function buildShowConfig(): void
+        {
+            $this->configureBreadcrumbCustomLabelAttribute('name');
+        }
+
+        public function find($id): array
+        {
+            return $this->transform([
+                'id' => 1,
+                'name' => 'Marie Curie',
+            ]);
+        }
+    });
+
+    fakeFormFor('person', new class() extends PersonForm
+    {
+        public function buildFormConfig(): void
+        {
+            $this->configureBreadcrumbCustomLabelAttribute('name');
+        }
+
+        public function find($id): array
+        {
+            return $this->transform([
+                'id' => 1,
+                'name' => 'Albert Einstein',
+            ]);
+        }
+    });
+
+    $this->get('/sharp/s-list/person/s-show/person/1')
+        ->assertOk();
+
+    $this->get('/sharp/s-list/person/s-show/person/1/s-form/person/1')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('form.title', 'Edit “Albert Einstein”')
+        );
+});
+
+it('allows to override entirely the form title', function () {
+    fakeFormFor('person', new class() extends PersonForm
+    {
+        public function buildFormConfig(): void
+        {
+            $this->configureEditTitle('My custom edit title')
+                ->configureCreateTitle('My custom create title');
+        }
+    });
+
+    $this->get('/sharp/s-list/person/s-form/person/1')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('form.title', 'My custom edit title')
+        );
+
+    $this->get('/sharp/s-list/person/s-form/person')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('form.title', 'My custom create title')
+        );
 });
