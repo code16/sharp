@@ -28,7 +28,11 @@ class AutocompleteListFormatter extends SharpFieldFormatter
 
         return collect($value)
             ->map(function ($item) use ($autocompleteField) {
-                $item = $item[$autocompleteField->key()];
+                $item = $item[$autocompleteField->key()] ?? null;
+
+                if ($item === null) {
+                    return null;
+                }
 
                 return [
                     $autocompleteField->itemIdAttribute() => $autocompleteField->formatter()->fromFront(
@@ -36,6 +40,7 @@ class AutocompleteListFormatter extends SharpFieldFormatter
                     ),
                 ];
             })
+            ->whereNotNull()
             ->all();
     }
 }
