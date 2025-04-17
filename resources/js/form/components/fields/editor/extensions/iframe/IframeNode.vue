@@ -59,11 +59,7 @@
         const iframe = getIframe(html.value);
         if(iframe) {
             props.updateAttributes({
-                ...Object.fromEntries(
-                    Object.entries(props.node.type.spec.attrs)
-                        .map(([attr, spec]) => [attr, (spec as any).default])
-                ),
-                ...Object.fromEntries(
+                attributes: Object.fromEntries(
                     [...iframe.attributes].map(attr => [attr.name, attr.value])
                 ),
                 isNew: false,
@@ -103,7 +99,7 @@
     >
         <div class="flex-1 min-w-0">
             <template v-if="!node.attrs.isNew">
-                <iframe class="w-full max-h-[200px] [[height$='%']]:h-[200px]" v-bind="node.attrs"></iframe>
+                <iframe class="w-full max-h-[200px] [[height$='%']]:h-[200px]" v-bind="node.attrs.attributes"></iframe>
             </template>
         </div>
 
