@@ -68,5 +68,30 @@ it('strips null values from front', function () {
     )->toBe([
         ['id' => 'A'],
         ['id' => 'B'],
+        ['id' => null],
+        ['id' => null],
+        ['id' => null],
+        ['id' => null],
+    ]);
+});
+
+it('formats data in prepareForValidation()', function () {
+    $formatter = new AutocompleteListFormatter();
+    $field = SharpFormAutocompleteListField::make('list')
+        ->setItemField(SharpFormAutocompleteRemoteField::make('item')
+            ->setRemoteEndpoint('/endpoint'),
+        );
+
+    expect(
+        $formatter->prepareForValidation(
+            $field,
+            'attribute', [
+                ['id' => 'A'],
+                ['id' => 'B'],
+            ]
+        )
+    )->toBe([
+        ['item' => 'A'],
+        ['item' => 'B'],
     ]);
 });
