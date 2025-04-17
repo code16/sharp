@@ -56,15 +56,8 @@ jobs:
           composer update --prefer-stable --prefer-dist --no-interaction
       - name: Execute tests via Pest
         run: ./vendor/bin/pest --parallel
-
-  slack:
-    needs:
-      - laravel-tests
-#      - e2e-tests
-    if: failure() && github.event_name == 'push'
-    runs-on: ubuntu-latest
-    steps:
       - uses: 8398a7/action-slack@v2.4.0
+        if: failure() && github.event_name == 'push'
         with:
           status: failure
         env:
