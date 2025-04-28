@@ -3,6 +3,8 @@
 use Code16\Sharp\Enums\PageAlertLevel;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Exceptions\Form\SharpFormUpdateException;
+use Code16\Sharp\Form\Fields\SharpFormAutocompleteListField;
+use Code16\Sharp\Form\Fields\SharpFormAutocompleteLocalField;
 use Code16\Sharp\Form\Fields\SharpFormCheckField;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
@@ -305,6 +307,40 @@ it('formats data before validation', function () {
             'name' => ['text' => 'ba'],
         ])
         ->assertSessionHasErrors('name');
+});
+
+it('calls prepareForValidation() before validation on applicable fields', function () {
+    fakeFormFor('person', new class() extends PersonForm
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(
+                SharpFormAutocompleteListField::make('jobs')
+                    ->setItemField(
+                        SharpFormAutocompleteLocalField::make('job')
+                            ->setLocalValues([
+                                1 => 'Physicist',
+                                2 => 'Chemist',
+                            ])
+                    )
+            );
+        }
+
+        public function update($id, array $data)
+        {
+            $this->validate($data, ['jobs.*.job' => 'required']);
+        }
+    });
+
+    $this
+        ->post('/sharp/s-list/person/s-form/person', [
+            'jobs' => [
+                ['id' => null,  'job' => ['id' => 1, 'label' => 'Physicist']],
+                ['id' => null],
+            ],
+        ])
+        ->assertSessionDoesntHaveErrors('jobs.0.job')
+        ->assertSessionHasErrors('jobs.1.job');
 });
 
 it('handles application exception as 417', function () {
