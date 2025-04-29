@@ -71,6 +71,7 @@ return [
     'editor.extension_node.dropdown_button.aria_label' => 'Actions',
     'editor.extension_node.edit_button' => 'Modifier...',
     'editor.extension_node.remove_button' => 'Supprimer',
+    'editor.extension_node.copy_button' => 'Copier',
     'editor.extension_node.upload.aria_label' => 'Fichier intégré',
     'editor.extension_node.upload_image.aria_label' => 'Image intégré',
 

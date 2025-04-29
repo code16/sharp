@@ -19,7 +19,7 @@ export const Paste = Extension.create({
         return [
             new Plugin({
                 props: {
-                    clipboardParser: parser,
+                    // clipboardParser: parser,
                     clipboardTextParser: (text, $context) => {
                         if(this.options.inline) {
                             const dom = document.createElement('div');
