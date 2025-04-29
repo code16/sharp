@@ -34,18 +34,23 @@ class ApiFormAutocompleteController extends ApiController
         }
 
         if ($callback = $field->getRemoteCallback()) {
+            $listFieldKey = str_contains($autocompleteFieldKey, '.')
+                ? str($autocompleteFieldKey)->before('.')
+                : null;
+
             $formData = request()->input('formData')
                 ? collect(request()->input('formData'))
-                    ->filter(fn ($value, $key) => in_array($key, $fieldContainer->getDataKeys()))
-                    ->map(function ($value, $key) use ($fieldContainer) {
-                        if (! $field = $fieldContainer->findFieldByKey($key)) {
-                            return $value;
+                    ->mapWithKeys(function ($value, $key) use ($fieldContainer, $listFieldKey) {
+                        if (! $field = $fieldContainer->findFieldByKey($listFieldKey ? "$listFieldKey.$key" : $key)) {
+                            return [];
                         }
 
-                        return $field
-                            ->formatter()
-                            ->setDataLocalizations($fieldContainer->getDataLocalizations())
-                            ->fromFront($field, $key, $value);
+                        return [
+                            $key => $field
+                                ->formatter()
+                                ->setDataLocalizations($fieldContainer->getDataLocalizations())
+                                ->fromFront($field, $key, $value),
+                        ];
                     })
                     ->toArray()
                 : null;
@@ -120,6 +125,8 @@ class ApiFormAutocompleteController extends ApiController
 
         return $entity->getFormOrFail($entityKey->subEntity());
     }
+
+    private function getFormattedData() {}
 
     private function normalizeEndpoint(string $input): string
     {

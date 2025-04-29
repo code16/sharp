@@ -5,6 +5,7 @@ use Code16\Sharp\EntityList\Commands\InstanceCommand;
 use Code16\Sharp\EntityList\Commands\SingleInstanceCommand;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteRemoteField;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
+use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonForm;
@@ -79,6 +80,49 @@ it('allows to call a closure for a remote autocomplete field', function () {
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
             'entityKey' => 'person',
             'autocompleteFieldKey' => 'autocomplete_field',
+        ]), [
+            'search' => 'my search',
+        ])
+        ->assertOk()
+        ->assertJson([
+            'data' => [
+                ['id' => 1, 'label' => 'John'],
+            ],
+        ]);
+});
+
+it('allows to call a closure for a remote autocomplete field in list', function () {
+    fakeFormFor('person', new class() extends PersonForm
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(
+                SharpFormListField::make('list')
+                    ->addItemField(
+                        SharpFormTextField::make('name')
+                    )
+                    ->addItemField(
+                        SharpFormAutocompleteRemoteField::make('autocomplete_field')
+                            ->setRemoteCallback(function ($search, $linkedFields) {
+                                expect($search)->toBe('my search');
+                                expect($linkedFields)->toBe(['name' => 'John']);
+
+                                return [
+                                    ['id' => 1, 'label' => 'John'],
+                                ];
+                            }, linkedFields: ['name'])
+                    )
+            );
+        }
+    });
+
+    $this
+        ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+            'entityKey' => 'person',
+            'autocompleteFieldKey' => 'list.autocomplete_field',
+            'formData' => [
+                'name' => 'John',
+            ],
         ]), [
             'search' => 'my search',
         ])
