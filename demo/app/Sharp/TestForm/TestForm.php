@@ -64,7 +64,10 @@ class TestForm extends SharpSingleForm
                     ->setListItemTemplate('{{ $name }}')
                     ->setResultItemTemplate('{{ $name }} ({{ $id }})')
 //                    ->setReadOnly()
-                    ->setRemoteEndpoint(route('sharp.autocompletes.users.index')),
+                    ->setRemoteEndpoint(route('sharp.autocompletes.users.index'))
+                // ->setRemoteCallback(function ($search, $data) {
+                //     dd($data);
+                // }, linkedFields: ['select_dropdown']),
             )
             ->addField(
                 SharpFormAutocompleteListField::make('autocomplete_list')
@@ -144,6 +147,28 @@ class TestForm extends SharpSingleForm
                     ->addItemField(
                         SharpFormCheckField::make('check', 'check this'),
                     )
+//                     ->addItemField(
+//                         SharpFormSelectField::make('select_dropdown', $this->options())
+//                             ->setLabel('Select dropdown')
+//                             ->allowSelectAll()
+//
+// //                    ->setClearable()
+// //                    ->setReadOnly()
+//                             ->setMultiple()
+//                             ->setDisplayAsDropdown(),
+//                     )
+//                     ->addItemField(
+//                         SharpFormAutocompleteRemoteField::make('autocomplete_remote')
+//                             ->setLabel('Autocomplete remote')
+//                             ->setRemoteSearchAttribute('query')
+//                             ->setListItemTemplate('{{ $name }}')
+//                             ->setResultItemTemplate('{{ $name }} ({{ $id }})')
+//
+// //                    ->setReadOnly()
+//                             ->setRemoteCallback(function ($search, $data) {
+//                                 dd($data);
+//                             }, linkedFields: ['select_dropdown']),
+//                     )
                     ->addItemField(SharpFormEditorField::make('markdown2')
                         ->setLocalized()
                         ->setLabel('Markdown')
@@ -333,6 +358,7 @@ class TestForm extends SharpSingleForm
                     ->addColumn(6, function (FormLayoutColumn $column) {
                         $column->withListField('list', function (FormLayoutColumn $listItem) {
                             $listItem->withFields('date|5', 'check|7')
+                                // ->withFields('select_dropdown', 'autocomplete_remote')
                                 ->withField('markdown2');
                         });
                     });

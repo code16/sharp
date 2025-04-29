@@ -79,7 +79,7 @@
                         }), {
                             formData: field.callbackLinkedFields
                                 ? Object.fromEntries(
-                                    Object.entries(form.serializedData).filter(([fieldKey]) => field.callbackLinkedFields.includes(fieldKey))
+                                    Object.entries(props.parentData).filter(([fieldKey]) => field.callbackLinkedFields.includes(fieldKey))
                                 )
                                 : null,
                         }, {
@@ -199,12 +199,12 @@
                     />
                     <CommandList>
                         <template v-if="loading">
-                            <div class="py-6 text-center text-sm">
+                            <div class="py-6 px-4 text-center text-sm">
                                 {{ __('sharp::form.autocomplete.loading') }}
                             </div>
                         </template>
                         <template v-else-if="!results?.length && props.field.mode === 'remote' && searchTerm.length < props.field.searchMinChars">
-                            <div class="py-6 text-center text-sm">
+                            <div class="py-6 px-4 text-center text-sm">
                                 {{ trans_choice('sharp::form.autocomplete.query_too_short', props.field.searchMinChars, { min_chars: props.field.searchMinChars }) }}
                             </div>
                         </template>

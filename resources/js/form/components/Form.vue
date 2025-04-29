@@ -226,6 +226,7 @@
                                                                                                 :field-error-key="fieldLayout.key"
                                                                                                 :value="form.data[fieldLayout.key]"
                                                                                                 :locale="(form.getMeta(fieldLayout.key) as FieldMeta)?.locale ?? form.defaultLocale"
+                                                                                                :parent-data="form.data"
                                                                                                 :row="row"
                                                                                                 root
                                                                                                 @input="(value, options) => onFieldInput(fieldLayout.key, value, options)"
@@ -251,6 +252,7 @@
                                                                 :value="form.data[fieldLayout.key]"
                                                                 :locale="(form.getMeta(fieldLayout.key) as FieldMeta)?.locale ?? form.currentLocale"
                                                                 :row="row as LayoutFieldData[]"
+                                                                :parent-data="form.data"
                                                                 root
                                                                 @input="(value, options) => onFieldInput(fieldLayout.key, value, options)"
                                                                 @locale-change="onFieldLocaleChange(fieldLayout.key, $event)"

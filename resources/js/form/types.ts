@@ -26,6 +26,7 @@ export type FormFieldProps<Data extends FormFieldData = FormFieldData, Value = D
     parentField?: FormListFieldData
     fieldLayout?: LayoutFieldData,
     fieldErrorKey?: string,
+    parentData?: FormFieldData | FormListFieldData['value'][number],
     hasError?: boolean,
     value?: Value,
     locale?: string | null,

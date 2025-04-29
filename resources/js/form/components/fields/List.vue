@@ -220,6 +220,7 @@
                                                             :parent-field="field"
                                                             :value="item[itemFieldLayout.key]"
                                                             :locale="(form.getMeta(`${field.key}.${item[itemKey]}.${itemFieldLayout.key}`) as FieldMeta)?.locale ?? form.defaultLocale"
+                                                            :parent-data="item"
                                                             :row="row"
                                                             @input="(value, options) => onFieldInput(index, itemFieldLayout.key, value, options)"
                                                             @locale-change="onFieldLocaleChange(`${field.key}.${item[itemKey]}.${itemFieldLayout.key}`, $event)"
