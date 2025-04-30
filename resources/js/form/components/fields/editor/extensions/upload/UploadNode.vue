@@ -9,6 +9,7 @@
     import { ExtensionNodeProps } from "@/form/components/fields/editor/types";
     import { useParentEditor } from "@/form/components/fields/editor/useParentEditor";
     import { useEditorNode } from "@/form/components/fields/editor/useEditorNode";
+    import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 
     const props = defineProps<ExtensionNodeProps<typeof UploadExtension, UploadNodeAttributes>>();
 
@@ -57,6 +58,7 @@
     }
 
     function onRemove() {
+        props.editor.commands.setNodeSelection(props.getPos());
         props.deleteNode();
         setTimeout(() => {
             props.editor.commands.focus();
@@ -85,6 +87,7 @@
             :field-error-key="`${parentEditor.props.fieldErrorKey}-upload-${props.node.attrs['data-key']}`"
             :value="upload?.file"
             as-editor-embed
+            persist-thumbnail-url
             :legend="upload.legend"
             :dropdown-edit-label="parentEditor.props.field.uploads.fields.legend ? __('sharp::form.editor.extension_node.edit_button') : null"
             :aria-label="props.node.attrs.isImage
@@ -97,6 +100,12 @@
             @remove="onRemove"
             @edit="onEdit"
             ref="uploadComponent"
-        />
+        >
+            <template #dropdown-menu>
+                <DropdownMenuItem @click="props.editor.commands.copyNode(props.getPos())">
+                    {{ __('sharp::form.editor.extension_node.copy_button') }}
+                </DropdownMenuItem>
+            </template>
+        </Upload>
     </NodeRenderer>
 </template>

@@ -33,6 +33,7 @@
         postFn?: (data: FormData['data']) => Promise<ApiResponse<any>>,
         showErrorAlert?: boolean,
         errorAlertMessage?: string,
+        persistThumbnailUrl?: boolean,
         tab?: string,
     }>();
 
@@ -227,6 +228,7 @@
                                                                                                 :value="form.data[fieldLayout.key]"
                                                                                                 :locale="(form.getMeta(fieldLayout.key) as FieldMeta)?.locale ?? form.defaultLocale"
                                                                                                 :parent-data="form.data"
+                                                                                                :persist-thumbnail-url="props.persistThumbnailUrl"
                                                                                                 :row="row"
                                                                                                 root
                                                                                                 @input="(value, options) => onFieldInput(fieldLayout.key, value, options)"
@@ -253,6 +255,7 @@
                                                                 :locale="(form.getMeta(fieldLayout.key) as FieldMeta)?.locale ?? form.currentLocale"
                                                                 :row="row as LayoutFieldData[]"
                                                                 :parent-data="form.data"
+                                                                :persist-thumbnail-url="props.persistThumbnailUrl"
                                                                 root
                                                                 @input="(value, options) => onFieldInput(fieldLayout.key, value, options)"
                                                                 @locale-change="onFieldLocaleChange(fieldLayout.key, $event)"

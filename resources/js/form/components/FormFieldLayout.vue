@@ -12,6 +12,10 @@
 
     import LocaleSelectTrigger from "@/components/LocaleSelectTrigger.vue";
 
+    defineOptions({
+        inheritAttrs: false
+    });
+
     const props = defineProps<FormFieldProps<FormFieldData, any> & {
         class?: string,
         fieldGroup?: boolean,

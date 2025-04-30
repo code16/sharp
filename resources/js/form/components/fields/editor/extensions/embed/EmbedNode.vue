@@ -24,28 +24,10 @@
     const embedData = computed(() => embedManager.getEmbed(props.node.attrs['data-key'], props.extension.options.embed));
 
     function onRemove() {
+        props.editor.commands.setNodeSelection(props.getPos());
         props.deleteNode();
         setTimeout(() => {
             props.editor.commands.focus();
-        });
-    }
-
-    function onCopy() {
-        props.editor.commands.setNodeSelection(props.getPos());
-        const clipboardData = new DataTransfer();
-        const event = new ClipboardEvent('copy', {
-            bubbles: true,
-            cancelable: true,
-            clipboardData,
-        });
-
-        props.editor.view.dom.dispatchEvent(event);
-
-        const clipboardItem = new ClipboardItem({ 'text/html': clipboardData.getData('text/html') });
-
-        navigator.clipboard.write([clipboardItem]).then(() => {
-        }).catch(err => {
-            alert(__('sharp::errors.failed_to_write_to_clipboard'));
         });
     }
 
@@ -87,7 +69,7 @@
                             {{ __('sharp::form.editor.extension_node.edit_button') }}
                         </DropdownMenuItem>
                     </template>
-                    <DropdownMenuItem @click="onCopy">
+                    <DropdownMenuItem @click="props.editor.commands.copyNode(props.getPos())">
                         {{ __('sharp::form.editor.extension_node.copy_button') }}
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
