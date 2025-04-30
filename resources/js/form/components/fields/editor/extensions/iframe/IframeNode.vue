@@ -49,6 +49,7 @@
     }
 
     function onRemove() {
+        props.editor.commands.setNodeSelection(props.getPos());
         props.deleteNode();
         setTimeout(() => {
             props.editor.commands.focus();
@@ -113,6 +114,9 @@
                 <DropdownMenuContent>
                     <DropdownMenuItem @click="onEdit()">
                         {{ __('sharp::form.editor.extension_node.edit_button') }}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem @click="props.editor.commands.copyNode(props.getPos())">
+                        {{ __('sharp::form.editor.extension_node.copy_button') }}
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem class="text-destructive" @click="onRemove()">

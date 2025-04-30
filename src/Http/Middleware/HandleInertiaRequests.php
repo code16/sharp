@@ -71,6 +71,7 @@ class HandleInertiaRequests extends Middleware
                     'sharp::form',
                     'sharp::menu',
                     'sharp::modals',
+                    'sharp::errors',
                     'sharp::pages/auth/forgot-password',
                     'sharp::pages/auth/login',
                     'sharp::pages/auth/impersonate',

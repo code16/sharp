@@ -47,6 +47,7 @@
         legend?: string,
         dropdownEditLabel?: string,
         ariaLabel?: string,
+        persistThumbnailUrl?: boolean,
     }>();
 
     defineOptions({
@@ -131,6 +132,10 @@
                 });
                 await onImageTransform(cropper);
                 cropper.destroy();
+            } else if(props.persistThumbnailUrl) {
+                const response = await fetch(preview);
+                const blob = await response.blob();
+                transformedImg.value = URL.createObjectURL(blob);
             }
         })
         .on('upload', () => {
@@ -381,6 +386,9 @@
 
     onUnmounted(() => {
         uppy.destroy();
+        if(!props.persistThumbnailUrl && transformedImg.value) {
+            URL.revokeObjectURL(transformedImg.value);
+        }
         emit('uploading', false);
     });
 </script>
@@ -482,6 +490,7 @@
                                             {{ props.dropdownEditLabel ?? __('sharp::form.upload.edit_button') }}
                                         </DropdownMenuItem>
                                     </template>
+                                    <slot name="dropdown-menu"></slot>
                                     <DropdownMenuSeparator class="first:hidden" />
                                     <DropdownMenuItem class="text-destructive" @click="onRemove">
                                         {{ __('sharp::form.upload.remove_button') }}

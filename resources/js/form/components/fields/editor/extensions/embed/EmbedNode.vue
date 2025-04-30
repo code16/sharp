@@ -24,6 +24,7 @@
     const embedData = computed(() => embedManager.getEmbed(props.node.attrs['data-key'], props.extension.options.embed));
 
     function onRemove() {
+        props.editor.commands.setNodeSelection(props.getPos());
         props.deleteNode();
         setTimeout(() => {
             props.editor.commands.focus();
@@ -42,7 +43,7 @@
 
 <template>
     <NodeRenderer
-        class="my-4 first:mt-0 last:mb-0 border rounded-md items-center p-4 flex gap-4"
+        class="my-4 first:mt-0 last:mb-0 border rounded-md items-center p-4 flex gap-4 group-focus/editor:data-[textselected]:border-primary"
         :class="{ 'group-focus/editor:border-primary': props.selected }"
         :node="node"
     >
@@ -67,8 +68,11 @@
                         <DropdownMenuItem @click="embedModal.open({ id: node.attrs['data-key'], embed: extension.options.embed })">
                             {{ __('sharp::form.editor.extension_node.edit_button') }}
                         </DropdownMenuItem>
-                        <DropdownMenuSeparator />
                     </template>
+                    <DropdownMenuItem @click="props.editor.commands.copyNode(props.getPos())">
+                        {{ __('sharp::form.editor.extension_node.copy_button') }}
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
                     <DropdownMenuItem class="text-destructive" @click="onRemove">
                         {{ __('sharp::form.editor.extension_node.remove_button') }}
                     </DropdownMenuItem>
