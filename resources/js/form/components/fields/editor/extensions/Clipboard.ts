@@ -59,7 +59,10 @@ export const Clipboard = Extension.create({
 
                     editor.view.dom.dispatchEvent(event);
 
-                    const clipboardItem = new ClipboardItem({ 'text/html': clipboardData.getData('text/html') });
+                    const clipboardItem = new ClipboardItem({
+                        'text/html': clipboardData.getData('text/html'),
+                        'text/plain': clipboardData.getData('text/plain'),
+                    });
 
                     navigator.clipboard.write([clipboardItem]).then(() => {
                     }).catch(err => {
