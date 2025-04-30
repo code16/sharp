@@ -62,6 +62,16 @@
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 240 4.9% 83.9%;
   }
+
+  .dark {
+    --text-destructive: oklch(0.704 0.191 22.216);
+  }
+}
+
+@layer utilities {
+  .text-destructive {
+    @apply dark:text-[var(--text-destructive)];
+  }
 }
 
 
