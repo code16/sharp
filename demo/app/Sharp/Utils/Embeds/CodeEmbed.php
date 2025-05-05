@@ -12,7 +12,7 @@ class CodeEmbed extends SharpFormEditorEmbed
     {
         $this->configureLabel('Code')
             ->configureTagName('x-codeblock')
-            ->configureIcon('fas fa-code')
+            ->configureIcon('lucide-code')
             ->configureFormTemplate('<div style="overflow:auto; max-height:100px; font-family:monospace; white-space: pre-wrap">{{ $code }}</div>')
             ->configureShowTemplate(view('sharp.templates.codeblock-show-embed'));
     }

@@ -23,7 +23,7 @@ class AppSearchEngine extends SharpSearchEngine
         $resultSet = $this
             ->addResultSet(
                 label: 'Posts',
-                icon: 'fa-file-o',
+                icon: 'lucide-file-text',
             )
             ->setEmptyStateLabel('No post found');
 
@@ -55,7 +55,7 @@ class AppSearchEngine extends SharpSearchEngine
         $resultSet = $this
             ->addResultSet(
                 label: 'Authors',
-                icon: 'fa-users',
+                icon: 'lucide-signature',
             );
 
         $builder = User::query();

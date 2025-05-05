@@ -15,7 +15,7 @@ class RelatedPostEmbed extends SharpFormEditorEmbed
         $this
             ->configureLabel('Related Post')
             ->configureTagName('x-related-post')
-            ->configureIcon('fas-link')
+            ->configureIcon('lucide-link')
             ->configureTemplate(<<<'blade'
                 <div style="display: flex; gap: .5rem; align-items: center">
                     @if($online)

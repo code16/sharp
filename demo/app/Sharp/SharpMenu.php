@@ -25,11 +25,11 @@ class SharpMenu extends BaseSharpMenu
             ->addSection('Blog', function (SharpMenuItemSection $section) {
                 $section
                     ->setCollapsible(false)
-                    ->addEntityLink(PostEntity::class, 'Posts', icon: 'far-file')
-                    ->addEntityLink(CategoryEntity::class, 'Categories', icon: 'fas-sitemap')
-                    ->addEntityLink(AuthorEntity::class, 'Authors', icon: 'far-user');
+                    ->addEntityLink(PostEntity::class, 'Posts', icon: 'lucide-file-text')
+                    ->addEntityLink(CategoryEntity::class, 'Categories', icon: 'lucide-tags')
+                    ->addEntityLink(AuthorEntity::class, 'Authors', icon: 'lucide-signature');
             })
-            ->addEntityLink(DemoDashboardEntity::class, 'Dashboard', icon: 'fas-chart-line')
-            ->addEntityLink(TestEntity::class, 'Fields test', icon: 'fas-cog');
+            ->addEntityLink(DemoDashboardEntity::class, 'Dashboard', icon: 'lucide-layout-dashboard')
+            ->addEntityLink(TestEntity::class, 'Fields test', icon: 'lucide-cog');
     }
 }

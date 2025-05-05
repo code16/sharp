@@ -97,7 +97,7 @@ class AuthorList extends SharpEntityList
                     : sprintf(
                         '<div>%s</div><div style="color: darkorange">%s pending invitation...</div>',
                         $value,
-                        svg('far-envelope')->toHtml()
+                        svg('lucide-mail-x')->toHtml()
                     );
             })
             ->transform($users->get());

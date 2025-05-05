@@ -19,7 +19,7 @@ class AuthorEmbed extends SharpFormEditorEmbed
         $this
             ->configureLabel('Author')
             ->configureTagName('x-author')
-            ->configureIcon('far fa-user')
+            ->configureIcon('lucide-signature')
             ->configureTemplate(view('sharp.templates.author-embed'));
     }
 

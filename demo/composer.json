@@ -13,10 +13,10 @@
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.9",
         "masterminds/html5": "^2.8",
-        "owenvoke/blade-fontawesome": "^2.6",
         "pragmarx/google2fa": "^8.0",
         "spatie/image-optimizer": "^1.6",
         "spatie/laravel-translatable": "^6.0",
+        "technikermathe/blade-lucide-icons": "^3.98",
         "tightenco/ziggy": "^1.8"
     },
     "require-dev": {

@@ -48,27 +48,26 @@ class PostBlockList extends SharpEntityList
             ->get();
 
         return $this
-            ->setCustomTransformer('type_label', function ($value, PostBlock $instance) {
-                return sprintf('<span class="badge badge-bloc badge-bloc-%1$s">%1$s</span>', $instance->type);
-            })
-            ->setCustomTransformer('content', function ($value, PostBlock $instance) {
-                return match ($instance->type) {
-                    'text' => Str::limit($instance->content, 150),
-                    'video' => sprintf(
-                        '%s %s',
-                        svg('far-play-circle')->toHtml(),
-                        Str::match('/\ssrc="(.*)"/mU', $instance->content)
-                    ),
-                    'visuals' => $instance->files
-                        ->map(function (Media $visual) {
-                            if ($url = $visual->thumbnail(null, 30)) {
-                                return sprintf('<img src="%s" alt="" style="display: inline-block">', $url);
-                            }
+            ->setCustomTransformer('type_label', fn ($value, PostBlock $instance) => sprintf(
+                '<span class="badge badge-bloc badge-bloc-%1$s">%1$s</span>',
+                $instance->type
+            ))
+            ->setCustomTransformer('content', fn ($value, PostBlock $instance) => match ($instance->type) {
+                'text' => Str::limit($instance->content, 150),
+                'video' => sprintf(
+                    '<div style="display: flex; gap: .4rem; align-items: center">%s %s</div>',
+                    svg('lucide-youtube')->toHtml(),
+                    Str::match('/\ssrc="(.*)"/mU', $instance->content)
+                ),
+                'visuals' => $instance->files
+                    ->map(function (Media $visual) {
+                        if ($url = $visual->thumbnail(null, 30)) {
+                            return sprintf('<img src="%s" alt="" style="display: inline-block">', $url);
+                        }
 
-                            return null;
-                        })
-                        ->implode(' ')
-                };
+                        return null;
+                    })
+                    ->implode(' ')
             })
             ->transform($postBlocks);
     }
