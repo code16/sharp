@@ -29,13 +29,15 @@ class SharpException extends \Exception
             return false;
         }
 
-        return Inertia::render('Error', [
-            'status' => $this->getStatusCode(),
-            'message' => $this->getMessage(),
-            'previous' => $this->getPrevious() && $this->getPrevious()->getMessage() !== $this->getMessage() ? [
-                'message' => $this->getPrevious()->getMessage(),
-            ] : null,
-        ])
+        return Inertia::render(
+            'Error',
+            [
+                'status' => $this->getStatusCode(),
+                'message' => $this->getMessage(),
+                'previous' => $this->getPrevious() && $this->getPrevious()->getMessage() !== $this->getMessage() ? [
+                    'message' => $this->getPrevious()->getMessage(),
+                ] : null,
+            ])
             ->toResponse($request)
             ->setStatusCode($this->getStatusCode());
     }

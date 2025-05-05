@@ -2,6 +2,9 @@
 
 namespace Code16\Sharp\Form\Layout;
 
+use Code16\Sharp\Exceptions\Form\SharpFormFieldLayoutException;
+use Code16\Sharp\Form\Fields\SharpFormListField;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Traits\Conditionable;
 
 class FormLayout implements HasLayout
@@ -67,6 +70,36 @@ class FormLayout implements HasLayout
         }
 
         return $this->tabs[0];
+    }
+
+    public function validateAgainstFields(Collection $fields): self
+    {
+        collect($this->toArray()['tabs'])
+            ->flatMap(fn ($tab) => collect($tab['columns'])
+                ->flatMap(fn ($column) => collect($column['fields'])
+                    ->flatMap(fn ($field) => $field)
+                )
+            )
+            ->flatMap(fn ($field) => isset($field['legend'])
+                ? collect($field['fields'])->flatMap(fn ($field) => $field)
+                : [$field]
+            )
+            ->each(function ($layoutField) use ($fields) {
+                if (! $fields->has($layoutField['key'])) {
+                    throw SharpFormFieldLayoutException::undeclaredField($layoutField['key']);
+                }
+
+                $field = $fields->get($layoutField['key']);
+                if (isset($layoutField['item']) && ! $field instanceof SharpFormListField) {
+                    throw SharpFormFieldLayoutException::regularFieldDeclaredAsListField($layoutField['key']);
+                }
+
+                if (! isset($layoutField['item']) && $field instanceof SharpFormListField) {
+                    throw SharpFormFieldLayoutException::listFieldDeclaredAsRegularField($layoutField['key']);
+                }
+            });
+
+        return $this;
     }
 
     public function toArray(): array

@@ -2,8 +2,10 @@
 
 use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
+use Code16\Sharp\Exceptions\Form\SharpFormFieldLayoutException;
 use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
+use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
@@ -580,6 +582,39 @@ it('returns the form fields of the entity command and build a basic layout if mi
             ],
         ]);
 });
+
+it('fails when referencing an undeclared form field in the layout', function () {
+    $this->withoutExceptionHandling();
+    fakeListFor('person', new class() extends PersonList
+    {
+        protected function getEntityCommands(): ?array
+        {
+            return [
+                'cmd' => new class() extends EntityCommand
+                {
+                    public function label(): ?string
+                    {
+                        return 'entity';
+                    }
+
+                    public function buildFormFields(FieldsContainer $formFields): void
+                    {
+                        $formFields->addField(SharpFormTextField::make('name'));
+                    }
+
+                    public function buildFormLayout(FormLayoutColumn &$column): void
+                    {
+                        $column->withField('title');
+                    }
+
+                    public function execute(array $data = []): array {}
+                },
+            ];
+        }
+    });
+
+    $this->getJson(route('code16.sharp.api.list.command.entity.form', ['person', 'cmd']));
+})->throws(SharpFormFieldLayoutException::class, SharpFormFieldLayoutException::undeclaredField('title')->getMessage());
 
 it('allows to configure a page alert on an entity command', function () {
     fakeListFor('person', new class() extends PersonList

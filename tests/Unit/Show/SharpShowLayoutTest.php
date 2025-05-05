@@ -52,7 +52,7 @@ it('handles fields in columns', function () {
         ]);
 });
 
-it('handles fields with layout', function () {
+it('handles list fields', function () {
     $show = new class() extends FakeSharpShow
     {
         public function buildShowLayout(ShowLayout $showLayout): void

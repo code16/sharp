@@ -33,6 +33,7 @@ abstract class SharpForm
         if ($this->formLayout === null) {
             $this->formLayout = new FormLayout();
             $this->buildFormLayout($this->formLayout);
+            $this->formLayout->validateAgainstFields($this->getBuiltFields());
         }
 
         return $this->formLayout->toArray();

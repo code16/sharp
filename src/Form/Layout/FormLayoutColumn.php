@@ -23,7 +23,7 @@ class FormLayoutColumn extends LayoutColumn implements HasLayout
         return $this;
     }
 
-    private function addFieldsetLayout(FormLayoutFieldset $fieldset)
+    private function addFieldsetLayout(FormLayoutFieldset $fieldset): void
     {
         $this->rows[] = [$fieldset];
     }

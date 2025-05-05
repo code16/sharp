@@ -36,9 +36,9 @@ class FormLayoutTab implements HasLayout
     {
         return [
             'title' => $this->title,
-            'columns' => collect($this->columns)->map(function ($column) {
-                return $column->toArray();
-            })->all(),
+            'columns' => collect($this->columns)
+                ->map(fn (FormLayoutColumn $column) => $column->toArray())
+                ->all(),
         ];
     }
 
