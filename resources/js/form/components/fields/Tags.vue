@@ -7,7 +7,6 @@
     import { __ } from "@/utils/i18n";
     import { CommandGroup, CommandItem, CommandList, CommandSeparator } from "@/components/ui/command";
     import FormFieldLayout from "@/form/components/FormFieldLayout.vue";
-    import { fuzzySearch } from "@/utils/search";
     import { useFullTextSearch } from "@/composables/useFullTextSearch";
 
     const props = defineProps<FormFieldProps<FormTagsFieldData>>();
