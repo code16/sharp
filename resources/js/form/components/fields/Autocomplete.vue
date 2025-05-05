@@ -21,8 +21,7 @@
     import { route } from "@/utils/url";
     import { api } from "@/api/api";
     import { useParentForm } from "@/form/useParentForm";
-    import { fuzzySearch } from "@/utils/search";
-    import {  isCancel } from "axios";
+    import { isCancel } from "axios";
     import { ComboboxItemIndicator } from "reka-ui";
     import { useParentCommands } from "@/commands/useCommands";
     import { useIsInDialog } from "@/components/ui/dialog/Dialog.vue";
@@ -59,46 +58,11 @@
                 if(!results.value.length) {
                     loading.value = true;
                 }
-                timeout = setTimeout(async () => {
-                    clearTimeout(loadingTimeout);
-                    loadingTimeout = setTimeout(() => {
-                        loading.value = true;
-                    }, 200);
-                    abortController?.abort();
-                    abortController = new AbortController();
-                    results.value = await api.post(
-                        route('code16.sharp.api.form.autocomplete.index', {
-                            entityKey: form.entityKey,
-                            autocompleteFieldKey: props.parentField ? `${props.parentField.key}.${field.key}` : field.key,
-                            embed_key: form.embedKey,
-                            entity_list_command_key: parentCommands?.commandContainer === 'entityList' ? form.commandKey : null,
-                            show_command_key: parentCommands?.commandContainer === 'show' ? form.commandKey : null,
-                            instance_id: form.instanceId,
-                            endpoint: field.remoteEndpoint,
-                            search: query,
-                        }), {
-                            formData: field.callbackLinkedFields
-                                ? Object.fromEntries(
-                                    Object.entries(props.parentData).filter(([fieldKey]) => field.callbackLinkedFields.includes(fieldKey))
-                                )
-                                : null,
-                        }, {
-                            signal: abortController.signal,
-                        }
-                    )
-                        .then(response => {
-                            clearTimeout(loadingTimeout);
-                            loading.value = false;
-                            return response;
-                        }, (e) => {
-                            if(isCancel(e)) {
-                                clearTimeout(loadingTimeout);
-                            }
-                            return Promise.reject(e);
-                        })
-                        .then(response => response.data.data)
-                    ;
-                }, immediate ? 0 : props.field.debounceDelay)
+                if(immediate) {
+                    remoteSearch(query);
+                } else {
+                    timeout = setTimeout(() => remoteSearch(query), props.field.debounceDelay)
+                }
             } else {
                 clearTimeout(timeout);
                 loading.value = false;
@@ -109,6 +73,58 @@
                 ? props.field.localValues
                 : fullTextSearch(query);
         }
+    }
+
+    async function remoteSearch(query: string) {
+        const field = props.field as FormAutocompleteRemoteFieldData;
+        clearTimeout(loadingTimeout);
+        loadingTimeout = setTimeout(() => {
+            loading.value = true;
+        }, 200);
+        abortController?.abort();
+        abortController = new AbortController();
+        results.value = await api.post(
+            route('code16.sharp.api.form.autocomplete.index', {
+                entityKey: form.entityKey,
+                autocompleteFieldKey: props.parentField ? `${props.parentField.key}.${field.key}` : field.key,
+                embed_key: form.embedKey,
+                entity_list_command_key: parentCommands?.commandContainer === 'entityList' ? form.commandKey : null,
+                show_command_key: parentCommands?.commandContainer === 'show' ? form.commandKey : null,
+                instance_id: form.instanceId,
+                endpoint: field.remoteEndpoint,
+                search: query,
+            }), {
+                formData: field.callbackLinkedFields
+                    ? Object.fromEntries(
+                        Object.entries(props.parentData).filter(([fieldKey]) => field.callbackLinkedFields.includes(fieldKey))
+                    )
+                    : null,
+            }, {
+                signal: abortController.signal,
+            }
+        )
+            .then(response => {
+                clearTimeout(loadingTimeout);
+                loading.value = false;
+                return response;
+            }, (e) => {
+                if(isCancel(e)) {
+                    clearTimeout(loadingTimeout);
+                }
+                return Promise.reject(e);
+            })
+            .then(response => response.data.data)
+        ;
+    }
+
+    let hasTyped = false;
+
+    function onSearchInput(query: string) {
+        if(!query.length && !hasTyped) {
+            return;
+        }
+        hasTyped = true;
+        search(query);
     }
 
     function onOpen() {
@@ -193,7 +209,7 @@
                 >
                     <CommandInput
                         v-model="searchTerm"
-                        @update:model-value="search($event)"
+                        @update:model-value="onSearchInput"
                         :display-value="() => searchTerm"
                         :placeholder="props.value ? props.field.placeholder ?? __('sharp::form.autocomplete.placeholder') : null"
                     />
