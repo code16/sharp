@@ -329,7 +329,7 @@
                 </div>
             </template>
 
-            <template v-if="field.readOnly && !value?.length">
+            <template v-if="!canAddItem && !value?.length">
                 <div class="text-muted-foreground text-sm">
                     {{ __('sharp::form.list.empty') }}
                 </div>
