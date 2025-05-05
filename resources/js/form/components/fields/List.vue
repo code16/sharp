@@ -276,7 +276,7 @@
             </template>
 
             <template v-if="!props.field.readOnly">
-                <div class="relative grid grid-cols-1 gap-y-3"
+                <div class="relative grid grid-cols-1 gap-y-3 [&:not(:has(*))]:hidden"
                     @dragenter="($event as DragEvent).dataTransfer.types.includes('Files') && (bulkDroppingFile = true)"
                     @dragleave="(!$event.relatedTarget || !$el.contains($event.relatedTarget)) && (bulkDroppingFile = false)"
                 >
