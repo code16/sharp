@@ -16,7 +16,7 @@ class AddLinkHeadersForPreloadedRequests
 
     public function handle(Request $request, $next)
     {
-        if ($request->hasHeader('X-No-Preload')) {
+        if ($request->hasHeader('X-No-Preload') || $this->isSafari()) {
             return $next($request);
         }
 
