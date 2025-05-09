@@ -52,7 +52,7 @@ use Inertia\ServiceProvider as InertiaServiceProvider;
 
 class SharpInternalServiceProvider extends ServiceProvider
 {
-    const VERSION = '9.3.5';
+    const VERSION = '9.3.6';
 
     public function boot()
     {
