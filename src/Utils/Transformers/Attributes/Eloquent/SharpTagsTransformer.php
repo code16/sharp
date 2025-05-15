@@ -5,7 +5,6 @@ namespace Code16\Sharp\Utils\Transformers\Attributes\Eloquent;
 use Code16\Sharp\Exceptions\SharpException;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\Transformers\SharpAttributeTransformer;
-use Illuminate\Contracts\Support\Arrayable;
 
 class SharpTagsTransformer implements SharpAttributeTransformer
 {
@@ -33,8 +32,12 @@ class SharpTagsTransformer implements SharpAttributeTransformer
             return null;
         }
 
-        if (! $instance->$attribute instanceof Arrayable) {
+        if (! is_iterable($instance->$attribute)) {
             throw new SharpException("[$attribute] must be an array");
+        }
+
+        if (! count($instance->$attribute)) {
+            return null;
         }
 
         return view('sharp::transformers.tags', [
