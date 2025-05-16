@@ -85,4 +85,12 @@ class SharpMenuManager
 
         return $filtered->reverse();
     }
+
+    public function reset(): void
+    {
+        if ($this->menu) {
+            $this->menu->reset();
+            $this->buildMenu();
+        }
+    }
 }

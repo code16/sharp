@@ -52,4 +52,10 @@ class SharpUploadManager
             'transformFilters',
         );
     }
+
+    public function reset(): void
+    {
+        $this->uploadedFileQueue = [];
+        $this->transformedFileQueue = [];
+    }
 }
