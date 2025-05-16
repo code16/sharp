@@ -39,6 +39,11 @@ class AddLinkHeadersForPreloadedRequests
         });
     }
 
+    public function reset(): void
+    {
+        $this->preloadedRequests = [];
+    }
+
     private function isSafari(): bool
     {
         return str_contains(request()->userAgent(), 'Safari')

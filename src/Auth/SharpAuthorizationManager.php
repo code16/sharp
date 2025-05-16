@@ -77,4 +77,9 @@ class SharpAuthorizationManager
     {
         throw new SharpAuthorizationException('Unauthorized action');
     }
+
+    public function reset(): void
+    {
+        $this->cachedPolicies = [];
+    }
 }
