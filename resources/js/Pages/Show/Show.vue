@@ -174,11 +174,11 @@
                                 <template v-else>
                                     <RootCard>
                                         <template v-if="section.title || i == 0 || section.collapsable || show.sectionCommands(section)?.flat().length">
-                                            <RootCardHeader class="data-[overflowing-viewport]:sticky" :collapsed="collapsed">
+                                            <RootCardHeader class="data-overflowing-viewport:sticky" :collapsed="collapsed">
                                                 <div class="flex flex-wrap gap-4">
                                                     <div class="flex gap-4">
                                                         <template v-if="section.title || (i == 0 && show.getTitle(locale))">
-                                                            <CardTitle :id="`section-${i}-title`" v-html="section.title || (i == 0 && show.getTitle(locale))">
+                                                            <CardTitle :id="`section-${i}-title`" class="py-1 -my-1" v-html="section.title || (i == 0 && show.getTitle(locale))">
                                                             </CardTitle>
                                                         </template>
                                                         <template v-if="section.collapsable">

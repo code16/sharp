@@ -52,7 +52,7 @@
                 ref="input"
             />
             <template v-if="field.inputType === 'password'">
-                <Button class="absolute size-[2.375rem] right-px top-px rounded-[calc(var(--radius)-3px)]" size="icon" variant="ghost" @click="passwordVisible = !passwordVisible">
+                <Button class="absolute size-9.5 right-px top-px rounded-[calc(var(--radius)-3px)]" size="icon" variant="ghost" @click="passwordVisible = !passwordVisible">
                     <template v-if="passwordVisible">
                         <EyeOff />
                     </template>

@@ -4,6 +4,7 @@ import vue from '@vitejs/plugin-vue';
 import * as path from 'node:path';
 import legacy from '@vitejs/plugin-legacy'
 import svgLoader from 'vite-svg-loader';
+import tailwindcss from "@tailwindcss/vite";
 
 
 export default defineConfig(({ mode, command }) => {
@@ -41,6 +42,7 @@ export default defineConfig(({ mode, command }) => {
         plugins: [
             // circleDependency(),
             svgLoader({ svgo: false }),
+            tailwindcss(),
             laravel({
                 input: [
                     'resources/js/sharp.ts',

@@ -25,13 +25,13 @@
                 </CardTitle>
             </CardHeader>
         </template>
-        <CardContent :class="widget.minimal ? '!p-0' : ''">
+        <CardContent :class="widget.minimal ? 'p-0!' : ''">
             <component
                 :is="components[widget.display]"
                 v-bind="props"
                 class="[&_svg]:rounded-b-[calc(.5rem-1px)] [&_svg]:overflow-visible"
                 :class="[
-                    !widget.height ? 'aspect-[--ratio]' : '',
+                    !widget.height ? 'aspect-(--ratio)' : '',
                 ]"
                 :style="{
                     '--ratio': `${widget.ratioX} / ${widget.ratioY}`,

@@ -85,7 +85,7 @@
                     <ChevronDown class="w-4 h-4 opacity-50 shrink-0 ml-auto" />
                 </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent class="w-[--reka-dropdown-menu-trigger-width] max-h-[min(24rem,var(--reka-dropdown-menu-content-available-height))] overflow-auto">
+            <DropdownMenuContent class="w-(--reka-dropdown-menu-trigger-width) max-h-[min(24rem,var(--reka-dropdown-menu-content-available-height))] overflow-auto">
                 <template v-for="option in field.options" :key="option.id">
                     <DropdownMenuCheckboxItem
                         :model-value="Array.isArray(value) ? value.some(val => isSelected(option, val)) : isSelected(option, value)"

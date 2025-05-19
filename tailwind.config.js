@@ -5,6 +5,8 @@
 import defaultTheme from 'tailwindcss/defaultTheme';
 // import flattenColorPalette from 'tailwindcss/src/util/flattenColorPalette.js';
 
+/// LEGACY CONFIG
+
 /** @type {import('tailwindcss').Config} */
 const config = {
     darkMode: ["class"],
