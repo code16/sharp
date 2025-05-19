@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Http\Context\Util;
 
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
+use Code16\Sharp\Utils\Entities\ValueObjects\EntityKey;
 
 class BreadcrumbItem
 {
@@ -65,6 +66,15 @@ class BreadcrumbItem
         return $this->type === $item->type
             && $this->key === $item->key
             && $this->instance === $item->instance;
+    }
+
+    public function entityIs(string $entityKeyOrClassName, ?string $subEntity = null): bool
+    {
+        $selfKey = new EntityKey($this->key);
+        $resolvedEntityKey = app(SharpEntityManager::class)->entityKeyFor($entityKeyOrClassName);
+
+        return $selfKey->baseKey() === $resolvedEntityKey
+            && (! $subEntity || $selfKey->subEntity() === $subEntity);
     }
 
     public function entityKey(): string
