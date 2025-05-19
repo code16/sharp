@@ -1,9 +1,9 @@
-import plugin from 'tailwindcss/plugin';
-import containerQueries from '@tailwindcss/container-queries';
+// import plugin from 'tailwindcss/plugin';
+// import containerQueries from '@tailwindcss/container-queries';
 // import forms from '@tailwindcss/forms';
-import animate from 'tailwindcss-animate';
+// import animate from 'tailwindcss-animate';
 import defaultTheme from 'tailwindcss/defaultTheme';
-import flattenColorPalette from 'tailwindcss/src/util/flattenColorPalette.js';
+// import flattenColorPalette from 'tailwindcss/src/util/flattenColorPalette.js';
 
 /** @type {import('tailwindcss').Config} */
 const config = {
@@ -131,70 +131,70 @@ const config = {
         },
     },
     plugins: [
-        animate,
-        containerQueries,
-        plugin(function enableOklchFallbacks({ matchUtilities, theme }) {
-            const fallbackColor = (value) => {
-                const color = typeof value === 'function' ? value({ opacityVariable: '--tw-bg-opacity', opacityValue: `var(--tw-bg-opacity)` }) : value;
-                return [
-                    color.replace('oklch(var(--primary-oklch)', 'hsl(var(--primary)'),
-                    color.replace('oklch(var(--primary-foreground-oklch)', 'hsl(var(--primary-foreground)'),
-                    color.replace('oklch(var(--secondary-oklch)', 'hsl(var(--secondary)'),
-                    color.replace('oklch(var(--secondary-foreground-oklch)', 'hsl(var(--secondary-foreground)'),
-                    color.replace('oklch(var(--muted-oklch)', 'hsl(var(--muted)'),
-                    color.replace('oklch(var(--muted-foreground-oklch)', 'hsl(var(--muted-foreground)'),
-                    color.replace('oklch(var(--accent-oklch)', 'hsl(var(--accent)'),
-                    color.replace('oklch(var(--accent-foreground-oklch)', 'hsl(var(--accent-foreground)'),
-                    color.replace('oklch(var(--input-oklch)', 'hsl(var(--input)'),
-                    color.replace('oklch(var(--border-oklch)', 'hsl(var(--border)'),
-                    color.replace('oklch(var(--ring-oklch)', 'hsl(var(--ring)'),
-                    color.replace('oklch(var(--sidebar-background-oklch)', 'hsl(var(--sidebar-background)'),
-                    color.replace('oklch(var(--sidebar-foreground-oklch)', 'hsl(var(--sidebar-foreground)'),
-                    color.replace('oklch(var(--sidebar-accent-oklch)', 'hsl(var(--sidebar-accent)'),
-                    color.replace('oklch(var(--sidebar-accent-foreground-oklch)', 'hsl(var(--sidebar-accent-foreground)'),
-                    color.replace('oklch(var(--sidebar-border-oklch)', 'hsl(var(--sidebar-border)'),
-                ].find(replaced => replaced !== color);
-            }
-            matchUtilities(
-                {
-                    'bg': (value) => {
-                        const color = fallbackColor(value);
-                        return color ? {
-                            '@supports not (color: oklch(from #000 l c h))': {
-                                'background-color': color,
-                            }
-                        } : null;
-                    },
-                },
-                { values: flattenColorPalette(theme('backgroundColor')), type: ['color'] }
-            );
-            matchUtilities(
-                {
-                    'text': (value) => {
-                        const color = fallbackColor(value);
-                        return color ? {
-                            '@supports not (color: oklch(from #000 l c h))': {
-                                'color': color,
-                            }
-                        } : null;
-                    },
-                },
-                { values: flattenColorPalette(theme('textColor')), type: ['color'] }
-            );
-            matchUtilities(
-                {
-                    'border': (value) => {
-                        const color = fallbackColor(value);
-                        return color ? {
-                            '@supports not (color: oklch(from #000 l c h))': {
-                                'border-color': color,
-                            }
-                        } : null;
-                    },
-                },
-                { values: flattenColorPalette(theme('borderColor')), type: ['color'] }
-            );
-        }),
+        // animate,
+        // containerQueries,
+        // plugin(function enableOklchFallbacks({ matchUtilities, theme }) {
+        //     const fallbackColor = (value) => {
+        //         const color = typeof value === 'function' ? value({ opacityVariable: '--tw-bg-opacity', opacityValue: `var(--tw-bg-opacity)` }) : value;
+        //         return [
+        //             color.replace('oklch(var(--primary-oklch)', 'hsl(var(--primary)'),
+        //             color.replace('oklch(var(--primary-foreground-oklch)', 'hsl(var(--primary-foreground)'),
+        //             color.replace('oklch(var(--secondary-oklch)', 'hsl(var(--secondary)'),
+        //             color.replace('oklch(var(--secondary-foreground-oklch)', 'hsl(var(--secondary-foreground)'),
+        //             color.replace('oklch(var(--muted-oklch)', 'hsl(var(--muted)'),
+        //             color.replace('oklch(var(--muted-foreground-oklch)', 'hsl(var(--muted-foreground)'),
+        //             color.replace('oklch(var(--accent-oklch)', 'hsl(var(--accent)'),
+        //             color.replace('oklch(var(--accent-foreground-oklch)', 'hsl(var(--accent-foreground)'),
+        //             color.replace('oklch(var(--input-oklch)', 'hsl(var(--input)'),
+        //             color.replace('oklch(var(--border-oklch)', 'hsl(var(--border)'),
+        //             color.replace('oklch(var(--ring-oklch)', 'hsl(var(--ring)'),
+        //             color.replace('oklch(var(--sidebar-background-oklch)', 'hsl(var(--sidebar-background)'),
+        //             color.replace('oklch(var(--sidebar-foreground-oklch)', 'hsl(var(--sidebar-foreground)'),
+        //             color.replace('oklch(var(--sidebar-accent-oklch)', 'hsl(var(--sidebar-accent)'),
+        //             color.replace('oklch(var(--sidebar-accent-foreground-oklch)', 'hsl(var(--sidebar-accent-foreground)'),
+        //             color.replace('oklch(var(--sidebar-border-oklch)', 'hsl(var(--sidebar-border)'),
+        //         ].find(replaced => replaced !== color);
+        //     }
+        //     matchUtilities(
+        //         {
+        //             'bg': (value) => {
+        //                 const color = fallbackColor(value);
+        //                 return color ? {
+        //                     '@supports not (color: oklch(from #000 l c h))': {
+        //                         'background-color': color,
+        //                     }
+        //                 } : null;
+        //             },
+        //         },
+        //         { values: flattenColorPalette(theme('backgroundColor')), type: ['color'] }
+        //     );
+        //     matchUtilities(
+        //         {
+        //             'text': (value) => {
+        //                 const color = fallbackColor(value);
+        //                 return color ? {
+        //                     '@supports not (color: oklch(from #000 l c h))': {
+        //                         'color': color,
+        //                     }
+        //                 } : null;
+        //             },
+        //         },
+        //         { values: flattenColorPalette(theme('textColor')), type: ['color'] }
+        //     );
+        //     matchUtilities(
+        //         {
+        //             'border': (value) => {
+        //                 const color = fallbackColor(value);
+        //                 return color ? {
+        //                     '@supports not (color: oklch(from #000 l c h))': {
+        //                         'border-color': color,
+        //                     }
+        //                 } : null;
+        //             },
+        //         },
+        //         { values: flattenColorPalette(theme('borderColor')), type: ['color'] }
+        //     );
+        // }),
         // plugin(function ({ matchUtilities, theme }) {
         //     matchUtilities({
         //         'gap-x': (value) => {
