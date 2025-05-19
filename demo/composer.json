@@ -2,7 +2,7 @@
     "name": "code16/sharp-demo",
     "type": "project",
     "require": {
-        "php": "^8.2",
+        "php": "^8.4",
         "bacon/bacon-qr-code": "~2.0",
         "blade-ui-kit/blade-icons": "^1.6",
         "code16/laravel-content-renderer": "^1.2",
