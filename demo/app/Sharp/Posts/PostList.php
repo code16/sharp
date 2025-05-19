@@ -187,9 +187,9 @@ class PostList extends SharpEntityList
                         ->renderAsText($value)
                     : null;
             })
-            ->setCustomTransformer('cover', (new SharpUploadModelThumbnailUrlTransformer(100))->renderAsImageTag())
+            ->setCustomTransformer('cover', new SharpUploadModelThumbnailUrlTransformer(100)->renderAsImageTag())
             ->setCustomTransformer('published_at', DateTimeCustomTransformer::class)
-            ->setCustomTransformer('categories', (new SharpTagsTransformer('name'))->setFilterLink('posts', CategoryFilter::class))
+            ->setCustomTransformer('categories', new SharpTagsTransformer('name')->setFilterLink(PostEntity::class, CategoryFilter::class))
             ->transform($posts->paginate(20));
     }
 }
