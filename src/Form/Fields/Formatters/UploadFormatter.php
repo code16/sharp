@@ -98,10 +98,10 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
         }
 
         return collect([
-            'file_name' => $formatted['file_name'] ?? $value['path'],
+            'file_name' => $formatted['file_name'] ?? $value['path'] ?? null,
             'size' => $formatted['size'] ?? $value['size'] ?? null,
             'mime_type' => $formatted['mime_type'] ?? $value['mime_type'] ?? null,
-            'disk' => $formatted['disk'] ?? $value['disk'],
+            'disk' => $formatted['disk'] ?? $value['disk'] ?? null,
             'filters' => $formatted['filters'] ?? $value['filters'] ?? null,
         ])->whereNotNull()->toArray();
     }
