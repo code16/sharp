@@ -16,7 +16,7 @@ trait SharpFormFieldWithOptions
 
         $options = collect($options);
         $firstOption = ArrayConverter::modelToArray($options->first());
-        $format ??= fn ($option) => $option;
+        $format ??= fn ($option) => ArrayConverter::modelToArray($option);
 
         if (is_array($firstOption) && isset($firstOption[$idAttribute])) {
             // We assume that we already have ["id", "label"] in this case
