@@ -5,9 +5,15 @@
             "complete": "viewName",
             "condition": [
                 {
-                    "classFqn": ["Code16\\Sharp\\EntityList\\Commands\\Command"],
-                    "methodNames": ["view"],
-                    "parameters": [1]
+                    "classFqn": [
+                        "Code16\\Sharp\\EntityList\\Commands\\Command"
+                    ],
+                    "methodNames": [
+                        "view"
+                    ],
+                    "parameters": [
+                        1
+                    ]
                 }
             ]
         }
@@ -52,5 +58,231 @@
                 }
             ]
         }
-    }
+    },
+    "codeGenerations": [
+        {
+            "name": "Sharp Dashboard",
+            "id": "code16/sharp:dashboard",
+            "files": [
+                {
+                    "template": {
+                        "path": "src/Console/stubs/dashboard.stub",
+                        "name": "${INPUT_CLASS|className|upperCamelCase}.php",
+                        "parameters": {
+                            "DummyNamespace": "${INPUT_FQN|namespace}",
+                            "DummyClass": "${INPUT_CLASS|className|upperCamelCase}"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Sharp EntityCommand",
+            "id": "code16/sharp:entity-command",
+            "files": [
+                {
+                    "template": {
+                        "path": "src/Console/stubs/entity-command.stub",
+                        "name": "${INPUT_CLASS|className|upperCamelCase}.php",
+                        "parameters": {
+                            "DummyNamespace": "${INPUT_FQN|namespace}",
+                            "DummyClass": "${INPUT_CLASS|className|upperCamelCase}"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Sharp EntityCommand (form)",
+            "id": "code16/sharp:entity-command.form",
+            "files": [
+                {
+                    "template": {
+                        "path": "src/Console/stubs/entity-command.form.stub",
+                        "name": "${INPUT_CLASS|className|upperCamelCase}.php",
+                        "parameters": {
+                            "DummyNamespace": "${INPUT_FQN|namespace}",
+                            "DummyClass": "${INPUT_CLASS|className|upperCamelCase}"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Sharp EntityCommand (wizard)",
+            "id": "code16/sharp:entity-command.wizard",
+            "files": [
+                {
+                    "template": {
+                        "path": "src/Console/stubs/entity-command.wizard.stub",
+                        "name": "${INPUT_CLASS|className|upperCamelCase}.php",
+                        "parameters": {
+                            "DummyNamespace": "${INPUT_FQN|namespace}",
+                            "DummyClass": "${INPUT_CLASS|className|upperCamelCase}"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Sharp EntityList",
+            "id": "code16/sharp:entity-list",
+            "files": [
+                {
+                    "template": {
+                        "path": "src/Console/stubs/entity-list.stub",
+                        "name": "${INPUT_CLASS|className|upperCamelCase}.php",
+                        "parameters": {
+                            "DummyNamespace": "${INPUT_FQN|namespace}",
+                            "DummyClass": "${INPUT_CLASS|className|upperCamelCase}"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Sharp EntityList (model)",
+            "id": "code16/sharp:entity-list.model",
+            "files": [
+                {
+                    "template": {
+                        "path": "src/Console/stubs/entity-list.model.stub",
+                        "name": "${INPUT_CLASS|className|upperCamelCase}.php",
+                        "parameters": {
+                            "DummyNamespace": "${INPUT_FQN|namespace}",
+                            "DummyClass": "${INPUT_CLASS|className|upperCamelCase}"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Sharp Form",
+            "id": "code16/sharp:form",
+            "files": [
+                {
+                    "template": {
+                        "path": "src/Console/stubs/form.stub",
+                        "name": "${INPUT_CLASS|className|upperCamelCase}.php",
+                        "parameters": {
+                            "DummyNamespace": "${INPUT_FQN|namespace}",
+                            "DummyClass": "${INPUT_CLASS|className|upperCamelCase}"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Sharp Form (single)",
+            "id": "code16/sharp:form.single",
+            "files": [
+                {
+                    "template": {
+                        "path": "src/Console/stubs/form.single.stub",
+                        "name": "${INPUT_CLASS|className|upperCamelCase}.php",
+                        "parameters": {
+                            "DummyNamespace": "${INPUT_FQN|namespace}",
+                            "DummyClass": "${INPUT_CLASS|className|upperCamelCase}"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Sharp Form (model)",
+            "id": "code16/sharp:form.model",
+            "files": [
+                {
+                    "template": {
+                        "path": "src/Console/stubs/form.model.stub",
+                        "name": "${INPUT_CLASS|className|upperCamelCase}.php",
+                        "parameters": {
+                            "DummyNamespace": "${INPUT_FQN|namespace}",
+                            "DummyClass": "${INPUT_CLASS|className|upperCamelCase}"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Sharp InstanceCommand",
+            "id": "code16/sharp:instance-command",
+            "files": [
+                {
+                    "template": {
+                        "path": "src/Console/stubs/instance-command.stub",
+                        "name": "${INPUT_CLASS|className|upperCamelCase}.php",
+                        "parameters": {
+                            "DummyNamespace": "${INPUT_FQN|namespace}",
+                            "DummyClass": "${INPUT_CLASS|className|upperCamelCase}"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Sharp InstanceCommand (form)",
+            "id": "code16/sharp:instance-command.form",
+            "files": [
+                {
+                    "template": {
+                        "path": "src/Console/stubs/instance-command.form.stub",
+                        "name": "${INPUT_CLASS|className|upperCamelCase}.php",
+                        "parameters": {
+                            "DummyNamespace": "${INPUT_FQN|namespace}",
+                            "DummyClass": "${INPUT_CLASS|className|upperCamelCase}"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Sharp InstanceCommand (wizard)",
+            "id": "code16/sharp:instance-command.wizard",
+            "files": [
+                {
+                    "template": {
+                        "path": "src/Console/stubs/instance-command.wizard.stub",
+                        "name": "${INPUT_CLASS|className|upperCamelCase}.php",
+                        "parameters": {
+                            "DummyNamespace": "${INPUT_FQN|namespace}",
+                            "DummyClass": "${INPUT_CLASS|className|upperCamelCase}"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Sharp Show",
+            "id": "code16/sharp:show-page",
+            "files": [
+                {
+                    "template": {
+                        "path": "src/Console/stubs/show-page.stub",
+                        "name": "${INPUT_CLASS|className|upperCamelCase}.php",
+                        "parameters": {
+                            "DummyNamespace": "${INPUT_FQN|namespace}",
+                            "DummyClass": "${INPUT_CLASS|className|upperCamelCase}"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Sharp Show (model)",
+            "id": "code16/sharp:show-page.model",
+            "files": [
+                {
+                    "template": {
+                        "path": "src/Console/stubs/show-page.model.stub",
+                        "name": "${INPUT_CLASS|className|upperCamelCase}.php",
+                        "parameters": {
+                            "DummyNamespace": "${INPUT_FQN|namespace}",
+                            "DummyClass": "${INPUT_CLASS|className|upperCamelCase}"
+                        }
+                    }
+                }
+            ]
+        }
+    ]
 }
