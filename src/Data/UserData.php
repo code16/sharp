@@ -20,7 +20,7 @@ final class UserData extends Data
         return new self(
             name: $user->{sharp()->config()->get('auth.display_attribute')} ?? null,
             email: $user->{sharp()->config()->get('auth.login_attribute')} ?? null,
-            avatar: $user->{sharp()->config()->get('auth.avatar_attribute')} ?? null,
+            avatar: ($avatar = sharp()->config()->get('auth.avatar')) ? $avatar($user) : null,
         );
     }
 }

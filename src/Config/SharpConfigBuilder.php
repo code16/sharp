@@ -15,6 +15,7 @@ use Code16\Sharp\Utils\Entities\SharpEntity;
 use Code16\Sharp\Utils\Entities\SharpEntityResolver;
 use Code16\Sharp\Utils\Filters\GlobalRequiredFilter;
 use Code16\Sharp\Utils\Menu\SharpMenu;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Vite;
@@ -61,7 +62,7 @@ class SharpConfigBuilder
             'logout_page_url' => null,
             'display_attribute' => 'name',
             'login_attribute' => 'email',
-            'avatar_attribute' => 'avatar',
+            'avatar' => null,
             'password_attribute' => 'password',
             'impersonate' => [
                 'enabled' => false,
@@ -415,9 +416,13 @@ class SharpConfigBuilder
         return $this;
     }
 
-    public function setUserAvatarAttribute(string $avatar): self
+    /**
+     * @param  (Closure(Authenticatable $user): string)  $userAvatar
+     * @return $this
+     */
+    public function setUserAvatar(Closure $userAvatar): self
     {
-        $this->config['auth']['avatar_attribute'] = $avatar;
+        $this->config['auth']['avatar'] = $userAvatar;
 
         return $this;
     }
