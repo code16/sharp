@@ -11,7 +11,7 @@ const props = defineProps<ToasterProps>()
     v-bind="props"
     :toast-options="{
       classes: {
-        toast: 'group toast !text-base data-[type=info]:!border-primary/25 data-[type=error]:!border-destructive group-[.toaster]:items-start group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg',
+        toast: 'group toast text-base! data-[type=info]:!border-primary/25 data-[type=error]:!border-destructive group-[.toaster]:items-start group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg',
         title: 'group-[[data-type=error]]:text-destructive group-[[data-type=info]]:text-primary',
         description: 'group-[.toast]:text-muted-foreground',
         actionButton:

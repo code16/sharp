@@ -402,7 +402,7 @@
                         <template v-if="transformedImg ?? value?.thumbnail ?? uppyFile?.preview">
                             <div class="self-center group/img relative flex flex-col justify-center rounded-md overflow-hidden">
                                 <img class="rounded-md max-h-[150px] max-w-[150px]"
-                                    :class="uppyFile && !transformedImg && field.imageCropRatio ? 'object-cover aspect-[--ratio]' : ''"
+                                    :class="uppyFile && !transformedImg && field.imageCropRatio ? 'object-cover aspect-(--ratio)' : ''"
                                     :style="{
                                         '--ratio': field.imageCropRatio ? `${field.imageCropRatio[0]} / ${field.imageCropRatio[1]}` : null
                                     }"

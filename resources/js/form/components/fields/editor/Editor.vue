@@ -161,7 +161,7 @@
             }"
         >
             <template v-if="editor && field.toolbar">
-                <StickyTop class="sticky top-[--stacked-top] [[role=dialog]_&]:top-0 p-1.5 border-b data-[stuck]:z-10 data-[stuck]:bg-background">
+                <StickyTop class="sticky top-(--stacked-top) in-[[role=dialog]]:top-0 p-1.5 border-b data-stuck:z-10 data-[stuck]:bg-background">
                     <div class="flex gap-x-1 gap-y-0 flex-wrap" ref="header">
                         <template v-for="button in props.field.toolbar">
                             <template v-if="button === 'link'">
@@ -223,10 +223,10 @@
                 :class="cn(
                     'group/editor content min-h-20 w-full rounded-b-md overflow-y-auto focus:outline-none px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50',
                     '[&_.selection-highlight]:bg-[Highlight] [&_.selection-highlight]:py-0.5',
-                    '[&_.ProseMirror-selectednode]:!outline-none [&:focus_.ProseMirror-selectednode]:ring-1 [&_.ProseMirror-selectednode]:ring-primary',
+                    '[&_.ProseMirror-selectednode]:outline-none! [&:focus_.ProseMirror-selectednode]:ring-1 [&_.ProseMirror-selectednode]:ring-primary',
                     {
-                        'min-h-[--min-height]': field.minHeight,
-                        'max-h-[--max-height]': field.maxHeight,
+                        'min-h-(--min-height)': field.minHeight,
+                        'max-h-(--max-height)': field.maxHeight,
                     },
                 )"
                 :style="{

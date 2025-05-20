@@ -67,13 +67,13 @@
                 :is="stickyLabel ? StickyTop : 'div'"
                 class="group"
                 :class="[{
-                    'top-[calc(var(--stacked-top)+.625rem)] [[role=dialog]_&]:top-2.5 z-[5] lg:sticky': stickyLabel,
+                    'top-[calc(var(--stacked-top)+.625rem)] in-[[role=dialog]]:top-2.5 z-5 lg:sticky': stickyLabel,
                     'hidden @md/field-container:block @3xl/root-card:@md/field-container:block': !hasLabelRow,
                 }]"
                 v-slot="{ stuck = false } = {}"
             >
                 <template v-if="stickyLabel">
-                    <div class="absolute bg-background transition-colors hidden border-b -inset-x-6 -top-3 -bottom-2.5 lg:group-data-[stuck]:block"
+                    <div class="absolute bg-background transition-colors hidden border-b -inset-x-6 -top-3 -bottom-2.5 lg:group-data-stuck:block"
                         :class="stuck ? 'border-border' : 'border-transparent'"></div>
                 </template>
                 <div class="relative flex flex-row-reverse flex-wrap gap-4" :class="{
@@ -86,9 +86,8 @@
                                 :as="fieldGroup ? 'div' : 'label'"
                                 class="leading-4 cursor-default"
                                 :class="{
-                                    'text-destructive dark:text-foreground': form.fieldHasError(field, fieldErrorKey),
+                                    'text-destructive': form.fieldHasError(field, fieldErrorKey),
                                 }"
-                                :style="{ '--destructive': '0deg 72.22% 50.59%' }"
                                 :for="id"
                                 @click="$emit('label-click')"
                             >
@@ -170,7 +169,7 @@
 
                     <template v-if="form.fieldHasError(field, fieldErrorKey)">
                         <div :id="`${id}-error`" class="mb-1 text-sm text-destructive leading-4">
-                            <span class="dark:bg-destructive dark:text-destructive-foreground dark:py-1 dark:px-2 dark:rounded-md">
+                            <span class="">
                                 <template v-if="form.fieldError(fieldErrorKey)">
                                     {{ form.fieldError(fieldErrorKey) }}
                                 </template>

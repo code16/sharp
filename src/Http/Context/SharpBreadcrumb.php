@@ -62,9 +62,9 @@ class SharpBreadcrumb
         return $this->breadcrumbItems()->reverse()->skip(1)->first();
     }
 
-    public function previousShowSegment(?string $entityKeyOrClassName = null): ?BreadcrumbItem
+    public function previousShowSegment(?string $entityKeyOrClassName = null, ?string $subEntity = null): ?BreadcrumbItem
     {
-        return $this->findPreviousSegment('s-show', $entityKeyOrClassName);
+        return $this->findPreviousSegment('s-show', $entityKeyOrClassName, $subEntity);
     }
 
     public function previousListSegment(?string $entityKeyOrClassName = null): ?BreadcrumbItem
@@ -111,7 +111,7 @@ class SharpBreadcrumb
         return $this->breadcrumbItems;
     }
 
-    private function findPreviousSegment(string $type, ?string $entityKeyOrClassName = null): ?BreadcrumbItem
+    private function findPreviousSegment(string $type, ?string $entityKeyOrClassName = null, ?string $subEntity = null): ?BreadcrumbItem
     {
         $modeNotEquals = false;
         if ($entityKeyOrClassName && Str::startsWith($entityKeyOrClassName, '!')) {
@@ -124,10 +124,8 @@ class SharpBreadcrumb
             ->filter(fn (BreadcrumbItem $item) => $item->type === $type)
             ->when($entityKeyOrClassName !== null, fn ($items) => $items
                 ->filter(fn (BreadcrumbItem $breadcrumbItem) => $modeNotEquals
-                    ? $breadcrumbItem->entityKey() !== app(SharpEntityManager::class)
-                        ->entityKeyFor($entityKeyOrClassName)
-                    : $breadcrumbItem->entityKey() === app(SharpEntityManager::class)
-                        ->entityKeyFor($entityKeyOrClassName)
+                    ? ! $breadcrumbItem->entityIs($entityKeyOrClassName, $subEntity)
+                    : $breadcrumbItem->entityIs($entityKeyOrClassName, $subEntity)
                 )
             )
             ->first();

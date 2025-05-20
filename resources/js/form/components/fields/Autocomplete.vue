@@ -151,7 +151,7 @@
             <template v-if="props.value">
                 <div class="relative">
                     <PopoverTrigger as-child>
-                        <div class="relative border border-input flex items-center rounded-md min-h-10 text-sm px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 aria-disabled:pointer-events-none aria-disabled:opacity-50"
+                        <div class="relative border border-input flex items-center rounded-md min-h-10 text-sm px-3 py-2 pr-10 bg-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 aria-disabled:pointer-events-none aria-disabled:opacity-50"
                             role="combobox"
                             aria-autocomplete="none"
                             tabindex="0"
@@ -167,7 +167,7 @@
                             ></div>
                         </div>
                     </PopoverTrigger>
-                    <Button class="absolute right-0 h-[2.375rem] top-1/2 -translate-y-1/2 opacity-50 hover:opacity-100"
+                    <Button class="absolute right-0 h-9.5 top-1/2 -translate-y-1/2 opacity-50 hover:opacity-100"
                         :disabled="props.field.readOnly"
                         variant="ghost"
                         size="icon"
@@ -196,12 +196,12 @@
             </template>
 
             <PopoverContent
-                class="p-0 w-[--reka-popover-trigger-width] min-w-[200px]"
+                class="p-0 w-(--reka-popover-trigger-width) min-w-[200px]"
                 align="start"
                 :avoid-collisions="false"
             >
                 <Command
-                    :class="isInDialog ? 'max-h-[--reka-popper-available-height]' : ''"
+                    :class="isInDialog ? 'max-h-(--reka-popper-available-height)' : ''"
                     :model-value="value?.[props.field.itemIdAttribute]"
                     :reset-search-term-on-blur="false"
                     ignore-filter

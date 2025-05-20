@@ -2,9 +2,9 @@
     import { type Component, computed } from "vue";
     import File from "@/show/components/fields/text/nodes/Upload.vue";
     import Html from "@/show/components/fields/text/nodes/Html.vue";
-    import { ShowFieldProps } from "@/show/types";
     import { ShowTextFieldData } from "@/types";
     import Embed from "@/show/components/fields/text/nodes/Embed.vue";
+    import { components } from '@/components/TemplateRenderer.vue';
 
     const props = defineProps<{
         field: ShowTextFieldData,
@@ -26,6 +26,7 @@
     const component = computed<Component>(() => ({
         template: `<div>${formattedContent.value}</div>`,
         components: {
+            ...components,
             'x-sharp-file': File,
             'x-sharp-image': File,
             'html-content': Html,

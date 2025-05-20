@@ -7,15 +7,15 @@
 <style>
     /** shadcn inline styles to prevent flickering */
     :root {
-        --background: 0 0% 100%;
-        --foreground: 240 10% 3.9%;
+        --background: oklch(1 0 0);
+        --foreground: oklch(0.145 0 0);
     }
     .dark {
-        --background: 240 10% 3.9%;
-        --foreground: 0 0% 98%;
+        --background: oklch(0.145 0 0);
+        --foreground: oklch(0.985 0 0);
     }
     body {
-        background-color: hsl(var(--background));
+        background-color: var(--background);
     }
     :root {
         --sharp-config-primary: {{ $primaryColor }};

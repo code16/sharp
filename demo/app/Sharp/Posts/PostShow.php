@@ -4,14 +4,15 @@ namespace App\Sharp\Posts;
 
 use App\Models\Post;
 use App\Sharp\Entities\AuthorEntity;
-use App\Sharp\Entities\CategoryEntity;
 use App\Sharp\Entities\PostBlockEntity;
+use App\Sharp\Entities\PostEntity;
 use App\Sharp\Posts\Commands\EvaluateDraftPostWizardCommand;
 use App\Sharp\Posts\Commands\PreviewPostCommand;
 use App\Sharp\Utils\Embeds\AuthorEmbed;
 use App\Sharp\Utils\Embeds\CodeEmbed;
 use App\Sharp\Utils\Embeds\RelatedPostEmbed;
 use App\Sharp\Utils\Embeds\TableOfContentsEmbed;
+use App\Sharp\Utils\Filters\CategoryFilter;
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Show\Fields\SharpShowEntityListField;
 use Code16\Sharp\Show\Fields\SharpShowFileField;
@@ -24,8 +25,8 @@ use Code16\Sharp\Show\Layout\ShowLayoutSection;
 use Code16\Sharp\Show\SharpShow;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
-use Code16\Sharp\Utils\Links\LinkToShowPage;
 use Code16\Sharp\Utils\PageAlerts\PageAlert;
+use Code16\Sharp\Utils\Transformers\Attributes\Eloquent\SharpTagsTransformer;
 use Code16\Sharp\Utils\Transformers\Attributes\Eloquent\SharpUploadModelThumbnailUrlTransformer;
 
 class PostShow extends SharpShow
@@ -149,12 +150,7 @@ class PostShow extends SharpShow
                     ->renderAsText($instance->author->name)
                 : null
             )
-            ->setCustomTransformer('categories', fn ($value, Post $instance) => $instance
-                ->categories
-                ->map(fn ($category) => LinkToShowPage::make(CategoryEntity::class, $category->id)
-                    ->renderAsText($category->name))
-                ->implode(', ')
-            )
+            ->setCustomTransformer('categories', new SharpTagsTransformer('name')->setFilterLink(PostEntity::class, CategoryFilter::class))
             ->setCustomTransformer('cover', new SharpUploadModelThumbnailUrlTransformer(500))
             ->setCustomTransformer(
                 'attachments[document]',

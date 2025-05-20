@@ -328,7 +328,7 @@
         <div ref="el">
             <transition enter-active-class="transition" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition" leave-from-class="opacity-100" leave-to-class="opacity-0">
                 <template v-if="reordering">
-                    <div class="fixed inset-0 z-[11] bg-black/5"></div>
+                    <div class="fixed inset-0 z-11 bg-black/5"></div>
                 </template>
             </transition>
 
@@ -341,8 +341,8 @@
                 </div>
             </template>
 
-            <RootCard :class="reordering ? 'relative z-[12]' : ''">
-                <RootCardHeader :class="reordering || selecting ? 'sticky' : 'data-[overflowing-viewport]:sticky'" :collapsed="collapsed || !entityList">
+            <RootCard :class="reordering ? 'relative z-12' : ''">
+                <RootCardHeader :class="reordering || selecting ? 'sticky' : 'data-overflowing-viewport:sticky'" :collapsed="collapsed || !entityList">
                     <div class="flex flex-wrap md:flex-nowrap gap-y-4 gap-x-2">
                         <div class="flex items-baseline min-w-0">
                             <slot name="card-header" />
@@ -601,15 +601,15 @@
                     </div>
                 </template>
                 <template v-if="entityList">
-                    <CardContent :class="entityList.data?.length > 0 ? 'pb-2 !px-0' : ''" v-show="!collapsed">
+                    <CardContent :class="entityList.data?.length > 0 ? 'pb-2 px-0!' : ''" v-show="!collapsed">
                         <template v-if="entityList.data?.length > 0">
-                            <ScrollArea class="w-full data-[scrollbar-x-visible]:pb-4" type="auto" touch-type="scroll">
+                            <ScrollArea class="w-full data-scrollbar-x-visible:pb-4" type="auto" touch-type="scroll">
                                 <Table no-scroll class="w-max min-w-full max-w-[768px] md:max-w-[1024px] @3xl:w-full @3xl:max-w-none">
                                     <TableHeader
                                         :class="!visibleFields.some(field => field.label) ? 'collapse [&_tr]:border-0' : ''"
                                         role="rowgroup"
                                     >
-                                        <TableRow class="hover:bg-transparent lg:first:*:pl-6 lg:last:*:pr-6">
+                                        <TableRow class="hover:bg-transparent lg:*:first:pl-6 lg:*:last:pr-6">
                                             <template v-if="selecting">
                                                 <TableHead scope="col" class="w-2" aria-label="Select...">
                                                     <TooltipProvider>
@@ -636,7 +636,7 @@
                                             </template>
                                             <template v-for="(field, fieldIndex) in visibleFields" :key="field.key">
                                                 <TableHead
-                                                    class="max-w-[70cqw] md:w-[var(--width,auto)]"
+                                                    class="max-w-[70cqw] md:w-(--width,auto)"
                                                     scope="col"
                                                     :style="{
                                                         '--width':
@@ -694,7 +694,7 @@
                                     >
                                         <template v-for="(item, itemIndex) in items" :key="entityList.instanceId(item)">
                                             <TableRow
-                                                class="group/row relative hover:bg-transparent has-[[data-row-action]:hover]:bg-muted/50 has-[[aria-expanded=true]]:bg-muted/50 group-data-[reordering]:cursor-move group-data-[reordering]:hover:bg-muted/50 group-[:has(.sortable-chosen)]:bg-background [&.sortable-chosen]:transition-none lg:first:*:pl-6 lg:last:*:pr-6"
+                                                class="group/row relative hover:bg-transparent has-[[data-row-action]:hover]:bg-muted/50 has-[[aria-expanded=true]]:bg-muted/50 group-data-reordering:cursor-move group-data-[reordering]:hover:bg-muted/50 group-[:has(.sortable-chosen)]:bg-background [&.sortable-chosen]:transition-none lg:*:first:pl-6 lg:*:last:pr-6"
                                                 :data-instance-row="entityList.instanceId(item)"
                                                 :data-highlighted="props.highlightedInstanceId && props.highlightedInstanceId == entityList.instanceId(item) ? true : null"
                                             >
@@ -749,7 +749,7 @@
                                                                 {{ item[field.key] }}
                                                             </template>
                                                             <template v-if="fieldIndex === 0 && entityList.instanceUrl(item) && !selecting && !reordering">
-                                                                <Link class="absolute inset-0 ring-ring ring-inset focus-visible:outline-none focus-visible:ring-2 focus:group-data-[highlighted]/row:ring-2"
+                                                                <Link class="absolute inset-0 ring-ring ring-inset focus-visible:outline-none focus-visible:ring-2 focus:group-data-highlighted/row:ring-2"
                                                                     data-row-action
                                                                     :href="entityList.instanceUrl(item)"
                                                                 ></Link>
@@ -758,14 +758,14 @@
                                                     </template>
                                                 </template>
 
-                                                <TableCell class="w-0 pr-6 @5xl:pl-4 hidden group-data-[reordering]:table-cell">
+                                                <TableCell class="w-0 pr-6 @5xl:pl-4 hidden group-data-reordering:table-cell">
                                                     <div class="flex justify-center items-center size-10"> <!-- same size than dropdown -->
                                                         <GripVertical class="w-4 h-4 opacity-50" />
                                                     </div>
                                                 </TableCell>
 
                                                 <template v-if="entityList.instanceHasActions(item, showEntityState)">
-                                                    <TableCell class="sticky bg-background pl-1 -right-3 z-10 group-data-[scroll-arrived-right=true]/scroll-area:bg-transparent group-data-[reordering]:hidden group-data-[selecting]:hidden @5xl:pl-4 @5xl:bg-transparent"
+                                                    <TableCell class="sticky bg-background pl-1 -right-3 z-10 group-data-[scroll-arrived-right=true]/scroll-area:bg-transparent group-data-reordering:hidden group-data-selecting:hidden @5xl:pl-4 @5xl:bg-transparent"
                                                     >
                                                         <div class="absolute inset-0 -left-2 overflow-hidden" aria-hidden="true"></div>
                                                         <div class="absolute inset-0 -left-4 overflow-hidden pointer-events-none" aria-hidden="true">

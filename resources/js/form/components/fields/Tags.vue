@@ -67,7 +67,7 @@
         >
             <ComboboxAnchor>
                 <TagsInput
-                    class="ring-offset-background data-[disabled]:pointer-events-none data-[disabled]:opacity-50 has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-offset-2"
+                    class="ring-offset-background data-disabled:pointer-events-none data-disabled:opacity-50 has-[:focus-visible]:ring-ring has-focus-visible:ring-2 has-focus-visible:ring-offset-2"
                     :model-value="props.value"
                     :display-value="(item: typeof props.value[0]) => item.label ?? item.id"
                     :disabled="props.field.readOnly"
@@ -85,7 +85,7 @@
                     </template>
 
                     <ComboboxInput v-model="searchTerm" :placeholder="props.field.placeholder ?? __('sharp::form.multiselect.placeholder')" as-child>
-                        <TagsInputInput :id="id" :aria-describedby="ariaDescribedBy" :disabled="props.field.readOnly" class="flex-1 w-[10rem]" autocomplete="off" @keydown.enter.prevent ref="input" />
+                        <TagsInputInput :id="id" :aria-describedby="ariaDescribedBy" :disabled="props.field.readOnly" class="flex-1 w-40" autocomplete="off" @keydown.enter.prevent ref="input" />
                     </ComboboxInput>
                 </TagsInput>
             </ComboboxAnchor>
@@ -94,7 +94,7 @@
                     position="popper"
                     position-strategy="absolute"
                     :avoid-collisions="false"
-                    class="z-50 w-[--reka-popper-anchor-width] rounded-md mt-2 border bg-popover text-popover-foreground shadow-md outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2"
+                    class="z-50 w-(--reka-popper-anchor-width) rounded-md mt-2 border bg-popover text-popover-foreground shadow-md outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2"
                 >
                     <template v-if="searchTerm.length > 0 && props.field.creatable">
                         <CommandGroup>

@@ -17,7 +17,6 @@ export function useApexCharts(
     props: DashboardWidgetProps<GraphWidgetData>,
     additionalOptions: ({ width }: { width: number }) => ApexOptions
 ) {
-    const zoomed = ref(false);
     const apexChartsComponent = useTemplateRef<VueApexChartsComponent>('apexChartsComponent');
     const el = computed<HTMLElement>(() => apexChartsComponent.value?.$el);
     const width = ref(0);
@@ -41,16 +40,17 @@ export function useApexCharts(
                 height: widget.height ?? '100%',
                 width: '100%',
                 parentHeightOffset: 0,
-                events: {
-                    zoomed: () => {
-                        zoomed.value = true;
-                    },
-                },
                 animations: {
                     enabled: false,
                 },
                 toolbar: {
                     show: false,
+                },
+                zoom: {
+                    enabled: false,
+                },
+                selection: {
+                    enabled: false,
                 },
                 locales: [
                     en, fr, ru, es, de,
