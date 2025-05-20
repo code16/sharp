@@ -215,8 +215,13 @@ export function useMenuBoundaryElement() {
                                             size="lg"
                                             class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                                         >
-                                            <span class="inline-flex items-center justify-center size-8 bg-secondary rounded-lg">
-                                                <CircleUser class="h-5 w-5" />
+                                            <span class="inline-flex items-center justify-center size-8 bg-secondary rounded-lg overflow-hidden">
+                                                <template v-if="auth().user.avatar">
+                                                    <img class="size-full aspect-1/1 object-cover" :src="auth().user.avatar" :alt="auth().user.name">
+                                                </template>
+                                                <template v-else>
+                                                    <CircleUser class="size-5" />
+                                                </template>
                                             </span>
                                             <div class="grid flex-1 text-left text-sm leading-tight">
                                                 <span class="truncate font-semibold"> {{ auth().user.name }}</span>

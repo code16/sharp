@@ -28,6 +28,7 @@ class DemoSharpServiceProvider extends SharpAppServiceProvider
             ->setAuthCustomGuard('web')
             ->setLoginAttributes('email', 'password')
             ->setUserDisplayAttribute('name')
+            ->setUserAvatarAttribute(fn () => auth()->user()->avatar?->thumbnail(200))
             ->enable2faCustom(Demo2faNotificationHandler::class)
             ->enableLoginRateLimiting(maxAttempts: 3)
             ->suggestRememberMeOnLoginForm()
