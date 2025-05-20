@@ -16,11 +16,11 @@ trait SharpFormFieldWithOptions
 
         $options = collect($options);
         $firstOption = ArrayConverter::modelToArray($options->first());
-        $format ??= fn ($option) => $option;
+        $format ??= fn ($option) => ArrayConverter::modelToArray($option);
 
         if (is_array($firstOption) && isset($firstOption[$idAttribute])) {
             // We assume that we already have ["id", "label"] in this case
-            return $options->map(fn ($option) => $format(ArrayConverter::modelToArray($option)))->values()->all();
+            return $options->map(fn ($option) => $format($option))->values()->all();
         }
 
         // Simple [key => value] array case

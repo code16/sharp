@@ -106,8 +106,7 @@ SharpFormAutocompleteRemoteField::make('brand')
 
 In this example, the `{{country}}` placeholder will be replaced by the value of the `country` form field. You can define multiple replacements if necessary.
 
-You may need to provide a default value for the endpoint, used when `country` (in our example) is not valued (without default, the autocomplete field will be displayed as disabled). To do that,
-fill the second argument:
+You may need to provide a default value for the endpoint, used when `country` (in our example) is not valued (without default, the autocomplete field will be displayed as disabled). To do that, fill the second argument:
 
 ```php
 SharpFormAutocompleteRemoteField::make('model')
@@ -129,12 +128,24 @@ Set the name of the id attribute for items. This is useful :
 - to designate the id attribute in the remote API call return.
 Default: `"id"`
 
-### `setListItemTemplate(View|string $template)`
-### `setResultItemTemplate(View|string $template)`
+### `setListItemTemplate(View|string|Closure $template)`
+### `setResultItemTemplate(View|string|Closure $template)`
 
 The templates for the list and result items can be set in two ways: either by passing a string, or by passing a Laravel view.
 
 Examples:
+
+```php
+SharpFormAutocompleteRemoteField::make('customer')
+    ->setRemoteEndpoint('/api/customers')
+    ->setListItemTemplate('<div>{{$name}}</div><div><small>{{$email}}</small></div>')
+    ->setResultItemTemplate(view('my/customer/blade/view'));
+```
+
+Note that the template can access to every attribute of the item (which will be sent as JSON by the API endpoint, and cast into an array) as a variable. In this example, we assume that the API endpoint returns an array of objects with `id`, `name` and `email` attributes.
+
+There is a third way to set the templates, by passing a Closure. This is **only suitable in one case: a remote autocomplete with a callback**. The closure will receive the unchanged item as a parameter (it’s useful when this item is an object, like a Model for instance), and must return a string. 
+Here’s a simple example:
 
 ```php
 SharpFormAutocompleteRemoteField::make('customer')
@@ -143,8 +154,7 @@ SharpFormAutocompleteRemoteField::make('customer')
             ->where('name', 'like', "%$search%")
             ->get();
     })
-    ->setListItemTemplate('<div>{{$name}}</div><div><small>{{$email}}</small></div>')
-    ->setResultItemTemplate(view('my/customer/blade/view'));
+    ->setListItemTemplate(fn ($customer) => '<div>{{$customer->getFullName()}}</div>');
 ```
 
 ## Formatter
