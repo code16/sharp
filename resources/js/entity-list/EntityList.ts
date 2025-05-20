@@ -109,7 +109,7 @@ export class EntityList implements EntityListData {
             return refreshedItems.find(refreshedItem => this.instanceId(refreshedItem) === this.instanceId(item))
                 ?? item;
         });
-        return new EntityList(this, this.entityKey);
+        return new EntityList(this, this.entityKey, this.hiddenFilters, this.hiddenCommands);
     }
 
     dropdownEntityCommands(selecting: boolean) {
