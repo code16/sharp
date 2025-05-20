@@ -68,9 +68,9 @@
   --destructive-foreground: oklch(1 0 0);
 
   /*--input: from var(--sharp-config-primary) 0.27 min(c, 0.01) h; !* default levels *!*/
-  --input: oklch(from var(--sharp-config-primary) 0.35 min(0.01) h);
+  --input: oklch(from var(--sharp-config-primary) 1 min(c, 0.05) h / 15%);
   /*--border: from var(--sharp-config-primary) 0.27 min(c, 0.01) h; !* default levels *!*/
-  --border: oklch(from var(--sharp-config-primary) 0.27 min(0.01) h);
+  --border: oklch(from var(--sharp-config-primary) 1 min(c, 0.05) h / 10%);
   /*--ring: from var(--sharp-config-primary) 0.87 min(c, 0.01) h; !* default levels *!*/
   --ring: oklch(from var(--sharp-config-primary) 0.87 min(c, 0.1) h);
 
