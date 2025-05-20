@@ -49,6 +49,10 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Inertia\ServiceProvider as InertiaServiceProvider;
+use Laravel\Octane\Events\RequestReceived;
+use Laravel\Octane\Events\RequestTerminated;
+use Laravel\Octane\Events\TaskReceived;
+use Laravel\Octane\Events\TickReceived;
 
 class SharpInternalServiceProvider extends ServiceProvider
 {
@@ -85,6 +89,8 @@ class SharpInternalServiceProvider extends ServiceProvider
             setlocale(LC_ALL, config('sharp.locale'));
             Carbon::setLocale(config('sharp.locale'));
         }
+
+        $this->configureOctane();
     }
 
     public function register()
@@ -210,5 +216,36 @@ class SharpInternalServiceProvider extends ServiceProvider
         if (sharp()->config()->get('auth.impersonate.enabled')) {
             $this->loadRoutesFrom(__DIR__.'/routes/auth/impersonate.php');
         }
+    }
+
+    private function configureOctane(): void
+    {
+        if (isset($_SERVER['LARAVEL_OCTANE'])) {
+            $this->app['events']->listen(RequestReceived::class, function () {
+                $this->resetSharp();
+            });
+
+            $this->app['events']->listen(TaskReceived::class, function () {
+                $this->resetSharp();
+            });
+
+            $this->app['events']->listen(TickReceived::class, function () {
+                $this->resetSharp();
+            });
+
+            $this->app['events']->listen(RequestTerminated::class, function () {
+                $this->resetSharp();
+            });
+        }
+    }
+
+    private function resetSharp()
+    {
+        $this->app->get(SharpMenuManager::class)->reset();
+        $this->app->get(SharpAuthorizationManager::class)->reset();
+        $this->app->get(SharpUploadManager::class)->reset();
+        $this->app->get(SharpUtil::class)->__construct();
+        $this->app->get(SharpImageManager::class)->__construct();
+        $this->app->get(AddLinkHeadersForPreloadedRequests::class)->reset();
     }
 }
