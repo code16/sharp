@@ -212,7 +212,7 @@
                         <Suspense>
                             <component
                                 :is="components[field.mapsProvider.name]"
-                                class="mt-4 rounded-md aspect-[4/3]"
+                                class="mt-4 rounded-md aspect-4/3"
                                 v-bind="{
                                     field,
                                     markerPosition: modalMarkerPosition,

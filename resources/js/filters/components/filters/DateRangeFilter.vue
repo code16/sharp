@@ -131,7 +131,7 @@
                     </Button>
                 </template>
             </PopoverTrigger>
-            <PopoverContent :class="cn('w-auto p-0', !inline ? 'w-[--reka-popover-trigger-width]' : '')">
+            <PopoverContent :class="cn('w-auto p-0', !inline ? 'w-(--reka-popover-trigger-width)' : '')">
                 <div class="flex">
                     <template v-if="filter.presets?.length">
                         <div class="flex flex-col shrink-0 p-3">

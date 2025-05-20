@@ -6,11 +6,11 @@
 /*@import '/node_modules/@fortawesome/fontawesome-free/css/v4-shims.css';*/
 
 
-@import "/node_modules/cropperjs/dist/cropper.css";
-@import "/node_modules/prosemirror-view/style/prosemirror.css";
-@import "/node_modules/prosemirror-gapcursor/style/gapcursor.css";
-@import "/node_modules/prosemirror-tables/style/tables.css";
-@import "/node_modules/leaflet/dist/leaflet.css";
+@import "../../node_modules/cropperjs/dist/cropper.css";
+@import "../../node_modules/prosemirror-view/style/prosemirror.css";
+@import "../../node_modules/prosemirror-gapcursor/style/gapcursor.css";
+@import "../../node_modules/prosemirror-tables/style/tables.css";
+@import "../../node_modules/leaflet/dist/leaflet.css";
 
 .leaflet-default-icon-path {
   background-image: none;

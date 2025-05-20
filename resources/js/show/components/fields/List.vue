@@ -46,7 +46,7 @@
             <template v-else>
                 <div class="grid grid-cols-1 gap-y-6">
                     <template v-for="item in value">
-                        <Card>
+                        <Card class="bg-background">
                             <CardContent>
                                 <FieldGrid class="gap-6">
                                     <template v-for="row in fieldLayout.item">

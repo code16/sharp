@@ -1,12 +1,22 @@
-@import "./fonts.css";
-@import "./shadcn.css";
-@import "./shadcn-overrides.css";
-@import "./content.css";
-@import "./nprogress.css";
+@import 'tailwindcss' source(none);
+@import 'tw-animate-css';
+@import './fonts.css';
+@import './shadcn.css';
+@import './shadcn-overrides.css';
+@import './content.css';
+@import './nprogress.css';
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@source '../views/**/*.blade.php';
+@source '../js/**/*.vue';
+@source '../js/components/ui/**/*.ts';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --shadow-l-xl: 0 0px 25px -5px rgb(0 0 0 / 0.1), 0 0px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-b-md: 0 5px 20px -8px rgb(0 0 0 / 0.1), 0 6px 3px -6px rgb(0 0 0 / 0.1);
+  --font-sans: 'geist-sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}
 
 @layer base {
   [type="search"]::-webkit-search-decoration,
@@ -34,15 +44,18 @@
     clip-path: inset(0);
   }
 
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
   .dark {
     color-scheme: dark;
   }
 }
 
-@layer components {
-  .container {
-    @apply px-4 lg:px-6;
-  }
+@utility container {
+  @apply mx-auto px-4 lg:px-6 2xl:max-w-[90rem];
 }
 
 @layer utilities {

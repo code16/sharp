@@ -194,11 +194,11 @@
         <div class="grid grid-cols-1 gap-y-6">
             <template v-if="value?.length > 0">
                 <div class="relative group/list space-y-6" role="list" :ref="(el: HTMLElement) => sortableContainer = el">
-                    <TransitionGroup move-class="transition-transform duration-200" leave-to-class="opacity-0" leave-active-class="!absolute" :css="false">
+                    <TransitionGroup move-class="transition-transform duration-200" leave-to-class="opacity-0" leave-active-class="absolute!" :css="false">
                         <template v-for="(item, index) in value" :key="`${item[itemKey]}-${sortedKey}`">
-                            <Card class="group relative ring-ring ring-offset-2 ring-background p-6 shadow"
+                            <Card class="group relative p-6 shadow-sm"
                                 :class="[
-                                    '[&.sortable-ghost]:z-10 [&.sortable-ghost]:ring-2',
+                                    '[&.sortable-ghost]:z-10 [&.sortable-ghost]:ring-2 [&.sortable-ghost]:ring-offset-2 [&.sortable-ghost]:ring-offset-background',
                                     reordering ? 'cursor-grab bg-muted/50' : 'bg-background',
                                     itemShouldHavePaddingTop(item) ? 'pt-10' : ''
                                 ]"

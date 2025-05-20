@@ -96,7 +96,7 @@
                     </Button>
                 </template>
             </PopoverTrigger>
-            <PopoverContent :class="cn('p-0 w-auto min-w-[150px]', !inline ? 'w-[--reka-popover-trigger-width]' : '')" align="start">
+            <PopoverContent :class="cn('p-0 w-auto min-w-[150px]', !inline ? 'w-(--reka-popover-trigger-width)' : '')" align="start">
                 <Command
                     :multiple="props.filter.multiple"
                     highlight-on-hover

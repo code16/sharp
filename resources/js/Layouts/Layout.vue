@@ -225,7 +225,7 @@ export function useMenuBoundaryElement() {
                                             <ChevronsUpDown class="ml-auto size-4" />
                                         </SidebarMenuButton>
                                     </DropdownMenuTrigger>
-                                    <DropdownMenuContent class="w-[--reka-dropdown-menu-trigger-width] min-w-56 rounded-lg" side="bottom" :side-offset="4" :collision-boundary="null" align="end">
+                                    <DropdownMenuContent class="w-(--reka-dropdown-menu-trigger-width) min-w-56 rounded-lg" side="bottom" :side-offset="4" :collision-boundary="null" align="end">
                                         <template v-if="menu?.userMenu?.items?.length">
                                             <DropdownMenuGroup>
                                                 <template v-for="item in menu.userMenu.items">
@@ -275,8 +275,8 @@ export function useMenuBoundaryElement() {
                 </Sidebar>
             </template>
             <SidebarInset class="min-w-0">
-                <header class="flex h-14 items-center gap-4 border-b backdrop-blur bg-background/90 px-4 sticky top-0 z-40 lg:px-6
-                    transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12
+                <header class="flex h-14 items-center gap-4 border-b backdrop-blur-sm bg-background/90 px-4 sticky top-0 z-40 lg:px-6
+                    transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12
                 ">
                     <template v-if="auth()?.user">
                         <SidebarTrigger class="-ml-1 shrink-0" />
@@ -307,7 +307,7 @@ export function useMenuBoundaryElement() {
                     @update:open="(open) => !open && window.setTimeout(() => dialog.onHidden(), 200)"
                 >
                     <DialogContent
-                        class="max-w-screen-xl overflow-hidden w-[calc(100%-4rem)] h-[90dvh]"
+                        class="max-w-(--breakpoint-xl) overflow-hidden w-[calc(100%-4rem)] h-[90dvh]"
                         :class="!dialog.text?.includes('window.Sfdump') ? 'p-0' : ''"
                     >
                         <iframe class="size-full" :srcdoc="`

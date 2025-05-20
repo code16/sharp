@@ -136,7 +136,7 @@
             <template v-if="!modal || form.locales?.length || form.layout.tabs.length > 1">
                 <component :is="modal ? 'div' : RootCardHeader"
                     :class="[
-                        form.locales?.length || form.layout.tabs.length > 1 ? 'data-[overflowing-viewport]:sticky' : '',
+                        form.locales?.length || form.layout.tabs.length > 1 ? 'data-overflowing-viewport:sticky' : '',
                         modal ? '-mt-2 mb-6' : ''
                     ]"
                 >
@@ -198,7 +198,7 @@
                     </div>
                 </component>
             </template>
-            <CardContent :class="modal ? '!p-0' : ''">
+            <CardContent :class="modal ? 'p-0!' : ''">
                 <template v-for="tab in form.layout.tabs">
                     <TabsContent class="mt-0" :tabindex="form.layout.tabs.length > 1 ? 0 : -1" :value="slugify(tab.title)">
                         <div class="grid gap-8 grid-cols-1 @3xl/root-card:grid-cols-12">
@@ -214,7 +214,7 @@
                                                                 <Label class="mb-2.5" as="legend">
                                                                     {{ fieldLayout.legend }}
                                                                 </Label>
-                                                                <Card class="shadow">
+                                                                <Card class="shadow-sm">
                                                                     <CardContent>
                                                                         <FieldGrid class="gap-6">
                                                                             <template v-for="row in fieldLayout.fields">
