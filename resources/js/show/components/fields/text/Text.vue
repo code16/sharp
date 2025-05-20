@@ -73,13 +73,13 @@
     <ShowFieldLayout v-bind="props">
         <template v-if="currentContent && field.html">
             <TextRenderer
-                class="content content-sm text-sm"
+                class="content content-sm text-sm [:where(&)_:where(h1,h2,h3)]:text-foreground/75"
                 :content="currentContent"
                 :field="field"
             />
         </template>
         <template v-else>
-            <div class="content content-sm text-sm">
+            <div class="text-sm">
                 {{ currentContent }}
             </div>
         </template>

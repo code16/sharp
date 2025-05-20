@@ -12,7 +12,7 @@
     const menu = useMenu();
 
     const currentBreadcrumbItem = props.breadcrumb?.items.at(-1);
-    const currentEntityItem = menu.getEntityItem(currentBreadcrumbItem?.entityKey ?? props.entityKey);
+    const currentEntityItem = menu?.getEntityItem(currentBreadcrumbItem?.entityKey ?? props.entityKey);
 </script>
 
 <template>

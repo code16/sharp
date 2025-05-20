@@ -5,6 +5,8 @@ return [
     'validation_error.description' => 'Please review your input, errors are detailed below each field.',
     'validation_error.localized' => 'There is an error in : :locales',
 
+    'field_locale_selector.aria_label' => 'Change language for field :field_label',
+
     'list.add_button' => 'Add an item',
     'list.remove_button' => 'Remove',
     'list.insert_above_button' => 'Insert above',
@@ -43,6 +45,7 @@ return [
     'multiselect.max_text' => 'Maximum items reached',
 
     'tags.unknown_label' => 'Unknown',
+    'tags.tag_delete_button.aria_label' => 'Delete :option_label',
 
     'select.select_all' => 'Select all',
     'select.unselect_all' => 'Unselect all',
@@ -55,6 +58,7 @@ return [
     'autocomplete.placeholder' => 'Search...',
 
     'date.validation_error.format' => 'Invalid date format',
+    'date.clear' => 'Clear :field_label',
 
     'daterange.start_placeholder' => 'Start date',
     'daterange.end_placeholder' => 'End date',
@@ -64,8 +68,12 @@ return [
     'editor.character_count' => ':count characters',
     'editor.errors.unknown_file' => 'Unknown file ":path"',
 
+    'editor.extension_node.dropdown_button.aria_label' => 'Actions',
     'editor.extension_node.edit_button' => 'Edit...',
     'editor.extension_node.remove_button' => 'Remove',
+    'editor.extension_node.copy_button' => 'Copy',
+    'editor.extension_node.upload.aria_label' => 'Embedded file',
+    'editor.extension_node.upload_image.aria_label' => 'Embedded image',
 
     'editor.dialogs.upload.title.new' => 'Insert file',
     'editor.dialogs.upload.title.update' => 'Update',
@@ -104,17 +112,20 @@ return [
     'editor.toolbar.strikethrough.title' => 'Strike through',
     'editor.toolbar.highlight.title' => 'Highlight',
     'editor.toolbar.small.title' => 'Small text',
+    'editor.toolbar.superscript.title' => 'Superscript',
     'editor.toolbar.heading_1.title' => 'Heading 1',
     'editor.toolbar.heading_2.title' => 'Heading 2',
     'editor.toolbar.heading_3.title' => 'Heading 3',
     'editor.toolbar.code.title' => 'Code',
+    'editor.toolbar.code_block.title' => 'Code block',
     'editor.toolbar.quote.title' => 'Quote',
     'editor.toolbar.unordered_list.title' => 'Unordered list',
     'editor.toolbar.ordered_list.title' => 'Ordered list',
     'editor.toolbar.link.title' => 'Link',
     'editor.toolbar.image.title' => 'Image',
     'editor.toolbar.table.title' => 'Table',
-    'editor.toolbar.iframe.title' => 'Web embed',
+    'editor.toolbar.iframe.title' => 'Iframe (embed)',
+    'editor.toolbar.html.title' => 'Insert HTML',
     'editor.toolbar.upload.title' => 'Insert file',
     'editor.toolbar.upload_image.title' => 'Insert image',
     'editor.toolbar.horizontal_rule.title' => 'Horizontal rule',

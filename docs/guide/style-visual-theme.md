@@ -39,6 +39,10 @@ class SharpServiceProvider extends SharpAppServiceProvider
 
 The file should be an SVG, you can customize the logo height by setting the `logo_height` config.
 
+:::tip
+With the newly added dark theme, it is recommended to use an SVG logo with `fill="currentColor"` to allow the logo to adapt to the theme, Sharp will handle it for you.
+:::
+
 ### Login form
 
 You can customize the login form with a custom message.

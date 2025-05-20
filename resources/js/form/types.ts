@@ -26,6 +26,7 @@ export type FormFieldProps<Data extends FormFieldData = FormFieldData, Value = D
     parentField?: FormListFieldData
     fieldLayout?: LayoutFieldData,
     fieldErrorKey?: string,
+    parentData?: FormFieldData | FormListFieldData['value'][number],
     hasError?: boolean,
     value?: Value,
     locale?: string | null,
@@ -33,7 +34,7 @@ export type FormFieldProps<Data extends FormFieldData = FormFieldData, Value = D
     row?: LayoutFieldData[],
 }
 
-export type FormFieldEmitInputOptions = { error?: string, force?: boolean };
+export type FormFieldEmitInputOptions = { error?: string, force?: boolean, preserveError?: boolean };
 
 export type FormFieldEmits<Data extends FormFieldData> = {
     (e: 'input', value: Data['value'], options?: FormFieldEmitInputOptions): void

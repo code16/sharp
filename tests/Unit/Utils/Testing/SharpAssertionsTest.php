@@ -24,14 +24,24 @@ it('allows to test getSharpForm for edit', function () {
 
 it('allows to test getSharpForm for edit with a custom breadcrumb', function () {
     $response = fakeResponse()
-        ->withSharpCurrentBreadcrumb(
-            ['list', 'leaves'],
-            ['show', 'leaves', 6],
+        ->withSharpBreadcrumb(
+            fn ($builder) => $builder
+                ->appendEntityList('leaves')
+                ->appendShowPage('leaves', 6),
         )
         ->getSharpForm('leaves', 6);
 
     $this->assertEquals(
         route('code16.sharp.form.edit', ['s-list/leaves/s-show/leaves/6', 'leaves', 6]),
+        $response->uri,
+    );
+});
+
+it('allows to test getSharpForm for single edit', function () {
+    $response = fakeResponse()->getSharpSingleForm('leaves');
+
+    $this->assertEquals(
+        route('code16.sharp.form.edit', ['s-list/leaves', 'leaves']),
         $response->uri,
     );
 });
@@ -50,6 +60,21 @@ it('allows to test updateSharpForm for update', function () {
 
     $this->assertEquals(
         route('code16.sharp.form.update', ['s-list/leaves', 'leaves', 6]),
+        $response->uri,
+    );
+
+    $this->assertEquals(
+        ['attr' => 'some_value'],
+        $response->postedData,
+    );
+});
+
+it('allows to test updateSharpForm for single update', function () {
+    $response = fakeResponse()
+        ->updateSharpSingleForm('leaves', ['attr' => 'some_value']);
+
+    $this->assertEquals(
+        route('code16.sharp.form.update', ['s-list/leaves', 'leaves']),
         $response->uri,
     );
 
@@ -131,6 +156,36 @@ it('allows to test callSharpInstanceCommandFromList with a wizard step', functio
 });
 
 it('allows to define a current breadcrumb', function () {
+    $response = fakeResponse()
+        ->withSharpBreadcrumb(
+            fn ($builder) => $builder
+                ->appendEntityList('trees')
+                ->appendShowPage('trees', 2)
+                ->appendShowPage('leaves', 6),
+        )
+        ->getSharpForm('leaves', 6);
+
+    $this->assertEquals(
+        'http://localhost/sharp/s-list/trees/s-show/trees/2/s-show/leaves/6/s-form/leaves/6',
+        $response->uri,
+    );
+});
+
+it('allows to test getSharpForm for edit with a custom breadcrumb with legacy API', function () {
+    $response = fakeResponse()
+        ->withSharpCurrentBreadcrumb(
+            ['list', 'leaves'],
+            ['show', 'leaves', 6],
+        )
+        ->getSharpForm('leaves', 6);
+
+    $this->assertEquals(
+        route('code16.sharp.form.edit', ['s-list/leaves/s-show/leaves/6', 'leaves', 6]),
+        $response->uri,
+    );
+});
+
+it('allows to define a current breadcrumb with legacy API', function () {
     $response = fakeResponse()
         ->withSharpCurrentBreadcrumb(
             ['list', 'trees'],

@@ -31,7 +31,7 @@
 <template>
     <LMap
         v-if="field.mapsProvider.name === 'osm'"
-        class="!h-auto"
+        class="h-auto!"
         :class="editable ? 'cursor-crosshair' : ''"
         v-bind="{
             zoom,

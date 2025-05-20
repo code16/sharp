@@ -47,7 +47,7 @@ it('returns form layout', function () {
         ->toEqual([
             'tabbed' => true,
             'tabs' => [[
-                'title' => 'one',
+                'title' => '',
                 'columns' => [[
                     'size' => 6,
                     'fields' => [[
@@ -103,26 +103,6 @@ it('handles single forms', function () {
     $this->assertEquals(
         [
             'isSingle' => true,
-            'hasShowPage' => false,
-        ],
-        $sharpForm->formConfig(),
-    );
-});
-
-it('allows to declare setDisplayShowPageAfterCreation in config', function () {
-    $sharpForm = new class() extends FakeSharpForm
-    {
-        public function buildFormConfig(): void
-        {
-            $this->configureDisplayShowPageAfterCreation();
-        }
-    };
-
-    $sharpForm->buildFormConfig();
-
-    $this->assertEquals(
-        [
-            'hasShowPage' => true,
         ],
         $sharpForm->formConfig(),
     );

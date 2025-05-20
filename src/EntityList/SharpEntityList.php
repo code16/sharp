@@ -70,7 +70,7 @@ abstract class SharpEntityList
             ->toArray();
     }
 
-    final public function data(): array
+    final public function data(?array $query = null): array
     {
         $listItems = $this->getListData();
 
@@ -99,7 +99,7 @@ abstract class SharpEntityList
         return [
             'items' => $items,
             'meta' => $listItems instanceof AbstractPaginator
-                ? Arr::except($listItems->withQueryString()->toArray(), 'data')
+                ? Arr::except($listItems->appends($query)->toArray(), 'data')
                 : null,
         ];
     }
@@ -180,7 +180,7 @@ abstract class SharpEntityList
         return $this;
     }
 
-    final protected function configureMultiformAttribute(string $attribute): self
+    final protected function configureMultiformAttribute(?string $attribute): self
     {
         $this->multiformAttribute = $attribute;
 

@@ -5,6 +5,7 @@ use Code16\Sharp\EntityList\Commands\InstanceCommand;
 use Code16\Sharp\EntityList\Commands\SingleInstanceCommand;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteRemoteField;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
+use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonForm;
@@ -15,7 +16,7 @@ use Code16\Sharp\Tests\Http\Api\Fixtures\ApiFormAutocompleteControllerAutocomple
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 beforeEach(function () {
-    sharp()->config()->addEntity('person', PersonEntity::class);
+    sharp()->config()->declareEntity(PersonEntity::class);
 
     login();
 });
@@ -79,6 +80,49 @@ it('allows to call a closure for a remote autocomplete field', function () {
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
             'entityKey' => 'person',
             'autocompleteFieldKey' => 'autocomplete_field',
+        ]), [
+            'search' => 'my search',
+        ])
+        ->assertOk()
+        ->assertJson([
+            'data' => [
+                ['id' => 1, 'label' => 'John'],
+            ],
+        ]);
+});
+
+it('allows to call a closure for a remote autocomplete field in list', function () {
+    fakeFormFor('person', new class() extends PersonForm
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(
+                SharpFormListField::make('list')
+                    ->addItemField(
+                        SharpFormTextField::make('name')
+                    )
+                    ->addItemField(
+                        SharpFormAutocompleteRemoteField::make('autocomplete_field')
+                            ->setRemoteCallback(function ($search, $linkedFields) {
+                                expect($search)->toBe('my search');
+                                expect($linkedFields)->toBe(['name' => 'John']);
+
+                                return [
+                                    ['id' => 1, 'label' => 'John'],
+                                ];
+                            }, linkedFields: ['name'])
+                    )
+            );
+        }
+    });
+
+    $this
+        ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+            'entityKey' => 'person',
+            'autocompleteFieldKey' => 'list.autocomplete_field',
+            'formData' => [
+                'name' => 'John',
+            ],
         ]), [
             'search' => 'my search',
         ])
@@ -260,6 +304,9 @@ it('validates that the sent remote endpoint is the same that was defined in the 
         }
     });
 
+    Route::post('/my/endpoint', fn () => []);
+    Route::post('/another/endpoint', fn () => []);
+
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
             'entityKey' => 'person',
@@ -269,6 +316,34 @@ it('validates that the sent remote endpoint is the same that was defined in the 
             'search' => 'my search',
         ]);
 })->throws(\Code16\Sharp\Exceptions\SharpInvalidConfigException::class);
+
+it('allows the defined endpoint to have a querystring', function () {
+    $this->withoutExceptionHandling();
+
+    fakeFormFor('person', new class() extends PersonForm
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(
+                SharpFormAutocompleteRemoteField::make('autocomplete_field')
+                    ->setRemoteMethodPOST()
+                    ->setRemoteEndpoint('/my/endpoint?param1=one,param2=two')
+            );
+        }
+    });
+
+    Route::post('/my/endpoint', fn () => []);
+
+    $this
+        ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+            'entityKey' => 'person',
+            'autocompleteFieldKey' => 'autocomplete_field',
+        ]), [
+            'endpoint' => '/my/endpoint?param1=one,param2=two',
+            'search' => 'my search',
+        ])
+        ->assertOk();
+});
 
 it('allows full and relative remote endpoint', function () {
     fakeFormFor('person', new class() extends PersonForm
@@ -335,6 +410,58 @@ it('allows dynamic remote endpoint', function () {
             'autocompleteFieldKey' => 'autocomplete_field',
         ]), [
             'endpoint' => url('/my/test/endpoint'),
+            'search' => 'my search',
+        ])
+        ->assertOk();
+});
+
+it('allows parametrized remote endpoint', function () {
+    fakeFormFor('person', new class() extends PersonForm
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(
+                SharpFormAutocompleteRemoteField::make('autocomplete_field')
+                    ->setRemoteMethodPOST()
+                    ->setRemoteEndpoint('/my/endpoint/one')
+            );
+        }
+    });
+
+    Route::post('/my/endpoint/{number}', fn ($number) => []);
+
+    $this
+        ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+            'entityKey' => 'person',
+            'autocompleteFieldKey' => 'autocomplete_field',
+        ]), [
+            'endpoint' => url('/my/endpoint/one'),
+            'search' => 'my search',
+        ])
+        ->assertOk();
+});
+
+it('allows dynamic and parametrized remote endpoint', function () {
+    fakeFormFor('person', new class() extends PersonForm
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(
+                SharpFormAutocompleteRemoteField::make('autocomplete_field')
+                    ->setRemoteMethodPOST()
+                    ->setRemoteEndpoint('/my/endpoint/{{number}}')
+            );
+        }
+    });
+
+    Route::post('/my/endpoint/{number}', fn ($number) => []);
+
+    $this
+        ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+            'entityKey' => 'person',
+            'autocompleteFieldKey' => 'autocomplete_field',
+        ]), [
+            'endpoint' => url('/my/endpoint/one'),
             'search' => 'my search',
         ])
         ->assertOk();

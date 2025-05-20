@@ -14,6 +14,8 @@ use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 final class ShowData extends Data
 {
     public function __construct(
+        #[LiteralTypeScriptType('string | { [locale:string]: string } | null')]
+        public string|array|null $title,
         public InstanceAuthorizationsData $authorizations,
         public ShowConfigData $config,
         #[LiteralTypeScriptType('{ [key:string]: ShowFieldData["value"] }')]
@@ -29,6 +31,7 @@ final class ShowData extends Data
     public static function from(array $show): self
     {
         return new self(
+            title: $show['title'],
             authorizations: InstanceAuthorizationsData::from($show['authorizations']),
             config: ShowConfigData::from($show['config']),
             data: $show['data'],

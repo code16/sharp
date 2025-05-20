@@ -6,7 +6,7 @@ use Code16\Sharp\Tests\Http\Api\Embeds\Fixtures\ApiEmbedsFormControllerTestEmbed
 use Illuminate\Support\Str;
 
 beforeEach(function () {
-    sharp()->config()->addEntity('person', PersonEntity::class);
+    sharp()->config()->declareEntity(PersonEntity::class);
     login();
 });
 
@@ -45,7 +45,7 @@ it('returns fields and layout of an embed', function () {
                                 'size' => 12,
                             ],
                         ],
-                        'title' => 'one',
+                        'title' => '',
                     ],
                 ],
             ],

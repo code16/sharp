@@ -83,7 +83,7 @@
             <SharpForm
                 :form="modalEmbed?.form"
                 :post-fn="postForm"
-                inline
+                modal
                 ref="modalForm"
             />
 

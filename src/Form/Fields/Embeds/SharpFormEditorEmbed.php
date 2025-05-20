@@ -16,6 +16,7 @@ use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
 use Code16\Sharp\Utils\Traits\HandleValidation;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
@@ -33,6 +34,8 @@ abstract class SharpFormEditorEmbed
     protected ?string $icon = null;
     protected string|View|null $showTemplate = null;
     protected string|View|null $formTemplate = null;
+    protected bool $displayEmbedHeader = true;
+    protected ?string $embedHeaderTitle = null;
 
     public function toConfigArray(bool $isForm): array
     {
@@ -43,9 +46,11 @@ abstract class SharpFormEditorEmbed
             'attributes' => collect($this->fields())->keys()->toArray(),
             'icon' => app(IconManager::class)->iconToArray($this->icon),
             'fields' => $this->fields(),
+            'displayEmbedHeader' => $this->displayEmbedHeader,
+            'embedHeaderTitle' => $this->embedHeaderTitle ?: $this->label,
         ];
 
-        $this->validate($config, [
+        Validator::make($config, [
             'key' => ['required'],
             'label' => ['required'],
             'tag' => ['required', 'regex:/^[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*$/'],
@@ -53,7 +58,7 @@ abstract class SharpFormEditorEmbed
         ], [
             'attributes.required' => 'Your Embed should at least have one form field',
             'tag.regex' => 'the tag name should only contain letters, figures and carets',
-        ]);
+        ])->validate();
 
         return $config;
     }
@@ -182,6 +187,14 @@ abstract class SharpFormEditorEmbed
         return $this;
     }
 
+    final protected function configureDisplayEmbedHeader(bool $display = true, ?string $title = null): self
+    {
+        $this->displayEmbedHeader = $display;
+        $this->embedHeaderTitle = $title;
+
+        return $this;
+    }
+
     final public function transformDataWithRenderedTemplate(array $data, bool $isForm): array
     {
         $data = $this->transformDataForTemplate($data, $isForm);
@@ -197,7 +210,7 @@ abstract class SharpFormEditorEmbed
         $template = $isForm ? $this->formTemplate : $this->showTemplate;
 
         if (! $template) {
-            return 'Empty template';
+            return '';
         }
 
         if (isset($data['slot'])) {

@@ -55,4 +55,14 @@ class Person extends Model
     {
         return $this->morphOne(SharpUploadModel::class, 'model');
     }
+
+    public function notTypedHintPartner()
+    {
+        return $this->belongsTo(Person::class, 'partner_id');
+    }
+
+    public function unrelated(): string
+    {
+        return 'unrelated';
+    }
 }

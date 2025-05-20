@@ -13,15 +13,22 @@ abstract class SharpDashboardEntity extends BaseSharpEntity
     final public function getViewOrFail(): SharpDashboard
     {
         if (! $view = $this->getView()) {
-            throw new SharpInvalidEntityKeyException("The view for the dashboard entity [{$this->entityKey}] was not found.");
+            throw new SharpInvalidEntityKeyException(
+                sprintf('The view for the dashboard entity %s was not found.', get_class($this))
+            );
         }
 
-        return $view instanceof SharpDashboard ? $view : app($view);
+        return $view;
     }
 
     final public function hasView(): bool
     {
         return $this->getView() !== null;
+    }
+
+    protected function getLabel(): string
+    {
+        return $this->label;
     }
 
     protected function getView(): SharpDashboard

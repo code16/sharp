@@ -34,7 +34,7 @@
         v-model:open="modalOpen"
         @update:open="!$event && $nextTick(() => commands.finish())"
     >
-        <DialogScrollContent class="sm:max-w-[558px] gap-6" @pointer-down-outside.prevent>
+        <DialogScrollContent class="sm:max-w-[558px] gap-8" @pointer-down-outside.prevent>
             <template v-if="commands.state.currentCommandForm">
                 <DialogHeader>
                     <DialogTitle>
@@ -51,7 +51,7 @@
                         :form="commands.state.currentCommandForm"
                         @loading="(loading) => commands.state.currentCommandFormLoading = loading"
                         :key="`form-${currentFormUpdatedKey}`"
-                        inline
+                        modal
                         ref="form"
                     />
                 </div>
@@ -62,7 +62,7 @@
                         </Button>
                     </DialogClose>
                     <template v-if="commands.state.currentCommandForm.config.showSubmitAndReopenButton">
-                        <Button variant="secondary"
+                        <Button variant="outline"
                             :disabled="commands.state.currentCommandFormLoading"
                             @click="form.submit<CommandFormExtraData>({ _shouldReopen: true })"
                         >

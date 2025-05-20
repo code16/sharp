@@ -12,6 +12,7 @@
         entityList: EntityListData,
         expanded: boolean,
         inline?: boolean,
+        disabled?: boolean,
     }>();
 
     const emit = defineEmits(['submit', 'update:expanded']);
@@ -66,27 +67,35 @@
 
 <template>
     <form @submit.prevent="onSubmit" ref="el">
-        <div class="relative z-[1]" :class="[inline ? 'h-8 w-[150px] @5xl/root-card:w-[200px]' : '']">
+        <div class="relative z-1" :class="[inline ? 'h-8 w-[150px] @5xl/root-card:w-[200px]' : '']">
             <div class="top-0 left-0 group flex gap-3" :class="cn(
                 inline ? 'absolute h-8' : 'flex-col',
                 inline && expanded ? '-mr-[100px]' : ''
             )">
                 <div class="relative" :class="[inline ? '' : 'w-full']">
                     <Input
-                        :placeholder="__('sharp::action_bar.list.search.placeholder')"
                         v-model="search"
                         :class="cn('w-full pl-8 h-9', {
                             'h-8 w-[150px] @5xl/root-card:w-[200px]': inline,
-                            'sm:!w-[300px]': inline && expanded,
+                            'sm:w-[300px]!': inline && expanded,
                             'pr-8': props.entityList.query?.search,
                         })"
+                        :disabled="disabled"
+                        :placeholder="__('sharp::action_bar.list.search.placeholder')"
+                        :aria-label="__('sharp::action_bar.list.search.placeholder')"
                         type="search"
                         ref="input"
                         @input="onInput"
                     />
                     <Search class="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
                     <template v-if="props.entityList.query?.search">
-                        <Button type="button" class="absolute right-0 top-0 h-full" size="sm" variant="ghost" @click="$emit('submit', null)">
+                        <Button type="button"
+                            class="absolute right-0 top-0 h-full"
+                            size="sm"
+                            variant="ghost"
+                            :aria-label="__('sharp::action_bar.list.search.clear.aria_label')"
+                            @click="$emit('submit', null)"
+                        >
                             <X class="h-4 w-4 text-muted-foreground" />
                         </Button>
                     </template>

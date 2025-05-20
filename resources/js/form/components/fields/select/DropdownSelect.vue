@@ -45,13 +45,17 @@
 </script>
 
 <template>
-    <FormFieldLayout v-bind="props" @label-click="open = true">
+    <FormFieldLayout v-bind="props" @label-click="open = true" v-slot="{ ariaLabelledBy, ariaDescribedBy }">
         <DropdownMenu v-model:open="open" :modal="false">
             <DropdownMenuTrigger as-child>
                 <Button
                     class="w-full text-left justify-start font-normal h-auto min-h-10 py-2 gap-1 hover:bg-background"
                     variant="outline"
                     size="sm"
+                    role="combobox"
+                    aria-autocomplete="none"
+                    :aria-labelledby="ariaLabelledBy"
+                    :aria-describedby="ariaDescribedBy"
                     :disabled="field.readOnly"
                 >
                     <template v-if="Array.isArray(value) ? value.length : value != null">
@@ -81,7 +85,7 @@
                     <ChevronDown class="w-4 h-4 opacity-50 shrink-0 ml-auto" />
                 </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent class="w-[--reka-dropdown-menu-trigger-width] max-h-[min(24rem,var(--reka-dropdown-menu-content-available-height))] overflow-auto">
+            <DropdownMenuContent class="w-(--reka-dropdown-menu-trigger-width) max-h-[min(24rem,var(--reka-dropdown-menu-content-available-height))] overflow-auto">
                 <template v-for="option in field.options" :key="option.id">
                     <DropdownMenuCheckboxItem
                         :model-value="Array.isArray(value) ? value.some(val => isSelected(option, val)) : isSelected(option, value)"

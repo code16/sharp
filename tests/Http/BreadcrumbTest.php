@@ -1,15 +1,18 @@
 <?php
 
+use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Entities\SinglePersonEntity;
+use Code16\Sharp\Tests\Fixtures\Sharp\PersonForm;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonShow;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
     sharp()->config()
         ->displayBreadcrumb()
-        ->addEntity('person', PersonEntity::class);
+        ->declareEntity(PersonEntity::class);
     login();
 });
 
@@ -33,19 +36,21 @@ it('builds the breadcrumb for a show page', function () {
         )
         ->assertOk();
 
-    expect(sharp()->context()->isShow())->toBeTrue()
-        ->and(sharp()->context()->breadcrumb()->allSegments())->toHaveCount(2);
+    expect(sharp()->context())
+        ->isShow()->toBeTrue()
+        ->breadcrumb()->allSegments()->toHaveCount(2);
 });
 
 it('builds the breadcrumb for a single show page', function () {
-    sharp()->config()->addEntity('single-person', SinglePersonEntity::class);
+    sharp()->config()->declareEntity(SinglePersonEntity::class);
 
     $this
         ->get(route('code16.sharp.single-show', 'single-person'))
         ->assertOk();
 
-    expect(sharp()->context()->isShow())->toBeTrue()
-        ->and(sharp()->context()->breadcrumb()->allSegments())->toHaveCount(1);
+    expect(sharp()->context())
+        ->isShow()->toBeTrue()
+        ->breadcrumb()->allSegments()->toHaveCount(1);
 });
 
 it('builds the breadcrumb for a form', function () {
@@ -59,8 +64,9 @@ it('builds the breadcrumb for a form', function () {
         )
         ->assertOk();
 
-    expect(sharp()->context()->isForm())->toBeTrue()
-        ->and(sharp()->context()->breadcrumb()->allSegments())->toHaveCount(2);
+    expect(sharp()->context())
+        ->isForm()->toBeTrue()
+        ->breadcrumb()->allSegments()->toHaveCount(2);
 });
 
 it('builds the breadcrumb for a form through a show page', function () {
@@ -74,8 +80,9 @@ it('builds the breadcrumb for a form through a show page', function () {
         )
         ->assertOk();
 
-    expect(sharp()->context()->isForm())->toBeTrue()
-        ->and(sharp()->context()->breadcrumb()->allSegments())->toHaveCount(3);
+    expect(sharp()->context())
+        ->isForm()->toBeTrue()
+        ->breadcrumb()->allSegments()->toHaveCount(3);
 });
 
 it('uses labels defined for entities in the config', function () {
@@ -98,7 +105,7 @@ it('uses labels defined for entities in the config', function () {
         );
 });
 
-it('uses custom labels on leaves if configured, based on unformatted data', function () {
+it('uses custom labels on show leaf if configured, based on unformatted data', function () {
     fakeShowFor('person', new class() extends PersonShow
     {
         public function buildShowConfig(): void
@@ -128,7 +135,43 @@ it('uses custom labels on leaves if configured, based on unformatted data', func
             ->where('breadcrumb.items.0.label', 'List')
             // Data is not formatted for breadcrumb:
             ->where('breadcrumb.items.1.label', 'Marie Curie')
-            // Data is formatted for fields:
-            ->where('show.data.name', ['text' => 'Marie Curie'])
+        );
+});
+
+it('uses custom labels on form leaf if configured, based on unformatted data', function () {
+    fakeFormFor('person', new class() extends PersonForm
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(SharpFormEditorField::make('name'));
+        }
+
+        public function buildFormConfig(): void
+        {
+            $this->configureBreadcrumbCustomLabelAttribute('name');
+        }
+
+        public function find($id): array
+        {
+            return $this->transform([
+                'id' => 1,
+                'name' => 'Marie Curie',
+            ]);
+        }
+    });
+
+    $this
+        ->get(
+            route('code16.sharp.form.edit', [
+                'parentUri' => 's-list/person',
+                'person',
+                1,
+            ])
+        )
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('breadcrumb.items.0.label', 'List')
+            // Data is not formatted for breadcrumb:
+            ->where('breadcrumb.items.1.label', 'Edit “Marie Curie”')
         );
 });

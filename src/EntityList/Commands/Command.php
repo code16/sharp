@@ -8,7 +8,7 @@ use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\HasModalFormLayout;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Fields\HandleFormFields;
-use Code16\Sharp\Utils\SharpNotification;
+use Code16\Sharp\Utils\Traits\CanNotify;
 use Code16\Sharp\Utils\Traits\HandleLocalizedFields;
 use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
 use Code16\Sharp\Utils\Traits\HandleValidation;
@@ -16,6 +16,7 @@ use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 abstract class Command
 {
+    use CanNotify;
     use HandleFormFields;
     use HandleLocalizedFields;
     use HandlePageAlertMessage;
@@ -29,13 +30,16 @@ abstract class Command
     private string|Closure|null $formModalDescription = null;
     private ?string $formModalButtonLabel = null;
     private ?string $confirmationText = null;
+    private ?string $confirmationTitle = null;
+    private ?string $confirmationButtonLabel = null;
     private ?string $description = null;
 
-    protected function info(string $message): array
+    protected function info(string $message, bool $reload = false): array
     {
         return [
             'action' => CommandAction::Info->value,
             'message' => $message,
+            'reload' => $reload,
         ];
     }
 
@@ -73,7 +77,7 @@ abstract class Command
     protected function html(string $htmlContent): array
     {
         return [
-            'action' => 'view',
+            'action' => CommandAction::View->value,
             'html' => $htmlContent,
         ];
     }
@@ -95,11 +99,6 @@ abstract class Command
             'content' => $fileContent,
             'name' => $fileName,
         ];
-    }
-
-    public function notify(string $title): SharpNotification
-    {
-        return new SharpNotification($title);
     }
 
     /**
@@ -138,9 +137,11 @@ abstract class Command
         return $this;
     }
 
-    final protected function configureConfirmationText(string $confirmationText): self
+    final protected function configureConfirmationText(string $confirmationText, ?string $title = null, ?string $buttonLabel = null): self
     {
         $this->confirmationText = $confirmationText;
+        $this->confirmationTitle = $title;
+        $this->confirmationButtonLabel = $buttonLabel;
 
         return $this;
     }
@@ -161,6 +162,16 @@ abstract class Command
     final public function getConfirmationText(): ?string
     {
         return $this->confirmationText;
+    }
+
+    final public function getConfirmationTitle(): ?string
+    {
+        return $this->confirmationTitle;
+    }
+
+    final public function getConfirmationButtonLabel(): ?string
+    {
+        return $this->confirmationButtonLabel;
     }
 
     final public function getDescription(): ?string

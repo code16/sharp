@@ -15,6 +15,7 @@ class RelatedPostEmbed extends SharpFormEditorEmbed
         $this
             ->configureLabel('Related Post')
             ->configureTagName('x-related-post')
+            ->configureIcon('lucide-link')
             ->configureTemplate(<<<'blade'
                 <div style="display: flex; gap: .5rem; align-items: center">
                     @if($online)
@@ -22,7 +23,6 @@ class RelatedPostEmbed extends SharpFormEditorEmbed
                     @else
                         <span style="color: orange">●</span>
                     @endif
-                    <x-fas-link style="width: 1rem; height: 1rem" />
                     <em>{{ $title }}</em>
                 </div>
                 blade

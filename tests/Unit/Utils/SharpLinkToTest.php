@@ -1,6 +1,8 @@
 <?php
 
+use Code16\Sharp\Config\SharpConfigBuilder;
 use Code16\Sharp\Exceptions\SharpInvalidBreadcrumbItemException;
+use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Utils\Filters\SelectFilter;
 use Code16\Sharp\Utils\Links\BreadcrumbBuilder;
 use Code16\Sharp\Utils\Links\LinkToDashboard;
@@ -59,6 +61,16 @@ it('allows to generate a link to a dashboard page', function () {
     );
 });
 
+it('allows to generate a link to a show page passing a SharpEntity class', function () {
+    app(SharpConfigBuilder::class)
+        ->declareEntity(PersonEntity::class);
+
+    $this->assertEquals(
+        '<a href="http://localhost/sharp/s-list/person/s-show/person/23" title="">test</a>',
+        LinkToShowPage::make(PersonEntity::class, 23)->renderAsText('test'),
+    );
+});
+
 it('allows to generate an url to a show page with a specific breadcrumb', function () {
     $this->assertEquals(
         'http://localhost/sharp/s-list/base-entity/s-show/base-entity/3/s-show/my-entity/4',
@@ -67,6 +79,22 @@ it('allows to generate an url to a show page with a specific breadcrumb', functi
                 return $builder
                     ->appendEntityList('base-entity')
                     ->appendShowPage('base-entity', 3);
+            })
+            ->renderAsUrl(),
+    );
+});
+
+it('allows to generate an url to a show page with a specific breadcrumb passing a SharpEntity class', function () {
+    app(SharpConfigBuilder::class)
+        ->declareEntity(PersonEntity::class);
+
+    $this->assertEquals(
+        'http://localhost/sharp/s-list/person/s-show/person/3/s-show/person/4',
+        LinkToShowPage::make(PersonEntity::class, 4)
+            ->withBreadcrumb(function (BreadcrumbBuilder $builder) {
+                return $builder
+                    ->appendEntityList(PersonEntity::class)
+                    ->appendShowPage(PersonEntity::class, 3);
             })
             ->renderAsUrl(),
     );

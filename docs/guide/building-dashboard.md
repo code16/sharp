@@ -8,6 +8,10 @@ A Dashboard is a good way to present synthetic data to the user, with graphs, st
 php artisan sharp:make:dashboard <class_name>
 ```
 
+::: tip
+The Dashboard name should be singular, in CamelCase and must end with the "Dashboard" suffix. For instance: `ActivityDashboard`.
+:::
+
 ## Write the class
 
 The first step is to create a new class extending `Code16\Sharp\Dashboard\SharpDashboard`, and to implement three functions:
@@ -99,8 +103,8 @@ class SharpServiceProvider extends SharpAppServiceProvider
     protected function configureSharp(SharpConfigBuilder $config): void
     {
         $config
-            ->addEntity('company_dashboard', CompanyDashboardEntity::class)
-            // [...]
+            ->declareEntity(CompanyDashboardEntity::class);
+            // ...
     }
 }
 ```
@@ -113,7 +117,7 @@ class AppSharpMenu extends SharpMenu
     public function build(): self
     {
         return $this
-            ->addEntityLink('company_dashboard', 'Dashboard')
+            ->addEntityLink(CompanyDashboardEntity::class, 'Dashboard');
             // ...
     }
 }

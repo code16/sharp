@@ -2,6 +2,9 @@
 
 use Code16\Sharp\Enums\PageAlertLevel;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
+use Code16\Sharp\Exceptions\Form\SharpFormUpdateException;
+use Code16\Sharp\Form\Fields\SharpFormAutocompleteListField;
+use Code16\Sharp\Form\Fields\SharpFormAutocompleteLocalField;
 use Code16\Sharp\Form\Fields\SharpFormCheckField;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
@@ -10,14 +13,16 @@ use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Entities\SinglePersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonForm;
+use Code16\Sharp\Tests\Fixtures\Sharp\PersonShow;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonSingleForm;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\PageAlerts\PageAlert;
+use Illuminate\Support\Facades\Exceptions;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
-    sharp()->config()->addEntity('person', PersonEntity::class);
+    sharp()->config()->declareEntity(PersonEntity::class);
     login();
 });
 
@@ -36,6 +41,7 @@ it('gets form data for an instance', function () {
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('form.data.name', 'James Clerk Maxwell')
+            ->where('form.title', 'Edit “person”')
         );
 });
 
@@ -54,6 +60,7 @@ it('gets form initial data for an entity in creation', function () {
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('form.data.name', 'Who is this guy?')
+            ->where('form.title', 'New “person”')
         );
 });
 
@@ -143,34 +150,22 @@ it('returns configured form layout', function () {
         );
 });
 
-it('returns form configuration', function () {
-    fakeFormFor('person', new class() extends PersonForm
-    {
-        public function buildFormConfig(): void
-        {
-            $this->configureBreadcrumbCustomLabelAttribute('name');
-        }
-    });
-
-    $this->get('/sharp/s-list/person/s-form/person/1')
-        ->assertOk()
-        ->assertInertia(fn (Assert $page) => $page
-            ->where('form.config.breadcrumbAttribute', 'name')
-        );
-});
-
 it('stores or updates an instance and redirect to the list', function () {
     $this
         ->post('/sharp/s-list/person/s-form/person', [
             'name' => 'Stephen Hawking',
         ])
-        ->assertRedirect('/sharp/s-list/person');
+        ->assertRedirectContains('/sharp/s-list/person')
+        ->assertRedirectContains('highlighted_entity_key=person')
+        ->assertRedirectContains('highlighted_instance_id=1');
 
     $this
         ->post('/sharp/s-list/person/s-form/person/1', [
             'name' => 'Stephen Hawking',
         ])
-        ->assertRedirect('/sharp/s-list/person');
+        ->assertRedirectContains('/sharp/s-list/person')
+        ->assertRedirectContains('highlighted_entity_key=person')
+        ->assertRedirectContains('highlighted_instance_id=1');
 });
 
 it('redirects to the show after an update', function () {
@@ -180,7 +175,9 @@ it('redirects to the show after an update', function () {
         ->post('/sharp/s-list/person/s-show/person/1/s-form/person/1', [
             'name' => 'Stephen Hawking',
         ])
-        ->assertRedirect('/sharp/s-list/person/s-show/person/1');
+        ->assertRedirectContains('/sharp/s-list/person/s-show/person/1')
+        ->assertRedirectContains('highlighted_entity_key=person')
+        ->assertRedirectContains('highlighted_instance_id=1');
 });
 
 it('creates an instance and redirect to the show if configured', function () {
@@ -197,6 +194,22 @@ it('creates an instance and redirect to the show if configured', function () {
             'name' => 'Stephen Hawking',
         ])
         ->assertRedirect('/sharp/s-list/person/s-show/person/1');
+});
+
+it('logs an error if the update() method does not return the instance id', function () {
+    Exceptions::fake();
+
+    fakeFormFor('person', new class() extends PersonForm
+    {
+        public function update(mixed $id, array $data) {}
+    });
+
+    $this
+        ->post('/sharp/s-list/person/s-form/person')
+        ->assertRedirect()
+        ->assertSessionDoesntHaveErrors();
+
+    Exceptions::assertReported(SharpFormUpdateException::class);
 });
 
 it('validates an instance before store and update with the rules() method', function () {
@@ -217,6 +230,38 @@ it('validates an instance before store and update with the rules() method', func
     $this
         ->post('/sharp/s-list/person/s-form/person/1', [
             'name' => '',
+        ])
+        ->assertSessionHasErrors('name');
+});
+
+it('passes the formatted data to the rules() method', function () {
+    fakeFormFor('person', new class() extends PersonForm
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(SharpFormTextField::make('name'))
+                ->addField(SharpFormTextField::make('job'));
+        }
+
+        public function rules(array $data): array
+        {
+            return [
+                'name' => [
+                    'required',
+                    function ($attribute, $value, $fail) use ($data) {
+                        if ($data['job'] == 'Physicist' && $value == 'Marie Curie') {
+                            $fail('Marie Curie is not a physicist');
+                        }
+                    },
+                ],
+            ];
+        }
+    });
+
+    $this
+        ->post('/sharp/s-list/person/s-form/person/1', [
+            'job' => 'Physicist',
+            'name' => 'Marie Curie',
         ])
         ->assertSessionHasErrors('name');
 });
@@ -264,6 +309,40 @@ it('formats data before validation', function () {
         ->assertSessionHasErrors('name');
 });
 
+it('calls prepareForValidation() before validation on applicable fields', function () {
+    fakeFormFor('person', new class() extends PersonForm
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(
+                SharpFormAutocompleteListField::make('jobs')
+                    ->setItemField(
+                        SharpFormAutocompleteLocalField::make('job')
+                            ->setLocalValues([
+                                1 => 'Physicist',
+                                2 => 'Chemist',
+                            ])
+                    )
+            );
+        }
+
+        public function update($id, array $data)
+        {
+            $this->validate($data, ['jobs.*.job' => 'required']);
+        }
+    });
+
+    $this
+        ->post('/sharp/s-list/person/s-form/person', [
+            'jobs' => [
+                ['id' => null,  'job' => ['id' => 1, 'label' => 'Physicist']],
+                ['id' => null],
+            ],
+        ])
+        ->assertSessionDoesntHaveErrors('jobs.0.job')
+        ->assertSessionHasErrors('jobs.1.job');
+});
+
 it('handles application exception as 417', function () {
     fakeFormFor('person', new class() extends PersonForm
     {
@@ -279,7 +358,7 @@ it('handles application exception as 417', function () {
 });
 
 it('gets form data for an instance in a single form case', function () {
-    sharp()->config()->addEntity('single-person', SinglePersonEntity::class);
+    sharp()->config()->declareEntity(SinglePersonEntity::class);
 
     fakeFormFor('single-person', new class() extends PersonSingleForm
     {
@@ -299,7 +378,7 @@ it('gets form data for an instance in a single form case', function () {
 });
 
 it('updates an instance on a single form case', function () {
-    sharp()->config()->addEntity('single-person', SinglePersonEntity::class);
+    sharp()->config()->declareEntity(SinglePersonEntity::class);
 
     $this
         ->post('/sharp/s-show/single-person/s-form/single-person', [
@@ -428,4 +507,99 @@ it('allows to use the legacy validation', function () {
             'name' => '',
         ])
         ->assertSessionHasErrors('name');
+});
+
+it('formats form title based on parent show breadcrumb', function () {
+    fakeShowFor('person', new class() extends PersonShow
+    {
+        public function buildShowConfig(): void
+        {
+            $this->configureBreadcrumbCustomLabelAttribute('name');
+        }
+
+        public function find($id): array
+        {
+            return $this->transform([
+                'id' => 1,
+                'name' => 'Marie Curie',
+            ]);
+        }
+    });
+
+    fakeFormFor('person', new PersonForm());
+
+    $this->get('/sharp/s-list/person/s-show/person/1')
+        ->assertOk();
+
+    $this->get('/sharp/s-list/person/s-show/person/1/s-form/person/1')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('form.title', 'Edit “Marie Curie”')
+        );
+});
+
+it('formats form title based on configured breadcrumb attribute', function () {
+    fakeShowFor('person', new class() extends PersonShow
+    {
+        public function buildShowConfig(): void
+        {
+            $this->configureBreadcrumbCustomLabelAttribute('name');
+        }
+
+        public function find($id): array
+        {
+            return $this->transform([
+                'id' => 1,
+                'name' => 'Marie Curie',
+            ]);
+        }
+    });
+
+    fakeFormFor('person', new class() extends PersonForm
+    {
+        public function buildFormConfig(): void
+        {
+            $this->configureBreadcrumbCustomLabelAttribute('name');
+        }
+
+        public function find($id): array
+        {
+            return $this->transform([
+                'id' => 1,
+                'name' => 'Albert Einstein',
+            ]);
+        }
+    });
+
+    $this->get('/sharp/s-list/person/s-show/person/1')
+        ->assertOk();
+
+    $this->get('/sharp/s-list/person/s-show/person/1/s-form/person/1')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('form.title', 'Edit “Albert Einstein”')
+        );
+});
+
+it('allows to override entirely the form title', function () {
+    fakeFormFor('person', new class() extends PersonForm
+    {
+        public function buildFormConfig(): void
+        {
+            $this->configureEditTitle('My custom edit title')
+                ->configureCreateTitle('My custom create title');
+        }
+    });
+
+    $this->get('/sharp/s-list/person/s-form/person/1')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('form.title', 'My custom edit title')
+        );
+
+    $this->get('/sharp/s-list/person/s-form/person')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('form.title', 'My custom create title')
+        );
 });

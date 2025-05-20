@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { FormUploadFieldData } from "@/types";
-    import Uppy from '@uppy/core';
+    import Uppy, { MinimalRequiredUppyFile } from '@uppy/core';
     import type { UppyFile } from "@uppy/core";
     import ThumbnailGenerator from '@uppy/thumbnail-generator';
     import XHRUpload from '@uppy/xhr-upload';
@@ -42,7 +42,13 @@
     } from "@/components/ui/dialog";
     import { rotate, rotateTo } from "@/form/components/fields/upload/util/rotate";
 
-    const props = defineProps<FormFieldProps<FormUploadFieldData> & { asEditorEmbed?: boolean, legend?: string, dropdownEditLabel?: string }>();
+    const props = defineProps<FormFieldProps<FormUploadFieldData> & {
+        asEditorEmbed?: boolean,
+        legend?: string,
+        dropdownEditLabel?: string,
+        ariaLabel?: string,
+        persistThumbnailUrl?: boolean,
+    }>();
 
     defineOptions({
         inheritAttrs: false,
@@ -61,7 +67,7 @@
     }>();
     const form = useParentForm();
     const transformedImg = ref<string>();
-    const uppyFile = ref<UppyFile>();
+    const uppyFile = ref<UppyFile<{}, {}>>();
     const isEditable = computed(() => {
         return props.value && canTransform(props.value.name, props.value.mime_type) && !props.hasError
             || !!props.dropdownEditLabel;
@@ -80,13 +86,14 @@
                 }),
                 youCanOnlyUploadFileTypes: __('sharp::form.upload.message.bad_extension'),
             },
+            pluralize: () => 1,
         },
         autoProceed: true,
         meta: {
             'validation_rule[]': props.field.validationRule,
         },
     })
-        .use(ThumbnailGenerator, { thumbnailWidth: 300, thumbnailHeight: 300 })
+        .use(ThumbnailGenerator, { thumbnailWidth: 300, thumbnailHeight: 300, thumbnailType: 'image/png' })
         .use(XHRUpload, {
             endpoint: route('code16.sharp.api.form.upload'),
             fieldName: 'file',
@@ -125,6 +132,10 @@
                 });
                 await onImageTransform(cropper);
                 cropper.destroy();
+            } else if(props.persistThumbnailUrl) {
+                const response = await fetch(preview);
+                const blob = await response.blob();
+                transformedImg.value = URL.createObjectURL(blob);
             }
         })
         .on('upload', () => {
@@ -135,12 +146,14 @@
         })
         .on('upload-success', (file, response) => {
             emit('input', {
+                ...props.value,
                 ...response.body,
                 thumbnail: transformedImg?.value ?? uppyFile.value.preview,
                 mime_type: file.type,
                 size: file.size,
             });
             emit('success', {
+                ...props.value,
                 ...response.body,
                 thumbnail: transformedImg?.value ?? uppyFile.value.preview,
                 mime_type: file.type,
@@ -152,7 +165,7 @@
         .on('upload-error', (file, error, response) => {
             if(response) {
                 if(response.status === 422) {
-                    emit('error', response.body.errors.file?.join(', '), file.data);
+                    emit('error', (response.body.errors as Record<string, string[]>).file?.join(', '), file.data);
                 } else {
                     const message = getErrorMessage({ data: response.body, status: response.status });
                     handleErrorAlert({ data: response.body, status: response.status, method: 'post' });
@@ -268,11 +281,14 @@
             } else if(uppyFile.value) {
                 editModalImageUrl.value = await new Promise(resolve => {
                     new Uppy()
-                        .use(ThumbnailGenerator, { thumbnailWidth: 1200, thumbnailHeight: 1000 })
+                        .use(ThumbnailGenerator, { thumbnailWidth: 1200, thumbnailHeight: 1000, thumbnailType: 'image/png' })
                         .on('thumbnail:generated', (file, preview) => {
                             resolve(preview);
                         })
-                        .addFile({ ...uppyFile.value, preview: null });
+                        .addFile({
+                            ...(uppyFile.value as MinimalRequiredUppyFile<{}, {}>),
+                            preview: null
+                        });
                 });
             }
         }
@@ -369,14 +385,16 @@
     });
 
     onUnmounted(() => {
-        uppy.close({ reason: 'unmount' });
-        uppy.emit('cancel-all', { reason: 'user' });
+        uppy.destroy();
+        if(!props.persistThumbnailUrl && transformedImg.value) {
+            URL.revokeObjectURL(transformedImg.value);
+        }
         emit('uploading', false);
     });
 </script>
 
 <template>
-    <FormFieldLayout v-bind="props">
+    <FormFieldLayout v-bind="props" field-group>
         <template #default="{ id, ariaDescribedBy }">
             <template v-if="value?.path || value?.uploaded || uppyFile">
                 <div :class="{ 'bg-background border rounded-md p-4': !asEditorEmbed }">
@@ -384,12 +402,12 @@
                         <template v-if="transformedImg ?? value?.thumbnail ?? uppyFile?.preview">
                             <div class="self-center group/img relative flex flex-col justify-center rounded-md overflow-hidden">
                                 <img class="rounded-md max-h-[150px] max-w-[150px]"
-                                    :class="uppyFile && !transformedImg && field.imageCropRatio ? 'object-cover aspect-[--ratio]' : ''"
+                                    :class="uppyFile && !transformedImg && field.imageCropRatio ? 'object-cover aspect-(--ratio)' : ''"
                                     :style="{
                                         '--ratio': field.imageCropRatio ? `${field.imageCropRatio[0]} / ${field.imageCropRatio[1]}` : null
                                     }"
                                     :src="transformedImg ?? value?.thumbnail ?? uppyFile.preview"
-                                    alt=""
+                                    :alt="value?.name ?? uppyFile?.name"
                                 >
                                 <template v-if="isEditable && !props.field.readOnly">
                                     <button class="absolute flex justify-center items-center gap-2 inset-0 bg-black/50 transition text-white text-xs font-medium opacity-0 group-hover/img:opacity-100" tabindex="-1" @click="onEdit">
@@ -447,7 +465,7 @@
                         </div>
                         <DropdownMenu :modal="false">
                             <DropdownMenuTrigger as-child>
-                                <Button class="shrink-0 self-center" variant="ghost" size="icon">
+                                <Button class="shrink-0 self-center" variant="ghost" size="icon" :aria-label="__('sharp::form.editor.extension_node.dropdown_button.aria_label')">
                                     <MoreHorizontal class="w-4 h-4" />
                                 </Button>
                             </DropdownMenuTrigger>
@@ -472,6 +490,7 @@
                                             {{ props.dropdownEditLabel ?? __('sharp::form.upload.edit_button') }}
                                         </DropdownMenuItem>
                                     </template>
+                                    <slot name="dropdown-menu"></slot>
                                     <DropdownMenuSeparator class="first:hidden" />
                                     <DropdownMenuItem class="text-destructive" @click="onRemove">
                                         {{ __('sharp::form.upload.remove_button') }}

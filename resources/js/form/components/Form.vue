@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { FormData, FormFieldData,  LayoutFieldData } from "@/types";
     import PageAlert from "@/components/PageAlert.vue";
-    import { provide, ref } from "vue";
+    import { provide, ref, useTemplateRef } from "vue";
     import { Form } from "../Form";
     import { getDependantFieldsResetData } from "../util";
     import FieldGrid from "@/components/ui/FieldGrid.vue";
@@ -22,19 +22,27 @@
     import StickyTop from "@/components/StickyTop.vue";
     import StickyBottom from "@/components/StickyBottom.vue";
     import { Menu } from 'lucide-vue-next';
+    import { Label } from "@/components/ui/label";
+    import RootCardHeader from "@/components/ui/RootCardHeader.vue";
+    import { vScrollIntoView } from "@/directives/scroll-into-view";
+    import { useResizeObserver } from "@vueuse/core";
 
     const props = defineProps<{
         form: Form
-        inline?: boolean,
+        modal?: boolean,
         postFn?: (data: FormData['data']) => Promise<ApiResponse<any>>,
         showErrorAlert?: boolean,
         errorAlertMessage?: string,
+        persistThumbnailUrl?: boolean,
+        tab?: string,
     }>();
 
     provide('form', props.form);
 
     const loading = ref(false);
-    const { selectedTabSlug } = useFormTabs(props);
+    const selectedTabSlug = defineModel<string>('tab', {
+        default: ''
+    });
 
     function submit<ExtraData extends { [key: string]: any } = any>(extraData?: ExtraData) {
         const { form, postFn } = props;
@@ -47,9 +55,8 @@
 
         return postFn({ ...form.serializedData, ...extraData })
             .catch(error => {
-                console.log('handled', error);
                 if (error.response?.status === 422) {
-                    props.form.errors = error.response.data.errors ?? {};
+                    props.form.onError(error.response.data.errors ?? {})
                 }
                 return Promise.reject(error);
             })
@@ -81,6 +88,13 @@
         props.form.serializedData = data;
     }
 
+    const title = useTemplateRef<HTMLElement>('title');
+    const titleScrollWidth = ref(0);
+
+    useResizeObserver(title, (e) => {
+        titleScrollWidth.value = e[0].target.scrollWidth;
+    });
+
     defineExpose({ submit });
 </script>
 
@@ -90,9 +104,12 @@
             <div class="container">
                 <Alert class="mb-4" variant="destructive">
                     <template v-if="errorAlertMessage">
-                        <AlertTitle class="mb-0">
-                            {{ errorAlertMessage }}
+                        <AlertTitle>
+                            {{ __('sharp::modals.error.title') }}
                         </AlertTitle>
+                        <AlertDescription>
+                            {{ errorAlertMessage }}
+                        </AlertDescription>
                     </template>
                     <template v-else>
                         <AlertTitle>
@@ -105,106 +122,100 @@
                 </Alert>
             </div>
         </template>
-        <template v-if="form.locales?.length || form.layout.tabbed && form.layout.tabs.length > 1">
-            <StickyTop class="@container relative group flex items-end  pointer-events-none data-[stuck]:z-20"
-                v-slot="{ stuck, isOverflowing }"
-                :class="[
-                    inline ? 'mb-6' : 'mb-4 container overflow-x-clip lg:sticky lg:top-3',
-                ]"
-            >
-                <div class="flex-1">
-                    <template v-if="form.locales?.length">
-                        <Select :model-value="form.currentLocale ?? undefined" @update:model-value="onLocaleChange">
-                            <LocaleSelectTrigger class="mr-4 pointer-events-auto lg:ml-[--sticky-safe-left-offset]" />
-                            <SelectContent>
-                                <template v-for="locale in form.locales" :key="locale">
-                                    <SelectItem :value="locale">
-                                        <span class="uppercase text-xs">{{ locale }}</span>
-                                    </SelectItem>
-                                </template>
-                            </SelectContent>
-                        </Select>
-                    </template>
-                </div>
-                <template v-if="form.layout.tabbed && form.layout.tabs.length > 1">
-                    <div class="">
-                        <div class="hidden lg:h-8 col-start-1 row-start-1 @2xl:flex flex-col justify-end group-data-[stuck]:!hidden group-data-[overflowing]:opacity-0"
-                            :inert="isOverflowing"
-                        >
-                            <TabsList class="pointer-events-auto">
-                                <template v-for="tab in form.layout.tabs">
-                                    <TabsTrigger :value="slugify(tab.title)">
-                                        {{ tab.title }}
-                                        <template v-if="form.tabErrorCount(tab)">
-                                            <Badge class="ml-2" variant="destructive">
-                                                {{ form.tabErrorCount(tab) }}
-                                            </Badge>
-                                        </template>
-                                    </TabsTrigger>
-                                </template>
-                            </TabsList>
-                        </div>
-                        <div class="@2xl:hidden group-data-[stuck]:!block group-data-[overflowing]:!block"
-                            :class="{ '@2xl:absolute @2xl:bottom-0 @2xl:left-1/2 @2xl:-translate-x-1/2': isOverflowing && !stuck }"
-                        >
-                            <div class="flex items-center">
-                                <Select v-model="selectedTabSlug">
-                                    <SelectTrigger class="h-8 w-auto text-left pointer-events-auto">
-                                        <Menu class="size-4 shrink-0 mr-2" />
-                                        <SelectValue class="font-medium" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <template v-for="(tab, i) in form.layout.tabs">
-                                            <SelectItem :value="slugify(tab.title)">
-                                                {{ tab.title }}
-                                            </SelectItem>
-                                        </template>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                        </div>
-                    </div>
-                </template>
-                <div class="flex-1"></div>
-            </StickyTop>
+
+        <template v-if="form.pageAlert">
+            <div class="container" :class="{ 'px-0': modal }">
+                <PageAlert
+                    class="mb-4"
+                    :page-alert="form.pageAlert"
+                />
+            </div>
         </template>
 
-            <component :is="inline ? 'div' : RootCard">
-                <template v-if="!inline">
-                    <CardHeader>
-                        <div class="flex items-start gap-x-4">
-                            <CardTitle class="-mt-0.5 flex-1 truncate text-2xl/7">
-                                <slot name="title" />
-                            </CardTitle>
-                        </div>
-                    </CardHeader>
-                </template>
-                <CardContent :class="inline ? '!p-0' : ''">
-                    <template v-if="form.pageAlert">
-                        <PageAlert
-                            class="mb-4"
-                            :page-alert="form.pageAlert"
-                        />
-                    </template>
-
-                    <template v-for="tab in form.layout.tabs">
-                        <TabsContent class="mt-0" :tabindex="form.layout.tabs.length > 1 ? 0 : -1" :value="slugify(tab.title)">
-                            <div class="grid gap-8 grid-cols-1 @3xl/root-card:grid-cols-12">
-                                <template v-for="column in tab.columns">
-                                    <div class="@3xl/root-card:col-[span_var(--size)]" :style="{ '--size': `${column.size}` }">
-                                        <FieldGrid class="gap-6 gap-y-7">
-                                            <template v-for="row in column.fields">
-                                                <FieldGridRow v-show="form.fieldRowShouldBeVisible(row)">
-                                                    <template v-for="fieldLayout in row">
-                                                        <template v-if="'legend' in fieldLayout">
-                                                            <FieldGridColumn v-show="form.fieldsetShouldBeVisible(fieldLayout)">
-                                                                <Card class="shadow">
-                                                                    <CardHeader>
-                                                                        <CardTitle class="text-base font-light tracking-normal">
-                                                                            {{ fieldLayout.legend }}
-                                                                        </CardTitle>
-                                                                    </CardHeader>
-                                                                    <CardContent >
+        <component :is="modal ? 'div' : RootCard">
+            <template v-if="!modal || form.locales?.length || form.layout.tabs.length > 1">
+                <component :is="modal ? 'div' : RootCardHeader"
+                    :class="[
+                        form.locales?.length || form.layout.tabs.length > 1 ? 'data-overflowing-viewport:sticky' : '',
+                        modal ? '-mt-2 mb-6' : ''
+                    ]"
+                >
+                    <div class="flex flex-wrap items-start gap-x-4 gap-y-4" :class="modal ? 'justify-start' : 'justify-end'">
+                        <template v-if="!modal">
+                            <div class="flex-1 flex min-w-[min(var(--scroll-width),min(18rem,100%))]" :style="{'--scroll-width':`${titleScrollWidth}px`}">
+                                <CardTitle class="min-w-0 truncate py-1 -my-1" ref="title">
+                                    <slot name="title" />
+                                </CardTitle>
+                            </div>
+                        </template>
+                        <template v-if="form.locales?.length || form.layout.tabs.length > 1">
+                            <div class="flex min-w-0 gap-4" :class="!modal ? '-my-1' : ''">
+                                <template v-if="form.locales?.length">
+                                    <Select :model-value="form.currentLocale ?? undefined" @update:model-value="onLocaleChange">
+                                        <div class="flex items-center" :class="!modal ? 'h-8' : ''">
+                                            <LocaleSelectTrigger class="pointer-events-auto" />
+                                        </div>
+                                        <SelectContent>
+                                            <template v-for="locale in form.locales" :key="locale">
+                                                <SelectItem :value="locale">
+                                                    <span class="uppercase text-xs">{{ locale }}</span>
+                                                </SelectItem>
+                                            </template>
+                                        </SelectContent>
+                                    </Select>
+                                </template>
+                                <template v-if="form.layout.tabs.length > 1">
+                                    <div class="hidden @2xl/root-card:block min-w-0 overflow-auto scroll-px-2 -my-1">
+                                        <TabsList>
+                                            <template v-for="tab in form.layout.tabs">
+                                                <TabsTrigger :value="slugify(tab.title)" v-scroll-into-view.nearest="slugify(tab.title) === selectedTabSlug">
+                                                    {{ tab.title }}
+                                                    <template v-if="form.tabErrorCount(tab)">
+                                                        <Badge class="ml-2" variant="destructive">
+                                                            {{ form.tabErrorCount(tab) }}
+                                                        </Badge>
+                                                    </template>
+                                                </TabsTrigger>
+                                            </template>
+                                        </TabsList>
+                                    </div>
+                                    <Select v-model="selectedTabSlug">
+                                        <SelectTrigger class="h-8 @2xl/root-card:hidden w-auto text-left pointer-events-auto">
+                                            <Menu class="size-4 shrink-0 mr-2" />
+                                            <SelectValue class="font-medium" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <template v-for="(tab, i) in form.layout.tabs">
+                                                <SelectItem :value="slugify(tab.title)">
+                                                    {{ tab.title }}
+                                                </SelectItem>
+                                            </template>
+                                        </SelectContent>
+                                    </Select>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+                </component>
+            </template>
+            <CardContent :class="modal ? 'p-0!' : ''">
+                <template v-for="tab in form.layout.tabs">
+                    <TabsContent class="mt-0" :tabindex="form.layout.tabs.length > 1 ? 0 : -1" :value="slugify(tab.title)">
+                        <div class="grid gap-8 grid-cols-1 @3xl/root-card:grid-cols-12">
+                            <template v-for="column in tab.columns">
+                                <div class="@3xl/root-card:col-[span_var(--size)]" :style="{ '--size': `${column.size}` }">
+                                    <FieldGrid class="gap-6 gap-y-7">
+                                        <template v-for="row in column.fields">
+                                            <FieldGridRow v-show="form.fieldRowShouldBeVisible(row)">
+                                                <template v-for="fieldLayout in row">
+                                                    <template v-if="'legend' in fieldLayout">
+                                                        <FieldGridColumn v-show="form.fieldsetShouldBeVisible(fieldLayout)">
+                                                            <fieldset>
+                                                                <Label class="mb-2.5" as="legend">
+                                                                    {{ fieldLayout.legend }}
+                                                                </Label>
+                                                                <Card class="shadow-sm">
+                                                                    <CardContent>
                                                                         <FieldGrid class="gap-6">
                                                                             <template v-for="row in fieldLayout.fields">
                                                                                 <FieldGridRow v-show="form.fieldRowShouldBeVisible(row)">
@@ -216,6 +227,8 @@
                                                                                                 :field-error-key="fieldLayout.key"
                                                                                                 :value="form.data[fieldLayout.key]"
                                                                                                 :locale="(form.getMeta(fieldLayout.key) as FieldMeta)?.locale ?? form.defaultLocale"
+                                                                                                :parent-data="form.data"
+                                                                                                :persist-thumbnail-url="props.persistThumbnailUrl"
                                                                                                 :row="row"
                                                                                                 root
                                                                                                 @input="(value, options) => onFieldInput(fieldLayout.key, value, options)"
@@ -229,45 +242,48 @@
                                                                         </FieldGrid>
                                                                     </CardContent>
                                                                 </Card>
-                                                            </FieldGridColumn>
-                                                        </template>
-                                                        <template v-else>
-                                                            <FieldGridColumn :layout="fieldLayout" v-show="form.fieldShouldBeVisible(fieldLayout)">
-                                                                <SharpFormField
-                                                                    :field="form.getField(fieldLayout.key)"
-                                                                    :field-layout="fieldLayout"
-                                                                    :field-error-key="fieldLayout.key"
-                                                                    :value="form.data[fieldLayout.key]"
-                                                                    :locale="(form.getMeta(fieldLayout.key) as FieldMeta)?.locale ?? form.currentLocale"
-                                                                    :row="row as LayoutFieldData[]"
-                                                                    root
-                                                                    @input="(value, options) => onFieldInput(fieldLayout.key, value, options)"
-                                                                    @locale-change="onFieldLocaleChange(fieldLayout.key, $event)"
-                                                                    @uploading="onFieldUploading(fieldLayout.key, $event)"
-                                                                />
-                                                            </FieldGridColumn>
-                                                        </template>
+                                                            </fieldset>
+                                                        </FieldGridColumn>
                                                     </template>
-                                                </FieldGridRow>
-                                            </template>
-                                        </FieldGrid>
-                                    </div>
-                                </template>
-                            </div>
-                        </TabsContent>
-                    </template>
-                </CardContent>
-                <template v-if="$slots.footer">
-                    <StickyBottom class="group sticky z-30 -bottom-2 lg:bottom-0 pointer-events-none" sentinel-class="bottom-2 lg:bottom-0">
-                        <CardFooter class="justify-end px-0 pt-4">
-                            <div class="relative pointer-events-auto">
-                                <div class="absolute -inset-4 -bottom-6 @[64rem]:-inset-6 transition-[border-color] border-transparent border-l border-t rounded-tl-lg rounded-br-lg -z-10 group-data-[stuck]:bg-card group-data-[stuck]:border-border"
-                                ></div>
-                                <slot name="footer" />
-                            </div>
-                        </CardFooter>
-                    </StickyBottom>
+                                                    <template v-else>
+                                                        <FieldGridColumn :layout="fieldLayout" v-show="form.fieldShouldBeVisible(fieldLayout)">
+                                                            <SharpFormField
+                                                                :field="form.getField(fieldLayout.key)"
+                                                                :field-layout="fieldLayout"
+                                                                :field-error-key="fieldLayout.key"
+                                                                :value="form.data[fieldLayout.key]"
+                                                                :locale="(form.getMeta(fieldLayout.key) as FieldMeta)?.locale ?? form.currentLocale"
+                                                                :row="row as LayoutFieldData[]"
+                                                                :parent-data="form.data"
+                                                                :persist-thumbnail-url="props.persistThumbnailUrl"
+                                                                root
+                                                                @input="(value, options) => onFieldInput(fieldLayout.key, value, options)"
+                                                                @locale-change="onFieldLocaleChange(fieldLayout.key, $event)"
+                                                                @uploading="onFieldUploading(fieldLayout.key, $event)"
+                                                            />
+                                                        </FieldGridColumn>
+                                                    </template>
+                                                </template>
+                                            </FieldGridRow>
+                                        </template>
+                                    </FieldGrid>
+                                </div>
+                            </template>
+                        </div>
+                    </TabsContent>
                 </template>
-            </component>
+            </CardContent>
+            <template v-if="$slots.footer">
+                <StickyBottom class="group sticky z-30 -bottom-2 lg:bottom-0 pointer-events-none" sentinel-class="bottom-2 lg:bottom-0">
+                    <CardFooter class="justify-end px-0 pt-4">
+                        <div class="relative pointer-events-auto">
+                            <div class="absolute -inset-4 -bottom-6 @[64rem]:-inset-6 transition-[border-color] border-transparent border-l border-t rounded-tl-lg rounded-br-lg -z-10 group-data-[stuck]:bg-card group-data-[stuck]:border-border"
+                            ></div>
+                            <slot name="footer" />
+                        </div>
+                    </CardFooter>
+                </StickyBottom>
+            </template>
+        </component>
     </Tabs>
 </template>

@@ -12,7 +12,7 @@ class HtmlFormatter extends AbstractSimpleFormatter
      */
     public function toFront(SharpFormField $field, $value)
     {
-        return $value ? $field->render($value) : null;
+        return $field->render(is_array($value) ? $value : []);
     }
 
     public function fromFront(SharpFormField $field, string $attribute, $value)

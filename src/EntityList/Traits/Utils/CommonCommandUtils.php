@@ -20,7 +20,11 @@ trait CommonCommandUtils
                     'description' => $handler->getDescription(),
                     'type' => $handler->type(),
                     'confirmation' => $handler->getConfirmationText()
-                        ? ['text' => $handler->getConfirmationText()]
+                        ? [
+                            'text' => $handler->getConfirmationText(),
+                            'title' => $handler->getConfirmationTitle(),
+                            'buttonLabel' => $handler->getConfirmationButtonLabel(),
+                        ]
                         : null,
                     'hasForm' => count($handler->form()) > 0,
                     'authorization' => $instanceId

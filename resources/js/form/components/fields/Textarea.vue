@@ -14,8 +14,13 @@
         const error = validateTextField(value, {
             maxlength: props.field.maxLength,
         });
-        if(props.field.localized && typeof props.value === 'object') {
-            emit('input', { ...props.value, [props.locale]: value }, { error });
+        if(props.field.localized) {
+            emit('input',
+                typeof props.value === 'object'
+                    ? { ...props.value, [props.locale]: value }
+                    : { [props.locale]: value },
+                { error }
+            );
         } else {
             emit('input', value, { error });
         }

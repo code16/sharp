@@ -78,8 +78,8 @@ class InstallCommand extends Command
 
         $this->replaceFileContent(
             app_path('Providers/SharpServiceProvider.php'),
-            '->setName(\'My new project\');'.PHP_EOL,
-            '->setName(\'My new project\')'.PHP_EOL.'            ->setSharpMenu(SharpMenu::class);'.PHP_EOL
+            '->discoverEntities();'.PHP_EOL,
+            '->discoverEntities()'.PHP_EOL.'            ->setSharpMenu(SharpMenu::class);'.PHP_EOL
         );
     }
 

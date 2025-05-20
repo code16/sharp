@@ -48,8 +48,8 @@ trait HandleFormFields
             if (method_exists($this, 'rules')) {
                 $this->validate(
                     $formattedData,
-                    $this->rules(),
-                    method_exists($this, 'messages') ? $this->messages() : []
+                    $this->rules($formattedData),
+                    method_exists($this, 'messages') ? $this->messages($formattedData) : []
                 );
             }
         }

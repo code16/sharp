@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Show\Fields\Formatters;
 
+use Code16\Sharp\Exceptions\Form\SharpFormFieldDataException;
 use Code16\Sharp\Show\Fields\SharpShowField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
 use Code16\Sharp\Utils\Fields\Formatters\FormatsEditorEmbeds;
@@ -15,9 +16,13 @@ class TextFormatter extends SharpShowFieldFormatter
 
     /**
      * @param  SharpShowTextField  $field
+     *
+     * @throws SharpFormFieldDataException
      */
     public function toFront(SharpShowField $field, $value)
     {
+        $this->guardAgainstInvalidLocalizedValue($field, $value);
+
         return collect(['text' => $value])
             ->pipeThrough([
                 fn (Collection $collection) => $collection->merge(

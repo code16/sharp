@@ -9,7 +9,12 @@ class PostBlockVideoValidator extends FormRequest
     public function rules(): array
     {
         return [
-            'content' => ['required', 'string', 'max:1000'],
+            'content' => [
+                'required',
+                'string',
+                'regex:/^<iframe.*?src="https?:\/\/(www\.)?youtube\.com\/embed\/[a-zA-Z0-9_-]+(\?.*?)?".*?><\/iframe>$/s',
+                'max:1000',
+            ],
         ];
     }
 }

@@ -124,7 +124,7 @@
 </script>
 
 <template>
-    <FormFieldLayout v-bind="props">
+    <FormFieldLayout field-group v-bind="props">
         <div class="@container">
             <template v-if="value">
                 <div class="flex bg-background border border-input rounded-md gap-4 p-4">
@@ -212,7 +212,7 @@
                         <Suspense>
                             <component
                                 :is="components[field.mapsProvider.name]"
-                                class="mt-4 rounded-md aspect-[4/3]"
+                                class="mt-4 rounded-md aspect-4/3"
                                 v-bind="{
                                     field,
                                     markerPosition: modalMarkerPosition,

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { type HTMLAttributes, computed, ref, watchEffect, watch } from 'vue'
+    import { type HTMLAttributes, computed, ref, watchEffect, watch, Directive, nextTick } from 'vue'
     import {
         ScrollAreaCorner,
         ScrollAreaRoot,
@@ -26,6 +26,12 @@
         useElementSize(() => viewport.value?.viewportElement).width,
         useThrottleFn(() => { measure() }, 50, true, true)
     );
+
+    watch(() => viewport.value?.viewportElement, () => {
+        if(viewport.value?.viewportElement) {
+            viewport.value.viewportElement.tabIndex = -1;
+        }
+    });
 </script>
 
 <template>
@@ -35,7 +41,7 @@
       :data-scrollbar-x-visible="!arrivedState.left || !arrivedState.right ? true : null"
   >
     <ScrollAreaViewport
-        class=" h-full w-full rounded-[inherit]"
+        class="h-full w-full rounded-[inherit]"
         ref="viewport"
     >
       <slot />

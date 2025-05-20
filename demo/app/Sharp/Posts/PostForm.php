@@ -193,7 +193,9 @@ class PostForm extends SharpForm
 
     public function buildFormConfig(): void
     {
-        $this->configureDisplayShowPageAfterCreation();
+        $this->configureDisplayShowPageAfterCreation()
+            ->configureEditTitle('Edit post')
+            ->configureCreateTitle('New post');
     }
 
     public function find($id): array

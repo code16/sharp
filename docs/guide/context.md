@@ -67,10 +67,14 @@ sharp()->context()->breadcrumb();
 
 Get the current or previous breadcrumb item.
 
-### `previousShowSegment(?string $entityKey = null): ?BreadcrumbItem`
-### `previousListSegment(?string $entityKey = null): ?BreadcrumbItem`
+### `previousShowSegment(?string $entityKeyOrClassName = null, ?string $subEntity = null): ?BreadcrumbItem`
+### `previousListSegment(?string $entityKeyOrClassName = null): ?BreadcrumbItem`
 
 Get (if existing) the closest Show or List in the breadcrumb.
+
+::: tip
+As always, prefer the entity class name to the entity key. For instance: `sharp()->context()->breadcrumb()->previousShowSegment(MyEntity::class)`.
+:::
 
 ### The `BreadcrumbItem` class
 
@@ -83,6 +87,7 @@ A `BreadcrumbItem` instance has the same methods seen above:
 #### `isUpdate(): bool`
 #### `isCreation(): bool`
 #### `instanceId(): string`
+#### `entityIs(string $entityKeyOrClassName, ?string $subEntity = null): bool`
 
 Here's an example of how this information could be useful: imagine you have a Show for a `Post` instance, with an Embedded Entity List of `Comment`. When creating a new `Comment`, you'll need to set its `post_id` attribute on the Form `update()` method. You can for this make use of the breadcrumb context like this:
 
@@ -96,7 +101,10 @@ class CommentForm extends SharpForm
         $comment = $id 
             ? Comment::find($id) 
             : new Comment([
-                'post_id' => sharp()->context()->breadcrumb()->previousShowSegment('post')->instanceId()
+                'post_id' => sharp()->context()
+                    ->breadcrumb()
+                    ->previousShowSegment(PostEntity::class)
+                    ->instanceId()
             ]);
 
         $this->save($comment, $data);

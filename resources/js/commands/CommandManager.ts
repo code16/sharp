@@ -14,6 +14,7 @@ import {
     CommandFormExtraData
 } from "./types";
 import { Form } from "@/form/Form";
+import { isSharpLink } from "@/utils/url";
 
 
 export class CommandManager {
@@ -40,20 +41,23 @@ export class CommandManager {
 
     get defaultCommandResponseHandlers(): CommandResponseHandlers {
         return {
-            info: async ({ message }, { formModal }) => {
+            info: async ({ message, reload }, { formModal }) => {
                 await showAlert(message, {
                     title: __('sharp::modals.command.info.title'),
                 });
-                formModal.shouldReopen && formModal.reloadAndReopen();
+                if(formModal.shouldReopen) {
+                    formModal.reloadAndReopen();
+                } else if(reload) {
+                    await this.handleCommandResponse({ action: 'reload' });
+                }
             },
             link: ({ link }, { formModal }) => {
                 if(formModal.shouldReopen) {
                     formModal.reloadAndReopen();
                     return;
                 }
-                const url = new URL(link);
-                if(url.origin === location.origin) {
-                    router.visit(url.pathname + url.search);
+                if(isSharpLink(link)) {
+                    router.visit(link);
                 } else {
                     location.href = link;
                 }
@@ -106,6 +110,8 @@ export class CommandManager {
 
         if(command.confirmation) {
             if(! await showConfirm(command.confirmation.text, {
+                title: command.confirmation.title,
+                okTitle: command.confirmation.buttonLabel,
                 ...confirmDialogOptions,
             })) {
                 this.finish();
@@ -141,6 +147,7 @@ export class CommandManager {
                 await this.reopenCurrentCommand();
                 return;
             }
+            this.state.currentCommandEndpoints.onSuccess?.();
             this.finish();
             return;
         }
@@ -150,6 +157,9 @@ export class CommandManager {
         if(data.action !== 'step') {
             // close form modal
             this.state.currentCommandForm = null;
+            if(!this.state.currentCommandShouldReopen) {
+                this.state.currentCommandEndpoints.onSuccess?.();
+            }
         }
 
         await this.handleCommandResponse(data);

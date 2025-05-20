@@ -4,9 +4,11 @@ namespace Tests\Feature;
 
 use App\Models\Post;
 use App\Models\User;
+use App\Sharp\Entities\PostEntity;
 use App\Sharp\Posts\Commands\PreviewPostCommand;
 use Code16\Sharp\Utils\Testing\SharpAssertions;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class PostSharpFormTest extends TestCase
@@ -21,24 +23,28 @@ class PostSharpFormTest extends TestCase
         $this->withoutVite();
     }
 
-    /** @test */
+    #[Test]
     public function we_can_edit_a_post()
     {
         $this->loginAsSharpUser(User::factory()->create(['role' => 'admin']));
         $post = Post::factory()->create();
 
         $this
-            ->withSharpCurrentBreadcrumb(['list', 'posts'])
-            ->getSharpForm('posts', $post->id)
+            ->withSharpBreadcrumb(
+                fn ($builder) => $builder->appendEntityList(PostEntity::class)
+            )
+            ->getSharpForm(PostEntity::class, $post->id)
             ->assertOk();
 
         $this
-            ->withSharpCurrentBreadcrumb(['list', 'posts'])
-            ->getSharpForm('posts')
+            ->withSharpBreadcrumb(
+                fn ($builder) => $builder->appendEntityList(PostEntity::class)
+            )
+            ->getSharpForm(PostEntity::class)
             ->assertOk();
     }
 
-    /** @test */
+    #[Test]
     public function we_can_update_a_post()
     {
         $this->loginAsSharpUser(User::factory()->create(['role' => 'admin']));
@@ -46,7 +52,7 @@ class PostSharpFormTest extends TestCase
 
         $this
             ->updateSharpForm(
-                'posts',
+                PostEntity::class,
                 $post->id,
                 array_merge(
                     $post->toArray(),
@@ -68,7 +74,7 @@ class PostSharpFormTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function we_can_not_update_a_post_with_invalid_data()
     {
         $this->loginAsSharpUser(User::factory()->create(['role' => 'admin']));
@@ -76,7 +82,7 @@ class PostSharpFormTest extends TestCase
 
         $this
             ->updateSharpForm(
-                'posts',
+                PostEntity::class,
                 $post->id,
                 array_merge(
                     $post->toArray(),
@@ -91,14 +97,14 @@ class PostSharpFormTest extends TestCase
             ->assertSessionHasErrors(['title.en']);
     }
 
-    /** @test */
+    #[Test]
     public function we_can_store_a_new_post()
     {
         $this->loginAsSharpUser(User::factory()->create(['role' => 'admin']));
 
         $this
             ->storeSharpForm(
-                'posts',
+                PostEntity::class,
                 [
                     'title' => [
                         'fr' => 'titre',
@@ -122,7 +128,7 @@ class PostSharpFormTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function we_can_delete_a_post()
     {
         $this->loginAsSharpUser(User::factory()->create(['role' => 'admin']));
@@ -130,20 +136,20 @@ class PostSharpFormTest extends TestCase
         $post2 = Post::factory()->create();
 
         $this
-            ->deleteFromSharpShow('posts', $post1->id)
+            ->deleteFromSharpShow(PostEntity::class, $post1->id)
             ->assertRedirect();
 
         $this->assertDatabaseMissing('posts', ['id' => $post1->id]);
         $this->assertDatabaseHas('posts', ['id' => $post2->id]);
 
         $this
-            ->deleteFromSharpList('posts', $post2->id)
+            ->deleteFromSharpList(PostEntity::class, $post2->id)
             ->assertOk();
 
         $this->assertDatabaseMissing('posts', ['id' => $post2->id]);
     }
 
-    /** @test */
+    #[Test]
     public function as_an_editor_we_are_not_authorize_to_update_a_post_of_another_editor()
     {
         $this->loginAsSharpUser(User::factory()->create(['role' => 'editor']));
@@ -153,20 +159,23 @@ class PostSharpFormTest extends TestCase
             ->create();
 
         $this
-            ->withSharpCurrentBreadcrumb(['list', 'posts'])
-            ->getSharpShow('posts', $publishedPost->id)
+            ->withSharpBreadcrumb(
+                fn ($builder) => $builder->appendEntityList(PostEntity::class)
+            )
+            ->getSharpShow(PostEntity::class, $publishedPost->id)
             ->assertOk();
 
         $this
-            ->withSharpCurrentBreadcrumb(
-                ['list', 'posts'],
-                ['show', 'posts', $publishedPost->id],
+            ->withSharpBreadcrumb(
+                fn ($builder) => $builder
+                    ->appendEntityList(PostEntity::class)
+                    ->appendShowPage(PostEntity::class, $publishedPost->id),
             )
-            ->getSharpForm('posts', $publishedPost->id)
+            ->getSharpForm(PostEntity::class, $publishedPost->id)
             ->assertForbidden();
     }
 
-    /** @test */
+    #[Test]
     public function as_an_editor_we_are_not_authorize_to_view_an_unpublished_post_of_another_editor()
     {
         $this->loginAsSharpUser(User::factory()->create(['role' => 'editor']));
@@ -178,12 +187,14 @@ class PostSharpFormTest extends TestCase
             ]);
 
         $this
-            ->withSharpCurrentBreadcrumb(['list', 'posts'])
-            ->getSharpShow('posts', $publishedPost->id)
+            ->withSharpBreadcrumb(
+                fn ($builder) => $builder->appendEntityList(PostEntity::class)
+            )
+            ->getSharpShow(PostEntity::class, $publishedPost->id)
             ->assertForbidden();
     }
 
-    /** @test */
+    #[Test]
     public function we_can_preview_a_post_through_command()
     {
         $this->loginAsSharpUser(User::factory()->create(['role' => 'admin']));
@@ -191,7 +202,7 @@ class PostSharpFormTest extends TestCase
 
         $this
             ->callSharpInstanceCommandFromList(
-                'posts',
+                PostEntity::class,
                 $post->id,
                 PreviewPostCommand::class,
             )

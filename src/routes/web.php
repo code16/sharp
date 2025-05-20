@@ -10,6 +10,7 @@ use Code16\Sharp\Http\Controllers\GlobalFilterController;
 use Code16\Sharp\Http\Controllers\HomeController;
 use Code16\Sharp\Http\Controllers\ShowController;
 use Code16\Sharp\Http\Controllers\SingleShowController;
+use Code16\Sharp\Http\Controllers\UpdateAssetsController;
 use Illuminate\Support\Facades\Route;
 
 Route::group([
@@ -52,13 +53,16 @@ Route::group([
         Route::post('/{parentUri}/s-form/{entityKey}', [FormController::class, 'store'])
             ->name('code16.sharp.form.store');
 
-        Route::get('/{parentUri}/s-form/{entityKey}/{instanceId}', [FormController::class, 'edit'])
+        Route::get('/{parentUri}/s-form/{entityKey}/{instanceId?}', [FormController::class, 'edit'])
             ->name('code16.sharp.form.edit');
 
-        Route::post('/{parentUri}/s-form/{entityKey}/{instanceId}', [FormController::class, 'update'])
+        Route::post('/{parentUri}/s-form/{entityKey}/{instanceId?}', [FormController::class, 'update'])
             ->name('code16.sharp.form.update');
     });
 
     Route::post('/filters/{filterKey}', [GlobalFilterController::class, 'update'])
         ->name('code16.sharp.filters.update');
+
+    Route::post('/update-assets', UpdateAssetsController::class)
+        ->name('code16.sharp.update-assets');
 });

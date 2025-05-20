@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Console;
 
+use Code16\Sharp\Config\SharpConfigBuilder;
 use Code16\Sharp\Utils\Links\LinkToDashboard;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\Links\LinkToSingleShowPage;
@@ -407,60 +408,21 @@ class GeneratorCommand extends Command
         }
     }
 
-    private function generateDashboardEntity(): array
-    {
-        $name = text(
-            label: 'What is the name of your Dashboard?',
-            placeholder: 'E.g. Activity',
-            required: true,
-            hint: 'A "DashboardEntity" suffix will be added automatically (E.g. ActivityDashboardEntity.php).',
-        );
-        $name = Str::ucfirst(Str::camel($name));
-
-        $needsPolicy = confirm(
-            label: 'Do you need a Policy?',
-            default: false,
-        );
-
-        $this->call('sharp:make:dashboard', [
-            'name' => 'Dashboards\\'.$name.'Dashboard',
-        ]);
-
-        $this->components->twoColumnDetail('Dashboard', $this->getSharpRootNamespace().'\\Dashboards\\'.$name.'Dashboard.php');
-
-        if ($needsPolicy) {
-            $this->call('sharp:make:policy', [
-                'name' => 'Dashboards\\'.$name.'DashboardPolicy',
-                '--entity-only' => '',
-            ]);
-
-            $this->components->twoColumnDetail('Policy', $this->getSharpRootNamespace().'\\Dashboards\\'.$name.'DashboardPolicy.php');
-        }
-
-        $this->call('sharp:make:entity', [
-            'name' => 'Entities\\'.$name.'DashboardEntity',
-            '--dashboard' => '',
-            ...($needsPolicy ? ['--policy' => ''] : []),
-        ]);
-
-        $this->components->twoColumnDetail('Entity', $this->getSharpRootNamespace().'\\Entities\\'.$name.'DashboardEntity.php');
-
-        return [
-            $this->getSharpRootNamespace().'\\Entities\\'.$name.'DashboardEntity',
-            Str::snake($name),
-        ];
-    }
-
     private function generateRegularEntity(): array
     {
         $name = text(
-            label: 'What is the name of your Entity?',
+            label: 'What is the name of your Entity (singular)?',
             placeholder: 'E.g. User',
             required: true,
-            hint: 'An "Entity" suffix will be added automatically (E.g. UserEntity.php).',
+            hint: 'An "Entity" suffix will be added automatically if needed (E.g. UserEntity.php).',
         );
-        $name = Str::ucfirst(Str::camel($name));
-        $pluralName = Str::plural($name);
+
+        $name = str($name)
+            ->camel()
+            ->ucfirst()
+            ->when(! str($name)->endsWith('Entity'), fn ($name) => $name.'Entity');
+        $baseName = str($name)->substr(0, -6);
+        $pluralName = str($baseName)->plural()->toString();
 
         if (confirm('Do you want to attach this Entity to a specific Model?')) {
             $modelNamespace = text(
@@ -507,55 +469,70 @@ class GeneratorCommand extends Command
 
         $this->call(
             'sharp:make:entity-list',
-            collect(['name' => $pluralName.'\\'.$name.'EntityList'])
+            collect(['name' => $baseName.'List'])
                 ->when($model ?? null, fn ($args) => $args->put('--model', $model))
                 ->toArray()
         );
 
-        $this->components->twoColumnDetail('Entity List', $this->getSharpRootNamespace().'\\'.$pluralName.'\\'.$name.'EntityList.php');
+        $this->components->twoColumnDetail(
+            'Entity List',
+            $this->getSharpRootNamespace().'\\'.$pluralName.'\\'.$baseName.'EntityList.php'
+        );
 
         if (Str::contains($type, 'Form')) {
             $this->call(
                 'sharp:make:form',
-                collect(['name' => $pluralName.'\\'.$name.'Form'])
+                collect(['name' => $baseName.'Form'])
                     ->when($model ?? null, fn ($args) => $args->put('--model', $model))
                     ->toArray()
             );
 
-            $this->components->twoColumnDetail('Form', $this->getSharpRootNamespace().'\\'.$pluralName.'\\'.$name.'Form.php');
+            $this->components->twoColumnDetail(
+                'Form',
+                $this->getSharpRootNamespace().'\\'.$pluralName.'\\'.$baseName.'Form.php'
+            );
         }
 
         if (Str::contains($type, 'Show Page')) {
             $this->call(
                 'sharp:make:show-page',
-                collect(['name' => $pluralName.'\\'.$name.'Show'])
+                collect(['name' => $baseName.'Show'])
                     ->when($model ?? null, fn ($args) => $args->put('--model', $model))
                     ->toArray()
             );
 
-            $this->components->twoColumnDetail('Show Page', $this->getSharpRootNamespace().'\\'.$pluralName.'\\'.$name.'Show.php');
+            $this->components->twoColumnDetail(
+                'Show Page',
+                $this->getSharpRootNamespace().'\\'.$pluralName.'\\'.$baseName.'Show.php'
+            );
         }
 
         if ($needsPolicy) {
             $this->call('sharp:make:policy', [
-                'name' => $pluralName.'\\'.$name.'Policy',
+                'name' => $baseName.'Policy',
             ]);
 
-            $this->components->twoColumnDetail('Policy', $this->getSharpRootNamespace().'\\'.$pluralName.'\\'.$name.'Policy.php');
+            $this->components->twoColumnDetail(
+                'Policy',
+                $this->getSharpRootNamespace().'\\'.$pluralName.'\\'.$baseName.'Policy.php'
+            );
         }
 
         $this->call('sharp:make:entity', [
-            'name' => 'Entities\\'.$name.'Entity',
+            'name' => $name,
             '--label' => $label,
             ...(Str::contains($type, 'Form') ? ['--form' => ''] : []),
             ...(Str::contains($type, 'Show') ? ['--show' => ''] : []),
             ...($needsPolicy ? ['--policy' => ''] : []),
         ]);
 
-        $this->components->twoColumnDetail('Entity', $this->getSharpRootNamespace().'\\Entities\\'.$name.'Entity.php');
+        $this->components->twoColumnDetail(
+            'Entity',
+            $this->getSharpRootNamespace().'\\Entities\\'.$name.'.php'
+        );
 
         return [
-            $this->getSharpRootNamespace().'\\Entities\\'.$name.'Entity',
+            $this->getSharpRootNamespace().'\\Entities\\'.$name,
             Str::snake($pluralName),
         ];
     }
@@ -563,16 +540,20 @@ class GeneratorCommand extends Command
     private function generateSingleEntity(): array
     {
         $name = text(
-            label: 'What is the name of your Entity?',
+            label: 'What is the name of your Entity (singular)?',
             placeholder: 'E.g. User',
             required: true,
-            hint: 'An "Entity" suffix will be added automatically (E.g. UserEntity.php).',
+            hint: 'An "Entity" suffix will be added automatically is needed (E.g. UserEntity.php).',
         );
-        $name = Str::ucfirst(Str::camel($name));
+        $name = str($name)
+            ->camel()
+            ->ucfirst()
+            ->when(! str($name)->endsWith('Entity'), fn ($name) => $name.'Entity');
+        $baseName = str($name)->substr(0, -6)->toString();
 
         $label = text(
             label: 'What is the label of your Entity?',
-            placeholder: 'E.g. Administrators',
+            placeholder: 'E.g. Configuration',
             required: true,
             hint: 'It will be displayed in the breadcrumb'
         );
@@ -583,39 +564,110 @@ class GeneratorCommand extends Command
         );
 
         $this->call('sharp:make:form', [
-            'name' => $name.'\\'.$name.'SingleForm',
+            'name' => $baseName.'Form',
             '--single' => '',
         ]);
 
-        $this->components->twoColumnDetail('Single form', $this->getSharpRootNamespace().'\\'.$name.'\\'.$name.'SingleForm.php');
+        $this->components->twoColumnDetail(
+            'Single form',
+            $this->getSharpRootNamespace().'\\'.$baseName.'\\'.$baseName.'Form.php'
+        );
 
         $this->call('sharp:make:show-page', [
-            'name' => $name.'\\'.$name.'SingleShow',
+            'name' => $baseName.'Show',
             '--single' => '',
         ]);
 
-        $this->components->twoColumnDetail('Single Show Page', $this->getSharpRootNamespace().'\\'.$name.'\\'.$name.'SingleShow.php');
+        $this->components->twoColumnDetail(
+            'Single Show Page',
+            $this->getSharpRootNamespace().'\\'.$baseName.'\\'.$baseName.'Show.php'
+        );
 
         if ($needsPolicy) {
             $this->call('sharp:make:policy', [
-                'name' => $name.'\\'.$name.'Policy',
+                'name' => $baseName.'Policy',
+                '--single' => '',
             ]);
 
-            $this->components->twoColumnDetail('Policy', $this->getSharpRootNamespace().'\\'.$name.'\\'.$name.'Policy.php');
+            $this->components->twoColumnDetail(
+                'Policy',
+                $this->getSharpRootNamespace().'\\'.$baseName.'\\'.$baseName.'Policy.php'
+            );
         }
 
         $this->call('sharp:make:entity', [
-            'name' => 'Entities\\'.$name.'Entity',
+            'name' => $name,
             '--label' => $label,
             '--single' => '',
             ...($needsPolicy ? ['--policy' => ''] : []),
         ]);
 
-        $this->components->twoColumnDetail('Entity', $this->getSharpRootNamespace().'\\Entities\\'.$name.'Entity.php');
+        $this->components->twoColumnDetail(
+            'Entity',
+            $this->getSharpRootNamespace().'\\Entities\\'.$name.'.php'
+        );
 
         return [
-            $this->getSharpRootNamespace().'\\Entities\\'.$name.'Entity',
-            Str::snake($name),
+            $this->getSharpRootNamespace().'\\Entities\\'.$name,
+            Str::snake($baseName),
+        ];
+    }
+
+    private function generateDashboardEntity(): array
+    {
+        $name = text(
+            label: 'What is the name of your Dashboard (singular)?',
+            placeholder: 'E.g. Activity',
+            required: true,
+            hint: 'An "Entity" suffix will be added automatically if needed (E.g. ActivityEntity.php).',
+        );
+
+        $name = str($name)
+            ->camel()
+            ->ucfirst()
+            ->when(! str($name)->endsWith('Entity'), fn ($name) => $name.'Entity');
+        $baseName = str($name)->substr(0, -6)->toString();
+
+        $needsPolicy = confirm(
+            label: 'Do you need a Policy?',
+            default: false,
+        );
+
+        $this->call('sharp:make:dashboard', [
+            'name' => $baseName.'Dashboard',
+        ]);
+
+        $this->components->twoColumnDetail(
+            'Dashboard',
+            $this->getSharpRootNamespace().'\\'.$baseName.'\\'.$baseName.'Dashboard.php'
+        );
+
+        if ($needsPolicy) {
+            $this->call('sharp:make:policy', [
+                'name' => $baseName.'Policy',
+                '--single' => '',
+            ]);
+
+            $this->components->twoColumnDetail(
+                'Policy',
+                $this->getSharpRootNamespace().'\\'.$baseName.'\\'.$baseName.'Policy.php'
+            );
+        }
+
+        $this->call('sharp:make:entity', [
+            'name' => $name,
+            '--dashboard' => '',
+            ...($needsPolicy ? ['--policy' => ''] : []),
+        ]);
+
+        $this->components->twoColumnDetail(
+            'Entity',
+            $this->getSharpRootNamespace().'\\Entities\\'.$name.'.php'
+        );
+
+        return [
+            $this->getSharpRootNamespace().'\\Entities\\'.$name,
+            Str::snake($baseName),
         ];
     }
 
@@ -639,7 +691,7 @@ class GeneratorCommand extends Command
 
     private function getSharpEntitiesList(?string $search = null): array
     {
-        return collect(config('sharp.entities'))
+        return collect(app(SharpConfigBuilder::class)->get('entities'))
             ->map(fn ($class) => str_replace(
                 ['App\Sharp\Entities\\', 'Entity'],
                 ['', ''],

@@ -11,8 +11,8 @@ trait FillsWithFileAttribute
                 // We use this magical "file" attribute to fill at the same time
                 // file_name, mime_type, disk and size in a MorphMany case
                 $uploadModel->fill($uploadModel->file);
-                unset($uploadModel->file);
             }
+            unset($uploadModel->file);
         });
     }
 }

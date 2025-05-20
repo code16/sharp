@@ -29,7 +29,7 @@ import { Selection } from './Selection';
 import { Html } from './html/Html';
 import { TrailingNode } from './TrailingNode';
 import { Iframe } from './iframe/Iframe';
-import { Paste } from './Paste';
+import { Clipboard } from './Clipboard';
 import { Small } from './Small';
 import { CharacterCount } from '@tiptap/extension-character-count';
 import { FormEditorFieldData, FormEditorToolbarButton } from "@/types";
@@ -80,7 +80,7 @@ function getExtensions(field: FormEditorFieldData) {
             levels: [1,2,3].filter((level: 1|2|3) => toolbarHas(`heading-${level}`)) as (1|2|3)[],
         }),
         toolbarHas('horizontal-rule') && HorizontalRule.extend({
-            selectable: false,
+            // selectable: false,
         }),
         Html,
         toolbarHas('iframe') && Iframe,
@@ -120,7 +120,7 @@ function getExtensions(field: FormEditorFieldData) {
 export function getExtensionsForEditor(field: FormEditorFieldData) {
     return [
         ...getExtensions(field),
-        Paste.configure({
+        Clipboard.configure({
             schema: getSchema(getExtensions({
                 ...field,
                 toolbar: field.toolbar ?? [], // if no toolbar, prevent pasting formatted HTML

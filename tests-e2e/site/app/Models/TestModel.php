@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Spatie\Translatable\HasTranslations;
 
@@ -24,26 +25,24 @@ class TestModel extends Model
     protected function casts(): array
     {
         return [
+            'check' => 'bool',
             'date' => 'date',
             'date_time' => 'datetime',
             'list' => 'array',
             'autocomplete_list' => 'array',
-            'select_dropdown' => 'array',
+            'select_dropdown_multiple' => 'array',
             'select_checkboxes' => 'array',
-            'tags' => 'array',
         ];
     }
 
     public function upload(): MorphOne
     {
         return $this->morphOne(Media::class, 'model')
-            ->where('model_key', 'upload');
+            ->withAttributes(['model_key' => 'upload']);
     }
 
-    public function getDefaultAttributesFor($attribute)
+    public function tags(): BelongsToMany
     {
-        return in_array($attribute, ['upload'])
-            ? ['model_key' => $attribute]
-            : [];
+        return $this->belongsToMany(TestTag::class);
     }
 }

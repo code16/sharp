@@ -7,13 +7,13 @@
 
 <template>
     <template v-if="logo.svg">
-        <div class="[&_svg]:w-auto [&_svg]:max-w-full [&_svg]:h-[--height]"
+        <div class="[&_svg]:w-auto [&_svg]:max-w-full [&_svg]:h-(--height)"
             :style="{ '--height': config('sharp.theme.logo_height') ?? '1.5rem' }"
             v-html="logo.svg"
         ></div>
     </template>
     <template v-else>
-        <img class="w-auto h-[--height]"
+        <img class="w-auto h-(--height)"
             :style="{ '--height': config('sharp.theme.logo_height') ?? '1.5rem' }"
             :src="logo.url"
             :alt="config('sharp.name')"

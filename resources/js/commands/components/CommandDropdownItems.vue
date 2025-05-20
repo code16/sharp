@@ -14,8 +14,8 @@
 
     defineEmits(['select']);
 
-    function requiresSelection(command) {
-        return !props.selecting && command.instance_selection === 'required';
+    function requiresSelection(command: CommandData) {
+        return !props.selecting && command.instanceSelection === 'required';
     }
 
     const breakpoints = useBreakpoints();

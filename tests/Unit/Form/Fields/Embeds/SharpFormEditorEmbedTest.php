@@ -32,6 +32,8 @@ it('sets default values in config', function () {
             'tag' => 'x-default-fake-sharp-form-editor-embed',
             'attributes' => ['text'],
             'icon' => null,
+            'displayEmbedHeader' => true,
+            'embedHeaderTitle' => 'default_fake_sharp_form_editor_embed',
         ])
         ->and($defaultEmbed->toConfigArray(true))
         ->toHaveKey('fields.text')
@@ -85,6 +87,31 @@ it('allows to configure label', function () {
 
     expect($defaultEmbed->toConfigArray(true)['label'])
         ->toEqual('Some Label');
+});
+
+it('allows to hide embed header', function () {
+    $defaultEmbed = new class() extends SharpFormEditorEmbed
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(
+                SharpFormTextField::make('text')
+            );
+        }
+
+        public function updateContent(array $data = []): array {}
+
+        public function buildEmbedConfig(): void
+        {
+            $this->configureTagName('my-tag')
+                ->configureDisplayEmbedHeader(false);
+        }
+    };
+
+    $defaultEmbed->buildEmbedConfig();
+
+    expect($defaultEmbed->toConfigArray(true)['displayEmbedHeader'])
+        ->toBeFalse();
 });
 
 it('allows to configure both form & shows template', function () {
@@ -145,7 +172,7 @@ it('allows to configure form template', function () {
     expect($defaultEmbed->transformDataWithRenderedTemplate(['id' => 1, 'text' => 'Test'], isForm: false))->toEqual([
         'id' => 1,
         'text' => 'Test',
-        '_html' => 'Empty template',
+        '_html' => '',
     ]);
 
     expect($defaultEmbed->transformDataWithRenderedTemplate(['id' => 1, 'text' => 'Test'], isForm: true))->toEqual([
@@ -185,7 +212,7 @@ it('allows to configure show template', function () {
     expect($defaultEmbed->transformDataWithRenderedTemplate(['id' => 1, 'text' => 'Test'], isForm: true))->toEqual([
         'id' => 1,
         'text' => 'Test',
-        '_html' => 'Empty template',
+        '_html' => '',
     ]);
 });
 

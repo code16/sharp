@@ -1,16 +1,16 @@
 <script setup lang="ts">
-    import { useColorMode } from '@vueuse/core'
     import {
         DropdownMenuRadioGroup,
         DropdownMenuRadioItem,
     } from '@/components/ui/dropdown-menu'
     import { __ } from "@/utils/i18n";
+    import { useColorMode } from "@/composables/useColorMode";
 
-    const { store } = useColorMode();
+    const mode = useColorMode(true);
 </script>
 
 <template>
-    <DropdownMenuRadioGroup v-model="store">
+    <DropdownMenuRadioGroup v-model="mode">
         <DropdownMenuRadioItem value="light">
             {{ __('sharp::action_bar.color-mode-dropdown.light') }}
         </DropdownMenuRadioItem>

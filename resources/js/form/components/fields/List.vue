@@ -20,7 +20,8 @@
     } from "@/components/ui/dropdown-menu";
     import { Card, CardHeader } from "@/components/ui/card";
     import { useSortable } from "@vueuse/integrations/useSortable";
-    import { watchArray } from "@vueuse/core";
+    import { useEventListener, watchArray } from "@vueuse/core";
+    import { FormEvents } from "@/form/Form";
 
     const props = defineProps<FormFieldProps<FormListFieldData>>();
     const emit = defineEmits<FormFieldEmits<FormListFieldData>>();
@@ -76,13 +77,11 @@
     const itemKey = Symbol('itemKey') as unknown as string;
     const errorIndex = Symbol('errorIndex') as unknown as string;
 
-    watch(() => form.errors, () => {
-        emit('input', props.value?.map(((item, index) => ({ ...item, [errorIndex]: index }))));
+    useEventListener<FormEvents>(() => form, 'error', function () {
+        emit('input', props.value?.map(((item, index) => ({ ...item, [errorIndex]: index }))), { preserveError: true });
     });
 
     emit('input', props.value?.map(item => ({ ...item, [itemKey]: itemKeyIndex++ })), { force: true });
-
-    watch(form.meta, () => console.log(form.meta), { deep: true });
 
     watchArray(() => props.value ?? [], async (newList, oldList, added) => {
         if(!added.length) {
@@ -91,6 +90,7 @@
         }
         form.setMeta(
             props.field.key,
+            // @ts-ignore
             props.value?.map(item =>
                 (form.meta[props.field.key] as FieldsMeta[])?.find(meta => meta[itemKey] === item[itemKey])
                 ?? ({ [itemKey]: item[itemKey] })
@@ -194,11 +194,11 @@
         <div class="grid grid-cols-1 gap-y-6">
             <template v-if="value?.length > 0">
                 <div class="relative group/list space-y-6" role="list" :ref="(el: HTMLElement) => sortableContainer = el">
-                    <TransitionGroup move-class="transition-transform duration-200" leave-to-class="opacity-0" leave-active-class="!absolute" :css="false">
+                    <TransitionGroup move-class="transition-transform duration-200" leave-to-class="opacity-0" leave-active-class="absolute!" :css="false">
                         <template v-for="(item, index) in value" :key="`${item[itemKey]}-${sortedKey}`">
-                            <Card class="group relative ring-ring ring-offset-2 ring-background p-6 shadow"
+                            <Card class="group relative p-6 shadow-sm"
                                 :class="[
-                                    '[&.sortable-ghost]:z-10 [&.sortable-ghost]:ring-2',
+                                    '[&.sortable-ghost]:z-10 [&.sortable-ghost]:ring-2 [&.sortable-ghost]:ring-offset-2 [&.sortable-ghost]:ring-offset-background',
                                     reordering ? 'cursor-grab bg-muted/50' : 'bg-background',
                                     itemShouldHavePaddingTop(item) ? 'pt-10' : ''
                                 ]"
@@ -220,6 +220,7 @@
                                                             :parent-field="field"
                                                             :value="item[itemFieldLayout.key]"
                                                             :locale="(form.getMeta(`${field.key}.${item[itemKey]}.${itemFieldLayout.key}`) as FieldMeta)?.locale ?? form.defaultLocale"
+                                                            :parent-data="item"
                                                             :row="row"
                                                             @input="(value, options) => onFieldInput(index, itemFieldLayout.key, value, options)"
                                                             @locale-change="onFieldLocaleChange(`${field.key}.${item[itemKey]}.${itemFieldLayout.key}`, $event)"
@@ -275,7 +276,7 @@
             </template>
 
             <template v-if="!props.field.readOnly">
-                <div class="relative grid grid-cols-1 gap-y-3"
+                <div class="relative grid grid-cols-1 gap-y-3 [&:not(:has(*))]:hidden"
                     @dragenter="($event as DragEvent).dataTransfer.types.includes('Files') && (bulkDroppingFile = true)"
                     @dragleave="(!$event.relatedTarget || !$el.contains($event.relatedTarget)) && (bulkDroppingFile = false)"
                 >
@@ -328,7 +329,7 @@
                 </div>
             </template>
 
-            <template v-if="field.readOnly && !value?.length">
+            <template v-if="!canAddItem && !value?.length">
                 <div class="text-muted-foreground text-sm">
                     {{ __('sharp::form.list.empty') }}
                 </div>

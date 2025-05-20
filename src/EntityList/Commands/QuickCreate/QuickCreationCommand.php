@@ -3,6 +3,7 @@
 namespace Code16\Sharp\EntityList\Commands\QuickCreate;
 
 use Code16\Sharp\EntityList\Commands\EntityCommand;
+use Code16\Sharp\Exceptions\Form\SharpFormUpdateException;
 use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
@@ -12,6 +13,7 @@ class QuickCreationCommand extends EntityCommand
     protected ?string $title = null;
     protected SharpForm $sharpForm;
     protected string $entityKey;
+    protected mixed $instanceId;
 
     public function __construct(protected ?array $specificFormFields) {}
 
@@ -64,18 +66,23 @@ class QuickCreationCommand extends EntityCommand
         return $this->sharpForm->getDataLocalizations();
     }
 
+    public function getInstanceId(): mixed
+    {
+        return $this->instanceId;
+    }
+
     public function execute(array $data = []): array
     {
-        $instanceId = $this->sharpForm->update(null, $data);
+        $this->instanceId = $this->sharpForm->update(null, $data);
+
+        if ($this->instanceId === null) {
+            report(new SharpFormUpdateException('The update() method in '.get_class($this->sharpForm).' must return the newly created instance id'));
+        }
+
         $currentUrl = sharp()->context()->breadcrumb()->getCurrentSegmentUrl();
 
         return $this->sharpForm->isDisplayShowPageAfterCreation()
-            ? $this->link(sprintf(
-                '%s/s-show/%s/%s',
-                $currentUrl,
-                sharp_normalize_entity_key($this->entityKey)[0],
-                $instanceId
-            ))
+            ? $this->link(sprintf('%s/s-show/%s/%s', $currentUrl, $this->entityKey, $this->instanceId))
             : $this->reload();
     }
 

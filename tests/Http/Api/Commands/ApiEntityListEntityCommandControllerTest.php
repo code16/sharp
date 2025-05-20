@@ -2,7 +2,10 @@
 
 use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
+use Code16\Sharp\Exceptions\Form\SharpFormFieldLayoutException;
+use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
+use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
@@ -10,7 +13,7 @@ use Code16\Sharp\Utils\PageAlerts\PageAlert;
 use Illuminate\Http\UploadedFile;
 
 beforeEach(function () {
-    sharp()->config()->addEntity('person', PersonEntity::class);
+    sharp()->config()->declareEntity(PersonEntity::class);
     login();
 });
 
@@ -41,6 +44,7 @@ it('allows to call an info entity command', function () {
         ->assertJson([
             'action' => 'info',
             'message' => 'ok',
+            'reload' => false,
         ]);
 });
 
@@ -70,6 +74,37 @@ it('allows to call a reload entity command', function () {
         ->assertOk()
         ->assertJson([
             'action' => 'reload',
+        ]);
+});
+
+it('allows to call an info + reload entity command', function () {
+    fakeListFor('person', new class() extends PersonList
+    {
+        protected function getEntityCommands(): ?array
+        {
+            return [
+                'cmd' => new class() extends EntityCommand
+                {
+                    public function label(): ?string
+                    {
+                        return 'entity';
+                    }
+
+                    public function execute(array $data = []): array
+                    {
+                        return $this->info('ok', reload: true);
+                    }
+                },
+            ];
+        }
+    });
+
+    $this->postJson(route('code16.sharp.api.list.command.entity', ['person', 'cmd']))
+        ->assertOk()
+        ->assertJson([
+            'action' => 'info',
+            'message' => 'ok',
+            'reload' => true,
         ]);
 });
 
@@ -487,7 +522,14 @@ it('returns the form fields of the entity command and build a basic layout if mi
 
                     public function buildFormFields(FieldsContainer $formFields): void
                     {
-                        $formFields->addField(SharpFormTextField::make('name'));
+                        $formFields
+                            ->addField(SharpFormTextField::make('name'))
+                            ->addField(
+                                SharpFormListField::make('jobs')
+                                    ->addItemField(
+                                        SharpFormTextField::make('company')
+                                    )
+                            );
                     }
 
                     public function execute(array $data = []): array
@@ -503,13 +545,6 @@ it('returns the form fields of the entity command and build a basic layout if mi
         ->getJson(route('code16.sharp.api.list.command.entity.form', ['person', 'cmd']))
         ->assertOk()
         ->assertJsonFragment([
-            'fields' => [
-                'name' => [
-                    'key' => 'name',
-                    'type' => 'text',
-                    'inputType' => 'text',
-                ],
-            ],
             'layout' => [
                 'tabbed' => false,
                 'tabs' => [
@@ -518,18 +553,68 @@ it('returns the form fields of the entity command and build a basic layout if mi
                             [
                                 'fields' => [
                                     [
-                                        ['key' => 'name', 'size' => 12],
+                                        [
+                                            'key' => 'name',
+                                            'size' => 12,
+                                        ],
+                                    ],
+                                    [
+                                        [
+                                            'key' => 'jobs',
+                                            'size' => 12,
+                                            'item' => [
+                                                [
+                                                    [
+                                                        'key' => 'company',
+                                                        'size' => 12,
+                                                    ],
+                                                ],
+                                            ],
+                                        ],
                                     ],
                                 ],
                                 'size' => 12,
                             ],
                         ],
-                        'title' => 'one',
+                        'title' => '',
                     ],
                 ],
             ],
         ]);
 });
+
+it('fails when referencing an undeclared form field in the layout', function () {
+    $this->withoutExceptionHandling();
+    fakeListFor('person', new class() extends PersonList
+    {
+        protected function getEntityCommands(): ?array
+        {
+            return [
+                'cmd' => new class() extends EntityCommand
+                {
+                    public function label(): ?string
+                    {
+                        return 'entity';
+                    }
+
+                    public function buildFormFields(FieldsContainer $formFields): void
+                    {
+                        $formFields->addField(SharpFormTextField::make('name'));
+                    }
+
+                    public function buildFormLayout(FormLayoutColumn &$column): void
+                    {
+                        $column->withField('title');
+                    }
+
+                    public function execute(array $data = []): array {}
+                },
+            ];
+        }
+    });
+
+    $this->getJson(route('code16.sharp.api.list.command.entity.form', ['person', 'cmd']));
+})->throws(SharpFormFieldLayoutException::class, SharpFormFieldLayoutException::undeclaredField('title')->getMessage());
 
 it('allows to configure a page alert on an entity command', function () {
     fakeListFor('person', new class() extends PersonList
@@ -646,7 +731,7 @@ it('allows to initialize form data in an entity command', function () {
 
                     public function buildFormFields(FieldsContainer $formFields): void
                     {
-                        $formFields->addField(SharpFormTextField::make('name')->setLocalized());
+                        $formFields->addField(SharpFormTextField::make('name'));
                     }
 
                     public function execute(array $data = []): array

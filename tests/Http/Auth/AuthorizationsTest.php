@@ -15,7 +15,8 @@ use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
     login();
-    sharp()->config()->addEntity('person', PersonEntity::class);
+    sharp()->config()->declareEntity(PersonEntity::class);
+    sharp()->config()->disableImpersonation();
 });
 
 it('allows to configure prohibited actions on entities', function () {
@@ -212,7 +213,7 @@ it('checks the main entity prohibited actions in case of a sub entity', function
     app(SharpEntityManager::class)
         ->entityFor('person')
         ->setMultiforms([
-            'big' => [FakeSharpForm::class],
+            'big' => [FakeSharpForm::class, 'Big'],
         ])
         ->setProhibitedActions(['delete']);
 

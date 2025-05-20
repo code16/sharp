@@ -3,6 +3,7 @@
 namespace App\Sharp\Posts;
 
 use App\Models\Post;
+use App\Sharp\Entities\PostEntity;
 use App\Sharp\Posts\Commands\BulkPublishPostsCommand;
 use App\Sharp\Posts\Commands\ComposeEmailWithPostsWizardCommand;
 use App\Sharp\Posts\Commands\EvaluateDraftPostWizardCommand;
@@ -75,7 +76,7 @@ class PostList extends SharpEntityList
         if (! auth()->user()->isAdmin()) {
             $pageAlert
                 ->setMessage('As an editor, you can only edit your posts; you can see other posts except those which are still in draft.')
-                ->setLevelSecondary();
+                ->setLevelInfo();
         }
     }
 
@@ -180,15 +181,15 @@ class PostList extends SharpEntityList
             })
             ->setCustomTransformer('author:name', function ($value, $instance) {
                 return $value
-                    ? LinkToEntityList::make('posts')
+                    ? LinkToEntityList::make(PostEntity::class)
                         ->addFilter(AuthorFilter::class, $instance->id)
                         ->setTooltip('See '.$value.' posts')
                         ->renderAsText($value)
                     : null;
             })
-            ->setCustomTransformer('cover', (new SharpUploadModelThumbnailUrlTransformer(100))->renderAsImageTag())
+            ->setCustomTransformer('cover', new SharpUploadModelThumbnailUrlTransformer(100)->renderAsImageTag())
             ->setCustomTransformer('published_at', DateTimeCustomTransformer::class)
-            ->setCustomTransformer('categories', (new SharpTagsTransformer('name'))->setFilterLink('posts', CategoryFilter::class))
+            ->setCustomTransformer('categories', new SharpTagsTransformer('name')->setFilterLink(PostEntity::class, CategoryFilter::class))
             ->transform($posts->paginate(20));
     }
 }

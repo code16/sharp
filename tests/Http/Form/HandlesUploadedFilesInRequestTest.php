@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Storage;
 
 beforeEach(function () {
     $this->withoutExceptionHandling();
-    sharp()->config()->addEntity('person', PersonEntity::class);
+    sharp()->config()->declareEntity(PersonEntity::class);
     login();
     Storage::fake('local');
     Queue::fake();
@@ -274,6 +274,48 @@ it('does not dispatch HandlePostedFilesJob if not needed', function () {
                         'disk' => 'local',
                     ],
                 ],
+            ],
+        ])
+        ->assertSessionHasNoErrors()
+        ->assertRedirect();
+
+    Queue::assertNotPushed(HandleUploadedFileJob::class);
+});
+
+it('does not dispatch HandlePostedFilesJob when temporary', function () {
+    fakeFormFor('person', new class() extends PersonForm
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields
+                ->addField(
+                    SharpFormUploadField::make('file')
+                        ->setStorageTemporary()
+                );
+        }
+    });
+
+    UploadedFile::fake()
+        ->image('image.jpg')
+        ->storeAs('/tmp', 'image.jpg', ['disk' => 'local']);
+
+    $this
+        ->post('/sharp/s-list/person/s-form/person/2', [
+            'name' => 'Stephen Hawking',
+            'file' => [
+                'name' => 'image.jpg',
+                'uploaded' => true,
+            ],
+        ])
+        ->assertSessionHasNoErrors()
+        ->assertRedirect();
+
+    $this
+        ->post('/sharp/s-list/person/s-form/person', [
+            'name' => 'Marie Curie',
+            'file' => [
+                'name' => 'image.jpg',
+                'uploaded' => true,
             ],
         ])
         ->assertSessionHasNoErrors()

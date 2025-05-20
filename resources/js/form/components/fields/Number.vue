@@ -9,8 +9,9 @@
 </script>
 
 <template>
-    <FormFieldLayout v-bind="props">
+    <FormFieldLayout v-bind="props" v-slot="{ id, ariaDescribedBy }">
         <Input
+            :id="id"
             :class="{
                 '[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none': !field.showControls,
             }"
@@ -19,6 +20,7 @@
             :min="field.min"
             :max="field.max"
             :disabled="field.readOnly"
+            :aria-describedby="ariaDescribedBy"
             type="number"
             @update:model-value="emit('input', $event !== '' ? Number($event) : null)"
         />

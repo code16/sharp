@@ -10,7 +10,7 @@ use Code16\Sharp\Utils\PageAlerts\PageAlert;
 use Illuminate\Http\UploadedFile;
 
 beforeEach(function () {
-    sharp()->config()->addEntity('person', PersonEntity::class);
+    sharp()->config()->declareEntity(PersonEntity::class);
     login();
 });
 
@@ -41,6 +41,7 @@ it('allows to call an info instance command', function () {
         ->assertJson([
             'action' => 'info',
             'message' => 'ok',
+            'reload' => false,
         ]);
 });
 
@@ -70,6 +71,37 @@ it('allows to call a reload instance command', function () {
         ->assertOk()
         ->assertJson([
             'action' => 'reload',
+        ]);
+});
+
+it('allows to call an info + reload instance command', function () {
+    fakeListFor('person', new class() extends PersonList
+    {
+        protected function getInstanceCommands(): ?array
+        {
+            return [
+                'instance_info' => new class() extends InstanceCommand
+                {
+                    public function label(): ?string
+                    {
+                        return 'my command';
+                    }
+
+                    public function execute($instanceId, array $data = []): array
+                    {
+                        return $this->info('ok', reload: true);
+                    }
+                },
+            ];
+        }
+    });
+
+    $this->postJson(route('code16.sharp.api.list.command.instance', ['person', 'instance_info', 1]))
+        ->assertOk()
+        ->assertJson([
+            'action' => 'info',
+            'message' => 'ok',
+            'reload' => true,
         ]);
 });
 
@@ -406,7 +438,7 @@ it('returns the form of the instance command', function () {
                                 'size' => 12,
                             ],
                         ],
-                        'title' => 'one',
+                        'title' => '',
                     ],
                 ],
             ],
@@ -527,7 +559,7 @@ it('allows to initialize form data in an instance command', function () {
 
                     public function buildFormFields(FieldsContainer $formFields): void
                     {
-                        $formFields->addField(SharpFormTextField::make('name')->setLocalized());
+                        $formFields->addField(SharpFormTextField::make('name'));
                     }
 
                     public function execute($instanceId, array $data = []): array
@@ -538,7 +570,7 @@ it('allows to initialize form data in an instance command', function () {
                     public function initialData($instanceId): array
                     {
                         return [
-                            'name' => $instanceId == 1 ? 'Marie Curie' : '',
+                            'name' => $instanceId == 1 ? 'Marie Curie' : null,
                         ];
                     }
                 },

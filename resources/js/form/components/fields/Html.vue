@@ -7,7 +7,7 @@
 </script>
 
 <template>
-    <FormFieldLayout v-bind="props">
+    <FormFieldLayout v-bind="props" field-group>
         <div class="text-sm" v-html="props.value">
         </div>
     </FormFieldLayout>

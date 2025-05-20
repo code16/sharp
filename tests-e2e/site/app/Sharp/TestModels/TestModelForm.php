@@ -3,6 +3,9 @@
 namespace App\Sharp\TestModels;
 
 use App\Models\TestModel;
+use App\Models\TestTag;
+use App\Sharp\Embeds\TestEmbed;
+use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteListField;
@@ -22,6 +25,7 @@ use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
+use Code16\Sharp\Form\Layout\FormLayoutTab;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
@@ -42,7 +46,7 @@ class TestModelForm extends SharpForm
             )
             ->addField(
                 SharpFormAutocompleteRemoteField::make('autocomplete_remote')
-                    ->setLabel('Autocomplete endpoint remote')
+                    ->setLabel('Autocomplete remote endpoint')
                     ->setRemoteSearchAttribute('query')
                     ->setListItemTemplate('{{ $label }}')
                     ->setResultItemTemplate('{{ $label }} ({{ $id }})')
@@ -50,7 +54,7 @@ class TestModelForm extends SharpForm
             )
             ->addField(
                 SharpFormAutocompleteRemoteField::make('autocomplete_remote2')
-                    ->setLabel('Autocomplete callback remote')
+                    ->setLabel('Autocomplete remote callback')
                     ->setRemoteSearchAttribute('query')
                     ->setListItemTemplate('{{ $label }}')
                     ->setResultItemTemplate('{{ $label }} ({{ $id }})')
@@ -105,8 +109,8 @@ class TestModelForm extends SharpForm
             ->addField(
                 SharpFormGeolocationField::make('geolocation')
                     ->setLabel('Geolocation')
-                    ->setApiKey(env('GMAPS_KEY'))
-                    ->setGoogleMapsMapId(env('GMAPS_MAP_ID'))
+//                    ->setApiKey(env('GMAPS_KEY'))
+//                    ->setGoogleMapsMapId(env('GMAPS_MAP_ID'))
                     ->setMapsProvider('osm')
                     ->setGeocodingProvider('osm')
 //                    ->setMapsProvider('gmaps')
@@ -129,19 +133,9 @@ class TestModelForm extends SharpForm
                     ->setRemovable()
                     ->setItemIdAttribute('id')
                     ->addItemField(
-                        SharpFormDateField::make('date')
-                            ->setLabel('Date')
-                            ->setHasTime(false),
+                        SharpFormTextField::make('item')
+                            ->setLabel('List item text'),
                     )
-                    ->addItemField(
-                        SharpFormCheckField::make('check', 'check this'),
-                    )
-                    ->addItemField(SharpFormEditorField::make('markdown2')
-                        ->setLabel('Markdown')
-                        ->setToolbar([
-                            SharpFormEditorField::B, SharpFormEditorField::I, SharpFormEditorField::A,
-                        ]),
-                    ),
             )
             ->addField(
                 SharpFormEditorField::make('editor_html')
@@ -151,6 +145,10 @@ class TestModelForm extends SharpForm
                         SharpFormEditorField::B,
                         SharpFormEditorField::I,
                         SharpFormEditorField::A,
+                        SharpFormEditorField::HIGHLIGHT,
+                        SharpFormEditorField::SMALL,
+                        SharpFormEditorField::SUP,
+                        SharpFormEditorField::CODE,
                         SharpFormEditorField::SEPARATOR,
                         SharpFormEditorField::H1,
                         SharpFormEditorField::H2,
@@ -160,25 +158,24 @@ class TestModelForm extends SharpForm
                         SharpFormEditorField::OL,
                         SharpFormEditorField::UL,
                         SharpFormEditorField::QUOTE,
-                        SharpFormEditorField::CODE,
+                        SharpFormEditorField::UPLOAD,
                         SharpFormEditorField::UPLOAD_IMAGE,
+                        SharpFormEditorField::CODE_BLOCK,
                         SharpFormEditorField::SEPARATOR,
                         SharpFormEditorField::TABLE,
                         SharpFormEditorField::IFRAME,
                         SharpFormEditorField::RAW_HTML,
-                        SharpFormEditorField::SEPARATOR,
-                        SharpFormEditorField::HIGHLIGHT,
-                        SharpFormEditorField::SMALL,
-                        SharpFormEditorField::CODE_BLOCK,
-                        SharpFormEditorField::SUP,
                     ])
                     ->allowUploads(
                         SharpFormEditorUpload::make()
-                            ->setImageOnly()
+//                            ->setImageOnly()
                             ->setImageCropRatio('1:1')
                             ->setStorageDisk('local')
                             ->setStorageBasePath('data')
                     )
+                    ->allowEmbeds([
+                        TestEmbed::class,
+                    ])
                     ->setHeight(350)
             )
             ->addField(
@@ -235,13 +232,18 @@ class TestModelForm extends SharpForm
             ->addField(
                 SharpFormSelectField::make('select_dropdown', static::options())
                     ->setLabel('Select dropdown')
+                    ->setClearable()
+                    ->setDisplayAsDropdown(),
+            )
+            ->addField(
+                SharpFormSelectField::make('select_dropdown_multiple', static::options())
+                    ->setLabel('Select dropdown multiple')
                     ->allowSelectAll()
-//                    ->setClearable()
                     ->setMultiple()
                     ->setDisplayAsDropdown(),
             )
             ->addField(
-                SharpFormSelectField::make('select_radios', static::options())
+                SharpFormSelectField::make('select_radio', static::options())
                     ->setLabel('Select radios')
                     ->setDisplayAsList(),
             )
@@ -255,7 +257,7 @@ class TestModelForm extends SharpForm
                 //                    ->setMaxSelected(2),
             )
             ->addField(
-                SharpFormTagsField::make('tags', static::options())
+                SharpFormTagsField::make('tags', TestTag::pluck('label', 'id')->toArray())
                     ->setLabel('Tags')
                     ->setCreatable(true)
                     ->setCreateAttribute('label')
@@ -274,7 +276,7 @@ class TestModelForm extends SharpForm
             )
             ->addField(
                 SharpFormTextField::make('text')
-                    ->setLabel('text'),
+                    ->setLabel('Text'),
             )
             ->addField(
                 SharpFormTextField::make('text_localized')
@@ -284,16 +286,16 @@ class TestModelForm extends SharpForm
             ->addField(
                 SharpFormUploadField::make('upload')
                     ->setLabel('Upload')
-                    ->setMaxFileSize(5)
+                    ->setMaxFileSize(2)
                     ->setImageCropRatio('1:1')
                     ->setStorageDisk('local')
                     ->setStorageBasePath('data'),
             );
     }
 
-    public function buildFormLayout(FormLayout $formLayout): void
+    protected function buildTestFieldsLayout(FormLayout|FormLayoutTab $layout)
     {
-        $formLayout
+        $layout
             ->addColumn(6, function (FormLayoutColumn $column) {
                 $column
                     ->withField('autocomplete_local')
@@ -303,12 +305,14 @@ class TestModelForm extends SharpForm
                         $listItem->withField('item');
                     })
                     ->withField('check')
-                    ->withField('date_time')
                     ->withField('date')
+                    ->withField('date_time')
                     ->withField('time')
                     ->withField('geolocation')
                     ->withField('html')
-                    ->withField('list')
+                    ->withListField('list', function (FormLayoutColumn $listItem) {
+                        $listItem->withField('item');
+                    })
                     ->withField('editor_html')
                     ->withField('editor_html_localized')
                     ->withField('editor_markdown');
@@ -317,7 +321,8 @@ class TestModelForm extends SharpForm
                 $column
                     ->withField('number')
                     ->withField('select_dropdown')
-                    ->withField('select_radios')
+                    ->withField('select_dropdown_multiple')
+                    ->withField('select_radio')
                     ->withField('select_checkboxes')
                     ->withField('tags')
                     ->withField('textarea')
@@ -326,6 +331,18 @@ class TestModelForm extends SharpForm
                     ->withField('text_localized')
                     ->withField('upload');
             });
+    }
+
+    public function buildFormLayout(FormLayout $formLayout): void
+    {
+        $this->buildTestFieldsLayout($formLayout);
+    }
+
+    public function buildFormConfig(): void
+    {
+        if (session()->get('display_show_page_after_creation')) {
+            $this->configureDisplayShowPageAfterCreation();
+        }
     }
 
     public function create(): array
@@ -344,9 +361,10 @@ class TestModelForm extends SharpForm
             ->setCustomTransformer('autocomplete_remote2', function ($value) {
                 return $value ? ['id' => $value, 'label' => static::options()[$value]] : null;
             })
-            ->transform(TestModel::findOrFail($id)->fill([
-            'html' => ['name' => 'John'],
-        ]));
+            ->setCustomTransformer('upload', new SharpUploadModelFormAttributeTransformer())
+            ->transform(TestModel::with('tags')->findOrFail($id)->fill([
+                'html' => ['name' => 'John'],
+            ]));
     }
 
     public function update($id, array $data)
@@ -357,12 +375,17 @@ class TestModelForm extends SharpForm
     public function rules(): array
     {
         return [
+            'editor_markdown' => [
+                'nullable',
+                'starts_with:**',
+                'ends_with:**',
+            ],
         ];
     }
 
     public function getDataLocalizations(): array
     {
-        return ['fr', 'en'];
+        return ['en', 'fr'];
     }
 
     public static function options(): array

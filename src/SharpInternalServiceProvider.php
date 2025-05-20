@@ -27,8 +27,10 @@ use Code16\Sharp\Console\PolicyMakeCommand;
 use Code16\Sharp\Console\ReorderHandlerMakeCommand;
 use Code16\Sharp\Console\ServiceProviderMakeCommand;
 use Code16\Sharp\Console\ShowPageMakeCommand;
+use Code16\Sharp\Exceptions\SharpAuthenticationException;
 use Code16\Sharp\Exceptions\SharpTokenMismatchException;
 use Code16\Sharp\Form\Eloquent\Uploads\Migration\CreateUploadsMigration;
+use Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\SharpImageManager;
 use Code16\Sharp\Http\Context\CurrentSharpRequest;
 use Code16\Sharp\Http\Middleware\AddLinkHeadersForPreloadedRequests;
 use Code16\Sharp\Http\Middleware\SharpAuthenticate;
@@ -39,6 +41,7 @@ use Code16\Sharp\Utils\Uploads\SharpUploadManager;
 use Code16\Sharp\View\Components\Content;
 use Code16\Sharp\View\Components\File;
 use Code16\Sharp\View\Components\Image;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Session\TokenMismatchException;
@@ -46,11 +49,14 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Inertia\ServiceProvider as InertiaServiceProvider;
-use Intervention\Image\ImageManager;
+use Laravel\Octane\Events\RequestReceived;
+use Laravel\Octane\Events\RequestTerminated;
+use Laravel\Octane\Events\TaskReceived;
+use Laravel\Octane\Events\TickReceived;
 
 class SharpInternalServiceProvider extends ServiceProvider
 {
-    const VERSION = '9.0.0-beta.3';
+    const VERSION = '9.3.7';
 
     public function boot()
     {
@@ -83,12 +89,12 @@ class SharpInternalServiceProvider extends ServiceProvider
             setlocale(LC_ALL, config('sharp.locale'));
             Carbon::setLocale(config('sharp.locale'));
         }
+
+        $this->configureOctane();
     }
 
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'sharp');
-
         $this->app->singleton(SharpAuthorizationManager::class);
         $this->app->singleton(CurrentSharpRequest::class);
         $this->app->singleton(SharpMenuManager::class);
@@ -100,10 +106,7 @@ class SharpInternalServiceProvider extends ServiceProvider
                 ? new SharpLegacyConfigBuilder()
                 : new SharpConfigBuilder()
         );
-        $this->app->singleton(
-            ImageManager::class,
-            fn () => new ImageManager(sharp()->config()->get('uploads.image_driver'))
-        );
+        $this->app->singleton(SharpImageManager::class);
         $this->app->singleton(AddLinkHeadersForPreloadedRequests::class);
 
         if (class_exists('\PragmaRX\Google2FA\Google2FA')) {
@@ -128,7 +131,6 @@ class SharpInternalServiceProvider extends ServiceProvider
                 : null;
         });
 
-        $this->app->register(\Intervention\Image\Laravel\ServiceProvider::class);
         $this->app->register(InertiaServiceProvider::class);
     }
 
@@ -180,6 +182,18 @@ class SharpInternalServiceProvider extends ServiceProvider
 
             return $exception;
         });
+
+        $handler->map(function (AuthenticationException $exception) {
+            if (request()->routeIs('code16.sharp.*')) {
+                return new SharpAuthenticationException(
+                    $exception->getMessage(),
+                    $exception->guards(),
+                    $exception->redirectTo(request())
+                );
+            }
+
+            return $exception;
+        });
     }
 
     public function loadRoutes(): void
@@ -202,5 +216,36 @@ class SharpInternalServiceProvider extends ServiceProvider
         if (sharp()->config()->get('auth.impersonate.enabled')) {
             $this->loadRoutesFrom(__DIR__.'/routes/auth/impersonate.php');
         }
+    }
+
+    private function configureOctane(): void
+    {
+        if (isset($_SERVER['LARAVEL_OCTANE'])) {
+            $this->app['events']->listen(RequestReceived::class, function () {
+                $this->resetSharp();
+            });
+
+            $this->app['events']->listen(TaskReceived::class, function () {
+                $this->resetSharp();
+            });
+
+            $this->app['events']->listen(TickReceived::class, function () {
+                $this->resetSharp();
+            });
+
+            $this->app['events']->listen(RequestTerminated::class, function () {
+                $this->resetSharp();
+            });
+        }
+    }
+
+    private function resetSharp()
+    {
+        $this->app->get(SharpMenuManager::class)->reset();
+        $this->app->get(SharpAuthorizationManager::class)->reset();
+        $this->app->get(SharpUploadManager::class)->reset();
+        $this->app->get(SharpUtil::class)->__construct();
+        $this->app->get(SharpImageManager::class)->__construct();
+        $this->app->get(AddLinkHeadersForPreloadedRequests::class)->reset();
     }
 }

@@ -5,8 +5,12 @@
 
 <template>
     <Layout>
-        <h1 class="text-xl">
-            {{ __('sharp::menu.no-dashboard-message') }}
-        </h1>
+        <div class="@container">
+            <div class="container pt-6 @3xl:pt-10">
+                <h1 class="text-xl">
+                    {{ __('sharp::menu.no-dashboard-message') }}
+                </h1>
+            </div>
+        </div>
     </Layout>
 </template>

@@ -3,6 +3,7 @@
 namespace App\Sharp\Categories;
 
 use App\Models\Category;
+use App\Sharp\Entities\PostEntity;
 use App\Sharp\Utils\Filters\CategoryFilter;
 use Code16\Sharp\Show\Fields\SharpShowEntityListField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
@@ -36,7 +37,7 @@ class CategoryShow extends SharpShow
                     ->setLabel('Description')
             )
             ->addField(
-                SharpShowEntityListField::make('posts')
+                SharpShowEntityListField::make(PostEntity::class)
                     ->setLabel('Related posts')
                     ->showCreateButton(false)
                     ->showCount()
@@ -54,7 +55,7 @@ class CategoryShow extends SharpShow
                             ->withField('description');
                     });
             })
-            ->addEntityListSection('posts', collapsable: true);
+            ->addEntityListSection(PostEntity::class);
     }
 
     public function delete($id): void

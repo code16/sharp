@@ -6,12 +6,23 @@ use Closure;
 use Code16\Sharp\Auth\Impersonate\SharpDefaultEloquentImpersonationHandler;
 use Code16\Sharp\Auth\Impersonate\SharpImpersonationHandler;
 use Code16\Sharp\Auth\TwoFactor\Sharp2faHandler;
+use Code16\Sharp\Exceptions\SharpInvalidConfigException;
+use Code16\Sharp\Exceptions\SharpInvalidEntityKeyException;
 use Code16\Sharp\Search\SharpSearchEngine;
+use Code16\Sharp\Utils\Entities\BaseSharpEntity;
+use Code16\Sharp\Utils\Entities\SharpDashboardEntity;
+use Code16\Sharp\Utils\Entities\SharpEntity;
+use Code16\Sharp\Utils\Entities\SharpEntityResolver;
 use Code16\Sharp\Utils\Filters\GlobalRequiredFilter;
 use Code16\Sharp\Utils\Menu\SharpMenu;
 use Illuminate\Contracts\Auth\PasswordBroker;
+use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Vite;
 use Illuminate\Support\Traits\Conditionable;
+use ReflectionClass;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
+use Throwable;
 
 class SharpConfigBuilder
 {
@@ -47,6 +58,7 @@ class SharpConfigBuilder
         ],
         'auth' => [
             'login_page_url' => null,
+            'logout_page_url' => null,
             'display_attribute' => 'name',
             'login_attribute' => 'email',
             'avatar_attribute' => 'avatar',
@@ -120,6 +132,7 @@ class SharpConfigBuilder
         return $this;
     }
 
+    /** @deprecated use declareEntity instead, and set the entityKey in the SharpEntity class */
     public function addEntity(string $key, string $entityClass): self
     {
         $this->config['entities'][$key] = $entityClass;
@@ -128,13 +141,75 @@ class SharpConfigBuilder
         return $this;
     }
 
-    /**
-     * @deprecated will be removed in a future version. Use regular addEntity() calls instead.
-     */
-    public function declareEntityResolver(string $resolverClassName): self
+    public function declareEntity(string $entityClass): self
     {
-        $this->config['entity_resolver'] = $resolverClassName;
+        if (! is_subclass_of($entityClass, BaseSharpEntity::class)) {
+            throw new SharpInvalidEntityKeyException(
+                sprintf(
+                    '%s is an invalid entity class: it should extend either %s or %s.',
+                    $entityClass, SharpEntity::class, SharpDashboardEntity::class
+                )
+            );
+        }
+
+        $entityKey = $entityClass::$entityKey ?? null;
+        if (! $entityKey) {
+            $entityKey = str(class_basename($entityClass))
+                ->beforeLast('Entity')
+                ->kebab()
+                ->toString();
+        }
+
+        $this->config['entities'][$entityKey] = $entityClass;
+        $this->config['entity_resolver'] = null;
+
+        return $this;
+    }
+
+    public function declareEntityResolver(SharpEntityResolver|string $resolver): self
+    {
+        $resolver = instanciate($resolver);
+
+        if (! $resolver instanceof SharpEntityResolver) {
+            throw new SharpInvalidEntityKeyException('Invalid entity resolver class: it should extend '.SharpEntityResolver::class.'.');
+        }
+
+        $this->config['entity_resolver'] = instanciate($resolver);
         $this->config['entities'] = [];
+
+        return $this;
+    }
+
+    public function discoverEntities(array $paths = []): self
+    {
+        $entityClasses = collect($paths)
+            ->map(fn (string $path) => str($path)->startsWith('/')
+                ? $path
+                : app_path($path)
+            )
+            ->add(app_path('Sharp/Entities'))
+            ->filter(fn (string $path) => file_exists($path))
+            ->unique()
+            ->map(fn (string $path) => collect((new Finder())->files()->in($path))
+                ->map(fn (SplFileInfo $file) => $this->fullQualifiedClassNameFromFile($file))
+                ->whereNotNull()
+                ->filter(function (string $entityClass) {
+                    try {
+                        return (
+                            is_subclass_of($entityClass, SharpEntity::class)
+                            || is_subclass_of($entityClass, SharpDashboardEntity::class)
+                        ) && (new ReflectionClass($entityClass))->isInstantiable();
+                    } catch (Throwable) {
+                        return false;
+                    }
+                })
+                ->flatten()
+                ->each(fn (string $entityClass) => $this->declareEntity($entityClass))
+            );
+
+        if (empty($entityClasses)) {
+            throw new SharpInvalidConfigException('discoverEntities failed: no entities found in the given path.');
+        }
 
         return $this;
     }
@@ -249,8 +324,20 @@ class SharpConfigBuilder
         return $this;
     }
 
-    public function enableImpersonation(SharpImpersonationHandler|string|null $handler = null): self
+    public function enableImpersonation(SharpImpersonationHandler|Closure|string|null $handler = null): self
     {
+        if ($handler instanceof Closure) {
+            $handler = new class($handler) extends SharpImpersonationHandler
+            {
+                public function __construct(private readonly Closure $callback) {}
+
+                public function getUsers(): array
+                {
+                    return call_user_func($this->callback);
+                }
+            };
+        }
+
         $this->config['auth']['impersonate'] = [
             'enabled' => true,
             'handler' => $handler
@@ -388,9 +475,9 @@ class SharpConfigBuilder
         return $this;
     }
 
-    public function appendMessageOnLoginForm(string $messageOrBladePath): self
+    public function appendMessageOnLoginForm(string|View $message): self
     {
-        $this->config['auth']['login_form_message'] = $messageOrBladePath;
+        $this->config['auth']['login_form_message'] = $message;
 
         return $this;
     }
@@ -398,6 +485,13 @@ class SharpConfigBuilder
     public function redirectLoginToUrl(?string $url): self
     {
         $this->config['auth']['login_page_url'] = $url;
+
+        return $this;
+    }
+
+    public function redirectLogoutToUrl(?string $url): self
+    {
+        $this->config['auth']['logout_page_url'] = $url;
 
         return $this;
     }
@@ -436,5 +530,18 @@ class SharpConfigBuilder
         }
 
         return $this->config[$key] ?? null;
+    }
+
+    private function fullQualifiedClassNameFromFile(SplFileInfo $file): ?string
+    {
+        $lines = file($file->getRealPath());
+        if ($namespaceLine = collect(preg_grep('/^namespace /', $lines))->first()) {
+            preg_match('/^namespace (.*);$/', $namespaceLine, $match);
+            if ($namespace = $match[1] ?? null) {
+                return $namespace.str($file->getFilename())->beforeLast('.php')->prepend('\\');
+            }
+        }
+
+        return null;
     }
 }

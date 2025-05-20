@@ -52,6 +52,7 @@
                         :id="`${id}.select-all`"
                         :model-value="isAllSelected"
                         :disabled="field.readOnly"
+                        :aria-label="isAllSelected ? __('sharp::form.select.unselect_all') : __('sharp::form.select.select_all')"
                         @update:model-value="$event ? selectAll() : emit('input', null)"
                     />
                     <Label class="font-normal py-1 text-sm leading-4" :for="`${id}.select-all`">

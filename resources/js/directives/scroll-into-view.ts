@@ -19,7 +19,7 @@ export const vScrollIntoView: Directive<any, boolean, ScrollLogicalPosition> = (
     if(value && !oldValue) {
         setTimeout(() => {
             scrollIntoViewIfNeeded(el, () => {
-                const align = modifiers.center ? 'center' : 'start';
+                const align = modifiers.center ? 'center' : modifiers.nearest ? 'nearest' : 'start';
                 el.scrollIntoView({ block: align, inline: align });
             });
         });

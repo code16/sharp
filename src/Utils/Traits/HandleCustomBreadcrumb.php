@@ -13,6 +13,11 @@ trait HandleCustomBreadcrumb
         return $this;
     }
 
+    public function getBreadcrumbCustomLabelAttribute(): ?string
+    {
+        return $this->breadcrumbAttribute;
+    }
+
     protected function appendBreadcrumbCustomLabelAttribute(array &$config): void
     {
         if ($this->breadcrumbAttribute) {

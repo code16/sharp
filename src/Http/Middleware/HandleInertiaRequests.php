@@ -2,17 +2,22 @@
 
 namespace Code16\Sharp\Http\Middleware;
 
+use Closure;
 use Code16\Sharp\Data\Filters\GlobalFiltersData;
 use Code16\Sharp\Data\LogoData;
 use Code16\Sharp\Data\MenuData;
+use Code16\Sharp\Data\Search\GlobalSearchData;
 use Code16\Sharp\Data\SessionData;
 use Code16\Sharp\Data\UserData;
 use Code16\Sharp\Enums\SessionStatusLevel;
+use Code16\Sharp\Http\Requests\SharpInertiaRequest;
 use Code16\Sharp\Utils\Filters\GlobalFilters;
 use Code16\Sharp\Utils\Menu\SharpMenuManager;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Gate;
+use Inertia\Inertia;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -20,6 +25,28 @@ class HandleInertiaRequests extends Middleware
     protected $rootView = 'sharp::app';
 
     public function __construct(protected Filesystem $filesystem) {}
+
+    public function version(Request $request)
+    {
+        if (app()->environment('testing')) {
+            return null;
+        }
+
+        return md5_file(public_path('vendor/sharp/manifest.json'));
+    }
+
+    public function handle(Request $request, Closure $next)
+    {
+        Inertia::share([
+            'query' => (object) $request->query(),
+        ]);
+
+        $inertiaRequest = SharpInertiaRequest::createFrom($request);
+
+        app()->instance('request', $inertiaRequest);
+
+        return parent::handle($inertiaRequest, $next);
+    }
 
     public function share(Request $request)
     {
@@ -44,16 +71,16 @@ class HandleInertiaRequests extends Middleware
                     'sharp::form',
                     'sharp::menu',
                     'sharp::modals',
+                    'sharp::errors',
                     'sharp::pages/auth/forgot-password',
                     'sharp::pages/auth/login',
                     'sharp::pages/auth/impersonate',
                     'sharp::pages/auth/reset-password',
                     'sharp::show',
                 ])
-                    ->map(function ($group) {
-                        return collect(__($group, [], app()->getFallbackLocale()))
-                            ->mapWithKeys(fn ($value, $key) => ["$group.$key" => __("$group.$key")]);
-                    })
+                    ->map(fn ($group) => collect(__($group, [], app()->getFallbackLocale()))
+                        ->mapWithKeys(fn ($value, $key) => ["$group.$key" => __("$group.$key")])
+                    )
                     ->collapse()
                     ->toArray();
             }),
@@ -66,8 +93,6 @@ class HandleInertiaRequests extends Middleware
                 'sharp.display_sharp_version_in_title' => sharp()->config()->get('display_sharp_version_in_title'),
                 'sharp.display_breadcrumb' => sharp()->config()->get('display_breadcrumb'),
                 'sharp.name' => sharp()->config()->get('name'),
-                'sharp.search.enabled' => sharp()->config()->get('search.enabled'),
-                'sharp.search.placeholder' => sharp()->config()->get('search.placeholder'),
                 'sharp.theme.logo_height' => sharp()->config()->get('theme.logo_height'),
             ],
             'logo' => LogoData::optional(transform(
@@ -79,15 +104,24 @@ class HandleInertiaRequests extends Middleware
                     'url' => $url,
                 ] : null,
             )),
-            'globalFilters' => app(GlobalFilters::class)->isEnabled()
-                ? GlobalFiltersData::from(app(GlobalFilters::class)->toArray())
-                : null,
-            ...auth()->check() ? [
-                'menu' => fn () => MenuData::from(app(SharpMenuManager::class)),
-                'auth' => fn () => [
-                    'user' => UserData::from(auth()->user()),
-                ],
-            ] : [],
+            ...auth()->check() && (! Gate::has('viewSharp') || Gate::allows('viewSharp'))
+                ? [
+                    'globalSearch' => sharp()->config()->get('search.enabled') && sharp()->config()->get('search.engine')?->authorize()
+                        ? GlobalSearchData::from([
+                            'config' => [
+                                'placeholder' => sharp()->config()->get('search.placeholder'),
+                            ],
+                        ])
+                        : null,
+                    'globalFilters' => app(GlobalFilters::class)->isEnabled()
+                        ? GlobalFiltersData::from(app(GlobalFilters::class)->toArray())
+                        : null,
+                    'menu' => fn () => MenuData::from(app(SharpMenuManager::class)),
+                    'auth' => fn () => [
+                        'user' => UserData::from(auth()->user()),
+                    ],
+                ]
+                : [],
         ];
     }
 }

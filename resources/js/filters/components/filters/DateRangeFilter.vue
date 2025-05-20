@@ -91,9 +91,18 @@
         <Popover v-model:open="open" @update:open="$event && onOpen()" :modal="!inline">
             <PopoverTrigger as-child>
                 <template v-if="inline">
-                    <Button variant="outline" size="sm" class="h-8 gap-2 transition-shadow data-[state=open]:shadow-md" :disabled="disabled">
+                    <Button
+                        class="h-8 gap-2 transition-shadow data-[state=open]:shadow-md"
+                        variant="outline" size="sm"
+                        :disabled="disabled"
+                        role="combobox"
+                        aria-autocomplete="none"
+                        :aria-label="filter.label"
+                    >
                         <CalendarIcon class="h-4 w-4 opacity-50" />
-                        {{ filter.label }}
+                        <span aria-hidden="true">
+                            {{ filter.label }}
+                        </span>
                         <template v-if="props.value && 'start' in props.value">
                             <Separator orientation="vertical" class="h-4" />
                             <DateRangeFilterValue v-bind="props" />
@@ -106,6 +115,9 @@
                         variant="outline"
                         size="sm"
                         :disabled="disabled"
+                        role="combobox"
+                        aria-autocomplete="none"
+                        :aria-label="filter.label"
                     >
                         <template v-if="props.value && 'start' in props.value">
                             <DateRangeFilterValue v-bind="props" />
@@ -119,7 +131,7 @@
                     </Button>
                 </template>
             </PopoverTrigger>
-            <PopoverContent :class="cn('w-auto p-0', !inline ? 'w-[--reka-popover-trigger-width]' : '')">
+            <PopoverContent :class="cn('w-auto p-0', !inline ? 'w-(--reka-popover-trigger-width)' : '')">
                 <div class="flex">
                     <template v-if="filter.presets?.length">
                         <div class="flex flex-col shrink-0 p-3">
@@ -152,10 +164,12 @@
                                 <Input class="block" type="date"
                                     v-model="inputs.start"
                                     @update:model-value="onStartChange"
+                                    :aria-label="__('sharp::form.daterange.start_placeholder')"
                                 />
                                 <Input class="block" type="date"
                                     v-model="inputs.end"
                                     @update:model-value="onEndChange"
+                                    :aria-label="__('sharp::form.daterange.end_placeholder')"
                                 />
                             </div>
                             <div class="flex flex-col md:flex-row justify-end gap-3 pt-0">

@@ -1,7 +1,15 @@
+<script lang="ts">
+    import { Card, CardContent } from '@/components/ui/card';
+    import { Badge } from '@/components/ui/badge';
+
+    export const components = {
+        'sharp-card': Card,
+        'sharp-card-content': CardContent,
+        'sharp-badge': Badge,
+    };
+</script>
 <script lang="ts" setup>
-    import { Card, CardHeader } from "@/components/ui/card";
-    import { computed } from "vue";
-    import { Badge } from "@/components/ui/badge";
+    import { computed } from 'vue';
 
     const props = defineProps<{
         templateData?: Record<string, any>,
@@ -10,11 +18,7 @@
     }>();
 
     const component = computed(() => ({
-        components: {
-            'sharp-card': Card,
-            'sharp-card-header': CardHeader,
-            'sharp-badge': Badge,
-        },
+        components,
         template: `<div class="SharpTemplate">${props.template ?? ''}</div>`,
         props: [
             ...(props.templateProps || []),

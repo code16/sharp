@@ -46,7 +46,7 @@ export const Selection = Extension.create({
 
                     state.doc.nodesBetween(selection.from, selection.to, (node, position) => {
                         if (node.isBlock) {
-                            decorations.push(Decoration.node(position, position + node.nodeSize, { class: 'selected' }));
+                            decorations.push(Decoration.node(position, position + node.nodeSize, { 'data-textselected': 'true' }));
                         }
                     });
 

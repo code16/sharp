@@ -60,4 +60,13 @@ abstract class SharpMenu
     }
 
     abstract public function build(): self;
+
+    final public function reset(): self
+    {
+        $this->items = [];
+        $this->userMenu = null;
+        $this->visible = true;
+
+        return $this;
+    }
 }

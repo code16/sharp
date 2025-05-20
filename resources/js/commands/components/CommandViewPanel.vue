@@ -3,6 +3,7 @@
     import { Sheet, SheetContent } from "@/components/ui/sheet";
     import { DialogClose } from "reka-ui";
     import { X } from "lucide-vue-next";
+    import { __ } from "@/utils/i18n";
 
     defineProps<{
         commands: CommandManager,
@@ -25,6 +26,7 @@
             <template #close>
                 <DialogClose
                     class="absolute right-0 translate-x-full text-white top-0 p-2 md:p-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary"
+                    :aria-label="__('sharp::modals.close.aria_label')"
                 >
                     <X class="size-6" />
                 </DialogClose>

@@ -21,8 +21,7 @@
     import { route } from "@/utils/url";
     import { api } from "@/api/api";
     import { useParentForm } from "@/form/useParentForm";
-    import { fuzzySearch } from "@/utils/search";
-    import {  isCancel } from "axios";
+    import { isCancel } from "axios";
     import { ComboboxItemIndicator } from "reka-ui";
     import { useParentCommands } from "@/commands/useCommands";
     import { useIsInDialog } from "@/components/ui/dialog/Dialog.vue";
@@ -59,48 +58,14 @@
                 if(!results.value.length) {
                     loading.value = true;
                 }
-                timeout = setTimeout(async () => {
-                    clearTimeout(loadingTimeout);
-                    loadingTimeout = setTimeout(() => {
-                        loading.value = true;
-                    }, 200);
-                    abortController?.abort();
-                    abortController = new AbortController();
-                    results.value = await api.post(
-                        route('code16.sharp.api.form.autocomplete.index', {
-                            entityKey: form.entityKey,
-                            autocompleteFieldKey: props.parentField ? `${props.parentField.key}.${field.key}` : field.key,
-                            embed_key: form.embedKey,
-                            entity_list_command_key: parentCommands?.commandContainer === 'entityList' ? form.commandKey : null,
-                            show_command_key: parentCommands?.commandContainer === 'show' ? form.commandKey : null,
-                            instance_id: form.instanceId,
-                            endpoint: field.remoteEndpoint,
-                            search: query,
-                        }), {
-                            formData: field.callbackLinkedFields
-                                ? Object.fromEntries(
-                                    Object.entries(form.serializedData).filter(([fieldKey]) => field.callbackLinkedFields.includes(fieldKey))
-                                )
-                                : null,
-                        }, {
-                            signal: abortController.signal,
-                        }
-                    )
-                        .then(response => {
-                            clearTimeout(loadingTimeout);
-                            loading.value = false;
-                            return response;
-                        }, (e) => {
-                            if(isCancel(e)) {
-                                clearTimeout(loadingTimeout);
-                            }
-                            return Promise.reject(e);
-                        })
-                        .then(response => response.data.data)
-                    ;
-                }, immediate ? 0 : props.field.debounceDelay)
+                if(immediate) {
+                    remoteSearch(query);
+                } else {
+                    timeout = setTimeout(() => remoteSearch(query), props.field.debounceDelay)
+                }
             } else {
                 clearTimeout(timeout);
+                loading.value = false;
                 results.value = [];
             }
         } else {
@@ -108,6 +73,58 @@
                 ? props.field.localValues
                 : fullTextSearch(query);
         }
+    }
+
+    async function remoteSearch(query: string) {
+        const field = props.field as FormAutocompleteRemoteFieldData;
+        clearTimeout(loadingTimeout);
+        loadingTimeout = setTimeout(() => {
+            loading.value = true;
+        }, 200);
+        abortController?.abort();
+        abortController = new AbortController();
+        results.value = await api.post(
+            route('code16.sharp.api.form.autocomplete.index', {
+                entityKey: form.entityKey,
+                autocompleteFieldKey: props.parentField ? `${props.parentField.key}.${field.key}` : field.key,
+                embed_key: form.embedKey,
+                entity_list_command_key: parentCommands?.commandContainer === 'entityList' ? form.commandKey : null,
+                show_command_key: parentCommands?.commandContainer === 'show' ? form.commandKey : null,
+                instance_id: form.instanceId,
+                endpoint: field.remoteEndpoint,
+                search: query,
+            }), {
+                formData: field.callbackLinkedFields
+                    ? Object.fromEntries(
+                        Object.entries(props.parentData).filter(([fieldKey]) => field.callbackLinkedFields.includes(fieldKey))
+                    )
+                    : null,
+            }, {
+                signal: abortController.signal,
+            }
+        )
+            .then(response => {
+                clearTimeout(loadingTimeout);
+                loading.value = false;
+                return response;
+            }, (e) => {
+                if(isCancel(e)) {
+                    clearTimeout(loadingTimeout);
+                }
+                return Promise.reject(e);
+            })
+            .then(response => response.data.data)
+        ;
+    }
+
+    let hasTyped = false;
+
+    function onSearchInput(query: string) {
+        if(!query.length && !hasTyped) {
+            return;
+        }
+        hasTyped = true;
+        search(query);
     }
 
     function onOpen() {
@@ -134,7 +151,7 @@
             <template v-if="props.value">
                 <div class="relative">
                     <PopoverTrigger as-child>
-                        <div class="relative border border-input flex items-center rounded-md min-h-10 text-sm px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 aria-disabled:pointer-events-none aria-disabled:opacity-50"
+                        <div class="relative border border-input flex items-center rounded-md min-h-10 text-sm px-3 py-2 pr-10 bg-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 aria-disabled:pointer-events-none aria-disabled:opacity-50"
                             role="combobox"
                             aria-autocomplete="none"
                             tabindex="0"
@@ -150,7 +167,7 @@
                             ></div>
                         </div>
                     </PopoverTrigger>
-                    <Button class="absolute right-0 h-[2.375rem] top-1/2 -translate-y-1/2 opacity-50 hover:opacity-100"
+                    <Button class="absolute right-0 h-9.5 top-1/2 -translate-y-1/2 opacity-50 hover:opacity-100"
                         :disabled="props.field.readOnly"
                         variant="ghost"
                         size="icon"
@@ -179,12 +196,12 @@
             </template>
 
             <PopoverContent
-                class="p-0 w-[--reka-popover-trigger-width] min-w-[200px]"
+                class="p-0 w-(--reka-popover-trigger-width) min-w-[200px]"
                 align="start"
                 :avoid-collisions="false"
             >
                 <Command
-                    :class="isInDialog ? 'max-h-[--reka-popper-available-height]' : ''"
+                    :class="isInDialog ? 'max-h-(--reka-popper-available-height)' : ''"
                     :model-value="value?.[props.field.itemIdAttribute]"
                     :reset-search-term-on-blur="false"
                     ignore-filter
@@ -192,18 +209,18 @@
                 >
                     <CommandInput
                         v-model="searchTerm"
-                        @update:model-value="search($event)"
+                        @update:model-value="onSearchInput"
                         :display-value="() => searchTerm"
                         :placeholder="props.value ? props.field.placeholder ?? __('sharp::form.autocomplete.placeholder') : null"
                     />
                     <CommandList>
                         <template v-if="loading">
-                            <div class="py-6 text-center text-sm">
+                            <div class="py-6 px-4 text-center text-sm">
                                 {{ __('sharp::form.autocomplete.loading') }}
                             </div>
                         </template>
                         <template v-else-if="!results?.length && props.field.mode === 'remote' && searchTerm.length < props.field.searchMinChars">
-                            <div class="py-6 text-center text-sm">
+                            <div class="py-6 px-4 text-center text-sm">
                                 {{ trans_choice('sharp::form.autocomplete.query_too_short', props.field.searchMinChars, { min_chars: props.field.searchMinChars }) }}
                             </div>
                         </template>
@@ -211,7 +228,7 @@
                             <CommandEmpty>
                                 {{ __('sharp::form.autocomplete.no_results_text') }}
                             </CommandEmpty>
-                            <CommandGroup>
+                            <CommandGroup v-show="results.length">
                                 <template v-for="item in results" :key="item[props.field.itemIdAttribute]">
                                     <CommandItem
                                         class="group/item"

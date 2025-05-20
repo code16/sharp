@@ -34,12 +34,7 @@ return [
             'driver' => 'local',
             'root' => storage_path('app/private'),
             'serve' => true,
-            'throw' => false,
-        ],
-
-        'snapshots' => [
-            'driver' => 'local',
-            'root' => database_path('snapshots'),
+            'throw' => true,
         ],
 
         'public' => [
@@ -47,7 +42,18 @@ return [
             'root' => storage_path('app/public'),
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
-            'throw' => false,
+            'throw' => true,
+        ],
+
+        'fixtures' => [
+            'driver' => 'local',
+            'root' => database_path('fixtures'),
+            'throw' => true,
+        ],
+
+        'snapshots' => [
+            'driver' => 'local',
+            'root' => database_path('snapshots'),
         ],
 
         's3' => [

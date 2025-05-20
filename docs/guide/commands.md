@@ -160,7 +160,7 @@ public function buildCommandConfig(): void
 
 Here is the full list of available methods:
 
-- `configureConfirmationText(string $confirmationText)`: if set the Command will ask a confirmation to the user before executing (warning: for now, the confirmation will not properly work in a Wizard Command)
+- `configureConfirmationText(string $confirmationText, ?string $title = null, ?string $buttonLabel = null)`: if set the Command will ask a confirmation to the user before executing (warning: for now, the confirmation will not properly work in a Wizard Command)
 - `configureDescription(string $description)`: this text will appear under the Command label
 - `configureFormModalTitle(string $formModalTitle)`: if the Command has a Form, the title of the modal will be its label, or `$formModalTitle` if defined
 - `configureFormModalButtonLabel(string $formModalButtonLabel)`: if the Command has a Form, the label of the OK button will be `$formModalButtonLabel`
@@ -171,7 +171,7 @@ Here is the full list of available methods:
 
 Finally, let's review the return possibilities: after a Command has been executed, the code must return something to tell to the front what to do next. There are height of them:
 
-- `return $this->info('some text')`: displays the entered text in a modal.
+- `return $this->info('some text', reload: true)`: displays the entered text in a modal. The second argument, optional (default is `false`), is a boolean to also mark Sharp to reload the page.
 - `return $this->reload()`: reload the current page (with context).
 - `return $this->refresh(1)`*: refresh only the instance with an id on `1`. We can pass an id array also to refresh more than one instance.
 - `return $this->view('view.name', ['some'=>'params'])`: display a view right in Sharp; useful for page previews.

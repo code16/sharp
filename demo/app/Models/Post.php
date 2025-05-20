@@ -51,7 +51,7 @@ class Post extends Model
     public function cover(): MorphOne
     {
         return $this->morphOne(Media::class, 'model')
-            ->where('model_key', 'cover');
+            ->withAttributes(['model_key' => 'cover']);
     }
 
     public function attachments(): HasMany
@@ -79,12 +79,5 @@ class Post extends Model
     public function isDraft(): bool
     {
         return $this->state === PostState::DRAFT;
-    }
-
-    public function getDefaultAttributesFor($attribute)
-    {
-        return in_array($attribute, ['cover'])
-            ? ['model_key' => $attribute]
-            : [];
     }
 }

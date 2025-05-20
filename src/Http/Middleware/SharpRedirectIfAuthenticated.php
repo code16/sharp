@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Http\Middleware;
 
 use Closure;
+use Illuminate\Support\Facades\Gate;
 
 class SharpRedirectIfAuthenticated
 {
@@ -18,6 +19,11 @@ class SharpRedirectIfAuthenticated
     protected function checkSharpUserAuthenticated($guard)
     {
         if (auth()->guard($guard)->check()) {
+            if (Gate::has('viewSharp')) {
+                return Gate::allows('viewSharp');
+            }
+
+            // Legacy check:
             if ($checkHandler = config('sharp.auth.check_handler')) {
                 return instanciate($checkHandler)
                     ->check(auth()->guard($guard)->user());

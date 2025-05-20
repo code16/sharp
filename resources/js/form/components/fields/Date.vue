@@ -33,6 +33,7 @@ import { CalendarRoot } from "reka-ui";
 import { createYear, createYearRange, toDate } from 'reka-ui/date'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { __ } from "@/utils/i18n";
 
 const props = defineProps<FormFieldProps<FormDateFieldData>>();
 const emit = defineEmits<FormFieldEmits<FormDateFieldData>>();
@@ -167,7 +168,7 @@ function onMinuteChange(minute: string) {
                     <Input
                         :id="id"
                         class="pl-10 min-w-full appearance-none text-left [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-date-and-time-value]:text-left"
-                        :class="{ 'pr-10 [@supports_not_selector(::-webkit-calendar-picker-indicator)]:pr-3': props.value }"
+                        :class="{ 'pr-10 not-[@supports_selector(::-webkit-calendar-picker-indicator)]:pr-3': props.value }"
                         :type="
                             props.field.hasDate && props.field.hasTime ? 'datetime-local'
                             : props.field.hasTime ? 'time'
@@ -183,12 +184,16 @@ function onMinuteChange(minute: string) {
                         ref="input"
                     />
                 </PopoverTrigger>
-                <div class="absolute right-px rounded-md top-px w-10 bottom-px bg-background hidden [@supports_not_selector(::-webkit-calendar-picker-indicator)]:block"
+                <div class="absolute right-px rounded-md top-px w-10 bottom-px bg-background hidden not-[@supports_selector(::-webkit-calendar-picker-indicator)]:block"
                     @touchstart="isTouch = true"
                     @click="($refs.input.$el as HTMLInputElement).focus(); open = !isTouch"
                 ></div>
                 <template v-if="props.value">
-                    <Button class="absolute opacity-50 hover:opacity-100 right-px h-[2.375rem] top-1/2 -translate-y-1/2"  variant="ghost" size="icon" @click="$emit('input', null)">
+                    <Button class="absolute opacity-50 hover:opacity-100 right-px h-9.5 top-1/2 -translate-y-1/2"
+                        variant="ghost"
+                        size="icon"
+                        :aria-label="__('sharp::form.date.clear', { field_label: props.field.label })"
+                        @click="$emit('input', null)">
                         <X class="size-4" />
                     </Button>
                 </template>
@@ -213,7 +218,7 @@ function onMinuteChange(minute: string) {
                     :model-value="calendarDateValue"
                     v-model:placeholder="calendarViewingDate"
                     :locale="dateLocale"
-                    :week-starts-on="props.field.mondayFirst ? 1 : 0"
+                    :week-starts-on="props.field.mondayFirst ? 0 : 6"
                     @update:model-value="onCalendarDateChange"
                     class="p-3"
                 >

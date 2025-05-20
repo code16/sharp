@@ -2,6 +2,8 @@
 
 namespace Code16\Sharp\Auth\Impersonate;
 
+use Illuminate\Support\Facades\Gate;
+
 class SharpDefaultEloquentImpersonationHandler extends SharpImpersonationHandler
 {
     public function getUsers(): array
@@ -14,6 +16,10 @@ class SharpDefaultEloquentImpersonationHandler extends SharpImpersonationHandler
         return $userModelClassName::query()
             ->orderBy($loginAttribute)
             ->get()
+            ->when(
+                Gate::has('viewSharp'),
+                fn ($users) => $users->filter(fn ($user) => Gate::forUser($user)->allows('viewSharp'))
+            )
             ->mapWithKeys(fn ($user) => [$user->id => $user->$loginAttribute])
             ->all();
     }

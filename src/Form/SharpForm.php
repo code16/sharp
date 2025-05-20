@@ -6,6 +6,7 @@ use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Fields\HandleFormFields;
 use Code16\Sharp\Utils\SharpNotification;
+use Code16\Sharp\Utils\Traits\CanNotify;
 use Code16\Sharp\Utils\Traits\HandleCustomBreadcrumb;
 use Code16\Sharp\Utils\Traits\HandleLocalizedFields;
 use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
@@ -14,6 +15,7 @@ use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 abstract class SharpForm
 {
+    use CanNotify;
     use HandleCustomBreadcrumb;
     use HandleFormFields;
     use HandleLocalizedFields;
@@ -23,12 +25,15 @@ abstract class SharpForm
 
     protected ?FormLayout $formLayout = null;
     protected bool $displayShowPageAfterCreation = false;
+    protected ?string $editFormTitle = null;
+    protected ?string $createFormTitle = null;
 
     final public function formLayout(): array
     {
         if ($this->formLayout === null) {
             $this->formLayout = new FormLayout();
             $this->buildFormLayout($this->formLayout);
+            $this->formLayout->validateAgainstFields($this->getBuiltFields());
         }
 
         return $this->formLayout->toArray();
@@ -36,14 +41,7 @@ abstract class SharpForm
 
     public function formConfig(): array
     {
-        return tap(
-            [
-                'hasShowPage' => $this->displayShowPageAfterCreation,
-            ],
-            function (&$config) {
-                $this->appendBreadcrumbCustomLabelAttribute($config);
-            },
-        );
+        return [];
     }
 
     final public function instance($id): array
@@ -86,6 +84,30 @@ abstract class SharpForm
         $this->displayShowPageAfterCreation = $displayShowPage;
 
         return $this;
+    }
+
+    protected function configureEditTitle(string $editFormTitle): self
+    {
+        $this->editFormTitle = $editFormTitle;
+
+        return $this;
+    }
+
+    protected function configureCreateTitle(string $createFormTitle): self
+    {
+        $this->createFormTitle = $createFormTitle;
+
+        return $this;
+    }
+
+    final public function getCreateTitle(): ?string
+    {
+        return $this->createFormTitle;
+    }
+
+    final public function getEditTitle(): ?string
+    {
+        return $this->editFormTitle;
     }
 
     public function isDisplayShowPageAfterCreation(): bool

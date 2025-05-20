@@ -28,7 +28,11 @@ export type CommandData = {
   label: string | null;
   description: string | null;
   type: CommandType;
-  confirmation: { text: string | null } | null;
+  confirmation: {
+    text: string;
+    title: string | null;
+    buttonLabel: string | null;
+  } | null;
   hasForm: boolean;
   authorization: Array<string | number> | boolean;
   instanceSelection: InstanceSelectionMode | null;
@@ -51,7 +55,7 @@ export type CommandFormData = {
 };
 export type CommandResponseData =
   | { action: "link"; link: string }
-  | { action: "info"; message: string }
+  | { action: "info"; message: string; reload: boolean }
   | { action: "refresh"; items?: Array<{ [key: string]: any }> }
   | { action: "reload" }
   | { action: "step"; step: string }
@@ -110,6 +114,8 @@ export type EmbedData = {
   icon: IconData | null;
   attributes: Array<string>;
   fields: { [key: string]: FormFieldData };
+  displayEmbedHeader: boolean;
+  embedHeaderTitle: string | null;
 };
 export type EmbedFormData = {
   data: { [key: string]: FormFieldData["value"] };
@@ -139,6 +145,7 @@ export type EntityListConfigData = {
   state: EntityStateData | null;
 };
 export type EntityListData = {
+  title: string | null;
   authorizations: EntityListAuthorizationsData;
   config: EntityListConfigData;
   fields: Array<EntityListFieldData>;
@@ -270,9 +277,7 @@ export type FormConditionalDisplayData = {
   fields: Array<{ key: string; values: string | boolean | Array<string> }>;
 };
 export type FormConfigData = {
-  hasShowPage: boolean;
   isSingle: boolean;
-  breadcrumbAttribute: string | null;
 };
 export type FormCustomFieldData = {
   value?: any;
@@ -285,6 +290,7 @@ export type FormCustomFieldData = {
   extraStyle: string | null;
 };
 export type FormData = {
+  title: string | null;
   authorizations: InstanceAuthorizationsData;
   config: FormConfigData;
   data: { [key: string]: FormFieldData["value"] };
@@ -571,8 +577,6 @@ export type FormUploadFieldData = {
   allowedExtensions: Array<string> | null;
   maxFileSize: number | null;
   validationRule: Array<string> | null;
-  storageBasePath: string | null;
-  storageDisk: string | null;
   label: string | null;
   readOnly: boolean | null;
   conditionalDisplay: FormConditionalDisplayData | null;
@@ -600,6 +604,9 @@ export type FormUploadFieldValueData = {
 export type GlobalFiltersData = {
   config: { filters: ConfigFiltersData };
   filterValues: FilterValuesData;
+};
+export type GlobalSearchData = {
+  config: { placeholder: string };
 };
 export type GraphWidgetData = {
   value?: {
@@ -741,7 +748,6 @@ export type ShowConfigData = {
   deleteConfirmationText: string;
   isSingle: boolean;
   commands: ConfigCommandsData | null;
-  multiformAttribute: string | null;
   titleAttribute: string | null;
   breadcrumbAttribute: string | null;
   editButtonLabel: string | null;
@@ -754,6 +760,7 @@ export type ShowCustomFieldData = {
   emptyVisible: boolean;
 };
 export type ShowData = {
+  title: string | { [locale: string]: string } | null;
   authorizations: InstanceAuthorizationsData;
   config: ShowConfigData;
   data: { [key: string]: ShowFieldData["value"] };
@@ -823,8 +830,8 @@ export type ShowListFieldData = {
   key: string;
   type: "list";
   emptyVisible: boolean;
-  label: string | null;
   itemFields: { [key: string]: ShowFieldData };
+  label: string | null;
 };
 export type ShowPictureFieldData = {
   value?: string;

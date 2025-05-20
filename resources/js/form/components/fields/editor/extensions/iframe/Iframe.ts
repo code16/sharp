@@ -5,12 +5,9 @@ import IframeNode from "./IframeNode.vue";
 import { ExtensionAttributesSpec } from "@/form/components/fields/editor/types";
 
 export type IframeAttributes = {
-    src: string,
-    frameborder: string,
-    width: string,
-    height: string,
-    allow: string,
-    allowfullscreen: string,
+    attributes: {
+        [key: string]: string,
+    },
     isNew: boolean,
 }
 
@@ -29,23 +26,16 @@ export const Iframe = Node.create({
 
     addAttributes(): ExtensionAttributesSpec<IframeAttributes> {
         return {
-            src: {
-                default: null,
-            },
-            frameborder: {
-                default: '0',
-            },
-            width: {
-                default: null
-            },
-            height: {
-                default: null
-            },
-            allow: {
-                default: null,
-            },
-            allowfullscreen: {
-                default: null,
+            attributes: {
+                default: {},
+                parseHTML: element => Object.fromEntries(
+                    [...element.attributes]
+                        .filter(attr => !['onload', 'onerror'].includes(attr.name))
+                        .map(attr => [attr.name, attr.value])
+                ),
+                renderHTML: (attributes: IframeAttributes) => {
+                    return attributes.attributes;
+                },
             },
             isNew: {
                 default: false,

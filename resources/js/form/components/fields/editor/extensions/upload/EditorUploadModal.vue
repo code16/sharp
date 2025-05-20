@@ -1,5 +1,4 @@
 <script setup lang="ts">
-    import { FormFieldProps } from "@/form/types";
     import { FormEditorFieldData } from "@/types";
     import { nextTick, ref, useTemplateRef } from "vue";
     import { Form } from "@/form/Form";
@@ -104,7 +103,8 @@
             <SharpForm
                 :form="modalUpload.form"
                 :post-fn="postForm"
-                inline
+                persist-thumbnail-url
+                modal
                 ref="modalForm"
             />
 

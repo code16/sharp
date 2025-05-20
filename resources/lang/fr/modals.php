@@ -11,7 +11,7 @@ return [
 
     'command.info.title' => 'Information',
     'command.submit_button' => 'Envoyer',
-    'command.submit_and_reopen_button' => 'Envoyer et rouvrir',
+    'command.submit_and_reopen_button' => 'Envoyer & rouvrir',
     'state.422.title' => "Impossible de modifier l'état",
 
     // Other errors fallback text
@@ -20,6 +20,7 @@ return [
 
     'ok_button' => 'Ok',
     'cancel_button' => 'Annuler',
+    'close.aria_label' => 'Fermer',
 
     'entity_state.edit.title' => 'Modifier l’état',
     'entity_state.edit.ok_button' => 'Valider',

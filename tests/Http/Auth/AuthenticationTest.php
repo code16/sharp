@@ -5,7 +5,8 @@ use Code16\Sharp\Tests\Fixtures\TestAuthGuard;
 use Code16\Sharp\Tests\Fixtures\User;
 
 beforeEach(function () {
-    sharp()->config()->addEntity('person', PersonEntity::class);
+    sharp()->config()->declareEntity(PersonEntity::class);
+    sharp()->config()->disableImpersonation();
 });
 
 function setTestAuthGuard(): void
@@ -171,4 +172,19 @@ it('allows custom auth guard', function () {
 
     $this->get('/sharp/s-list/person')
         ->assertRedirect(route('code16.sharp.login'));
+});
+
+it('allows to use a custom login url', function () {
+    sharp()->config()->redirectLoginToUrl('/custom-login');
+
+    $this->get(route('code16.sharp.login'))
+        ->assertRedirect('/custom-login');
+});
+
+it('allows to use a custom logout url', function () {
+    login();
+    sharp()->config()->redirectLogoutToUrl('/custom-logout');
+
+    $this->post(route('code16.sharp.logout'))
+        ->assertRedirect('/custom-logout');
 });

@@ -41,6 +41,15 @@ it('allows to define EEL field with default key', function () {
         ->endpointUrl->toStartWith(route('code16.sharp.api.list', ['instances']));
 });
 
+it('allows to define EEL field with the entity className', function () {
+    $field = SharpShowEntityListField::make(PersonEntity::class);
+
+    expect($field->toArray())->key->toBe(PersonEntity::class)
+        ->type->toBe('entityList')
+        ->entityListKey->toBe('entityKey')
+        ->endpointUrl->toStartWith(route('code16.sharp.api.list', ['entityKey']));
+});
+
 it('handles hideFilterWithValue', function () {
     $field = SharpShowEntityListField::make('entityListField', 'entityKey')
         ->hideFilterWithValue('f1', 'value1');

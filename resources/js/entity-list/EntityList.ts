@@ -7,6 +7,7 @@ import {
 } from "@/types";
 import { getAppendableParentUri, route } from "@/utils/url";
 import { EntityListInstance, InstanceId } from "./types";
+import { toRaw } from "vue";
 
 export class EntityList implements EntityListData {
     authorizations: EntityListData['authorizations'];
@@ -18,6 +19,7 @@ export class EntityList implements EntityListData {
     pageAlert: EntityListData['pageAlert'];
     query: EntityListData['query'];
     filterValues: EntityListData['filterValues'];
+    title: EntityListData['title'];
 
     entityKey: string;
     hiddenFilters?: Record<string, FilterData['value']>;
@@ -36,6 +38,23 @@ export class EntityList implements EntityListData {
         this.hiddenCommands = hiddenCommands;
     }
 
+    toData() {
+        return Object.fromEntries(
+            Object.entries({
+                authorizations: this.authorizations,
+                config: this.config,
+                data: this.data,
+                fields: this.fields,
+                forms: this.forms,
+                meta: this.meta,
+                pageAlert: this.pageAlert,
+                query: this.query,
+                filterValues: this.filterValues,
+                title: this.title,
+            }).map(([key, value]) => [key, toRaw(value)])
+        ) as EntityListData;
+    }
+
     get count() {
         return this.meta?.total ?? this.data.length;
     }
@@ -49,7 +68,9 @@ export class EntityList implements EntityListData {
     }
 
     get visibleFilters(): Array<FilterData>|null {
-        return this.config.filters?._root.filter(filter => !this.hiddenFilters?.[filter.key]);
+        return this.hiddenFilters
+            ? this.config.filters?._root.filter(filter => !(filter.key in this.hiddenFilters))
+            : this.config.filters?._root;
     }
 
     get visibleCommands(): ConfigCommandsData {
@@ -88,7 +109,7 @@ export class EntityList implements EntityListData {
             return refreshedItems.find(refreshedItem => this.instanceId(refreshedItem) === this.instanceId(item))
                 ?? item;
         });
-        return new EntityList(this, this.entityKey);
+        return new EntityList(this, this.entityKey, this.hiddenFilters, this.hiddenCommands);
     }
 
     dropdownEntityCommands(selecting: boolean) {
@@ -114,27 +135,19 @@ export class EntityList implements EntityListData {
             return null;
         }
 
+        const multiform = this.forms && Object.values(this.forms).find(form => form.instances.includes(instanceId));
+
         if(this.config.hasShowPage) {
             return route('code16.sharp.show.show', {
                 parentUri: getAppendableParentUri(),
-                entityKey,
-                instanceId,
-            });
-        }
-
-        if(this.forms) {
-            const multiform = Object.values(this.forms).find(form => form.instances.includes(instanceId));
-
-            return route('code16.sharp.form.edit', {
-                parentUri: getAppendableParentUri(),
-                entityKey: `${entityKey}:${multiform.key}`,
+                entityKey: multiform ? `${entityKey}:${multiform.key}` : entityKey,
                 instanceId,
             });
         }
 
         return route('code16.sharp.form.edit', {
             parentUri: getAppendableParentUri(),
-            entityKey,
+            entityKey: multiform ? `${entityKey}:${multiform.key}` : entityKey,
             instanceId,
         });
     }

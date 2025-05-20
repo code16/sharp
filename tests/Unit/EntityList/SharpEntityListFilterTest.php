@@ -7,6 +7,7 @@ use Code16\Sharp\EntityList\Filters\EntityListDateRangeRequiredFilter;
 use Code16\Sharp\EntityList\Filters\EntityListSelectFilter;
 use Code16\Sharp\EntityList\Filters\EntityListSelectMultipleFilter;
 use Code16\Sharp\EntityList\Filters\EntityListSelectRequiredFilter;
+use Code16\Sharp\EntityList\Filters\HiddenFilter;
 use Code16\Sharp\Tests\Unit\EntityList\Fakes\FakeSharpEntityList;
 
 it('allows to configure filters with a key', function () {
@@ -78,6 +79,32 @@ it('allows to configure filters without a key', function () {
 
     expect($list->listConfig()['filters']['_root'][0]['key'])
         ->toEqual(class_basename(get_class($list->getFilters()[0])));
+});
+
+it('allows to configure filters with hidden filters', function () {
+    $list = new class() extends FakeSharpEntityList
+    {
+        public function getFilters(): array
+        {
+            return [
+                HiddenFilter::make('test'),
+                new class() extends EntityListSelectFilter
+                {
+                    public function buildFilterConfig(): void {}
+
+                    public function values(): array
+                    {
+                        return [1 => 'A', 2 => 'B'];
+                    }
+                },
+            ];
+        }
+    };
+
+    $list->buildListConfig();
+
+    expect($list->listConfig()['filters']['_root'][0]['key'])
+        ->toEqual(class_basename(get_class($list->getFilters()[1])));
 });
 
 it('allows section based filters config', function () {

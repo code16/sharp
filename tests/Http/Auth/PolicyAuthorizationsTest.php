@@ -11,7 +11,7 @@ use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
     login();
-    sharp()->config()->addEntity('person', PersonEntity::class);
+    sharp()->config()->declareEntity(PersonEntity::class);
 });
 
 it('allows to configure a policy', function () {

@@ -20,6 +20,7 @@ export class Show implements ShowData {
     layout: ShowData['layout'];
     locales: ShowData['locales'];
     pageAlert: ShowData['pageAlert'];
+    title: ShowData['title'];
 
     entityKey: string;
     instanceId?: string;
@@ -31,21 +32,17 @@ export class Show implements ShowData {
     }
 
     get formUrl(): string {
-        const multiformKey = this.config.multiformAttribute
-            ? this.data[this.config.multiformAttribute]
-            : null;
-
         if(route().params.instanceId) {
             return route('code16.sharp.form.edit', {
                 parentUri: getAppendableParentUri(),
-                entityKey: multiformKey ? `${this.entityKey}:${multiformKey}` : this.entityKey,
+                entityKey: this.entityKey,
                 instanceId: this.instanceId,
             });
         }
 
         return route('code16.sharp.form.create', {
             parentUri: getAppendableParentUri(),
-            entityKey: multiformKey ? `${this.entityKey}:${multiformKey}` : this.entityKey,
+            entityKey: this.entityKey,
         });
     }
 
@@ -65,15 +62,10 @@ export class Show implements ShowData {
     }
 
     getTitle(locale: string): string | null {
-        if(!this.config.titleAttribute) {
-            return null;
-        }
-        if(this.fields[this.config.titleAttribute]) {
-            const field = this.fields[this.config.titleAttribute] as ShowTextFieldData;
-            const value = this.data[this.config.titleAttribute] as ShowTextFieldData['value'];
-            return field.localized && typeof value?.text === 'object'
-                ? value?.text?.[locale]
-                : value?.text as string;
+        if(this.title) {
+            return typeof this.title === 'object'
+                ? this.title?.[locale]
+                : this.title;
         }
         return null;
     }

@@ -49,6 +49,7 @@
     }
 
     function onRemove() {
+        props.editor.commands.setNodeSelection(props.getPos());
         props.deleteNode();
         setTimeout(() => {
             props.editor.commands.focus();
@@ -59,16 +60,13 @@
         const iframe = getIframe(html.value);
         if(iframe) {
             props.updateAttributes({
-                ...Object.fromEntries(
-                    Object.entries(props.node.type.spec.attrs)
-                        .map(([attr, spec]) => [attr, (spec as any).default])
-                ),
-                ...Object.fromEntries(
+                attributes: Object.fromEntries(
                     [...iframe.attributes].map(attr => [attr.name, attr.value])
                 ),
                 isNew: false,
             });
             modalOpen.value = false;
+            setTimeout(() => props.editor.commands.focus(props.getPos() + 1));
         } else {
             invalid.value = true;
         }
@@ -102,20 +100,23 @@
     >
         <div class="flex-1 min-w-0">
             <template v-if="!node.attrs.isNew">
-                <iframe class="w-full max-h-[200px] [[height$='%']]:h-[200px]" v-bind="node.attrs"></iframe>
+                <iframe class="w-full max-h-[200px] [[height$='%']]:h-[200px]" v-bind="node.attrs.attributes"></iframe>
             </template>
         </div>
 
         <template v-if="!parentEditor.props.field.readOnly">
             <DropdownMenu :modal="false">
                 <DropdownMenuTrigger as-child>
-                    <Button class="shrink-0 self-center" variant="ghost" size="icon">
+                    <Button class="shrink-0 self-center" variant="ghost" size="icon" :aria-label="__('sharp::form.editor.extension_node.dropdown_button.aria_label')">
                         <MoreHorizontal class="size-4" />
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                     <DropdownMenuItem @click="onEdit()">
                         {{ __('sharp::form.editor.extension_node.edit_button') }}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem @click="props.editor.commands.copyNode(props.getPos())">
+                        {{ __('sharp::form.editor.extension_node.copy_button') }}
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem class="text-destructive" @click="onRemove()">
@@ -146,6 +147,7 @@
                         placeholder="&lt;iframe src=&quot;...&quot;&gt;&lt;/iframe&gt;"
                         v-model="html"
                         rows="6"
+                        :aria-label="__('sharp::form.editor.dialogs.iframe.insert_title')"
                         @update:model-value="debouncedOnModalInputChange"
                         @paste="onModalInputChange"
                         @focus="($event.target as HTMLTextAreaElement).select()"

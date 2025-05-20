@@ -135,7 +135,7 @@ it('throws an exception when setting an UPLOAD item in the toolbar without defin
         ]);
 
     $formField->toArray();
-})->expectException(SharpInvalidConfigException::class);
+})->throws(SharpInvalidConfigException::class);
 
 it('allows to allows embeds', function () {
     $formField = SharpFormEditorField::make('text')
@@ -172,4 +172,4 @@ it('throws an exception when setting an embed item in the toolbar without allowi
         ]);
 
     $formField->toArray();
-})->expectException(SharpInvalidConfigException::class);
+})->throws(SharpInvalidConfigException::class);

@@ -26,7 +26,7 @@ jobs:
           coverage: none
 
       - name: Install Pint
-        run: composer global require laravel/pint
+        run: composer global require laravel/pint:1.18.3
 
       - name: Run Pint
         run: pint

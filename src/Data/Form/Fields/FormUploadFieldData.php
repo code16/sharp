@@ -30,8 +30,6 @@ final class FormUploadFieldData extends Data
         public ?int $maxFileSize = null,
         /** @var array<string> */
         public ?array $validationRule = null,
-        public ?string $storageBasePath = null,
-        public ?string $storageDisk = null,
         public ?string $label = null,
         public ?bool $readOnly = null,
         public ?FormConditionalDisplayData $conditionalDisplay = null,

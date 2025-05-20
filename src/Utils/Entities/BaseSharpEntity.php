@@ -8,16 +8,9 @@ use Code16\Sharp\Exceptions\SharpException;
 abstract class BaseSharpEntity
 {
     protected bool $isDashboard = false;
-    protected string $entityKey = 'entity';
+    public static string $entityKey;
     protected ?string $policy = null;
     protected string $label = 'entity';
-
-    final public function setEntityKey(string $entityKey): self
-    {
-        $this->entityKey = $entityKey;
-
-        return $this;
-    }
 
     final public function getPolicyOrDefault(): SharpEntityPolicy
     {
@@ -32,10 +25,7 @@ abstract class BaseSharpEntity
         return $policy;
     }
 
-    final public function getLabel(): string
-    {
-        return $this->label;
-    }
+    abstract protected function getLabel(): string;
 
     final public function isDashboard(): bool
     {

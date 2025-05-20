@@ -17,7 +17,7 @@ final class CommandData extends Data
         public ?string $label,
         public ?string $description,
         public CommandType $type,
-        #[LiteralTypeScriptType('{ text: string | null } | null')]
+        #[LiteralTypeScriptType('{ text: string, title: string | null, buttonLabel: string | null } | null')]
         public ?array $confirmation,
         public bool $hasForm,
         /** @var array<string|int>|bool */

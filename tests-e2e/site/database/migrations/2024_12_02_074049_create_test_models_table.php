@@ -32,14 +32,17 @@ return new class() extends Migration
             $table->json('list')->nullable();
             $table->integer('number')->nullable();
             $table->unsignedInteger('select_dropdown')->nullable();
-            $table->unsignedInteger('select_checkboxes')->nullable();
-            $table->unsignedInteger('select_radios')->nullable();
-            $table->json('tags')->nullable();
+            $table->json('select_dropdown_multiple')->nullable();
+            $table->json('select_checkboxes')->nullable();
+            $table->unsignedInteger('select_radio')->nullable();
+            //            $table->json('tags')->nullable();
             $table->text('textarea')->nullable();
             $table->json('textarea_localized')->nullable();
             $table->string('text')->nullable();
             $table->json('text_localized')->nullable();
             $table->unsignedInteger('upload_id')->nullable();
+            $table->unsignedInteger('order')->default(100);
+            $table->string('state')->default('draft');
             $table->timestamps();
         });
     }

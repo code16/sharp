@@ -16,6 +16,7 @@
     import { route } from "@/utils/url";
     import PageBreadcrumb from "@/components/PageBreadcrumb.vue";
     import { CardTitle } from "@/components/ui/card";
+    import { useEntityListHighlightedItem } from "@/composables/useEntityListHighlightedItem";
 
     const props = defineProps<{
         entityList: EntityListData,
@@ -31,6 +32,7 @@
             formModal.shouldReopen && formModal.reopen();
         },
     });
+    const { highlightedEntityKey, highlightedInstanceId } = useEntityListHighlightedItem();
 
     watch(() => props.entityList, () => {
         entityList.value = new EntityList(props.entityList, entityKey);
@@ -77,21 +79,26 @@
             <PageBreadcrumb :breadcrumb="breadcrumb" />
         </template>
 
-        <EntityListComponent
-            :entity-key="entityKey"
-            :entity-list="entityList"
-            :filters="filters"
-            :commands="commands"
-            :title="breadcrumb.items[0].label"
-            @reset="onReset"
-            @filter-change="onFilterChange"
-            @update:query="onQueryChange"
-        >
-            <template #card-header>
-                <CardTitle>
-                    {{ breadcrumb.items[0].label }}
-                </CardTitle>
-            </template>
-        </EntityListComponent>
+        <div class="@container">
+            <div :class="entityList.pageAlert ? 'pt-4' : 'pt-6 @3xl:pt-10'">
+                <EntityListComponent
+                    :entity-key="entityKey"
+                    :entity-list="entityList"
+                    :filters="filters"
+                    :commands="commands"
+                    :title="breadcrumb.items[0].label"
+                    :highlighted-instance-id="highlightedInstanceId"
+                    @reset="onReset"
+                    @filter-change="onFilterChange"
+                    @update:query="onQueryChange"
+                >
+                    <template #card-header>
+                        <CardTitle class="line-clamp-2 py-1 -my-1 min-w-0">
+                            {{ entityList.title }}
+                        </CardTitle>
+                    </template>
+                </EntityListComponent>
+            </div>
+        </div>
     </Layout>
 </template>

@@ -22,6 +22,12 @@ export type CommandEndpoints = {
     postCommand: string
     getForm: string
     query?: object
+    /**
+     * Called after the form is submitted and a successful response is received with some exceptions:
+     * - if reopen has been clicked, it is not called
+     * - if the response is a wizard step, it is not called
+     */
+    onSuccess?: () => void
 
     entityKey: string
     instanceId?: string | number

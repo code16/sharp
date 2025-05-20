@@ -59,9 +59,14 @@
                         class="relative text-left justify-start h-8 py-1.5 gap-2 transition-shadow data-[state=open]:shadow-md"
                         variant="outline"
                         size="sm"
+                        role="combobox"
+                        aria-autocomplete="none"
+                        :aria-label="filter.label"
                         :disabled="disabled"
                     >
-                        {{ filter.label }}
+                        <span aria-hidden="true">
+                            {{ filter.label }}
+                        </span>
                         <template v-if="valuated">
                             <Separator orientation="vertical" class="h-4" />
                             <SelectFilterValue v-bind="props" />
@@ -74,6 +79,9 @@
                         class="mt-2 h-auto min-h-9 w-full text-left justify-start font-normal py-1.5 gap-2"
                         variant="outline"
                         size="sm"
+                        role="combobox"
+                        aria-autocomplete="none"
+                        :aria-label="filter.label"
                         :disabled="disabled"
                     >
                         <template v-if="valuated">
@@ -88,23 +96,24 @@
                     </Button>
                 </template>
             </PopoverTrigger>
-            <PopoverContent :class="cn('p-0 w-auto min-w-[150px]', !inline ? 'w-[--reka-popover-trigger-width]' : '')" align="start">
+            <PopoverContent :class="cn('p-0 w-auto min-w-[150px]', !inline ? 'w-(--reka-popover-trigger-width)' : '')" align="start">
                 <Command
                     :multiple="props.filter.multiple"
                     highlight-on-hover
                 >
-                    <div v-show="filter.searchable">
+                    <template v-if="filter.searchable">
                         <!-- v-show because otherwise highlight on hover does not work -->
                         <CommandInput :placeholder="__('sharp::form.multiselect.placeholder')" />
-                    </div>
+                    </template>
 
-                    <CommandList>
+                    <CommandList class="scroll-pb-12">
                         <CommandEmpty>{{ __('sharp::form.autocomplete.no_results_text') }}</CommandEmpty>
                         <CommandGroup>
                             <template v-for="selectValue in filter.values" :key="selectValue.id">
                                 <CommandItem
                                     class="pr-6"
                                     :value="selectValue"
+                                    :aria-selected="isSelected(selectValue)"
                                     @select="onSelect(selectValue)"
                                 >
                                     <template v-if="filter.multiple">
@@ -127,7 +136,7 @@
                         </CommandGroup>
 
                         <template v-if="valuated">
-                            <div class="sticky -bottom-px border-b border-transparent bg-popover">
+                            <div class="sticky -bottom-px border-b border-transparent rounded-b-md bg-popover">
                                 <CommandSeparator />
                                 <CommandGroup>
                                     <CommandItem

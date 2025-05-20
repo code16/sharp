@@ -11,16 +11,13 @@ class EditorFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
 {
     /**
      * @param  SharpFormEditorField  $field
+     *
+     * @throws SharpFormFieldDataException
      */
     public function toFront(SharpFormField $field, $value)
     {
-        if(is_array($value) && !$field->isLocalized()) {
-            throw new SharpFormFieldDataException(sprintf(
-                'String expected, got an Array for editor field value "%s". If the field is localized, add `‑>setLocalized()`',
-                $field->key()
-            ));
-        }
-        
+        $this->guardAgainstInvalidLocalizedValue($field, $value);
+
         return collect([
             'text' => $this->maybeLocalized($field, $value),
         ])
@@ -42,6 +39,10 @@ class EditorFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
     {
         if ($value === null) {
             return null;
+        }
+
+        if (is_string($value)) {
+            $value = ['text' => $value];
         }
 
         $text = $this->maybeLocalized(

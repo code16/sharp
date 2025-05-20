@@ -1,6 +1,0 @@
-{
-    "name": "@sharp/show",
-    "private": true,
-    "version": "1.0.0",
-    "main": "../../resources/js/src/index.ts"
-}

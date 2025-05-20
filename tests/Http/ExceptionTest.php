@@ -7,7 +7,7 @@ use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
-    sharp()->config()->addEntity('person', PersonEntity::class);
+    sharp()->config()->declareEntity(PersonEntity::class);
     login();
 });
 
@@ -25,7 +25,7 @@ it('renders inertia Exception', function () {
         ->assertInertia(fn (Assert $page) => $page
             ->component('Error')
             ->where('status', 500)
-            ->where('message', 'Test error')
+            ->where('message', 'Server error')
         );
 });
 

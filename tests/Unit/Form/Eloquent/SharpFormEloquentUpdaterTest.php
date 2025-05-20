@@ -175,6 +175,84 @@ it('allows to manually ignore multiple field', function () {
     ]);
 });
 
+it('allows to have a field with the same name of a model method but not a relation', function () {
+    $person = Person::create(['name' => 'Marie Curry']);
+
+    $form = new class() extends FakeSharpForm
+    {
+        use WithSharpFormEloquentUpdater;
+
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(SharpFormTextField::make('unrelated'));
+        }
+
+        public function update($id, array $data)
+        {
+            return $this->save(Person::findOrFail($id), $data);
+        }
+    };
+
+    $form->update($person->id, $form->formatAndValidateRequestData(['unrelated' => 'Marie Curie']));
+
+    expect($person->fresh()->unrelated)->toBe('Marie Curie');
+});
+
+it('allows to have a relation without type hinting', function () {
+    $marie = Person::create(['name' => 'Marie Curie']);
+    $pierre = Person::create(['name' => 'Pierre Curie']);
+
+    $form = new class() extends FakeSharpForm
+    {
+        use WithSharpFormEloquentUpdater;
+
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(SharpFormTextField::make('notTypedHintPartner'));
+        }
+
+        public function update($id, array $data)
+        {
+            return $this->save(Person::findOrFail($id), $data);
+        }
+    };
+
+    $form->update($marie->id, $form->formatAndValidateRequestData([
+        'notTypedHintPartner' => $pierre->id,
+    ]));
+
+    expect($marie->fresh()->notTypedHintPartner->id)->toBe($pierre->id);
+});
+
+it('allows to have a relation defined with a relation resolver', function () {
+    $marie = Person::create(['name' => 'Marie Curie']);
+    $pierre = Person::create(['name' => 'Pierre Curie']);
+    Person::resolveRelationUsing('marriedPartner', fn (Person $person) => $person
+        ->belongsTo(Person::class, 'partner_id')
+    );
+
+    $form = new class() extends FakeSharpForm
+    {
+        use WithSharpFormEloquentUpdater;
+
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(SharpFormTextField::make('marriedPartner'));
+        }
+
+        public function update($id, array $data)
+        {
+            return $this->save(Person::findOrFail($id), $data);
+        }
+    };
+
+    $form->update($marie->id, $form->formatAndValidateRequestData([
+        'marriedPartner' => $pierre->id,
+    ]));
+
+    expect($marie->fresh()->marriedPartner->id)->toBe($pierre->id);
+});
+
 it('allows to update a belongsTo attribute', function () {
     $pierre = Person::create(['name' => 'Pierre Curie']);
     $marie = Person::create(['name' => 'Marie Curie']);

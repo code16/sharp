@@ -1,41 +1,66 @@
-@import "./fonts.css";
-@import "./shadcn.css";
-@import "./shadcn-overrides.css";
-@import "./content.css";
-@import "./nprogress.css";
+@import 'tailwindcss' source(none);
+@import 'tw-animate-css';
+@import './fonts.css';
+@import './shadcn.css';
+@import './shadcn-overrides.css';
+@import './content.css';
+@import './nprogress.css';
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@source '../views/**/*.blade.php';
+@source '../js/**/*.vue';
+@source '../js/components/ui/**/*.ts';
 
-@layer base {
-    [type="search"]::-webkit-search-decoration,
-    [type="search"]::-webkit-search-cancel-button {
-        appearance: none;
-    }
-    body {
-        overflow-y: scroll;
-    }
+@custom-variant dark (&:is(.dark *));
 
-    tr.relative {
-        transform: scale(100%);
-        clip-path: inset(0);
-    }
-
-    .dark {
-        color-scheme: dark;
-    }
+@theme {
+  --shadow-l-xl: 0 0px 25px -5px rgb(0 0 0 / 0.1), 0 0px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-b-md: 0 5px 20px -8px rgb(0 0 0 / 0.1), 0 6px 3px -6px rgb(0 0 0 / 0.1);
+  --font-sans: 'geist-sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
-@layer components {
-    .container {
-        @apply px-4 lg:px-6;
-    }
+@layer base {
+  [type="search"]::-webkit-search-decoration,
+  [type="search"]::-webkit-search-cancel-button {
+    appearance: none;
+  }
+
+  /* disabling scroll padding top because it changes scroll position when hovering a select */
+  /*html {*/
+  /*  &:not(*/
+  /*    :has([data-stuck]:focus-within),*/
+  /*    :has(header:focus-within),*/
+  /*    :has(:is([role="menu"],[role="dialog"]):focus-within)*/
+  /*  ) {*/
+  /*    @apply scroll-pt-36;*/
+  /*  }*/
+  /*}*/
+
+  body {
+    overflow-y: scroll;
+  }
+
+  tr.relative {
+    transform: scale(100%);
+    clip-path: inset(0);
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  .dark {
+    color-scheme: dark;
+  }
+}
+
+@utility container {
+  @apply mx-auto px-4 lg:px-6 2xl:max-w-[90rem];
 }
 
 @layer utilities {
-    /* tailwindcss-animate allow to set animation duration with "duration-" classes but it clashes with items in TransitionGroup */
-    [class*="transition"] {
-        animation-duration: 0s;
-    }
+  /* tailwindcss-animate allow to set animation duration with "duration-" classes but it clashes with items in TransitionGroup */
+  [class*="transition"] {
+    animation-duration: 0s;
+  }
 }

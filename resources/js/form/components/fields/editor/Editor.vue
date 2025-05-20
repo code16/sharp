@@ -122,10 +122,12 @@
                     ? normalizeText(editor.storage.markdown.getMarkdown() ?? '')
                     : normalizeText(trimHTML(editor.getHTML(), { inline: props.field.inline }));
 
-                if(props.field.localized && typeof props.value?.text === 'object') {
+                if(props.field.localized) {
                     emit('input', {
                         ...props.value,
-                        text: { ...props.value.text, [locale]: content },
+                        text: typeof props.value?.text === 'object'
+                            ? { ...props.value.text, [locale]: content }
+                            : { [locale]: content },
                     }, { error });
                 } else {
                     emit('input', { ...props.value, text: content }, { error });
@@ -151,7 +153,7 @@
 </script>
 
 <template>
-    <FormFieldLayout v-bind="props">
+    <FormFieldLayout v-bind="props" field-group>
         <div class="editor rounded-md border border-input bg-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background"
             :class="{
                 'editor--disabled': field.readOnly,
@@ -159,7 +161,7 @@
             }"
         >
             <template v-if="editor && field.toolbar">
-                <StickyTop class="sticky top-[--top-bar-height] [[role=dialog]_&]:top-0 p-1.5 border-b data-[stuck]:z-10 data-[stuck]:bg-background">
+                <StickyTop class="sticky top-(--stacked-top) in-[[role=dialog]]:top-0 p-1.5 border-b data-stuck:z-10 data-[stuck]:bg-background">
                     <div class="flex gap-x-1 gap-y-0 flex-wrap" ref="header">
                         <template v-for="button in props.field.toolbar">
                             <template v-if="button === 'link'">
@@ -191,7 +193,6 @@
                                     @click="button === 'upload' || button === 'upload-image'
                                         ? uploadModal.open()
                                         : buttons[button].command(editor)"
-                                    :data-test="button"
                                 >
                                     <component :is="buttons[button].icon" class="size-4" />
                                 </Toggle>
@@ -200,7 +201,7 @@
                         <template v-if="Object.values(props.field.embeds ?? {}).length > 0">
                             <DropdownMenu :modal="false">
                                 <DropdownMenuTrigger as-child>
-                                    <Button class="px-3" variant="ghost" :disabled="props.field.readOnly">
+                                    <Button class="px-3" variant="ghost" size="sm" :disabled="props.field.readOnly">
                                         {{ __('sharp::form.editor.dropdown.embeds') }}
                                     </Button>
                                 </DropdownMenuTrigger>
@@ -218,19 +219,21 @@
             </template>
 
             <EditorAttributes
+                :editor="editor"
                 :class="cn(
                     'group/editor content min-h-20 w-full rounded-b-md overflow-y-auto focus:outline-none px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50',
                     '[&_.selection-highlight]:bg-[Highlight] [&_.selection-highlight]:py-0.5',
+                    '[&_.ProseMirror-selectednode]:outline-none! [&:focus_.ProseMirror-selectednode]:ring-1 [&_.ProseMirror-selectednode]:ring-primary',
                     {
-                        'min-h-[--min-height]': field.minHeight,
-                        'max-h-[--max-height]': field.maxHeight,
+                        'min-h-(--min-height)': field.minHeight,
+                        'max-h-(--max-height)': field.maxHeight,
                     },
                 )"
                 :style="{
                     '--min-height': field.minHeight ? `${field.minHeight}px` : null,
                     '--max-height': field.maxHeight ? `${field.maxHeight}px` : null,
                 }"
-                :editor="editor"
+                role="textbox"
             >
                 <EditorContent :editor="editor" :key="locale ?? 'editor'" />
             </EditorAttributes>

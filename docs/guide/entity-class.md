@@ -14,6 +14,10 @@ The `entity class` is the place where you can declare the entity configuration: 
 php artisan sharp:make:entity <class_name> [--label,--dashboard,--show,--form,--policy,--single]
 ```
 
+::: tip
+The Entity name should be singular, in CamelCase and end with the "Entity" suffix. For instance: `ProductEntity`.
+:::
+
 ## Write the class
 
 The class must extend `Code16\Sharp\Entities\SharpEntity`. The easiest way to declare your attached classes is to simply override a bunch of protected attributes: 
@@ -21,10 +25,11 @@ The class must extend `Code16\Sharp\Entities\SharpEntity`. The easiest way to de
 ```php
 class ProductEntity extends SharpEntity
 {
+    protected string $label = 'Product';
     protected ?string $list = ProductList::class;
     protected ?string $show = ProductShow::class;
     protected ?string $form = ProductForm::class;
-    protected string $label = 'Product';
+}
 ```
 
 Here is the full list:
@@ -50,6 +55,7 @@ class SalesDashboardEntity extends SharpDashboardEntity
 If you need more control, you can override these instead of the attributes:
 
 ```php
+protected function getLabel(): string {}
 protected function getList(): ?string {}
 protected function getShow(): ?string {}
 protected function getForm(): ?string {}
@@ -61,7 +67,7 @@ The last one, `getPolicy()`, allows you to return a `SharpEntityPolicy` implemen
 ```php
 class MyEntity extends SharpEntity
 {
-    // [...]
+    // ...
 
     protected function getPolicy(): string|SharpEntityPolicy|null
     {
@@ -76,6 +82,123 @@ class MyEntity extends SharpEntity
 }
 ```
 
+### Single shows and forms
+
+When you need to configure a "unique" resource that does not fit into a List / Show schema, like for instance an account or a configuration item, you can use a Single Show or Form. This is a dedicated topic, [documented here](single-show.md).
+
 ### Handle Multiforms
 
-This is a dedicated topic, [documented here](multiforms.md).
+Multiforms allows to declare different forms for the same entity, to hanle variants. This is a dedicated topic, [documented here](multiforms.md).
+
+## Declare the Entity in Sharp configuration
+
+The last step is to declare the entity in Sharp, in your `SharpAppServiceProvider` implementation. 
+
+### Autodiscovery
+
+The easiest way is to let Sharp discover your entities:
+
+```php
+class SharpServiceProvider extends SharpAppServiceProvider
+{
+    protected function configureSharp(SharpConfigBuilder $config): void
+    {
+        $config
+            ->setName('My new project')
+            ->discoverEntities();
+            // ...
+    }
+}
+```
+
+The `discoverEntities()` method will scan the `app_path('Sharp/Entities')` directory for all Entity classes, and declare them in Sharp. You can pass an array of other paths to scan if needed:
+
+```php
+class SharpServiceProvider extends SharpAppServiceProvider
+{
+    protected function configureSharp(SharpConfigBuilder $config): void
+    {
+        $config
+            ->setName('My new project')
+            ->discoverEntities([__DIR__ . '../Domain/OtherEntities']);
+            // ...
+    }
+}
+```
+
+Each Entity is keyed by and entity key, used everywhere in Sharp (starting with the URL).
+When using autodiscovery, the entity key is automatically set to the class name, in kebab-case. For instance, `ProductEntity` will have the entity key `product`.
+
+### Choosing your own entity key
+
+If for whatever reason you want to choose your own entity key, you can set it in the entity class:
+
+```php
+class ProductEntity extends SharpEntity
+{
+    public static string $entityKey = 'my-product';
+    // ...
+}
+```
+
+### Manual declaration
+
+If you want to have control over the entity declaration, you can declare them manually instead of using discovery:
+
+```php
+class SharpServiceProvider extends SharpAppServiceProvider
+{
+    protected function configureSharp(SharpConfigBuilder $config): void
+    {
+        $config
+            ->setName('My new project')
+            ->declareEntity(ProductEntity::class);
+            // ...
+    }
+}
+```
+
+### Custom Entity Resolver
+
+In some very specific cases, you may want to have full control over the entity declaration, depending on some context. You can use a custom `SharpEntityResolver` to do that.
+
+```php
+use Code16\Sharp\Utils\Entities\SharpEntityResolver;
+
+class MySharpEntityResolver implements SharpEntityResolver
+{
+    public function entityClassName(string $entityKey): ?string
+    {
+        return match ($entityKey) {
+            'product' => auth()->user()->isAdmin() 
+                ? AdminProductEntity::class
+                : ProductEntity::class,
+            'order' => OrderEntity::class,
+            // ...
+        };
+    }
+}
+```
+
+Then, in the ServiceProvider, you can declare the resolver like this:
+
+```php
+class SharpServiceProvider extends SharpAppServiceProvider
+{
+    protected function configureSharp(SharpConfigBuilder $config): void
+    {
+        $config
+            ->setName('My new project')
+            ->declareEntityResolver(MySharpEntityResolver::class);
+            // ...
+    }
+}
+```
+
+::: warning
+You must remove all `->declareEntity()` calls in order to use `->declareEntityResolver()`.
+:::
+
+::: warning
+If you are using a custom entity resolver, you won’t be able to use the `SharpEntity` classes in the [menu](building-menu.md), or in [`LinkTo` links](link-to.md), or for [embedded entity lists](show-fields/embedded-entity-list.md): you will have to use the entity key instead. For instance: `LinkToForm::make('products', $id)`.
+:::

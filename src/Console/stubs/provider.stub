@@ -10,8 +10,8 @@ class DummyClass extends SharpAppServiceProvider
     protected function configureSharp(SharpConfigBuilder $config): void
     {
         $config
-            ->setName('My new project');
-//            ->addEntity('posts', PostEntity::class)
+            ->setName('My new project')
+            ->discoverEntities();
     }
 
     protected function declareAccessGate(): void

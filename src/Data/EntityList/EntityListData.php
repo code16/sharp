@@ -15,6 +15,7 @@ use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 final class EntityListData extends Data
 {
     public function __construct(
+        public ?string $title,
         public EntityListAuthorizationsData $authorizations,
         public EntityListConfigData $config,
         /** @var EntityListFieldData[] */
@@ -32,6 +33,7 @@ final class EntityListData extends Data
     public static function from(array $entityList): self
     {
         return new self(
+            title: $entityList['title'] ?? null,
             authorizations: new EntityListAuthorizationsData(...$entityList['authorizations']),
             config: EntityListConfigData::from($entityList['config']),
             fields: EntityListFieldData::collection($entityList['fields']),

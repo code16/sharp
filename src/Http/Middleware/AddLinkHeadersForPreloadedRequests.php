@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Http\Middleware;
 
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class AddLinkHeadersForPreloadedRequests
@@ -13,8 +14,12 @@ class AddLinkHeadersForPreloadedRequests
         $this->preloadedRequests[] = $endpointUrl;
     }
 
-    public function handle($request, $next)
+    public function handle(Request $request, $next)
     {
+        if ($request->hasHeader('X-No-Preload') || $this->isSafari()) {
+            return $next($request);
+        }
+
         return tap($next($request), function (Response $response) {
             if ($this->preloadedRequests !== []) {
                 if ($link = $response->headers->get('Link', '')) {
@@ -22,11 +27,26 @@ class AddLinkHeadersForPreloadedRequests
                 }
 
                 $link .= collect($this->preloadedRequests)
-                    ->map(fn ($url) => sprintf('<%s>; rel="preload"; as="fetch"; type="application/json"; crossorigin="anonymous"', $url))
+                    ->map(fn ($url) => sprintf(
+                        '<%s>; rel="preload"; as="fetch"; type="application/json"; %s',
+                        $url,
+                        $this->isSafari() ? '' : 'crossorigin="anonymous"'
+                    ))
                     ->join(', ');
 
                 $response->headers->set('Link', $link);
             }
         });
+    }
+
+    public function reset(): void
+    {
+        $this->preloadedRequests = [];
+    }
+
+    private function isSafari(): bool
+    {
+        return str_contains(request()->userAgent(), 'Safari')
+            && ! str_contains(request()->userAgent(), 'Chrome');
     }
 }

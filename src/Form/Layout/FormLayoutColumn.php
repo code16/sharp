@@ -10,7 +10,7 @@ class FormLayoutColumn extends LayoutColumn implements HasLayout
      * @param  (\Closure(FormLayoutFieldset): mixed)|null  $callback
      * @return $this
      */
-    public function withFieldset(string $name, ?\Closure $callback = null): self
+    public function withFieldset(string $name, ?\Closure $callback = null): static
     {
         $fieldset = new FormLayoutFieldset($name);
 
@@ -23,7 +23,7 @@ class FormLayoutColumn extends LayoutColumn implements HasLayout
         return $this;
     }
 
-    private function addFieldsetLayout(FormLayoutFieldset $fieldset)
+    private function addFieldsetLayout(FormLayoutFieldset $fieldset): void
     {
         $this->rows[] = [$fieldset];
     }

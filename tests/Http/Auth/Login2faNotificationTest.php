@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Notification;
 beforeEach(function () {
     auth()->extend('sharp', fn () => new TestAuthGuard());
 
-    sharp()->config()->addEntity('person', PersonEntity::class)
+    sharp()->config()->declareEntity(PersonEntity::class)
         ->setAuthCustomGuard('sharp')
         ->enable2faByNotification();
 

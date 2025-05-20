@@ -1,9 +1,9 @@
 <script setup lang="ts">
     import { router } from "@inertiajs/vue3";
-    import { config } from "@/utils/config";
     import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
     import { computed, ref } from "vue";
     import TemplateRenderer from "@/components/TemplateRenderer.vue";
+    import { isSharpLink } from "@/utils/url";
 
     const props = defineProps<{
         html: string | null,
@@ -17,9 +17,8 @@
 
     function onClick(e: MouseEvent & { target: HTMLElement }) {
         const link: HTMLAnchorElement = e.target.closest('a[href]');
-        const base = `${location.origin}/${config('sharp.custom_url_segment')}/`;
 
-        if(link?.href.startsWith(base)) {
+        if(link && isSharpLink(link.href)) {
             router.visit(link.href);
             e.preventDefault();
         }
@@ -43,7 +42,7 @@
                         <div class="content" v-html="updatedHtml"></div>
                     </template>
                 </TooltipTrigger>
-                <TooltipContent class="max-w-[--reka-tooltip-content-available-width] md:max-w-md" :side-offset="12" :collision-boundary="hoveringElementWithTitle">
+                <TooltipContent class="max-w-(--reka-tooltip-content-available-width) md:max-w-md" :side-offset="12" :collision-boundary="hoveringElementWithTitle">
                     {{ hoveringElementWithTitle?.dataset.title }}
                 </TooltipContent>
             </Tooltip>

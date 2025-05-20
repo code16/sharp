@@ -14,7 +14,7 @@ class SelectFormatter extends SharpFieldFormatter
     public function toFront(SharpFormField $field, $value)
     {
         if ($field->multiple()) {
-            return collect((array) $value)
+            return collect($value)
                 ->map(function ($item) use ($field) {
                     $item = ArrayConverter::modelToArray($item);
 
@@ -32,10 +32,8 @@ class SelectFormatter extends SharpFieldFormatter
     {
         if ($field->multiple()) {
             // We must transform items into associative arrays with the "id" key
-            return collect((array) $value)
-                ->map(function ($item) use ($field) {
-                    return [$field->idAttribute() => $item];
-                })
+            return collect($value)
+                ->map(fn ($item) => [$field->idAttribute() => $item])
                 ->all();
         }
 

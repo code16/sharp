@@ -55,6 +55,22 @@ SharpFormEditorField::make("description")
      ]);
 ```
 
+If you have editor embeds you can add them to the toolbar alongside other buttons (instead of the embeds dropdown) :
+
+```php
+SharpFormEditorField::make("description")
+    ->setToolbar([
+        SharpFormEditorField::B, 
+        SharpFormEditorField::I,
+        AuthorEmbed::class,
+    ])
+    ->allowEmbeds([
+        AuthorEmbed::class,
+    ]);
+```
+
+See full [embed docs](../form-editor-embeds.md).
+
 ### `setRenderContentAsMarkdown(bool $renderAsMarkdown = true)`
 
 If true the front will send the content as markdown to the back, for storage. Default is false.

@@ -5,6 +5,8 @@ return [
     'validation_error.description' => 'Veuillez contrôler votre saisie, les erreurs sont indiquées sous chaque champ.',
     'validation_error.localized' => 'Il y a une erreur avec la langue : :locales|Il y a une erreur avec les langues : :locales',
 
+    'field_locale_selector.aria_label' => 'Changer de langue pour le champ :field_label',
+
     'list.add_button' => 'Ajouter un élément',
     'list.remove_button' => 'Supprimer',
     'list.insert_above_button' => 'Insérer au-dessus',
@@ -43,6 +45,7 @@ return [
     'multiselect.max_text' => 'Maximum atteint',
 
     'tags.unknown_label' => 'Inconnu',
+    'tags.tag_delete_button.aria_label' => 'Supprimer :option_label',
 
     'select.select_all' => 'Tout sélectionner',
     'select.unselect_all' => 'Tout désélectionner',
@@ -55,6 +58,7 @@ return [
     'autocomplete.placeholder' => 'Rechercher...',
 
     'date.validation_error.format' => 'Format de date invalide',
+    'date.clear' => 'Effacer :field_label',
 
     'daterange.start_placeholder' => 'Date de début',
     'daterange.end_placeholder' => 'Date de fin',
@@ -64,8 +68,12 @@ return [
     'editor.character_count' => ':count caractères',
     'editor.errors.unknown_file' => 'Unknown file ":path"',
 
+    'editor.extension_node.dropdown_button.aria_label' => 'Actions',
     'editor.extension_node.edit_button' => 'Modifier...',
     'editor.extension_node.remove_button' => 'Supprimer',
+    'editor.extension_node.copy_button' => 'Copier',
+    'editor.extension_node.upload.aria_label' => 'Fichier intégré',
+    'editor.extension_node.upload_image.aria_label' => 'Image intégré',
 
     'editor.dialogs.upload.title.new' => 'Insérer un fichier',
     'editor.dialogs.upload.title.update' => 'Modifier le fichier',
@@ -106,10 +114,12 @@ return [
     'editor.toolbar.strikethrough.title' => 'Barré',
     'editor.toolbar.highlight.title' => 'Surligner',
     'editor.toolbar.small.title' => 'Texte plus petit',
+    'editor.toolbar.superscript.title' => 'Exposant',
     'editor.toolbar.heading_1.title' => 'Titre 1',
     'editor.toolbar.heading_2.title' => 'Titre 2',
     'editor.toolbar.heading_3.title' => 'Titre 3',
     'editor.toolbar.code.title' => 'Code',
+    'editor.toolbar.code_block.title' => 'Bloc de code',
     'editor.toolbar.quote.title' => 'Citation',
     'editor.toolbar.unordered_list.title' => 'Liste',
     'editor.toolbar.ordered_list.title' => 'Liste ordonnée',
@@ -118,6 +128,7 @@ return [
     'editor.toolbar.table.title' => 'Table',
     'editor.toolbar.iframe.title' => 'Intégration web',
     'editor.toolbar.upload.title' => 'Insérer un fichier',
+    'editor.toolbar.html.title' => 'Insérer du HTML',
     'editor.toolbar.upload_image.title' => 'Insérer une image',
     'editor.toolbar.horizontal_rule.title' => 'Séparateur',
     'editor.toolbar.fullscreen.title' => 'Plein écran',

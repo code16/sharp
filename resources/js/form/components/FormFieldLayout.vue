@@ -12,10 +12,15 @@
 
     import LocaleSelectTrigger from "@/components/LocaleSelectTrigger.vue";
 
+    defineOptions({
+        inheritAttrs: false
+    });
+
     const props = defineProps<FormFieldProps<FormFieldData, any> & {
         class?: string,
         fieldGroup?: boolean,
         stickyLabel?: boolean,
+        ariaLabel?: string,
     }>();
     const emit = defineEmits<{
         (e: 'label-click'),
@@ -23,7 +28,7 @@
     }>();
     const form = useParentForm();
     const id = useId(`form-field_${props.fieldErrorKey}`);
-    const ariaLabelledBy = computed(() => `${id}-label`);
+    const ariaLabelledBy = computed(() => props.field.label ? `${id}-label` : null);
     const ariaDescribedBy = computed(() => [
             props.field.helpMessage && `${id}-help-message`,
             form.fieldHasError(props.field, props.fieldErrorKey) && `${id}-error`,
@@ -45,10 +50,13 @@
 <template>
     <div :class="cn(
             'relative grid grid-cols-1 grid-rows-subgrid gap-2.5',
-            hasLabelRow ? 'row-span-2' : props.row?.length > 1 ? 'row-span-1 @lg/field-container:row-span-2 @3xl/root-card:@md/field-container:row-span-2' : '',
+            hasLabelRow
+                ? 'row-span-2'
+                : props.row?.length > 1 ? ['row-span-1 @md/field-container:row-span-2', /* '@3xl/root-card:@md/field-container:row-span-2' */] : '',
             props.class,
         )"
         :role="fieldGroup ? 'group' : null"
+        :aria-label="ariaLabel"
         :aria-labelledby="fieldGroup ? ariaLabelledBy : null"
         :aria-describedby="fieldGroup ? ariaDescribedBy : null"
         :aria-invalid="form.fieldHasError(field, fieldErrorKey)"
@@ -59,13 +67,13 @@
                 :is="stickyLabel ? StickyTop : 'div'"
                 class="group"
                 :class="[{
-                    'top-[calc(var(--top-bar-height)+.625rem)] [[role=dialog]_&]:top-2.5 z-10 lg:sticky': stickyLabel,
-                    'hidden @lg/field-container:block @3xl/root-card:@md/field-container:block': !hasLabelRow,
+                    'top-[calc(var(--stacked-top)+.625rem)] in-[[role=dialog]]:top-2.5 z-5 lg:sticky': stickyLabel,
+                    'hidden @md/field-container:block @3xl/root-card:@md/field-container:block': !hasLabelRow,
                 }]"
                 v-slot="{ stuck = false } = {}"
             >
                 <template v-if="stickyLabel">
-                    <div class="absolute bg-background transition-colors hidden border-b -inset-x-6 -top-3 -bottom-2.5 lg:group-data-[stuck]:block"
+                    <div class="absolute bg-background transition-colors hidden border-b -inset-x-6 -top-3 -bottom-2.5 lg:group-data-stuck:block"
                         :class="stuck ? 'border-border' : 'border-transparent'"></div>
                 </template>
                 <div class="relative flex flex-row-reverse flex-wrap gap-4" :class="{
@@ -77,7 +85,9 @@
                                 :id="`${id}-label`"
                                 :as="fieldGroup ? 'div' : 'label'"
                                 class="leading-4 cursor-default"
-                                :class="{ 'text-destructive dark:text-foreground': form.fieldHasError(field, fieldErrorKey) }"
+                                :class="{
+                                    'text-destructive': form.fieldHasError(field, fieldErrorKey),
+                                }"
                                 :for="id"
                                 @click="$emit('label-click')"
                             >
@@ -92,10 +102,13 @@
                     </template>
                     <template v-if="'localized' in field && field.localized">
                         <Select :model-value="props.locale" @update:model-value="emit('locale-change', $event as string)">
-                            <LocaleSelectTrigger class="ml-auto w-auto border-transparent hover:border-input aria-expanded:border-input -my-2" :show-arrow="false" />
+                            <LocaleSelectTrigger
+                                class="ml-auto w-auto border-transparent hover:border-input aria-expanded:border-input -my-2"
+                                :aria-label="__('sharp::form.field_locale_selector.aria_label', { field_label:field.label })"
+                            />
                             <SelectContent>
                                 <template v-for="itemLocale in form.locales" :key="itemLocale">
-                                    <SelectItem  :value="itemLocale">
+                                    <SelectItem :value="itemLocale">
                                         <div class="flex items-center">
                                             <span class="uppercase text-xs">{{ itemLocale }}</span>
                                             <template v-if="form.fieldLocalesContainingError(fieldErrorKey).includes(itemLocale)">
@@ -155,8 +168,8 @@
                     </template>
 
                     <template v-if="form.fieldHasError(field, fieldErrorKey)">
-                        <div :id="`${id}-error`" class="text-sm font-medium text-destructive leading-4">
-                            <span class="dark:bg-destructive dark:text-destructive-foreground dark:py-1 dark:px-2 dark:rounded-md">
+                        <div :id="`${id}-error`" class="mb-1 text-sm text-destructive leading-4">
+                            <span class="">
                                 <template v-if="form.fieldError(fieldErrorKey)">
                                     {{ form.fieldError(fieldErrorKey) }}
                                 </template>

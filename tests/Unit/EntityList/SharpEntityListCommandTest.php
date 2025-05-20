@@ -87,7 +87,7 @@ it('handles confirmation on a command', function () {
 
                     public function buildCommandConfig(): void
                     {
-                        $this->configureConfirmationText('Sure?');
+                        $this->configureConfirmationText('Sure?', title: 'Are you sure?', buttonLabel: 'Yes, do it');
                     }
 
                     public function execute(array $data = []): array {}
@@ -100,6 +100,8 @@ it('handles confirmation on a command', function () {
 
     expect($list->listConfig()['commands']['entity'][0][0]['confirmation'])->toEqual([
         'text' => 'Sure?',
+        'title' => 'Are you sure?',
+        'buttonLabel' => 'Yes, do it',
     ]);
 });
 

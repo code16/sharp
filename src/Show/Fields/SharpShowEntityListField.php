@@ -24,6 +24,10 @@ class SharpShowEntityListField extends SharpShowField
 
     public static function make(string $key, ?string $entityListKey = null): SharpShowEntityListField
     {
+        if (class_exists($key)) {
+            $entityListKey = app(SharpEntityManager::class)->entityKeyFor($key);
+        }
+
         return tap(
             new static($key, static::FIELD_TYPE),
             fn ($instance) => $instance->entityListKey = $entityListKey ?: $key
@@ -116,6 +120,14 @@ class SharpShowEntityListField extends SharpShowField
     }
 
     /**
+     * @deprecated Not used anymore, EEL are shown no matter what.
+     */
+    public function setShowIfEmpty(bool $showIfEmpty = true): SharpShowField
+    {
+        return $this;
+    }
+
+    /**
      * Create the properties array for the field, using parent::buildArray().
      */
     public function toArray(): array
@@ -136,7 +148,7 @@ class SharpShowEntityListField extends SharpShowField
                             // Filter value can be a Closure
                             if (is_callable($value)) {
                                 // Call it with current instanceId
-                                return $value(currentSharpRequest()->instanceId());
+                                return $value(sharp()->context()->instanceId());
                             }
 
                             return $value;

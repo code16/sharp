@@ -10,6 +10,7 @@ return [
     'list.search.button' => 'Search',
     'list.search.placeholder' => 'Search...',
     'list.search.title' => ':count result for “:search”|:count results for “:search”',
+    'list.search.clear.aria_label' => 'Clear search',
     'list.create_button' => 'New...',
     'list.forms_dropdown' => 'New',
     'list.reorder_button' => 'Reorder',

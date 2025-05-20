@@ -5,6 +5,7 @@ namespace App\Sharp\Dashboard;
 use App\Models\Category;
 use App\Models\User;
 use App\Sharp\Dashboard\Commands\ExportStatsAsCsvCommand;
+use App\Sharp\Entities\PostEntity;
 use App\Sharp\Utils\Filters\CategoryFilter;
 use App\Sharp\Utils\Filters\PeriodFilter;
 use App\Sharp\Utils\Filters\PeriodRequiredFilter;
@@ -68,12 +69,12 @@ class DemoDashboard extends SharpDashboard
             ->addWidget(
                 SharpFigureWidget::make('draft_panel')
                     ->setTitle('Draft posts')
-                    ->setLink(LinkToEntityList::make('posts')->addFilter(StateFilter::class, 'draft')),
+                    ->setLink(LinkToEntityList::make(PostEntity::class)->addFilter(StateFilter::class, 'draft')),
             )
             ->addWidget(
                 SharpFigureWidget::make('online_panel')
                     ->setTitle('Online posts')
-                    ->setLink(LinkToEntityList::make('posts')->addFilter(StateFilter::class, 'online')),
+                    ->setLink(LinkToEntityList::make(PostEntity::class)->addFilter(StateFilter::class, 'online')),
             )
             ->addWidget(
                 SharpOrderedListWidget::make('list')
@@ -133,7 +134,7 @@ class DemoDashboard extends SharpDashboard
     protected function buildPageAlert(PageAlert $pageAlert): void
     {
         $pageAlert
-            ->setLevelSecondary()
+            ->setLevelInfo()
             ->setMessage(
                 sprintf(
                     'Graphs below are delimited by period %s - %s (and yes, visits figures are randomly generated)',
@@ -194,11 +195,14 @@ class DemoDashboard extends SharpDashboard
 
     protected function setBarsGraphDataSet(): void
     {
-        $data = User::withCount([
-            'posts' => fn (Builder $query) => $query->whereBetween(
-                'published_at',
-                [$this->getStartDate(), $this->getEndDate()]
-            )])
+        $data = User::query()
+            ->withCount([
+                'posts' => fn (Builder $query) => $query
+                    ->whereBetween(
+                        'published_at',
+                        [$this->getStartDate(), $this->getEndDate()]
+                    )]
+            )
             ->orderBy('posts_count', 'desc')
             ->limit(8)
             ->get()
@@ -213,13 +217,14 @@ class DemoDashboard extends SharpDashboard
 
     protected function setPieGraphDataSet(): void
     {
-        Category::withCount([
-            'posts' => fn (Builder $query) => $query
-                ->whereBetween('published_at', [
-                    $this->getStartDate(),
-                    $this->getEndDate(),
-                ]),
-        ])
+        Category::query()
+            ->withCount([
+                'posts' => fn (Builder $query) => $query
+                    ->whereBetween('published_at', [
+                        $this->getStartDate(),
+                        $this->getEndDate(),
+                    ]),
+            ])
             ->limit(5)
             ->orderBy('posts_count', 'desc')
             ->get()
@@ -236,17 +241,21 @@ class DemoDashboard extends SharpDashboard
     protected function setOrderedListDataSet(): void
     {
         $this->setOrderedListData('list',
-            Category::withCount([
-                'posts' => function (Builder $query) {
-                    $query->whereBetween('published_at', [$this->getStartDate(), $this->getEndDate()]);
-                }])
+            Category::query()
+                ->withCount([
+                    'posts' => fn (Builder $query) => $query
+                        ->whereBetween('published_at', [
+                            $this->getStartDate(),
+                            $this->getEndDate(),
+                        ]),
+                ])
                 ->orderBy('posts_count', 'desc')
                 ->limit(3)
                 ->get()
                 ->map(fn (Category $category) => [
                     'label' => $category->name,
                     'count' => $category->posts_count,
-                    'url' => LinkToEntityList::make('posts')
+                    'url' => LinkToEntityList::make(PostEntity::class)
                         ->addFilter(CategoryFilter::class, $category->id)
                         ->addFilter(PeriodFilter::class, sprintf('%s..%s',
                             $this->getStartDate()->format('Ymd'),

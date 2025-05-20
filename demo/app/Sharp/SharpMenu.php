@@ -2,6 +2,12 @@
 
 namespace App\Sharp;
 
+use App\Sharp\Entities\AuthorEntity;
+use App\Sharp\Entities\CategoryEntity;
+use App\Sharp\Entities\DemoDashboardEntity;
+use App\Sharp\Entities\PostEntity;
+use App\Sharp\Entities\ProfileEntity;
+use App\Sharp\Entities\TestEntity;
 use Code16\Sharp\Utils\Menu\SharpMenu as BaseSharpMenu;
 use Code16\Sharp\Utils\Menu\SharpMenuItemSection;
 use Code16\Sharp\Utils\Menu\SharpMenuUserMenu;
@@ -13,17 +19,17 @@ class SharpMenu extends BaseSharpMenu
         return $this
             ->setUserMenu(function (SharpMenuUserMenu $userMenu) {
                 $userMenu
-                    ->addEntityLink('profile', 'Profile')
+                    ->addEntityLink(ProfileEntity::class, 'Profile')
                     ->addExternalLink('https://sharp.code16.fr/docs', 'Documentation');
             })
             ->addSection('Blog', function (SharpMenuItemSection $section) {
                 $section
                     ->setCollapsible(false)
-                    ->addEntityLink('posts', 'Posts', icon: 'far-file')
-                    ->addEntityLink('categories', 'Categories', icon: 'fas-sitemap')
-                    ->addEntityLink('authors', 'Authors', icon: 'far-user');
+                    ->addEntityLink(PostEntity::class, 'Posts', icon: 'lucide-file-text')
+                    ->addEntityLink(CategoryEntity::class, 'Categories', icon: 'lucide-tags')
+                    ->addEntityLink(AuthorEntity::class, 'Authors', icon: 'lucide-signature');
             })
-            ->addEntityLink('dashboard', 'Dashboard', icon: 'fas-chart-line')
-            ->addEntityLink('test', 'Fields test', icon: 'fas-cog');
+            ->addEntityLink(DemoDashboardEntity::class, 'Dashboard', icon: 'lucide-layout-dashboard')
+            ->addEntityLink(TestEntity::class, 'Fields test', icon: 'lucide-cog');
     }
 }

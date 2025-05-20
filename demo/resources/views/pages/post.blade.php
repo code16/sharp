@@ -13,7 +13,7 @@
          * @var \App\Models\Post $post
          */
         @endphp
-        <div class="pt-12 pb-24 px-6 container mx-auto max-w-screen-lg">
+        <div class="pt-12 pb-24 px-6 container mx-auto max-w-(--breakpoint-lg)">
             <div class="mb-8 prose prose-lg [&_iframe]:max-w-full max-w-full">
                 @if($post->cover)
                     <img class="w-full" src="{{ $post->cover->thumbnail(1200) }}" alt="">
@@ -22,10 +22,6 @@
                     {{ $post->title }}
                 </h1>
                 <x-sharp-content :image-thumbnail-width="1200">
-                    <x-sharp-content::attributes
-                        component="sharp-image"
-                        class="img-fluid"
-                    />
                     {!! $post->content !!}
                 </x-sharp-content>
             </div>

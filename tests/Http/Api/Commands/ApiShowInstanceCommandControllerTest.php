@@ -13,9 +13,9 @@ beforeEach(function () {
 });
 
 it('allows to call an info instance command from a show', function () {
-    sharp()->config()->addEntity('person', PersonEntity::class);
+    sharp()->config()->declareEntity(PersonEntity::class);
 
-    fakeShowFor('person', new class() extends PersonShow
+    fakeShowFor(PersonEntity::class, new class() extends PersonShow
     {
         public function getInstanceCommands(): ?array
         {
@@ -45,9 +45,9 @@ it('allows to call an info instance command from a show', function () {
 });
 
 it('allows to call an info instance command from a single show', function () {
-    sharp()->config()->addEntity('person', SinglePersonEntity::class);
+    sharp()->config()->declareEntity(SinglePersonEntity::class);
 
-    fakeShowFor('person', new class() extends SinglePersonShow
+    fakeShowFor(SinglePersonEntity::class, new class() extends SinglePersonShow
     {
         public function getInstanceCommands(): ?array
         {
@@ -68,7 +68,7 @@ it('allows to call an info instance command from a single show', function () {
         }
     });
 
-    $this->postJson(route('code16.sharp.api.show.command.instance', ['person', 'cmd']))
+    $this->postJson(route('code16.sharp.api.show.command.instance', ['single-person', 'cmd']))
         ->assertOk()
         ->assertJson([
             'action' => 'info',
@@ -77,9 +77,9 @@ it('allows to call an info instance command from a single show', function () {
 });
 
 it('gets form and initialize form data in an instance command of a show', function () {
-    sharp()->config()->addEntity('person', PersonEntity::class);
+    sharp()->config()->declareEntity(PersonEntity::class);
 
-    fakeShowFor('person', new class() extends PersonShow
+    fakeShowFor(PersonEntity::class, new class() extends PersonShow
     {
         public function getInstanceCommands(): ?array
         {
@@ -153,7 +153,7 @@ it('gets form and initialize form data in an instance command of a show', functi
                                 'size' => 12,
                             ],
                         ],
-                        'title' => 'one',
+                        'title' => '',
                     ],
                 ],
             ],
@@ -168,9 +168,9 @@ it('gets form and initialize form data in an instance command of a show', functi
 });
 
 it('gets form and initialize form data in an instance command of a single show', function () {
-    sharp()->config()->addEntity('person', SinglePersonEntity::class);
+    sharp()->config()->declareEntity(SinglePersonEntity::class);
 
-    fakeShowFor('person', new class() extends SinglePersonShow
+    fakeShowFor(SinglePersonEntity::class, new class() extends SinglePersonShow
     {
         public function getInstanceCommands(): ?array
         {
@@ -214,7 +214,7 @@ it('gets form and initialize form data in an instance command of a single show',
     $this
         ->getJson(
             route('code16.sharp.api.show.command.singleInstance.form', [
-                'entityKey' => 'person',
+                'entityKey' => 'single-person',
                 'commandKey' => 'single_cmd',
             ])
         )
@@ -249,7 +249,7 @@ it('gets form and initialize form data in an instance command of a single show',
                                 'size' => 12,
                             ],
                         ],
-                        'title' => 'one',
+                        'title' => '',
                     ],
                 ],
             ],
@@ -257,7 +257,7 @@ it('gets form and initialize form data in an instance command of a single show',
 
     $this
         ->postJson(
-            route('code16.sharp.api.show.command.instance', ['person', 'single_cmd']),
+            route('code16.sharp.api.show.command.instance', ['single-person', 'single_cmd']),
             ['data' => ['name' => '']]
         )
         ->assertJsonValidationErrors(['name']);

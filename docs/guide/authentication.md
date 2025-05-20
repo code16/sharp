@@ -323,11 +323,32 @@ class SharpServiceProvider extends SharpAppServiceProvider
 ```
 
 ::: warning
-By default Sharp will also check the `APP_ENV` value to be `local` to enable this feature, since this should never hit the production by mistake.
+By default Sharp will also check the `APP_ENV` value to be `local` (or `testing`) to enable this feature, since this should never hit the production by mistake.
 You can override this behavior by providing a custom handler class, see below. 
 :::
 
-Configured like this, Sharp will display a dropdown list of all users in the login form, allowing you to select one and be logged in as this user. If you want more control on this users list, or if you need to opt out from this default Eloquent implementation, you can provide your own handler class, which must extend `Code16\Sharp\Auth\Impersonate\SharpImpersonationHandler`:
+Configured like this, Sharp will display a dropdown list of all users in the login form, allowing you to select one and be logged in as this user. If you want more control on this users list, or if you need to opt out from this default Eloquent implementation, you can provide either a Closure with must return a key-value array:
+
+```php
+use \Code16\Sharp\Auth\Impersonate\SharpImpersonationHandler;
+
+class SharpServiceProvider extends SharpAppServiceProvider
+{
+    protected function configureSharp(SharpConfigBuilder $config): void
+    {
+        $config
+            ->enableImpersonation(fn () => User::query()
+                ->where('is_admin', true)
+                ->pluck('email', 'id')
+                ->all()
+            )
+            
+            // ...
+    }
+}
+```
+
+Or your own handler class, which must extend `Code16\Sharp\Auth\Impersonate\SharpImpersonationHandler`:
 
 ```php
 use \Code16\Sharp\Auth\Impersonate\SharpImpersonationHandler;
@@ -343,11 +364,12 @@ class SharpServiceProvider extends SharpAppServiceProvider
                     return User::where('is_admin', true)
                         ->get()
                         ->filter(fn ($user) => $user->canImpersonate())
-                        ->mapWithKeys(fn ($user) => [$user->id => $user->email])
+                        ->pluck('email', 'id')
                         ->all();
                 }
             })
-            // [...]
+            
+            // ...
     }
 }
 ```
@@ -365,6 +387,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
     {
         $config
             ->redirectLoginToUrl('/my_login')
+            ->redirectLogoutToUrl('/my_logout')
             // [...]
     }
 }

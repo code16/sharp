@@ -3,6 +3,7 @@
 return [
     'popover_button' => 'Filter',
     'select.reset' => 'Reset',
+    'select.label.selected' => ':count selected',
     'daterange.confirm' => 'Update',
     'daterange.preset.today' => 'Today',
     'daterange.preset.yesterday' => 'Yesterday',

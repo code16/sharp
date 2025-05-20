@@ -24,7 +24,6 @@ abstract class SharpShow
     use WithCustomTransformers;
 
     protected ?ShowLayout $showLayout = null;
-    protected ?string $multiformAttribute = null;
     protected ?SharpShowTextField $pageTitleField = null;
     protected ?string $deleteConfirmationText = null;
     protected ?string $editButtonLabel = null;
@@ -51,7 +50,6 @@ abstract class SharpShow
                     ->merge(array_keys($this->transformers))
                     ->when($this->breadcrumbAttribute, fn ($collect) => $collect->push($this->breadcrumbAttribute))
                     ->when($this->entityStateAttribute, fn ($collect) => $collect->push($this->entityStateAttribute))
-                    ->when($this->multiformAttribute, fn ($collect) => $collect->push($this->multiformAttribute))
                     ->unique()
                     ->values()
                     ->toArray()
@@ -66,9 +64,6 @@ abstract class SharpShow
                 'deleteConfirmationText' => $this->deleteConfirmationText ?: trans('sharp::show.delete_confirmation_text'),
                 'editButtonLabel' => $this->editButtonLabel,
             ])
-            ->when($this->multiformAttribute, fn ($collection) => $collection->merge([
-                'multiformAttribute' => $this->multiformAttribute,
-            ]))
             ->when($this->pageTitleField, fn ($collection) => $collection->merge([
                 'titleAttribute' => $this->pageTitleField->key,
             ]))
@@ -81,10 +76,11 @@ abstract class SharpShow
         });
     }
 
+    /**
+     * @deprecated to be deleted, no more useful
+     */
     final protected function configureMultiformAttribute(string $attribute): self
     {
-        $this->multiformAttribute = $attribute;
-
         return $this;
     }
 
@@ -107,6 +103,11 @@ abstract class SharpShow
         $this->deleteConfirmationText = $text;
 
         return $this;
+    }
+
+    final public function titleAttribute(): ?string
+    {
+        return $this->pageTitleField?->key();
     }
 
     private function buildFormFields(FieldsContainer $fields): void

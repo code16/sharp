@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -36,20 +35,6 @@ class User extends Authenticatable
     public function avatar(): MorphOne
     {
         return $this->morphOne(Media::class, 'model')
-            ->where('model_key', 'avatar');
-    }
-
-    public function avatarUrl(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => $this->avatar?->thumbnail(500),
-        );
-    }
-
-    public function getDefaultAttributesFor(string $attribute): array
-    {
-        return in_array($attribute, ['avatar'])
-            ? ['model_key' => $attribute]
-            : [];
+            ->withAttributes(['model_key' => 'avatar']);
     }
 }

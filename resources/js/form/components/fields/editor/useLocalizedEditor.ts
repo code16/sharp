@@ -9,8 +9,9 @@ export function useLocalizedEditor(
     props: FormFieldProps<FormEditorFieldData>,
     createEditor: (locale?: string) => Editor
 ): ComputedRef<Editor> {
-    if(props.field.localized) {
-        const form = useParentForm();
+    const form = useParentForm();
+
+    if(props.field.localized && form.locales?.length) {
         const localizedEditors = Object.fromEntries(
             form.locales.map(locale => [
                 locale,

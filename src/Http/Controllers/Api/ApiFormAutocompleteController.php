@@ -10,6 +10,7 @@ use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Http\Controllers\Api\Commands\HandlesEntityCommand;
 use Code16\Sharp\Http\Controllers\Api\Commands\HandlesInstanceCommand;
 use Code16\Sharp\Http\Controllers\Api\Embeds\HandlesEmbed;
+use Code16\Sharp\Utils\Entities\ValueObjects\EntityKey;
 use Code16\Sharp\Utils\Transformers\ArrayConverter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -21,7 +22,7 @@ class ApiFormAutocompleteController extends ApiController
     use HandlesEntityCommand;
     use HandlesInstanceCommand;
 
-    public function index(string $entityKey, string $autocompleteFieldKey)
+    public function index(EntityKey $entityKey, string $autocompleteFieldKey)
     {
         $fieldContainer = $this->getFieldContainer($entityKey);
         $field = $fieldContainer->findFieldByKey($autocompleteFieldKey);
@@ -33,18 +34,23 @@ class ApiFormAutocompleteController extends ApiController
         }
 
         if ($callback = $field->getRemoteCallback()) {
+            $listFieldKey = str_contains($autocompleteFieldKey, '.')
+                ? str($autocompleteFieldKey)->before('.')
+                : null;
+
             $formData = request()->input('formData')
                 ? collect(request()->input('formData'))
-                    ->filter(fn ($value, $key) => in_array($key, $fieldContainer->getDataKeys()))
-                    ->map(function ($value, $key) use ($fieldContainer) {
-                        if (! $field = $fieldContainer->findFieldByKey($key)) {
-                            return $value;
+                    ->mapWithKeys(function ($value, $key) use ($fieldContainer, $listFieldKey) {
+                        if (! $field = $fieldContainer->findFieldByKey($listFieldKey ? "$listFieldKey.$key" : $key)) {
+                            return [];
                         }
 
-                        return $field
-                            ->formatter()
-                            ->setDataLocalizations($fieldContainer->getDataLocalizations())
-                            ->fromFront($field, $key, $value);
+                        return [
+                            $key => $field
+                                ->formatter()
+                                ->setDataLocalizations($fieldContainer->getDataLocalizations())
+                                ->fromFront($field, $key, $value),
+                        ];
                     })
                     ->toArray()
                 : null;
@@ -86,7 +92,7 @@ class ApiFormAutocompleteController extends ApiController
         ]);
     }
 
-    private function getFieldContainer(string $entityKey): SharpFormEditorEmbed|Command|SharpForm
+    private function getFieldContainer(EntityKey $entityKey): SharpFormEditorEmbed|Command|SharpForm
     {
         if (request()->input('embed_key')) {
             return $this->getEmbedFromKey(request()->input('embed_key'));
@@ -117,8 +123,10 @@ class ApiFormAutocompleteController extends ApiController
             );
         }
 
-        return $entity->getFormOrFail(sharp_normalize_entity_key($entityKey)[1]);
+        return $entity->getFormOrFail($entityKey->subEntity());
     }
+
+    private function getFormattedData() {}
 
     private function normalizeEndpoint(string $input): string
     {
@@ -127,16 +135,23 @@ class ApiFormAutocompleteController extends ApiController
 
     private function checkEndpoint(string $requestEndpoint, string $fieldEndpoint): void
     {
+        // Validates that the endpoint defined in the field is the same as the one called
+        preg_match(
+            '#'
+            .str()
+                ->of(preg_quote($fieldEndpoint))
+                ->replaceMatches('#\\\\{\\\\{(.*)\\\\}\\\\}#', '(.*)')
+            .'#im',
+            $requestEndpoint
+        ) ?: throw new SharpInvalidConfigException('The endpoint is not the one defined in the autocomplete field.');
+
+        // Check that the remote route exists in the app
         collect(Route::getRoutes()->getRoutes())
             ->map(fn ($route) => url($route->uri))
-            ->filter(fn ($routeUrl) => $routeUrl == str($requestEndpoint)->before('?'))
+            ->filter(fn (string $routeUrl) => preg_match(
+                '#'.str()->of($routeUrl)->replaceMatches('#\\{(.*)\\}#', '(.*)').'#im',
+                str($requestEndpoint)->before('?')
+            ))
             ->count() > 0 ?: throw new SharpInvalidConfigException('The endpoint is not a valid internal route.');
-
-        preg_match(
-            '#'.str()
-                ->of(preg_quote($fieldEndpoint))
-                ->replaceMatches('#\\\\{\\\\{(.*)\\\\}\\\\}#', '(.*)').'#im',
-            $requestEndpoint
-        ) ?: throw new SharpInvalidConfigException('The endpoint is not a valid internal route.');
     }
 }

@@ -25,14 +25,19 @@ class SharpException extends \Exception
             return false;
         }
 
-        if ($request->routeIs('code16.sharp.api.*')) {
+        if ($request->routeIs('code16.sharp.api.*', 'code16.sharp.download.show')) {
             return false;
         }
 
-        return Inertia::render('Error', [
-            'status' => $this->getStatusCode(),
-            'message' => $this->getMessage(),
-        ])
+        return Inertia::render(
+            'Error',
+            [
+                'status' => $this->getStatusCode(),
+                'message' => $this->getMessage(),
+                'previous' => $this->getPrevious() && $this->getPrevious()->getMessage() !== $this->getMessage() ? [
+                    'message' => $this->getPrevious()->getMessage(),
+                ] : null,
+            ])
             ->toResponse($request)
             ->setStatusCode($this->getStatusCode());
     }

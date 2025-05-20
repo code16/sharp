@@ -34,6 +34,7 @@
     }
 
     function onRemove() {
+        props.editor.commands.setNodeSelection(props.getPos());
         props.deleteNode();
         setTimeout(() => {
             props.editor.commands.focus();
@@ -47,15 +48,14 @@
             isNew: false,
         });
         modalOpen.value = false;
+        setTimeout(() => props.editor.commands.focus(props.getPos() + 1));
     }
 
     function onModalHidden() {
         if(!props.node.attrs.content) {
             props.deleteNode();
         }
-        setTimeout(() => {
-            props.editor.commands.focus();
-        });
+        setTimeout(() => props.editor.commands.focus());
     }
 </script>
 
@@ -64,13 +64,13 @@
         class="my-4 first:mt-0 last:mb-0 border rounded-md items-center p-4 flex gap-4"
         :class="{ 'group-focus/editor:border-primary': selected }"
     >
-        <div class="flex-1">
+        <div class="flex-1 min-w-0">
             <pre>{{ node.attrs.content }}</pre>
         </div>
         <template v-if="!parentEditor.props.field.readOnly">
             <DropdownMenu :modal="false">
                 <DropdownMenuTrigger as-child>
-                    <Button class="shrink-0 self-center" variant="ghost" size="icon">
+                    <Button class="shrink-0 self-center" variant="ghost" size="icon" :aria-label="__('sharp::form.editor.extension_node.dropdown_button.aria_label')">
                         <MoreHorizontal class="size-4" />
                     </Button>
                 </DropdownMenuTrigger>
