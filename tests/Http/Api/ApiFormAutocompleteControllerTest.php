@@ -249,7 +249,7 @@ it('renders autocomplete results with template', function () {
         ]);
 });
 
-it('passes the full object in the item variable in the template', function () {
+it('passes the full data in the item variable in the template', function () {
     fakeFormFor('person', new class() extends PersonForm
     {
         public function buildFormFields(FieldsContainer $formFields): void
@@ -281,6 +281,46 @@ it('passes the full object in the item variable in the template', function () {
             'data' => [
                 ['id' => 1, 'name' => 'John', 'job' => 'actor', '_html' => 'John, actor'],
                 ['id' => 2, 'name' => 'Jane', 'job' => 'producer', '_html' => 'Jane, producer'],
+            ],
+        ]);
+});
+
+it('allows objects / models as the item variable in the template in a callback case', function () {
+    fakeFormFor('person', new class() extends PersonForm
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(
+                SharpFormAutocompleteRemoteField::make('autocomplete_field')
+                    ->setRemoteCallback(function () {
+                        return [
+                            new class()
+                            {
+                                public int $id = 1;
+
+                                public function getNameAndJob(): string
+                                {
+                                    return 'John, actor';
+                                }
+                            },
+                        ];
+                    })
+                    ->setListItemTemplate('{{ $item->getNameAndJob() }}')
+            );
+        }
+    });
+
+    $this
+        ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+            'entityKey' => 'person',
+            'autocompleteFieldKey' => 'autocomplete_field',
+        ]), [
+            'search' => 'my search',
+        ])
+        ->assertOk()
+        ->assertJson([
+            'data' => [
+                ['id' => 1, '_html' => 'John, actor'],
             ],
         ]);
 });
