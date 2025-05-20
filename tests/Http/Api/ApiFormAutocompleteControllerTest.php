@@ -249,6 +249,78 @@ it('renders autocomplete results with template', function () {
         ]);
 });
 
+it('passes the full object in the item variable in the template', function () {
+    fakeFormFor('person', new class() extends PersonForm
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(
+                SharpFormAutocompleteRemoteField::make('autocomplete_field')
+                    ->setRemoteMethodPOST()
+                    ->setListItemTemplate('{{ $item["name"] }}, {{ $item["job"] }}')
+                    ->setRemoteEndpoint('/my/endpoint')
+            );
+        }
+    });
+
+    Route::post('/my/endpoint', fn () => [
+        ['id' => 1, 'name' => 'John', 'job' => 'actor'],
+        ['id' => 2, 'name' => 'Jane', 'job' => 'producer'],
+    ]);
+
+    $this
+        ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+            'entityKey' => 'person',
+            'autocompleteFieldKey' => 'autocomplete_field',
+        ]), [
+            'endpoint' => '/my/endpoint',
+            'search' => 'my search',
+        ])
+        ->assertOk()
+        ->assertJson([
+            'data' => [
+                ['id' => 1, 'name' => 'John', 'job' => 'actor', '_html' => 'John, actor'],
+                ['id' => 2, 'name' => 'Jane', 'job' => 'producer', '_html' => 'Jane, producer'],
+            ],
+        ]);
+});
+
+it('allows Closure as item template', function () {
+    fakeFormFor('person', new class() extends PersonForm
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(
+                SharpFormAutocompleteRemoteField::make('autocomplete_field')
+                    ->setRemoteMethodPOST()
+                    ->setListItemTemplate(fn ($data) => $data['name'].', '.$data['job'])
+                    ->setRemoteEndpoint('/my/endpoint')
+            );
+        }
+    });
+
+    Route::post('/my/endpoint', fn () => [
+        ['id' => 1, 'name' => 'John', 'job' => 'actor'],
+        ['id' => 2, 'name' => 'Jane', 'job' => 'producer'],
+    ]);
+
+    $this
+        ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+            'entityKey' => 'person',
+            'autocompleteFieldKey' => 'autocomplete_field',
+        ]), [
+            'endpoint' => '/my/endpoint',
+            'search' => 'my search',
+        ])
+        ->assertOk()
+        ->assertJson([
+            'data' => [
+                ['id' => 1, 'name' => 'John', 'job' => 'actor', '_html' => 'John, actor'],
+                ['id' => 2, 'name' => 'Jane', 'job' => 'producer', '_html' => 'Jane, producer'],
+            ],
+        ]);
+});
+
 it('fails if field is missing', function () {
     $this->withoutExceptionHandling();
 

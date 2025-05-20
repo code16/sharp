@@ -58,7 +58,7 @@ trait SharpFormAutocompleteCommonField
 
     protected function renderListItem($data): string
     {
-        if (is_callable($this->resultItemTemplate)) {
+        if (is_callable($this->listItemTemplate)) {
             return ($this->listItemTemplate)($data);
         }
 
