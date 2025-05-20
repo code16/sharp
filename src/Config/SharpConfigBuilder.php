@@ -62,7 +62,7 @@ class SharpConfigBuilder
             'logout_page_url' => null,
             'display_attribute' => 'name',
             'login_attribute' => 'email',
-            'avatar' => null,
+            'avatar_attribute' => null,
             'password_attribute' => 'password',
             'impersonate' => [
                 'enabled' => false,
@@ -417,12 +417,12 @@ class SharpConfigBuilder
     }
 
     /**
-     * @param  (Closure(Authenticatable $user): string)  $userAvatar
+     * @param  (string|Closure(Authenticatable $user): string)  $avatarAttribute
      * @return $this
      */
-    public function setUserAvatar(Closure $userAvatar): self
+    public function setUserAvatarAttribute(string|Closure $avatarAttribute): self
     {
-        $this->config['auth']['avatar'] = $userAvatar;
+        $this->config['auth']['avatar_attribute'] = $avatarAttribute;
 
         return $this;
     }

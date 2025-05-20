@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Data;
 
+use Closure;
 use Illuminate\Contracts\Auth\Authenticatable;
 
 /**
@@ -20,7 +21,11 @@ final class UserData extends Data
         return new self(
             name: $user->{sharp()->config()->get('auth.display_attribute')} ?? null,
             email: $user->{sharp()->config()->get('auth.login_attribute')} ?? null,
-            avatar: ($avatar = sharp()->config()->get('auth.avatar')) ? $avatar($user) : null,
+            avatar: match (true) {
+                is_string(sharp()->config()->get('auth.avatar_attribute')) => $user->{sharp()->config()->get('auth.avatar_attribute')},
+                sharp()->config()->get('auth.avatar_attribute') instanceof Closure => sharp()->config()->get('auth.avatar_attribute')($user),
+                default => null,
+            },
         );
     }
 }

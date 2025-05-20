@@ -14,14 +14,14 @@ class SharpServiceProvider extends SharpAppServiceProvider
         $config
             ->setLoginAttributes('login', 'pwd')
             ->setUserDisplayAttribute('last_name')
-            ->setUserAvatar(fn () => auth()->user()->avatar)
+            ->setUserAvatarAttribute('avatar_url')
             // [...]
     }
 }
 ```
 
 - The `setUserDisplayAttribute()` is useful to display the user's name in the Sharp UI. Default is `name`.
-- The `setUserAvatar()` is useful to display the user's avatar in the Sharp UI. By default, a user icon is displayed instead.
+- The `setUserAvatarAttribute()` is useful to display the user's avatar in the Sharp UI. By default, a user icon is displayed instead.
 
 ## Login form
 
