@@ -14,6 +14,8 @@
     import { Button } from "@/components/ui/button";
     import { __ } from "@/utils/i18n";
     import { CommandFormExtraData } from "@/commands/types";
+    import { Alert, AlertDescription } from "@/components/ui/alert";
+    import { OctagonAlert } from "lucide-vue-next";
 
     const props = defineProps<{
         commands: CommandManager,
@@ -55,24 +57,36 @@
                         ref="form"
                     />
                 </div>
-                <DialogFooter>
-                    <DialogClose as-child>
-                        <Button variant="outline">
-                            {{ __('sharp::modals.cancel_button') }}
-                        </Button>
-                    </DialogClose>
-                    <template v-if="commands.state.currentCommandForm.config.showSubmitAndReopenButton">
-                        <Button variant="outline"
-                            :disabled="commands.state.currentCommandFormLoading"
-                            @click="form.submit<CommandFormExtraData>({ _shouldReopen: true })"
-                        >
-                            {{ commands.state.currentCommandForm.config.submitAndReopenButtonLabel ?? __('sharp::modals.command.submit_and_reopen_button') }}
-                        </Button>
+                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-end gap-4">
+                    <template v-if="commands.state.currentCommandForm.hasErrors">
+                        <div class="flex-1">
+                            <Alert class="py-2" variant="destructive">
+                                <OctagonAlert class="size-4 text-destructive mt-0!" />
+                                <AlertDescription class="text-xs text-foreground">
+                                    {{ __('sharp::form.validation_error.title') }}  {{ __('sharp::form.validation_error.description') }}
+                                </AlertDescription>
+                            </Alert>
+                        </div>
                     </template>
-                    <Button :disabled="commands.state.currentCommandFormLoading" @click="form.submit()">
-                        {{ commands.state.currentCommandForm.config.buttonLabel ?? __('sharp::modals.command.submit_button') }}
-                    </Button>
-                </DialogFooter>
+                    <DialogFooter>
+                        <DialogClose as-child>
+                            <Button variant="outline">
+                                {{ __('sharp::modals.cancel_button') }}
+                            </Button>
+                        </DialogClose>
+                        <template v-if="commands.state.currentCommandForm.config.showSubmitAndReopenButton">
+                            <Button variant="outline"
+                                :disabled="commands.state.currentCommandFormLoading"
+                                @click="form.submit<CommandFormExtraData>({ _shouldReopen: true })"
+                            >
+                                {{ commands.state.currentCommandForm.config.submitAndReopenButtonLabel ?? __('sharp::modals.command.submit_and_reopen_button') }}
+                            </Button>
+                        </template>
+                        <Button :disabled="commands.state.currentCommandFormLoading" @click="form.submit()">
+                            {{ commands.state.currentCommandForm.config.buttonLabel ?? __('sharp::modals.command.submit_button') }}
+                        </Button>
+                    </DialogFooter>
+                </div>
             </template>
         </DialogScrollContent>
     </Dialog>
