@@ -101,14 +101,19 @@
 <template>
     <Tabs v-model="selectedTabSlug" :unmount-on-hide="false">
         <template v-if="showErrorAlert">
-            <div class="container">
-                <Alert class="mb-4" variant="destructive">
+            <div :class="modal ? 'mb-8' : 'mb-4 container'">
+                <Alert variant="destructive">
                     <template v-if="errorAlertMessage">
-                        <AlertTitle>
+                        <AlertTitle v-if="!modal">
                             {{ __('sharp::modals.error.title') }}
                         </AlertTitle>
                         <AlertDescription>
                             {{ errorAlertMessage }}
+                        </AlertDescription>
+                    </template>
+                    <template v-else-if="modal">
+                        <AlertDescription>
+                            {{ __('sharp::form.validation_error.title') }} {{ __('sharp::form.validation_error.description') }}
                         </AlertDescription>
                     </template>
                     <template v-else>
