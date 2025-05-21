@@ -11,7 +11,6 @@ use Code16\Sharp\Http\Controllers\Api\Commands\HandlesEntityCommand;
 use Code16\Sharp\Http\Controllers\Api\Commands\HandlesInstanceCommand;
 use Code16\Sharp\Http\Controllers\Api\Embeds\HandlesEmbed;
 use Code16\Sharp\Utils\Entities\ValueObjects\EntityKey;
-use Code16\Sharp\Utils\Transformers\ArrayConverter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
@@ -55,11 +54,9 @@ class ApiFormAutocompleteController extends ApiController
                     ->toArray()
                 : null;
 
-            $data = collect($callback(request()->input('search'), $formData))
-                ->map(fn ($record) => ArrayConverter::modelToArray($record));
-
             return response()->json([
-                'data' => $data->map(fn ($item) => $field->itemWithRenderedTemplates($item)),
+                'data' => collect($callback(request()->input('search'), $formData))
+                    ->map(fn ($item) => $field->itemWithRenderedTemplates($item)),
             ]);
         }
 

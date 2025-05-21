@@ -2,6 +2,7 @@
 
 namespace App\Sharp\TestForm;
 
+use App\Models\User;
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteListField;
@@ -61,8 +62,8 @@ class TestForm extends SharpSingleForm
                 SharpFormAutocompleteRemoteField::make('autocomplete_remote')
                     ->setLabel('Autocomplete remote')
                     ->setRemoteSearchAttribute('query')
-                    ->setListItemTemplate('{{ $name }}')
-                    ->setResultItemTemplate('{{ $name }} ({{ $id }})')
+                    ->setListItemTemplate('{{ $item["name"] }}')
+                    ->setResultItemTemplate('{{ $item["name"] }} ({{ $item["id"] }})')
 //                    ->setReadOnly()
                     ->setRemoteEndpoint(route('sharp.autocompletes.users.index'))
                 //                 ->setRemoteCallback(function ($search, $data) {
@@ -400,6 +401,7 @@ class TestForm extends SharpSingleForm
         }
 
         return $this
+            ->setCustomTransformer('autocomplete_remote', fn ($value) => User::find($value))
             ->setCustomTransformer('upload', (new SharpUploadModelFormAttributeTransformer())->dynamicInstance())
             ->setCustomTransformer('html', fn () => [
                 'name' => fake()->name,

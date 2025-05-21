@@ -14,13 +14,11 @@ class AutocompleteRemoteFormatter extends SharpFieldFormatter
      */
     public function toFront(SharpFormField $field, $value)
     {
-        $value = ArrayConverter::modelToArray($value);
-
         if (is_null($value)) {
             return null;
         }
 
-        if (is_array($value)) {
+        if (is_array(ArrayConverter::modelToArray($value))) {
             return $field->itemWithRenderedTemplates($value);
         }
 

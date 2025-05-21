@@ -2,6 +2,8 @@
 
 namespace Code16\Sharp\Form\Fields\Utils;
 
+use Closure;
+use Code16\Sharp\Utils\Transformers\ArrayConverter;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Blade;
 
@@ -15,17 +17,17 @@ trait SharpFormAutocompleteCommonField
     protected string $mode;
     protected string $itemIdAttribute = 'id';
     protected ?array $dynamicAttributes = null;
-    protected View|string|null $listItemTemplate = null;
-    protected View|string|null $resultItemTemplate = null;
+    protected View|string|Closure|null $listItemTemplate = null;
+    protected View|string|Closure|null $resultItemTemplate = null;
 
-    public function itemWithRenderedTemplates(array $item): array
+    public function itemWithRenderedTemplates($item): array
     {
         $resultItem = $this->resultItemTemplate
             ? ['_htmlResult' => $this->renderResultItem($item)]
             : [];
 
         return [
-            ...$item,
+            ...ArrayConverter::modelToArray($item),
             '_html' => $this->listItemTemplate
                 ? $this->renderListItem($item)
                 : ($item['label'] ?? $item[$this->itemIdAttribute] ?? null),
@@ -40,22 +42,28 @@ trait SharpFormAutocompleteCommonField
         return $this;
     }
 
-    public function setListItemTemplate(View|string $template): self
+    public function setListItemTemplate(View|string|Closure $template): self
     {
         $this->listItemTemplate = $template;
 
         return $this;
     }
 
-    public function setResultItemTemplate(View|string $template): self
+    public function setResultItemTemplate(View|string|Closure $template): self
     {
         $this->resultItemTemplate = $template;
 
         return $this;
     }
 
-    public function renderListItem(array $data): string
+    protected function renderListItem($data): string
     {
+        if (is_callable($this->listItemTemplate)) {
+            return ($this->listItemTemplate)($data);
+        }
+
+        $data = ['item' => $data, ...ArrayConverter::modelToArray($data)];
+
         if (is_string($this->listItemTemplate)) {
             return Blade::render($this->listItemTemplate, $data);
         }
@@ -63,8 +71,14 @@ trait SharpFormAutocompleteCommonField
         return $this->listItemTemplate->with($data)->render();
     }
 
-    public function renderResultItem(array $data): string
+    protected function renderResultItem($data): string
     {
+        if (is_callable($this->resultItemTemplate)) {
+            return ($this->resultItemTemplate)($data);
+        }
+
+        $data = ['item' => $data, ...ArrayConverter::modelToArray($data)];
+
         if (is_string($this->resultItemTemplate)) {
             return Blade::render($this->resultItemTemplate, $data);
         }
