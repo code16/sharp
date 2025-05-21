@@ -73,8 +73,7 @@ export class Form implements FormData, CommandFormData, EventTarget {
     set errors(errors) {
         this.state.errors = errors;
     }
-    get hasErrors()
-    {
+    get hasErrors() {
         return Object.keys(this.errors).length > 0;
     }
 
