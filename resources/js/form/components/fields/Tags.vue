@@ -5,7 +5,7 @@
     import { ComboboxAnchor, ComboboxContent, ComboboxPortal, ComboboxRoot, ComboboxInput } from "reka-ui";
     import { computed, ref } from "vue";
     import { __ } from "@/utils/i18n";
-    import { CommandGroup, CommandItem, CommandList, CommandSeparator } from "@/components/ui/command";
+    import { CommandEmpty, CommandGroup, CommandItem, CommandList, CommandSeparator } from "@/components/ui/command";
     import FormFieldLayout from "@/form/components/FormFieldLayout.vue";
     import { useFullTextSearch } from "@/composables/useFullTextSearch";
 
@@ -53,6 +53,12 @@
         return filtered
             .filter(o => !props.value?.find(v => o.id != null && v.id != null && o.id === v.id)); // show only unselected options
     });
+    const canCreate = computed(() => {
+        return props.field.creatable
+            && searchTerm.value.length > 0
+            && !props.value?.find(v => v.label === searchTerm.value)
+            && !props.field.options.find(o => o.label === searchTerm.value);
+    });
 
     emit('input', props.value?.map(option => withItemKey(option)));
 </script>
@@ -96,7 +102,10 @@
                     :avoid-collisions="false"
                     class="z-50 w-(--reka-popper-anchor-width) rounded-md mt-2 border bg-popover text-popover-foreground shadow-md outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2"
                 >
-                    <template v-if="searchTerm.length > 0 && props.field.creatable">
+                    <CommandEmpty>
+                        {{ __('sharp::form.autocomplete.no_results_text') }}
+                    </CommandEmpty>
+                    <template v-if="canCreate">
                         <CommandGroup>
                             <CommandItem :value="{ id: null, label: searchTerm }" @select.prevent="onCreateClick()" :key="searchTerm">
                                 {{ props.field.createText }} “{{ searchTerm }}”
