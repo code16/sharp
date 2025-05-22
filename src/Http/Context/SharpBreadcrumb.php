@@ -312,7 +312,7 @@ class SharpBreadcrumb
                 ->values();
         }
 
-        return collect(request()->segments())->slice(1)->values();
+        return collect(request()->segments())->skip(1)->values();
     }
 
     public function forceRequestSegments(array|Collection $segments): void

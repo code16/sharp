@@ -7,6 +7,7 @@ use Code16\Sharp\Exceptions\Form\SharpFormUpdateException;
 use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Illuminate\Support\Uri;
 
 class QuickCreationCommand extends EntityCommand
 {
@@ -73,13 +74,16 @@ class QuickCreationCommand extends EntityCommand
 
     public function execute(array $data = []): array
     {
+        $currentUrl = sharp()->context()->breadcrumb()->getCurrentSegmentUrl();
+
+        sharp()->context()->breadcrumb()->forceRequestSegments(
+            Uri::of($currentUrl)->pathSegments()->skip(1)->concat(['s-form', $this->entityKey])
+        );
         $this->instanceId = $this->sharpForm->update(null, $data);
 
         if ($this->instanceId === null) {
             report(new SharpFormUpdateException('The update() method in '.get_class($this->sharpForm).' must return the newly created instance id'));
         }
-
-        $currentUrl = sharp()->context()->breadcrumb()->getCurrentSegmentUrl();
 
         return $this->sharpForm->isDisplayShowPageAfterCreation()
             ? $this->link(sprintf('%s/s-show/%s/%s', $currentUrl, $this->entityKey, $this->instanceId))

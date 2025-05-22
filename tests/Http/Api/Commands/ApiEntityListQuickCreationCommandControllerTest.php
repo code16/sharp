@@ -2,6 +2,7 @@
 
 use Code16\Sharp\Exceptions\Form\SharpFormUpdateException;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
+use Code16\Sharp\Http\Context\SharpBreadcrumb;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonForm;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
@@ -149,6 +150,42 @@ it('logs an error if the form’s update() method does not return the instance i
         ->assertJson(['action' => 'reload']);
 
     Exceptions::assertReported(SharpFormUpdateException::class);
+});
+
+it('sharp()->context()->breadcrumb() is correct', function () {
+
+    fakeListFor('person', new class() extends PersonList
+    {
+        public function buildListConfig(): void
+        {
+            $this->configureQuickCreationForm();
+        }
+    });
+
+    fakeFormFor('person', new class() extends PersonForm
+    {
+        public function update($id, array $data)
+        {
+            expect(sharp()->context())
+                ->isCreation()->toBeTrue()
+                ->isForm()->toBeTrue()
+                ->entityKey()->toBe('person');
+
+            expect(sharp()->context()->breadcrumb())
+                ->getCurrentSegmentUrl()->toBe(url('/sharp/s-list/person/s-form/person'));
+        }
+    });
+
+    $this
+        ->postJson(
+            route('code16.sharp.api.list.command.quick-creation-form.create', ['person']),
+            ['data' => []],
+            [
+                SharpBreadcrumb::CURRENT_PAGE_URL_HEADER => url('/sharp/s-list/person'),
+            ]
+        )
+        ->assertOk()
+        ->assertJson(['action' => 'reload']);
 });
 
 it('validates posted data of a quick creation command', function () {
