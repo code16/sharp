@@ -58,6 +58,7 @@ export function useMenuBoundaryElement() {
     import GlobalSearch from "@/components/GlobalSearch.vue";
     import { vScrollIntoView } from "@/directives/scroll-into-view";
     import Content from "@/components/Content.vue";
+    import { Badge } from "@/components/ui/badge";
 
     const dialogs = useDialogs();
     const menu = useMenu();
@@ -166,9 +167,9 @@ export function useMenuBoundaryElement() {
                                                                                 {{ childItem.label }}
                                                                             </span>
                                                                             <template v-if="childItem.badge != null">
-                                                                                <SidebarMenuBadge>
+                                                                                <Badge class="-my-px -mr-1" variant="sidebar">
                                                                                     {{ childItem.badge }}
-                                                                                </SidebarMenuBadge>
+                                                                                </Badge>
                                                                             </template>
                                                                             <template v-if="childItem.isExternalLink">
                                                                                 <ExternalLink class="size-4 opacity-50" />
@@ -202,9 +203,9 @@ export function useMenuBoundaryElement() {
                                                                 {{ item.label }}
                                                             </span>
                                                             <template v-if="item.badge != null">
-                                                                <SidebarMenuBadge>
+                                                                <Badge class="-my-px -mr-1" variant="sidebar">
                                                                     {{ item.badge }}
-                                                                </SidebarMenuBadge>
+                                                                </Badge>
                                                             </template>
                                                             <template v-if="item.isExternalLink">
                                                                 <ExternalLink class="size-4 opacity-50" />

@@ -14,6 +14,7 @@ export const badgeVariants = cva(
         destructive:
           'border-transparent bg-destructive text-destructive-foreground dark:bg-destructive/60 hover:bg-destructive/80',
         outline: 'text-foreground',
+        sidebar: 'relative isolate before:-z-10 before:absolute before:inset-0 before:rounded-full before:bg-background/50 border-primary/10 text-primary',
       },
     },
     defaultVariants: {
