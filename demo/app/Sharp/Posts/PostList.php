@@ -13,6 +13,7 @@ use App\Sharp\Utils\Filters\AuthorFilter;
 use App\Sharp\Utils\Filters\CategoryFilter;
 use App\Sharp\Utils\Filters\PeriodFilter;
 use App\Sharp\Utils\Filters\StateFilter;
+use Code16\Sharp\EntityList\Fields\EntityListBadgeField;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\Fields\EntityListStateField;
@@ -22,6 +23,7 @@ use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\PageAlerts\PageAlert;
 use Code16\Sharp\Utils\Transformers\Attributes\Eloquent\SharpTagsTransformer;
 use Code16\Sharp\Utils\Transformers\Attributes\Eloquent\SharpUploadModelThumbnailUrlTransformer;
+use Code16\Sharp\Utils\Transformers\Attributes\SharpBadgeCustomTransformer;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -30,6 +32,13 @@ class PostList extends SharpEntityList
     protected function buildList(EntityListFieldsContainer $fields): void
     {
         $fields
+            ->addField(
+                EntityListField::make('is_draft')
+                    ->setWidth(.01)
+            )
+            // ->addField(
+            //     EntityListBadgeField::make('is_draft')
+            // )
             ->addField(
                 EntityListField::make('cover')
                     ->setWidth(.1)
@@ -172,6 +181,8 @@ class PostList extends SharpEntityList
             );
 
         return $this
+            ->setCustomTransformer('is_draft', fn ($value, Post $instance) => new SharpBadgeCustomTransformer()->apply($instance->isDraft()))
+            // ->setCustomTransformer('is_draft', fn ($value, Post $instance) => $instance->isDraft())
             ->setCustomTransformer('title', function ($value, Post $instance) {
                 return sprintf(
                     '<div>%s</div><div><small>[fr] %s</div>',

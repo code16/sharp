@@ -157,7 +157,7 @@ export type EntityListData = {
   pageAlert: PageAlertData | null;
 };
 export type EntityListFieldData = {
-  type: "text" | "state";
+  type: "text" | "state" | "badge";
   key: string;
   label: string;
   sortable: boolean;

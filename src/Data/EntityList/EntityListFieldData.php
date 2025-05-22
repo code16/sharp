@@ -12,7 +12,7 @@ use Spatie\TypeScriptTransformer\Attributes\Optional;
 final class EntityListFieldData extends Data
 {
     public function __construct(
-        #[LiteralTypeScriptType('"text"|"state"')]
+        #[LiteralTypeScriptType('"text"|"state"|"badge"')]
         public string $type,
         public string $key,
         public string $label,

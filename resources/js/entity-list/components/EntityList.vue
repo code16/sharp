@@ -642,7 +642,7 @@
                                                         '--width':
                                                             field.width === 'fill' ? (100 / visibleFields.length)+'%' :
                                                             field.width ? field.width :
-                                                            field.type === 'state' ? 0 : null
+                                                            field.type === 'state' || field.type === 'badge' ? 0 : null
                                                     }"
                                                 >
                                                     <template v-if="field.sortable">
@@ -735,6 +735,13 @@
                                                                     </template>
                                                                 </DropdownMenuContent>
                                                             </DropdownMenu>
+                                                        </TableCell>
+                                                    </template>
+                                                    <template v-else-if="field.type === 'badge'">
+                                                        <TableCell class="max-w-[70cqw]">
+                                                            <template v-if="item[field.key] === true">
+                                                                <div class="size-2 bg-primary rounded-full"></div>
+                                                            </template>
                                                         </TableCell>
                                                     </template>
                                                     <template v-else>
