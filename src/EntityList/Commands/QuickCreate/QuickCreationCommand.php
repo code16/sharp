@@ -77,7 +77,11 @@ class QuickCreationCommand extends EntityCommand
         $currentUrl = sharp()->context()->breadcrumb()->getCurrentSegmentUrl();
 
         sharp()->context()->breadcrumb()->forceRequestSegments(
-            Uri::of($currentUrl)->pathSegments()->skip(1)->concat(['s-form', $this->entityKey])
+            str(Uri::of($currentUrl)->path())
+                ->explode('/')
+                ->filter()
+                ->skip(1)
+                ->concat(['s-form', $this->entityKey])
         );
         $this->instanceId = $this->sharpForm->update(null, $data);
 
