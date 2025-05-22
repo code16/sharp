@@ -8,7 +8,7 @@ trait HasSharpMenuItems
 {
     protected array $items = [];
 
-    public function addEntityLink(string $entityKeyOrClassName, ?string $label = null, ?string $icon = null): self
+    public function addEntityLink(string $entityKeyOrClassName, ?string $label = null, ?string $icon = null, ?\Closure $badge = null): self
     {
         if (class_exists($entityKeyOrClassName)) {
             $entityKeyOrClassName = app(SharpEntityManager::class)
