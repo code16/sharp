@@ -685,6 +685,8 @@ export type OrderedListWidgetData = {
 export type PageAlertData = {
   level: PageAlertLevel;
   text: string;
+  buttonLabel: string | null;
+  buttonUrl: string | null;
 };
 export type PageAlertLevel =
   | "danger"
