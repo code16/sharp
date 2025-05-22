@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Utils\Menu;
 
+use Closure;
 use Code16\Sharp\Utils\Entities\SharpDashboardEntity;
 use Code16\Sharp\Utils\Entities\SharpEntity;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
@@ -12,7 +13,11 @@ class SharpMenuItemLink extends SharpMenuItem
     protected ?string $entityKey = null;
     protected ?string $url = null;
 
-    public function __construct(protected ?string $label, protected ?string $icon) {}
+    public function __construct(
+        protected ?string $label,
+        protected ?string $icon,
+        protected ?Closure $badge,
+    ) {}
 
     public function setEntity(string $entityKey): self
     {
@@ -32,6 +37,15 @@ class SharpMenuItemLink extends SharpMenuItem
     public function getIcon(): ?string
     {
         return $this->icon;
+    }
+
+    public function getBadge(): ?string
+    {
+        if ($this->badge instanceof Closure) {
+            return ($this->badge)();
+        }
+
+        return null;
     }
 
     public function isDashboardEntity(): bool

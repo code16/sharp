@@ -655,6 +655,7 @@ export type MenuData = {
 export type MenuItemData = {
   icon: IconData | null;
   label: string | null;
+  badge: string | null;
   url: string | null;
   isExternalLink: boolean;
   entityKey: string | null;

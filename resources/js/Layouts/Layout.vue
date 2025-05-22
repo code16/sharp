@@ -49,6 +49,7 @@ export function useMenuBoundaryElement() {
         SidebarGroupLabel,
         SidebarHeader, SidebarInset,
         SidebarMenu,
+        SidebarMenuBadge,
         SidebarMenuButton,
         SidebarMenuItem,
         SidebarProvider, SidebarRail, SidebarSeparator, SidebarTrigger
@@ -161,9 +162,16 @@ export function useMenuBoundaryElement() {
                                                                             <template v-if="childItem.icon">
                                                                                 <Icon :icon="childItem.icon" class="size-4" />
                                                                             </template>
-                                                                            <span>{{ childItem.label }}</span>
+                                                                            <span class="flex-1">
+                                                                                {{ childItem.label }}
+                                                                            </span>
+                                                                            <template v-if="childItem.badge != null">
+                                                                                <SidebarMenuBadge>
+                                                                                    {{ childItem.badge }}
+                                                                                </SidebarMenuBadge>
+                                                                            </template>
                                                                             <template v-if="childItem.isExternalLink">
-                                                                                <ExternalLink class="ml-auto size-4 opacity-50" />
+                                                                                <ExternalLink class="size-4 opacity-50" />
                                                                             </template>
                                                                         </component>
                                                                     </SidebarMenuButton>
@@ -190,11 +198,16 @@ export function useMenuBoundaryElement() {
                                                             <template v-if="item.icon">
                                                                 <Icon :icon="item.icon" class="size-4" />
                                                             </template>
-                                                            <span>
+                                                            <span class="flex-1">
                                                                 {{ item.label }}
                                                             </span>
+                                                            <template v-if="item.badge != null">
+                                                                <SidebarMenuBadge>
+                                                                    {{ item.badge }}
+                                                                </SidebarMenuBadge>
+                                                            </template>
                                                             <template v-if="item.isExternalLink">
-                                                                <ExternalLink class="ml-auto size-4 opacity-50" />
+                                                                <ExternalLink class="size-4 opacity-50" />
                                                             </template>
                                                         </component>
                                                     </SidebarMenuButton>
