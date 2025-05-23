@@ -12,6 +12,8 @@ final class PageAlertData extends Data
     public function __construct(
         public PageAlertLevel $level,
         public string $text,
+        public ?string $buttonLabel = null,
+        public ?string $buttonUrl = null,
     ) {}
 
     public static function from(array $pageAlert): self
