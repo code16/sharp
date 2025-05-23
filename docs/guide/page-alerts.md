@@ -54,3 +54,38 @@ The `$data` array passed to the closure is the result of your `find()` (Show, Fo
 If your message is complex to build, you can defer to a blade template to encapsulate the logic, eg:
 `return view('sharp._post-planned-info', ['data' => $data])->render();`
 :::
+
+## Add a button link
+
+The `setButton()` method allows you to add a link to your alert:
+
+```php
+class MyShow extends SharpShow
+{
+    // [...]
+    
+    protected function buildPageAlert(PageAlert $pageAlert): void
+    {
+        $pageAlert
+            ->setMessage('This page has been edited recently.')
+            ->setButton('Go to page', route('pages.show', sharp()->context()->instanceId()));
+    }
+}
+```
+
+You can also pass a `SharpLinkTo` object. It's useful for filtering an Entity List, for example:
+
+```php
+class MyEntityList extends SharpEntityList
+{
+    // [...]
+    
+    protected function buildPageAlert(PageAlert $pageAlert): void
+    {
+        $pageAlert
+            ->setMessage('There is 3 new orders')
+            ->setButton('See orders', LinkToEntityList::make(MyEntity::class)->addFilter('is_new', 1));
+    }
+}
+```
+

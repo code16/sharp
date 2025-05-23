@@ -55,6 +55,23 @@ To hide the column on small screens, use `->hideOnSmallScreens()`.
 
 Sorting columns must be handled in the `getListData()` method, see below.
 
+#### Add a badge field
+
+The `EntityListBadgeField` allows you to display a badge in the list. It is either a simple dot if the value is `true` or a badge containing the value if it is an integer or a string.
+
+```php
+class ProductList extends SharpEntityList
+{
+    protected function buildList(EntityListFieldsContainer $fields): void
+    {
+        $fields
+            ->addField(
+                EntityListBadgeField::make('is_new')
+            );
+    }
+}
+```
+
 ### `getListData()`
 
 Now the real work: grab and return the actual list data. This method must return an array of `instances` of our `entity`. You can do this however you want, so let's see a generic example:
