@@ -73,11 +73,16 @@ class PostList extends SharpEntityList
 
     protected function buildPageAlert(PageAlert $pageAlert): void
     {
-        if (($count = Post::where('state', 'draft')->count()) > 0) {
+        if (auth()->user()->isAdmin() && ($count = Post::where('state', 'draft')->count()) > 0) {
             $pageAlert
                 ->setMessage(sprintf('%d posts are still in draft', $count))
-                ->setButton('Show drafts', LinkToEntityList::make(sharp()->context()->entityKey())->addFilter(StateFilter::class, 'draft'));
-        } elseif (! auth()->user()->isAdmin()) {
+                ->setButton(
+                    'Show drafts',
+                    LinkToEntityList::make(PostEntity::class)->addFilter(StateFilter::class, 'draft')
+                );
+        }
+
+        if (! auth()->user()->isAdmin()) {
             $pageAlert
                 ->setMessage('As an editor, you can only edit your posts; you can see other posts except those which are still in draft.')
                 ->setLevelInfo();
