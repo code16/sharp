@@ -6,6 +6,8 @@ class EntityListBadgeField implements IsEntityListField
 {
     use HasCommonEntityListFieldAttributes;
 
+    protected ?string $tooltip = null;
+
     private function __construct(string $key)
     {
         $this->key = $key;
@@ -14,6 +16,13 @@ class EntityListBadgeField implements IsEntityListField
     public static function make(string $key): self
     {
         return new static($key);
+    }
+
+    public function setTooltip(string $tooltip): self
+    {
+        $this->tooltip = $tooltip;
+
+        return $this;
     }
 
     public function getFieldProperties(): array
@@ -25,6 +34,7 @@ class EntityListBadgeField implements IsEntityListField
             'sortable' => $this->sortable,
             'width' => $this->width,
             'hideOnXS' => $this->hideOnXs,
+            'tooltip' => $this->tooltip,
         ];
     }
 }

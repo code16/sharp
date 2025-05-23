@@ -310,7 +310,13 @@
     }
 
     const breakpoints = useBreakpoints();
-    const visibleFields = computed(() => props.entityList.fields.filter(field => breakpoints.md ? true : !field.hideOnXS));
+    const visibleFields = computed(() =>
+        props.entityList.fields
+            .filter(field =>
+                (breakpoints.md || !field.hideOnXS)
+                && props.entityList.fieldShouldBeVisible(field, props.showEntityState)
+            )
+    );
 
     watch([sortableTableBody, () => props.highlightedInstanceId], () => {
         if(sortableTableBody.value && props.highlightedInstanceId) {
@@ -649,7 +655,7 @@
                                                         <Button
                                                             variant="ghost"
                                                             size="sm"
-                                                            class="-ml-3 h-8 data-[state=open]:bg-accent"
+                                                            class="-ml-3 h-8 gap-2 data-[state=open]:bg-accent"
                                                             @click="onSortClick(field)"
                                                             :aria-label="
                                                                 nextSortDir(field) === 'asc'
@@ -659,13 +665,15 @@
                                                                         : __('sharp::entity_list.sort_default')
                                                             "
                                                         >
-                                                            <span>{{ field.label }}</span>
+                                                            <template v-if="field.label">
+                                                                <span>{{ field.label }}</span>
+                                                            </template>
                                                             <template v-if="entityList.currentSort === field.key">
-                                                                <ArrowDown v-if="entityList.currentSortDir === 'desc'" class="ml-2 h-3.5 w-3.5" />
-                                                                <ArrowUp v-else-if="entityList.currentSortDir === 'asc'" class="ml-2 h-3.5 w-3.5" />
+                                                                <ArrowDown v-if="entityList.currentSortDir === 'desc'" class="size-3.5" />
+                                                                <ArrowUp v-else-if="entityList.currentSortDir === 'asc'" class="size-3.5" />
                                                             </template>
                                                             <template v-else>
-                                                                <ChevronsUpDown class="ml-2 h-3.5 w-3.5" />
+                                                                <ChevronsUpDown class="size-3.5" />
                                                             </template>
                                                         </Button>
                                                     </template>
@@ -712,8 +720,8 @@
                                                     </TableCell>
                                                 </template>
                                                 <template v-for="(field, fieldIndex) in visibleFields" :key="field.key">
-                                                    <template v-if="field.type === 'state' && entityList.config.state && showEntityState">
-                                                        <TableCell class="max-w-[70cqw]">
+                                                    <TableCell class="max-w-[70cqw]">
+                                                        <template v-if="field.type === 'state'">
                                                             <DropdownMenu>
                                                                 <DropdownMenuTrigger as-child>
                                                                     <Button class="relative disabled:opacity-100 -mx-3" variant="ghost" size="sm" :disabled="!entityList.instanceCanUpdateState(item)" :aria-label="__('sharp::entity_list.state_dropdown.aria_label', { current_state_label: entityList.instanceStateValue(item)?.label })">
@@ -735,17 +743,32 @@
                                                                     </template>
                                                                 </DropdownMenuContent>
                                                             </DropdownMenu>
-                                                        </TableCell>
-                                                    </template>
-                                                    <template v-else-if="field.type === 'badge'">
-                                                        <TableCell class="max-w-[70cqw]">
-                                                            <template v-if="item[field.key] === true">
-                                                                <div class="size-2 bg-primary rounded-full"></div>
-                                                            </template>
-                                                        </TableCell>
-                                                    </template>
-                                                    <template v-else>
-                                                        <TableCell class="max-w-[70cqw]">
+                                                        </template>
+                                                        <template v-else-if="field.type === 'badge'">
+                                                            <TooltipProvider>
+                                                                <Tooltip :disabled="!field.tooltip" :delay-duration="0">
+                                                                    <TooltipTrigger as-child>
+                                                                        <div :class="field.tooltip ? 'relative z-2' : ''">
+                                                                            <template v-if="field.tooltip">
+                                                                                <div class="absolute -inset-2"></div>
+                                                                            </template>
+                                                                            <template v-if="item[field.key] === true">
+                                                                                <div class="size-2 bg-primary rounded-full"></div>
+                                                                            </template>
+                                                                            <template v-else-if="typeof item[field.key] === 'number' || (typeof item[field.key] === 'string' && item[field.key].length)">
+                                                                                <Badge class="px-1.5 justify-center min-w-5.5">
+                                                                                    {{ item[field.key] }}
+                                                                                </Badge>
+                                                                            </template>
+                                                                        </div>
+                                                                    </TooltipTrigger>
+                                                                    <TooltipContent :side-offset="10">
+                                                                        <div v-html="field.tooltip"></div>
+                                                                    </TooltipContent>
+                                                                </Tooltip>
+                                                            </TooltipProvider>
+                                                        </template>
+                                                        <template v-else>
                                                             <template v-if="field.html && typeof item[field.key] === 'string'">
                                                                 <Content class="break-words [&_a]:relative [&_a]:z-10"
                                                                     :class="{ '[&_a]:pointer-events-none': selecting || reordering }"
@@ -755,14 +778,14 @@
                                                             <template v-else>
                                                                 {{ item[field.key] }}
                                                             </template>
-                                                            <template v-if="fieldIndex === 0 && entityList.instanceUrl(item) && !selecting && !reordering">
-                                                                <Link class="absolute inset-0 ring-ring ring-inset focus-visible:outline-none focus-visible:ring-2 focus:group-data-highlighted/row:ring-2"
-                                                                    data-row-action
-                                                                    :href="entityList.instanceUrl(item)"
-                                                                ></Link>
-                                                            </template>
-                                                        </TableCell>
-                                                    </template>
+                                                        </template>
+                                                        <template v-if="fieldIndex === 0 && entityList.instanceUrl(item) && !selecting && !reordering">
+                                                            <Link class="absolute inset-0 ring-ring ring-inset focus-visible:outline-none focus-visible:ring-2 focus:group-data-highlighted/row:ring-2"
+                                                                data-row-action
+                                                                :href="entityList.instanceUrl(item)"
+                                                            ></Link>
+                                                        </template>
+                                                    </TableCell>
                                                 </template>
 
                                                 <TableCell class="w-0 pr-6 @5xl:pl-4 hidden group-data-reordering:table-cell">

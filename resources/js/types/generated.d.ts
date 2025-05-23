@@ -163,7 +163,8 @@ export type EntityListFieldData = {
   sortable: boolean;
   width: string | null;
   hideOnXS: boolean;
-  html?: boolean;
+  html: boolean | null;
+  tooltip: string | null;
 };
 export type EntityListMultiformData = {
   key: string;
