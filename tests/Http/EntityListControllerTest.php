@@ -1,6 +1,7 @@
 <?php
 
 use Code16\Sharp\Auth\SharpEntityPolicy;
+use Code16\Sharp\EntityList\Fields\EntityListBadgeField;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\Enums\NotificationLevel;
@@ -9,6 +10,7 @@ use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonForm;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonShow;
+use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\PageAlerts\PageAlert;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -138,6 +140,10 @@ it('gets containers and layout', function () {
         {
             $fields
                 ->addField(
+                    EntityListBadgeField::make('is_new')
+                        ->setTooltip('This person is new')
+                )
+                ->addField(
                     EntityListField::make('name')
                         ->setLabel('Name')
                         ->setWidth(6)
@@ -155,8 +161,16 @@ it('gets containers and layout', function () {
     $this->get('/sharp/s-list/person')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->has('entityList.fields', 2)
+            ->has('entityList.fields', 3)
             ->has('entityList.fields.0', fn (Assert $name) => $name
+                ->where('key', 'is_new')
+                ->where('type', 'badge')
+                ->where('tooltip', 'This person is new')
+                ->where('hideOnXS', false)
+                ->where('sortable', false)
+                ->etc()
+            )
+            ->has('entityList.fields.1', fn (Assert $name) => $name
                 ->where('key', 'name')
                 ->where('label', 'Name')
                 ->where('width', '50%')
@@ -164,7 +178,7 @@ it('gets containers and layout', function () {
                 ->where('sortable', true)
                 ->etc()
             )
-            ->has('entityList.fields.1', fn (Assert $job) => $job
+            ->has('entityList.fields.2', fn (Assert $job) => $job
                 ->where('key', 'job')
                 ->where('label', 'Job')
                 ->where('width', '50%')
@@ -352,7 +366,8 @@ it('allows to configure a page alert', function () {
         {
             $pageAlert
                 ->setLevelInfo()
-                ->setMessage('My page alert');
+                ->setMessage('My page alert')
+                ->setButton('My button', LinkToEntityList::make('person'));
         }
     });
 
@@ -362,6 +377,8 @@ it('allows to configure a page alert', function () {
             ->where('entityList.pageAlert', [
                 'level' => PageAlertLevel::Info->value,
                 'text' => 'My page alert',
+                'buttonLabel' => 'My button',
+                'buttonUrl' => LinkToEntityList::make('person')->renderAsUrl(),
             ])
             ->etc()
         );

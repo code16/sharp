@@ -1,6 +1,7 @@
 <?php
 
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
+use Code16\Sharp\Enums\PageAlertLevel;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
@@ -462,7 +463,8 @@ it('allows to configure a page alert on an instance command', function () {
                     {
                         $pageAlert
                             ->setLevelInfo()
-                            ->setMessage('My page alert');
+                            ->setMessage('My page alert')
+                            ->setButton('My button', 'https://example.com');
                     }
 
                     public function buildFormFields(FieldsContainer $formFields): void
@@ -485,7 +487,9 @@ it('allows to configure a page alert on an instance command', function () {
         ->assertJsonFragment([
             'pageAlert' => [
                 'text' => 'My page alert',
-                'level' => \Code16\Sharp\Enums\PageAlertLevel::Info->value,
+                'level' => PageAlertLevel::Info->value,
+                'buttonLabel' => 'My button',
+                'buttonUrl' => 'https://example.com',
             ],
         ]);
 });

@@ -4,6 +4,9 @@ namespace Code16\Sharp\Data;
 
 use Code16\Sharp\Utils\Icons\IconManager;
 use Code16\Sharp\Utils\Menu\SharpMenuItem;
+use Code16\Sharp\Utils\Menu\SharpMenuItemLink;
+use Code16\Sharp\Utils\Menu\SharpMenuItemSection;
+use Code16\Sharp\Utils\Menu\SharpMenuItemSeparator;
 use Code16\Sharp\Utils\Menu\SharpMenuManager;
 
 /**
@@ -14,6 +17,9 @@ final class MenuItemData extends Data
     public function __construct(
         public ?IconData $icon = null,
         public ?string $label = null,
+        public ?string $badge = null,
+        public ?string $badgeTooltip = null,
+        public ?string $badgeUrl = null,
         public ?string $url = null,
         public bool $isExternalLink = false,
         public ?string $entityKey = null,
@@ -26,7 +32,7 @@ final class MenuItemData extends Data
 
     public static function from(SharpMenuItem $item)
     {
-        if ($item->isSection()) {
+        if ($item instanceof SharpMenuItemSection) {
             return new self(
                 label: $item->getLabel(),
                 children: self::collection(
@@ -39,20 +45,27 @@ final class MenuItemData extends Data
             );
         }
 
-        if ($item->isSeparator()) {
+        if ($item instanceof SharpMenuItemSeparator) {
             return new self(
                 label: $item->getLabel(),
                 isSeparator: true,
             );
         }
 
-        return new self(
-            icon: IconData::optional(app(IconManager::class)->iconToArray($item->getIcon())),
-            label: $item->getLabel(),
-            url: $item->getUrl(),
-            isExternalLink: $item->isExternalLink(),
-            entityKey: $item->isEntity() ? $item->getEntityKey() : null,
-            current: $item->isEntity() && $item->isCurrent(),
-        );
+        if ($item instanceof SharpMenuItemLink) {
+            return new self(
+                icon: IconData::optional(app(IconManager::class)->iconToArray($item->getIcon())),
+                label: $item->getLabel(),
+                badge: $item->getBadge(),
+                badgeTooltip: $item->getBadgeTooltip(),
+                badgeUrl: $item->getBadgeUrl(),
+                url: $item->getUrl(),
+                isExternalLink: $item->isExternalLink(),
+                entityKey: $item->isEntity() ? $item->getEntityKey() : null,
+                current: $item->isEntity() && $item->isCurrent(),
+            );
+        }
+
+        return new self();
     }
 }
