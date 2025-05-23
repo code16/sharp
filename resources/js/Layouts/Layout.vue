@@ -1,7 +1,7 @@
 <script lang="ts">
-import {inject, Ref} from "vue";
+    import {inject, Ref} from "vue";
 
-export function useMenuBoundaryElement() {
+    export function useMenuBoundaryElement() {
         return inject<Ref<HTMLElement>>('menuBoundary');
     }
 </script>
@@ -49,16 +49,14 @@ export function useMenuBoundaryElement() {
         SidebarGroupLabel,
         SidebarHeader, SidebarInset,
         SidebarMenu,
-        SidebarMenuBadge,
         SidebarMenuButton,
         SidebarMenuItem,
         SidebarProvider, SidebarRail, SidebarSeparator, SidebarTrigger
     } from "@/components/ui/sidebar";
     import { useEventListener, useStorage } from "@vueuse/core";
     import GlobalSearch from "@/components/GlobalSearch.vue";
-    import { vScrollIntoView } from "@/directives/scroll-into-view";
     import Content from "@/components/Content.vue";
-    import { Badge } from "@/components/ui/badge";
+    import MenuItem from "@/components/MenuItem.vue";
 
     const dialogs = useDialogs();
     const menu = useMenu();
@@ -153,30 +151,7 @@ export function useMenuBoundaryElement() {
                                                                 </div>
                                                             </template>
                                                             <template v-else>
-                                                                <SidebarMenuItem>
-                                                                    <SidebarMenuButton :is-active="childItem.current" as-child>
-                                                                        <component
-                                                                            :is="childItem.isExternalLink ? 'a' : Link"
-                                                                            :href="childItem.url"
-                                                                            v-scroll-into-view.center="childItem.current"
-                                                                        >
-                                                                            <template v-if="childItem.icon">
-                                                                                <Icon :icon="childItem.icon" class="size-4" />
-                                                                            </template>
-                                                                            <span class="flex-1">
-                                                                                {{ childItem.label }}
-                                                                            </span>
-                                                                            <template v-if="childItem.badge != null">
-                                                                                <Badge class="-my-px -mr-1" variant="sidebar">
-                                                                                    {{ childItem.badge }}
-                                                                                </Badge>
-                                                                            </template>
-                                                                            <template v-if="childItem.isExternalLink">
-                                                                                <ExternalLink class="size-4 opacity-50" />
-                                                                            </template>
-                                                                        </component>
-                                                                    </SidebarMenuButton>
-                                                                </SidebarMenuItem>
+                                                                <MenuItem :item="childItem" />
                                                             </template>
                                                         </template>
                                                     </SidebarMenu>
@@ -189,30 +164,7 @@ export function useMenuBoundaryElement() {
                                     <SidebarGroup>
                                         <SidebarGroupContent>
                                             <SidebarMenu>
-                                                <SidebarMenuItem>
-                                                    <SidebarMenuButton :is-active="item.current" as-child>
-                                                        <component
-                                                            :is="item.isExternalLink ? 'a' : Link"
-                                                            :href="item.url"
-                                                            v-scroll-into-view.center="item.current"
-                                                        >
-                                                            <template v-if="item.icon">
-                                                                <Icon :icon="item.icon" class="size-4" />
-                                                            </template>
-                                                            <span class="flex-1">
-                                                                {{ item.label }}
-                                                            </span>
-                                                            <template v-if="item.badge != null">
-                                                                <Badge class="-my-px -mr-1" variant="sidebar">
-                                                                    {{ item.badge }}
-                                                                </Badge>
-                                                            </template>
-                                                            <template v-if="item.isExternalLink">
-                                                                <ExternalLink class="size-4 opacity-50" />
-                                                            </template>
-                                                        </component>
-                                                    </SidebarMenuButton>
-                                                </SidebarMenuItem>
+                                                <MenuItem :item="item" />
                                             </SidebarMenu>
                                         </SidebarGroupContent>
                                     </SidebarGroup>
