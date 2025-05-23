@@ -753,7 +753,7 @@
                                                                                 <div class="absolute -inset-2"></div>
                                                                             </template>
                                                                             <template v-if="item[field.key] === true">
-                                                                                <div class="size-2 bg-primary rounded-full"></div>
+                                                                                <div class="size-2.5 bg-primary rounded-full"></div>
                                                                             </template>
                                                                             <template v-else-if="typeof item[field.key] === 'number' || (typeof item[field.key] === 'string' && item[field.key].length)">
                                                                                 <Badge class="px-1.5 justify-center min-w-5.5">
