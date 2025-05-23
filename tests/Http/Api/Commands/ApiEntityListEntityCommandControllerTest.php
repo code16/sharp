@@ -1,6 +1,7 @@
 <?php
 
 use Code16\Sharp\EntityList\Commands\EntityCommand;
+use Code16\Sharp\Enums\PageAlertLevel;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Exceptions\Form\SharpFormFieldLayoutException;
 use Code16\Sharp\Form\Fields\SharpFormListField;
@@ -633,7 +634,8 @@ it('allows to configure a page alert on an entity command', function () {
                     {
                         $pageAlert
                             ->setLevelInfo()
-                            ->setMessage('My page alert');
+                            ->setMessage('My page alert')
+                            ->setButton('My button', 'https://example.com');
                     }
 
                     public function buildFormFields(FieldsContainer $formFields): void
@@ -657,7 +659,9 @@ it('allows to configure a page alert on an entity command', function () {
         ->assertJsonFragment([
             'pageAlert' => [
                 'text' => 'My page alert',
-                'level' => \Code16\Sharp\Enums\PageAlertLevel::Info->value,
+                'level' => PageAlertLevel::Info->value,
+                'buttonLabel' => 'My button',
+                'buttonUrl' => 'https://example.com',
             ],
         ]);
 });

@@ -36,7 +36,7 @@
             }">
                 <div v-html="pageAlert.text"></div>
             </AlertDescription>
-            <template v-if="pageAlert.buttonLabel && window.location.origin + $page.url !== pageAlert.buttonUrl">
+            <template v-if="pageAlert.buttonLabel">
                 <Button class="-my-2" :as="isSharpLink(pageAlert.buttonUrl) ? Link : 'a'" size="sm" variant="link" :href="pageAlert.buttonUrl">
                     {{ pageAlert.buttonLabel }}
                 </Button>

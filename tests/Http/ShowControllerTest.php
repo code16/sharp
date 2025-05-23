@@ -2,6 +2,7 @@
 
 use Code16\Sharp\EntityList\Commands\EntityState;
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
+use Code16\Sharp\Enums\PageAlertLevel;
 use Code16\Sharp\Show\Fields\SharpShowPictureField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
 use Code16\Sharp\Show\Layout\ShowLayout;
@@ -292,7 +293,8 @@ it('allows to configure a page alert', function () {
         {
             $pageAlert
                 ->setLevelInfo()
-                ->setMessage('My page alert');
+                ->setMessage('My page alert')
+                ->setButton('My button', 'https://example.com');
         }
     });
 
@@ -300,8 +302,10 @@ it('allows to configure a page alert', function () {
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('show.pageAlert', [
-                'level' => \Code16\Sharp\Enums\PageAlertLevel::Info->value,
+                'level' => PageAlertLevel::Info->value,
                 'text' => 'My page alert',
+                'buttonLabel' => 'My button',
+                'buttonUrl' => 'https://example.com',
             ])
             ->etc()
         );
@@ -332,7 +336,7 @@ it('allows to configure a page alert with a closure as content', function () {
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('show.pageAlert', [
-                'level' => \Code16\Sharp\Enums\PageAlertLevel::Info->value,
+                'level' => PageAlertLevel::Info->value,
                 'text' => 'Hello Marie Curie',
             ])
             ->etc()

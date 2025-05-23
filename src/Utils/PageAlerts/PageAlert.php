@@ -5,6 +5,7 @@ namespace Code16\Sharp\Utils\PageAlerts;
 use Closure;
 use Code16\Sharp\Enums\PageAlertLevel;
 use Code16\Sharp\Utils\Links\SharpLinkTo;
+use Illuminate\Support\Arr;
 
 class PageAlert
 {
@@ -73,12 +74,12 @@ class PageAlert
     final public function toArray(): ?array
     {
         return $this->isFilled()
-            ? [
+            ? Arr::whereNotNull([
                 'level' => $this->pageAlertLevel,
                 'text' => $this->text,
                 'buttonLabel' => $this->buttonLabel,
                 'buttonUrl' => $this->buttonUrl,
-            ]
+            ])
             : null;
     }
 
