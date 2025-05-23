@@ -157,13 +157,14 @@ export type EntityListData = {
   pageAlert: PageAlertData | null;
 };
 export type EntityListFieldData = {
-  type: "text" | "state";
+  type: "text" | "state" | "badge";
   key: string;
   label: string;
   sortable: boolean;
   width: string | null;
   hideOnXS: boolean;
-  html?: boolean;
+  html: boolean | null;
+  tooltip: string | null;
 };
 export type EntityListMultiformData = {
   key: string;

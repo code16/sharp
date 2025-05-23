@@ -13,6 +13,7 @@ use App\Sharp\Utils\Filters\AuthorFilter;
 use App\Sharp\Utils\Filters\CategoryFilter;
 use App\Sharp\Utils\Filters\PeriodFilter;
 use App\Sharp\Utils\Filters\StateFilter;
+use Code16\Sharp\EntityList\Fields\EntityListBadgeField;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\Fields\EntityListStateField;
@@ -30,6 +31,10 @@ class PostList extends SharpEntityList
     protected function buildList(EntityListFieldsContainer $fields): void
     {
         $fields
+            ->addField(
+                EntityListBadgeField::make('is_draft')
+                    ->setTooltip('This post is draft')
+            )
             ->addField(
                 EntityListField::make('cover')
                     ->setWidth(.1)
@@ -172,6 +177,7 @@ class PostList extends SharpEntityList
             );
 
         return $this
+            ->setCustomTransformer('is_draft', fn ($value, Post $instance) => $instance->isDraft())
             ->setCustomTransformer('title', function ($value, Post $instance) {
                 return sprintf(
                     '<div>%s</div><div><small>[fr] %s</div>',
