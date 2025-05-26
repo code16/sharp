@@ -1,33 +1,40 @@
 <script setup lang="ts">
-    import { type HTMLAttributes, computed } from 'vue'
-import {
-    DialogClose,
-    DialogContent,
-    type DialogContentEmits,
-    type DialogContentProps,
-    DialogOverlay,
-    DialogPortal,
-    useForwardPropsEmits,
-} from 'reka-ui'
-import { X } from 'lucide-vue-next'
-import { cn } from '@/utils/cn'
+    import { type HTMLAttributes, computed, useTemplateRef } from 'vue'
+    import {
+        DialogClose,
+        DialogContent,
+        type DialogContentEmits,
+        type DialogContentProps,
+        DialogOverlay,
+        DialogPortal,
+        useForwardPropsEmits,
+    } from 'reka-ui'
+    import { X } from 'lucide-vue-next'
+    import { cn } from '@/utils/cn'
 
-const props = defineProps<DialogContentProps & { class?: HTMLAttributes['class'] }>()
-const emits = defineEmits<DialogContentEmits>()
+    const props = defineProps<DialogContentProps & { class?: HTMLAttributes['class'] }>()
+    const emits = defineEmits<DialogContentEmits>()
 
-const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props
+    const delegatedProps = computed(() => {
+      const { class: _, ...delegated } = props
 
-  return delegated
-})
+      return delegated
+    })
 
-const forwarded = useForwardPropsEmits(delegatedProps, emits)
+    const forwarded = useForwardPropsEmits(delegatedProps, emits)
+    const overlay = useTemplateRef<InstanceType<typeof DialogOverlay>>('overlay');
+    defineExpose({
+        scrollToTop: () => {
+            overlay.value.$el.scrollTo(0, 0);
+        },
+    });
 </script>
 
 <template>
   <DialogPortal>
     <DialogOverlay
       class="fixed inset-0 z-50 grid grid-cols-1 place-items-center overflow-y-auto bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
+        ref="overlay"
     >
       <DialogContent
         :class="
