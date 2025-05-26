@@ -29,13 +29,15 @@ class SharpMenu extends BaseSharpMenu
                 $section
                     ->setCollapsible(false)
                     ->addEntityLink(
-                        PostEntity::class, 'Posts',
+                        entityKeyOrClassName: PostEntity::class,
+                        label: 'Posts',
                         icon: 'lucide-file-text',
                         badge: fn () => Post::query()
                             ->where('state', 'draft')
-                            ->count(),
+                            ->count() ?: null,
                         badgeTooltip: 'See draft posts',
-                        badgeLink: LinkToEntityList::make(PostEntity::class)->addFilter(StateFilter::class, 'draft'),
+                        badgeLink: LinkToEntityList::make(PostEntity::class)
+                            ->addFilter(StateFilter::class, 'draft'),
                     )
                     ->addEntityLink(CategoryEntity::class, 'Categories', icon: 'lucide-tags')
                     ->addEntityLink(AuthorEntity::class, 'Authors', icon: 'lucide-signature');
