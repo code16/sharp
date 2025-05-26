@@ -67,6 +67,7 @@
     import RootCardHeader from "@/components/ui/RootCardHeader.vue";
     import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
     import { useElementVisibility } from "@vueuse/core";
+    import StateBadge from "@/components/ui/StateBadge.vue";
 
     const props = withDefaults(defineProps<{
         entityKey: string,
@@ -725,10 +726,9 @@
                                                             <DropdownMenu>
                                                                 <DropdownMenuTrigger as-child>
                                                                     <Button class="relative disabled:opacity-100 -mx-3" variant="ghost" size="sm" :disabled="!entityList.instanceCanUpdateState(item)" :aria-label="__('sharp::entity_list.state_dropdown.aria_label', { current_state_label: entityList.instanceStateValue(item)?.label })">
-                                                                        <Badge variant="outline">
-                                                                            <StateIcon class="-ml-0.5 mr-1.5" :state-value="entityList.instanceStateValue(item)" />
+                                                                        <StateBadge :state-value="entityList.instanceStateValue(item)">
                                                                             {{ entityList.instanceStateValue(item)?.label }}
-                                                                        </Badge>
+                                                                        </StateBadge>
                                                                     </Button>
                                                                 </DropdownMenuTrigger>
                                                                 <DropdownMenuContent align="start" :align-offset="-16">
@@ -737,7 +737,7 @@
                                                                             :model-value="stateValue.value == entityList.instanceState(item)"
                                                                             @update:model-value="(checked) => checked && onInstanceStateChange(stateValue.value, entityList.instanceId(item))"
                                                                         >
-                                                                            <StateIcon class="mr-1.5" :state-value="stateValue" />
+                                                                            <StateIcon class="mr-2" :state-value="stateValue" />
                                                                             <span class="truncate">{{ stateValue.label }}</span>
                                                                         </DropdownMenuCheckboxItem>
                                                                     </template>
@@ -825,7 +825,7 @@
                                                                                             :model-value="stateValue.value == entityList.instanceState(item)"
                                                                                             @update:model-value="(checked) => checked && onInstanceStateChange(stateValue.value, entityList.instanceId(item))"
                                                                                         >
-                                                                                            <StateIcon class="mr-1.5" :state-value="stateValue" />
+                                                                                            <StateIcon class="mr-2" :state-value="stateValue" />
                                                                                             <span class="truncate">{{ stateValue.label }}</span>
                                                                                         </DropdownMenuCheckboxItem>
                                                                                     </template>
