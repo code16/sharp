@@ -5,9 +5,7 @@ export function getErrorMessage({ data, status }) {
     if(status === 417) {
         return data.message;
     }
-    return __(`sharp::modals.${status}.message`) === `sharp::modals.${status}.message`
-        ? `${status}: ${data.message}`
-        : __(`sharp::modals.${status}.message`);
+    return `${status}: ${data?.message || __('sharp::modals.error.message')}`;
 }
 
 export async function handleErrorAlert({ data, method, status }) {
