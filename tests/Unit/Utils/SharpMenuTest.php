@@ -1,6 +1,7 @@
 <?php
 
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
+use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\Menu\SharpMenu;
 
 it('allows to add an entity link with its key in the menu', function () {
@@ -72,7 +73,7 @@ it('allows to specify a link and a tooltip for the notification badge', function
                 'test',
                 badge: fn () => 42,
                 badgeTooltip: 'See all persons',
-                badgeLink: \Code16\Sharp\Utils\Links\LinkToEntityList::make(PersonEntity::class),
+                badgeLink: LinkToEntityList::make(PersonEntity::class),
             );
         }
     };
