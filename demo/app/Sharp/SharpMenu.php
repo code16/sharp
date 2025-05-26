@@ -34,7 +34,7 @@ class SharpMenu extends BaseSharpMenu
                         icon: 'lucide-file-text',
                         badge: fn () => Post::query()
                             ->where('state', 'draft')
-                            ->count(),
+                            ->count() ?: null,
                         badgeTooltip: 'See draft posts',
                         badgeLink: LinkToEntityList::make(PostEntity::class)
                             ->addFilter(StateFilter::class, 'draft'),
