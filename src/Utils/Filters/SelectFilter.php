@@ -54,5 +54,34 @@ abstract class SelectFilter extends Filter
         return $value;
     }
 
+    public function toArray(): array
+    {
+        return parent::buildArray([
+            'type' => 'select',
+            'multiple' => $this instanceof SelectMultipleFilter,
+            'required' => $this instanceof SelectRequiredFilter,
+            'values' => $this->formattedValues(),
+            'master' => $this->isMaster(),
+            'searchable' => $this->isSearchable(),
+            'searchKeys' => $this->getSearchKeys(),
+        ]);
+    }
+
+    protected function formattedValues(): array
+    {
+        $values = $this->values();
+
+        if (! is_array(collect($values)->first())) {
+            return collect($values)
+                ->map(function ($label, $id) {
+                    return compact('id', 'label');
+                })
+                ->values()
+                ->all();
+        }
+
+        return $values;
+    }
+
     abstract public function values(): array;
 }

@@ -13,4 +13,11 @@ abstract class CheckFilter extends Filter
     {
         return $value;
     }
+
+    public function toArray(): array
+    {
+        return parent::buildArray([
+            'type' => 'check',
+        ]);
+    }
 }

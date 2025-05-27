@@ -78,22 +78,6 @@ class FilterContainer
             ->first();
     }
 
-    public function formatSelectFilterValues(SelectFilter $handler): array
-    {
-        $values = $handler->values();
-
-        if (! is_array(collect($values)->first())) {
-            return collect($values)
-                ->map(function ($label, $id) {
-                    return compact('id', 'label');
-                })
-                ->values()
-                ->all();
-        }
-
-        return $values;
-    }
-
     public function getCurrentFilterValues(?array $query): array
     {
         return [

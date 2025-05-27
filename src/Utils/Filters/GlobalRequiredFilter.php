@@ -25,7 +25,11 @@ abstract class GlobalRequiredFilter extends SelectRequiredFilter
             return;
         }
 
-        session()->put($this->getSessionKey(), $value);
+        $value = collect($this->formattedValues())
+            ->where('id', request('value'))
+            ->first();
+
+        session()->put($this->getSessionKey(), $value ? $value['id'] : null);
     }
 
     private function getSessionKey(): string

@@ -154,6 +154,19 @@ abstract class DateRangeFilter extends Filter
         );
     }
 
+    public function toArray(): array
+    {
+        return parent::buildArray([
+            'type' => 'daterange',
+            'required' => $this instanceof DateRangeRequiredFilter,
+            'mondayFirst' => $this->isMondayFirst(),
+            'presets' => collect($this->getPresets())
+                ->map(fn ($preset, $key) => ['key' => $key, ...$preset->toArray()])
+                ->values()
+                ->toArray(),
+        ]);
+    }
+
     public function formatRawValue(mixed $value): DateRangeFilterValue
     {
         return new DateRangeFilterValue(Carbon::parse($value['start']), Carbon::parse($value['end']));

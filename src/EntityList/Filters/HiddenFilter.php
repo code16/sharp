@@ -22,4 +22,9 @@ class HiddenFilter extends Filter
     {
         return $value;
     }
+
+    public function toArray(): array
+    {
+        return [];
+    }
 }
