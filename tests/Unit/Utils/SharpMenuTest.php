@@ -1,6 +1,7 @@
 <?php
 
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
+use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\Menu\SharpMenu;
 
 it('allows to add an entity link with its key in the menu', function () {
@@ -23,7 +24,7 @@ it('allows to add an entity link with its key in the menu', function () {
 });
 
 it('allows to add an entity link with its entity class name in the menu', function () {
-    sharp()->config()->addEntity('my-entity', PersonEntity::class);
+    sharp()->config()->declareEntity(PersonEntity::class);
 
     $menu = new class() extends SharpMenu
     {
@@ -37,8 +38,50 @@ it('allows to add an entity link with its entity class name in the menu', functi
         ->getLabel()->toEqual('test')
         ->getIcon()->toEqual('fa-user')
         ->isEntity()->toBeTrue()
-        ->getEntityKey()->toEqual('my-entity')
-        ->getUrl()->toEqual(route('code16.sharp.list', 'my-entity'));
+        ->getEntityKey()->toEqual('person')
+        ->getUrl()->toEqual(route('code16.sharp.list', 'person'));
+});
+
+it('allows to specify a notification badge in the menu', function () {
+    sharp()->config()->declareEntity(PersonEntity::class);
+
+    $menu = new class() extends SharpMenu
+    {
+        public function build(): SharpMenu
+        {
+            return $this->addEntityLink(
+                PersonEntity::class,
+                'test',
+                badge: fn () => 42,
+            );
+        }
+    };
+
+    expect($menu->build()->getItems()[0])
+        ->getBadge()->toEqual(42);
+});
+
+it('allows to specify a link and a tooltip for the notification badge', function () {
+    sharp()->config()->declareEntity(PersonEntity::class);
+
+    $menu = new class() extends SharpMenu
+    {
+        public function build(): SharpMenu
+        {
+            return $this->addEntityLink(
+                PersonEntity::class,
+                'test',
+                badge: fn () => 42,
+                badgeTooltip: 'See all persons',
+                badgeLink: LinkToEntityList::make(PersonEntity::class),
+            );
+        }
+    };
+
+    expect($menu->build()->getItems()[0])
+        ->getBadge()->toEqual(42)
+        ->getBadgeTooltip()->toEqual('See all persons')
+        ->getBadgeUrl()->toEqual(route('code16.sharp.list', 'person'));
 });
 
 it('allows to add an external link in the menu', function () {

@@ -378,7 +378,8 @@ it('allows to configure a page alert', function () {
         {
             $pageAlert
                 ->setLevelWarning()
-                ->setMessage('My page alert');
+                ->setMessage('My page alert')
+                ->setButton('My button', 'https://example.com');
         }
     };
 
@@ -386,5 +387,7 @@ it('allows to configure a page alert', function () {
         ->toEqual([
             'text' => 'My page alert',
             'level' => PageAlertLevel::Warning,
+            'buttonLabel' => 'My button',
+            'buttonUrl' => 'https://example.com',
         ]);
 });
