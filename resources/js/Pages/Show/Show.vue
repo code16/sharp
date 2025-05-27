@@ -218,7 +218,7 @@
                                                             <template v-if="show.config.state">
                                                                 <DropdownMenu>
                                                                     <DropdownMenuTrigger as-child>
-                                                                        <Button class="pointer-events-auto h-8 -mx-2 disabled:opacity-100" variant="ghost" size="sm" :disabled="!show.config.state.authorization"
+                                                                        <Button class="pointer-events-auto h-8 -mx-2 disabled:opacity-100 hover:bg-transparent aria-expanded:bg-transparent" variant="ghost" size="sm" :disabled="!show.config.state.authorization"
                                                                             :aria-label="__('sharp::show.state_dropdown.aria_label')"
                                                                         >
                                                                             <StateBadge :state-value="show.instanceStateValue">

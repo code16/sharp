@@ -68,6 +68,7 @@
     import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
     import { useElementVisibility } from "@vueuse/core";
     import StateBadge from "@/components/ui/StateBadge.vue";
+    // import StateBadgeTest from "@/components/dev/StateBadgeTest.vue";
 
     const props = withDefaults(defineProps<{
         entityKey: string,
@@ -347,6 +348,10 @@
                     />
                 </div>
             </template>
+
+<!--            <div class="container my-10">-->
+<!--                <StateBadgeTest></StateBadgeTest>-->
+<!--            </div>-->
 
             <RootCard :class="reordering ? 'relative z-12' : ''">
                 <RootCardHeader :class="reordering || selecting ? 'sticky' : 'data-overflowing-viewport:sticky'" :collapsed="collapsed || !entityList">
@@ -725,7 +730,7 @@
                                                         <template v-if="field.type === 'state'">
                                                             <DropdownMenu>
                                                                 <DropdownMenuTrigger as-child>
-                                                                    <Button class="relative disabled:opacity-100 -mx-3" variant="ghost" size="sm" :disabled="!entityList.instanceCanUpdateState(item)" :aria-label="__('sharp::entity_list.state_dropdown.aria_label', { current_state_label: entityList.instanceStateValue(item)?.label })">
+                                                                    <Button class="relative disabled:opacity-100 -mx-3 hover:bg-transparent aria-expanded:bg-transparent" variant="ghost" size="sm" :disabled="!entityList.instanceCanUpdateState(item)" :aria-label="__('sharp::entity_list.state_dropdown.aria_label', { current_state_label: entityList.instanceStateValue(item)?.label })">
                                                                         <StateBadge :state-value="entityList.instanceStateValue(item)">
                                                                             {{ entityList.instanceStateValue(item)?.label }}
                                                                         </StateBadge>
