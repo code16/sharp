@@ -1,9 +1,9 @@
 <?php
 
-namespace Code16\Sharp\Utils\Filters\Concerns;
+namespace Code16\Sharp\Filters\FilterContainer\Concerns;
 
-use Code16\Sharp\Utils\Filters\Filter;
-use Code16\Sharp\Utils\Filters\SelectMultipleFilter;
+use Code16\Sharp\Filters\Filter;
+use Code16\Sharp\Filters\SelectMultipleFilter;
 use Illuminate\Support\Arr;
 
 trait ProvidesFilterValuesToFront

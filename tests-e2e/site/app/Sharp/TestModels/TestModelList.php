@@ -29,7 +29,7 @@ use Code16\Sharp\EntityList\Eloquent\SimpleEloquentReorderHandler;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\SharpEntityList;
-use Code16\Sharp\Utils\Filters\DateRangeFilterValue;
+use Code16\Sharp\Filters\DateRange\DateRangeFilterValue;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Builder;
 

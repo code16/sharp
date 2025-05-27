@@ -1,6 +1,6 @@
 <?php
 
-namespace Code16\Sharp\Utils\Filters;
+namespace Code16\Sharp\Filters;
 
 abstract class RemoteAutocompleteFilter extends Filter
 {

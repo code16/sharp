@@ -2,8 +2,8 @@
 
 namespace Code16\Sharp\Http\Controllers;
 
-use Code16\Sharp\Utils\Filters\GlobalFilters;
-use Code16\Sharp\Utils\Filters\GlobalRequiredFilter;
+use Code16\Sharp\Filters\GlobalFilters\GlobalFilters;
+use Code16\Sharp\Filters\GlobalRequiredFilter;
 use Illuminate\Http\RedirectResponse;
 
 class GlobalFilterController extends SharpProtectedController

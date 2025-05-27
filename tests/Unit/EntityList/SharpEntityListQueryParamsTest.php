@@ -2,9 +2,9 @@
 
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\Filters\HiddenFilter;
-use Code16\Sharp\Utils\Filters\DateRangeFilter;
-use Code16\Sharp\Utils\Filters\FilterContainer;
-use Code16\Sharp\Utils\Filters\SelectMultipleFilter;
+use Code16\Sharp\Filters\DateRangeFilter;
+use Code16\Sharp\Filters\FilterContainer\FilterContainer;
+use Code16\Sharp\Filters\SelectMultipleFilter;
 use Illuminate\Support\Carbon;
 
 it('handles hasSearch', function () {
@@ -40,7 +40,7 @@ it('finds filter values', function () {
         ]);
 
     expect(buildParams(1, '', null, null, ['range' => '20190201..20190210'])->filterFor('range'))
-        ->toBeInstanceOf(\Code16\Sharp\Utils\Filters\DateRangeFilterValue::class)
+        ->toBeInstanceOf(\Code16\Sharp\Filters\DateRange\DateRangeFilterValue::class)
         ->getStart()->toEqual(Carbon::parse('20190201'))
         ->getEnd()->toEqual(Carbon::parse('20190210'));
 

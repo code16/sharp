@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\EntityList\Filters;
 
-use Code16\Sharp\Utils\Filters\Filter;
+use Code16\Sharp\Filters\Filter;
 
 class HiddenFilter extends Filter
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace Code16\Sharp\Utils\Filters;
+namespace Code16\Sharp\Filters;
 
 use Illuminate\Support\Arr;
 
-abstract class RemoteAutocompleteMultipleFilter extends RemoteAutocompleteFilter
+abstract class SelectMultipleFilter extends SelectFilter
 {
     public function fromQueryParam($value): array
     {

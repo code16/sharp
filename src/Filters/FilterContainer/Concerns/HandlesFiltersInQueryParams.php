@@ -1,8 +1,8 @@
 <?php
 
-namespace Code16\Sharp\Utils\Filters\Concerns;
+namespace Code16\Sharp\Filters\FilterContainer\Concerns;
 
-use Code16\Sharp\Utils\Filters\Filter;
+use Code16\Sharp\Filters\Filter;
 use Illuminate\Support\Collection;
 
 trait HandlesFiltersInQueryParams

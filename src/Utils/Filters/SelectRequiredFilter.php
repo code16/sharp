@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Utils\Filters;
 
-abstract class SelectRequiredFilter extends SelectFilter
-{
-    abstract public function defaultValue(): mixed;
-}
+/**
+ * @deprecated Use \Code16\Sharp\Filters\SelectRequiredFilter instead.
+ */
+abstract class SelectRequiredFilter extends \Code16\Sharp\Filters\SelectRequiredFilter {}
