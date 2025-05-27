@@ -4,7 +4,7 @@ namespace Code16\Sharp\Filters;
 
 use Illuminate\Support\Arr;
 
-abstract class RemoteAutocompleteMultipleFilter extends RemoteAutocompleteFilter
+abstract class AutocompleteRemoteMultipleFilter extends AutocompleteRemoteFilter
 {
     public function fromQueryParam($value): array
     {

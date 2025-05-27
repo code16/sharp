@@ -4,7 +4,7 @@ namespace Code16\Sharp\Enums;
 
 enum FilterType: string
 {
-    case Autocomplete = 'autocomplete';
+    case AutocompleteRemote = 'autocompleteRemote';
     case Select = 'select';
     case DateRange = 'daterange';
     case Check = 'check';

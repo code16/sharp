@@ -2,6 +2,8 @@
 
 namespace Code16\Sharp\Filters;
 
+use Code16\Sharp\Enums\FilterType;
+
 class CheckFilter extends Filter
 {
     public function fromQueryParam($value): mixed
@@ -17,7 +19,7 @@ class CheckFilter extends Filter
     public function toArray(): array
     {
         return parent::buildArray([
-            'type' => 'check',
+            'type' => FilterType::Check->value,
         ]);
     }
 }

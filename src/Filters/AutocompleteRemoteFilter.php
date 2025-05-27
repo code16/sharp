@@ -2,7 +2,9 @@
 
 namespace Code16\Sharp\Filters;
 
-abstract class RemoteAutocompleteFilter extends Filter
+use Code16\Sharp\Enums\FilterType;
+
+abstract class AutocompleteRemoteFilter extends Filter
 {
     private bool $isMaster = false;
 
@@ -31,10 +33,10 @@ abstract class RemoteAutocompleteFilter extends Filter
     public function toArray(): array
     {
         return parent::buildArray([
-            'type' => 'remoteAutocomplete',
+            'type' => FilterType::AutocompleteRemote->value,
             'master' => $this->isMaster(),
-            'required' => $this instanceof RemoteAutocompleteRequiredFilter,
-            'multiple' => $this instanceof RemoteAutocompleteMultipleFilter,
+            'required' => $this instanceof AutocompleteRemoteRequiredFilter,
+            'multiple' => $this instanceof AutocompleteRemoteMultipleFilter,
         ]);
     }
 

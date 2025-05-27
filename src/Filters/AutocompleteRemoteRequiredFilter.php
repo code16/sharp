@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Filters;
 
-abstract class RemoteAutocompleteRequiredFilter extends RemoteAutocompleteFilter
+abstract class AutocompleteRemoteRequiredFilter extends AutocompleteRemoteFilter
 {
     abstract public function defaultValue(): mixed;
 }

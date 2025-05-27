@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Filters;
 
 use Carbon\Carbon;
+use Code16\Sharp\Enums\FilterType;
 use Code16\Sharp\Filters\DateRange\DateRangeFilterValue;
 use Code16\Sharp\Filters\DateRange\DateRangePreset;
 
@@ -159,7 +160,7 @@ abstract class DateRangeFilter extends Filter
     public function toArray(): array
     {
         return parent::buildArray([
-            'type' => 'daterange',
+            'type' => FilterType::DateRange->value,
             'required' => $this instanceof DateRangeRequiredFilter,
             'mondayFirst' => $this->isMondayFirst(),
             'presets' => collect($this->getPresets())

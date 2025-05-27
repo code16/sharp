@@ -2,6 +2,8 @@
 
 namespace Code16\Sharp\Filters;
 
+use Code16\Sharp\Enums\FilterType;
+
 abstract class SelectFilter extends Filter
 {
     private bool $isMaster = false;
@@ -57,7 +59,7 @@ abstract class SelectFilter extends Filter
     public function toArray(): array
     {
         return parent::buildArray([
-            'type' => 'select',
+            'type' => FilterType::Select->value,
             'multiple' => $this instanceof SelectMultipleFilter,
             'required' => $this instanceof SelectRequiredFilter,
             'values' => $this->formattedValues(),

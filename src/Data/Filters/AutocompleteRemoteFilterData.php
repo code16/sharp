@@ -10,7 +10,7 @@ use Spatie\TypeScriptTransformer\Attributes\Optional;
 /**
  * @internal
  */
-final class RemoteAutocompleteFilterData extends Data
+final class AutocompleteRemoteFilterData extends Data
 {
     #[Optional]
     #[LiteralTypeScriptType('Array<{ id: string|number, label: string }>')]
@@ -19,15 +19,11 @@ final class RemoteAutocompleteFilterData extends Data
     public function __construct(
         public string $key,
         public ?string $label,
-        #[LiteralTypeScriptType('"'.FilterType::Select->value.'"')]
+        #[LiteralTypeScriptType('"'.FilterType::AutocompleteRemote->value.'"')]
         public FilterType $type,
         public bool $multiple,
         public bool $required,
-        public array $values,
         public bool $master,
-        public bool $searchable,
-        /** string[] */
-        public array $searchKeys,
     ) {}
 
     public static function from(array $filter): self
