@@ -3,9 +3,9 @@
 namespace App\Sharp\Utils\Filters;
 
 use App\Models\Category;
-use Code16\Sharp\EntityList\Filters\EntityListSelectMultipleFilter;
+use Code16\Sharp\Filters\SelectMultipleFilter;
 
-class CategoryFilter extends EntityListSelectMultipleFilter
+class CategoryFilter extends SelectMultipleFilter
 {
     public function buildFilterConfig(): void
     {

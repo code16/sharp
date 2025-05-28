@@ -3,8 +3,8 @@
 namespace Code16\Sharp\Http\Context;
 
 use Closure;
-use Code16\Sharp\Utils\Filters\GlobalFilters;
-use Code16\Sharp\Utils\Filters\GlobalRequiredFilter;
+use Code16\Sharp\Filters\GlobalFilters\GlobalFilters;
+use Code16\Sharp\Filters\GlobalRequiredFilter;
 use Illuminate\Support\Collection;
 
 class SharpContext

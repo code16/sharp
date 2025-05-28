@@ -1,6 +1,8 @@
 <?php
 
-namespace Code16\Sharp\Utils\Filters;
+namespace Code16\Sharp\Filters\Concerns;
+
+use Code16\Sharp\Filters\DateRange\DateRangeFilterValue;
 
 trait HasFiltersInQuery
 {

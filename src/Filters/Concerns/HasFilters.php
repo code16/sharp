@@ -1,8 +1,10 @@
 <?php
 
-namespace Code16\Sharp\Utils\Filters;
+namespace Code16\Sharp\Filters\Concerns;
 
-trait HandleFilters
+use Code16\Sharp\Filters\FilterContainer\FilterContainer;
+
+trait HasFilters
 {
     /**
      * @internal

@@ -1,12 +1,15 @@
 <?php
 
-namespace Code16\Sharp\Utils\Filters;
+namespace Code16\Sharp\Filters\FilterContainer;
 
 use Code16\Sharp\Exceptions\SharpException;
-use Code16\Sharp\Utils\Filters\Concerns\BuildsFiltersConfigArray;
-use Code16\Sharp\Utils\Filters\Concerns\HandlesFiltersInQueryParams;
-use Code16\Sharp\Utils\Filters\Concerns\HandlesFiltersInSession;
-use Code16\Sharp\Utils\Filters\Concerns\ProvidesFilterValuesToFront;
+use Code16\Sharp\Filters\DateRangeRequiredFilter;
+use Code16\Sharp\Filters\Filter;
+use Code16\Sharp\Filters\FilterContainer\Concerns\BuildsFiltersConfigArray;
+use Code16\Sharp\Filters\FilterContainer\Concerns\HandlesFiltersInQueryParams;
+use Code16\Sharp\Filters\FilterContainer\Concerns\HandlesFiltersInSession;
+use Code16\Sharp\Filters\FilterContainer\Concerns\ProvidesFilterValuesToFront;
+use Code16\Sharp\Filters\SelectRequiredFilter;
 use Illuminate\Support\Collection;
 
 class FilterContainer
@@ -76,22 +79,6 @@ class FilterContainer
                 return $filter->getKey() === $filterFullClassNameOrKey;
             })
             ->first();
-    }
-
-    public function formatSelectFilterValues(SelectFilter $handler): array
-    {
-        $values = $handler->values();
-
-        if (! is_array(collect($values)->first())) {
-            return collect($values)
-                ->map(function ($label, $id) {
-                    return compact('id', 'label');
-                })
-                ->values()
-                ->all();
-        }
-
-        return $values;
     }
 
     public function getCurrentFilterValues(?array $query): array

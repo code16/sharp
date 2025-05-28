@@ -8,7 +8,7 @@ use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\Traits\HandleEntityCommands;
 use Code16\Sharp\EntityList\Traits\HandleEntityState;
 use Code16\Sharp\EntityList\Traits\HandleInstanceCommands;
-use Code16\Sharp\Utils\Filters\HandleFilters;
+use Code16\Sharp\Filters\Concerns\HasFilters;
 use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 use Illuminate\Contracts\Support\Arrayable;
@@ -19,9 +19,9 @@ abstract class SharpEntityList
 {
     use HandleEntityCommands;
     use HandleEntityState;
-    use HandleFilters;
     use HandleInstanceCommands;
     use HandlePageAlertMessage;
+    use HasFilters;
     use WithCustomTransformers;
 
     private ?EntityListFieldsContainer $fieldsContainer = null;

@@ -1,12 +1,15 @@
 <?php
 
-namespace Code16\Sharp\Utils\Filters;
+namespace Code16\Sharp\Filters\GlobalFilters;
 
+use Code16\Sharp\Filters\Concerns\HasFilters;
+use Code16\Sharp\Filters\Filter;
+use Code16\Sharp\Filters\GlobalRequiredFilter;
 use Illuminate\Contracts\Support\Arrayable;
 
 final class GlobalFilters implements Arrayable
 {
-    use HandleFilters;
+    use HasFilters;
 
     public function getFilters(): array
     {

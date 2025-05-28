@@ -9,6 +9,7 @@ export type FilterProps<Data extends FilterData, Value = Data['value']> = {
     filter: Omit<Data, 'value'>;
     value: Value;
     valuated: boolean;
+    entityKey: string;
     disabled?: boolean;
     inline?: boolean;
 }

@@ -29,7 +29,6 @@
         DialogTrigger
     } from "@/components/ui/dialog";
     import { Filter } from "lucide-vue-next";
-    import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
     import { Badge } from "@/components/ui/badge";
 
     const props = defineProps<{
@@ -108,6 +107,7 @@
                                             :filter="filter"
                                             :value="filters.currentValues[filter.key]"
                                             :valuated="filters.isValuated([filter])"
+                                            :entity-key="dashboardKey"
                                             inline
                                             @input="onFilterChange(filter, $event)"
                                         />
@@ -140,6 +140,7 @@
                                                         :filter="filter"
                                                         :value="filters.currentValues[filter.key]"
                                                         :valuated="filters.isValuated([filter])"
+                                                        :entity-key="dashboardKey"
                                                         @input="onFilterChange(filter, $event)"
                                                     />
                                                 </template>
@@ -205,6 +206,7 @@
                                                         :filter="filter"
                                                         :value="filters.currentValues[filter.key]"
                                                         :valuated="filters.isValuated([filter])"
+                                                        :entity-key="dashboardKey"
                                                         inline
                                                         @input="onFilterChange(filter, $event)"
                                                     />
@@ -237,6 +239,7 @@
                                                                     :filter="filter"
                                                                     :value="filters.currentValues[filter.key]"
                                                                     :valuated="filters.isValuated([filter])"
+                                                                    :entity-key="dashboardKey"
                                                                     @input="onFilterChange(filter, $event)"
                                                                 />
                                                             </template>

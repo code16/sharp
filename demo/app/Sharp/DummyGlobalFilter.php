@@ -2,7 +2,7 @@
 
 namespace App\Sharp;
 
-use Code16\Sharp\Utils\Filters\GlobalRequiredFilter;
+use Code16\Sharp\Filters\GlobalRequiredFilter;
 
 class DummyGlobalFilter extends GlobalRequiredFilter
 {

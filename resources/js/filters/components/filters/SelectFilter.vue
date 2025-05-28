@@ -20,6 +20,7 @@
     import { computed, ref } from "vue";
     import SelectFilterValue from "@/filters/components/filters/SelectFilterValue.vue";
     import { FilterEmits, FilterProps } from "@/filters/types";
+    import SelectButton from "@/filters/components/filters/SelectButton.vue";
 
     const props = defineProps<FilterProps<SelectFilterData>>();
     const emit = defineEmits<FilterEmits<SelectFilterData>>();
@@ -54,36 +55,14 @@
         </Label>
         <Popover v-model:open="open" :modal="!inline">
             <PopoverTrigger as-child>
-                <template v-if="inline">
-                    <Button
-                        class="relative text-left justify-start h-8 py-1.5 gap-2 transition-shadow data-[state=open]:shadow-md"
-                        variant="outline"
-                        size="sm"
-                        role="combobox"
-                        aria-autocomplete="none"
-                        :aria-label="filter.label"
-                        :disabled="disabled"
-                    >
-                        <span aria-hidden="true">
-                            {{ filter.label }}
-                        </span>
+                <SelectButton v-bind="props">
+                    <template v-if="inline">
                         <template v-if="valuated">
                             <Separator orientation="vertical" class="h-4" />
                             <SelectFilterValue v-bind="props" />
                         </template>
-                        <ChevronDown class="-mr-0.5 w-4 h-4 opacity-50 shrink-0" />
-                    </Button>
-                </template>
-                <template v-else>
-                    <Button
-                        class="mt-2 h-auto min-h-9 w-full text-left justify-start font-normal py-1.5 gap-2"
-                        variant="outline"
-                        size="sm"
-                        role="combobox"
-                        aria-autocomplete="none"
-                        :aria-label="filter.label"
-                        :disabled="disabled"
-                    >
+                    </template>
+                    <template v-else>
                         <template v-if="valuated">
                             <SelectFilterValue v-bind="props" />
                         </template>
@@ -92,9 +71,8 @@
                                 {{ __('sharp::form.multiselect.placeholder') }}
                             </span>
                         </template>
-                        <ChevronDown class="ml-auto w-4 h-4 opacity-50 shrink-0" />
-                    </Button>
-                </template>
+                    </template>
+                </SelectButton>
             </PopoverTrigger>
             <PopoverContent :class="cn('p-0 w-auto min-w-[150px]', !inline ? 'w-(--reka-popover-trigger-width)' : '')" align="start">
                 <Command

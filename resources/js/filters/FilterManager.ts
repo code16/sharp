@@ -37,7 +37,7 @@ export class FilterManager {
     }
 
     nextValues(filter: FilterData, value: ParsedValue): FilterValues {
-        if(filter.type === 'select' && filter.master) {
+        if((filter.type === 'select' || filter.type === 'autocompleteRemote') && filter.master) {
             return {
                 ...Object.fromEntries(Object.entries(this.currentValues).map(([key, value]) => [key, null])),
                 [filter.key]: value,

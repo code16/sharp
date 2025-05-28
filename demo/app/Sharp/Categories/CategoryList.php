@@ -8,7 +8,7 @@ use Code16\Sharp\EntityList\Eloquent\SimpleEloquentReorderHandler;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\SharpEntityList;
-use Code16\Sharp\Utils\Filters\CheckFilter;
+use Code16\Sharp\Filters\CheckFilter;
 use Illuminate\Contracts\Support\Arrayable;
 
 class CategoryList extends SharpEntityList

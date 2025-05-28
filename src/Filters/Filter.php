@@ -1,6 +1,6 @@
 <?php
 
-namespace Code16\Sharp\Utils\Filters;
+namespace Code16\Sharp\Filters;
 
 abstract class Filter
 {
@@ -51,6 +51,16 @@ abstract class Filter
 
     public function buildFilterConfig(): void {}
 
+    protected function buildArray(array $childArray): array
+    {
+        return [
+            'key' => $this->getKey(),
+            'label' => $this->getLabel(),
+            ...$childArray,
+        ];
+    }
+
+    abstract public function toArray(): array;
     abstract public function fromQueryParam($value): mixed;
     abstract public function toQueryParam($value): mixed;
 }

@@ -2,9 +2,9 @@
 
 namespace App\Sharp\Utils\Filters;
 
-use Code16\Sharp\Dashboard\Filters\DashboardDateRangeRequiredFilter;
+use Code16\Sharp\Filters\DateRangeRequiredFilter;
 
-class PeriodRequiredFilter extends DashboardDateRangeRequiredFilter
+class PeriodRequiredFilter extends DateRangeRequiredFilter
 {
     public function buildFilterConfig(): void
     {

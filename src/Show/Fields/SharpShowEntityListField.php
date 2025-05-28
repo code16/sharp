@@ -2,8 +2,8 @@
 
 namespace Code16\Sharp\Show\Fields;
 
+use Code16\Sharp\Filters\Filter;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
-use Code16\Sharp\Utils\Filters\Filter;
 
 class SharpShowEntityListField extends SharpShowField
 {
