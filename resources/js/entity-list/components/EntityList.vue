@@ -543,6 +543,7 @@
                                                         :value="filters.currentValues[filter.key]"
                                                         :disabled="reordering"
                                                         :valuated="filters.isValuated([filter])"
+                                                        :entity-key="entityKey"
                                                         @input="onFilterChange(filter, $event)"
                                                     />
                                                 </template>
@@ -586,6 +587,7 @@
                                             :value="filters.currentValues[filter.key]"
                                             :disabled="reordering || selecting"
                                             :valuated="filters.isValuated([filter])"
+                                            :entity-key="entityKey"
                                             inline
                                             @input="onFilterChange(filter, $event)"
                                         />

@@ -24,6 +24,8 @@ final class AutocompleteRemoteFilterData extends Data
         public bool $multiple,
         public bool $required,
         public bool $master,
+        public int $debounceDelay,
+        public int $searchMinChars,
     ) {}
 
     public static function from(array $filter): self

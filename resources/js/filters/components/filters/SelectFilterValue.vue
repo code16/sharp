@@ -24,7 +24,7 @@
             </template>
         </template>
         <template v-else>
-            <Badge variant="secondary" class="block rounded-sm px-1 font-normal max-w-44 truncate">
+            <Badge variant="secondary" class="block rounded-sm px-1 font-normal max-w-52 truncate">
                 {{ filter.values.find(selectValue => selectValue.id == value)?.label }}
             </Badge>
         </template>

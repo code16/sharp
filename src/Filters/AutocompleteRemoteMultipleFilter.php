@@ -2,17 +2,12 @@
 
 namespace Code16\Sharp\Filters;
 
-use Illuminate\Support\Arr;
-
 abstract class AutocompleteRemoteMultipleFilter extends AutocompleteRemoteFilter
 {
-    public function fromQueryParam($value): array
+    public function formatRawValue(mixed $value): mixed
     {
-        return $value ? explode(',', $value) : [];
-    }
-
-    public function toQueryParam($value): ?string
-    {
-        return $value ? implode(',', Arr::wrap($value)) : null;
+        return $value
+            ? collect($value)->pluck('id')->all()
+            : null;
     }
 }
