@@ -2,9 +2,9 @@
 
 namespace App\Sharp\Filters\EntityList;
 
-use Code16\Sharp\EntityList\Filters\EntityListSelectMultipleFilter;
+use Code16\Sharp\Filters\SelectMultipleFilter;
 
-class TestSelectMultipleFilter extends EntityListSelectMultipleFilter
+class TestSelectMultipleFilter extends SelectMultipleFilter
 {
     public function buildFilterConfig(): void
     {

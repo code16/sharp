@@ -2,9 +2,9 @@
 
 namespace App\Sharp\Filters\EntityList;
 
-use Code16\Sharp\EntityList\Filters\EntityListCheckFilter;
+use Code16\Sharp\Filters\CheckFilter;
 
-class TestCheckFilter extends EntityListCheckFilter
+class TestCheckFilter extends CheckFilter
 {
     public function buildFilterConfig(): void
     {

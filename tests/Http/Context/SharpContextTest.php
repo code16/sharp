@@ -1,7 +1,7 @@
 <?php
 
 use Code16\Sharp\Config\SharpConfigBuilder;
-use Code16\Sharp\EntityList\Filters\EntityListSelectFilter;
+use Code16\Sharp\Filters\SelectFilter;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Entities\SinglePersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonForm;
@@ -171,7 +171,7 @@ it('allow to retrieve retained filters value in the context', function () {
         protected function getFilters(): ?array
         {
             return [
-                new class() extends EntityListSelectFilter
+                new class() extends SelectFilter
                 {
                     public function buildFilterConfig(): void
                     {

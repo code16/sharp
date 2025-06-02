@@ -2,9 +2,9 @@
 
 namespace App\Sharp\Filters\EntityList;
 
-use Code16\Sharp\EntityList\Filters\EntityListDateRangeFilter;
+use Code16\Sharp\Filters\DateRangeFilter;
 
-class TestDateRangeFilter extends EntityListDateRangeFilter
+class TestDateRangeFilter extends DateRangeFilter
 {
     public function buildFilterConfig(): void
     {

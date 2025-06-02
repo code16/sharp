@@ -2,9 +2,9 @@
 
 namespace DummyNamespace;
 
-use Code16\Sharp\EntityList\Filters\EntityListSelectMultipleFilter;
+use Code16\Sharp\Filters\SelectMultipleFilter;
 
-class DummyClass extends EntityListSelectMultipleFilter
+class DummyClass extends SelectMultipleFilter
 {
     public function buildFilterConfig(): void
     {

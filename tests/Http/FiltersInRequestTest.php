@@ -1,8 +1,8 @@
 <?php
 
-use Code16\Sharp\EntityList\Filters\EntityListSelectFilter;
-use Code16\Sharp\EntityList\Filters\EntityListSelectMultipleFilter;
-use Code16\Sharp\EntityList\Filters\EntityListSelectRequiredFilter;
+use Code16\Sharp\Filters\SelectFilter;
+use Code16\Sharp\Filters\SelectMultipleFilter;
+use Code16\Sharp\Filters\SelectRequiredFilter;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
 use Illuminate\Contracts\Support\Arrayable;
@@ -20,7 +20,7 @@ it('filters instances of an entity list', function () {
         protected function getFilters(): ?array
         {
             return [
-                new class() extends EntityListSelectFilter
+                new class() extends SelectFilter
                 {
                     public function buildFilterConfig(): void
                     {
@@ -65,7 +65,7 @@ it('uses the default value of a required filter if no value was sent', function 
         protected function getFilters(): ?array
         {
             return [
-                new class() extends EntityListSelectRequiredFilter
+                new class() extends SelectRequiredFilter
                 {
                     public function buildFilterConfig(): void
                     {
@@ -116,7 +116,7 @@ it('handles multiple filter values', function () {
         protected function getFilters(): ?array
         {
             return [
-                new class() extends EntityListSelectMultipleFilter
+                new class() extends SelectMultipleFilter
                 {
                     public function buildFilterConfig(): void
                     {
@@ -162,7 +162,7 @@ it('saves retained filters in the session when set', function () {
         protected function getFilters(): ?array
         {
             return [
-                new class() extends EntityListSelectFilter
+                new class() extends SelectFilter
                 {
                     public function buildFilterConfig(): void
                     {
@@ -255,7 +255,7 @@ it('handles retained multiple filter', function () {
         protected function getFilters(): ?array
         {
             return [
-                new class() extends EntityListSelectMultipleFilter
+                new class() extends SelectMultipleFilter
                 {
                     public function buildFilterConfig(): void
                     {
@@ -300,7 +300,7 @@ it('handles retained required filter', function () {
         protected function getFilters(): ?array
         {
             return [
-                new class() extends EntityListSelectRequiredFilter
+                new class() extends SelectRequiredFilter
                 {
                     public function buildFilterConfig(): void
                     {
@@ -402,7 +402,7 @@ it('fakes request segments to fix the breadcrumb in case it is built', function 
         protected function getFilters(): ?array
         {
             return [
-                new class() extends EntityListSelectFilter
+                new class() extends SelectFilter
                 {
                     public function buildFilterConfig(): void
                     {
