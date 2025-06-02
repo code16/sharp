@@ -13,8 +13,7 @@ trait HandlesFiltersInSession
             ->flatten()
             ->filter(fn (Filter $handler) => $this->isRetainedFilter($handler))
             ->mapWithKeys(fn (Filter $handler) => [
-                $handler->getKey() => $handler
-                    ->fromQueryParam(session('_sharp_retained_filter_'.$handler->getKey())),
+                $handler->getKey() => session('_sharp_retained_filter_'.$handler->getKey()),
             ]);
     }
 

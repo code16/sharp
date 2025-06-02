@@ -35,19 +35,15 @@ abstract class AutocompleteRemoteFilter extends Filter
     public function fromQueryParam($value): mixed
     {
         if ($value) {
-            $value = collect(explode(',', $value));
-
-            return $this->cache[$value->sort()->implode(',')] ??= $this->format($this->valuesFor($value->all()));
+            return $this->cache[$value] ??= ['id' => $value, 'label' => $this->valueLabelFor($value)];
         }
 
-        return [];
+        return null;
     }
 
     public function toQueryParam($value): mixed
     {
-        return $value
-            ? collect($value)->pluck('id')->join(',')
-            : null;
+        return is_array($value) ? $value['id'] : $value;
     }
 
     public function toArray(): array
@@ -56,7 +52,7 @@ abstract class AutocompleteRemoteFilter extends Filter
             'type' => FilterType::AutocompleteRemote->value,
             'master' => $this->isMaster,
             'required' => $this instanceof AutocompleteRemoteRequiredFilter,
-            'multiple' => $this instanceof AutocompleteRemoteMultipleFilter,
+            // 'multiple' => $this instanceof AutocompleteRemoteMultipleFilter,
             'debounceDelay' => $this->debounceDelay,
             'searchMinChars' => $this->searchMinChars,
         ]);
@@ -78,10 +74,10 @@ abstract class AutocompleteRemoteFilter extends Filter
 
     public function formatRawValue(mixed $value): mixed
     {
-        return $value ? $value[0]['id'] : null;
+        return $value ? $value['id'] : null;
     }
 
     abstract public function values(string $query): array;
 
-    abstract public function valuesFor(array $ids): array;
+    abstract public function valueLabelFor(string $id): string;
 }

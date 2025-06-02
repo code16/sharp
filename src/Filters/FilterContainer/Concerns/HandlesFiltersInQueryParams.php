@@ -12,7 +12,7 @@ trait HandlesFiltersInQueryParams
         return $this->getFilterHandlers()
             ->flatten()
             ->mapWithKeys(function (Filter $handler) use ($query) {
-                $value = $handler->fromQueryParam($query['filter_'.$handler->getKey()] ?? null);
+                $value = $query['filter_'.$handler->getKey()] ?? null;
 
                 return [
                     $handler->getKey() => $value,

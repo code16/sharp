@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Filters\FilterContainer;
 
 use Code16\Sharp\Exceptions\SharpException;
+use Code16\Sharp\Filters\AutocompleteRemoteRequiredFilter;
 use Code16\Sharp\Filters\DateRangeRequiredFilter;
 use Code16\Sharp\Filters\Filter;
 use Code16\Sharp\Filters\FilterContainer\Concerns\BuildsFiltersConfigArray;
@@ -83,11 +84,11 @@ class FilterContainer
 
     public function getCurrentFilterValues(?array $query): array
     {
-        return [
+        return $this->formatValuesFromQuery([
             ...$this->getDefaultFilterValues(),
             ...$this->getFilterValuesRetainedInSession(),
             ...$this->getFilterValuesFromQueryParams($query),
-        ];
+        ]);
     }
 
     public function getDefaultFilterValues(): Collection
@@ -97,13 +98,21 @@ class FilterContainer
             ->whereInstanceOf([
                 SelectRequiredFilter::class,
                 DateRangeRequiredFilter::class,
+                AutocompleteRemoteRequiredFilter::class,
             ])
             ->mapWithKeys(function (Filter $handler) {
                 return [
                     // we pass through fromQueryParam() & toQueryParam() to ensure the value is formatted correctly
-                    $handler->getKey() => $handler->fromQueryParam($handler->toQueryParam($handler->defaultValue())),
+                    $handler->getKey() => $handler->toQueryParam($handler->defaultValue()),
                 ];
             });
+    }
+
+    public function formatValuesFromQuery(array $values): array
+    {
+        return collect($values)
+            ->map(fn ($value, $key) => $this->findFilterHandler($key)->fromQueryParam($value))
+            ->all();
     }
 
     public function excludeFilter(string $filterClassNameOrKey): void

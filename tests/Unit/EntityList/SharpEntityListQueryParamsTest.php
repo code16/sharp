@@ -89,7 +89,7 @@ function buildParams($p = 1, $s = '', $sb = null, $sd = null, $filters = null): 
             parent::__construct(
                 filterContainer: $filterContainer,
                 filterValues: [
-                    ...$filterContainer->getFilterValuesFromQueryParams(
+                    ...$filterContainer->getCurrentFilterValues(
                         collect($f)->mapWithKeys(fn ($v, $k) => ["filter_$k" => $v])->toArray()
                     ),
                 ],

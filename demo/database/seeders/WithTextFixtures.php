@@ -149,4 +149,14 @@ trait WithTextFixtures
         'The chair sat in the corner where it had been for over 25 years. The only difference was there was someone actually sitting in it. How long had it been since someone had done that? Ten years or more he imagined. Yet there was no denying the presence in the chair now.',
         "Things aren't going well at all with mom today. She is just a limp noodle and wants to sleep all the time. I sure hope that things get better soon.",
     ];
+    protected static array $attachmentTitles = [
+        'Newspaper article',
+        'Charts',
+        'PDF specifications',
+        'Book preview',
+        'Code example',
+        'Photo of my lamborghini',
+        'Photo of my cat',
+        'Sales growth chart',
+    ];
 }

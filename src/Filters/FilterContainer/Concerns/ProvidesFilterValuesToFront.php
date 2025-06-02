@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Filters\FilterContainer\Concerns;
 
-use Code16\Sharp\Filters\AutocompleteRemoteFilter;
 use Code16\Sharp\Filters\Filter;
 use Code16\Sharp\Filters\SelectMultipleFilter;
 use Illuminate\Support\Arr;
@@ -11,7 +10,7 @@ trait ProvidesFilterValuesToFront
 {
     public function getCurrentFilterValuesForFront(?array $query): array
     {
-        $defaultValues = $this->getDefaultFilterValues();
+        $defaultValues = $this->formatValuesFromQuery($this->getDefaultFilterValues()->all());
         $currentValues = $this->getCurrentFilterValues($query);
 
         return [
@@ -37,7 +36,7 @@ trait ProvidesFilterValuesToFront
                 ->mapWithKeys(function (Filter $handler) use ($currentValues, $defaultValues) {
                     $current = $currentValues[$handler->getKey()] ?? null;
                     $default = $defaultValues[$handler->getKey()] ?? null;
-                    if ($handler instanceof SelectMultipleFilter || $handler instanceof AutocompleteRemoteFilter) {
+                    if ($handler instanceof SelectMultipleFilter) {
                         $current = is_array($current) ? Arr::sort($current) : [];
                         $default = is_array($default) ? Arr::sort($default) : [];
                     }

@@ -1,9 +1,8 @@
 export type AutocompleteRemoteFilterData = {
-  value?: Array<{ id: string | number; label: string }>;
+  value?: { id: string | number; label: string };
   key: string;
   label: string | null;
   type: "autocompleteRemote";
-  multiple: boolean;
   required: boolean;
   master: boolean;
   debounceDelay: number;

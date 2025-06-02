@@ -26,7 +26,7 @@
     const emit = defineEmits<FilterEmits<SelectFilterData>>();
     const open = ref(false);
 
-    const valuated = computed(() => Array.isArray(props.value) ? props.value.length : props.value != null);
+    const hasValue = computed(() => Array.isArray(props.value) ? props.value.length : props.value != null);
 
     function isSelected(selectValue: SelectFilterData['values'][0]) {
         return Array.isArray(props.value)
@@ -57,13 +57,13 @@
             <PopoverTrigger as-child>
                 <SelectButton v-bind="props">
                     <template v-if="inline">
-                        <template v-if="valuated">
+                        <template v-if="hasValue">
                             <Separator orientation="vertical" class="h-4" />
                             <SelectFilterValue v-bind="props" />
                         </template>
                     </template>
                     <template v-else>
-                        <template v-if="valuated">
+                        <template v-if="hasValue">
                             <SelectFilterValue v-bind="props" />
                         </template>
                         <template v-else>
@@ -113,7 +113,7 @@
                             </template>
                         </CommandGroup>
 
-                        <template v-if="valuated">
+                        <template v-if="props.valuated">
                             <div class="sticky -bottom-px border-b border-transparent rounded-b-md bg-popover">
                                 <CommandSeparator />
                                 <CommandGroup>

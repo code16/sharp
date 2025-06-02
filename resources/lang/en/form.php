@@ -54,7 +54,7 @@ return [
 
     'autocomplete.no_results_text' => 'No results found',
     'autocomplete.loading' => 'Loading...',
-    'autocomplete.query_too_short' => 'Enter at least 1 character to search|Enter at least :min_chars characters to search',
+    'autocomplete.query_too_short' => 'Enter at least 1 character to search...|Enter at least :min_chars characters to search...',
     'autocomplete.placeholder' => 'Search...',
 
     'date.validation_error.format' => 'Invalid date format',
