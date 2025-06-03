@@ -2,12 +2,12 @@ import {
     CommandData,
     ConfigCommandsData,
     EntityListData,
+    EntityListFieldData,
     EntityStateValueData,
     FilterData,
 } from "@/types";
 import { getAppendableParentUri, route } from "@/utils/url";
 import { EntityListInstance, InstanceId } from "./types";
-import { toRaw } from "vue";
 
 export class EntityList implements EntityListData {
     authorizations: EntityListData['authorizations'];
@@ -36,23 +36,6 @@ export class EntityList implements EntityListData {
         this.entityKey = entityKey;
         this.hiddenFilters = hiddenFilters;
         this.hiddenCommands = hiddenCommands;
-    }
-
-    toData() {
-        return Object.fromEntries(
-            Object.entries({
-                authorizations: this.authorizations,
-                config: this.config,
-                data: this.data,
-                fields: this.fields,
-                forms: this.forms,
-                meta: this.meta,
-                pageAlert: this.pageAlert,
-                query: this.query,
-                filterValues: this.filterValues,
-                title: this.title,
-            }).map(([key, value]) => [key, toRaw(value)])
-        ) as EntityListData;
     }
 
     get count() {
@@ -192,5 +175,21 @@ export class EntityList implements EntityListData {
             this.config.state && showEntityState && this.instanceCanUpdateState(instance) ||
             !this.config.deleteHidden && this.instanceCanDelete(instance)
         );
+    }
+
+    fieldShouldBeVisible(field: EntityListFieldData, showEntityState: boolean): boolean {
+        if(field.type === 'badge') {
+            return this.data.some(item =>
+                item[field.key] === true
+                || typeof item[field.key] === 'number'
+                || typeof item[field.key] === 'string' && item[field.key].length > 0
+            );
+        }
+
+        if(field.type === 'state') {
+            return this.config.state && showEntityState;
+        }
+
+        return true;
     }
 }

@@ -43,6 +43,7 @@
     import DropdownChevronDown from "@/components/ui/DropdownChevronDown.vue";
     import { useEntityListHighlightedItem } from "@/composables/useEntityListHighlightedItem";
     import RootCardHeader from "@/components/ui/RootCardHeader.vue";
+    import StateBadge from "@/components/ui/StateBadge.vue";
 
     const props = defineProps<{
         show: ShowData,
@@ -217,13 +218,12 @@
                                                             <template v-if="show.config.state">
                                                                 <DropdownMenu>
                                                                     <DropdownMenuTrigger as-child>
-                                                                        <Button class="pointer-events-auto h-8 -mx-2 disabled:opacity-100" variant="ghost" size="sm" :disabled="!show.config.state.authorization"
+                                                                        <Button class="pointer-events-auto h-8 -mx-2 disabled:opacity-100 hover:bg-transparent aria-expanded:bg-transparent" variant="ghost" size="sm" :disabled="!show.config.state.authorization"
                                                                             :aria-label="__('sharp::show.state_dropdown.aria_label')"
                                                                         >
-                                                                            <Badge variant="outline">
-                                                                                <StateIcon class="-ml-0.5 mr-1.5" :state-value="show.instanceStateValue" />
+                                                                            <StateBadge :state-value="show.instanceStateValue">
                                                                                 {{ show.instanceStateValue?.label }}
-                                                                            </Badge>
+                                                                            </StateBadge>
                                                                         </Button>
                                                                     </DropdownMenuTrigger>
                                                                     <DropdownMenuContent>

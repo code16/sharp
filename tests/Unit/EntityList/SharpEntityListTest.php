@@ -1,11 +1,13 @@
 <?php
 
 use Code16\Sharp\EntityList\Commands\ReorderHandler;
+use Code16\Sharp\EntityList\Fields\EntityListBadgeField;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\Enums\PageAlertLevel;
 use Code16\Sharp\Exceptions\SharpInvalidConfigException;
 use Code16\Sharp\Tests\Unit\EntityList\Fakes\FakeSharpEntityList;
+use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\PageAlerts\PageAlert;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -32,6 +34,31 @@ it('gets fields with layout', function () {
             'html' => true,
             'width' => '50%',
             'hideOnXS' => false,
+        ],
+    ]);
+});
+
+it('allows to add badge fields', function () {
+    $list = new class() extends FakeSharpEntityList
+    {
+        public function buildList(EntityListFieldsContainer $fields): void
+        {
+            $fields->addField(
+                EntityListBadgeField::make('is_new')
+                    ->setTooltip('This person is new')
+            );
+        }
+    };
+
+    expect($list->fields())->toEqual([
+        [
+            'type' => 'badge',
+            'key' => 'is_new',
+            'label' => null,
+            'sortable' => false,
+            'width' => null,
+            'hideOnXS' => false,
+            'tooltip' => 'This person is new',
         ],
     ]);
 });
@@ -239,7 +266,8 @@ it('allows to configure a page alert', function () {
         {
             $pageAlert
                 ->setLevelDanger()
-                ->setMessage('My page alert');
+                ->setMessage('My page alert')
+                ->setButton('My button', LinkToEntityList::make('person'));
         }
     };
 
@@ -247,6 +275,8 @@ it('allows to configure a page alert', function () {
         ->toEqual([
             'text' => 'My page alert',
             'level' => PageAlertLevel::Danger,
+            'buttonLabel' => 'My button',
+            'buttonUrl' => LinkToEntityList::make('person')->renderAsUrl(),
         ]);
 });
 

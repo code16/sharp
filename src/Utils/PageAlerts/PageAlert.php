@@ -4,12 +4,16 @@ namespace Code16\Sharp\Utils\PageAlerts;
 
 use Closure;
 use Code16\Sharp\Enums\PageAlertLevel;
+use Code16\Sharp\Utils\Links\SharpLinkTo;
+use Illuminate\Support\Arr;
 
 class PageAlert
 {
     protected PageAlertLevel $pageAlertLevel = PageAlertLevel::Info;
     protected ?string $text;
     protected array $data;
+    protected ?string $buttonLabel = null;
+    protected ?string $buttonUrl = null;
 
     final public function setData(array $data): self
     {
@@ -59,13 +63,23 @@ class PageAlert
         return $this;
     }
 
+    public function setButton(string $label, string|SharpLinkTo $link): self
+    {
+        $this->buttonLabel = $label;
+        $this->buttonUrl = $link instanceof SharpLinkTo ? $link->renderAsUrl() : $link;
+
+        return $this;
+    }
+
     final public function toArray(): ?array
     {
         return $this->isFilled()
-            ? [
+            ? Arr::whereNotNull([
                 'level' => $this->pageAlertLevel,
                 'text' => $this->text,
-            ]
+                'buttonLabel' => $this->buttonLabel,
+                'buttonUrl' => $this->buttonUrl,
+            ])
             : null;
     }
 

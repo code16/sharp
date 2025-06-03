@@ -2,10 +2,14 @@
     import { PageAlertData } from "@/types";
     import { Alert, AlertDescription } from "@/components/ui/alert";
     import { Info, TriangleAlert, OctagonAlert } from 'lucide-vue-next';
+    import { Button } from "@/components/ui/button";
+    import { isSharpLink } from "@/utils/url";
+    import { Link } from '@inertiajs/vue3';
 
     defineProps<{
         pageAlert: PageAlertData,
     }>();
+
 </script>
 
 <template>
@@ -25,11 +29,18 @@
         <template v-else>
             <Info class="w-4 h-4" />
         </template>
-        <AlertDescription :class="{
-            'font-medium': pageAlert.level === 'warning' || pageAlert.level === 'danger',
-            'text-foreground': pageAlert.level === 'warning',
-        }">
-            <div v-html="pageAlert.text"></div>
-        </AlertDescription>
+        <div class="flex items-center gap-4">
+            <AlertDescription class="flex-1" :class="{
+                'font-medium': pageAlert.level === 'warning' || pageAlert.level === 'danger',
+                'text-foreground': pageAlert.level === 'warning',
+            }">
+                <div v-html="pageAlert.text"></div>
+            </AlertDescription>
+            <template v-if="pageAlert.buttonLabel">
+                <Button class="-my-2" :as="isSharpLink(pageAlert.buttonUrl) ? Link : 'a'" size="sm" variant="link" :href="pageAlert.buttonUrl">
+                    {{ pageAlert.buttonLabel }}
+                </Button>
+            </template>
+        </div>
     </Alert>
 </template>

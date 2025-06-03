@@ -89,6 +89,30 @@ class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
 }
 ```
 
+### Handle notification badges
+
+You can display a notification badge on any link, with a count and a tooltip. You can also, optionally, define a tooltip and a link for the badge (usually to a filtered Entity List).
+
+Here’s an example of a badge on an Entity List link:
+
+```php
+class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
+{
+    public function build(): self
+    {
+        return $this
+            ->addEntityLink(
+                entityKeyOrClassName: PostEntity::class,
+                label: 'Posts',
+                badge: fn () => Post::query()->where('state', 'draft')->count(),
+                badgeTooltip: 'See draft posts',
+                badgeLink: LinkToEntityList::make(PostEntity::class)
+                    ->addFilter(StateFilter::class, 'draft'),
+            );
+    }
+}
+```
+
 ### Group links in sections
 
 Sections are groups that can be collapsed

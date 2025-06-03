@@ -85,7 +85,8 @@ it('allows to configure a page alert', function () {
         {
             $pageAlert
                 ->setLevelInfo()
-                ->setMessage('My page alert');
+                ->setMessage('My page alert')
+                ->setButton('My button', 'https://example.com');
         }
     });
 
@@ -93,8 +94,10 @@ it('allows to configure a page alert', function () {
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('dashboard.pageAlert', [
-                'level' => \Code16\Sharp\Enums\PageAlertLevel::Info->value,
+                'level' => PageAlertLevel::Info->value,
                 'text' => 'My page alert',
+                'buttonLabel' => 'My button',
+                'buttonUrl' => 'https://example.com',
             ])
             ->etc()
         );

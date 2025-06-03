@@ -157,13 +157,14 @@ export type EntityListData = {
   pageAlert: PageAlertData | null;
 };
 export type EntityListFieldData = {
-  type: "text" | "state";
+  type: "text" | "state" | "badge";
   key: string;
   label: string;
   sortable: boolean;
   width: string | null;
   hideOnXS: boolean;
-  html?: boolean;
+  html: boolean | null;
+  tooltip: string | null;
 };
 export type EntityListMultiformData = {
   key: string;
@@ -655,6 +656,9 @@ export type MenuData = {
 export type MenuItemData = {
   icon: IconData | null;
   label: string | null;
+  badge: string | null;
+  badgeTooltip: string | null;
+  badgeUrl: string | null;
   url: string | null;
   isExternalLink: boolean;
   entityKey: string | null;
@@ -684,6 +688,8 @@ export type OrderedListWidgetData = {
 export type PageAlertData = {
   level: PageAlertLevel;
   text: string;
+  buttonLabel: string | null;
+  buttonUrl: string | null;
 };
 export type PageAlertLevel =
   | "danger"
