@@ -24,8 +24,8 @@ class ApiFilterAutocompleteController extends ApiController
             ];
         }
 
-        $query = request()->input('query', '');
-        $values = $filter->values($query);
+        $query = request()->input('query');
+        $values = $filter->values($query ?: '');
 
         return [
             'data' => $filter->format($values),

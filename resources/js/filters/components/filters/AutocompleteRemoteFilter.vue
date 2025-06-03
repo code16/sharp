@@ -76,6 +76,12 @@
         searchTerm.value = query;
         search(query);
     }
+
+    function onOpen() {
+        if(!searchTerm.value && props.filter.searchMinChars === 0) {
+            search('', true);
+        }
+    }
 </script>
 
 <template>
@@ -83,7 +89,7 @@
         <Label v-if="!inline">
             {{ filter.label }}
         </Label>
-        <Popover v-model:open="open" :modal="!inline">
+        <Popover v-model:open="open" :modal="!inline" @update:open="$event ? onOpen() : null">
             <PopoverTrigger as-child>
                 <SelectButton v-bind="props">
                     <template v-if="inline">
