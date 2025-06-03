@@ -35,7 +35,15 @@ abstract class AutocompleteRemoteFilter extends Filter
     public function fromQueryParam($value): mixed
     {
         if ($value) {
-            return $this->cache[$value] ??= ['id' => $value, 'label' => $this->valueLabelFor($value)];
+            if ($this->cache[$value] ?? null) {
+                return $this->cache[$value];
+            }
+            if ($label = $this->valueLabelFor($value)) {
+                return $this->cache[$value] = [
+                    'id' => $value,
+                    'label' => $label,
+                ];
+            }
         }
 
         return null;
@@ -79,5 +87,5 @@ abstract class AutocompleteRemoteFilter extends Filter
 
     abstract public function values(string $query): array;
 
-    abstract public function valueLabelFor(string $id): string;
+    abstract public function valueLabelFor(string $id): ?string;
 }

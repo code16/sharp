@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Sharp\Filters\EntityList;
+namespace App\Sharp\Filters;
 
-use Code16\Sharp\Filters\SelectMultipleFilter;
+use Code16\Sharp\Filters\SelectFilter;
 
-class TestSelectMultipleFilter extends SelectMultipleFilter
+class TestSelectFilter extends SelectFilter
 {
     public function buildFilterConfig(): void
     {
-        $this->configureLabel('Select multiple');
+        $this->configureLabel('Select');
     }
 
     public function values(): array

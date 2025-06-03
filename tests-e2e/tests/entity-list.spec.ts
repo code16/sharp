@@ -284,6 +284,13 @@ function entityListSuite(test: TestType<PlaywrightTestArgs & PlaywrightTestOptio
       await page.getByRole('button', { name: 'Reset all' }).click();
       await expect(page.getByText('Option 7', { exact: true }).first()).toBeVisible();
     });
+    test('autocomplete remote', async ({ page, init, goto, reload }) => {
+      await init();
+      await goto();
+      await page.getByRole('combobox', { name: 'Autocomplete remote' }).click();
+      await page.getByRole('combobox', { name: 'Search...' }).fill('5');
+      await page.getByRole('option', { name: 'Option 5' }).click();
+    });
   });
   test('search', async ({ page, init, goto, reload }) => {
     await init();

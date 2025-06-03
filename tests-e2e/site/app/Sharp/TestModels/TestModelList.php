@@ -18,12 +18,13 @@ use App\Sharp\Commands\TestReloadInstanceCommand;
 use App\Sharp\Commands\TestSelectionCommand;
 use App\Sharp\Commands\TestViewEntityCommand;
 use App\Sharp\Commands\TestViewInstanceCommand;
-use App\Sharp\Filters\EntityList\TestCheckFilter;
-use App\Sharp\Filters\EntityList\TestDateRangeFilter;
-use App\Sharp\Filters\EntityList\TestDateRangeRequiredFilter;
-use App\Sharp\Filters\EntityList\TestSelectFilter;
-use App\Sharp\Filters\EntityList\TestSelectMultipleFilter;
-use App\Sharp\Filters\EntityList\TestSelectRequiredFilter;
+use App\Sharp\Filters\TestAutocompleteRemoteFilter;
+use App\Sharp\Filters\TestCheckFilter;
+use App\Sharp\Filters\TestDateRangeFilter;
+use App\Sharp\Filters\TestDateRangeRequiredFilter;
+use App\Sharp\Filters\TestSelectFilter;
+use App\Sharp\Filters\TestSelectMultipleFilter;
+use App\Sharp\Filters\TestSelectRequiredFilter;
 use App\Sharp\TestModelStateHandler;
 use Code16\Sharp\EntityList\Eloquent\SimpleEloquentReorderHandler;
 use Code16\Sharp\EntityList\Fields\EntityListField;
@@ -104,6 +105,7 @@ class TestModelList extends SharpEntityList
     protected function getFilters(): array
     {
         return [
+            TestAutocompleteRemoteFilter::class,
             TestCheckFilter::class,
             TestDateRangeFilter::class,
             TestDateRangeRequiredFilter::class,
@@ -122,6 +124,9 @@ class TestModelList extends SharpEntityList
                         $this->queryParams->specificIds(),
                         fn (Builder $builder, array $ids) => $builder->whereIn('id', $ids),
                     )
+                    ->when($this->queryParams->filterFor(TestAutocompleteRemoteFilter::class), function (Builder $query, $value) {
+                        $query->where('select_dropdown', $value);
+                    })
                     ->when($this->queryParams->filterFor(TestCheckFilter::class), function (Builder $query, $check) {
                         $query->where('check', $check);
                     })
