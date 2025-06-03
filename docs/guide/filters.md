@@ -161,6 +161,51 @@ class ProductCreationDateFilter extends DateRangeFilter
 }
 ```
 
+## Autocomplete remote filter
+
+If you want to use a remote filter, you can use the `Code16\Sharp\Filters\AutocompleteRemoteFilter` class. It is very similar to the `Code16\Sharp\Filters\SelectFilter` class, but it uses a remote endpoint to fetch the values.
+
+```php
+class ProductCategoryFilter extends AutocompleteRemoteFilter
+{
+    public function buildFilterConfig(): void
+    {
+        $this
+            ->configureKey('cat')
+            ->configureLabel('Category');
+    }
+    
+    public function values(string $query)
+    {
+        return ProductCategory::orderBy('label')
+            ->where('label', 'like', "%$query%")
+            ->pluck('label', 'id')
+            ->toArray();
+    }
+
+    public function valueLabelFor(string $id)
+    {
+        return ProductCategory::find($id)?->label;
+    }
+}
+```
+
+The `values()` method must return an `[{id} => {label}]` array. The `valueLabelFor()` method is used to display the label in the dropdown for the selected id.
+
+### Configuration
+
+```php
+class ProductCategoryFilter extends AutocompleteRemoteFilter
+{
+    public function buildFilterConfig(): void
+    {
+        $this
+            ->configureDebounceDelay(200) // 300ms per default
+            ->configureSearchMinChars(2); // 1 per default, set 0 to search directly on opening the filter
+    }
+}
+```
+
 ## Required filters
 
 It is sometimes useful to have a filter which can't be null: to achieve this you need to extend the right "Required" subclass (`SelectRequiredFilter` or `DateRangeRequiredFilter`), and define a proper default value.
