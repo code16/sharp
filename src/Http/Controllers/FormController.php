@@ -135,7 +135,12 @@ class FormController extends SharpProtectedController
         );
 
         $formattedData = $form->formatAndValidateRequestData(request()->all(), $instanceId);
-        $form->update($instanceId, $formattedData);
+        $instanceId = $form->update($instanceId, $formattedData);
+
+        if ($instanceId === null && ! $form instanceof SharpSingleForm) {
+            report(new SharpFormUpdateException('The update() method in '.get_class($form).' must return the newly created instance id'));
+        }
+
         $this->uploadManager->dispatchJobs($instanceId);
 
         $previousUrl = request()->query('previous_page_url') ?: sharp()->context()->breadcrumb()->getPreviousSegmentUrl();

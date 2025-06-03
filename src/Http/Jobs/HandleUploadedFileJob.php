@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Http\Jobs;
 
+use Code16\Sharp\Exceptions\Form\SharpFormUpdateException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -56,7 +57,11 @@ class HandleUploadedFileJob implements ShouldQueue
 
     private function determineFilePath(): string
     {
-        if ($this->instanceId) {
+        if (str_contains($this->filePath, '{id}')) {
+            if ($this->instanceId === null) {
+                throw new SharpFormUpdateException('Instance ID is required but not provided for file path template containing {id}');
+            }
+
             return str_replace('{id}', $this->instanceId, $this->filePath);
         }
 

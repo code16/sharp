@@ -54,10 +54,10 @@ class AccountSharpForm extends SharpSingleForm
 
     protected function updateSingle(array $data)
     {
-        $this->save(
+        return $this->save(
             User::findOrFail(auth()->id()), 
             $data
-        );
+        )->id;
     }
 }
 ```

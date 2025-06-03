@@ -1,5 +1,6 @@
 <?php
 
+use Code16\Sharp\Exceptions\Form\SharpFormUpdateException;
 use Code16\Sharp\Http\Jobs\HandleUploadedFileJob;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -31,14 +32,28 @@ it('handles the {id} segment of the file path', function () {
 
     HandleUploadedFileJob::dispatch(
         uploadedFileName: 'image.jpg',
-        filePath: 'data/things/{id}/image.jpg',
         disk: 'local',
-        instanceId: 50,
+        filePath: 'data/things/{id}/image.jpg',
         shouldOptimizeImage: false,
+        instanceId: 50,
     );
 
     Storage::disk('local')->assertExists('data/things/50/image.jpg');
 });
+
+it('throws if instance id null and {id} in segment', function () {
+    UploadedFile::fake()
+        ->image('image.jpg')
+        ->storeAs('/tmp', 'image.jpg', ['disk' => 'local']);
+
+    HandleUploadedFileJob::dispatch(
+        uploadedFileName: 'image.jpg',
+        disk: 'local',
+        filePath: 'data/things/{id}/image.jpg',
+        shouldOptimizeImage: false,
+    );
+})
+    ->throws(SharpFormUpdateException::class);
 
 it('optimizes uploaded images if configured', function () {
     $optimizer = new class()
