@@ -2,6 +2,7 @@
 
 use Carbon\Carbon;
 use Code16\Sharp\EntityList\Filters\HiddenFilter;
+use Code16\Sharp\Filters\AutocompleteRemoteFilter;
 use Code16\Sharp\Filters\CheckFilter;
 use Code16\Sharp\Filters\DateRangeFilter;
 use Code16\Sharp\Filters\DateRangeRequiredFilter;
@@ -557,6 +558,53 @@ it('allows to define a check filter', function () {
     $list->buildListConfig();
 
     expect($list->listConfig()['filters']['_root'][0]['type'])->toEqual('check');
+});
+
+it('allows to define a autocomplete remote filter', function () {
+    $list = new class() extends FakeSharpEntityList
+    {
+        public function getFilters(): array
+        {
+            return [
+                new class() extends AutocompleteRemoteFilter
+                {
+                    public function buildFilterConfig(): void
+                    {
+                        $this->configureKey('test')
+                            ->configureLabel('Test filter')
+                            ->configureSearchMinChars(2)
+                            ->configureDebounceDelay(500);
+                    }
+
+                    public function values(string $query): array
+                    {
+                        return [
+                            ['id' => 1, 'label' => 'Item A'],
+                            ['id' => 2, 'label' => 'Item B'],
+                        ];
+                    }
+
+                    public function valueLabelFor(string $id): string
+                    {
+                        return "Item $id";
+                    }
+                },
+            ];
+        }
+    };
+
+    $list->buildListConfig();
+
+    expect($list->listConfig()['filters']['_root'][0])
+        ->toEqual([
+            'key' => 'test',
+            'label' => 'Test filter',
+            'type' => 'autocompleteRemote',
+            'master' => false,
+            'required' => false,
+            'debounceDelay' => 500,
+            'searchMinChars' => 2,
+        ]);
 });
 
 it('allows to drop a filter afterwards', function () {
