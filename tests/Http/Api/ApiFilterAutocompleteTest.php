@@ -63,6 +63,56 @@ it('allows to call an autocomplete remote filter endpoint for entity list', func
         ]);
 });
 
+it('allows to call an autocomplete remote filter endpoint with empty query', function () {
+    fakeListFor('person', new class() extends PersonList
+    {
+        public function getFilters(): ?array
+        {
+            return [
+                new class() extends AutocompleteRemoteFilter
+                {
+                    public function buildFilterConfig(): void
+                    {
+                        $this->configureKey('test')
+                            ->configureLabel('Test filter')
+                            ->configureSearchMinChars(0);
+                    }
+
+                    public function values(string $query): array
+                    {
+                        expect($query)->toBe('');
+
+                        return [
+                            ['id' => 1, 'label' => 'Item A'],
+                            ['id' => 2, 'label' => 'Item B'],
+                        ];
+                    }
+
+                    public function valueLabelFor(string $id): string
+                    {
+                        return "Item $id";
+                    }
+                },
+            ];
+        }
+    });
+
+    $this
+        ->postJson(route('code16.sharp.api.filters.autocomplete.index', [
+            'entityKey' => 'person',
+            'filterKey' => 'test',
+        ]), [
+            'query' => '',
+        ])
+        ->assertOk()
+        ->assertJson([
+            'data' => [
+                ['id' => 1, 'label' => 'Item A'],
+                ['id' => 2, 'label' => 'Item B'],
+            ],
+        ]);
+});
+
 it('allows to call an autocomplete remote filter endpoint for dashboard', function () {
     fakeShowFor('dashboard', new class() extends TestDashboard
     {

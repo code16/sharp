@@ -287,9 +287,27 @@ function entityListSuite(test: TestType<PlaywrightTestArgs & PlaywrightTestOptio
     test('autocomplete remote', async ({ page, init, goto, reload }) => {
       await init();
       await goto();
-      await page.getByRole('combobox', { name: 'Autocomplete remote' }).click();
-      await page.getByRole('combobox', { name: 'Search...' }).fill('5');
-      await page.getByRole('option', { name: 'Option 5' }).click();
+      async function valuate() {
+        await test.step('valuate', async () => {
+          await page.getByRole('combobox', { name: 'Autocomplete remote', exact: true }).click();
+          await page.getByRole('combobox', { name: 'Search...' }).fill('2');
+          await page.getByRole('option', { name: 'Option 2', exact: true }).click();
+          await expect(page.getByRole('dialog')).toBeHidden();
+          await expect(page.getByText('Option 2', { exact: true }).first()).toBeVisible();
+        });
+      }
+      await valuate();
+      await reload();
+      await expect(page.getByText('Option 2', { exact: true }).first()).toBeVisible();
+      await expect(page.getByText('1 item', { exact: true }).first()).toBeVisible();
+      await page.getByRole('combobox', { name: 'Autocomplete remote', exact: true }).click();
+      await page.getByRole('dialog').getByRole('button', { name: 'Reset', exact: true }).click();
+      await expect(page.getByRole('dialog')).toBeHidden();
+      await expect(page.getByText('Option 2', { exact: true }).first()).not.toBeVisible();
+      await expect(page.getByText('20 items', { exact: true }).first()).toBeVisible();
+      await valuate();
+      await page.getByRole('button', { name: 'Reset all' }).click();
+      await expect(page.getByText('20 items', { exact: true }).first()).toBeVisible();
     });
   });
   test('search', async ({ page, init, goto, reload }) => {
