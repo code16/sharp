@@ -171,11 +171,12 @@ class ProductCategoryFilter extends AutocompleteRemoteFilter
     public function buildFilterConfig(): void
     {
         $this
-            ->configureKey('cat')
-            ->configureLabel('Category');
+            ->configureLabel('Category')
+            ->configureDebounceDelay(200) // 300ms per default
+            ->configureSearchMinChars(2); // 1 per default, set 0 to search directly on opening the filter
     }
     
-    public function values(string $query)
+    public function values(string $query): array
     {
         return ProductCategory::orderBy('label')
             ->where('label', 'like', "%$query%")
@@ -183,7 +184,7 @@ class ProductCategoryFilter extends AutocompleteRemoteFilter
             ->toArray();
     }
 
-    public function valueLabelFor(string $id)
+    public function valueLabelFor(string $id): ?string
     {
         return ProductCategory::find($id)?->label;
     }
@@ -192,19 +193,6 @@ class ProductCategoryFilter extends AutocompleteRemoteFilter
 
 The `values()` method must return an `[{id} => {label}]` array. The `valueLabelFor()` method is used to display the label in the dropdown for the selected id.
 
-### Configuration
-
-```php
-class ProductCategoryFilter extends AutocompleteRemoteFilter
-{
-    public function buildFilterConfig(): void
-    {
-        $this
-            ->configureDebounceDelay(200) // 300ms per default
-            ->configureSearchMinChars(2); // 1 per default, set 0 to search directly on opening the filter
-    }
-}
-```
 
 ## Required filters
 
