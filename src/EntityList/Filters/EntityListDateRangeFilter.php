@@ -2,6 +2,9 @@
 
 namespace Code16\Sharp\EntityList\Filters;
 
-use Code16\Sharp\Utils\Filters\DateRangeFilter;
+use Code16\Sharp\Filters\DateRangeFilter;
 
+/**
+ * @deprecated Use \Code16\Sharp\Filters\DateRangeFilter
+ */
 abstract class EntityListDateRangeFilter extends DateRangeFilter {}

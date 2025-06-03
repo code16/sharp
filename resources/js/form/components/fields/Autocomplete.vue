@@ -26,6 +26,7 @@
     import { useParentCommands } from "@/commands/useCommands";
     import { useIsInDialog } from "@/components/ui/dialog/Dialog.vue";
     import { useFullTextSearch } from "@/composables/useFullTextSearch";
+    import { useRemoteAutocomplete } from "@/composables/useRemoteAutocomplete";
 
     const props = defineProps<FormFieldProps<FormAutocompleteLocalFieldData | FormAutocompleteRemoteFieldData>>();
     const emit = defineEmits<FormFieldEmits<FormAutocompleteLocalFieldData | FormAutocompleteRemoteFieldData>>();
@@ -34,11 +35,6 @@
     const open = ref(false);
     const searchTerm = ref('');
     const results = ref<FormAutocompleteItemData[]>([]);
-    const loading = ref(false);
-
-    let abortController: AbortController | null = null;
-    let timeout = null;
-    let loadingTimeout = null;
 
     const parentCommands = useParentCommands();
     const isInDialog = useIsInDialog();
@@ -49,41 +45,9 @@
             searchKeys: props.field.mode === 'local' ? props.field.searchKeys : [],
         }
     );
-
-    function search(query: string, immediate?: boolean) {
-        if(props.field.mode === 'remote') {
-            const field = props.field as FormAutocompleteRemoteFieldData;
-            clearTimeout(timeout);
-            if(query.length >= field.searchMinChars) {
-                if(!results.value.length) {
-                    loading.value = true;
-                }
-                if(immediate) {
-                    remoteSearch(query);
-                } else {
-                    timeout = setTimeout(() => remoteSearch(query), props.field.debounceDelay)
-                }
-            } else {
-                clearTimeout(timeout);
-                loading.value = false;
-                results.value = [];
-            }
-        } else {
-            results.value = !query.length
-                ? props.field.localValues
-                : fullTextSearch(query);
-        }
-    }
-
-    async function remoteSearch(query: string) {
+    const { loading, search: remoteSearch } = useRemoteAutocomplete(({ query, signal, onSuccess, onError }) => {
         const field = props.field as FormAutocompleteRemoteFieldData;
-        clearTimeout(loadingTimeout);
-        loadingTimeout = setTimeout(() => {
-            loading.value = true;
-        }, 200);
-        abortController?.abort();
-        abortController = new AbortController();
-        results.value = await api.post(
+        return api.post(
             route('code16.sharp.api.form.autocomplete.index', {
                 entityKey: form.entityKey,
                 autocompleteFieldKey: props.parentField ? `${props.parentField.key}.${field.key}` : field.key,
@@ -99,31 +63,31 @@
                         Object.entries(props.parentData).filter(([fieldKey]) => field.callbackLinkedFields.includes(fieldKey))
                     )
                     : null,
-            }, {
-                signal: abortController.signal,
-            }
+            },
+            { signal }
         )
-            .then(response => {
-                clearTimeout(loadingTimeout);
-                loading.value = false;
-                return response;
-            }, (e) => {
-                if(isCancel(e)) {
-                    clearTimeout(loadingTimeout);
-                }
-                return Promise.reject(e);
-            })
-            .then(response => response.data.data)
-        ;
+            .then(onSuccess, onError)
+            .then(response => response.data.data);
+    }, {
+        debounceDelay: (props.field as FormAutocompleteRemoteFieldData).debounceDelay,
+        minLength: (props.field as FormAutocompleteRemoteFieldData).searchMinChars,
+    });
+
+    async function search(query: string, immediate?: boolean) {
+        if(props.field.mode === 'remote') {
+            results.value = await remoteSearch(query, immediate);
+        } else {
+            results.value = !query.length
+                ? props.field.localValues
+                : fullTextSearch(query);
+        }
     }
 
-    let hasTyped = false;
-
     function onSearchInput(query: string) {
-        if(!query.length && !hasTyped) {
+        if(!query.length && !searchTerm.value) {
             return;
         }
-        hasTyped = true;
+        searchTerm.value = query;
         search(query);
     }
 
@@ -208,7 +172,7 @@
                     @update:model-value="onSelect($event as any)"
                 >
                     <CommandInput
-                        v-model="searchTerm"
+                        :model-value="searchTerm"
                         @update:model-value="onSearchInput"
                         :display-value="() => searchTerm"
                         :placeholder="props.value ? props.field.placeholder ?? __('sharp::form.autocomplete.placeholder') : null"

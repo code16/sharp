@@ -2,8 +2,8 @@
 
 namespace Code16\Sharp\Dashboard;
 
-use Code16\Sharp\Utils\Filters\FilterContainer;
-use Code16\Sharp\Utils\Filters\HasFiltersInQuery;
+use Code16\Sharp\Filters\Concerns\HasFiltersInQuery;
+use Code16\Sharp\Filters\FilterContainer\FilterContainer;
 
 class DashboardQueryParams
 {

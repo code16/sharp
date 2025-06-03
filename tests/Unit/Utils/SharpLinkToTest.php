@@ -2,8 +2,8 @@
 
 use Code16\Sharp\Config\SharpConfigBuilder;
 use Code16\Sharp\Exceptions\SharpInvalidBreadcrumbItemException;
+use Code16\Sharp\Filters\SelectFilter;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
-use Code16\Sharp\Utils\Filters\SelectFilter;
 use Code16\Sharp\Utils\Links\BreadcrumbBuilder;
 use Code16\Sharp\Utils\Links\LinkToDashboard;
 use Code16\Sharp\Utils\Links\LinkToEntityList;

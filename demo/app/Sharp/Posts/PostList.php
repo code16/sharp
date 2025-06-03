@@ -3,6 +3,7 @@
 namespace App\Sharp\Posts;
 
 use App\Models\Post;
+use App\Models\PostAttachment;
 use App\Sharp\Entities\PostEntity;
 use App\Sharp\Posts\Commands\BulkPublishPostsCommand;
 use App\Sharp\Posts\Commands\ComposeEmailWithPostsWizardCommand;
@@ -12,13 +13,14 @@ use App\Sharp\Utils\DateTimeCustomTransformer;
 use App\Sharp\Utils\Filters\AuthorFilter;
 use App\Sharp\Utils\Filters\CategoryFilter;
 use App\Sharp\Utils\Filters\PeriodFilter;
+use App\Sharp\Utils\Filters\PostAttachmentFilter;
 use App\Sharp\Utils\Filters\StateFilter;
 use Code16\Sharp\EntityList\Fields\EntityListBadgeField;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\Fields\EntityListStateField;
 use Code16\Sharp\EntityList\SharpEntityList;
-use Code16\Sharp\Utils\Filters\DateRangeFilterValue;
+use Code16\Sharp\Filters\DateRange\DateRangeFilterValue;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\PageAlerts\PageAlert;
 use Code16\Sharp\Utils\Transformers\Attributes\Eloquent\SharpTagsTransformer;
@@ -100,6 +102,7 @@ class PostList extends SharpEntityList
             StateFilter::class,
             AuthorFilter::class,
             CategoryFilter::class,
+            PostAttachmentFilter::class,
             PeriodFilter::class,
         ];
     }
@@ -158,6 +161,14 @@ class PostList extends SharpEntityList
                                     fn (Builder $builder) => $builder->where('categories.id', $categoryId)
                                 );
                             });
+                    });
+                },
+            )
+            ->when(
+                $this->queryParams->filterFor(PostAttachmentFilter::class),
+                function (Builder $builder, int $attachmentId) {
+                    $builder->whereHas('attachments', function (Builder $builder) use ($attachmentId) {
+                        $builder->where('title', PostAttachment::find($attachmentId)->title);
                     });
                 },
             )

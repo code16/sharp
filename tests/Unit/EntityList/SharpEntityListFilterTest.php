@@ -1,13 +1,14 @@
 <?php
 
 use Carbon\Carbon;
-use Code16\Sharp\EntityList\Filters\EntityListCheckFilter;
-use Code16\Sharp\EntityList\Filters\EntityListDateRangeFilter;
-use Code16\Sharp\EntityList\Filters\EntityListDateRangeRequiredFilter;
-use Code16\Sharp\EntityList\Filters\EntityListSelectFilter;
-use Code16\Sharp\EntityList\Filters\EntityListSelectMultipleFilter;
-use Code16\Sharp\EntityList\Filters\EntityListSelectRequiredFilter;
 use Code16\Sharp\EntityList\Filters\HiddenFilter;
+use Code16\Sharp\Filters\AutocompleteRemoteFilter;
+use Code16\Sharp\Filters\CheckFilter;
+use Code16\Sharp\Filters\DateRangeFilter;
+use Code16\Sharp\Filters\DateRangeRequiredFilter;
+use Code16\Sharp\Filters\SelectFilter;
+use Code16\Sharp\Filters\SelectMultipleFilter;
+use Code16\Sharp\Filters\SelectRequiredFilter;
 use Code16\Sharp\Tests\Unit\EntityList\Fakes\FakeSharpEntityList;
 
 it('allows to configure filters with a key', function () {
@@ -16,7 +17,7 @@ it('allows to configure filters with a key', function () {
         public function getFilters(): array
         {
             return [
-                new class() extends EntityListSelectFilter
+                new class() extends SelectFilter
                 {
                     public function buildFilterConfig(): void
                     {
@@ -62,7 +63,7 @@ it('allows to configure filters without a key', function () {
         public function getFilters(): array
         {
             return [
-                new class() extends EntityListSelectFilter
+                new class() extends SelectFilter
                 {
                     public function buildFilterConfig(): void {}
 
@@ -88,7 +89,7 @@ it('allows to configure filters with hidden filters', function () {
         {
             return [
                 HiddenFilter::make('test'),
-                new class() extends EntityListSelectFilter
+                new class() extends SelectFilter
                 {
                     public function buildFilterConfig(): void {}
 
@@ -113,7 +114,7 @@ it('allows section based filters config', function () {
         public function getFilters(): ?array
         {
             return [
-                new class() extends EntityListSelectFilter
+                new class() extends SelectFilter
                 {
                     public function values(): array
                     {
@@ -121,7 +122,7 @@ it('allows section based filters config', function () {
                     }
                 },
                 'section-1' => [
-                    new class() extends EntityListSelectFilter
+                    new class() extends SelectFilter
                     {
                         public function values(): array
                         {
@@ -153,7 +154,7 @@ it('allows list filter to be multiple', function () {
         public function getFilters(): array
         {
             return [
-                new class() extends EntityListSelectMultipleFilter
+                new class() extends SelectMultipleFilter
                 {
                     public function values(): array
                     {
@@ -176,7 +177,7 @@ it('allows list filter to be required', function () {
         public function getFilters(): array
         {
             return [
-                new class() extends EntityListSelectRequiredFilter
+                new class() extends SelectRequiredFilter
                 {
                     public function buildFilterConfig(): void
                     {
@@ -213,7 +214,7 @@ it('allows to define a label for the filter', function () {
         public function getFilters(): array
         {
             return [
-                new class() extends EntityListSelectFilter
+                new class() extends SelectFilter
                 {
                     public function buildFilterConfig(): void
                     {
@@ -240,7 +241,7 @@ it('allows to declare a filter as master', function () {
         public function getFilters(): array
         {
             return [
-                new class() extends EntityListSelectFilter
+                new class() extends SelectFilter
                 {
                     public function buildFilterConfig(): void
                     {
@@ -267,7 +268,7 @@ it('allows to declare a filter as searchable', function () {
         public function getFilters(): array
         {
             return [
-                new class() extends EntityListSelectFilter
+                new class() extends SelectFilter
                 {
                     public function buildFilterConfig(): void
                     {
@@ -295,7 +296,7 @@ it('allows to define searchKeys on a filter', function () {
         public function getFilters(): array
         {
             return [
-                new class() extends EntityListSelectFilter
+                new class() extends SelectFilter
                 {
                     public function buildFilterConfig(): void
                     {
@@ -323,7 +324,7 @@ it('allows to declare a filter as retained and to set its default value', functi
         public function getFilters(): array
         {
             return [
-                new class() extends EntityListSelectFilter
+                new class() extends SelectFilter
                 {
                     public function buildFilterConfig(): void
                     {
@@ -357,7 +358,7 @@ it('returns retained value for required and retained filters returns by default'
         public function getFilters(): array
         {
             return [
-                new class() extends EntityListSelectRequiredFilter
+                new class() extends SelectRequiredFilter
                 {
                     public function buildFilterConfig(): void
                     {
@@ -396,7 +397,7 @@ it('formats date range filter retained value', function () {
         public function getFilters(): array
         {
             return [
-                new class() extends EntityListDateRangeFilter
+                new class() extends DateRangeFilter
                 {
                     public function buildFilterConfig(): void
                     {
@@ -435,7 +436,7 @@ it('allows to declare a date range filter as required', function () {
         public function getFilters(): array
         {
             return [
-                new class() extends EntityListDateRangeRequiredFilter
+                new class() extends DateRangeRequiredFilter
                 {
                     public function buildFilterConfig(): void
                     {
@@ -487,7 +488,7 @@ it('allows to define a date display format for a date range filter', function ()
         public function getFilters(): array
         {
             return [
-                new class() extends EntityListDateRangeFilter
+                new class() extends DateRangeFilter
                 {
                     public function buildFilterConfig(): void
                     {
@@ -527,7 +528,7 @@ it('allows to define the monday first attribute for a date range filter', functi
         public function getFilters(): array
         {
             return [
-                new class() extends EntityListDateRangeFilter
+                new class() extends DateRangeFilter
                 {
                     public function buildFilterConfig(): void
                     {
@@ -549,7 +550,7 @@ it('allows to define a check filter', function () {
         public function getFilters(): array
         {
             return [
-                new class() extends EntityListCheckFilter {},
+                new class() extends CheckFilter {},
             ];
         }
     };
@@ -559,20 +560,67 @@ it('allows to define a check filter', function () {
     expect($list->listConfig()['filters']['_root'][0]['type'])->toEqual('check');
 });
 
+it('allows to define a autocomplete remote filter', function () {
+    $list = new class() extends FakeSharpEntityList
+    {
+        public function getFilters(): array
+        {
+            return [
+                new class() extends AutocompleteRemoteFilter
+                {
+                    public function buildFilterConfig(): void
+                    {
+                        $this->configureKey('test')
+                            ->configureLabel('Test filter')
+                            ->configureSearchMinChars(2)
+                            ->configureDebounceDelay(500);
+                    }
+
+                    public function values(string $query): array
+                    {
+                        return [
+                            ['id' => 1, 'label' => 'Item A'],
+                            ['id' => 2, 'label' => 'Item B'],
+                        ];
+                    }
+
+                    public function valueLabelFor(string $id): string
+                    {
+                        return "Item $id";
+                    }
+                },
+            ];
+        }
+    };
+
+    $list->buildListConfig();
+
+    expect($list->listConfig()['filters']['_root'][0])
+        ->toEqual([
+            'key' => 'test',
+            'label' => 'Test filter',
+            'type' => 'autocompleteRemote',
+            'master' => false,
+            'required' => false,
+            'debounceDelay' => 500,
+            'searchMinChars' => 2,
+        ]);
+});
+
 it('allows to drop a filter afterwards', function () {
     $list = new class() extends FakeSharpEntityList
     {
         public function getFilters(): array
         {
             return [
-                new class() extends EntityListSelectFilter
+                new class() extends SelectFilter
                 {
                     public function values(): array
                     {
                         return [];
                     }
                 },
-                new class() extends EntityListSelectFilter
+                new class() extends SelectFilter
                 {
                     public function buildFilterConfig(): void
                     {

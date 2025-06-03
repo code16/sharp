@@ -2,9 +2,9 @@
 
 namespace App\Sharp\Utils\Filters;
 
-use Code16\Sharp\EntityList\Filters\EntityListSelectFilter;
+use Code16\Sharp\Filters\SelectFilter;
 
-class StateFilter extends EntityListSelectFilter
+class StateFilter extends SelectFilter
 {
     public function buildFilterConfig(): void
     {

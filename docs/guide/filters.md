@@ -12,10 +12,10 @@ php artisan sharp:make:entity-list-filter <class_name> [--required,--multiple,--
 
 ## Write the filter class
 
-First, we need to write a class which extends `Code16\Sharp\EntityList\Filters\EntityListSelectFilter`, and therefore declare a `values()` function. This function must return an `[{id} => {label}]` array. For instance, with Eloquent:
+First, we need to write a class which extends `Code16\Sharp\Filters\SelectFilter`, and therefore declare a `values()` function. This function must return an `[{id} => {label}]` array. For instance, with Eloquent:
 
 ```php
-class ProductCategoryFilter extends EntityListSelectFilter
+class ProductCategoryFilter extends SelectFilter
 {
     public function values(): array
     {
@@ -31,7 +31,7 @@ class ProductCategoryFilter extends EntityListSelectFilter
 You can implement the optional `buildFilterConfig()` method to configure the filter:
 
 ```php
-class ProductCategoryFilter extends EntityListSelectFilter
+class ProductCategoryFilter extends SelectFilter
 {
     public function buildFilterConfig(): void
     {
@@ -94,7 +94,7 @@ class ProductList extends SharpEntityList
 
 ## Multiple filter
 
-First, notice that you can have as many filters as you want for an EntityList. The "multiple filter" here designate something else: allowing the user to select more than one value for a filter. To achieve this, make your filter extend `Code16\Sharp\EntityList\Filters\EntityListSelectMultipleFilter`.
+First, notice that you can have as many filters as you want for an EntityList. The "multiple filter" here designate something else: allowing the user to select more than one value for a filter. To achieve this, make your filter extend `Code16\Sharp\Filters\SelectMultipleFilter`.
 
 In this case, with Eloquent for instance, your might have to modify your code to ensure that you have an array (Sharp will return either null, and id or an array of id, depending on the user selection):
 
@@ -120,7 +120,7 @@ Note that a filter can't be required AND multiple.
 
 ## Date range filter
 
-You might find useful to filter list elements on a specific date range. Date range filters enable you to show only data that meets a given time period. To implement such a filter, your filter class must extend `Code16\Sharp\EntityList\Filters\EntityListDateRangeFilter`.
+You might find useful to filter list elements on a specific date range. Date range filters enable you to show only data that meets a given time period. To implement such a filter, your filter class must extend `Code16\Sharp\Filters\DateRangeFilter`.
 
 Then you need to adjust the query with selected range; in this case, with Eloquent for instance, you might add a condition like:
 
@@ -148,7 +148,7 @@ You can define the date display format (default is `MM-DD-YYYY`, using [Carbon i
 With `configureShowPresets()`, a list of buttons is displayed allowing the user to quickly select a date range.
 
 ```php
-class ProductCreationDateFilter extends EntityListDateRangeFilter
+class ProductCreationDateFilter extends DateRangeFilter
 {
     public function buildFilterConfig(): void
     {
@@ -161,14 +161,47 @@ class ProductCreationDateFilter extends EntityListDateRangeFilter
 }
 ```
 
+## Autocomplete remote filter
+
+If you want to use a remote filter, you can use the `Code16\Sharp\Filters\AutocompleteRemoteFilter` class. It is very similar to the `Code16\Sharp\Filters\SelectFilter` class, but it uses a remote endpoint to fetch the values.
+
+```php
+class ProductCategoryFilter extends AutocompleteRemoteFilter
+{
+    public function buildFilterConfig(): void
+    {
+        $this
+            ->configureLabel('Category')
+            ->configureDebounceDelay(200) // 300ms per default
+            ->configureSearchMinChars(2); // 1 per default, set 0 to search directly on opening the filter
+    }
+    
+    public function values(string $query): array
+    {
+        return ProductCategory::orderBy('label')
+            ->where('label', 'like', "%$query%")
+            ->pluck('label', 'id')
+            ->toArray();
+    }
+
+    public function valueLabelFor(string $id): ?string
+    {
+        return ProductCategory::find($id)?->label;
+    }
+}
+```
+
+The `values()` method must return an `[{id} => {label}]` array. The `valueLabelFor()` method is used to display the label in the dropdown for the selected id.
+
+
 ## Required filters
 
-It is sometimes useful to have a filter which can't be null: to achieve this you need to extend the right "Required" subclass (`EntityListSelectRequiredFilter` or `EntityListDateRangeRequiredFilter`), and define a proper default value.
+It is sometimes useful to have a filter which can't be null: to achieve this you need to extend the right "Required" subclass (`SelectRequiredFilter` or `DateRangeRequiredFilter`), and define a proper default value.
 
 Example for a select filter:
 
 ```php
-class ProductCategoryFilter extends EntityListSelectRequiredFilter
+class ProductCategoryFilter extends SelectRequiredFilter
 {
     public function defaultValue(): mixed
     {
@@ -184,7 +217,7 @@ Note that a filter can't be required AND multiple.
 Example for a date range filter:
 
 ```php
-class ProductCreationDateFilter extends EntityListDateRangeRequiredFilter
+class ProductCreationDateFilter extends DateRangeRequiredFilter
 {
     public function defaultValue(): array
     {
@@ -211,7 +244,7 @@ public function buildFilterConfig(): void
 
 ## Check filter
 
-In case of a filter that is just a matter on true / false ("only show admins" for example), just make your filter class extend `Code16\Sharp\EntityList\Filters\EntityListCheckFilter`.
+In case of a filter that is just a matter on true / false ("only show admins" for example), just make your filter class extend `Code16\Sharp\Filters\CheckFilter`.
 
 ## Master filter
 
@@ -272,14 +305,14 @@ class OrderList extends SharpEntityList
 
 ## Filters for Dashboards
 
-[Dashboards](building-dashboard.md) also can take advantage of filters; the API the same, but base classes are specific: `Code16\Sharp\Dashboard\Filters\DashboardSelectFilter`, `Code16\Sharp\Dashboard\Filters\DashboardDateRangeFilter`,`Code16\Sharp\Dashboard\DashboardCheckFilter` and so on.
+[Dashboards](building-dashboard.md) also can take advantage of filters; the API the same, but base classes are specific: `Code16\Sharp\Filters\SelectFilter`, `Code16\Sharp\Filters\DateRangeFilter`,`Code16\Sharp\Filters\CheckFilter` and so on.
 
 ## Global menu Filters
 
 You may want to "scope" the entire data set: an example of this could be a user which can manage several organizations. Instead of adding a filter on almost every Entity List, in this case, you can define a global filter, which will appear on top of the global menu.
 
 To achieve this, first write the filter class, like any filter, except it must
-extend `\Code16\Sharp\Utils\Filters\GlobalRequiredFilter` — meaning it must be a required filter.
+extend `\Code16\Sharp\Filters\GlobalRequiredFilter` — meaning it must be a required filter.
 
 ```php
 class OrganizationGlobalFilter extends GlobalRequiredFilter

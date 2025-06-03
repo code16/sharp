@@ -307,6 +307,15 @@ declare module 'ziggy-js' {
             "name": "autocompleteFieldKey"
         }
     ],
+    "code16.sharp.api.filters.autocomplete.index": [
+        {
+            "name": "entityKey",
+            "binding": "key"
+        },
+        {
+            "name": "filterKey"
+        }
+    ],
     "code16.sharp.login": [],
     "code16.sharp.login.post": [],
     "code16.sharp.login.2fa": [],

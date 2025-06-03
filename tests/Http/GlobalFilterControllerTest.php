@@ -1,7 +1,7 @@
 <?php
 
+use Code16\Sharp\Filters\GlobalRequiredFilter;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
-use Code16\Sharp\Utils\Filters\GlobalRequiredFilter;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {

@@ -2,9 +2,9 @@
 
 namespace DummyNamespace;
 
-use Code16\Sharp\EntityList\Filters\EntityListCheckFilter;
+use Code16\Sharp\Filters\CheckFilter;
 
-class DummyClass extends EntityListCheckFilter
+class DummyClass extends CheckFilter
 {
     public function buildFilterConfig(): void
     {

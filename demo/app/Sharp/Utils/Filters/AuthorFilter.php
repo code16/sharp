@@ -3,9 +3,9 @@
 namespace App\Sharp\Utils\Filters;
 
 use App\Models\User;
-use Code16\Sharp\EntityList\Filters\EntityListSelectFilter;
+use Code16\Sharp\Filters\SelectFilter;
 
-class AuthorFilter extends EntityListSelectFilter
+class AuthorFilter extends SelectFilter
 {
     public function buildFilterConfig(): void
     {
@@ -16,6 +16,7 @@ class AuthorFilter extends EntityListSelectFilter
     {
         return User::whereHas('posts')
             ->orderBy('name')
+            ->get()
             ->pluck('name', 'id')
             ->map(fn ($name, $id) => auth()->id() === $id ? "$name (me)" : $name)
             ->toArray();

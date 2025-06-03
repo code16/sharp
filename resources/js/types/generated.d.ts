@@ -1,3 +1,13 @@
+export type AutocompleteRemoteFilterData = {
+  value?: { id: string | number; label: string };
+  key: string;
+  label: string | null;
+  type: "autocompleteRemote";
+  required: boolean;
+  master: boolean;
+  debounceDelay: number;
+  searchMinChars: number;
+};
 export type BreadcrumbData = {
   items: Array<BreadcrumbItemData>;
 };
@@ -200,10 +210,15 @@ export type FigureWidgetData = {
   link: string | null;
 };
 export type FilterData =
+  | AutocompleteRemoteFilterData
   | CheckFilterData
   | DateRangeFilterData
   | SelectFilterData;
-export type FilterType = "select" | "daterange" | "check";
+export type FilterType =
+  | "autocompleteRemote"
+  | "select"
+  | "daterange"
+  | "check";
 export type FilterValuesData = {
   current: { [key: string]: any };
   default: { [key: string]: any };

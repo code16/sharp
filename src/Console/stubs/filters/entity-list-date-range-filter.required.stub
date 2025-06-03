@@ -2,9 +2,9 @@
 
 namespace DummyNamespace;
 
-use Code16\Sharp\EntityList\Filters\EntityListDateRangeRequiredFilter;
+use Code16\Sharp\Filters\DateRangeRequiredFilter;
 
-class DummyClass extends EntityListDateRangeRequiredFilter
+class DummyClass extends DateRangeRequiredFilter
 {
     public function buildFilterConfig(): void
     {
