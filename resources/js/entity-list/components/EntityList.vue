@@ -198,7 +198,7 @@
                 entityKey: subEntity ? subEntity.entityKey : entityKey,
             });
         } else {
-            router.visit(subEntity.formCreateUrl);
+            router.visit(subEntity ? subEntity.formCreateUrl : props.entityList.config.formCreateUrl);
         }
     }
 

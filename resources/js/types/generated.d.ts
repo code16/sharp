@@ -147,6 +147,7 @@ export type EntityListConfigData = {
   hasShowPage: boolean;
   deleteConfirmationText: string;
   deleteHidden: boolean;
+  formCreateUrl: string;
   subEntityAttribute: string | null;
   createButtonLabel: string | null;
   quickCreationForm: boolean;

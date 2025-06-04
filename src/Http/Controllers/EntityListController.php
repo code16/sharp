@@ -39,7 +39,13 @@ class EntityListController extends SharpProtectedController
             'data' => $this->addMetaToItems($listData['items'], $entityKey, $listConfig),
             'meta' => $listData['meta'],
             'pageAlert' => $list->pageAlert($listData['items']),
-            'config' => $listConfig,
+            'config' => [
+                ...$listConfig,
+                'formCreateUrl' => route('code16.sharp.form.create', [
+                    'parentUri' => sharp()->context()->breadcrumb()->getCurrentPath(),
+                    'entityKey' => $entityKey,
+                ]),
+            ],
             'authorizations' => $this->getAuthorizationsForEntityList(
                 $entityKey,
                 $listData['items'],

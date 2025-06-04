@@ -21,6 +21,7 @@ final class EntityListConfigData extends Data
         public bool $hasShowPage,
         public string $deleteConfirmationText,
         public bool $deleteHidden,
+        public string $formCreateUrl,
         public ?string $subEntityAttribute,
         public ?string $createButtonLabel = null,
         public bool $quickCreationForm = false,
