@@ -27,7 +27,7 @@ abstract class SharpEntityList
     private ?EntityListFieldsContainer $fieldsContainer = null;
     protected ?EntityListQueryParams $queryParams;
     protected string $instanceIdAttribute = 'id';
-    protected ?string $multiformAttribute = null;
+    protected ?string $subEntityAttribute = null;
     protected bool $searchable = false;
     protected ?ReorderHandler $reorderHandler = null;
     private bool $disabledReorder = false;
@@ -87,7 +87,7 @@ abstract class SharpEntityList
                     array_merge(
                         array_keys($this->transformers),
                         $this->entityStateAttribute ? [$this->entityStateAttribute] : [],
-                        $this->multiformAttribute ? [$this->multiformAttribute] : [],
+                        $this->subEntityAttribute ? [$this->subEntityAttribute] : [],
                         [$this->instanceIdAttribute],
                         $this->getDataKeys(),
                     ),
@@ -108,7 +108,7 @@ abstract class SharpEntityList
     {
         $config = [
             'instanceIdAttribute' => $this->instanceIdAttribute,
-            'multiformAttribute' => $this->multiformAttribute,
+            'subEntityAttribute' => $this->subEntityAttribute,
             'searchable' => $this->searchable,
             'reorderable' => ! is_null($this->reorderHandler) && ! $this->disabledReorder,
             'defaultSort' => $this->defaultSort,
@@ -180,9 +180,17 @@ abstract class SharpEntityList
         return $this;
     }
 
+    /**
+     * @deprecated use configureSubEntityAttribute() instead
+     */
     final protected function configureMultiformAttribute(?string $attribute): self
     {
-        $this->multiformAttribute = $attribute;
+        return $this->configureSubEntityAttribute($attribute);
+    }
+
+    final protected function configureSubEntityAttribute(?string $attribute): self
+    {
+        $this->subEntityAttribute = $attribute;
 
         return $this;
     }

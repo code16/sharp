@@ -127,11 +127,19 @@ declare module 'ziggy-js' {
         {
             "name": "entityKey",
             "binding": "key"
+        },
+        {
+            "name": "formEntityKey",
+            "binding": "key"
         }
     ],
     "code16.sharp.api.list.command.quick-creation-form.store": [
         {
             "name": "entityKey",
+            "binding": "key"
+        },
+        {
+            "name": "formEntityKey",
             "binding": "key"
         }
     ],

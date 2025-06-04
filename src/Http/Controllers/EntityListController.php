@@ -8,6 +8,7 @@ use Code16\Sharp\Data\EntityList\EntityListData;
 use Code16\Sharp\Data\NotificationData;
 use Code16\Sharp\Exceptions\SharpInvalidConfigException;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
+use Code16\Sharp\Utils\Icons\IconManager;
 use Code16\Sharp\Utils\Menu\SharpMenuManager;
 use Inertia\Inertia;
 
@@ -35,7 +36,7 @@ class EntityListController extends SharpProtectedController
 
         $data = [
             'fields' => $list->fields(),
-            'data' => $listData['items'],
+            'data' => $this->addMetaToItems($listData['items'], $entityKey, $listConfig),
             'meta' => $listData['meta'],
             'pageAlert' => $list->pageAlert($listData['items']),
             'config' => $listConfig,
@@ -44,7 +45,7 @@ class EntityListController extends SharpProtectedController
                 $listData['items'],
                 $listConfig,
             ),
-            'forms' => $this->getMultiformDataForEntityList(
+            'subEntities' => $this->getSubEntitiesDataForEntityList(
                 $entityKey,
                 $listData['items'],
                 $listConfig,
@@ -72,6 +73,46 @@ class EntityListController extends SharpProtectedController
         ]);
     }
 
+    private function addMetaToItems(array $listItems, string $entityKey, array $listConfig): array
+    {
+        $breadcrumb = sharp()->context()->breadcrumb();
+        $entity = $this->entityManager->entityFor($entityKey);
+
+        return collect($listItems)
+            ->map(function ($item) use ($breadcrumb, $entity, $entityKey, $listConfig) {
+                $itemSubEntity = $listConfig['subEntityAttribute'] ? ($item[$listConfig['subEntityAttribute']] ?? null) : null;
+                $instanceId = $item[$listConfig['instanceIdAttribute']] ?? null;
+                if ($itemSubEntity) {
+                    $itemEntityKey = count($entity->getMultiforms()) > 0
+                        ? "$entityKey:$itemSubEntity"
+                        : $this->entityManager->entityKeyFor($entity->getSubEntityOrFail($itemSubEntity));
+                } else {
+                    $itemEntityKey = $entityKey;
+                }
+                if ($breadcrumb->getCurrentPath() && $this->sharpAuthorizationManager->isAllowed('view', $entityKey, $instanceId)) {
+                    $url = $this->entityManager->entityFor($entityKey)->hasShow()
+                        ? route('code16.sharp.show.show', [
+                            'parentUri' => $breadcrumb->getCurrentPath(),
+                            'entityKey' => $itemEntityKey,
+                            'instanceId' => $item[$listConfig['instanceIdAttribute']],
+                        ])
+                        : route('code16.sharp.form.edit', [
+                            'parentUri' => $breadcrumb->getCurrentPath(),
+                            'entityKey' => $itemEntityKey,
+                            'instanceId' => $item[$listConfig['instanceIdAttribute']],
+                        ]);
+                }
+
+                return [
+                    ...$item,
+                    '_meta' => [
+                        'url' => $url ?? null,
+                    ],
+                ];
+            })
+            ->all();
+    }
+
     private function getAuthorizationsForEntityList(string $entityKey, array $listItems, array $listConfig): array
     {
         $authorizations = [
@@ -96,30 +137,56 @@ class EntityListController extends SharpProtectedController
         return $authorizations;
     }
 
-    private function getMultiformDataForEntityList(string $entityKey, array $listItems, array $listConfig): ?array
+    private function getSubEntitiesDataForEntityList(string $entityKey, array $listItems, array $listConfig): ?array
     {
-        if ($listConfig['multiformAttribute'] === null) {
+        if ($listConfig['subEntityAttribute'] === null) {
             return null;
         }
 
-        if (! $forms = $this->entityManager->entityFor($entityKey)->getMultiforms()) {
+        $forms = $this->entityManager->entityFor($entityKey)->getMultiforms();
+        $subEntities = $this->entityManager->entityFor($entityKey)->getSubEntities();
+
+        if (! $forms && ! $subEntities) {
             throw new SharpInvalidConfigException(
-                'The list for the entity ['.$entityKey.'] defines a multiform attribute ['
-                .$listConfig['multiformAttribute']
-                .'] but the entity is not configured as multiform.'
+                'The list for the entity ['.$entityKey.'] defines a sub-entity attribute ['
+                .$listConfig['subEntityAttribute']
+                .'] but the entity is has no sub-entities.'
             );
         }
 
-        return collect($forms)
-            ->map(fn ($value, $key) => [
-                'key' => $key,
-                'label' => is_array($value) && count($value) > 1 ? $value[1] : $key,
-                'instances' => collect($listItems)
-                    ->where($listConfig['multiformAttribute'], $key)
-                    ->pluck($listConfig['instanceIdAttribute'])
-                    ->toArray(),
-            ])
-            ->keyBy('key')
+        if ($forms) {
+            return collect($forms)
+                ->map(fn ($value, $key) => [
+                    'key' => $key,
+                    'entityKey' => "$entityKey:$key",
+                    'label' => is_array($value) && count($value) > 1 ? $value[1] : $key,
+                    'formCreateUrl' => route('code16.sharp.form.create', [
+                        'parentUri' => sharp()->context()->breadcrumb()->getCurrentPath(),
+                        'entityKey' => "$entityKey:$key",
+                    ]),
+                ])
+                ->whereNotNull('label')
+                ->values()
+                ->all();
+        }
+
+        return collect($subEntities)
+            ->map(function ($subEntityClass, $key) {
+                $subEntityKey = $this->entityManager->entityKeyFor($subEntityClass);
+                $subEntity = $this->entityManager->entityFor($subEntityKey);
+
+                return [
+                    'key' => $key,
+                    'entityKey' => $subEntityKey,
+                    'label' => $subEntity->getLabelOrFail(),
+                    'icon' => app(IconManager::class)->iconToArray($subEntity->getIcon()),
+                    'formCreateUrl' => route('code16.sharp.form.create', [
+                        'parentUri' => sharp()->context()->breadcrumb()->getCurrentPath(),
+                        'entityKey' => $subEntityKey,
+                    ]),
+                ];
+            })
+            ->values()
             ->all();
     }
 }

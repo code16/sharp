@@ -74,13 +74,12 @@ class QuickCreationCommand extends EntityCommand
 
     public function execute(array $data = []): array
     {
-        $currentUrl = sharp()->context()->breadcrumb()->getCurrentSegmentUrl();
-
-        sharp()->context()->breadcrumb()->forceRequestSegments(
-            str(Uri::of($currentUrl)->path())
+        $breadcrumb = sharp()->context()->breadcrumb();
+        $currentPageUrl = $breadcrumb->getCurrentSegmentUrl();
+        $breadcrumb->forceRequestSegments(
+            str(Uri::of($breadcrumb->getCurrentPath()))
                 ->explode('/')
                 ->filter()
-                ->skip(1)
                 ->concat(['s-form', $this->entityKey])
         );
         $this->instanceId = $this->sharpForm->update(null, $data);
@@ -90,7 +89,7 @@ class QuickCreationCommand extends EntityCommand
         }
 
         return $this->sharpForm->isDisplayShowPageAfterCreation()
-            ? $this->link(sprintf('%s/s-show/%s/%s', $currentUrl, $this->entityKey, $this->instanceId))
+            ? $this->link(sprintf('%s/s-show/%s/%s', $currentPageUrl, $this->entityKey, $this->instanceId))
             : $this->reload();
     }
 

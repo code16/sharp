@@ -36,10 +36,17 @@ it('gets list data for an entity', function () {
     $this->get('/sharp/s-list/person')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('entityList.data', [
-                ['id' => 1, 'name' => 'Marie Curie'],
-                ['id' => 2, 'name' => 'Niels Bohr'],
-            ])
+            ->has('entityList.data.0', fn (Assert $json) => $json
+                ->where('id', 1)
+                ->where('name', 'Marie Curie')
+                ->etc()
+            )
+            ->has('entityList.data.1', fn (Assert $json) => $json
+                ->where('id', 2)
+                ->where('name', 'Niels Bohr')
+                ->etc()
+            )
+            ->count('entityList.data', 2)
         );
 });
 
@@ -60,10 +67,17 @@ it('gets paginated data if wanted', function () {
     $this->get('/sharp/s-list/person')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('entityList.data', [
-                ['id' => 1, 'name' => 'Marie Curie'],
-                ['id' => 2, 'name' => 'Niels Bohr'],
-            ])
+            ->has('entityList.data.0', fn (Assert $json) => $json
+                ->where('id', 1)
+                ->where('name', 'Marie Curie')
+                ->etc()
+            )
+            ->has('entityList.data.1', fn (Assert $json) => $json
+                ->where('id', 2)
+                ->where('name', 'Niels Bohr')
+                ->etc()
+            )
+            ->count('entityList.data', 2)
             ->has('entityList.meta', fn (Assert $name) => $name
                 ->where('current_page', 1)
                 ->where('from', 1)
@@ -108,10 +122,17 @@ it('allows to search for items', function () {
     $this->get('/sharp/s-list/person?search=Curie')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('entityList.data', [
-                ['id' => 1, 'name' => 'Marie Curie'],
-                ['id' => 3, 'name' => 'Pierre Curie'],
-            ])
+            ->has('entityList.data.0', fn (Assert $json) => $json
+                ->where('id', 1)
+                ->where('name', 'Marie Curie')
+                ->etc()
+            )
+            ->has('entityList.data.1', fn (Assert $json) => $json
+                ->where('id', 3)
+                ->where('name', 'Pierre Curie')
+                ->etc()
+            )
+            ->count('entityList.data', 2)
         );
 });
 
@@ -278,15 +299,19 @@ it('gets multiforms if configured', function () {
     $this->get('/sharp/s-list/person')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->has('entityList.forms', 2)
-            ->has('entityList.forms.yes', fn (Assert $config) => $config
+            ->has('entityList.subEntities', 2)
+            ->has('entityList.subEntities.0', fn (Assert $config) => $config
+                ->where('key', 'yes')
+                ->where('entityKey', 'person:yes')
                 ->where('label', 'With Nobel prize')
-                ->where('instances', [1])
+                // ->where('instances', [1])
                 ->etc()
             )
-            ->has('entityList.forms.nope', fn (Assert $config) => $config
+            ->has('entityList.subEntities.1', fn (Assert $config) => $config
+                ->where('key', 'nope')
+                ->where('entityKey', 'person:nope')
                 ->where('label', 'No Nobel prize')
-                ->where('instances', [2])
+                // ->where('instances', [2])
                 ->etc()
             )
         );

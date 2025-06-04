@@ -78,11 +78,16 @@ class SharpBreadcrumb
             sprintf(
                 '%s/%s',
                 sharp()->config()->get('custom_url_segment'),
-                $this->breadcrumbItems()
-                    ->map(fn (BreadcrumbItem $item) => $item->toUri())
-                    ->implode('/')
+                $this->getCurrentPath()
             )
         );
+    }
+
+    public function getCurrentPath(): ?string
+    {
+        return $this->breadcrumbItems()
+            ->map(fn (BreadcrumbItem $item) => $item->toUri())
+            ->implode('/');
     }
 
     public function getPreviousSegmentUrl(): string

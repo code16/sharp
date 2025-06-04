@@ -7,6 +7,7 @@ use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonShow;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Testing\Fluent\AssertableJson;
 
 beforeEach(function () {
     sharp()->config()->declareEntity(PersonEntity::class);
@@ -135,12 +136,17 @@ it('gets list data as JSON in an EEL case', function () {
 
     $this->getJson('/sharp/api/list/person')
         ->assertOk()
-        ->assertJsonFragment([
-            'data' => [
-                ['id' => 1, 'name' => 'Marie Curie'],
-                ['id' => 2, 'name' => 'Niels Bohr'],
-            ],
-        ]);
+        ->assertJson(fn (AssertableJson $json) => $json
+            ->has('data.0', fn (AssertableJson $json) => $json->where('id', 1)
+                ->where('name', 'Marie Curie')
+                ->etc()
+            )
+            ->has('data.1', fn (AssertableJson $json) => $json->where('id', 2)
+                ->where('name', 'Niels Bohr')
+                ->etc()
+            )
+            ->etc()
+        );
 });
 
 it('gets paginated data if wanted as JSON in an EEL case', function () {
@@ -157,25 +163,27 @@ it('gets paginated data if wanted as JSON in an EEL case', function () {
         }
     });
 
-    $metaJson = $this->getJson('/sharp/api/list/person')
+    $this->getJson('/sharp/api/list/person')
         ->assertOk()
-        ->assertJsonFragment([
-            'data' => [
-                ['id' => 1, 'name' => 'Marie Curie'],
-                ['id' => 2, 'name' => 'Niels Bohr'],
-            ],
-        ])
-        ->json('meta');
-
-    expect($metaJson)
-        ->toMatchArray([
-            'current_page' => 1,
-            'first_page_url' => '/?page=1',
-            'last_page_url' => '/?page=10',
-            'from' => 1,
-            'to' => 2,
-            'last_page' => 10,
-            'per_page' => 2,
-            'total' => 20,
-        ]);
+        ->assertJson(fn (AssertableJson $json) => $json
+            ->has('data.0', fn (AssertableJson $json) => $json->where('id', 1)
+                ->where('name', 'Marie Curie')
+                ->etc()
+            )
+            ->has('data.1', fn (AssertableJson $json) => $json->where('id', 2)
+                ->where('name', 'Niels Bohr')
+                ->etc()
+            )
+            ->has('meta', fn (AssertableJson $json) => $json->where('current_page', 1)
+                ->where('per_page', 2)
+                ->where('total', 20)
+                ->where('from', 1)
+                ->where('to', 2)
+                ->where('last_page', 10)
+                ->where('first_page_url', '/?page=1')
+                ->where('last_page_url', '/?page=10')
+                ->etc()
+            )
+            ->etc()
+        );
 });

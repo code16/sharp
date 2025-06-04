@@ -14,7 +14,7 @@ export class EntityList implements EntityListData {
     config: EntityListData['config'];
     data: EntityListData['data'];
     fields: EntityListData['fields'];
-    forms: EntityListData['forms'];
+    subEntities: EntityListData['subEntities'];
     meta: EntityListData['meta'];
     pageAlert: EntityListData['pageAlert'];
     query: EntityListData['query'];
@@ -108,31 +108,6 @@ export class EntityList implements EntityListData {
 
     instanceId(instance: EntityListInstance): InstanceId {
         return instance[this.config.instanceIdAttribute];
-    }
-
-    instanceUrl(instance: EntityListInstance): string | null {
-        const entityKey = this.entityKey;
-        const instanceId = this.instanceId(instance);
-
-        if(!this.authorizations.view.includes(instanceId)) {
-            return null;
-        }
-
-        const multiform = this.forms && Object.values(this.forms).find(form => form.instances.includes(instanceId));
-
-        if(this.config.hasShowPage) {
-            return route('code16.sharp.show.show', {
-                parentUri: getAppendableParentUri(),
-                entityKey: multiform ? `${entityKey}:${multiform.key}` : entityKey,
-                instanceId,
-            });
-        }
-
-        return route('code16.sharp.form.edit', {
-            parentUri: getAppendableParentUri(),
-            entityKey: multiform ? `${entityKey}:${multiform.key}` : entityKey,
-            instanceId,
-        });
     }
 
     instanceState(instance: EntityListInstance): string | number | null {

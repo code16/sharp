@@ -147,7 +147,7 @@ export type EntityListConfigData = {
   hasShowPage: boolean;
   deleteConfirmationText: string;
   deleteHidden: boolean;
-  multiformAttribute: string | null;
+  subEntityAttribute: string | null;
   createButtonLabel: string | null;
   quickCreationForm: boolean;
   filters: ConfigFiltersData | null;
@@ -159,10 +159,10 @@ export type EntityListData = {
   authorizations: EntityListAuthorizationsData;
   config: EntityListConfigData;
   fields: Array<EntityListFieldData>;
-  data: Array<{ [key: string]: any }>;
+  data: Array<{ [key: string]: any; _meta: EntityListItemMeta }>;
   filterValues: FilterValuesData;
   query: EntityListQueryParamsData | null;
-  forms: { [key: string]: EntityListMultiformData } | null;
+  subEntities: Array<EntityListSubEntityData> | null;
   meta: PaginatorMetaData | null;
   pageAlert: PageAlertData | null;
 };
@@ -176,10 +176,8 @@ export type EntityListFieldData = {
   html: boolean | null;
   tooltip: string | null;
 };
-export type EntityListMultiformData = {
-  key: string;
-  label: string;
-  instances: Array<number | string>;
+export type EntityListItemMeta = {
+  url: string | null;
 };
 export type EntityListQueryParamsData = {
   search?: string;
@@ -188,6 +186,13 @@ export type EntityListQueryParamsData = {
   dir?: "asc" | "desc";
 } & {
   [filterKey: string]: string;
+};
+export type EntityListSubEntityData = {
+  key: string;
+  entityKey: string;
+  label: string;
+  icon: IconData | null;
+  formCreateUrl: string | null;
 };
 export type EntityStateData = {
   attribute: string;

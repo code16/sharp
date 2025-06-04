@@ -17,7 +17,7 @@ class ApiEntityListQuickCreationCommandController extends ApiController
         parent::__construct();
     }
 
-    public function create(EntityKey $entityKey)
+    public function create(EntityKey $entityKey, EntityKey $formEntityKey)
     {
         $entity = $this->entityManager->entityFor($entityKey);
 
@@ -29,7 +29,7 @@ class ApiEntityListQuickCreationCommandController extends ApiController
             403
         );
 
-        $form = $entity->getFormOrFail($entityKey->subEntity());
+        $form = $this->entityManager->entityFor($formEntityKey)->getFormOrFail($formEntityKey->subEntity());
         $form->buildFormConfig();
 
         $quickCreationHandler
@@ -48,9 +48,9 @@ class ApiEntityListQuickCreationCommandController extends ApiController
         );
     }
 
-    public function store(EntityKey $entityKey)
+    public function store(EntityKey $entityKey, EntityKey $formEntityKey)
     {
-        $list = $this->getListInstance($entityKey);
+        $list = $this->entityManager->entityFor($entityKey)->getListOrFail();
         $list->buildListConfig();
 
         abort_if(
@@ -58,7 +58,7 @@ class ApiEntityListQuickCreationCommandController extends ApiController
             403
         );
 
-        $form = $this->entityManager->entityFor($entityKey)->getFormOrFail($entityKey->subEntity());
+        $form = $this->entityManager->entityFor($formEntityKey)->getFormOrFail($formEntityKey->subEntity());
         $form->buildFormConfig();
 
         $quickCreationHandler

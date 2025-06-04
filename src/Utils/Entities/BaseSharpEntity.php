@@ -11,6 +11,7 @@ abstract class BaseSharpEntity
     public static string $entityKey;
     protected ?string $policy = null;
     protected string $label = 'entity';
+    protected ?string $icon = null;
 
     final public function getPolicyOrDefault(): SharpEntityPolicy
     {
@@ -30,6 +31,11 @@ abstract class BaseSharpEntity
     final public function isDashboard(): bool
     {
         return $this->isDashboard;
+    }
+
+    final public function getIcon(): ?string
+    {
+        return $this->icon;
     }
 
     protected function getPolicy(): ?SharpEntityPolicy

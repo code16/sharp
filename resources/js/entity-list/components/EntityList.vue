@@ -3,7 +3,7 @@
     import { FilterManager } from "@/filters/FilterManager";
     import { EntityList } from "../EntityList";
     import {
-        CommandData, EntityListFieldData, EntityListMultiformData, EntityListQueryParamsData,
+        CommandData, EntityListFieldData, EntityListSubEntityData, EntityListQueryParamsData,
         EntityStateValueData,
         FilterData
     } from "@/types";
@@ -68,6 +68,7 @@
     import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
     import { useElementVisibility } from "@vueuse/core";
     import StateBadge from "@/components/ui/StateBadge.vue";
+    import Icon from "@/components/ui/Icon.vue";
     // import StateBadgeTest from "@/components/dev/StateBadgeTest.vue";
 
     const props = withDefaults(defineProps<{
@@ -175,7 +176,7 @@
             });
     }
 
-    async function onCreate(event: MouseEvent, form?: EntityListMultiformData) {
+    async function onCreate(event: MouseEvent, subEntity?: EntityListSubEntityData) {
         if(event.metaKey || event.ctrlKey || event.shiftKey) {
             return;
         }
@@ -186,19 +187,18 @@
         if(props.entityList.config.quickCreationForm) {
             await props.commands.send({ hasForm: true } as CommandData, {
                 postCommand: route('code16.sharp.api.list.command.quick-creation-form.store', {
-                    entityKey: form ? `${entityKey}:${form.key}` : entityKey,
+                    entityKey,
+                    formEntityKey: subEntity ? subEntity.entityKey : entityKey,
                 }),
                 getForm: route('code16.sharp.api.list.command.quick-creation-form.create', {
-                    entityKey: form ? `${entityKey}:${form.key}` : entityKey,
+                    entityKey,
+                    formEntityKey: subEntity ? subEntity.entityKey : entityKey,
                 }),
                 query: props.entityList.query,
-                entityKey: form ? `${entityKey}:${form.key}` : entityKey,
+                entityKey: subEntity ? subEntity.entityKey : entityKey,
             });
         } else {
-            router.visit(route('code16.sharp.form.create', {
-                parentUri: getAppendableParentUri(),
-                entityKey: form ? `${entityKey}:${form.key}` : entityKey,
-            }));
+            router.visit(subEntity.formCreateUrl);
         }
     }
 
@@ -469,7 +469,7 @@
                                 </template>
 
                                 <template v-if="showCreateButton && entityList.authorizations.create && !reordering && !selecting">
-                                    <template v-if="entityList.forms && Object.values(entityList.forms).length">
+                                    <template v-if="entityList.subEntities?.length">
                                         <DropdownMenu>
                                             <DropdownMenuTrigger as-child>
                                                 <Button class="h-8" size="sm">
@@ -478,13 +478,16 @@
                                                 </Button>
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent>
-                                                <template v-for="form in Object.values(entityList.forms).filter(f => !!f.label)">
+                                                <template v-for="subEntity in entityList.subEntities">
                                                     <DropdownMenuItem
                                                         as="a"
-                                                        :href="route('code16.sharp.form.create', { parentUri: getAppendableParentUri(), entityKey: `${entityKey}:${form.key}` })"
-                                                        @click="onCreate($event, form)"
+                                                        :href="subEntity.formCreateUrl"
+                                                        @click="onCreate($event, subEntity)"
                                                     >
-                                                        {{ form.label }}
+                                                        <template v-if="subEntity.icon">
+                                                            <Icon class="size-4" :icon="subEntity.icon" />
+                                                        </template>
+                                                        {{ subEntity.label }}
                                                     </DropdownMenuItem>
                                                 </template>
                                             </DropdownMenuContent>
@@ -786,10 +789,10 @@
                                                                 {{ item[field.key] }}
                                                             </template>
                                                         </template>
-                                                        <template v-if="fieldIndex === 0 && entityList.instanceUrl(item) && !selecting && !reordering">
+                                                        <template v-if="fieldIndex === 0 && item._meta.url && !selecting && !reordering">
                                                             <Link class="absolute inset-0 ring-ring ring-inset focus-visible:outline-none focus-visible:ring-2 focus:group-data-highlighted/row:ring-2"
                                                                 data-row-action
-                                                                :href="entityList.instanceUrl(item)"
+                                                                :href="item._meta.url"
                                                             ></Link>
                                                         </template>
                                                     </TableCell>

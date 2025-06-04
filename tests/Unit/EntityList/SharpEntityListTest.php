@@ -248,7 +248,7 @@ it('returns list config', function () {
         'reorderable' => false,
         'hasShowPage' => false,
         'instanceIdAttribute' => 'id',
-        'multiformAttribute' => null,
+        'subEntityAttribute' => null,
         'defaultSort' => 'name',
         'defaultSortDir' => 'asc',
         'deleteHidden' => false,

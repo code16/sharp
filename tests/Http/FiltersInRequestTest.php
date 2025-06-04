@@ -53,9 +53,12 @@ it('filters instances of an entity list', function () {
         ->get('/sharp/s-list/person?filter_job=physicist')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('entityList.data', [
-                ['id' => 1, 'name' => 'Marie Curie'],
-            ])
+            ->has('entityList.data.0', fn (Assert $json) => $json
+                ->where('id', 1)
+                ->where('name', 'Marie Curie')
+                ->etc()
+            )
+            ->count('entityList.data', 1)
         );
 });
 
@@ -103,9 +106,12 @@ it('uses the default value of a required filter if no value was sent', function 
         ->get('/sharp/s-list/person')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('entityList.data', [
-                ['id' => 1, 'name' => 'Marie Curie'],
-            ])
+            ->has('entityList.data.0', fn (Assert $json) => $json
+                ->where('id', 1)
+                ->where('name', 'Marie Curie')
+                ->etc()
+            )
+            ->count('entityList.data', 1)
         );
 });
 
@@ -149,10 +155,17 @@ it('handles multiple filter values', function () {
         ->get('/sharp/s-list/person?filter_job=physicist,physician')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('entityList.data', [
-                ['id' => 1, 'name' => 'Marie Curie'],
-                ['id' => 2, 'name' => 'Louis Pasteur'],
-            ])
+            ->has('entityList.data.0', fn (Assert $json) => $json
+                ->where('id', 1)
+                ->where('name', 'Marie Curie')
+                ->etc()
+            )
+            ->has('entityList.data.1', fn (Assert $json) => $json
+                ->where('id', 2)
+                ->where('name', 'Louis Pasteur')
+                ->etc()
+            )
+            ->count('entityList.data', 2)
         );
 });
 
@@ -213,9 +226,12 @@ it('saves retained filters in the session when set', function () {
         ->get('/sharp/s-list/person')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('entityList.data', [
-                ['id' => 1, 'name' => 'Marie Curie'],
-            ])
+            ->has('entityList.data.0', fn (Assert $json) => $json
+                ->where('id', 1)
+                ->where('name', 'Marie Curie')
+                ->etc()
+            )
+            ->count('entityList.data', 1)
         );
 
     // Third call: should use QS instead of session
@@ -223,9 +239,12 @@ it('saves retained filters in the session when set', function () {
         ->get('/sharp/s-list/person?filter_job=physician')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('entityList.data', [
-                ['id' => 2, 'name' => 'Louis Pasteur'],
-            ])
+            ->has('entityList.data.0', fn (Assert $json) => $json
+                ->where('id', 2)
+                ->where('name', 'Louis Pasteur')
+                ->etc()
+            )
+            ->count('entityList.data', 1)
         );
 
     // reset retained filter value
@@ -242,10 +261,17 @@ it('saves retained filters in the session when set', function () {
         ->get('/sharp/s-list/person')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('entityList.data', [
-                ['id' => 1, 'name' => 'Marie Curie'],
-                ['id' => 2, 'name' => 'Louis Pasteur'],
-            ])
+            ->has('entityList.data.0', fn (Assert $json) => $json
+                ->where('id', 1)
+                ->where('name', 'Marie Curie')
+                ->etc()
+            )
+            ->has('entityList.data.1', fn (Assert $json) => $json
+                ->where('id', 2)
+                ->where('name', 'Louis Pasteur')
+                ->etc()
+            )
+            ->count('entityList.data', 2)
         );
 });
 
@@ -342,9 +368,12 @@ it('handles retained required filter', function () {
         ->get('/sharp/s-list/person')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('entityList.data', [
-                ['id' => 1, 'name' => 'Marie Curie'],
-            ])
+            ->has('entityList.data.0', fn (Assert $json) => $json
+                ->where('id', 1)
+                ->where('name', 'Marie Curie')
+                ->etc()
+            )
+            ->count('entityList.data', 1)
         );
 
     $this
@@ -361,9 +390,12 @@ it('handles retained required filter', function () {
         ->get('/sharp/s-list/person?filter_job=physician')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('entityList.data', [
-                ['id' => 2, 'name' => 'Louis Pasteur'],
-            ])
+            ->has('entityList.data.0', fn (Assert $json) => $json
+                ->where('id', 2)
+                ->where('name', 'Louis Pasteur')
+                ->etc()
+            )
+            ->count('entityList.data', 1)
         );
 
     // Third call: no filter, use retained value
@@ -371,9 +403,12 @@ it('handles retained required filter', function () {
         ->get('/sharp/s-list/person')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('entityList.data', [
-                ['id' => 2, 'name' => 'Louis Pasteur'],
-            ])
+            ->has('entityList.data.0', fn (Assert $json) => $json
+                ->where('id', 2)
+                ->where('name', 'Louis Pasteur')
+                ->etc()
+            )
+            ->count('entityList.data', 1)
         );
 
     $this
@@ -390,9 +425,12 @@ it('handles retained required filter', function () {
         ->get('/sharp/s-list/person')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('entityList.data', [
-                ['id' => 1, 'name' => 'Marie Curie'],
-            ])
+            ->has('entityList.data.0', fn (Assert $json) => $json
+                ->where('id', 1)
+                ->where('name', 'Marie Curie')
+                ->etc()
+            )
+            ->count('entityList.data', 1)
         );
 });
 
