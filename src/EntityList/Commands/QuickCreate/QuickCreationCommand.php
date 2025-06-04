@@ -7,7 +7,6 @@ use Code16\Sharp\Exceptions\Form\SharpFormUpdateException;
 use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
-use Illuminate\Support\Uri;
 
 class QuickCreationCommand extends EntityCommand
 {
@@ -77,7 +76,7 @@ class QuickCreationCommand extends EntityCommand
         $breadcrumb = sharp()->context()->breadcrumb();
         $currentPageUrl = $breadcrumb->getCurrentSegmentUrl();
         $breadcrumb->forceRequestSegments(
-            str(Uri::of($breadcrumb->getCurrentPath()))
+            str($breadcrumb->getCurrentPath())
                 ->explode('/')
                 ->filter()
                 ->concat(['s-form', $this->entityKey])
