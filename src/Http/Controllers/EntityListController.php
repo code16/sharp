@@ -160,6 +160,7 @@ class EntityListController extends SharpProtectedController
                     'key' => $key,
                     'entityKey' => "$entityKey:$key",
                     'label' => is_array($value) && count($value) > 1 ? $value[1] : $key,
+                    'icon' => null,
                     'formCreateUrl' => route('code16.sharp.form.create', [
                         'parentUri' => sharp()->context()->breadcrumb()->getCurrentPath(),
                         'entityKey' => "$entityKey:$key",
