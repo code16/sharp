@@ -16,7 +16,7 @@ class ApiFormUploadController extends Controller
             'validation_rule' => ['nullable', 'array'],
             'validation_rule.*' => [
                 'string',
-                'regex:/^(file$|image:|mimes:|mimetypes:|extensions:|dimensions:|size:|between:|min:|max:)/',
+                'regex:/^(file$|image:?|mimes:|mimetypes:|extensions:|dimensions:|size:|between:|min:|max:)/',
             ],
         ]);
 
