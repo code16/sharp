@@ -67,10 +67,9 @@ abstract class SharpEntity extends BaseSharpEntity
 
     final public function getLabelOrFail(?string $subEntity = null): string
     {
-        // $label = $subEntity
-        //     ? $this->getMultiforms()[$subEntity][1] ?? null
-        //     : $this->getLabel();
-        $label = $this->getLabel();
+        $label = $subEntity
+            ? $this->getMultiforms()[$subEntity][1] ?? null
+            : $this->getLabel();
 
         if ($label === null) {
             throw new SharpInvalidEntityKeyException(
@@ -79,19 +78,6 @@ abstract class SharpEntity extends BaseSharpEntity
         }
 
         return $label;
-    }
-
-    final public function getSubEntityOrFail(string $subEntity): SharpEntity
-    {
-        if (! isset($this->getSubEntities()[$subEntity])) {
-            throw new SharpInvalidEntityKeyException(
-                sprintf('The sub-entity [%s] for the entity [%s] was not found.', $subEntity, get_class($this))
-            );
-        }
-
-        $entityKey = app(SharpEntityManager::class)->entityKeyFor($this->getSubEntities()[$subEntity]);
-
-        return app(SharpEntityManager::class)->entityFor($entityKey);
     }
 
     final public function isActionProhibited(string $action): bool
