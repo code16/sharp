@@ -8,8 +8,6 @@ use Code16\Sharp\Data\EntityList\EntityListData;
 use Code16\Sharp\Data\NotificationData;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Exceptions\SharpInvalidConfigException;
-use Code16\Sharp\Exceptions\SharpInvalidEntityKeyException;
-use Code16\Sharp\Utils\Entities\SharpEntity;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Entities\ValueObjects\EntityKey;
 use Code16\Sharp\Utils\Icons\IconManager;
@@ -18,6 +16,7 @@ use Inertia\Inertia;
 
 class EntityListController extends SharpProtectedController
 {
+    use HandlesEntityListItems;
     use HandlesSharpNotificationsInRequest;
 
     public function __construct(
@@ -79,80 +78,6 @@ class EntityListController extends SharpProtectedController
             ]),
             'notifications' => NotificationData::collection($this->getSharpNotifications()),
         ]);
-    }
-
-    private function addMetaToItems(array $listItems, string $entityKey, SharpEntityList $list): array
-    {
-        $entity = $this->entityManager->entityFor($entityKey);
-
-        return collect($listItems)
-            ->map(function ($item) use ($entity, $entityKey, $list) {
-                $itemEntityKey = $this->getItemEntityKey($item, $entityKey, $entity, $list);
-                $instanceId = $item[$list->getInstanceIdAttribute()] ?? null;
-
-                return [
-                    ...$item,
-                    '_meta' => [
-                        'url' => $this->getItemUrl($item, $entityKey, $entity, $list),
-                        'authorizations' => [
-                            'view' => $this->sharpAuthorizationManager->isAllowed('view', $itemEntityKey, $instanceId),
-                            'delete' => $this->sharpAuthorizationManager->isAllowed('delete', $itemEntityKey, $instanceId),
-                        ],
-                    ],
-                ];
-            })
-            ->all();
-    }
-
-    private function getItemEntityKey(array $item, string $entityKey, SharpEntity $entity, SharpEntityList $list): string
-    {
-        $itemSubEntity = $list->getSubEntityAttribute() ? ($item[$list->getSubEntityAttribute()] ?? null) : null;
-
-        if ($itemSubEntity) {
-            if (count($entity->getMultiforms()) > 0) {
-                return EntityKey::multiform(baseKey: $entityKey, multiformKey: $itemSubEntity);
-            }
-
-            if (! $itemSubEntityClass = ($list->getSubEntities()[$itemSubEntity] ?? null)) {
-                throw new SharpInvalidEntityKeyException(
-                    sprintf('The sub-entity [%s] for the entity [%s] was not found.', $itemSubEntity, get_class($this))
-                );
-            }
-
-            return $this->entityManager->entityKeyFor($itemSubEntityClass);
-        }
-
-        return $entityKey;
-    }
-
-    private function getItemUrl(array $item, string $entityKey, SharpEntity $entity, SharpEntityList $list): ?string
-    {
-        $breadcrumb = sharp()->context()->breadcrumb();
-
-        $itemEntityKey = $this->getItemEntityKey($item, $entityKey, $entity, $list);
-        $instanceId = $item[$list->getInstanceIdAttribute()] ?? null;
-
-        if (! $this->sharpAuthorizationManager->isAllowed('view', $itemEntityKey, $instanceId)) {
-            return null;
-        }
-
-        $itemEntity = $this->entityManager->entityFor($itemEntityKey);
-
-        if ($breadcrumb->getCurrentPath()) {
-            return $itemEntity->hasShow()
-                ? route('code16.sharp.show.show', [
-                    'parentUri' => $breadcrumb->getCurrentPath(),
-                    'entityKey' => $itemEntityKey,
-                    'instanceId' => $item[$list->getInstanceIdAttribute()],
-                ])
-                : route('code16.sharp.form.edit', [
-                    'parentUri' => $breadcrumb->getCurrentPath(),
-                    'entityKey' => $itemEntityKey,
-                    'instanceId' => $item[$list->getInstanceIdAttribute()],
-                ]);
-        }
-
-        return null;
     }
 
     private function getSubEntitiesDataForEntityList(string $entityKey, SharpEntityList $list): ?array
