@@ -2,6 +2,7 @@
 
 use Code16\Sharp\Auth\SharpEntityPolicy;
 use Code16\Sharp\EntityList\Commands\ReorderHandler;
+use Code16\Sharp\Http\Context\SharpBreadcrumb;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonShow;
@@ -134,7 +135,9 @@ it('gets list data as JSON in an EEL case', function () {
         }
     });
 
-    $this->getJson('/sharp/api/list/person')
+    $this->getJson('/sharp/api/list/person', headers: [
+        SharpBreadcrumb::CURRENT_PAGE_URL_HEADER => url('/sharp/s-list/person'),
+    ])
         ->assertOk()
         ->assertJson(fn (AssertableJson $json) => $json
             ->has('data.0', fn (AssertableJson $json) => $json->where('id', 1)
@@ -163,7 +166,9 @@ it('gets paginated data if wanted as JSON in an EEL case', function () {
         }
     });
 
-    $this->getJson('/sharp/api/list/person')
+    $this->getJson('/sharp/api/list/person', headers: [
+        SharpBreadcrumb::CURRENT_PAGE_URL_HEADER => url('/sharp/s-list/person'),
+    ])
         ->assertOk()
         ->assertJson(fn (AssertableJson $json) => $json
             ->has('data.0', fn (AssertableJson $json) => $json->where('id', 1)
