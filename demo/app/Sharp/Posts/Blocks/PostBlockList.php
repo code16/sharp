@@ -4,6 +4,9 @@ namespace App\Sharp\Posts\Blocks;
 
 use App\Models\Media;
 use App\Models\PostBlock;
+use App\Sharp\Entities\PostBlockTextEntity;
+use App\Sharp\Entities\PostBlockVideoEntity;
+use App\Sharp\Entities\PostBlockVisualsEntity;
 use Code16\Sharp\EntityList\Eloquent\SimpleEloquentReorderHandler;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
@@ -29,7 +32,11 @@ class PostBlockList extends SharpEntityList
 
     public function buildListConfig(): void
     {
-        $this->configureSubEntityAttribute('type')
+        $this->configureSubEntities('type', [
+            'text' => PostBlockTextEntity::class,
+            'video' => PostBlockVideoEntity::class,
+            'visuals' => PostBlockVisualsEntity::class,
+        ])
             ->configureReorderable(new SimpleEloquentReorderHandler(PostBlock::class))
             ->configureQuickCreationForm();
     }

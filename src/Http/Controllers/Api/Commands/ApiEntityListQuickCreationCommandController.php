@@ -29,14 +29,14 @@ class ApiEntityListQuickCreationCommandController extends ApiController
             403
         );
 
-        $form = $this->entityManager->entityFor($formEntityKey)->getFormOrFail($formEntityKey->subEntity());
+        $form = $this->entityManager->entityFor($formEntityKey)->getFormOrFail($formEntityKey->multiformKey());
         $form->buildFormConfig();
 
         $quickCreationHandler
             ->setEntityKey($entityKey)
             ->setFormInstance($form)
             ->setTitle(__('sharp::breadcrumb.form.create_entity', [
-                'entity' => $entity->getLabelOrFail($entityKey->subEntity()),
+                'entity' => $entity->getLabelOrFail($entityKey->multiformKey()),
             ]));
 
         $quickCreationHandler->buildCommandConfig();
@@ -58,7 +58,7 @@ class ApiEntityListQuickCreationCommandController extends ApiController
             403
         );
 
-        $form = $this->entityManager->entityFor($formEntityKey)->getFormOrFail($formEntityKey->subEntity());
+        $form = $this->entityManager->entityFor($formEntityKey)->getFormOrFail($formEntityKey->multiformKey());
         $form->buildFormConfig();
 
         $quickCreationHandler

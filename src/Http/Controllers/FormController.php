@@ -30,7 +30,7 @@ class FormController extends SharpProtectedController
     {
         $entity = $this->entityManager->entityFor($entityKey);
 
-        $form = $entity->getFormOrFail($entityKey->subEntity());
+        $form = $entity->getFormOrFail($entityKey->multiformKey());
 
         if ($form instanceof SharpSingleForm) {
             // There is no creation in SingleForms
@@ -47,7 +47,7 @@ class FormController extends SharpProtectedController
             'form' => FormData::from([
                 ...$this->buildFormData($form, $formData, $entityKey),
                 'title' => $form->getCreateTitle() ?: trans('sharp::breadcrumb.form.create_entity', [
-                    'entity' => $entity->getLabelOrFail($entityKey->subEntity()),
+                    'entity' => $entity->getLabelOrFail($entityKey->multiformKey()),
                 ]),
             ]),
             'breadcrumb' => BreadcrumbData::from([
@@ -72,7 +72,7 @@ class FormController extends SharpProtectedController
             $instanceId
         );
 
-        $form = $entity->getFormOrFail($entityKey->subEntity());
+        $form = $entity->getFormOrFail($entityKey->multiformKey());
 
         abort_if(
             (! $instanceId && ! $form instanceof SharpSingleForm)
@@ -94,7 +94,7 @@ class FormController extends SharpProtectedController
         $titleEntityLabel ??= sharp()
             ->context()
             ->breadcrumb()
-            ->getParentShowCachedBreadcrumbLabel() ?: $entity->getLabelOrFail($entityKey->subEntity());
+            ->getParentShowCachedBreadcrumbLabel() ?: $entity->getLabelOrFail($entityKey->multiformKey());
 
         return Inertia::render('Form/Form', [
             'form' => FormData::from([
@@ -126,7 +126,7 @@ class FormController extends SharpProtectedController
 
         $form = $this->entityManager
             ->entityFor($entityKey)
-            ->getFormOrFail($entityKey->subEntity());
+            ->getFormOrFail($entityKey->multiformKey());
 
         abort_if(
             (! $instanceId && ! $form instanceof SharpSingleForm)
@@ -152,7 +152,7 @@ class FormController extends SharpProtectedController
     {
         $form = $this->entityManager
             ->entityFor($entityKey)
-            ->getFormOrFail($entityKey->subEntity());
+            ->getFormOrFail($entityKey->multiformKey());
 
         if ($form instanceof SharpSingleForm) {
             // There is no creation in SingleForms

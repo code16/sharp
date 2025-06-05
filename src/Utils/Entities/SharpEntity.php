@@ -28,10 +28,6 @@ abstract class SharpEntity extends BaseSharpEntity
 
     final public function getShowOrFail(?string $subEntity = null): SharpShow
     {
-        if ($subEntity) {
-            return $this->getSubEntityOrFail($subEntity)->getShowOrFail();
-        }
-
         if (! $show = $this->getShow()) {
             throw new SharpInvalidEntityKeyException(
                 sprintf('The show for the entity [%s] was not found.', get_class($this))
@@ -58,8 +54,6 @@ abstract class SharpEntity extends BaseSharpEntity
 
                 return instanciate($form);
             }
-
-            return $this->getSubEntityOrFail($subEntity)->getFormOrFail();
         }
 
         if (! $form = $this->getForm()) {
@@ -136,13 +130,9 @@ abstract class SharpEntity extends BaseSharpEntity
         return $this->form ? app($this->form) : null;
     }
 
-    public function getSubEntities(): array
-    {
-        return [];
-    }
-
     /**
-     * @deprecated use getSubEntities() instead
+     * @deprecated
+     * @see SharpEntityList::configureSubEntities()
      */
     public function getMultiforms(): array
     {

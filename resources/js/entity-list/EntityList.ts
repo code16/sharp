@@ -6,7 +6,6 @@ import {
     EntityStateValueData,
     FilterData,
 } from "@/types";
-import { getAppendableParentUri, route } from "@/utils/url";
 import { EntityListInstance, InstanceId } from "./types";
 
 export class EntityList implements EntityListData {
@@ -128,10 +127,7 @@ export class EntityList implements EntityListData {
     }
 
     instanceCanDelete(instance: EntityListInstance): boolean {
-        if(Array.isArray(this.authorizations.delete)) {
-            return this.authorizations.delete?.includes(this.instanceId(instance));
-        }
-        return !!this.authorizations.delete;
+        return instance._meta.authorizations.delete;
     }
 
     instanceCommands(instance: EntityListInstance): Array<Array<CommandData>> | undefined {

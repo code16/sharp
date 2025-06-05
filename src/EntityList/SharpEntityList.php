@@ -28,6 +28,7 @@ abstract class SharpEntityList
     protected ?EntityListQueryParams $queryParams;
     protected string $instanceIdAttribute = 'id';
     protected ?string $subEntityAttribute = null;
+    protected ?array $subEntities = null;
     protected bool $searchable = false;
     protected ?ReorderHandler $reorderHandler = null;
     private bool $disabledReorder = false;
@@ -135,6 +136,14 @@ abstract class SharpEntityList
         return $this;
     }
 
+    /**
+     * @internal
+     */
+    final public function getInstanceIdAttribute(): string
+    {
+        return $this->instanceIdAttribute;
+    }
+
     final public function configureReorderable(ReorderHandler|string $reorderHandler): self
     {
         $this->reorderHandler = instanciate($reorderHandler);
@@ -181,18 +190,37 @@ abstract class SharpEntityList
     }
 
     /**
-     * @deprecated use configureSubEntityAttribute() instead
+     * @deprecated use configureSubEntities() instead
      */
     final protected function configureMultiformAttribute(?string $attribute): self
-    {
-        return $this->configureSubEntityAttribute($attribute);
-    }
-
-    final protected function configureSubEntityAttribute(?string $attribute): self
     {
         $this->subEntityAttribute = $attribute;
 
         return $this;
+    }
+
+    final protected function configureSubEntities(string $attribute, array $subEntities): self
+    {
+        $this->subEntityAttribute = $attribute;
+        $this->subEntities = $subEntities;
+
+        return $this;
+    }
+
+    /**
+     * @internal
+     */
+    final public function getSubEntityAttribute(): ?string
+    {
+        return $this->subEntityAttribute;
+    }
+
+    /**
+     * @internal
+     */
+    final public function getSubEntities(): ?array
+    {
+        return $this->subEntities;
     }
 
     final public function reorderHandler(): ?ReorderHandler

@@ -120,7 +120,7 @@ class ApiFormAutocompleteController extends ApiController
             );
         }
 
-        return $entity->getFormOrFail($entityKey->subEntity());
+        return $entity->getFormOrFail($entityKey->multiformKey());
     }
 
     private function getFormattedData() {}

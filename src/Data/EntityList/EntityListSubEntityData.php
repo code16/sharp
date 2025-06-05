@@ -16,8 +16,6 @@ final class EntityListSubEntityData extends Data
         public string $label,
         public ?IconData $icon,
         public ?string $formCreateUrl,
-        // /** @var array<int|string> */
-        // public array $instances,
     ) {}
 
     public static function from(array $subEntity): self

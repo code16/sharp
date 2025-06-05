@@ -23,13 +23,4 @@ class PostBlockEntity extends SharpEntity
     //         'video' => [PostBlockVideoForm::class, 'Video block'],
     //     ];
     // }
-
-    public function getSubEntities(): array
-    {
-        return [
-            'text' => PostBlockTextEntity::class,
-            'video' => PostBlockVideoEntity::class,
-            'visuals' => PostBlockVisualsEntity::class,
-        ];
-    }
 }

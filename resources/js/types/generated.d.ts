@@ -133,8 +133,6 @@ export type EmbedFormData = {
   layout: FormLayoutData | null;
 };
 export type EntityListAuthorizationsData = {
-  view: Array<number | string>;
-  delete: Array<number | string>;
   create: boolean;
   reorder: boolean;
 };
@@ -179,6 +177,7 @@ export type EntityListFieldData = {
 };
 export type EntityListItemMeta = {
   url: string | null;
+  authorizations: InstanceAuthorizationsData;
 };
 export type EntityListQueryParamsData = {
   search?: string;
@@ -194,6 +193,7 @@ export type EntityListSubEntityData = {
   label: string;
   icon: IconData | null;
   formCreateUrl: string | null;
+  authorizations: EntityListAuthorizationsData;
 };
 export type EntityStateData = {
   attribute: string;

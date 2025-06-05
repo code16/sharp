@@ -262,12 +262,18 @@ it('gets authorizations of each instance', function () {
     $this->get('/sharp/s-list/person')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->has('entityList.authorizations', fn (Assert $config) => $config
-                ->where('create', true)
-                ->where('view', [1, 2])
-                ->where('reorder', true)
-                ->where('delete', [2])
-            )
+            ->where('entityList.authorizations', [
+                'create' => true,
+                'reorder' => true,
+            ])
+            ->where('entityList.data.0._meta.authorizations', [
+                'view' => true,
+                'delete' => false,
+            ])
+            ->where('entityList.data.1._meta.authorizations', [
+                'view' => true,
+                'delete' => true,
+            ])
         );
 });
 
