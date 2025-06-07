@@ -6,7 +6,7 @@ class ApiEntityListFiltersController extends ApiController
 {
     public function store(string $entityKey)
     {
-        sharp_check_ability('entity', $entityKey);
+        $this->authorizationManager->check('entity', $entityKey);
 
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();

@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Utils\Menu;
 
 use Closure;
+use Code16\Sharp\Auth\SharpAuthorizationManager;
 use Code16\Sharp\Utils\Entities\SharpDashboardEntity;
 use Code16\Sharp\Utils\Entities\SharpEntity;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
@@ -110,7 +111,8 @@ class SharpMenuItemLink extends SharpMenuItem
     public function isAllowed(): bool
     {
         return $this->isExternalLink()
-            || sharp_has_ability('entity', $this->getEntityKey());
+            || app(SharpAuthorizationManager::class)
+                ->isAllowed('entity', $this->getEntityKey());
     }
 
     public function isCurrent(): bool

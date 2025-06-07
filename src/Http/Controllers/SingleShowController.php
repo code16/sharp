@@ -2,11 +2,9 @@
 
 namespace Code16\Sharp\Http\Controllers;
 
-use Code16\Sharp\Auth\SharpAuthorizationManager;
 use Code16\Sharp\Data\BreadcrumbData;
 use Code16\Sharp\Data\NotificationData;
 use Code16\Sharp\Data\Show\ShowData;
-use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Entities\ValueObjects\EntityKey;
 use Inertia\Inertia;
 
@@ -15,16 +13,9 @@ class SingleShowController extends SharpProtectedController
     use HandlesSharpNotificationsInRequest;
     use PreloadsShowEntityLists;
 
-    public function __construct(
-        private SharpAuthorizationManager $sharpAuthorizationManager,
-        private SharpEntityManager $entityManager,
-    ) {
-        parent::__construct();
-    }
-
     public function show(EntityKey $entityKey)
     {
-        sharp_check_ability('view', $entityKey);
+        $this->authorizationManager->check('view', $entityKey);
 
         $entity = $this->entityManager->entityFor($entityKey);
         $show = $entity->getShowOrFail();
@@ -44,8 +35,8 @@ class SingleShowController extends SharpProtectedController
                 : null,
             'authorizations' => [
                 'create' => false,
-                'view' => $this->sharpAuthorizationManager->isAllowed('view', $entityKey),
-                'update' => $this->sharpAuthorizationManager->isAllowed('update', $entityKey),
+                'view' => $this->authorizationManager->isAllowed('view', $entityKey),
+                'update' => $this->authorizationManager->isAllowed('update', $entityKey),
                 'delete' => false,
             ],
         ]);
