@@ -14,7 +14,6 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 class PostBlockVisualsForm extends AbstractPostBlockForm
 {
     protected static string $postBlockType = 'visuals';
-    protected ?string $formValidatorClass = PostBlockVisualsValidator::class;
 
     protected function getContentField(): ?SharpFormField
     {
@@ -34,6 +33,7 @@ class PostBlockVisualsForm extends AbstractPostBlockForm
                 ->addItemField(
                     SharpFormUploadField::make('file')
                         ->setMaxFileSize(1)
+                        ->setImageOnly()
                         ->setStorageDisk('local')
                         ->setStorageBasePath(function () {
                             return sprintf(
@@ -61,5 +61,13 @@ class PostBlockVisualsForm extends AbstractPostBlockForm
     protected function addCustomTransformers(): self
     {
         return $this->setCustomTransformer('files', new SharpUploadModelFormAttributeTransformer());
+    }
+
+    public function rules(): array
+    {
+        return [
+            'files' => ['required', 'array'],
+            'files.*.file' => ['required'],
+        ];
     }
 }

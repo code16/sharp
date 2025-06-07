@@ -8,7 +8,6 @@ use Code16\Sharp\Form\Fields\SharpFormField;
 class PostBlockTextForm extends AbstractPostBlockForm
 {
     protected static string $postBlockType = 'text';
-    protected ?string $formValidatorClass = PostBlockTextValidator::class;
 
     protected function getContentField(): ?SharpFormField
     {
@@ -21,5 +20,12 @@ class PostBlockTextForm extends AbstractPostBlockForm
             ])
             ->setWithoutParagraphs()
             ->setHeight(200);
+    }
+
+    public function rules(): array
+    {
+        return [
+            'content.text' => ['required', 'string', 'max:1000'],
+        ];
     }
 }

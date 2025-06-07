@@ -107,7 +107,7 @@ it('allows to define a custom validation rule on an image file', function () {
             'file',
             'extensions:jpg,jpeg,png,gif,bmp,svg,webp',
             'max:3072',
-            'image',
+            str(app()->version())->startsWith('11.') ? 'image' : 'image:allow_svg',
             'dimensions:max_width=100,max_height=100',
         ]);
 });
