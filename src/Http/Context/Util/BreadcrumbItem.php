@@ -74,7 +74,7 @@ class BreadcrumbItem
         $resolvedEntityKey = app(SharpEntityManager::class)->entityKeyFor($entityKeyOrClassName);
 
         return $selfKey->baseKey() === $resolvedEntityKey
-            && (! $subEntity || $selfKey->subEntity() === $subEntity);
+            && (! $subEntity || $selfKey->multiformKey() === $subEntity);
     }
 
     public function entityKey(): string

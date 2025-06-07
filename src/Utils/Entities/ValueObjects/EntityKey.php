@@ -15,6 +15,11 @@ class EntityKey implements Stringable, UrlRoutable
         protected ?string $key = null
     ) {}
 
+    public static function multiform(string $baseKey, ?string $multiformKey): static
+    {
+        return new static($multiformKey ? "$baseKey:$multiformKey" : $baseKey);
+    }
+
     public function baseKey(): string
     {
         return str_contains($this->key, ':')
@@ -22,7 +27,7 @@ class EntityKey implements Stringable, UrlRoutable
             : $this->key;
     }
 
-    public function subEntity(): ?string
+    public function multiformKey(): ?string
     {
         return str_contains($this->key, ':')
             ? Str::after($this->key, ':')

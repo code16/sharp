@@ -33,7 +33,7 @@ class SingleShowController extends SharpProtectedController
         $showData = $show->instance(null);
 
         $payload = ShowData::from([
-            'title' => $showData[$show->titleAttribute()] ?? $entity->getLabelOrFail($entityKey->subEntity()),
+            'title' => $showData[$show->titleAttribute()] ?? $entity->getLabelOrFail($entityKey->multiformKey()),
             'config' => $show->showConfig(null),
             'fields' => $show->fields(),
             'layout' => $show->showLayout(),

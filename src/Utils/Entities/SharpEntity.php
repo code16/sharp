@@ -26,7 +26,7 @@ abstract class SharpEntity extends BaseSharpEntity
         return $list instanceof SharpEntityList ? $list : app($list);
     }
 
-    final public function getShowOrFail(): SharpShow
+    final public function getShowOrFail(?string $subEntity = null): SharpShow
     {
         if (! $show = $this->getShow()) {
             throw new SharpInvalidEntityKeyException(
@@ -45,12 +45,18 @@ abstract class SharpEntity extends BaseSharpEntity
     final public function getFormOrFail(?string $subEntity = null): SharpForm
     {
         if ($subEntity) {
-            if (! $form = ($this->getMultiforms()[$subEntity][0] ?? null)) {
-                throw new SharpInvalidEntityKeyException(
-                    sprintf('The subform for the entity [%s:%s] was not found.', get_class($this), $subEntity)
-                );
+            if (count($this->getMultiforms())) {
+                if (! $form = ($this->getMultiforms()[$subEntity][0] ?? null)) {
+                    throw new SharpInvalidEntityKeyException(
+                        sprintf('The subform for the entity [%s:%s] was not found.', get_class($this), $subEntity)
+                    );
+                }
+
+                return instanciate($form);
             }
-        } elseif (! $form = $this->getForm()) {
+        }
+
+        if (! $form = $this->getForm()) {
             throw new SharpInvalidEntityKeyException(
                 sprintf('The form for the entity [%s] was not found.', get_class($this))
             );
@@ -110,6 +116,10 @@ abstract class SharpEntity extends BaseSharpEntity
         return $this->form ? app($this->form) : null;
     }
 
+    /**
+     * @deprecated
+     * @see SharpEntityList::configureSubEntities()
+     */
     public function getMultiforms(): array
     {
         return [];

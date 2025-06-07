@@ -15,12 +15,12 @@ class PostBlockEntity extends SharpEntity
     protected ?string $policy = PostBlockPolicy::class;
     protected string $label = 'Block';
 
-    public function getMultiforms(): array
-    {
-        return [
-            'text' => [PostBlockTextForm::class, 'Text block'],
-            'visuals' => [PostBlockVisualsForm::class, 'Visuals block'],
-            'video' => [PostBlockVideoForm::class, 'Video block'],
-        ];
-    }
+    // public function getMultiforms(): array
+    // {
+    //     return [
+    //         'text' => [PostBlockTextForm::class, 'Text block'],
+    //         'visuals' => [PostBlockVisualsForm::class, 'Visuals block'],
+    //         'video' => [PostBlockVideoForm::class, 'Video block'],
+    //     ];
+    // }
 }

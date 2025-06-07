@@ -44,7 +44,7 @@ class ApiDashboardCommandController extends ApiController
         $commandHandler = $this->getDashboardCommandHandler($dashboard, $commandKey);
 
         $formattedData = $commandHandler->formatAndValidateRequestData((array) request('data'));
-        $result = $this->returnCommandResult($dashboard, $commandHandler->execute($formattedData));
+        $result = $this->returnCommandResult($dashboard, $entityKey, $commandHandler->execute($formattedData));
         $this->uploadManager->dispatchJobs();
 
         return $result;

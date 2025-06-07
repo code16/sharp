@@ -11,7 +11,7 @@ use Code16\Sharp\Tests\Unit\Show\Fakes\FakeSharpSingleShow;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Facades\Gate;
-use Inertia\Testing\AssertableInertia as Assert;
+use Illuminate\Testing\Fluent\AssertableJson;
 
 beforeEach(function () {
     login();
@@ -73,7 +73,7 @@ it('returns prohibited actions with a show or form get request', function () {
 
     $this
         ->get('/sharp/s-list/person/s-form/person')
-        ->assertInertia(fn (Assert $page) => $page
+        ->assertInertia(fn (AssertableJson $json) => $json
             ->where('form.authorizations', [
                 'delete' => false,
                 'update' => false,
@@ -83,7 +83,7 @@ it('returns prohibited actions with a show or form get request', function () {
         );
 
     $this->get('/sharp/s-list/person/s-show/person/1')
-        ->assertInertia(fn (Assert $page) => $page
+        ->assertInertia(fn (AssertableJson $json) => $json
             ->where('show.authorizations', [
                 'delete' => false,
                 'update' => false,
@@ -110,7 +110,7 @@ it('always disallow create and delete actions for a single show', function () {
     $this
         ->get('/sharp/s-show/single_person')
         ->assertOk()
-        ->assertInertia(fn (Assert $page) => $page
+        ->assertInertia(fn (AssertableJson $json) => $json
             ->where('show.authorizations', [
                 'delete' => false,
                 'update' => true,
@@ -138,12 +138,18 @@ it('returns prohibited actions with a list get request', function () {
 
     $this
         ->get('/sharp/s-list/person')
-        ->assertInertia(fn (Assert $page) => $page
+        ->assertInertia(fn (AssertableJson $json) => $json
             ->where('entityList.authorizations', [
-                'delete' => [],
                 'reorder' => true,
                 'create' => true,
-                'view' => [1, 2],
+            ])
+            ->where('entityList.data.0._meta.authorizations', [
+                'view' => true,
+                'delete' => false,
+            ])
+            ->where('entityList.data.1._meta.authorizations', [
+                'view' => true,
+                'delete' => false,
             ])
         );
 });
@@ -163,7 +169,7 @@ it('allow access by default', function () {
     // Create (no instanceId, only create is allowed)
     $this
         ->get('/sharp/s-list/person/s-form/person')
-        ->assertInertia(fn (Assert $page) => $page
+        ->assertInertia(fn (AssertableJson $json) => $json
             ->where('form.authorizations', [
                 'delete' => false,
                 'update' => false,
@@ -175,7 +181,7 @@ it('allow access by default', function () {
     // Edit
     $this
         ->get('/sharp/s-list/person/s-form/person/1')
-        ->assertInertia(fn (Assert $page) => $page
+        ->assertInertia(fn (AssertableJson $json) => $json
             ->where('form.authorizations', [
                 'delete' => true,
                 'update' => true,
@@ -187,26 +193,42 @@ it('allow access by default', function () {
     // EL (inertia)
     $this
         ->get('/sharp/s-list/person')
-        ->assertInertia(fn (Assert $page) => $page
-            ->where('entityList.authorizations', [
-                'delete' => [1, 2],
-                'reorder' => true,
-                'create' => true,
-                'view' => [1, 2],
-            ])
+        ->assertInertia(fn (AssertableJson $json) => $json
+            ->has('entityList', fn (AssertableJson $json) => $json
+                ->where('authorizations', [
+                    'reorder' => true,
+                    'create' => true,
+                ])
+                ->where('data.0._meta.authorizations', [
+                    'view' => true,
+                    'delete' => true,
+                ])
+                ->where('data.1._meta.authorizations', [
+                    'view' => true,
+                    'delete' => true,
+                ])
+                ->etc()
+            )
         );
 
     // EEL (json)
     $this
         ->getJson('/sharp/api/list/person')
-        ->assertJsonFragment([
-            'authorizations' => [
-                'delete' => [1, 2],
+        ->assertJson(fn (AssertableJson $json) => $json
+            ->where('authorizations', [
                 'reorder' => true,
                 'create' => true,
-                'view' => [1, 2],
-            ],
-        ]);
+            ])
+            ->where('data.0._meta.authorizations', [
+                'view' => true,
+                'delete' => true,
+            ])
+            ->where('data.1._meta.authorizations', [
+                'view' => true,
+                'delete' => true,
+            ])
+            ->etc()
+        );
 });
 
 it('checks the main entity prohibited actions in case of a sub entity', function () {

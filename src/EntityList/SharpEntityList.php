@@ -27,7 +27,8 @@ abstract class SharpEntityList
     private ?EntityListFieldsContainer $fieldsContainer = null;
     protected ?EntityListQueryParams $queryParams;
     protected string $instanceIdAttribute = 'id';
-    protected ?string $multiformAttribute = null;
+    protected ?string $subEntityAttribute = null;
+    protected ?array $subEntities = null;
     protected bool $searchable = false;
     protected ?ReorderHandler $reorderHandler = null;
     private bool $disabledReorder = false;
@@ -87,7 +88,7 @@ abstract class SharpEntityList
                     array_merge(
                         array_keys($this->transformers),
                         $this->entityStateAttribute ? [$this->entityStateAttribute] : [],
-                        $this->multiformAttribute ? [$this->multiformAttribute] : [],
+                        $this->subEntityAttribute ? [$this->subEntityAttribute] : [],
                         [$this->instanceIdAttribute],
                         $this->getDataKeys(),
                     ),
@@ -108,7 +109,7 @@ abstract class SharpEntityList
     {
         $config = [
             'instanceIdAttribute' => $this->instanceIdAttribute,
-            'multiformAttribute' => $this->multiformAttribute,
+            'subEntityAttribute' => $this->subEntityAttribute,
             'searchable' => $this->searchable,
             'reorderable' => ! is_null($this->reorderHandler) && ! $this->disabledReorder,
             'defaultSort' => $this->defaultSort,
@@ -133,6 +134,14 @@ abstract class SharpEntityList
         $this->instanceIdAttribute = $instanceIdAttribute;
 
         return $this;
+    }
+
+    /**
+     * @internal
+     */
+    final public function getInstanceIdAttribute(): string
+    {
+        return $this->instanceIdAttribute;
     }
 
     final public function configureReorderable(ReorderHandler|string $reorderHandler): self
@@ -180,11 +189,38 @@ abstract class SharpEntityList
         return $this;
     }
 
+    /**
+     * @deprecated use configureSubEntities() instead
+     */
     final protected function configureMultiformAttribute(?string $attribute): self
     {
-        $this->multiformAttribute = $attribute;
+        $this->subEntityAttribute = $attribute;
 
         return $this;
+    }
+
+    final protected function configureSubEntities(string $attribute, array $subEntities): self
+    {
+        $this->subEntityAttribute = $attribute;
+        $this->subEntities = $subEntities;
+
+        return $this;
+    }
+
+    /**
+     * @internal
+     */
+    final public function getSubEntityAttribute(): ?string
+    {
+        return $this->subEntityAttribute;
+    }
+
+    /**
+     * @internal
+     */
+    final public function getSubEntities(): ?array
+    {
+        return $this->subEntities;
     }
 
     final public function reorderHandler(): ?ReorderHandler

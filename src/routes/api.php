@@ -29,10 +29,10 @@ Route::group([
     Route::post('/dashboard/{dashboardKey}/command/{commandKey}', [ApiDashboardCommandController::class, 'update'])
         ->name('code16.sharp.api.dashboard.command');
 
-    Route::get('/list/{entityKey}/create', [ApiEntityListQuickCreationCommandController::class, 'create'])
+    Route::get('/list/{entityKey}/form/{formEntityKey}/create', [ApiEntityListQuickCreationCommandController::class, 'create'])
         ->name('code16.sharp.api.list.command.quick-creation-form.create');
 
-    Route::post('/list/{entityKey}/create', [ApiEntityListQuickCreationCommandController::class, 'store'])
+    Route::post('/list/{entityKey}/form/{formEntityKey}/create', [ApiEntityListQuickCreationCommandController::class, 'store'])
         ->name('code16.sharp.api.list.command.quick-creation-form.store');
 
     // EEL

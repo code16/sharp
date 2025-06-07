@@ -42,7 +42,7 @@ class ApiEntityListEntityCommandController extends ApiController
         $commandHandler = $this->getEntityCommandHandler($list, $commandKey);
 
         $formattedData = $commandHandler->formatAndValidateRequestData((array) request('data'));
-        $result = $this->returnCommandResult($list, $commandHandler->execute($formattedData));
+        $result = $this->returnCommandResult($list, $entityKey, $commandHandler->execute($formattedData));
         $this->uploadManager->dispatchJobs();
 
         return $result;
