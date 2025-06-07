@@ -13,7 +13,7 @@ class ApiEntityListController extends ApiController
      */
     public function update(string $entityKey)
     {
-        sharp_check_ability('entity', $entityKey);
+        $this->authorizationManager->check('entity', $entityKey);
 
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();
@@ -30,7 +30,7 @@ class ApiEntityListController extends ApiController
      */
     public function delete(string $entityKey, string $instanceId)
     {
-        sharp_check_ability('delete', $entityKey, $instanceId);
+        $this->authorizationManager->check('delete', $entityKey, $instanceId);
 
         $impl = $this->getListInstance($entityKey);
         if (! self::isDeleteMethodImplementedInConcreteClass($impl)) {

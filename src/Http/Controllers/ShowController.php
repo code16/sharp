@@ -2,12 +2,10 @@
 
 namespace Code16\Sharp\Http\Controllers;
 
-use Code16\Sharp\Auth\SharpAuthorizationManager;
 use Code16\Sharp\Data\BreadcrumbData;
 use Code16\Sharp\Data\NotificationData;
 use Code16\Sharp\Data\Show\ShowData;
 use Code16\Sharp\Show\SharpSingleShow;
-use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Entities\ValueObjects\EntityKey;
 use Inertia\Inertia;
 
@@ -16,19 +14,11 @@ class ShowController extends SharpProtectedController
     use HandlesSharpNotificationsInRequest;
     use PreloadsShowEntityLists;
 
-    public function __construct(
-        private readonly SharpAuthorizationManager $sharpAuthorizationManager,
-        private readonly SharpEntityManager $entityManager,
-    ) {
-        parent::__construct();
-    }
-
     public function show(string $parentUri, EntityKey $entityKey, string $instanceId)
     {
-        sharp_check_ability('view', $entityKey, $instanceId);
+        $this->authorizationManager->check('view', $entityKey, $instanceId);
 
         $entity = $this->entityManager->entityFor($entityKey);
-
         $show = $entity->getShowOrFail();
 
         abort_if($show instanceof SharpSingleShow, 404);
@@ -47,10 +37,10 @@ class ShowController extends SharpProtectedController
                 ? $show->getDataLocalizations()
                 : null,
             'authorizations' => [
-                'create' => $this->sharpAuthorizationManager->isAllowed('create', $entityKey),
-                'view' => $this->sharpAuthorizationManager->isAllowed('view', $entityKey, $instanceId),
-                'update' => $this->sharpAuthorizationManager->isAllowed('update', $entityKey, $instanceId),
-                'delete' => $this->sharpAuthorizationManager->isAllowed('delete', $entityKey, $instanceId),
+                'create' => $this->authorizationManager->isAllowed('create', $entityKey),
+                'view' => $this->authorizationManager->isAllowed('view', $entityKey, $instanceId),
+                'update' => $this->authorizationManager->isAllowed('update', $entityKey, $instanceId),
+                'delete' => $this->authorizationManager->isAllowed('delete', $entityKey, $instanceId),
             ],
         ]);
 
@@ -71,10 +61,9 @@ class ShowController extends SharpProtectedController
 
     public function delete(string $parentUri, string $entityKey, string $instanceId)
     {
-        sharp_check_ability('delete', $entityKey, $instanceId);
+        $this->authorizationManager->check('delete', $entityKey, $instanceId);
 
         $show = $this->entityManager->entityFor($entityKey)->getShowOrFail();
-
         $show->delete($instanceId);
 
         return redirect()->to(sharp()->context()->breadcrumb()->getPreviousSegmentUrl());

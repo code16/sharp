@@ -17,15 +17,3 @@ function instanciate($class)
 {
     return is_string($class) ? app($class) : value($class);
 }
-
-function sharp_has_ability(string $ability, string $entityKey, ?string $instanceId = null): bool
-{
-    return app(Code16\Sharp\Auth\SharpAuthorizationManager::class)
-        ->isAllowed($ability, $entityKey, $instanceId);
-}
-
-function sharp_check_ability(string $ability, string $entityKey, ?string $instanceId = null)
-{
-    app(Code16\Sharp\Auth\SharpAuthorizationManager::class)
-        ->check($ability, $entityKey, $instanceId);
-}

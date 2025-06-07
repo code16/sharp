@@ -2,13 +2,11 @@
 
 namespace Code16\Sharp\Http\Controllers;
 
-use Code16\Sharp\Auth\SharpAuthorizationManager;
 use Code16\Sharp\Data\BreadcrumbData;
 use Code16\Sharp\Data\Form\FormData;
 use Code16\Sharp\Exceptions\Form\SharpFormUpdateException;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Form\SharpSingleForm;
-use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Entities\ValueObjects\EntityKey;
 use Code16\Sharp\Utils\Uploads\SharpUploadManager;
 use Illuminate\Support\Uri;
@@ -19,8 +17,6 @@ class FormController extends SharpProtectedController
     use HandlesSharpNotificationsInRequest;
 
     public function __construct(
-        private readonly SharpAuthorizationManager $sharpAuthorizationManager,
-        private readonly SharpEntityManager $entityManager,
         private readonly SharpUploadManager $uploadManager,
     ) {
         parent::__construct();
@@ -37,10 +33,8 @@ class FormController extends SharpProtectedController
             return $this->edit($parentUri, $entityKey);
         }
 
-        sharp_check_ability('create', $entityKey);
-
+        $this->authorizationManager->check('create', $entityKey);
         $form->buildFormConfig();
-
         $formData = $form->newInstance();
 
         return Inertia::render('Form/Form', [
@@ -66,7 +60,7 @@ class FormController extends SharpProtectedController
     {
         $entity = $this->entityManager->entityFor($entityKey);
 
-        sharp_check_ability(
+        $this->authorizationManager->check(
             $entity->hasShow() ? 'update' : 'view',
             $entityKey,
             $instanceId
@@ -122,7 +116,7 @@ class FormController extends SharpProtectedController
 
     public function update(string $parentUri, EntityKey $entityKey, ?string $instanceId = null)
     {
-        sharp_check_ability('update', $entityKey, $instanceId);
+        $this->authorizationManager->check('update', $entityKey, $instanceId);
 
         $form = $this->entityManager
             ->entityFor($entityKey)
@@ -159,9 +153,8 @@ class FormController extends SharpProtectedController
             return $this->update($parentUri, $entityKey);
         }
 
-        sharp_check_ability('create', $entityKey);
+        $this->authorizationManager->check('create', $entityKey);
         $form->buildFormConfig();
-
         $formattedData = $form->formatAndValidateRequestData(request()->all());
         $instanceId = $form->update(null, $formattedData);
 
@@ -223,10 +216,10 @@ class FormController extends SharpProtectedController
                 ? $form->getDataLocalizations()
                 : [],
             'authorizations' => [
-                'create' => $this->sharpAuthorizationManager->isAllowed('create', $entityKey),
-                'view' => $this->sharpAuthorizationManager->isAllowed('view', $entityKey, $instanceId),
-                'update' => $this->sharpAuthorizationManager->isAllowed('update', $entityKey, $instanceId),
-                'delete' => $this->sharpAuthorizationManager->isAllowed('delete', $entityKey, $instanceId),
+                'create' => $this->authorizationManager->isAllowed('create', $entityKey),
+                'view' => $this->authorizationManager->isAllowed('view', $entityKey, $instanceId),
+                'update' => $this->authorizationManager->isAllowed('update', $entityKey, $instanceId),
+                'delete' => $this->authorizationManager->isAllowed('delete', $entityKey, $instanceId),
             ],
         ];
     }
