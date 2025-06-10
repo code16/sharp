@@ -74,7 +74,11 @@ it('validates on explicit rules', function () {
     $this
         ->postJson(route('code16.sharp.api.form.upload'), [
             'file' => UploadedFile::fake()->create('file.xls'),
-            'validation_rule' => ['image'],
+            'validation_rule' => [
+                str(app()->version())->startsWith('11.')
+                    ? 'image'
+                    : 'image:allow_svg',
+            ],
         ])
         ->assertStatus(422)
         ->assertJsonValidationErrorFor('file');
