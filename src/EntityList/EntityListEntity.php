@@ -18,7 +18,12 @@ class EntityListEntity
 
     public function getEntity(): SharpEntity
     {
-        return app(SharpEntityManager::class)->entityFor($this->entityKeyOrClassName);
+        return app(SharpEntityManager::class)->entityFor($this->getEntityKey());
+    }
+
+    public function getEntityKey(): string
+    {
+        return app(SharpEntityManager::class)->entityKeyFor($this->entityKeyOrClassName);
     }
 
     public function getIcon(): ?string

@@ -85,13 +85,13 @@ abstract class SharpEntityList
             // Filter model attributes on actual form fields
             ->map(fn ($row) => collect($row)
                 ->only(
-                    array_merge(
-                        array_keys($this->transformers),
-                        $this->entityStateAttribute ? [$this->entityStateAttribute] : [],
-                        $this->entityAttribute ? [$this->entityAttribute] : [],
-                        [$this->instanceIdAttribute],
-                        $this->getDataKeys(),
-                    ),
+                    [
+                        ...array_keys($this->transformers),
+                        ...$this->entityStateAttribute ? [$this->entityStateAttribute] : [],
+                        ...$this->getEntityAttribute() ? [$this->getEntityAttribute()] : [],
+                        $this->instanceIdAttribute,
+                        ...$this->getDataKeys(),
+                    ]
                 )
                 ->toArray()
             )
@@ -109,7 +109,7 @@ abstract class SharpEntityList
     {
         $config = [
             'instanceIdAttribute' => $this->instanceIdAttribute,
-            'subEntityAttribute' => $this->entityAttribute,
+            'entityAttribute' => $this->getEntityAttribute(),
             'searchable' => $this->searchable,
             'reorderable' => ! is_null($this->reorderHandler) && ! $this->disabledReorder,
             'defaultSort' => $this->defaultSort,
@@ -190,17 +190,19 @@ abstract class SharpEntityList
     }
 
     /**
-     * @deprecated use configureSubEntities() instead
+     * @deprecated
+     * @see self::configureEntityMap()
      */
     final protected function configureMultiformAttribute(?string $attribute): self
     {
-        $this->entities = EntityListEntities::forAttribute($attribute);
+        $this->entityAttribute = $attribute;
 
         return $this;
     }
 
-    final protected function configureEntities(EntityListEntities $entities): self
+    final protected function configureEntityMap(string $attribute, EntityListEntities $entities): self
     {
+        $this->entityAttribute = $attribute;
         $this->entities = $entities;
 
         return $this;
@@ -211,7 +213,7 @@ abstract class SharpEntityList
      */
     final public function getEntityAttribute(): ?string
     {
-        return $this->entities?->getAttribute();
+        return $this->entityAttribute;
     }
 
     /**

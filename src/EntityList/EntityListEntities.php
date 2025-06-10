@@ -4,23 +4,16 @@ namespace Code16\Sharp\EntityList;
 
 class EntityListEntities
 {
-    protected string $attribute;
-
     /**
      * @var EntityListEntity[]
      */
     protected array $entities = [];
 
-    protected function __construct() {}
+    public function __construct() {}
 
-    public static function forAttribute(string $attribute): self
+    public static function make()
     {
-        return (new EntityListEntities())->setAttribute($attribute);
-    }
-
-    public function getAttribute(): string
-    {
-        return $this->attribute;
+        return new static();
     }
 
     /**
@@ -34,11 +27,9 @@ class EntityListEntities
         return $this;
     }
 
-    public function setAttribute(string $attribute): self
+    public function find(string $key): ?EntityListEntity
     {
-        $this->attribute = $attribute;
-
-        return $this;
+        return $this->entities[$key] ?? null;
     }
 
     public function all(): array

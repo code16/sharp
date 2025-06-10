@@ -3,9 +3,9 @@
     import { FilterManager } from "@/filters/FilterManager";
     import { EntityList } from "../EntityList";
     import {
-        CommandData, EntityListFieldData, EntityListSubEntityData, EntityListQueryParamsData,
+        CommandData, EntityListFieldData, EntityListQueryParamsData,
         EntityStateValueData,
-        FilterData
+        FilterData, EntityListEntityData
     } from "@/types";
     import WithCommands from "@/commands/components/WithCommands.vue";
     import { CommandManager } from "@/commands/CommandManager";
@@ -176,7 +176,7 @@
             });
     }
 
-    async function onCreate(event: MouseEvent, subEntity?: EntityListSubEntityData) {
+    async function onCreate(event: MouseEvent, listEntity?: EntityListEntityData) {
         if(event.metaKey || event.ctrlKey || event.shiftKey) {
             return;
         }
@@ -188,17 +188,17 @@
             await props.commands.send({ hasForm: true } as CommandData, {
                 postCommand: route('code16.sharp.api.list.command.quick-creation-form.store', {
                     entityKey,
-                    formEntityKey: subEntity ? subEntity.entityKey : entityKey,
+                    formEntityKey: listEntity ? listEntity.entityKey : entityKey,
                 }),
                 getForm: route('code16.sharp.api.list.command.quick-creation-form.create', {
                     entityKey,
-                    formEntityKey: subEntity ? subEntity.entityKey : entityKey,
+                    formEntityKey: listEntity ? listEntity.entityKey : entityKey,
                 }),
                 query: props.entityList.query,
-                entityKey: subEntity ? subEntity.entityKey : entityKey,
+                entityKey: listEntity ? listEntity.entityKey : entityKey,
             });
         } else {
-            router.visit(subEntity ? subEntity.formCreateUrl : props.entityList.config.formCreateUrl);
+            router.visit(listEntity ? listEntity.formCreateUrl : props.entityList.config.formCreateUrl);
         }
     }
 
@@ -469,7 +469,7 @@
                                 </template>
 
                                 <template v-if="showCreateButton && entityList.authorizations.create && !reordering && !selecting">
-                                    <template v-if="entityList.subEntities?.length">
+                                    <template v-if="entityList.entities?.length">
                                         <DropdownMenu>
                                             <DropdownMenuTrigger as-child>
                                                 <Button class="h-8" size="sm">
@@ -478,16 +478,16 @@
                                                 </Button>
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent>
-                                                <template v-for="subEntity in entityList.subEntities">
+                                                <template v-for="entity in entityList.entities">
                                                     <DropdownMenuItem
                                                         as="a"
-                                                        :href="subEntity.formCreateUrl"
-                                                        @click="onCreate($event, subEntity)"
+                                                        :href="entity.formCreateUrl"
+                                                        @click="onCreate($event, entity)"
                                                     >
-                                                        <template v-if="subEntity.icon">
-                                                            <Icon class="size-4" :icon="subEntity.icon" />
+                                                        <template v-if="entity.icon">
+                                                            <Icon class="size-4" :icon="entity.icon" />
                                                         </template>
-                                                        {{ subEntity.label }}
+                                                        {{ entity.label }}
                                                     </DropdownMenuItem>
                                                 </template>
                                             </DropdownMenuContent>

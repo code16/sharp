@@ -153,7 +153,18 @@ class SharpConfigBuilder
             );
         }
 
-        $entityKey = $entityClass::$entityKey ?? null;
+        $entityKey = $entityClass::$entityKey;
+
+        if (isset($entityClass::$entityKey)
+            && (get_parent_class($entityClass)::$entityKey ?? null) === $entityClass::$entityKey) {
+            throw new SharpInvalidEntityKeyException(
+                sprintf(
+                    '%s has same entity key than its parent class: %s. Specify a new one or remove entity keys completely.',
+                    $entityClass, get_parent_class($entityClass)
+                )
+            );
+        }
+
         if (! $entityKey) {
             $entityKey = str(class_basename($entityClass))
                 ->beforeLast('Entity')

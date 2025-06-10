@@ -1,12 +1,15 @@
 <?php
 
 use Code16\Sharp\Auth\SharpEntityPolicy;
+use Code16\Sharp\EntityList\EntityListEntities;
 use Code16\Sharp\EntityList\Fields\EntityListBadgeField;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\Enums\NotificationLevel;
 use Code16\Sharp\Enums\PageAlertLevel;
+use Code16\Sharp\Tests\Fixtures\Entities\PersonChemistEntity;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
+use Code16\Sharp\Tests\Fixtures\Entities\PersonPhysicistEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonForm;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonShow;
@@ -318,6 +321,53 @@ it('gets multiforms if configured', function () {
                 ->where('entityKey', 'person:nope')
                 ->where('label', 'No Nobel prize')
                 // ->where('instances', [2])
+                ->etc()
+            )
+        );
+});
+
+it('get entities if configured', function () {
+    $this->withoutExceptionHandling();
+
+    sharp()->config()->declareEntity(PersonChemistEntity::class);
+    sharp()->config()->declareEntity(PersonPhysicistEntity::class);
+
+    fakeListFor('person', new class() extends PersonList
+    {
+        public function getListData(): array|Arrayable
+        {
+            return [
+                ['id' => 1, 'name' => 'Marie Curie', 'job' => 'chemist'],
+                ['id' => 2, 'name' => 'Rosalind Franklin', 'job' => 'physicist'],
+            ];
+        }
+
+        public function buildListConfig(): void
+        {
+            $this->configureEntityMap(
+                attribute: 'job',
+                entities: EntityListEntities::make()
+                    ->addEntity('chemist', PersonChemistEntity::class, icon: 'testicon-car')
+                    ->addEntity('physicist', PersonPhysicistEntity::class),
+            );
+        }
+    });
+
+    $this->get('/sharp/s-list/person')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->has('entityList.entities', 2)
+            ->has('entityList.entities.0', fn (Assert $config) => $config
+                ->where('key', 'chemist')
+                ->where('entityKey', 'person-chemist')
+                ->where('label', 'Chemist')
+                ->where('icon.name', 'testicon-car')
+                ->etc()
+            )
+            ->has('entityList.entities.1', fn (Assert $config) => $config
+                ->where('key', 'physicist')
+                ->where('entityKey', 'person-physicist')
+                ->where('label', 'Physicist')
                 ->etc()
             )
         );

@@ -36,20 +36,22 @@ trait HandlesEntityListItems
 
     private function getItemEntityKey(array $item, string $entityKey, SharpEntity $entity, SharpEntityList $list): string
     {
-        $itemSubEntity = $list->getEntityAttribute() ? ($item[$list->getEntityAttribute()] ?? null) : null;
+        $itemEntityAttributeValue = $list->getEntityAttribute()
+            ? ($item[$list->getEntityAttribute()] ?? null)
+            : null;
 
-        if ($itemSubEntity) {
+        if ($itemEntityAttributeValue) {
             if (count($entity->getMultiforms()) > 0) {
-                return EntityKey::multiform(baseKey: $entityKey, multiformKey: $itemSubEntity);
+                return EntityKey::multiform(baseKey: $entityKey, multiformKey: $itemEntityAttributeValue);
             }
 
-            if (! $itemSubEntityClass = ($list->getEntities()[$itemSubEntity] ?? null)) {
+            if (! $listEntity = ($list->getEntities()->find($itemEntityAttributeValue))) {
                 throw new SharpInvalidEntityKeyException(
-                    sprintf('The sub-entity [%s] for the entity-list [%s] was not found.', $itemSubEntity, get_class($list))
+                    sprintf('The sub-entity [%s] for the entity-list [%s] was not found.', $itemEntityAttributeValue, get_class($list))
                 );
             }
 
-            return app(SharpEntityManager::class)->entityKeyFor($itemSubEntityClass);
+            return $listEntity->getEntityKey();
         }
 
         return $entityKey;

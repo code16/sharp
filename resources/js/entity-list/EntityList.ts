@@ -13,7 +13,7 @@ export class EntityList implements EntityListData {
     config: EntityListData['config'];
     data: EntityListData['data'];
     fields: EntityListData['fields'];
-    subEntities: EntityListData['subEntities'];
+    entities: EntityListData['entities'];
     meta: EntityListData['meta'];
     pageAlert: EntityListData['pageAlert'];
     query: EntityListData['query'];
