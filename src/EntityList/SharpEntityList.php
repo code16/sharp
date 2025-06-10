@@ -27,8 +27,8 @@ abstract class SharpEntityList
     private ?EntityListFieldsContainer $fieldsContainer = null;
     protected ?EntityListQueryParams $queryParams;
     protected string $instanceIdAttribute = 'id';
-    protected ?string $subEntityAttribute = null;
-    protected ?array $subEntities = null;
+    protected ?string $entityAttribute = null;
+    protected ?EntityListEntities $entities = null;
     protected bool $searchable = false;
     protected ?ReorderHandler $reorderHandler = null;
     private bool $disabledReorder = false;
@@ -88,7 +88,7 @@ abstract class SharpEntityList
                     array_merge(
                         array_keys($this->transformers),
                         $this->entityStateAttribute ? [$this->entityStateAttribute] : [],
-                        $this->subEntityAttribute ? [$this->subEntityAttribute] : [],
+                        $this->entityAttribute ? [$this->entityAttribute] : [],
                         [$this->instanceIdAttribute],
                         $this->getDataKeys(),
                     ),
@@ -109,7 +109,7 @@ abstract class SharpEntityList
     {
         $config = [
             'instanceIdAttribute' => $this->instanceIdAttribute,
-            'subEntityAttribute' => $this->subEntityAttribute,
+            'subEntityAttribute' => $this->entityAttribute,
             'searchable' => $this->searchable,
             'reorderable' => ! is_null($this->reorderHandler) && ! $this->disabledReorder,
             'defaultSort' => $this->defaultSort,
@@ -194,15 +194,14 @@ abstract class SharpEntityList
      */
     final protected function configureMultiformAttribute(?string $attribute): self
     {
-        $this->subEntityAttribute = $attribute;
+        $this->entities = EntityListEntities::forAttribute($attribute);
 
         return $this;
     }
 
-    final protected function configureSubEntities(string $attribute, array $subEntities): self
+    final protected function configureEntities(EntityListEntities $entities): self
     {
-        $this->subEntityAttribute = $attribute;
-        $this->subEntities = $subEntities;
+        $this->entities = $entities;
 
         return $this;
     }
@@ -210,17 +209,17 @@ abstract class SharpEntityList
     /**
      * @internal
      */
-    final public function getSubEntityAttribute(): ?string
+    final public function getEntityAttribute(): ?string
     {
-        return $this->subEntityAttribute;
+        return $this->entities?->getAttribute();
     }
 
     /**
      * @internal
      */
-    final public function getSubEntities(): ?array
+    final public function getEntities(): ?EntityListEntities
     {
-        return $this->subEntities;
+        return $this->entities;
     }
 
     final public function reorderHandler(): ?ReorderHandler

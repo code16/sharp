@@ -118,7 +118,7 @@ abstract class SharpEntity extends BaseSharpEntity
 
     /**
      * @deprecated
-     * @see SharpEntityList::configureSubEntities()
+     * @see SharpEntityList::configureEntities()
      */
     public function getMultiforms(): array
     {

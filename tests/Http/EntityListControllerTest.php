@@ -305,15 +305,15 @@ it('gets multiforms if configured', function () {
     $this->get('/sharp/s-list/person')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->has('entityList.subEntities', 2)
-            ->has('entityList.subEntities.0', fn (Assert $config) => $config
+            ->has('entityList.entities', 2)
+            ->has('entityList.entities.0', fn (Assert $config) => $config
                 ->where('key', 'yes')
                 ->where('entityKey', 'person:yes')
                 ->where('label', 'With Nobel prize')
                 // ->where('instances', [1])
                 ->etc()
             )
-            ->has('entityList.subEntities.1', fn (Assert $config) => $config
+            ->has('entityList.entities.1', fn (Assert $config) => $config
                 ->where('key', 'nope')
                 ->where('entityKey', 'person:nope')
                 ->where('label', 'No Nobel prize')

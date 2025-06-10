@@ -36,14 +36,14 @@ trait HandlesEntityListItems
 
     private function getItemEntityKey(array $item, string $entityKey, SharpEntity $entity, SharpEntityList $list): string
     {
-        $itemSubEntity = $list->getSubEntityAttribute() ? ($item[$list->getSubEntityAttribute()] ?? null) : null;
+        $itemSubEntity = $list->getEntityAttribute() ? ($item[$list->getEntityAttribute()] ?? null) : null;
 
         if ($itemSubEntity) {
             if (count($entity->getMultiforms()) > 0) {
                 return EntityKey::multiform(baseKey: $entityKey, multiformKey: $itemSubEntity);
             }
 
-            if (! $itemSubEntityClass = ($list->getSubEntities()[$itemSubEntity] ?? null)) {
+            if (! $itemSubEntityClass = ($list->getEntities()[$itemSubEntity] ?? null)) {
                 throw new SharpInvalidEntityKeyException(
                     sprintf('The sub-entity [%s] for the entity-list [%s] was not found.', $itemSubEntity, get_class($list))
                 );
