@@ -15,7 +15,7 @@ class EntityListEntities
 
     public static function forAttribute(string $attribute): self
     {
-        return new EntityListEntities()->setAttribute($attribute);
+        return (new EntityListEntities())->setAttribute($attribute);
     }
 
     public function getAttribute(): string

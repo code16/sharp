@@ -161,7 +161,7 @@ export type EntityListData = {
   data: Array<{ [key: string]: any; _meta: EntityListItemMeta }>;
   filterValues: FilterValuesData;
   query: EntityListQueryParamsData | null;
-  subEntities: Array<EntityListSubEntityData> | null;
+  entities: Array<EntityListSubEntityData> | null;
   meta: PaginatorMetaData | null;
   pageAlert: PageAlertData | null;
 };
@@ -193,7 +193,6 @@ export type EntityListSubEntityData = {
   label: string;
   icon: IconData | null;
   formCreateUrl: string | null;
-  authorizations: EntityListAuthorizationsData;
 };
 export type EntityStateData = {
   attribute: string;
