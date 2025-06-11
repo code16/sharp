@@ -71,17 +71,19 @@ trait HandlesEntityListItems
         $itemEntity = app(SharpEntityManager::class)->entityFor($itemEntityKey);
 
         if ($breadcrumb->getCurrentPath()) {
-            return $itemEntity->hasShow()
-                ? route('code16.sharp.show.show', [
-                    'parentUri' => $breadcrumb->getCurrentPath(),
-                    'entityKey' => $itemEntityKey,
-                    'instanceId' => $item[$list->getInstanceIdAttribute()],
-                ])
-                : route('code16.sharp.form.edit', [
+            if ($itemEntity->hasShow()) {
+                return route('code16.sharp.show.show', [
                     'parentUri' => $breadcrumb->getCurrentPath(),
                     'entityKey' => $itemEntityKey,
                     'instanceId' => $item[$list->getInstanceIdAttribute()],
                 ]);
+            } elseif ($itemEntity->hasForm()) {
+                return route('code16.sharp.form.edit', [
+                    'parentUri' => $breadcrumb->getCurrentPath(),
+                    'entityKey' => $itemEntityKey,
+                    'instanceId' => $item[$list->getInstanceIdAttribute()],
+                ]);
+            }
         }
 
         return null;

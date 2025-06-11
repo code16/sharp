@@ -6,4 +6,5 @@ class PersonChemistEntity extends PersonEntity
 {
     public static string $entityKey = 'person-chemist';
     protected string $label = 'Chemist';
+    protected ?string $show = null;
 }

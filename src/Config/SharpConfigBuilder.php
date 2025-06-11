@@ -153,7 +153,7 @@ class SharpConfigBuilder
             );
         }
 
-        $entityKey = $entityClass::$entityKey;
+        $entityKey = $entityClass::$entityKey ?? null;
 
         if (isset($entityClass::$entityKey)
             && (get_parent_class($entityClass)::$entityKey ?? null) === $entityClass::$entityKey) {

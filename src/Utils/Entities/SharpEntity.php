@@ -42,6 +42,11 @@ abstract class SharpEntity extends BaseSharpEntity
         return $this->getShow() !== null;
     }
 
+    final public function hasForm(): bool
+    {
+        return $this->getForm() !== null;
+    }
+
     final public function getFormOrFail(?string $multiformKey = null): SharpForm
     {
         if ($multiformKey) {
