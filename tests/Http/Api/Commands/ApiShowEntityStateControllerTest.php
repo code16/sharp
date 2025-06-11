@@ -13,7 +13,7 @@ beforeEach(function () {
 it('updates the state of an instance from a show and return a "refresh" action by default', function () {
     sharp()->config()->declareEntity(PersonEntity::class);
 
-    fakeShowFor(PersonEntity::class, new class() extends PersonShow
+    fakeShowFor('person', new class() extends PersonShow
     {
         public function buildShowConfig(): void
         {

@@ -15,7 +15,7 @@ beforeEach(function () {
 it('allows to call an info instance command from a show', function () {
     sharp()->config()->declareEntity(PersonEntity::class);
 
-    fakeShowFor(PersonEntity::class, new class() extends PersonShow
+    fakeShowFor('person', new class() extends PersonShow
     {
         public function getInstanceCommands(): ?array
         {
@@ -79,7 +79,7 @@ it('allows to call an info instance command from a single show', function () {
 it('gets form and initialize form data in an instance command of a show', function () {
     sharp()->config()->declareEntity(PersonEntity::class);
 
-    fakeShowFor(PersonEntity::class, new class() extends PersonShow
+    fakeShowFor('person', new class() extends PersonShow
     {
         public function getInstanceCommands(): ?array
         {
