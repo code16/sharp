@@ -5,7 +5,9 @@ namespace Code16\Sharp\Tests;
 use BladeUI\Icons\BladeIconsServiceProvider;
 use Code16\ContentRenderer\ContentRendererServiceProvider;
 use Code16\Sharp\SharpInternalServiceProvider;
+use Illuminate\Testing\Fluent\AssertableJson;
 use Orchestra\Testbench\TestCase as Orchestra;
+use PHPUnit\Framework\Assert as PHPUnit;
 
 class TestCase extends Orchestra
 {
@@ -18,6 +20,23 @@ class TestCase extends Orchestra
         config()->set('app.key', 'base64:'.base64_encode(random_bytes(32)));
         config()->set('view.cache', false);
         config()->set('inertia.testing.page_paths', [__DIR__.'/../resources/js/Pages']);
+
+        // laravel 11 polyfill, TODO to remove when laravel 12+ only
+        AssertableJson::macro('whereNull', function ($key) {
+            $this->has($key);
+
+            $actual = $this->prop($key);
+
+            PHPUnit::assertNull(
+                $actual,
+                sprintf(
+                    'Property [%s] should be null.',
+                    $this->dotPath($key),
+                )
+            );
+
+            return $this;
+        });
     }
 
     protected function getPackageProviders($app)
