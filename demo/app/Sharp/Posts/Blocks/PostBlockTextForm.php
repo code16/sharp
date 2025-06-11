@@ -25,7 +25,7 @@ class PostBlockTextForm extends AbstractPostBlockForm
     public function rules(): array
     {
         return [
-            'content.text' => ['required', 'string', 'max:1000'],
+            'content' => ['required', 'string', 'max:1000'],
         ];
     }
 }
