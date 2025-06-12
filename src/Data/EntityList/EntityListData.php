@@ -24,8 +24,8 @@ final class EntityListData extends Data
         public array $data,
         public FilterValuesData $filterValues,
         public ?EntityListQueryParamsData $query,
-        /** @var EntityListSubEntityData[]|null */
-        public ?array $subEntities = null,
+        /** @var EntityListEntityData[]|null */
+        public ?array $entities = null,
         public ?PaginatorMetaData $meta = null,
         public ?PageAlertData $pageAlert = null,
     ) {}
@@ -40,8 +40,8 @@ final class EntityListData extends Data
             data: $entityList['data'],
             filterValues: FilterValuesData::from($entityList['filterValues']),
             query: EntityListQueryParamsData::optional($entityList['query']),
-            subEntities: $entityList['subEntities']
-                ? EntityListSubEntityData::collection($entityList['subEntities'])
+            entities: $entityList['entities']
+                ? EntityListEntityData::collection($entityList['entities'])
                 : null,
             meta: PaginatorMetaData::optional($entityList['meta'] ?? null),
             pageAlert: PageAlertData::optional($entityList['pageAlert'] ?? null),

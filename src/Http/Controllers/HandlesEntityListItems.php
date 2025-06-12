@@ -36,20 +36,22 @@ trait HandlesEntityListItems
 
     private function getItemEntityKey(array $item, string $entityKey, SharpEntity $entity, SharpEntityList $list): string
     {
-        $itemSubEntity = $list->getSubEntityAttribute() ? ($item[$list->getSubEntityAttribute()] ?? null) : null;
+        $itemEntityAttributeValue = $list->getEntityAttribute()
+            ? ($item[$list->getEntityAttribute()] ?? null)
+            : null;
 
-        if ($itemSubEntity) {
+        if ($itemEntityAttributeValue) {
             if (count($entity->getMultiforms()) > 0) {
-                return EntityKey::multiform(baseKey: $entityKey, multiformKey: $itemSubEntity);
+                return EntityKey::multiform(baseKey: $entityKey, multiformKey: $itemEntityAttributeValue);
             }
 
-            if (! $itemSubEntityClass = ($list->getSubEntities()[$itemSubEntity] ?? null)) {
+            if (! $listEntity = ($list->getEntities()->find($itemEntityAttributeValue))) {
                 throw new SharpInvalidEntityKeyException(
-                    sprintf('The sub-entity [%s] for the entity-list [%s] was not found.', $itemSubEntity, get_class($list))
+                    sprintf('The sub-entity [%s] for the entity-list [%s] was not found.', $itemEntityAttributeValue, get_class($list))
                 );
             }
 
-            return app(SharpEntityManager::class)->entityKeyFor($itemSubEntityClass);
+            return $listEntity->getEntityKey();
         }
 
         return $entityKey;
@@ -69,17 +71,19 @@ trait HandlesEntityListItems
         $itemEntity = app(SharpEntityManager::class)->entityFor($itemEntityKey);
 
         if ($breadcrumb->getCurrentPath()) {
-            return $itemEntity->hasShow()
-                ? route('code16.sharp.show.show', [
-                    'parentUri' => $breadcrumb->getCurrentPath(),
-                    'entityKey' => $itemEntityKey,
-                    'instanceId' => $item[$list->getInstanceIdAttribute()],
-                ])
-                : route('code16.sharp.form.edit', [
+            if ($itemEntity->hasShow()) {
+                return route('code16.sharp.show.show', [
                     'parentUri' => $breadcrumb->getCurrentPath(),
                     'entityKey' => $itemEntityKey,
                     'instanceId' => $item[$list->getInstanceIdAttribute()],
                 ]);
+            } elseif ($itemEntity->hasForm()) {
+                return route('code16.sharp.form.edit', [
+                    'parentUri' => $breadcrumb->getCurrentPath(),
+                    'entityKey' => $itemEntityKey,
+                    'instanceId' => $item[$list->getInstanceIdAttribute()],
+                ]);
+            }
         }
 
         return null;

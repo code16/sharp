@@ -8,7 +8,7 @@ use Code16\Sharp\Data\IconData;
 /**
  * @internal
  */
-final class EntityListSubEntityData extends Data
+final class EntityListEntityData extends Data
 {
     public function __construct(
         public string $key,
@@ -18,10 +18,10 @@ final class EntityListSubEntityData extends Data
         public ?string $formCreateUrl,
     ) {}
 
-    public static function from(array $subEntity): self
+    public static function from(array $listEntity): self
     {
-        $subEntity['icon'] = IconData::optional($subEntity['icon']);
+        $listEntity['icon'] = IconData::optional($listEntity['icon']);
 
-        return new self(...$subEntity);
+        return new self(...$listEntity);
     }
 }

@@ -38,7 +38,17 @@ it('allows to configure prohibited actions on entities', function () {
     $this->delete('/sharp/s-list/person/s-show/person/1')->assertForbidden();
 
     // We can still view the list
-    $this->get('/sharp/s-list/person')->assertOk();
+    $this->get('/sharp/s-list/person')
+        ->assertOk()
+        ->assertInertia(fn (AssertableJson $json) => $json
+            ->where('entityList.authorizations.create', false)
+            ->where('entityList.data.0._meta.authorizations.view', false)
+            ->where('entityList.data.0._meta.authorizations.delete', false)
+            ->whereNull('entityList.data.0._meta.url')
+            ->where('entityList.data.1._meta.authorizations.view', false)
+            ->where('entityList.data.1._meta.authorizations.delete', false)
+            ->whereNull('entityList.data.1._meta.url')
+        );
 });
 
 it('allows to access to the form in readonly mode if there is no show', function () {
@@ -139,18 +149,12 @@ it('returns prohibited actions with a list get request', function () {
     $this
         ->get('/sharp/s-list/person')
         ->assertInertia(fn (AssertableJson $json) => $json
-            ->where('entityList.authorizations', [
-                'reorder' => true,
-                'create' => true,
-            ])
-            ->where('entityList.data.0._meta.authorizations', [
-                'view' => true,
-                'delete' => false,
-            ])
-            ->where('entityList.data.1._meta.authorizations', [
-                'view' => true,
-                'delete' => false,
-            ])
+            ->where('entityList.authorizations.reorder', true)
+            ->where('entityList.authorizations.create', true)
+            ->where('entityList.data.0._meta.authorizations.view', true)
+            ->where('entityList.data.0._meta.authorizations.delete', false)
+            ->where('entityList.data.1._meta.authorizations.view', true)
+            ->where('entityList.data.1._meta.authorizations.delete', false)
         );
 });
 
@@ -194,39 +198,24 @@ it('allow access by default', function () {
     $this
         ->get('/sharp/s-list/person')
         ->assertInertia(fn (AssertableJson $json) => $json
-            ->has('entityList', fn (AssertableJson $json) => $json
-                ->where('authorizations', [
-                    'reorder' => true,
-                    'create' => true,
-                ])
-                ->where('data.0._meta.authorizations', [
-                    'view' => true,
-                    'delete' => true,
-                ])
-                ->where('data.1._meta.authorizations', [
-                    'view' => true,
-                    'delete' => true,
-                ])
-                ->etc()
-            )
+            ->where('entityList.authorizations.reorder', true)
+            ->where('entityList.authorizations.create', true)
+            ->where('entityList.data.0._meta.authorizations.view', true)
+            ->where('entityList.data.0._meta.authorizations.delete', true)
+            ->where('entityList.data.1._meta.authorizations.view', true)
+            ->where('entityList.data.1._meta.authorizations.delete', true)
         );
 
     // EEL (json)
     $this
         ->getJson('/sharp/api/list/person')
         ->assertJson(fn (AssertableJson $json) => $json
-            ->where('authorizations', [
-                'reorder' => true,
-                'create' => true,
-            ])
-            ->where('data.0._meta.authorizations', [
-                'view' => true,
-                'delete' => true,
-            ])
-            ->where('data.1._meta.authorizations', [
-                'view' => true,
-                'delete' => true,
-            ])
+            ->where('authorizations.reorder', true)
+            ->where('authorizations.create', true)
+            ->where('data.0._meta.authorizations.view', true)
+            ->where('data.0._meta.authorizations.delete', true)
+            ->where('data.1._meta.authorizations.view', true)
+            ->where('data.1._meta.authorizations.delete', true)
             ->etc()
         );
 });

@@ -146,7 +146,7 @@ export type EntityListConfigData = {
   deleteConfirmationText: string;
   deleteHidden: boolean;
   formCreateUrl: string;
-  subEntityAttribute: string | null;
+  entityAttribute: string | null;
   createButtonLabel: string | null;
   quickCreationForm: boolean;
   filters: ConfigFiltersData | null;
@@ -161,9 +161,16 @@ export type EntityListData = {
   data: Array<{ [key: string]: any; _meta: EntityListItemMeta }>;
   filterValues: FilterValuesData;
   query: EntityListQueryParamsData | null;
-  subEntities: Array<EntityListSubEntityData> | null;
+  entities: Array<EntityListEntityData> | null;
   meta: PaginatorMetaData | null;
   pageAlert: PageAlertData | null;
+};
+export type EntityListEntityData = {
+  key: string;
+  entityKey: string;
+  label: string;
+  icon: IconData | null;
+  formCreateUrl: string | null;
 };
 export type EntityListFieldData = {
   type: "text" | "state" | "badge";
@@ -186,14 +193,6 @@ export type EntityListQueryParamsData = {
   dir?: "asc" | "desc";
 } & {
   [filterKey: string]: string;
-};
-export type EntityListSubEntityData = {
-  key: string;
-  entityKey: string;
-  label: string;
-  icon: IconData | null;
-  formCreateUrl: string | null;
-  authorizations: EntityListAuthorizationsData;
 };
 export type EntityStateData = {
   attribute: string;

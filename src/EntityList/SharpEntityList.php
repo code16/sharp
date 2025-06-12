@@ -27,8 +27,8 @@ abstract class SharpEntityList
     private ?EntityListFieldsContainer $fieldsContainer = null;
     protected ?EntityListQueryParams $queryParams;
     protected string $instanceIdAttribute = 'id';
-    protected ?string $subEntityAttribute = null;
-    protected ?array $subEntities = null;
+    protected ?string $entityAttribute = null;
+    protected ?EntityListEntities $entities = null;
     protected bool $searchable = false;
     protected ?ReorderHandler $reorderHandler = null;
     private bool $disabledReorder = false;
@@ -85,13 +85,13 @@ abstract class SharpEntityList
             // Filter model attributes on actual form fields
             ->map(fn ($row) => collect($row)
                 ->only(
-                    array_merge(
-                        array_keys($this->transformers),
-                        $this->entityStateAttribute ? [$this->entityStateAttribute] : [],
-                        $this->subEntityAttribute ? [$this->subEntityAttribute] : [],
-                        [$this->instanceIdAttribute],
-                        $this->getDataKeys(),
-                    ),
+                    [
+                        ...array_keys($this->transformers),
+                        ...$this->entityStateAttribute ? [$this->entityStateAttribute] : [],
+                        ...$this->getEntityAttribute() ? [$this->getEntityAttribute()] : [],
+                        $this->instanceIdAttribute,
+                        ...$this->getDataKeys(),
+                    ]
                 )
                 ->toArray()
             )
@@ -109,7 +109,7 @@ abstract class SharpEntityList
     {
         $config = [
             'instanceIdAttribute' => $this->instanceIdAttribute,
-            'subEntityAttribute' => $this->subEntityAttribute,
+            'entityAttribute' => $this->getEntityAttribute(),
             'searchable' => $this->searchable,
             'reorderable' => ! is_null($this->reorderHandler) && ! $this->disabledReorder,
             'defaultSort' => $this->defaultSort,
@@ -190,19 +190,20 @@ abstract class SharpEntityList
     }
 
     /**
-     * @deprecated use configureSubEntities() instead
+     * @deprecated
+     * @see self::configureEntityMap()
      */
     final protected function configureMultiformAttribute(?string $attribute): self
     {
-        $this->subEntityAttribute = $attribute;
+        $this->entityAttribute = $attribute;
 
         return $this;
     }
 
-    final protected function configureSubEntities(string $attribute, array $subEntities): self
+    final protected function configureEntityMap(string $attribute, EntityListEntities $entities): self
     {
-        $this->subEntityAttribute = $attribute;
-        $this->subEntities = $subEntities;
+        $this->entityAttribute = $attribute;
+        $this->entities = $entities;
 
         return $this;
     }
@@ -210,17 +211,17 @@ abstract class SharpEntityList
     /**
      * @internal
      */
-    final public function getSubEntityAttribute(): ?string
+    final public function getEntityAttribute(): ?string
     {
-        return $this->subEntityAttribute;
+        return $this->entityAttribute;
     }
 
     /**
      * @internal
      */
-    final public function getSubEntities(): ?array
+    final public function getEntities(): ?EntityListEntities
     {
-        return $this->subEntities;
+        return $this->entities;
     }
 
     final public function reorderHandler(): ?ReorderHandler

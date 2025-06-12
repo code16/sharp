@@ -5,6 +5,7 @@ namespace Code16\Sharp\Http\Controllers;
 use Code16\Sharp\Data\BreadcrumbData;
 use Code16\Sharp\Data\EntityList\EntityListData;
 use Code16\Sharp\Data\NotificationData;
+use Code16\Sharp\EntityList\EntityListEntity;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Exceptions\SharpInvalidConfigException;
 use Code16\Sharp\Utils\Entities\ValueObjects\EntityKey;
@@ -44,7 +45,7 @@ class EntityListController extends SharpProtectedController
                 'reorder' => $this->authorizationManager->isAllowed('reorder', $entityKey),
                 'create' => $this->authorizationManager->isAllowed('create', $entityKey),
             ],
-            'subEntities' => $this->getSubEntitiesDataForEntityList(
+            'entities' => $this->getEntitiesDataForEntityList(
                 $entityKey,
                 $list
             ),
@@ -71,19 +72,19 @@ class EntityListController extends SharpProtectedController
         ]);
     }
 
-    private function getSubEntitiesDataForEntityList(string $entityKey, SharpEntityList $list): ?array
+    private function getEntitiesDataForEntityList(string $entityKey, SharpEntityList $list): ?array
     {
-        if ($list->getSubEntityAttribute() === null) {
+        if ($list->getEntityAttribute() === null) {
             return null;
         }
 
         $forms = $this->entityManager->entityFor($entityKey)->getMultiforms();
-        $subEntities = $list->getSubEntities();
+        $entities = $list->getEntities()?->all();
 
-        if (! $forms && ! $subEntities) {
+        if (! $forms && ! $entities) {
             throw new SharpInvalidConfigException(
                 'The list for the entity ['.$entityKey.'] defines a sub-entity attribute ['
-                .$list->getSubEntityAttribute()
+                .$list->getEntityAttribute()
                 .'] but the entity is has no sub-entities.'
             );
         }
@@ -105,23 +106,23 @@ class EntityListController extends SharpProtectedController
                 ->all();
         }
 
-        return collect($subEntities)
-            ->map(function ($subEntityClass, $key) {
-                $subEntityKey = $this->entityManager->entityKeyFor($subEntityClass);
-                $subEntity = $this->entityManager->entityFor($subEntityKey);
+        return collect($entities)
+            ->map(function (EntityListEntity $listEntity, $key) {
+                $entity = $listEntity->getEntity();
+                $entityKey = $this->entityManager->entityKeyFor($entity);
 
-                if (! $this->authorizationManager->isAllowed('create', $subEntityKey)) {
+                if (! $this->authorizationManager->isAllowed('create', $entityKey)) {
                     return null;
                 }
 
                 return [
                     'key' => $key,
-                    'entityKey' => $subEntityKey,
-                    'label' => $subEntity->getLabelOrFail(),
-                    'icon' => app(IconManager::class)->iconToArray($subEntity->getIcon()),
+                    'entityKey' => $entityKey,
+                    'label' => $listEntity->getLabel() ?: $entity->getLabelOrFail(),
+                    'icon' => app(IconManager::class)->iconToArray($listEntity->getIcon()),
                     'formCreateUrl' => route('code16.sharp.form.create', [
                         'parentUri' => sharp()->context()->breadcrumb()->getCurrentPath(),
-                        'entityKey' => $subEntityKey,
+                        'entityKey' => $entityKey,
                     ]),
                 ];
             })

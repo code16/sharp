@@ -33,11 +33,6 @@ abstract class BaseSharpEntity
         return $this->isDashboard;
     }
 
-    final public function getIcon(): ?string
-    {
-        return $this->icon;
-    }
-
     protected function getPolicy(): ?SharpEntityPolicy
     {
         return $this->policy ? app($this->policy) : null;
