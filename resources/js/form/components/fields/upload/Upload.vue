@@ -41,6 +41,7 @@
         DialogTitle
     } from "@/components/ui/dialog";
     import { rotate, rotateTo } from "@/form/components/fields/upload/util/rotate";
+    import { createThumbnail } from "@/form/components/fields/upload/util/thumbnail";
 
     const props = defineProps<FormFieldProps<FormUploadFieldData> & {
         asEditorEmbed?: boolean,
@@ -93,7 +94,6 @@
             'validation_rule[]': props.field.validationRule,
         },
     })
-        .use(ThumbnailGenerator, { thumbnailWidth: 300, thumbnailHeight: 300, thumbnailType: 'image/png' })
         .use(XHRUpload, {
             endpoint: route('code16.sharp.api.form.upload'),
             fieldName: 'file',
@@ -102,41 +102,43 @@
                 'X-CSRF-TOKEN': getCsrfToken(),
             },
         })
-        .on('file-added', (file) => {
+        .on('file-added', async (file) => {
             emit('clear');
             uppyFile.value = uppy.getFile(file.id);
-            console.log('file-added', JSON.parse(JSON.stringify(uppyFile.value)));
+            if(file.type === 'image/svg+xml') {
+                transformedImg.value = URL.createObjectURL(file.data);
+            } else if(file.type?.startsWith('image/')) {
+                const preview = await createThumbnail(file, { width: 300, height: 300 });
+                emit('thumbnail', preview);
+                uppy.setFileState(file.id, { preview });
+                uppyFile.value = uppy.getFile(file.id);
+                console.log('thumbnail:generated', JSON.parse(JSON.stringify(uppyFile.value)));
+
+                if(canTransform(file.name, file.type) && props.field.imageCropRatio) {
+                    const cropper = await new Promise<Cropper>((resolve) => {
+                        const container = document.createElement('div');
+                        const image = document.createElement('img');
+                        image.src = preview;
+                        container.appendChild(image);
+                        return new Cropper(image, {
+                            aspectRatio: props.field.imageCropRatio[0] / props.field.imageCropRatio[1],
+                            autoCropArea: 1,
+                            ready: (e) => {
+                                resolve(e.currentTarget.cropper);
+                            },
+                        })
+                    });
+                    await onImageTransform(cropper);
+                    cropper.destroy();
+                } else if(props.persistThumbnailUrl) {
+                    const response = await fetch(preview);
+                    const blob = await response.blob();
+                    transformedImg.value = URL.createObjectURL(blob);
+                }
+            }
         })
         .on('restriction-failed', (file, error) => {
             emit('error', error.message, file.data);
-        })
-        .on('thumbnail:generated', async (file, preview) => {
-            const { field } = props;
-            emit('thumbnail', preview);
-            uppyFile.value = uppy.getFile(file.id);
-            console.log('thumbnail:generated', JSON.parse(JSON.stringify(uppyFile.value)));
-
-            if(canTransform(file.name, file.type) && field.imageCropRatio) {
-                const cropper = await new Promise<Cropper>((resolve) => {
-                    const container = document.createElement('div');
-                    const image = document.createElement('img');
-                    image.src = preview;
-                    container.appendChild(image);
-                    return new Cropper(image, {
-                        aspectRatio: field.imageCropRatio[0] / field.imageCropRatio[1],
-                        autoCropArea: 1,
-                        ready: (e) => {
-                            resolve(e.currentTarget.cropper);
-                        },
-                    })
-                });
-                await onImageTransform(cropper);
-                cropper.destroy();
-            } else if(props.persistThumbnailUrl) {
-                const response = await fetch(preview);
-                const blob = await response.blob();
-                transformedImg.value = URL.createObjectURL(blob);
-            }
         })
         .on('upload', () => {
             emit('uploading', true);
@@ -183,7 +185,8 @@
         const extension = fileName?.match(/\.[0-9a-z]+$/i)[0];
         return props.field.imageTransformable
             && (!props.field.imageTransformableFileTypes || props.field.imageTransformableFileTypes?.includes(extension))
-            && mimeType?.startsWith('image/');
+            && mimeType?.startsWith('image/')
+            && mimeType !== 'image/svg+xml';
     }
 
     const isDraggingOver = ref(false);
@@ -279,17 +282,7 @@
                     }
                 });
             } else if(uppyFile.value) {
-                editModalImageUrl.value = await new Promise(resolve => {
-                    new Uppy()
-                        .use(ThumbnailGenerator, { thumbnailWidth: 1200, thumbnailHeight: 1000, thumbnailType: 'image/png' })
-                        .on('thumbnail:generated', (file, preview) => {
-                            resolve(preview);
-                        })
-                        .addFile({
-                            ...(uppyFile.value as MinimalRequiredUppyFile<{}, {}>),
-                            preview: null
-                        });
-                });
+                editModalImageUrl.value = await createThumbnail(uppyFile.value, { width: 1200, height: 1000 });
             }
         }
 
