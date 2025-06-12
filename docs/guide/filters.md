@@ -161,6 +161,39 @@ class ProductCreationDateFilter extends DateRangeFilter
 }
 ```
 
+You can also define specific presets with the `DateRangePreset` class :
+
+```php
+use Code16\Sharp\Filters\DateRange\DateRangePreset;
+
+class ProductCreationDateFilter extends DateRangeFilter
+{
+    public function buildFilterConfig(): void
+    {
+        $this->configureShowPresets(presets: [
+            DateRangePreset::make(today()->subDays(3), today(), 'Last 3 days'),
+            DateRangePreset::thisMonth(),
+        ]);
+    }
+}
+```
+
+Following methods are available (default presets) :
+```php
+[
+    DateRangePreset::today(),
+    DateRangePreset::yesterday(),
+    DateRangePreset::last7days(),
+    DateRangePreset::last30days(),
+    DateRangePreset::last365days(),
+    DateRangePreset::thisMonth(),
+    DateRangePreset::lastMonth(),
+    DateRangePreset::thisYear(),
+    DateRangePreset::lastYear(),
+]
+```
+   
+
 ## Autocomplete remote filter
 
 If you want to use a remote filter, you can use the `Code16\Sharp\Filters\AutocompleteRemoteFilter` class. It is very similar to the `Code16\Sharp\Filters\SelectFilter` class, but it uses a remote endpoint to fetch the values.
