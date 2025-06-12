@@ -2,14 +2,12 @@
 
 namespace Code16\Sharp\Http\Controllers;
 
-use Code16\Sharp\Auth\SharpAuthorizationManager;
 use Code16\Sharp\Data\BreadcrumbData;
 use Code16\Sharp\Data\EntityList\EntityListData;
 use Code16\Sharp\Data\NotificationData;
 use Code16\Sharp\EntityList\EntityListEntity;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Exceptions\SharpInvalidConfigException;
-use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Entities\ValueObjects\EntityKey;
 use Code16\Sharp\Utils\Icons\IconManager;
 use Code16\Sharp\Utils\Menu\SharpMenuManager;
@@ -20,16 +18,9 @@ class EntityListController extends SharpProtectedController
     use HandlesEntityListItems;
     use HandlesSharpNotificationsInRequest;
 
-    public function __construct(
-        private readonly SharpAuthorizationManager $sharpAuthorizationManager,
-        private readonly SharpEntityManager $entityManager,
-    ) {
-        parent::__construct();
-    }
-
     public function show(string $entityKey)
     {
-        sharp_check_ability('entity', $entityKey);
+        $this->authorizationManager->check('entity', $entityKey);
 
         $list = $this->entityManager->entityFor($entityKey)->getListOrFail();
         $list->buildListConfig();
@@ -51,8 +42,8 @@ class EntityListController extends SharpProtectedController
                 ]),
             ],
             'authorizations' => [
-                'reorder' => $this->sharpAuthorizationManager->isAllowed('reorder', $entityKey),
-                'create' => $this->sharpAuthorizationManager->isAllowed('create', $entityKey),
+                'reorder' => $this->authorizationManager->isAllowed('reorder', $entityKey),
+                'create' => $this->authorizationManager->isAllowed('create', $entityKey),
             ],
             'entities' => $this->getEntitiesDataForEntityList(
                 $entityKey,
@@ -120,7 +111,7 @@ class EntityListController extends SharpProtectedController
                 $entity = $listEntity->getEntity();
                 $entityKey = $this->entityManager->entityKeyFor($entity);
 
-                if (! $this->sharpAuthorizationManager->isAllowed('create', $entityKey)) {
+                if (! $this->authorizationManager->isAllowed('create', $entityKey)) {
                     return null;
                 }
 
