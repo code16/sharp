@@ -4,6 +4,7 @@ use Carbon\Carbon;
 use Code16\Sharp\EntityList\Filters\HiddenFilter;
 use Code16\Sharp\Filters\AutocompleteRemoteFilter;
 use Code16\Sharp\Filters\CheckFilter;
+use Code16\Sharp\Filters\DateRange\DateRangePreset;
 use Code16\Sharp\Filters\DateRangeFilter;
 use Code16\Sharp\Filters\DateRangeRequiredFilter;
 use Code16\Sharp\Filters\SelectFilter;
@@ -391,6 +392,158 @@ it('returns retained value for required and retained filters returns by default'
     ]);
 });
 
+it('allows to declare date range filter', function () {
+    $list = new class() extends FakeSharpEntityList
+    {
+        public function getFilters(): array
+        {
+            return [
+                new class() extends DateRangeFilter
+                {
+                    public function buildFilterConfig(): void
+                    {
+                        $this->configureKey('test_22')
+                            ->configureLabel('Test filter');
+                    }
+                },
+            ];
+        }
+    };
+
+    $list->buildListConfig();
+
+    expect($list->listConfig()['filters']['_root'][0])->toEqual([
+        'key' => 'test_22',
+        'label' => 'Test filter',
+        'type' => 'daterange',
+        'required' => false,
+        'mondayFirst' => true,
+        'presets' => [],
+    ]);
+});
+
+it('allows to declare date range filter with default presets', function () {
+    $list = new class() extends FakeSharpEntityList
+    {
+        public function getFilters(): array
+        {
+            return [
+                new class() extends DateRangeFilter
+                {
+                    public function buildFilterConfig(): void
+                    {
+                        $this->configureKey('test_22')
+                            ->configureLabel('Test filter')
+                            ->configureShowPresets();
+                    }
+                },
+            ];
+        }
+    };
+
+    $list->buildListConfig();
+
+    expect($list->listConfig()['filters']['_root'][0])->toEqual([
+        'key' => 'test_22',
+        'label' => 'Test filter',
+        'type' => 'daterange',
+        'required' => false,
+        'mondayFirst' => true,
+        'presets' => [
+            [
+                'label' => 'Today',
+                'start' => today()->format('Y-m-d'),
+                'end' => today()->format('Y-m-d'),
+            ],
+            [
+                'label' => 'Yesterday',
+                'start' => today()->subDay()->format('Y-m-d'),
+                'end' => today()->subDay()->format('Y-m-d'),
+            ],
+            [
+                'label' => 'Last 7 days',
+                'start' => today()->subDays(6)->format('Y-m-d'),
+                'end' => today()->format('Y-m-d'),
+            ],
+            [
+                'label' => 'Last 30 days',
+                'start' => today()->subDays(29)->format('Y-m-d'),
+                'end' => today()->format('Y-m-d'),
+            ],
+            [
+                'label' => 'Last 365 days',
+                'start' => today()->subDays(364)->format('Y-m-d'),
+                'end' => today()->format('Y-m-d'),
+            ],
+            [
+                'label' => 'This month',
+                'start' => today()->startOfMonth()->format('Y-m-d'),
+                'end' => today()->endOfMonth()->format('Y-m-d'),
+            ],
+            [
+                'label' => 'Last month',
+                'start' => today()->subMonth()->startOfMonth()->format('Y-m-d'),
+                'end' => today()->subMonth()->endOfMonth()->format('Y-m-d'),
+            ],
+            [
+                'label' => 'This year',
+                'start' => today()->startOfYear()->format('Y-m-d'),
+                'end' => today()->endOfYear()->format('Y-m-d'),
+            ],
+            [
+                'label' => 'Last year',
+                'start' => today()->subYear()->startOfYear()->format('Y-m-d'),
+                'end' => today()->subYear()->endOfYear()->format('Y-m-d'),
+            ],
+        ],
+    ]);
+});
+
+it('allows to declare date range filter with custom presets', function () {
+    $list = new class() extends FakeSharpEntityList
+    {
+        public function getFilters(): array
+        {
+            return [
+                new class() extends DateRangeFilter
+                {
+                    public function buildFilterConfig(): void
+                    {
+                        $this->configureKey('test_22')
+                            ->configureLabel('Test filter')
+                            ->configureShowPresets(presets: [
+                                DateRangePreset::make(today()->subDays(3), today(), 'Last 3 days'),
+                                DateRangePreset::thisMonth(),
+                            ]);
+                    }
+                },
+            ];
+        }
+    };
+
+    $list->buildListConfig();
+
+    expect($list->listConfig()['filters']['_root'][0])->toEqual([
+        'key' => 'test_22',
+        'label' => 'Test filter',
+        'type' => 'daterange',
+        'required' => false,
+        'mondayFirst' => true,
+        'presets' => [
+            [
+                'label' => 'Last 3 days',
+                'start' => today()->subDays(3)->format('Y-m-d'),
+                'end' => today()->format('Y-m-d'),
+            ],
+            [
+                'label' => 'This month',
+                'start' => today()->startOfMonth()->format('Y-m-d'),
+                'end' => today()->endOfMonth()->format('Y-m-d'),
+            ],
+        ],
+    ]);
+});
+
 it('formats date range filter retained value', function () {
     $list = new class() extends FakeSharpEntityList
     {
@@ -419,7 +572,6 @@ it('formats date range filter retained value', function () {
             'test_22' => [
                 'start' => '2019-09-22',
                 'end' => '2019-09-25',
-                'preset' => null,
                 'formatted' => [
                     'start' => '2019-09-22',
                     'end' => '2019-09-25',
@@ -460,7 +612,6 @@ it('allows to declare a date range filter as required', function () {
                 'test' => [
                     'start' => Carbon::now()->subDay()->format('Y-m-d'),
                     'end' => Carbon::now()->format('Y-m-d'),
-                    'preset' => null,
                     'formatted' => [
                         'start' => Carbon::now()->subDay()->format('Y-m-d'),
                         'end' => Carbon::now()->format('Y-m-d'),
@@ -471,7 +622,6 @@ it('allows to declare a date range filter as required', function () {
                 'test' => [
                     'start' => Carbon::now()->subDay()->format('Y-m-d'),
                     'end' => Carbon::now()->format('Y-m-d'),
-                    'preset' => null,
                     'formatted' => [
                         'start' => Carbon::now()->subDay()->format('Y-m-d'),
                         'end' => Carbon::now()->format('Y-m-d'),
@@ -511,7 +661,6 @@ it('allows to define a date display format for a date range filter', function ()
             'test_22' => [
                 'start' => '2019-09-22',
                 'end' => '2019-09-25',
-                'preset' => null,
                 'formatted' => [
                     'start' => '2019_09_22',
                     'end' => '2019_09_25',

@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { parseDate, CalendarDate } from '@internationalized/date';
-    import { DateRangeFilterData } from "@/types";
+    import { DateRangeFilterData, DateRangePresetData } from "@/types";
     import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
     import { Button } from "@/components/ui/button";
     import { CalendarIcon } from "lucide-vue-next";
@@ -15,7 +15,7 @@
     import { FilterEmits, FilterProps } from "@/filters/types";
 
     const props = defineProps<FilterProps<DateRangeFilterData>>();
-    const emit = defineEmits<FilterEmits<DateRangeFilterData, { start: string, end: string } | { preset: string } | null>>();
+    const emit = defineEmits<FilterEmits<DateRangeFilterData>>();
 
     const localValue = ref<{ start: CalendarDate | null, end: CalendarDate | null }>();
     const inputs = reactive({ start: '', end: '' });
@@ -34,14 +34,19 @@
         renderKey.value++;
     }
 
+    function isPresetSelected(preset: DateRangePresetData) {
+        return preset.start === props.value?.start && preset.end === props.value?.end;
+    }
+
     function onOpen() {
         update();
     }
 
-    function onPresetSelected(preset: DateRangeFilterData['presets'][number]) {
+    function onPresetSelect(preset: DateRangePresetData) {
         open.value = false;
         emit('input', {
-            preset: preset.key,
+            start: preset.start,
+            end: preset.end,
         });
     }
 
@@ -105,7 +110,7 @@
                         </span>
                         <template v-if="props.value && 'start' in props.value">
                             <Separator orientation="vertical" class="h-4" />
-                            <DateRangeFilterValue v-bind="props" />
+                            <DateRangeFilterValue v-bind="props" :preset="props.filter.presets.find(p => isPresetSelected(p))" />
                         </template>
                     </Button>
                 </template>
@@ -120,7 +125,7 @@
                         :aria-label="filter.label"
                     >
                         <template v-if="props.value && 'start' in props.value">
-                            <DateRangeFilterValue v-bind="props" />
+                            <DateRangeFilterValue v-bind="props" :preset="props.filter.presets.find(p => isPresetSelected(p))" />
                         </template>
                         <template v-else>
                             <span class="text-muted-foreground">
@@ -137,11 +142,11 @@
                         <div class="flex flex-col shrink-0 p-3">
                             <template v-for="preset in filter.presets">
                                 <Button
-                                    class="text-left justify-start"
-                                    :class="{ 'bg-accent text-accent-foreground': preset.key === props.value?.preset }"
+                                    class="text-left justify-start aria-current:bg-accent aria-current:text-accent-foreground"
+                                    :aria-current="isPresetSelected(preset)"
                                     size="sm"
                                     variant="ghost"
-                                    @click="onPresetSelected(preset)"
+                                    @click="onPresetSelect(preset)"
                                 >
                                     {{ preset.label }}
                                 </Button>

@@ -107,14 +107,18 @@ export type DateRangeFilterData = {
     start: string;
     end: string;
     formatted?: { start: string; end: string };
-    preset?: string;
   } | null;
   key: string;
   label: string | null;
   type: "daterange";
   required: boolean;
   mondayFirst: boolean;
-  presets: Array<{ key: string; label: string }> | null;
+  presets: Array<DateRangePresetData> | null;
+};
+export type DateRangePresetData = {
+  label: string | null;
+  start: string | null;
+  end: string | null;
 };
 export type EmbedData = {
   value?: FormData["data"] & { slot: string; _html: string };
