@@ -9,6 +9,5 @@ class PostBlockVisualsEntity extends PostBlockEntity
 {
     protected ?string $form = PostBlockVisualsForm::class;
     protected ?string $show = PostBlockVisualsShow::class;
-    protected ?string $icon = 'lucide-images';
     protected string $label = 'Visual block';
 }

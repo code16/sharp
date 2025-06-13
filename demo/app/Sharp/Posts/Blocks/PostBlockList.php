@@ -33,13 +33,14 @@ class PostBlockList extends SharpEntityList
 
     public function buildListConfig(): void
     {
-        $this->configureEntityMap(
-            attribute: 'type',
-            entities: EntityListEntities::make()
-                ->addEntity('text', PostBlockTextEntity::class)
-                ->addEntity('video', PostBlockVideoEntity::class)
-                ->addEntity('visuals', PostBlockVisualsEntity::class),
-        )
+        $this
+            ->configureEntityMap(
+                attribute: 'type',
+                entities: EntityListEntities::make()
+                    ->addEntity('text', PostBlockTextEntity::class)
+                    ->addEntity('video', PostBlockVideoEntity::class)
+                    ->addEntity('visuals', PostBlockVisualsEntity::class),
+            )
             ->configureReorderable(new SimpleEloquentReorderHandler(PostBlock::class))
             ->configureQuickCreationForm();
     }

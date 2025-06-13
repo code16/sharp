@@ -7,6 +7,5 @@ use App\Sharp\Posts\Blocks\PostBlockTextForm;
 class PostBlockTextEntity extends PostBlockEntity
 {
     protected ?string $form = PostBlockTextForm::class;
-    protected ?string $icon = 'lucide-text';
     protected string $label = 'Text block';
 }
