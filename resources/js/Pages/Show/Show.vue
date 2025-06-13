@@ -335,7 +335,7 @@
                                                                                 :collapsable="section.collapsable"
                                                                                 :entity-key="entityKey"
                                                                                 :instance-id="instanceId"
-                                                                                :is-right-col="columnIndex === section.columns.length - 1"
+                                                                                :is-right-col="columnIndex > 0 && columnIndex === section.columns.length - 1"
                                                                                 :row="row"
                                                                                 @reordering="onEntityListReordering(fieldLayout.key, $event)"
                                                                             />

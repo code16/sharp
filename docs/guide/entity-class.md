@@ -84,11 +84,13 @@ class MyEntity extends SharpEntity
 
 ### Single shows and forms
 
-When you need to configure a "unique" resource that does not fit into a List / Show schema, like for instance an account or a configuration item, you can use a Single Show or Form. This is a dedicated topic, [documented here](single-show.md).
+When you need to configure a "unique" resource that does not fit into a List / Show schema, like an account or a configuration item, you can use a Single Show or Form. This is a dedicated topic, [documented here](single-show.md).
 
 ### Handle Multiforms
 
-Multiforms allows to declare different forms for the same entity, to hanle variants. This is a dedicated topic, [documented here](multiforms.md).
+::: info
+This feature has been deprecated and was replaced in version 9.6.0 by the [Entity Map](./building-entity-list.md#entity-map) feature.
+:::
 
 ## Declare the Entity in Sharp configuration
 

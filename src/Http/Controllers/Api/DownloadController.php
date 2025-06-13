@@ -8,7 +8,7 @@ class DownloadController extends ApiController
 {
     public function show(string $entityKey, ?string $instanceId = null)
     {
-        sharp_check_ability('view', $entityKey, $instanceId);
+        $this->authorizationManager->check('view', $entityKey, $instanceId);
 
         abort_if(
             ! ($path = request()->get('path'))

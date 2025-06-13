@@ -32,9 +32,4 @@ abstract class ApiController extends SharpProtectedController
     {
         return $this->entityManager->entityFor($dashboardKey)->getViewOrFail();
     }
-
-    protected function isSubEntity(string $entityKey): bool
-    {
-        return str_contains($entityKey, ':');
-    }
 }

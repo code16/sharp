@@ -1,4 +1,4 @@
-import type {DefaultTheme} from "vitepress";
+import type { DefaultTheme } from "vitepress";
 
 export function sidebar(): DefaultTheme.SidebarItem[] {
     return [
@@ -26,7 +26,6 @@ export function sidebar(): DefaultTheme.SidebarItem[] {
             collapsed: true,
             items: [
                 { text: 'Create a Form', link: '/guide/building-form.md' },
-                { text: 'Multi-Forms', link: '/guide/multiforms.md' },
                 { text: 'Using Single Form for unique resources', link: '/guide/single-form.md' },
                 { text: 'Quick creation form', link: '/guide/quick-creation-form.md' },
                 { text: 'Write an Embed for the Editor field', link: '/guide/form-editor-embeds.md' },
@@ -44,6 +43,7 @@ export function sidebar(): DefaultTheme.SidebarItem[] {
                 { text: 'List', link: '/guide/form-fields/list.md' },
                 { text: 'AutocompleteList', link: '/guide/form-fields/autocomplete-list.md' },
                 { text: 'Geolocation', link: '/guide/form-fields/geolocation.md' },
+                { text: 'Multi-Forms (deprecated)', link: '/guide/multiforms.md' },
                 // { text: 'Custom form field', link: '/guide/custom-form-fields.md' }
             ]
         },

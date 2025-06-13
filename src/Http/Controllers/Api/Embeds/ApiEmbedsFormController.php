@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Http\Controllers\Api\Embeds;
 
+use Code16\Sharp\Auth\SharpAuthorizationManager;
 use Code16\Sharp\Data\Embeds\EmbedFormData;
 use Illuminate\Routing\Controller;
 
@@ -9,12 +10,14 @@ class ApiEmbedsFormController extends Controller
 {
     use HandlesEmbed;
 
+    public function __construct(private readonly SharpAuthorizationManager $authorizationManager) {}
+
     public function show(string $embedKey, string $entityKey, ?string $instanceId = null)
     {
         if ($instanceId) {
-            sharp_check_ability('view', $entityKey, $instanceId);
+            $this->authorizationManager->check('view', $entityKey, $instanceId);
         } else {
-            sharp_check_ability('entity', $entityKey);
+            $this->authorizationManager->check('entity', $entityKey);
         }
 
         $embed = $this->getEmbedFromKey($embedKey);
@@ -31,9 +34,9 @@ class ApiEmbedsFormController extends Controller
     public function update(string $embedKey, string $entityKey, ?string $instanceId = null)
     {
         if ($instanceId) {
-            sharp_check_ability('update', $entityKey, $instanceId);
+            $this->authorizationManager->check('update', $entityKey, $instanceId);
         } else {
-            sharp_check_ability('create', $entityKey);
+            $this->authorizationManager->check('create', $entityKey);
         }
 
         $embed = $this->getEmbedFromKey($embedKey);

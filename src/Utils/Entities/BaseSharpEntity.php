@@ -11,6 +11,7 @@ abstract class BaseSharpEntity
     public static string $entityKey;
     protected ?string $policy = null;
     protected string $label = 'entity';
+    protected ?string $icon = null;
 
     final public function getPolicyOrDefault(): SharpEntityPolicy
     {
