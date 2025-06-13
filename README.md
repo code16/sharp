@@ -1,4 +1,7 @@
-<img src="./docs/img/sharp9-logo.png" alt="Sharp" width="250px"/>
+<picture>
+ <source media="(prefers-color-scheme: dark)" srcset="./docs/img/sharp9-logo-white.png" width="250">
+ <img alt="Sharp" src="./docs/img/sharp9-logo-blue.png" width="250">
+</picture>
 
 **Sharp is a content management framework built for Laravel as a package**, which provides great help to build a CMS section in a project with a clean UI and DX in mind. Sharp is driven by code: everything is manageable through a clean and documented PHP API, using Laravel conventions and coding style. It intends to avoid code adherence — the project should not have any knowledge of it — and is data-agnostic, meaning it does not have any expectations from the persistence layer.
 
