@@ -143,48 +143,55 @@ class Thumbnail
                 $thumbnailDisk->makeDirectory(dirname($thumbnailPath));
             }
 
-            try {
-                $sourceImg = $this->imageManager->read(
-                    Storage::disk($sourceDisk)->get($sourceRelativeFilePath),
-                );
-
-                // Transformation filters
-                if ($this->transformationFilters) {
-                    if ($rotate = Arr::get($this->transformationFilters, 'rotate.angle')) {
-                        $sourceImg->rotate($rotate);
-                    }
-
-                    if ($cropData = Arr::get($this->transformationFilters, 'crop')) {
-                        $sourceImg->crop(
-                            intval(round($sourceImg->width() * $cropData['width'])),
-                            intval(round($sourceImg->height() * $cropData['height'])),
-                            intval(round($sourceImg->width() * $cropData['x'])),
-                            intval(round($sourceImg->height() * $cropData['y'])),
-                        );
-                    }
-                }
-
-                // Custom modifiers
-                $alreadyResized = false;
-                foreach ($this->modifiers as $modifier) {
-                    $modifierInstance = $this->resolveModifierClass($modifier);
-                    if ($modifierInstance) {
-                        $sourceImg->modify($modifierInstance);
-                        $alreadyResized = $alreadyResized || $modifierInstance->resized();
-                    }
-                }
-
-                // Resize if needed
-                if (! $alreadyResized) {
-                    $sourceImg->scaleDown($width, $height);
-                }
-
+            if ($this->shouldOnlyCopy()) {
                 $thumbnailDisk->put(
                     $thumbnailPath,
-                    $sourceImg->encode($this->resolveEncoder())
+                    Storage::disk($sourceDisk)->get($sourceRelativeFilePath)
                 );
-            } catch (FileNotFoundException|EncoderException|DecoderException) {
-                return null;
+            } else {
+                try {
+                    $sourceImg = $this->imageManager->read(
+                        Storage::disk($sourceDisk)->get($sourceRelativeFilePath),
+                    );
+
+                    // Transformation filters
+                    if ($this->transformationFilters) {
+                        if ($rotate = Arr::get($this->transformationFilters, 'rotate.angle')) {
+                            $sourceImg->rotate($rotate);
+                        }
+
+                        if ($cropData = Arr::get($this->transformationFilters, 'crop')) {
+                            $sourceImg->crop(
+                                intval(round($sourceImg->width() * $cropData['width'])),
+                                intval(round($sourceImg->height() * $cropData['height'])),
+                                intval(round($sourceImg->width() * $cropData['x'])),
+                                intval(round($sourceImg->height() * $cropData['y'])),
+                            );
+                        }
+                    }
+
+                    // Custom modifiers
+                    $alreadyResized = false;
+                    foreach ($this->modifiers as $modifier) {
+                        $modifierInstance = $this->resolveModifierClass($modifier);
+                        if ($modifierInstance) {
+                            $sourceImg->modify($modifierInstance);
+                            $alreadyResized = $alreadyResized || $modifierInstance->resized();
+                        }
+                    }
+
+                    // Resize if needed
+                    if (! $alreadyResized) {
+                        $sourceImg->scaleDown($width, $height);
+                    }
+
+                    $thumbnailDisk->put(
+                        $thumbnailPath,
+                        $sourceImg->encode($this->resolveEncoder())
+                    );
+                } catch (FileNotFoundException|EncoderException|DecoderException) {
+                    return null;
+                }
             }
         }
 
@@ -239,6 +246,14 @@ class Thumbnail
 
     private function resolveThumbnailPath(?int $width = null, ?int $height = null): string
     {
+        if ($this->shouldOnlyCopy()) {
+            return sprintf(
+                '%s/%s',
+                sharp()->config()->get('uploads.thumbnails_dir'),
+                $this->uploadModel->file_name
+            );
+        }
+
         $thumbDirNameAppender = sprintf(
             '%s%s_q-%s',
             $this->transformationFilters ? '_'.md5(serialize($this->transformationFilters)) : '',
@@ -259,6 +274,16 @@ class Thumbnail
 
         // Strip double /
         return Str::replace('//', '/', $thumbnailPath);
+    }
+
+    private function shouldOnlyCopy(): bool
+    {
+        return in_array(
+            pathinfo($this->uploadModel->file_name, PATHINFO_EXTENSION),
+            [
+                'svg',
+            ]
+        );
     }
 
     public function __toString()

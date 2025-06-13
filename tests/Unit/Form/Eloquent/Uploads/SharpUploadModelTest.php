@@ -126,6 +126,16 @@ it('allows to define an encoder when creating the thumbnail', function () {
         ->toBeTrue();
 });
 
+it('allows to create SVG thumbnail by only copying the file', function () {
+    $file = createImage('local', 'test.svg');
+    $upload = createSharpUploadModel($file);
+
+    expect($upload->thumbnail(150, 150))
+        ->toStartWith('/storage/thumbnails/data/test.svg')
+        ->and(Storage::disk('public')->exists('thumbnails/data/test.svg'))
+        ->toBeTrue();
+});
+
 function createSharpUploadModel(string $file, ?object $model = null, ?string $modelKey = 'test'): SharpUploadModel
 {
     return SharpUploadModel::create([
