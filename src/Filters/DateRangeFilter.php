@@ -11,7 +11,9 @@ abstract class DateRangeFilter extends Filter
 {
     private string $dateFormat = 'YYYY-MM-DD';
     private bool $isMondayFirst = true;
-    private bool $showPresets = false;
+
+    /** @var DateRangePreset[] */
+    private ?array $presets = null;
 
     final public function configureDateFormat(string $dateFormat): self
     {
@@ -27,9 +29,25 @@ abstract class DateRangeFilter extends Filter
         return $this;
     }
 
-    final public function configureShowPresets(bool $showPresets = true): self
+    final public function configureShowPresets(bool $showPresets = true, ?array $presets = null): self
     {
-        $this->showPresets = $showPresets;
+        if ($showPresets) {
+            $this->presets = $presets !== null
+                ? $presets
+                : [
+                    DateRangePreset::today(),
+                    DateRangePreset::yesterday(),
+                    DateRangePreset::last7days(),
+                    DateRangePreset::last30days(),
+                    DateRangePreset::last365days(),
+                    DateRangePreset::thisMonth(),
+                    DateRangePreset::lastMonth(),
+                    DateRangePreset::thisYear(),
+                    DateRangePreset::lastYear(),
+                ];
+        } else {
+            $this->presets = [];
+        }
 
         return $this;
     }
@@ -45,64 +63,6 @@ abstract class DateRangeFilter extends Filter
     }
 
     /**
-     * @return array<string, DateRangePreset>
-     */
-    final public function getPresets(): array
-    {
-        if (! $this->showPresets) {
-            return [];
-        }
-
-        return [
-            'today' => new DateRangePreset(
-                start: today(),
-                end: today(),
-                label: __('sharp::filters.daterange.preset.today')
-            ),
-            'yesterday' => new DateRangePreset(
-                start: today()->subDay(),
-                end: today()->subDay(),
-                label: __('sharp::filters.daterange.preset.yesterday')
-            ),
-            'last_7_days' => new DateRangePreset(
-                start: today()->subDays(7),
-                end: today(),
-                label: __('sharp::filters.daterange.preset.last_7_days')
-            ),
-            'last_30_days' => new DateRangePreset(
-                start: today()->subDays(30),
-                end: today(),
-                label: __('sharp::filters.daterange.preset.last_30_days')
-            ),
-            'last_365_days' => new DateRangePreset(
-                start: today()->subDays(365),
-                end: today(),
-                label: __('sharp::filters.daterange.preset.last_365_days')
-            ),
-            'this_month' => new DateRangePreset(
-                start: today()->startOfMonth(),
-                end: today()->endOfMonth(),
-                label: __('sharp::filters.daterange.preset.this_month')
-            ),
-            'last_month' => new DateRangePreset(
-                start: today()->subMonth()->startOfMonth(),
-                end: today()->subMonth()->endOfMonth(),
-                label: __('sharp::filters.daterange.preset.last_month')
-            ),
-            'this_year' => new DateRangePreset(
-                start: today()->startOfYear(),
-                end: today()->endOfYear(),
-                label: __('sharp::filters.daterange.preset.this_year')
-            ),
-            'last_year' => new DateRangePreset(
-                start: today()->subYear()->startOfYear(),
-                end: today()->subYear()->endOfYear(),
-                label: __('sharp::filters.daterange.preset.last_year')
-            ),
-        ];
-    }
-
-    /**
      * @internal
      */
     final public function fromQueryParam($value): ?array
@@ -114,9 +74,6 @@ abstract class DateRangeFilter extends Filter
         [$start, $end] = explode('..', $value);
         $start = Carbon::createFromFormat('Ymd', $start)->startOfDay();
         $end = Carbon::createFromFormat('Ymd', $end)->endOfDay();
-        $presetKey = collect($this->getPresets())
-            ->search(fn (DateRangePreset $preset) => $preset->getStart()->isSameDay($start)
-                && $preset->getEnd()->isSameDay($end));
 
         return [
             'start' => $start->format('Y-m-d'),
@@ -125,7 +82,6 @@ abstract class DateRangeFilter extends Filter
                 'start' => $start->isoFormat($this->getDateFormat()),
                 'end' => $end->isoFormat($this->getDateFormat()),
             ],
-            'preset' => $presetKey ?: null,
         ];
     }
 
@@ -135,18 +91,6 @@ abstract class DateRangeFilter extends Filter
     final public function toQueryParam($value): ?string
     {
         if (! $value) {
-            return null;
-        }
-
-        if (isset($value['preset'])) {
-            if ($preset = $this->getPresets()[$value['preset']] ?? null) {
-                return sprintf(
-                    '%s..%s',
-                    $preset->getStart()->format('Ymd'),
-                    $preset->getEnd()->format('Ymd'),
-                );
-            }
-
             return null;
         }
 
@@ -163,9 +107,8 @@ abstract class DateRangeFilter extends Filter
             'type' => FilterType::DateRange->value,
             'required' => $this instanceof DateRangeRequiredFilter,
             'mondayFirst' => $this->isMondayFirst(),
-            'presets' => collect($this->getPresets())
-                ->map(fn ($preset, $key) => ['key' => $key, ...$preset->toArray()])
-                ->values()
+            'presets' => collect($this->presets)
+                ->map(fn (DateRangePreset $preset) => $preset->toArray())
                 ->toArray(),
         ]);
     }
