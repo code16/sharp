@@ -2,19 +2,11 @@
 
 namespace Code16\Sharp\Http\Controllers;
 
-use Code16\Sharp\Utils\Entities\SharpEntityManager;
-
 class DashboardFiltersController extends SharpProtectedController
 {
-    public function __construct(
-        readonly private SharpEntityManager $entityManager
-    ) {
-        parent::__construct();
-    }
-
     public function store(string $dashboardKey)
     {
-        sharp_check_ability('entity', $dashboardKey);
+        $this->authorizationManager->check('entity', $dashboardKey);
 
         $dashboard = $this->entityManager->entityFor($dashboardKey)->getViewOrFail();
         $dashboard->buildDashboardConfig();

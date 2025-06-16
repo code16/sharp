@@ -225,7 +225,9 @@ Here is the full list of available methods:
 
 - `configureDefaultSort(string $sortBy, string $sortDir = "asc")`: `EntityListQueryParams $queryParams` will be filled with this default value (see above)
 
-- `configureMultiformAttribute(string $attribute)`: handle various types of entities; see [detailed doc](multiforms.md)
+- `configureMultiformAttribute(string $attribute)`: :warning: This feature has been deprecated in version 9.6.0 and was replaced by the [Entity Map](entity-map.md) feature. You can still access to the [documentation](multiforms.md) for legacy usage. 
+
+- `configureEntityMap(string $attribute, EntityListEntities $entities)`: configure an Entity Map to display multiple entities in a single Entity List; [see detailed section](#entity-map) above.
 
 - `configurePageAlert(string $template, string $alertLevel = null, string $fieldKey = null, bool $declareTemplateAsPath = false)`: display a dynamic message above the list; [see detailed doc](page-alerts.md)
 
@@ -239,10 +241,65 @@ Here is the full list of available methods:
 
 - `configureCreateButtonLabel(string $label)` to set a custom "New..." button label.
 
-## Configure the Entity List
+## Declare the Entity List
 
 The Entity List must be declared in the correct entity class, as documented here: [Write an entity](entity-class.md)).
 
 After this we can access the Entity List at the following URL: **/sharp/s-list/products** (replace "products" by our entity key).
 
 To go ahead and learn how to add a link in the Sharp side menu, [look here](building-menu.md).
+
+## Entity Map
+
+::: info
+This feature replaces the deprecated Multiforms functionality, which remains available for legacy use in version 9.x but will be removed in 10.x.
+:::
+
+The Entity Map lets you display multiple entities within a single Entity List. This makes it possible to link different Show Pages or Forms based on a discriminating attribute.
+
+To set it up, declare the Entity Map in the `buildListConfig()` method by using `configureEntityMap()`:
+
+```php
+class CarList extends SharpEntityList
+{
+    // ...
+    
+    public function buildListConfig(): void
+    {
+        $this
+            ->configureEntityMap(
+                attribute: 'engine',
+                entities: EntityListEntities::make()
+                    ->addEntity('ice', InternalCombustionEngineCarEntity::class)
+                    ->addEntity('ev', ElectricEngineCarEntity::class, 'lucide-plug', 'EV')
+            );
+    }
+}
+```
+
+The `attribute` parameter defines which attribute will be used to distinguish between entities. If needed, you can compute this value using a [custom transformer](./how-to-transform-data.md).
+
+The `entities` parameter expects an instance of `EntityListEntities`, which maps each discriminant value to a specific Entity. You can also specify the icon and label that will be displayed in the "Create" dropdown.
+
+Each mapped entity should be declared like any regular Entity, and can include a Show Page, a Form, a Policy, etc.
+
+::: tip
+It’s not mandatory, but a good practice is to make your “sub-entities” extend the main Entity class to share policies or common logic. For example:
+:::
+
+```php
+class CarEntity extends SharpEntity
+{
+    protected ?string $list = CarList::class;
+    protected ?string $policy = CarPolicy::class;
+    protected string $label = 'Car';
+}
+```
+
+```php
+class ElectricEngineCarEntity extends CarEntity
+{
+    protected ?string $form = ElectricEngineCarForm::class;
+    protected string $label = 'EV';
+}
+```

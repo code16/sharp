@@ -128,10 +128,16 @@ it('returns policies with a list get request', function () {
         ->get('/sharp/s-list/person')
         ->assertInertia(fn (Assert $page) => $page
             ->where('entityList.authorizations', [
-                'delete' => [1],
                 'reorder' => true,
                 'create' => true,
-                'view' => [1, 2],
+            ])
+            ->where('entityList.data.0._meta.authorizations', [
+                'view' => true,
+                'delete' => true,
+            ])
+            ->where('entityList.data.1._meta.authorizations', [
+                'view' => true,
+                'delete' => false,
             ])
         );
 });

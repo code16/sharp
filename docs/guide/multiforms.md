@@ -1,8 +1,12 @@
-# Multi-Forms
+# Multi-Forms (deprecated)
+
+::: warning
+Multi-Forms is a feature that has been deprecated in version 9.6.0 and was replaced by the [Entity Map](./building-entity-list.md#entity-map) feature.
+:::
 
 Let's say you want to handle different variants for an entity in one Entity List.
 
-For instance, maybe you want to display sold cars on an Entity List: easy enough, you create a `Car` entity, list and form. But you want the to handle different form fields for cars with an internal combustion engine and those with an electric engine; you can of course use a form and [conditional display](building-form.md#conditional-display) to achieve this, but in a case where there are many differences, the best option may be to split the Entity in two (or more) Forms. That's Multi-Form.
+For instance, maybe you want to display sold cars on an Entity List: easy enough, you create a `Car` entity, list and form. But you want to handle different form fields for cars with an internal combustion engine and those with an electric engine; you can of course use a form and [conditional display](building-form.md#conditional-display) to achieve this, but in a case where there are many differences, the best option may be to split the Entity in two (or more) Forms. That's Multi-Form.
 
 ## Write the Form classes
 

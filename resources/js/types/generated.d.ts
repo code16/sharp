@@ -133,8 +133,6 @@ export type EmbedFormData = {
   layout: FormLayoutData | null;
 };
 export type EntityListAuthorizationsData = {
-  view: Array<number | string>;
-  delete: Array<number | string>;
   create: boolean;
   reorder: boolean;
 };
@@ -147,7 +145,8 @@ export type EntityListConfigData = {
   hasShowPage: boolean;
   deleteConfirmationText: string;
   deleteHidden: boolean;
-  multiformAttribute: string | null;
+  formCreateUrl: string;
+  entityAttribute: string | null;
   createButtonLabel: string | null;
   quickCreationForm: boolean;
   filters: ConfigFiltersData | null;
@@ -159,12 +158,19 @@ export type EntityListData = {
   authorizations: EntityListAuthorizationsData;
   config: EntityListConfigData;
   fields: Array<EntityListFieldData>;
-  data: Array<{ [key: string]: any }>;
+  data: Array<{ [key: string]: any; _meta: EntityListItemMeta }>;
   filterValues: FilterValuesData;
   query: EntityListQueryParamsData | null;
-  forms: { [key: string]: EntityListMultiformData } | null;
+  entities: Array<EntityListEntityData> | null;
   meta: PaginatorMetaData | null;
   pageAlert: PageAlertData | null;
+};
+export type EntityListEntityData = {
+  key: string;
+  entityKey: string;
+  label: string;
+  icon: IconData | null;
+  formCreateUrl: string | null;
 };
 export type EntityListFieldData = {
   type: "text" | "state" | "badge";
@@ -176,10 +182,9 @@ export type EntityListFieldData = {
   html: boolean | null;
   tooltip: string | null;
 };
-export type EntityListMultiformData = {
-  key: string;
-  label: string;
-  instances: Array<number | string>;
+export type EntityListItemMeta = {
+  url: string | null;
+  authorizations: InstanceAuthorizationsData;
 };
 export type EntityListQueryParamsData = {
   search?: string;

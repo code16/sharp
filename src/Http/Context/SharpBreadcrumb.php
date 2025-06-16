@@ -62,9 +62,9 @@ class SharpBreadcrumb
         return $this->breadcrumbItems()->reverse()->skip(1)->first();
     }
 
-    public function previousShowSegment(?string $entityKeyOrClassName = null, ?string $subEntity = null): ?BreadcrumbItem
+    public function previousShowSegment(?string $entityKeyOrClassName = null, ?string $multiformKey = null): ?BreadcrumbItem
     {
-        return $this->findPreviousSegment('s-show', $entityKeyOrClassName, $subEntity);
+        return $this->findPreviousSegment('s-show', $entityKeyOrClassName, $multiformKey);
     }
 
     public function previousListSegment(?string $entityKeyOrClassName = null): ?BreadcrumbItem
@@ -78,11 +78,16 @@ class SharpBreadcrumb
             sprintf(
                 '%s/%s',
                 sharp()->config()->get('custom_url_segment'),
-                $this->breadcrumbItems()
-                    ->map(fn (BreadcrumbItem $item) => $item->toUri())
-                    ->implode('/')
+                $this->getCurrentPath()
             )
         );
+    }
+
+    public function getCurrentPath(): ?string
+    {
+        return $this->breadcrumbItems()
+            ->map(fn (BreadcrumbItem $item) => $item->toUri())
+            ->implode('/');
     }
 
     public function getPreviousSegmentUrl(): string
@@ -111,7 +116,7 @@ class SharpBreadcrumb
         return $this->breadcrumbItems;
     }
 
-    private function findPreviousSegment(string $type, ?string $entityKeyOrClassName = null, ?string $subEntity = null): ?BreadcrumbItem
+    private function findPreviousSegment(string $type, ?string $entityKeyOrClassName = null, ?string $multiformKey = null): ?BreadcrumbItem
     {
         $modeNotEquals = false;
         if ($entityKeyOrClassName && Str::startsWith($entityKeyOrClassName, '!')) {
@@ -124,8 +129,8 @@ class SharpBreadcrumb
             ->filter(fn (BreadcrumbItem $item) => $item->type === $type)
             ->when($entityKeyOrClassName !== null, fn ($items) => $items
                 ->filter(fn (BreadcrumbItem $breadcrumbItem) => $modeNotEquals
-                    ? ! $breadcrumbItem->entityIs($entityKeyOrClassName, $subEntity)
-                    : $breadcrumbItem->entityIs($entityKeyOrClassName, $subEntity)
+                    ? ! $breadcrumbItem->entityIs($entityKeyOrClassName, $multiformKey)
+                    : $breadcrumbItem->entityIs($entityKeyOrClassName, $multiformKey)
                 )
             )
             ->first();
@@ -243,14 +248,14 @@ class SharpBreadcrumb
 
         return app(SharpEntityManager::class)
             ->entityFor($item->key)
-            ->getLabelOrFail((new EntityKey($item->key))->subEntity());
+            ->getLabelOrFail((new EntityKey($item->key))->multiformKey());
     }
 
     private function isSameEntityKeys(string $key1, string $key2, bool $compareBaseEntities): bool
     {
         if ($compareBaseEntities) {
-            $key1 = explode(':', $key1)[0];
-            $key2 = explode(':', $key2)[0];
+            $key1 = (new EntityKey($key1))->baseKey();
+            $key2 = (new EntityKey($key2))->baseKey();
         }
 
         return $key1 === $key2;

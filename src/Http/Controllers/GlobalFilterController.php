@@ -18,5 +18,4 @@ class GlobalFilterController extends SharpProtectedController
 
         return redirect()->route('code16.sharp.home');
     }
-
 }

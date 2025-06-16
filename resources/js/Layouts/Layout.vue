@@ -219,8 +219,8 @@
                                         <DropdownMenuSeparator class="first:hidden" />
                                         <DropdownMenuSub>
                                             <DropdownMenuSubTrigger>
-                                                <Sun class="w-4 h-4 mr-2 dark:hidden" />
-                                                <Moon class="hidden w-4 h-4 mr-2 dark:block" />
+                                                <Sun class="w-4 h-4 dark:hidden" />
+                                                <Moon class="hidden w-4 h-4 dark:block" />
                                                 {{ __('sharp::action_bar.color-mode-dropdown.label') }}
                                             </DropdownMenuSubTrigger>
                                             <DropdownMenuPortal>
@@ -233,7 +233,7 @@
                                         <form :action="route('code16.sharp.logout')" method="post">
                                             <input name="_token" :value="getCsrfToken()" type="hidden">
                                             <DropdownMenuItem type="submit" @click="$event.target.closest('form').submit()">
-                                                <LogOut class="w-4 h-4 mr-2" />
+                                                <LogOut class="w-4 h-4" />
                                                 {{ __('sharp::menu.logout_label') }}
                                             </DropdownMenuItem>
                                         </form>

@@ -27,7 +27,8 @@ abstract class SharpEntityList
     private ?EntityListFieldsContainer $fieldsContainer = null;
     protected ?EntityListQueryParams $queryParams;
     protected string $instanceIdAttribute = 'id';
-    protected ?string $multiformAttribute = null;
+    protected ?string $entityAttribute = null;
+    protected ?EntityListEntities $entities = null;
     protected bool $searchable = false;
     protected ?ReorderHandler $reorderHandler = null;
     private bool $disabledReorder = false;
@@ -84,13 +85,13 @@ abstract class SharpEntityList
             // Filter model attributes on actual form fields
             ->map(fn ($row) => collect($row)
                 ->only(
-                    array_merge(
-                        array_keys($this->transformers),
-                        $this->entityStateAttribute ? [$this->entityStateAttribute] : [],
-                        $this->multiformAttribute ? [$this->multiformAttribute] : [],
-                        [$this->instanceIdAttribute],
-                        $this->getDataKeys(),
-                    ),
+                    [
+                        ...array_keys($this->transformers),
+                        ...$this->entityStateAttribute ? [$this->entityStateAttribute] : [],
+                        ...$this->getEntityAttribute() ? [$this->getEntityAttribute()] : [],
+                        $this->instanceIdAttribute,
+                        ...$this->getDataKeys(),
+                    ]
                 )
                 ->toArray()
             )
@@ -108,7 +109,7 @@ abstract class SharpEntityList
     {
         $config = [
             'instanceIdAttribute' => $this->instanceIdAttribute,
-            'multiformAttribute' => $this->multiformAttribute,
+            'entityAttribute' => $this->getEntityAttribute(),
             'searchable' => $this->searchable,
             'reorderable' => ! is_null($this->reorderHandler) && ! $this->disabledReorder,
             'defaultSort' => $this->defaultSort,
@@ -133,6 +134,14 @@ abstract class SharpEntityList
         $this->instanceIdAttribute = $instanceIdAttribute;
 
         return $this;
+    }
+
+    /**
+     * @internal
+     */
+    final public function getInstanceIdAttribute(): string
+    {
+        return $this->instanceIdAttribute;
     }
 
     final public function configureReorderable(ReorderHandler|string $reorderHandler): self
@@ -180,11 +189,39 @@ abstract class SharpEntityList
         return $this;
     }
 
+    /**
+     * @deprecated
+     * @see self::configureEntityMap()
+     */
     final protected function configureMultiformAttribute(?string $attribute): self
     {
-        $this->multiformAttribute = $attribute;
+        $this->entityAttribute = $attribute;
 
         return $this;
+    }
+
+    final protected function configureEntityMap(string $attribute, EntityListEntities $entities): self
+    {
+        $this->entityAttribute = $attribute;
+        $this->entities = $entities;
+
+        return $this;
+    }
+
+    /**
+     * @internal
+     */
+    final public function getEntityAttribute(): ?string
+    {
+        return $this->entityAttribute;
+    }
+
+    /**
+     * @internal
+     */
+    final public function getEntities(): ?EntityListEntities
+    {
+        return $this->entities;
     }
 
     final public function reorderHandler(): ?ReorderHandler

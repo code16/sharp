@@ -6,7 +6,6 @@ import {
     EntityStateValueData,
     FilterData,
 } from "@/types";
-import { getAppendableParentUri, route } from "@/utils/url";
 import { EntityListInstance, InstanceId } from "./types";
 
 export class EntityList implements EntityListData {
@@ -14,7 +13,7 @@ export class EntityList implements EntityListData {
     config: EntityListData['config'];
     data: EntityListData['data'];
     fields: EntityListData['fields'];
-    forms: EntityListData['forms'];
+    entities: EntityListData['entities'];
     meta: EntityListData['meta'];
     pageAlert: EntityListData['pageAlert'];
     query: EntityListData['query'];
@@ -110,31 +109,6 @@ export class EntityList implements EntityListData {
         return instance[this.config.instanceIdAttribute];
     }
 
-    instanceUrl(instance: EntityListInstance): string | null {
-        const entityKey = this.entityKey;
-        const instanceId = this.instanceId(instance);
-
-        if(!this.authorizations.view.includes(instanceId)) {
-            return null;
-        }
-
-        const multiform = this.forms && Object.values(this.forms).find(form => form.instances.includes(instanceId));
-
-        if(this.config.hasShowPage) {
-            return route('code16.sharp.show.show', {
-                parentUri: getAppendableParentUri(),
-                entityKey: multiform ? `${entityKey}:${multiform.key}` : entityKey,
-                instanceId,
-            });
-        }
-
-        return route('code16.sharp.form.edit', {
-            parentUri: getAppendableParentUri(),
-            entityKey: multiform ? `${entityKey}:${multiform.key}` : entityKey,
-            instanceId,
-        });
-    }
-
     instanceState(instance: EntityListInstance): string | number | null {
         return this.config.state
             ? instance[this.config.state.attribute]
@@ -153,10 +127,7 @@ export class EntityList implements EntityListData {
     }
 
     instanceCanDelete(instance: EntityListInstance): boolean {
-        if(Array.isArray(this.authorizations.delete)) {
-            return this.authorizations.delete?.includes(this.instanceId(instance));
-        }
-        return !!this.authorizations.delete;
+        return instance._meta.authorizations.delete;
     }
 
     instanceCommands(instance: EntityListInstance): Array<Array<CommandData>> | undefined {

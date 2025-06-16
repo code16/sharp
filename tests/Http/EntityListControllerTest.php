@@ -1,15 +1,20 @@
 <?php
 
 use Code16\Sharp\Auth\SharpEntityPolicy;
+use Code16\Sharp\EntityList\EntityListEntities;
 use Code16\Sharp\EntityList\Fields\EntityListBadgeField;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\Enums\NotificationLevel;
 use Code16\Sharp\Enums\PageAlertLevel;
+use Code16\Sharp\Tests\Fixtures\Entities\PersonChemistEntity;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
+use Code16\Sharp\Tests\Fixtures\Entities\PersonPhysicistEntity;
+use Code16\Sharp\Tests\Fixtures\Entities\PersonUnknownEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonForm;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonShow;
+use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\PageAlerts\PageAlert;
 use Illuminate\Contracts\Support\Arrayable;
@@ -36,10 +41,151 @@ it('gets list data for an entity', function () {
     $this->get('/sharp/s-list/person')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('entityList.data', [
+            ->has('entityList.data.0', fn (Assert $json) => $json
+                ->where('id', 1)
+                ->where('name', 'Marie Curie')
+                ->etc()
+            )
+            ->has('entityList.data.1', fn (Assert $json) => $json
+                ->where('id', 2)
+                ->where('name', 'Niels Bohr')
+                ->etc()
+            )
+            ->count('entityList.data', 2)
+        );
+});
+
+it('sets appropriate `_meta` for each items linking to a show', function () {
+    fakeListFor('person', new class() extends PersonList
+    {
+        public function getListData(): array|Arrayable
+        {
+            return $this->transform([
                 ['id' => 1, 'name' => 'Marie Curie'],
                 ['id' => 2, 'name' => 'Niels Bohr'],
-            ])
+            ]);
+        }
+    });
+
+    $this->get('/sharp/s-list/person')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->has('entityList.data.0', fn (Assert $json) => $json
+                ->where('_meta.url', route('code16.sharp.show.show', [
+                    'parentUri' => 's-list/person',
+                    'entityKey' => 'person',
+                    'instanceId' => 1,
+                ]))
+                ->where('_meta.authorizations.view', true)
+                ->where('_meta.authorizations.delete', true)
+                ->etc()
+            )
+            ->has('entityList.data.1', fn (Assert $json) => $json
+                ->where('_meta.url', route('code16.sharp.show.show', [
+                    'parentUri' => 's-list/person',
+                    'entityKey' => 'person',
+                    'instanceId' => 2,
+                ]))
+                ->where('_meta.authorizations.view', true)
+                ->where('_meta.authorizations.delete', true)
+                ->etc()
+            )
+            ->count('entityList.data', 2)
+        );
+});
+
+it('sets appropriate `_meta` for each items linking to a form', function () {
+    fakeListFor('person', new class() extends PersonList
+    {
+        public function getListData(): array|Arrayable
+        {
+            return $this->transform([
+                ['id' => 1, 'name' => 'Marie Curie'],
+                ['id' => 2, 'name' => 'Niels Bohr'],
+            ]);
+        }
+    });
+
+    fakeShowFor('person', null);
+
+    $this->get('/sharp/s-list/person')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->has('entityList.data.0', fn (Assert $json) => $json
+                ->where('_meta.url', route('code16.sharp.form.edit', [
+                    'parentUri' => 's-list/person',
+                    'entityKey' => 'person',
+                    'instanceId' => 1,
+                ]))
+                ->where('_meta.authorizations.view', true)
+                ->where('_meta.authorizations.delete', true)
+                ->etc()
+            )
+            ->has('entityList.data.1', fn (Assert $json) => $json
+                ->where('_meta.url', route('code16.sharp.form.edit', [
+                    'parentUri' => 's-list/person',
+                    'entityKey' => 'person',
+                    'instanceId' => 2,
+                ]))
+                ->where('_meta.authorizations.view', true)
+                ->where('_meta.authorizations.delete', true)
+                ->etc()
+            )
+            ->count('entityList.data', 2)
+        );
+});
+
+it('sets appropriate `_meta` for with entities map', function () {
+    sharp()->config()->declareEntity(PersonChemistEntity::class);
+    sharp()->config()->declareEntity(PersonPhysicistEntity::class);
+    sharp()->config()->declareEntity(PersonUnknownEntity::class);
+
+    fakeListFor('person', new class() extends PersonList
+    {
+        public function getListData(): array|Arrayable
+        {
+            return [
+                ['id' => 1, 'name' => 'Marie Curie', 'job' => 'chemist'],
+                ['id' => 2, 'name' => 'Rosalind Franklin', 'job' => 'physicist'],
+                ['id' => 3, 'name' => 'James Bond', 'job' => 'unknown'],
+            ];
+        }
+
+        public function buildListConfig(): void
+        {
+            $this->configureEntityMap(
+                attribute: 'job',
+                entities: EntityListEntities::make()
+                    ->addEntity('chemist', PersonChemistEntity::class, icon: 'testicon-car')
+                    ->addEntity('physicist', PersonPhysicistEntity::class)
+                    ->addEntity('unknown', PersonUnknownEntity::class),
+            );
+        }
+    });
+
+    $this->get('/sharp/s-list/person')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->has('entityList.data.0', fn (Assert $json) => $json
+                ->where('_meta.url', route('code16.sharp.form.edit', [
+                    'parentUri' => 's-list/person',
+                    'entityKey' => 'person-chemist',
+                    'instanceId' => 1,
+                ]))
+                ->etc()
+            )
+            ->has('entityList.data.1', fn (Assert $json) => $json
+                ->where('_meta.url', route('code16.sharp.show.show', [
+                    'parentUri' => 's-list/person',
+                    'entityKey' => 'person-physicist',
+                    'instanceId' => 2,
+                ]))
+                ->etc()
+            )
+            ->has('entityList.data.2', fn (Assert $json) => $json
+                ->whereNull('_meta.url')
+                ->etc()
+            )
         );
 });
 
@@ -60,10 +206,17 @@ it('gets paginated data if wanted', function () {
     $this->get('/sharp/s-list/person')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('entityList.data', [
-                ['id' => 1, 'name' => 'Marie Curie'],
-                ['id' => 2, 'name' => 'Niels Bohr'],
-            ])
+            ->has('entityList.data.0', fn (Assert $json) => $json
+                ->where('id', 1)
+                ->where('name', 'Marie Curie')
+                ->etc()
+            )
+            ->has('entityList.data.1', fn (Assert $json) => $json
+                ->where('id', 2)
+                ->where('name', 'Niels Bohr')
+                ->etc()
+            )
+            ->count('entityList.data', 2)
             ->has('entityList.meta', fn (Assert $name) => $name
                 ->where('current_page', 1)
                 ->where('from', 1)
@@ -108,10 +261,17 @@ it('allows to search for items', function () {
     $this->get('/sharp/s-list/person?search=Curie')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('entityList.data', [
-                ['id' => 1, 'name' => 'Marie Curie'],
-                ['id' => 3, 'name' => 'Pierre Curie'],
-            ])
+            ->has('entityList.data.0', fn (Assert $json) => $json
+                ->where('id', 1)
+                ->where('name', 'Marie Curie')
+                ->etc()
+            )
+            ->has('entityList.data.1', fn (Assert $json) => $json
+                ->where('id', 3)
+                ->where('name', 'Pierre Curie')
+                ->etc()
+            )
+            ->count('entityList.data', 2)
         );
 });
 
@@ -241,12 +401,18 @@ it('gets authorizations of each instance', function () {
     $this->get('/sharp/s-list/person')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->has('entityList.authorizations', fn (Assert $config) => $config
-                ->where('create', true)
-                ->where('view', [1, 2])
-                ->where('reorder', true)
-                ->where('delete', [2])
-            )
+            ->where('entityList.authorizations', [
+                'create' => true,
+                'reorder' => true,
+            ])
+            ->where('entityList.data.0._meta.authorizations', [
+                'view' => true,
+                'delete' => false,
+            ])
+            ->where('entityList.data.1._meta.authorizations', [
+                'view' => true,
+                'delete' => true,
+            ])
         );
 });
 
@@ -268,7 +434,7 @@ it('gets multiforms if configured', function () {
         }
     });
 
-    app(\Code16\Sharp\Utils\Entities\SharpEntityManager::class)
+    app(SharpEntityManager::class)
         ->entityFor('person')
         ->setMultiforms([
             'yes' => [PersonForm::class, 'With Nobel prize'],
@@ -278,15 +444,76 @@ it('gets multiforms if configured', function () {
     $this->get('/sharp/s-list/person')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->has('entityList.forms', 2)
-            ->has('entityList.forms.yes', fn (Assert $config) => $config
+            ->has('entityList.entities', 2)
+            ->has('entityList.entities.0', fn (Assert $config) => $config
+                ->where('key', 'yes')
+                ->where('entityKey', 'person:yes')
                 ->where('label', 'With Nobel prize')
-                ->where('instances', [1])
                 ->etc()
             )
-            ->has('entityList.forms.nope', fn (Assert $config) => $config
+            ->has('entityList.entities.1', fn (Assert $config) => $config
+                ->where('key', 'nope')
+                ->where('entityKey', 'person:nope')
                 ->where('label', 'No Nobel prize')
-                ->where('instances', [2])
+                ->etc()
+            )
+        );
+});
+
+it('get entities if configured', function () {
+    $this->withoutExceptionHandling();
+
+    sharp()->config()->declareEntity(PersonChemistEntity::class);
+    sharp()->config()->declareEntity(PersonPhysicistEntity::class);
+    sharp()->config()->declareEntity(PersonUnknownEntity::class);
+
+    fakeListFor('person', new class() extends PersonList
+    {
+        public function getListData(): array|Arrayable
+        {
+            return [
+                ['id' => 1, 'name' => 'Marie Curie', 'job' => 'chemist'],
+                ['id' => 2, 'name' => 'Rosalind Franklin', 'job' => 'physicist'],
+                ['id' => 3, 'name' => 'James Bond', 'job' => 'unknown'],
+            ];
+        }
+
+        public function buildListConfig(): void
+        {
+            $this->configureEntityMap(
+                attribute: 'job',
+                entities: EntityListEntities::make()
+                    ->addEntity('chemist', PersonChemistEntity::class, icon: 'testicon-car')
+                    ->addEntity('physicist', PersonPhysicistEntity::class)
+                    ->addEntity('unknown', PersonUnknownEntity::class),
+            );
+        }
+    });
+
+    $this->get('/sharp/s-list/person')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->has('entityList.entities', 3)
+            ->has('entityList.entities.0', fn (Assert $config) => $config
+                ->where('key', 'chemist')
+                ->where('entityKey', 'person-chemist')
+                ->where('label', 'Chemist')
+                ->where('icon.name', 'testicon-car')
+                ->where('formCreateUrl', route('code16.sharp.form.create', ['parentUri' => 's-list/person', 'entityKey' => 'person-chemist']))
+                ->etc()
+            )
+            ->has('entityList.entities.1', fn (Assert $config) => $config
+                ->where('key', 'physicist')
+                ->where('entityKey', 'person-physicist')
+                ->where('label', 'Physicist')
+                ->where('formCreateUrl', route('code16.sharp.form.create', ['parentUri' => 's-list/person', 'entityKey' => 'person-physicist']))
+                ->etc()
+            )
+            ->has('entityList.entities.2', fn (Assert $config) => $config
+                ->where('key', 'unknown')
+                ->where('entityKey', 'person-unknown')
+                ->where('label', 'Unknown')
+                ->where('formCreateUrl', route('code16.sharp.form.create', ['parentUri' => 's-list/person', 'entityKey' => 'person-unknown']))
                 ->etc()
             )
         );

@@ -37,7 +37,7 @@ class ApiShowInstanceCommandController extends ApiController
         $commandHandler = $this->getInstanceCommandHandler($showPage, $commandKey, $instanceId);
 
         $formattedData = $commandHandler->formatAndValidateRequestData((array) request('data'), $instanceId);
-        $result = $this->returnCommandResult($showPage, $commandHandler->execute($instanceId, $formattedData));
+        $result = $this->returnCommandResult($showPage, $entityKey, $commandHandler->execute($instanceId, $formattedData));
         $this->uploadManager->dispatchJobs($instanceId);
 
         return $result;
