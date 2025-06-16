@@ -17,7 +17,6 @@ final class DateRangeFilterData extends Data
         start: string,
         end: string,
         formatted?: { start: string, end: string },
-        preset?: string,
     } | null')]
     public ?array $value;
 
@@ -28,7 +27,7 @@ final class DateRangeFilterData extends Data
         public FilterType $type,
         public bool $required,
         public bool $mondayFirst,
-        #[LiteralTypeScriptType('Array<{ key:string, label:string }>|null')]
+        /** @var DateRangePresetData[] */
         public ?array $presets,
     ) {}
 
