@@ -5,6 +5,7 @@ namespace Code16\Sharp\Utils\Transformers\Attributes\Eloquent;
 use Code16\Sharp\Exceptions\SharpException;
 use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
 use Code16\Sharp\Utils\Transformers\SharpAttributeTransformer;
+use Illuminate\Support\Arr;
 
 /**
  * Transforms a SharpUploadModel instance in a thumbnail URL.
@@ -39,18 +40,29 @@ class SharpUploadModelThumbnailUrlTransformer implements SharpAttributeTransform
      */
     public function apply($value, $instance = null, $attribute = null)
     {
-        if (! $instance->$attribute) {
+        $upload = $instance->$attribute;
+
+        if (! $upload) {
             return null;
         }
 
-        if (! $instance->$attribute instanceof SharpUploadModel) {
+        if (! $upload instanceof SharpUploadModel) {
             throw new SharpException("[$attribute] must be an instance of SharpUploadModel");
         }
 
-        $url = $instance->$attribute->thumbnail($this->width, $this->height, $this->filters);
+        $url = $upload->thumbnail($this->width, $this->height, $this->filters);
 
         return $this->renderAsImageTag
-            ? sprintf('<img src="%s" alt="" class="img-fluid">', $url)
+            ? sprintf(
+                '<img src="%s" alt="" style="object-fit: contain; %s">',
+                $url,
+                $upload->mime_type === 'image/svg+xml'
+                    ? Arr::toCssStyles([
+                        "width: {$this->width}px" => $this->width,
+                        "height: {$this->height}px" => $this->height,
+                    ])
+                    : ''
+            )
             : $url;
     }
 }
