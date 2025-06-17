@@ -198,13 +198,13 @@
                                         class="group/item"
                                         :value="item[props.field.itemIdAttribute]"
                                     >
-                                        <div class="size-4">
+                                        <div class="shrink-0 size-4">
                                             <ComboboxItemIndicator as-child>
                                                 <Check class="size-4" />
                                             </ComboboxItemIndicator>
                                         </div>
 
-                                        <div v-html="item._html"></div>
+                                        <div class="flex-1 min-w-0" v-html="item._html"></div>
                                     </CommandItem>
                                 </template>
                             </CommandGroup>
