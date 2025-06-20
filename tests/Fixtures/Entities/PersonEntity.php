@@ -47,6 +47,10 @@ class PersonEntity extends SharpEntity
     public function setForm(?SharpForm $form): self
     {
         $this->fakeForm = $form;
+        if ($form === null) {
+            // Enforce show to be null
+            $this->form = null;
+        }
 
         return $this;
     }

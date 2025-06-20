@@ -34,7 +34,7 @@ trait HandlesEntityListItems
             ->all();
     }
 
-    private function getItemEntityKey(array $item, string $entityKey, SharpEntity $entity, SharpEntityList $list): string
+    private function getItemEntityKey(array $item, string $entityKey, SharpEntity $entity, SharpEntityList $list): EntityKey
     {
         $itemEntityAttributeValue = $list->getEntityAttribute()
             ? ($item[$list->getEntityAttribute()] ?? null)
@@ -51,10 +51,10 @@ trait HandlesEntityListItems
                 );
             }
 
-            return $listEntity->getEntityKey();
+            return new EntityKey($listEntity->getEntityKey());
         }
 
-        return $entityKey;
+        return new EntityKey($entityKey);
     }
 
     private function getItemUrl(array $item, string $entityKey, SharpEntity $entity, SharpEntityList $list): ?string
@@ -77,7 +77,10 @@ trait HandlesEntityListItems
                     'entityKey' => $itemEntityKey,
                     'instanceId' => $item[$list->getInstanceIdAttribute()],
                 ]);
-            } elseif ($itemEntity->hasForm()) {
+            }
+            if ($itemEntity->hasForm()
+                || $itemEntityKey->multiformKey() && isset($entity->getMultiforms()[$itemEntityKey->multiformKey()])
+            ) {
                 return route('code16.sharp.form.edit', [
                     'parentUri' => $breadcrumb->getCurrentPath(),
                     'entityKey' => $itemEntityKey,
