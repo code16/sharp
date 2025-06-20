@@ -709,7 +709,7 @@ class GeneratorCommand extends Command
         $this->replaceFileContent(
             $providerClass,
             $search,
-            $search.'            ->addEntity(\''.$entityKey.'\', \\'.$entityPath.'::class)'.PHP_EOL
+            $search.'            ->declareEntity(\\'.$entityPath.'::class)'.PHP_EOL
         );
     }
 
