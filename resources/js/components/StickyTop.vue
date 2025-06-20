@@ -11,10 +11,11 @@
     const stuck = computed(() => {
         const style = el.value ? window.getComputedStyle(el.value) : null;
         const { bottom, top } = selfRect;
+        const round = (num:number) => Math.round((num + Number.EPSILON) * 100) / 100;
         return el.value
             && style.position === 'sticky'
             && bottom >= 0
-            && top <= parseFloat(style.top);
+            && round(top) <= round(parseFloat(style.top));
     });
     const isOverflowingViewport = ref(false);
     const { height: innerHeight } = useWindowSize();
