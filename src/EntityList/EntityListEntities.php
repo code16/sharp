@@ -2,8 +2,12 @@
 
 namespace Code16\Sharp\EntityList;
 
+use Illuminate\Support\Traits\Conditionable;
+
 class EntityListEntities
 {
+    use Conditionable;
+
     /**
      * @var EntityListEntity[]
      */
