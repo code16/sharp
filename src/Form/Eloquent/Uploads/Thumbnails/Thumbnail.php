@@ -224,7 +224,11 @@ class Thumbnail
             ) {
                 $class = $this->encoderClass;
 
-                return new $class(quality: $this->quality);
+                return tap(new $class(), function ($encoder) {
+                    if (isset($encoder->quality)) {
+                        $encoder->quality = $this->quality;
+                    }
+                });
             }
             throw new EncoderException('Encoder class ('.$this->encoderClass.') does not exist or does not implement EncoderInterface.');
         }

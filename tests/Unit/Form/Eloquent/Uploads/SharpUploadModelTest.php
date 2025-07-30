@@ -111,20 +111,51 @@ it('allows to call a closure after a thumbnail creation', function () {
         ->and($thumbWasCreatedTwice)->toBeFalse();
 });
 
-it('allows to define an encoder when creating the thumbnail', function () {
-    $file = createImage(name: 'my-image.png');
-    $upload = createSharpUploadModel($file);
+it('allows to define an encoder when creating the thumbnail', function (string $driver) {
+    sharp()->config()
+        ->configureUploadsThumbnailCreation(imageDriverClass: $driver);
 
-    $thumb = $upload->thumbnail()
-        ->setQuality(80)
-        ->when($upload->mime_type == 'image/png', fn ($thumbnail) => $thumbnail->toWebp())
-        ->make(150);
-
-    expect($thumb)
+    expect(
+        createSharpUploadModel(createImage(name: 'my-image.png'))->thumbnail()->setQuality(80)
+            ->toWebp()->make(150)
+    )
         ->toEqual('/storage/thumbnails/data/150-_q-80/my-image.webp')
-        ->and(Storage::disk('public')->exists('thumbnails/data/150-_q-80/my-image.webp'))
-        ->toBeTrue();
-});
+        ->and(Storage::disk('public')->exists('thumbnails/data/150-_q-80/my-image.webp'))->toBeTrue();
+
+    expect(
+        createSharpUploadModel(createImage(name: 'my-image.png'))->thumbnail()->setQuality(80)
+            ->toGif()->make(150)
+    )
+        ->toEqual('/storage/thumbnails/data/150-_q-80/my-image.gif')
+        ->and(Storage::disk('public')->exists('thumbnails/data/150-_q-80/my-image.gif'))->toBeTrue();
+
+    expect(
+        createSharpUploadModel(createImage(name: 'my-image.gif'))->thumbnail()->setQuality(80)
+            ->toPng()->make(150)
+    )
+        ->toEqual('/storage/thumbnails/data/150-_q-80/my-image.png')
+        ->and(Storage::disk('public')->exists('thumbnails/data/150-_q-80/my-image.png'))->toBeTrue();
+
+    expect(
+        createSharpUploadModel(createImage(name: 'my-image.gif'))->thumbnail()->setQuality(80)
+            ->toJpeg()->make(150)
+    )
+        ->toEqual('/storage/thumbnails/data/150-_q-80/my-image.jpeg')
+        ->and(Storage::disk('public')->exists('thumbnails/data/150-_q-80/my-image.jpeg'))->toBeTrue();
+
+    if ($driver === \Intervention\Image\Drivers\Imagick\Driver::class) {
+        expect(
+            createSharpUploadModel(createImage(name: 'my-image.png'))->thumbnail()->setQuality(80)
+                ->toAvif()->make(150)
+        )
+            ->toEqual('/storage/thumbnails/data/150-_q-80/my-image.avif')
+            ->and(Storage::disk('public')->exists('thumbnails/data/150-_q-80/my-image.avif'))->toBeTrue();
+    }
+})
+    ->with([
+        \Intervention\Image\Drivers\Gd\Driver::class,
+        \Intervention\Image\Drivers\Imagick\Driver::class,
+    ]);
 
 it('allows to create SVG thumbnail by only copying the file', function () {
     $file = createImage('local', 'test.svg');
