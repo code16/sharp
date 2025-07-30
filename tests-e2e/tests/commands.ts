@@ -53,7 +53,7 @@ export function commandSuite(test: TestType<PlaywrightTestArgs & PlaywrightTestO
     await goto();
     await openCommandDropdown();
     await page.getByRole('menu').getByRole('menuitem', { name: 'Test link command' }).click();
-    await page.waitForURL('https://example.org', { waitUntil: 'commit' });
+    await page.waitForURL('/test', { waitUntil: 'commit' });
   });
   test('refresh', async ({ page, init, goto, openCommandDropdown, contentLocator }) => {
     await init();
@@ -114,7 +114,7 @@ export function commandFormResultSuite(test: TestType<PlaywrightTestArgs & Playw
     await page.getByRole('menu').getByRole('menuitem', { name: 'Test form command' }).click();
     await page.getByRole('dialog').getByRole('radio', { name: 'Link' }).click();
     await page.getByRole('dialog').getByRole('button', { name: 'Submit' }).click();
-    await page.waitForURL('https://example.org', { waitUntil: 'commit' });
+    await page.waitForURL('/test', { waitUntil: 'commit' });
   });
   test('reload', async ({ page, init, goto, openCommandDropdown, contentLocator }) => {
     await init();

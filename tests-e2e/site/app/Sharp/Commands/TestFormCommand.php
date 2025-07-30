@@ -36,7 +36,7 @@ trait TestFormCommand
         return match ($data['test_action']) {
             'download' => $this->download('file.pdf', 'file.pdf', 'fixtures'),
             'info' => $this->info('Info message : '.$data['text']),
-            'link' => $this->link('https://example.org'),
+            'link' => $this->link(route('test-page')),
             'reload' => tap($this->reload(), function () {
                 TestModel::query()->update(['text' => 'Reloaded']);
             }),

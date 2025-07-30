@@ -19,3 +19,7 @@ Route::get('/sharp/remote-autocomplete', function () {
         ->values();
 })
     ->name('sharp.remote-autocomplete');
+
+Route::get('/test', function () {
+    return 'This is a test page';
+})->name('test-page');

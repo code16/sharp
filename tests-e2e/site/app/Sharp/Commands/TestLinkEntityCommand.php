@@ -13,6 +13,6 @@ class TestLinkEntityCommand extends EntityCommand
 
     public function execute(array $data = []): array
     {
-        return $this->link('https://example.org');
+        return $this->link(route('test-page'));
     }
 }
