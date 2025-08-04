@@ -18,7 +18,7 @@ export type EmbedOptions = {
 export const Embed: WithRequiredOptions<Node<EmbedOptions>> = Node.create<EmbedOptions>({
     name: 'embed',
 
-    group: 'block',
+    group: 'embed',
 
     atom: true,
 

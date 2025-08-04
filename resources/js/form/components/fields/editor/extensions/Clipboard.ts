@@ -1,22 +1,17 @@
 import { Command, Extension } from "@tiptap/core";
 import { Plugin } from '@tiptap/pm/state';
-import { DOMParser, Schema } from '@tiptap/pm/model';
+import { DOMParser } from '@tiptap/pm/model';
 import { __ } from "@/utils/i18n";
 
 export const Clipboard = Extension.create({
     name: 'clipboard',
     addOptions() {
         return {
-            schema: null,
             inline: false,
         }
     },
     addProseMirrorPlugins() {
-        const schema = getNormalizedSchema(
-            this.options.schema,
-            this.editor.schema
-        );
-        const parser = DOMParser.fromSchema(schema);
+        const parser = DOMParser.fromSchema(this.editor.schema);
         return [
             new Plugin({
                 props: {
@@ -82,18 +77,4 @@ declare module '@tiptap/core' {
             copyNode: (pos: number) => ReturnType
         }
     }
-}
-
-// needed to keep same references of node/mark types
-function getNormalizedSchema(target, source) {
-    const schema = new Schema(target.spec);
-    // @ts-ignore
-    schema.nodes = Object.fromEntries(
-        Object.entries(source.nodes).filter(([key]) => !!target.nodes[key])
-    );
-    // @ts-ignore
-    schema.marks = Object.fromEntries(
-        Object.entries(source.marks).filter(([key]) => !!target.marks[key])
-    );
-    return schema;
 }

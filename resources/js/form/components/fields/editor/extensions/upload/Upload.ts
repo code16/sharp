@@ -21,7 +21,7 @@ export type UploadOptions = {
 export const Upload: WithRequiredOptions<Node<UploadOptions>> = Node.create<UploadOptions>({
     name: 'upload',
 
-    group: 'block',
+    group: 'embed',
 
     atom: true,
 

@@ -35,7 +35,7 @@ import { CharacterCount } from '@tiptap/extension-character-count';
 import { FormEditorFieldData, FormEditorToolbarButton } from "@/types";
 
 
-function getExtensions(field: FormEditorFieldData) {
+export function getExtensions(field: FormEditorFieldData) {
     const toolbarHas = (buttonName: FormEditorToolbarButton | FormEditorToolbarButton[]) =>
         !field.toolbar || field.toolbar.some(button =>
             Array.isArray(buttonName)
@@ -54,9 +54,16 @@ function getExtensions(field: FormEditorFieldData) {
                 ]
             }
         }),
+        Clipboard.configure({
+            inline: field.inline,
+        }),
         toolbarHas('code') && Code,
         toolbarHas('code-block') && CodeBlock,
-        Document,
+        Document.extend({
+            content: field.uploads || Object.keys(field.embeds ?? {}).length
+                ? '(block | embed)+'
+                : 'block+',
+        }),
         Dropcursor,
         Gapcursor,
         HardBreak.extend({
@@ -115,17 +122,4 @@ function getExtensions(field: FormEditorFieldData) {
     ]
         .flat()
         .filter(extension => !!extension);
-}
-
-export function getExtensionsForEditor(field: FormEditorFieldData) {
-    return [
-        ...getExtensions(field),
-        Clipboard.configure({
-            schema: getSchema(getExtensions({
-                ...field,
-                toolbar: field.toolbar ?? [], // if no toolbar, prevent pasting formatted HTML
-            })),
-            inline: field.inline,
-        }),
-    ];
 }
