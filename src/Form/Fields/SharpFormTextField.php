@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Form\Fields;
 
 use Code16\Sharp\Form\Fields\Formatters\TextFormatter;
+use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithHtmlSanitization;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithMaxLength;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
 use Code16\Sharp\Utils\Fields\IsSharpFieldWithLocalization;
@@ -11,6 +12,7 @@ use Code16\Sharp\Utils\Fields\SharpFieldWithLocalization;
 class SharpFormTextField extends SharpFormField implements IsSharpFieldWithLocalization
 {
     use SharpFieldWithLocalization;
+    use SharpFormFieldWithHtmlSanitization;
     use SharpFormFieldWithMaxLength;
     use SharpFormFieldWithPlaceholder;
 

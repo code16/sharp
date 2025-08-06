@@ -351,3 +351,60 @@ it('allows to format a unicode text value from front', function () {
         ),
     );
 });
+
+it('sanitizes HTML content from front by default', function () {
+    $value = <<<'HTML'
+        This is unwanted:
+        1_<script>alert('XSS')</script>
+        2_<img src="xss.jpg" onload="alert('XSS')">
+        This is wanted:
+        1_<x-embed data-key="0"></x-embed>
+        2_<x-sharp-file data-key="0"></x-sharp-file>
+        3_<div data-html-content="true"><script></script></div>
+        HTML;
+
+    $expected = <<<'HTML'
+        This is unwanted:
+        1_
+        2_<img src="xss.jpg">
+        This is wanted:
+        1_<x-embed></x-embed>
+        2_<x-sharp-file file="[]"></x-sharp-file>
+        3_<div data-html-content="true"><script></script></div>
+        HTML;
+
+    expect(
+        (new EditorFormatter())->fromFront(
+            SharpFormEditorField::make('md')
+                ->allowEmbeds([EditorFormatterTestEmbed::class])
+                ->allowUploads(SharpFormEditorUpload::make()),
+            'attribute',
+            [
+                'text' => $value,
+                'embeds' => [
+                    (new EditorFormatterTestEmbed())->key() => [
+                        '0' => [],
+                    ],
+                ],
+                'uploads' => [
+                    '0' => [
+                        'file' => [],
+                    ],
+                ],
+            ],
+        )
+    )->toEqual($expected);
+});
+
+it('does not sanitize HTML content from front when disabled', function () {
+    expect(
+        (new EditorFormatter())->fromFront(
+            SharpFormEditorField::make('md')
+                ->shouldSanitizeHtml(false),
+            'attribute',
+            [
+                'text' => '<script>alert("XSS")</script>',
+            ],
+        )
+    )->toEqual('<script>alert("XSS")</script>');
+});

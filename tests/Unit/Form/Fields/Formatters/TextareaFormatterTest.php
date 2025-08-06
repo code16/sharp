@@ -58,3 +58,25 @@ it('returns a string when formatting a string text value from front in a localiz
             )
     )->toEqual($value);
 });
+
+it('sanitizes value from front if configured', function () {
+    expect(
+        (new TextareaFormatter())
+            ->fromFront(
+                SharpFormTextareaField::make('text'),
+                'attribute',
+                '<script>alert("XSS")</script>'
+            )
+    )
+        ->toEqual('<script>alert("XSS")</script>');
+
+    expect(
+        (new TextareaFormatter())
+            ->fromFront(
+                SharpFormTextareaField::make('text')->shouldSanitizeHtml(),
+                'attribute',
+                '<script>alert("XSS")</script><img src="x" onerror="alert(\'XSS\')">'
+            )
+    )
+        ->toEqual('<img src="x" />');
+});

@@ -16,6 +16,7 @@
         "pragmarx/google2fa": "^8.0",
         "spatie/image-optimizer": "^1.6",
         "spatie/laravel-translatable": "^6.0",
+        "symfony/html-sanitizer": "^7.3",
         "technikermathe/blade-lucide-icons": "^3.98",
         "tightenco/ziggy": "^1.8"
     },

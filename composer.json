@@ -26,6 +26,7 @@
         "league/commonmark": "^2.4",
         "masterminds/html5": "^2.8",
         "spatie/image-optimizer": "^1.6",
+        "symfony/html-sanitizer": "^7.3",
         "tightenco/ziggy": "^2.0"
     },
     "require-dev": {
