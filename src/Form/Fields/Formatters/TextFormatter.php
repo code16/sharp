@@ -5,7 +5,7 @@ namespace Code16\Sharp\Form\Fields\Formatters;
 use Code16\Sharp\Exceptions\Form\SharpFormFieldDataException;
 use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
-use Code16\Sharp\Utils\Fields\Formatters\FormatsSanitizedValue;
+use Code16\Sharp\Utils\Sanitization\FormatsSanitizedValue;
 
 class TextFormatter extends AbstractSimpleFormatter
 {

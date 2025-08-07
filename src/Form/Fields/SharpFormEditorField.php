@@ -8,19 +8,20 @@ use Code16\Sharp\Form\Fields\Editor\Uploads\FormEditorUploadForm;
 use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
 use Code16\Sharp\Form\Fields\Formatters\EditorFormatter;
 use Code16\Sharp\Form\Fields\Formatters\SharpFieldFormatter;
-use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithHtmlSanitization;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithMaxLength;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
 use Code16\Sharp\Utils\Fields\IsSharpFieldWithEmbeds;
 use Code16\Sharp\Utils\Fields\IsSharpFieldWithLocalization;
 use Code16\Sharp\Utils\Fields\SharpFieldWithEmbeds;
 use Code16\Sharp\Utils\Fields\SharpFieldWithLocalization;
+use Code16\Sharp\Utils\Sanitization\IsSharpFieldWithHtmlSanitization;
+use Code16\Sharp\Utils\Sanitization\SharpFieldWithHtmlSanitization;
 
-class SharpFormEditorField extends SharpFormField implements IsSharpFieldWithEmbeds, IsSharpFieldWithLocalization
+class SharpFormEditorField extends SharpFormField implements IsSharpFieldWithEmbeds, IsSharpFieldWithHtmlSanitization, IsSharpFieldWithLocalization
 {
     use SharpFieldWithEmbeds;
+    use SharpFieldWithHtmlSanitization;
     use SharpFieldWithLocalization;
-    use SharpFormFieldWithHtmlSanitization;
     use SharpFormFieldWithMaxLength {
         setMaxLength as protected parentSetMaxLength;
     }

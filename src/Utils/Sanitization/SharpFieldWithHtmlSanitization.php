@@ -1,8 +1,8 @@
 <?php
 
-namespace Code16\Sharp\Form\Fields\Utils;
+namespace Code16\Sharp\Utils\Sanitization;
 
-trait SharpFormFieldWithHtmlSanitization
+trait SharpFieldWithHtmlSanitization
 {
     protected bool $sanitize = false;
 

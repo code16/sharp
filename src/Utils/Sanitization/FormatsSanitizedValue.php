@@ -1,11 +1,9 @@
 <?php
 
-namespace Code16\Sharp\Utils\Fields\Formatters;
+namespace Code16\Sharp\Utils\Sanitization;
 
 use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
-use Code16\Sharp\Form\Fields\SharpFormTextareaField;
-use Code16\Sharp\Form\Fields\SharpFormTextField;
 use DOMElement;
 use Masterminds\HTML5;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizer;
@@ -13,14 +11,28 @@ use Symfony\Component\HtmlSanitizer\HtmlSanitizerConfig;
 
 trait FormatsSanitizedValue
 {
-    protected function sanitizeHtmlIfNeeded(
-        SharpFormTextField|SharpFormTextareaField|SharpFormEditorField $field,
+    private ?HtmlSanitizer $sanitizer = null;
+
+    private function sanitizeHtmlIfNeeded(
+        IsSharpFieldWithHtmlSanitization $field,
         ?string $value
     ): ?string {
-        if (! $value || ! $field->isSanitizingHtml()) {
+        if (! $value || ! str_contains($value, '<') || ! $field->isSanitizingHtml()) {
             return $value;
         }
 
+        if ($field instanceof SharpFormEditorField) {
+            $encoded = $this->encodeEmbedsAndRawHtml($field, $value);
+            $sanitized = $this->sanitizer()->sanitize($encoded);
+
+            return $this->decodeEmbedsAndRawHtml($field, $sanitized);
+        }
+
+        return $this->sanitizer()->sanitize($value);
+    }
+
+    private function sanitizer(): HtmlSanitizer
+    {
         $config = (new HtmlSanitizerConfig())
             ->allowSafeElements()
             ->allowElement('iframe')
@@ -31,24 +43,17 @@ trait FormatsSanitizedValue
             ->allowAttribute('style', allowedElements: '*')
             ->withMaxInputLength(500000);
 
-        if ($field instanceof SharpFormEditorField) {
-            $encoded = $this->encodeEmbedsAndRawHtml($field, $value);
-            $sanitized = (new HtmlSanitizer($config))->sanitize($encoded);
-
-            return $this->decodeEmbedsAndRawHtml($field, $sanitized);
-        }
-
-        return (new HtmlSanitizer($config))->sanitize($value);
+        return $this->sanitizer ??= new HtmlSanitizer($config);
     }
 
-    protected function isEncodingNeeded(SharpFormEditorField $field): bool
+    private function isEncodingNeeded(SharpFormEditorField $field): bool
     {
         return count($field->embeds())
             || $field->uploadsConfig()
             || in_array(SharpFormEditorField::RAW_HTML, $field->getToolbar());
     }
 
-    protected function encodeEmbedsAndRawHtml(SharpFormEditorField $field, string $value): string
+    private function encodeEmbedsAndRawHtml(SharpFormEditorField $field, string $value): string
     {
         if (! $this->isEncodingNeeded($field)) {
             return $value;
@@ -76,7 +81,7 @@ trait FormatsSanitizedValue
         return (new HTML5())->saveHTML($fragment->childNodes);
     }
 
-    protected function decodeEmbedsAndRawHtml(SharpFormEditorField $field, string $value): string
+    private function decodeEmbedsAndRawHtml(SharpFormEditorField $field, string $value): string
     {
         if (! $this->isEncodingNeeded($field)) {
             return $value;

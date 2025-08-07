@@ -5,7 +5,7 @@ namespace Code16\Sharp\Form\Fields\Formatters;
 use Code16\Sharp\Exceptions\Form\SharpFormFieldDataException;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormField;
-use Code16\Sharp\Utils\Fields\Formatters\FormatsSanitizedValue;
+use Code16\Sharp\Utils\Sanitization\FormatsSanitizedValue;
 use Illuminate\Support\Collection;
 
 class EditorFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
