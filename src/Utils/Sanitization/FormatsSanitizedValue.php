@@ -41,7 +41,25 @@ trait FormatsSanitizedValue
     {
         $config = (new HtmlSanitizerConfig())
             ->allowSafeElements()
-            ->allowElement('iframe')
+            ->allowElement('iframe', [
+                'allow',
+                'allowfullscreen',
+                'loading',
+                'name',
+                'referrerpolicy',
+                'sandbox',
+                'src',
+                'srcdoc',
+                'width',
+                'height',
+                'id',
+                'title',
+                'aria-label',
+                'frameborder',
+                'marginwidth',
+                'marginheight',
+                'scrolling',
+            ])
             ->allowRelativeLinks()
             ->allowRelativeMedias()
             ->allowElement('div', ['data-encoded-content'])

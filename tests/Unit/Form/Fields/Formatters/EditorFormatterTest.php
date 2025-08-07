@@ -355,22 +355,26 @@ it('allows to format a unicode text value from front', function () {
 it('sanitizes HTML content from front by default', function () {
     $value = <<<'HTML'
         This is unwanted:
-        1_<script>alert('XSS')</script>
-        2_<img src="xss.jpg" onload="alert('XSS')">
+        <script>alert('XSS')</script>
+        <img src="javascript:alert('XSS')" onload="alert('XSS')">
+        <iframe src="javascript:alert('XSS')" onerror="alert('XSS')"></iframe>
         This is wanted:
-        1_<x-embed data-key="0"></x-embed>
-        2_<x-sharp-file data-key="0"></x-sharp-file>
-        3_<div data-html-content="true"><script></script></div>
+        <x-embed data-key="0"></x-embed>
+        <x-sharp-file data-key="0"></x-sharp-file>
+        <div data-html-content="true"><script></script></div>
+        <iframe src="/test" allow="fullscreen" allowfullscreen width="50" height="50" frameborder="0" scrolling="false"></iframe>
         HTML;
 
     $expected = <<<'HTML'
         This is unwanted:
-        1_
-        2_<img src="xss.jpg">
+
+        <img>
+        <iframe></iframe>
         This is wanted:
-        1_<x-embed></x-embed>
-        2_<x-sharp-file file="[]"></x-sharp-file>
-        3_<div data-html-content="true"><script></script></div>
+        <x-embed></x-embed>
+        <x-sharp-file file="[]"></x-sharp-file>
+        <div data-html-content="true"><script></script></div>
+        <iframe src="/test" allow="fullscreen" allowfullscreen width="50" height="50" frameborder="0" scrolling="false"></iframe>
         HTML;
 
     expect(
