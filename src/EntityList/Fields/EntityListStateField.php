@@ -2,7 +2,9 @@
 
 namespace Code16\Sharp\EntityList\Fields;
 
-class EntityListStateField implements IsEntityListField
+use Illuminate\Contracts\Support\Arrayable;
+
+class EntityListStateField implements Arrayable, IsEntityListField
 {
     use HasCommonEntityListFieldAttributes;
 
@@ -13,7 +15,7 @@ class EntityListStateField implements IsEntityListField
         return new static();
     }
 
-    public function getFieldProperties(): array
+    public function toArray(): array
     {
         return [
             'type' => 'state',
