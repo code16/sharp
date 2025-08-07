@@ -22,10 +22,16 @@ trait FormatsSanitizedValue
         }
 
         if ($field instanceof SharpFormEditorField) {
-            $encoded = $this->encodeEmbedsAndRawHtml($field, $value);
-            $sanitized = $this->sanitizer()->sanitize($encoded);
+            $needsEncoding = $this->isEncodingNeeded($field, $value);
+            $sanitized = $this->sanitizer()->sanitize(
+                $needsEncoding
+                    ? $this->encodeEmbedsAndRawHtml($field, $value)
+                    : $value
+            );
 
-            return $this->decodeEmbedsAndRawHtml($field, $sanitized);
+            return $needsEncoding
+                ? $this->decodeEmbedsAndRawHtml($field, $sanitized)
+                : $sanitized;
         }
 
         return $this->sanitizer()->sanitize($value);
@@ -46,19 +52,19 @@ trait FormatsSanitizedValue
         return $this->sanitizer ??= new HtmlSanitizer($config);
     }
 
-    private function isEncodingNeeded(SharpFormEditorField $field): bool
+    private function isEncodingNeeded(SharpFormEditorField $field, string $value): bool
     {
-        return count($field->embeds())
-            || $field->uploadsConfig()
-            || in_array(SharpFormEditorField::RAW_HTML, $field->getToolbar());
+        return collect([
+            ...$field->embeds()->map(fn (SharpFormEditorEmbed $embed) => '<'.$embed->tagName())->all(),
+            '<x-sharp-image',
+            '<x-sharp-file',
+            'data-html-content',
+        ])
+            ->contains(fn (string $needle) => str_contains($value, $needle));
     }
 
     private function encodeEmbedsAndRawHtml(SharpFormEditorField $field, string $value): string
     {
-        if (! $this->isEncodingNeeded($field)) {
-            return $value;
-        }
-
         $fragment = (new HTML5())->loadHTMLFragment($value);
         $embedTags = $field->embeds()->map(fn (SharpFormEditorEmbed $embed) => $embed->tagName())->all();
 
@@ -83,10 +89,6 @@ trait FormatsSanitizedValue
 
     private function decodeEmbedsAndRawHtml(SharpFormEditorField $field, string $value): string
     {
-        if (! $this->isEncodingNeeded($field)) {
-            return $value;
-        }
-
         $fragment = (new HTML5())->loadHTMLFragment($value);
 
         for ($i = 0; $i < $fragment->childNodes->length; $i++) {

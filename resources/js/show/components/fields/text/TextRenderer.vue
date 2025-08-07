@@ -5,6 +5,7 @@
     import { ShowTextFieldData } from "@/types";
     import Embed from "@/show/components/fields/text/nodes/Embed.vue";
     import { components } from '@/components/TemplateRenderer.vue';
+    import { sanitize } from "@/utils/sanitize";
 
     const props = defineProps<{
         field: ShowTextFieldData,
@@ -13,7 +14,7 @@
 
     const formattedContent = computed(() => {
         const dom = document.createElement('template');
-        dom.innerHTML = props.content;
+        dom.innerHTML = sanitize(props.content);
         dom.content.querySelectorAll('[data-html-content]').forEach(htmlNode => {
             const component = document.createElement('html-content');
             component.setAttribute('content', htmlNode.innerHTML.trim());
