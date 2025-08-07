@@ -4,8 +4,6 @@ namespace Code16\Sharp\EntityList\Fields;
 
 interface IsEntityListField
 {
-    public function getFieldProperties(): array;
-
     public function setLabel(string $label): self;
 
     public function setSortable(bool $sortable = true): self;

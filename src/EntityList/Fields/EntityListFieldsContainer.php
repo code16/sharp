@@ -75,7 +75,6 @@ class EntityListFieldsContainer
             $this->fields[] = EntityListStateField::make();
         }
 
-        return collect($this->fields)
-            ->map(fn (IsEntityListField $field) => $field->getFieldProperties());
+        return collect($this->fields);
     }
 }

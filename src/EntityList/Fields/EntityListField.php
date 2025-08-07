@@ -2,7 +2,9 @@
 
 namespace Code16\Sharp\EntityList\Fields;
 
-class EntityListField implements IsEntityListField
+use Illuminate\Contracts\Support\Arrayable;
+
+class EntityListField implements Arrayable, IsEntityListField
 {
     use HasCommonEntityListFieldAttributes;
 
@@ -41,7 +43,7 @@ class EntityListField implements IsEntityListField
         return $this;
     }
 
-    public function getFieldProperties(): array
+    public function toArray(): array
     {
         return [
             'type' => 'text',

@@ -2,7 +2,9 @@
 
 namespace Code16\Sharp\EntityList\Fields;
 
-class EntityListBadgeField implements IsEntityListField
+use Illuminate\Contracts\Support\Arrayable;
+
+class EntityListBadgeField implements Arrayable, IsEntityListField
 {
     use HasCommonEntityListFieldAttributes;
 
@@ -25,7 +27,7 @@ class EntityListBadgeField implements IsEntityListField
         return $this;
     }
 
-    public function getFieldProperties(): array
+    public function toArray(): array
     {
         return [
             'type' => 'badge',
