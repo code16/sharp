@@ -12,6 +12,7 @@ it('allows to define label', function () {
             'type' => 'text',
             'emptyVisible' => false,
             'html' => true,
+            'sanitize' => true,
             'label' => 'Label',
         ]);
 });
@@ -55,4 +56,12 @@ it('handle localized attribute', function () {
     $field->setLocalized();
 
     expect($field->toArray())->toHaveKey('localized', true);
+});
+
+it('allows to disable HTML sanitization', function () {
+    $field = SharpShowTextField::make('textfield')
+        ->shouldSanitizeHtml(false)
+        ->setLabel('Label');
+
+    expect($field->toArray()['sanitize'])->toBe(false);
 });
