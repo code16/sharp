@@ -183,7 +183,7 @@
                                                             <CardTitle
                                                                 :id="`section-${i}-title`"
                                                                 class="py-1 -my-1"
-                                                                v-html="sanitize(section.title || (i == 0 && show.getTitle(locale)))"
+                                                                v-html="section.title || (i == 0 && sanitize(show.getTitle(locale)))"
                                                             >
                                                             </CardTitle>
                                                         </template>
