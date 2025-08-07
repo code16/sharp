@@ -13,6 +13,9 @@ trait SharpFieldWithHtmlSanitization
         return $this;
     }
 
+    /**
+     * @internal
+     */
     public function isSanitizingHtml(): bool
     {
         return $this->sanitize;

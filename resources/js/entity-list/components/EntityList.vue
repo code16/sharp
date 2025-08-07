@@ -783,7 +783,7 @@
                                                             <template v-if="field.html && typeof item[field.key] === 'string'">
                                                                 <Content class="break-words [&_a]:relative [&_a]:z-10"
                                                                     :class="{ '[&_a]:pointer-events-none': selecting || reordering }"
-                                                                    :html="sanitize(item[field.key])"
+                                                                    :html="field.sanitize ? sanitize(item[field.key]) : item[field.key]"
                                                                 />
                                                             </template>
                                                             <template v-else>
