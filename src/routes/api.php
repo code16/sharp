@@ -5,6 +5,7 @@ use Code16\Sharp\Http\Controllers\Api\ApiEntityListFiltersController;
 use Code16\Sharp\Http\Controllers\Api\ApiFilterAutocompleteController;
 use Code16\Sharp\Http\Controllers\Api\ApiFormAutocompleteController;
 use Code16\Sharp\Http\Controllers\Api\ApiFormEditorUploadFormController;
+use Code16\Sharp\Http\Controllers\Api\ApiFormPreviewController;
 use Code16\Sharp\Http\Controllers\Api\ApiFormUploadController;
 use Code16\Sharp\Http\Controllers\Api\ApiFormUploadThumbnailController;
 use Code16\Sharp\Http\Controllers\Api\ApiSearchController;
@@ -95,6 +96,9 @@ Route::group([
 
     Route::post('/form/editors/upload/form/{entityKey}/{instanceId?}', [ApiFormEditorUploadFormController::class, 'update'])
         ->name('code16.sharp.api.form.editor.upload.form.update');
+
+    Route::post('/form/preview/{entityKey}/{instanceId?}', [ApiFormPreviewController::class, 'store'])
+        ->name('code16.sharp.api.form.preview');
 
     Route::post('/upload/thumbnail/{entityKey}/{instanceId?}', [ApiFormUploadThumbnailController::class, 'show'])
         ->name('code16.sharp.api.form.upload.thumbnail.show');

@@ -43,7 +43,7 @@ trait WithSharpFormEloquentUpdater
             ->fillAfterUpdateUsing(
                 fn ($instanceId) => $this->formatDataAfterUpdate($data, $instanceId)
             )
-            ->update($instance, $data);
+            ->update($instance, $data, $this->isPreview);
     }
 
     /**

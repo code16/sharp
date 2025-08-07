@@ -16,9 +16,13 @@ class EloquentModelUpdater
     protected array $relationships = [];
     protected ?Closure $fillAfterUpdateUsing = null;
 
-    public function update(Model $instance, array $data): Model
+    public function update(Model $instance, array $data, bool $isPreview = false): Model
     {
         $this->fillInstance($instance, $data);
+
+        if ($isPreview) {
+            return $instance;
+        }
 
         // End of "normal" attributes.
         $instance->save();
