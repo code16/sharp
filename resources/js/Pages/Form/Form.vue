@@ -12,6 +12,7 @@
     import { Button } from '@/components/ui/button';
     import { useResizeObserver } from "@vueuse/core";
     import { slugify } from "@/utils";
+    import { api } from "@/api/api";
 
     const props = defineProps<{
         form: FormData,
@@ -71,6 +72,18 @@
             });
         }
     }, { immediate: true });
+
+    const previewHtml = ref('');
+    let timeout: number;
+    watch(() => form.data, () => {
+        clearTimeout(timeout);
+        timeout = window.setTimeout(() => {
+            api.post(route('code16.sharp.api.form.preview', { entityKey, instanceId }), form.data)
+                .then(response => {
+                    previewHtml.value = response.data.data.html;
+                });
+        }, timeout ? 200 : 0);
+    }, { immediate: true, deep: true });
 </script>
 
 <template>
@@ -85,44 +98,49 @@
 
         <div class="@container">
             <div :class="form.pageAlert ? 'mt-4' : 'mt-6 @3xl:mt-10'" ref="el">
-                <SharpForm
-                    :form="form"
-                    :show-error-alert="showErrorAlert"
-                    :error-alert-message="errorAlertMessage"
-                    v-model:tab="selectedTabSlug"
-                    @submit="submit"
-                >
-                    <template #title>
-                        {{ form.title }}
-                    </template>
-                    <template #footer>
-                        <div class="flex gap-4">
-                            <Button variant="outline" as-child>
-                                <Link :href="props.cancelUrl">
-                                    <template v-if="form.canEdit">
-                                        {{ __('sharp::action_bar.form.cancel_button') }}
-                                    </template>
-                                    <template v-else>
-                                        {{ __('sharp::action_bar.form.back_button') }}
-                                    </template>
-                                </Link>
-                            </Button>
-                            <template v-if="form.canEdit">
-                                <Button style="min-width: 6.5em" :disabled="form.isUploading || loading" @click="submit">
-                                    <template v-if="form.isUploading">
-                                        {{ __('sharp::action_bar.form.submit_button.pending.upload') }}
-                                    </template>
-                                    <template v-else-if="instanceId || form.config.isSingle">
-                                        {{ __('sharp::action_bar.form.submit_button.update') }}
-                                    </template>
-                                    <template v-else>
-                                        {{ __('sharp::action_bar.form.submit_button.create') }}
-                                    </template>
+                <div class="grid" :class="previewHtml ? 'grid-cols-2' : 'grid-cols-1'">
+                    <SharpForm
+                        :form="form"
+                        :show-error-alert="showErrorAlert"
+                        :error-alert-message="errorAlertMessage"
+                        v-model:tab="selectedTabSlug"
+                        @submit="submit"
+                    >
+                        <template #title>
+                            {{ form.title }}
+                        </template>
+                        <template #footer>
+                            <div class="flex gap-4">
+                                <Button variant="outline" as-child>
+                                    <Link :href="props.cancelUrl">
+                                        <template v-if="form.canEdit">
+                                            {{ __('sharp::action_bar.form.cancel_button') }}
+                                        </template>
+                                        <template v-else>
+                                            {{ __('sharp::action_bar.form.back_button') }}
+                                        </template>
+                                    </Link>
                                 </Button>
-                            </template>
-                        </div>
+                                <template v-if="form.canEdit">
+                                    <Button style="min-width: 6.5em" :disabled="form.isUploading || loading" @click="submit">
+                                        <template v-if="form.isUploading">
+                                            {{ __('sharp::action_bar.form.submit_button.pending.upload') }}
+                                        </template>
+                                        <template v-else-if="instanceId || form.config.isSingle">
+                                            {{ __('sharp::action_bar.form.submit_button.update') }}
+                                        </template>
+                                        <template v-else>
+                                            {{ __('sharp::action_bar.form.submit_button.create') }}
+                                        </template>
+                                    </Button>
+                                </template>
+                            </div>
+                        </template>
+                    </SharpForm>
+                    <template v-if="previewHtml">
+                        <iframe class="border-0 size-full" :srcdoc="previewHtml"></iframe>
                     </template>
-                </SharpForm>
+                </div>
             </div>
         </div>
     </Layout>

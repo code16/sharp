@@ -27,6 +27,7 @@ abstract class SharpForm
     protected bool $displayShowPageAfterCreation = false;
     protected ?string $editFormTitle = null;
     protected ?string $createFormTitle = null;
+    protected bool $isPreview = false;
 
     final public function formLayout(): array
     {
@@ -75,6 +76,15 @@ abstract class SharpForm
     final public function store(array $data): mixed
     {
         return $this->update(null, $data);
+    }
+
+    final public function updateForPreview(mixed $id, array $data): mixed
+    {
+        $this->isPreview = true;
+
+        return tap($this->update($id, $data), function () {
+            $this->isPreview = false;
+        });
     }
 
     public function buildFormConfig(): void {}
