@@ -23,13 +23,15 @@
 
 <template>
     <ShowFieldLayout v-bind="props">
-        <div class="flex gap-4 p-4 border rounded-md max-w-[500px]">
+        <div class="flex gap-4 p-4 border rounded-md max-w-[600px]">
             <template v-if="value">
                 <template v-if="value.thumbnail">
-                    <img class="self-center rounded-sm max-w-[100px] max-h-[100px]"
-                        :src="value.thumbnail"
-                        :alt="field.label"
-                    >
+                    <div class="self-center">
+                        <img class="rounded-sm min-w-[40px] max-w-[100px] max-h-[100px] object-contain"
+                            :src="value.thumbnail"
+                            :alt="field.label"
+                        >
+                    </div>
                 </template>
                 <template v-else>
                     <FileIcon class="self-center size-4" :mime-type="value.mime_type" />

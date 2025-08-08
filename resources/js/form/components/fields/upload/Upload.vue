@@ -393,8 +393,8 @@
                 <div :class="{ 'bg-background border rounded-md p-4': !asEditorEmbed }">
                     <div class="flex gap-4">
                         <template v-if="transformedImg ?? value?.thumbnail ?? uppyFile?.preview">
-                            <div class="self-center group/img relative flex flex-col justify-center rounded-md overflow-hidden">
-                                <img class="rounded-md max-h-[150px] max-w-[150px]"
+                            <div class="self-center group/img relative rounded-md overflow-hidden">
+                                <img class="rounded-md min-w-[50px] max-h-[150px] max-w-[150px] object-contain"
                                     :class="uppyFile && !transformedImg && field.imageCropRatio ? 'object-cover aspect-(--ratio)' : ''"
                                     :style="{
                                         '--ratio': field.imageCropRatio ? `${field.imageCropRatio[0]} / ${field.imageCropRatio[1]}` : null
