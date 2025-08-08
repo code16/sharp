@@ -20,7 +20,8 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
     public function __construct(
         protected bool $withThumbnails = true,
         protected int $thumbnailWidth = 200,
-        protected int $thumbnailHeight = 200
+        protected int $thumbnailHeight = 200,
+        protected bool $withPlayablePreview = false,
     ) {}
 
     public function dynamicInstance(): self
@@ -93,6 +94,7 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
                     'disk' => $upload->disk,
                     'mime_type' => $upload->mime_type,
                     'thumbnail' => $this->getThumbnailUrl($upload),
+                    'playable_preview_url' => $this->getPlayableMediaUrl($upload),
                     'size' => $upload->size,
                 ]
                 : [],
@@ -113,14 +115,34 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
         }
 
         try {
-            $url = $upload->thumbnail($this->thumbnailWidth, $this->thumbnailHeight);
-
-            // Return relative URL if possible, to avoid CORS issues in multidomain case.
-            return Str::startsWith($url, config('app.url'))
-                ? Str::after($url, config('app.url'))
-                : $url;
+            return $this->getRelativeUrlIfPossible(
+                $upload->thumbnail($this->thumbnailWidth, $this->thumbnailHeight)
+            );
         } catch (DecoderException) {
             return null;
         }
+    }
+
+    private function getPlayableMediaUrl(SharpUploadModel $upload): ?string
+    {
+        if (! $this->withPlayablePreview) {
+            return null;
+        }
+
+        if ($upload->mime_type && ! str($upload->mime_type)->startsWith(['video/', 'audio/'])) {
+            return null;
+        }
+
+        return $this->getRelativeUrlIfPossible(
+            $upload->playablePreviewUrl()
+        );
+    }
+
+    private function getRelativeUrlIfPossible(string $url): ?string
+    {
+        // Return relative URL if possible, to avoid CORS issues in multidomain case.
+        return Str::startsWith($url, config('app.url'))
+            ? Str::after($url, config('app.url'))
+            : $url;
     }
 }

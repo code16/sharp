@@ -68,6 +68,7 @@
     }>();
     const form = useParentForm();
     const transformedImg = ref<string>();
+    const playablePreviewUrl = ref<string>();
     const uppyFile = ref<UppyFile<{}, {}>>();
     const isEditable = computed(() => {
         return props.value && canTransform(props.value.name, props.value.mime_type) && !props.hasError
@@ -135,6 +136,8 @@
                     const blob = await response.blob();
                     transformedImg.value = URL.createObjectURL(blob);
                 }
+            } else if(file.type?.startsWith('video/') || file.type?.startsWith('audio/')) {
+                playablePreviewUrl.value = URL.createObjectURL(file.data);
             }
         })
         .on('restriction-failed', (file, error) => {
@@ -350,6 +353,7 @@
             uppy.removeFile(uppyFile.value.id);
             uppyFile.value = null;
             transformedImg.value = null;
+            playablePreviewUrl.value = null;
             editModalImageUrl.value = null;
         }
     }
@@ -382,6 +386,9 @@
         if(!props.persistThumbnailUrl && transformedImg.value) {
             URL.revokeObjectURL(transformedImg.value);
         }
+        if(playablePreviewUrl.value) {
+            URL.revokeObjectURL(playablePreviewUrl.value);
+        }
         emit('uploading', false);
     });
 </script>
@@ -392,69 +399,83 @@
             <template v-if="value?.path || value?.uploaded || uppyFile">
                 <div :class="{ 'bg-background border rounded-md p-4': !asEditorEmbed }">
                     <div class="flex gap-4">
-                        <template v-if="transformedImg ?? value?.thumbnail ?? uppyFile?.preview">
-                            <div class="self-center group/img relative rounded-md overflow-hidden">
-                                <img class="rounded-md min-w-[50px] max-h-[150px] max-w-[150px] object-contain"
-                                    :class="uppyFile && !transformedImg && field.imageCropRatio ? 'object-cover aspect-(--ratio)' : ''"
-                                    :style="{
+                        <div class="flex-1 min-w-0 flex gap-4" :class="playablePreviewUrl ?? value?.playable_preview_url ? 'flex-col' : ''">
+                            <template v-if="transformedImg ?? value?.thumbnail ?? uppyFile?.preview">
+                                <div class="self-center group/img relative rounded-md overflow-hidden">
+                                    <img class="rounded-md min-w-[50px] max-h-[150px] max-w-[150px] object-contain"
+                                        :class="uppyFile && !transformedImg && field.imageCropRatio ? 'object-cover aspect-(--ratio)' : ''"
+                                        :style="{
                                         '--ratio': field.imageCropRatio ? `${field.imageCropRatio[0]} / ${field.imageCropRatio[1]}` : null
                                     }"
-                                    :src="transformedImg ?? value?.thumbnail ?? uppyFile.preview"
-                                    :alt="value?.name ?? uppyFile?.name"
-                                >
-                                <template v-if="isEditable && !props.field.readOnly">
-                                    <button class="absolute flex justify-center items-center gap-2 inset-0 bg-black/50 transition text-white text-xs font-medium opacity-0 group-hover/img:opacity-100" tabindex="-1" @click="onEdit">
-                                        {{ __('sharp::form.upload.edit_button') }}
-                                    </button>
+                                        :src="transformedImg ?? value?.thumbnail ?? uppyFile.preview"
+                                        :alt="value?.name ?? uppyFile?.name"
+                                    >
+                                    <template v-if="isEditable && !props.field.readOnly">
+                                        <button class="absolute flex justify-center items-center gap-2 inset-0 bg-black/50 transition text-white text-xs font-medium opacity-0 group-hover/img:opacity-100" tabindex="-1" @click="onEdit">
+                                            {{ __('sharp::form.upload.edit_button') }}
+                                        </button>
+                                    </template>
+                                </div>
+                            </template>
+                            <template v-else-if="playablePreviewUrl ?? value?.playable_preview_url">
+                                <template v-if="(uppyFile?.type ?? value?.mime_type)?.startsWith('video/')">
+                                    <video class="rounded-md max-h-[150px]" controls>
+                                        <source :src="playablePreviewUrl ?? value.playable_preview_url" :type="uppyFile?.type ?? value?.mime_type">
+                                    </video>
                                 </template>
-                            </div>
-                        </template>
-                        <template v-else>
-                            <FileIcon class="self-center size-4" :mime-type="value?.mime_type || uppyFile?.type" />
-                        </template>
-                        <div class="flex-1 min-w-0">
-                            <div class="text-sm truncate">
-                                <template v-if="value?.path">
-                                    <TooltipProvider>
-                                        <Tooltip :delay-duration="0" disable-hoverable-content>
-                                            <TooltipTrigger as-child>
-                                                <a class="text-foreground underline underline-offset-4 decoration-foreground/20 hover:decoration-foreground"
-                                                    :href="route('code16.sharp.download.show', {
+                                <template v-else-if="(uppyFile?.type ?? value?.mime_type)?.startsWith('audio/')">
+                                    <audio controls>
+                                        <source :src="playablePreviewUrl ?? value.playable_preview_url" :type="uppyFile?.type ?? value?.mime_type">
+                                    </audio>
+                                </template>
+                            </template>
+                            <template v-else>
+                                <FileIcon class="self-center size-4" :mime-type="value?.mime_type || uppyFile?.type" />
+                            </template>
+                            <div class="flex-1 min-w-0">
+                                <div class="text-sm truncate">
+                                    <template v-if="value?.path">
+                                        <TooltipProvider>
+                                            <Tooltip :delay-duration="0" disable-hoverable-content>
+                                                <TooltipTrigger as-child>
+                                                    <a class="text-foreground underline underline-offset-4 decoration-foreground/20 hover:decoration-foreground"
+                                                        :href="route('code16.sharp.download.show', {
                                                         entityKey: form.entityKey,
                                                         instanceId: form.instanceId,
                                                         disk: value.disk,
                                                         path: value.path,
                                                     })"
-                                                    :download="value?.name"
-                                                >
-                                                    {{ value?.name }}
-                                                </a>
-                                            </TooltipTrigger>
+                                                        :download="value?.name"
+                                                    >
+                                                        {{ value?.name }}
+                                                    </a>
+                                                </TooltipTrigger>
 
-                                            <TooltipContent class="pointer-events-none" :side-offset="10">
-                                                {{ __('sharp::form.upload.download_tooltip') }}
-                                            </TooltipContent>
-                                        </Tooltip>
-                                    </TooltipProvider>
+                                                <TooltipContent class="pointer-events-none" :side-offset="10">
+                                                    {{ __('sharp::form.upload.download_tooltip') }}
+                                                </TooltipContent>
+                                            </Tooltip>
+                                        </TooltipProvider>
+                                    </template>
+                                    <template v-else>
+                                        {{ value?.name ?? uppyFile?.name }}
+                                    </template>
+                                </div>
+                                <template v-if="value?.size ?? uppyFile?.size">
+                                    <div class="mt-2 text-xs text-muted-foreground">
+                                        {{ filesizeLabel(value?.size ?? uppyFile.size) }}
+                                    </div>
                                 </template>
-                                <template v-else>
-                                    {{ value?.name ?? uppyFile?.name }}
+                                <template v-if="legend">
+                                    <div class="mt-2 text-xs">{{ legend }}</div>
+                                </template>
+                                <template v-if="uppyFile?.progress.percentage < 100 && !hasError">
+                                    <div class="mt-2">
+                                        <div class="bg-primary h-0.5 transition-all" :style="{ width: `${uppyFile.progress.percentage}%` }" role="progressbar">
+                                        </div>
+                                    </div>
                                 </template>
                             </div>
-                            <template v-if="value?.size ?? uppyFile?.size">
-                                <div class="mt-2 text-xs text-muted-foreground">
-                                    {{ filesizeLabel(value?.size ?? uppyFile.size) }}
-                                </div>
-                            </template>
-                            <template v-if="legend">
-                                <div class="mt-2 text-xs">{{ legend }}</div>
-                            </template>
-                            <template v-if="uppyFile?.progress.percentage < 100 && !hasError">
-                                <div class="mt-2">
-                                    <div class="bg-primary h-0.5 transition-all" :style="{ width: `${uppyFile.progress.percentage}%` }" role="progressbar">
-                                    </div>
-                                </div>
-                            </template>
                         </div>
                         <DropdownMenu :modal="false">
                             <DropdownMenuTrigger as-child>
