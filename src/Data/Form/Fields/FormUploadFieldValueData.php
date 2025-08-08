@@ -19,6 +19,7 @@ final class FormUploadFieldValueData extends Data
         public string $mime_type,
         public int $size,
         public ?string $thumbnail,
+        public ?string $playable_preview_url,
         public ?bool $uploaded,
         public ?bool $transformed,
         public ?bool $not_found,

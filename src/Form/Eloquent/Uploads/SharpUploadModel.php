@@ -5,6 +5,7 @@ namespace Code16\Sharp\Form\Eloquent\Uploads;
 use Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\Thumbnail;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Facades\Storage;
 
 class SharpUploadModel extends Model
 {
@@ -85,5 +86,19 @@ class SharpUploadModel extends Model
             })
             ->setAppendTimestamp()
             ->make($width, $height);
+    }
+
+    public function playablePreviewUrl(): string
+    {
+        $path = $this->file_name;
+        $thumbnailDisk = Storage::disk(sharp()->config()->get('uploads.thumbnails_disk'));
+
+        if (! $thumbnailDisk->exists($this->file_name)) {
+            if (Storage::disk($this->disk)->exists($path)) {
+                Storage::disk('public')->writeStream($path, Storage::disk($this->disk)->readStream($path));
+            }
+        }
+
+        return $thumbnailDisk->url($path);
     }
 }
