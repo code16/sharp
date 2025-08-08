@@ -68,6 +68,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cropperjs": "^1.5.12",
+    "dompurify": "^3.2.6",
     "filesize": "^10.1.0",
     "flexsearch": "^0.7.43",
     "leaflet": "^1.9.4",

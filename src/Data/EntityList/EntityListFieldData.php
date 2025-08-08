@@ -19,6 +19,7 @@ final class EntityListFieldData extends Data
         public ?string $width,
         public bool $hideOnXS,
         public ?bool $html = null,
+        public ?bool $sanitize = null,
         public ?string $tooltip = null,
     ) {}
 }

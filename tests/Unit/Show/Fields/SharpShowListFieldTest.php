@@ -18,6 +18,7 @@ it('allows to define a list field', function () {
                 'key' => 'textField',
                 'emptyVisible' => false,
                 'html' => true,
+                'sanitize' => true,
                 'type' => 'text',
             ],
         ],

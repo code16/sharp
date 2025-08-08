@@ -5,10 +5,13 @@ namespace Code16\Sharp\Form\Fields\Formatters;
 use Code16\Sharp\Exceptions\Form\SharpFormFieldDataException;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormField;
+use Code16\Sharp\Utils\Sanitization\FormatsSanitizedValue;
 use Illuminate\Support\Collection;
 
 class EditorFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
 {
+    use FormatsSanitizedValue;
+
     /**
      * @param  SharpFormEditorField  $field
      *
@@ -48,7 +51,10 @@ class EditorFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
         $text = $this->maybeLocalized(
             $field,
             $value['text'] ?? null,
-            fn (string $content) => preg_replace('/\R/u', "\n", $content)
+            fn (string $content) => $this->sanitizeHtmlIfNeeded(
+                $field,
+                preg_replace('/\R/u', "\n", $content)
+            )
         );
         $text = $this->editorUploadsFormatter()->fromFront($field, $attribute, [...$value, 'text' => $text]);
         $text = $this->editorEmbedsFormatter()->fromFront($field, $attribute, [...$value, 'text' => $text]);

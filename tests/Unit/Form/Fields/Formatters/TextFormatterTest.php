@@ -69,3 +69,25 @@ it('sets all locales to null when formatting a null localized text value from fr
             )
     )->toEqual(['fr' => null, 'en' => null, 'es' => null]);
 });
+
+it('sanitizes value from front if configured', function () {
+    expect(
+        (new TextFormatter())
+            ->fromFront(
+                SharpFormTextField::make('text'),
+                'attribute',
+                '<script>alert("XSS")</script>'
+            )
+    )
+        ->toEqual('<script>alert("XSS")</script>');
+
+    expect(
+        (new TextFormatter())
+            ->fromFront(
+                SharpFormTextField::make('text')->shouldSanitizeHtml(),
+                'attribute',
+                '<script>alert("XSS")</script><img src="x" onerror="alert(\'XSS\')">'
+            )
+    )
+        ->toEqual('<img src="x" />');
+});

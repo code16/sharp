@@ -69,6 +69,7 @@
     import { useElementVisibility } from "@vueuse/core";
     import StateBadge from "@/components/ui/StateBadge.vue";
     import Icon from "@/components/ui/Icon.vue";
+    import { sanitize } from "@/utils/sanitize";
     // import StateBadgeTest from "@/components/dev/StateBadgeTest.vue";
 
     const props = withDefaults(defineProps<{
@@ -782,7 +783,7 @@
                                                             <template v-if="field.html && typeof item[field.key] === 'string'">
                                                                 <Content class="break-words [&_a]:relative [&_a]:z-10"
                                                                     :class="{ '[&_a]:pointer-events-none': selecting || reordering }"
-                                                                    :html="item[field.key]"
+                                                                    :html="field.sanitize ? sanitize(item[field.key]) : item[field.key]"
                                                                 />
                                                             </template>
                                                             <template v-else>

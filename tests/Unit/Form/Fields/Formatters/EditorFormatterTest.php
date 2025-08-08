@@ -351,3 +351,64 @@ it('allows to format a unicode text value from front', function () {
         ),
     );
 });
+
+it('sanitizes HTML content from front by default', function () {
+    $value = <<<'HTML'
+        This is unwanted:
+        <script>alert('XSS')</script>
+        <img src="javascript:alert('XSS')" onload="alert('XSS')">
+        <iframe src="javascript:alert('XSS')" onerror="alert('XSS')"></iframe>
+        This is wanted:
+        <x-embed data-key="0"></x-embed>
+        <x-sharp-file data-key="0"></x-sharp-file>
+        <div data-html-content="true"><script></script></div>
+        <iframe src="/test" allow="fullscreen" allowfullscreen width="50" height="50" frameborder="0" scrolling="false"></iframe>
+        HTML;
+
+    $expected = <<<'HTML'
+        This is unwanted:
+
+        <img>
+        <iframe></iframe>
+        This is wanted:
+        <x-embed></x-embed>
+        <x-sharp-file file="[]"></x-sharp-file>
+        <div data-html-content="true"><script></script></div>
+        <iframe src="/test" allow="fullscreen" allowfullscreen width="50" height="50" frameborder="0" scrolling="false"></iframe>
+        HTML;
+
+    expect(
+        (new EditorFormatter())->fromFront(
+            SharpFormEditorField::make('md')
+                ->allowEmbeds([EditorFormatterTestEmbed::class])
+                ->allowUploads(SharpFormEditorUpload::make()),
+            'attribute',
+            [
+                'text' => $value,
+                'embeds' => [
+                    (new EditorFormatterTestEmbed())->key() => [
+                        '0' => [],
+                    ],
+                ],
+                'uploads' => [
+                    '0' => [
+                        'file' => [],
+                    ],
+                ],
+            ],
+        )
+    )->toEqual($expected);
+});
+
+it('does not sanitize HTML content from front when disabled', function () {
+    expect(
+        (new EditorFormatter())->fromFront(
+            SharpFormEditorField::make('md')
+                ->shouldSanitizeHtml(false),
+            'attribute',
+            [
+                'text' => '<script>alert("XSS")</script>',
+            ],
+        )
+    )->toEqual('<script>alert("XSS")</script>');
+});

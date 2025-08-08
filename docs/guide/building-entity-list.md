@@ -53,6 +53,10 @@ Setting the label, allowing the column to be sortable and to display html is opt
 The optional `->setWidth()` method accepts either an integer (eg: `20` for 20%), a float (eg: `.2` for 20%) or a string (eg: `'20'` or `'20%'`); if missing, it will be deduced (you can use `->setWidthFill()` to force this last behavior).
 To hide the column on small screens, use `->hideOnSmallScreens()`.
 
+::: warning
+HTML sanitization is enabled by default for list fields (to prevent XSS attacks when displaying the list). You can disable it by using `->shouldSanitizeHtml(false)` field method.
+:::
+
 Sorting columns must be handled in the `getListData()` method, see below.
 
 #### Add a badge field

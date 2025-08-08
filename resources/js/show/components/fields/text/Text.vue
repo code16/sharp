@@ -10,6 +10,7 @@
     import { useParentShow } from "@/show/useParentShow";
     import { ContentUploadManager } from "@/content/ContentUploadManager";
     import { Button } from "@/components/ui/button";
+    import { sanitize } from "@/utils/sanitize";
 
     const props = defineProps<ShowFieldProps<ShowTextFieldData>>();
 
@@ -74,7 +75,7 @@
         <template v-if="currentContent && field.html">
             <TextRenderer
                 class="content content-sm text-sm [:where(&)_:where(h1,h2,h3)]:text-foreground/75"
-                :content="currentContent"
+                :content="field.sanitize ? sanitize(currentContent) : currentContent"
                 :field="field"
             />
         </template>
