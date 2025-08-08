@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
     import { FormEditorFieldData } from "@/types";
-    import { provide, ref, watch } from "vue";
+    import { computed, provide, ref, watch } from "vue";
     import { Editor, BubbleMenu, isActive } from "@tiptap/vue-3";
     import debounce from 'lodash/debounce';
     import { EditorContent } from '@tiptap/vue-3';
@@ -150,6 +150,11 @@
             return editor;
         }
     );
+
+    const dropdownEmbeds = computed(() =>
+        Object.values(props.field.embeds ?? {})
+            .filter(embed => !props.field.toolbar?.includes(`embed:${embed.key}`))
+    );
 </script>
 
 <template>
@@ -198,7 +203,7 @@
                                 </Toggle>
                             </template>
                         </template>
-                        <template v-if="Object.values(props.field.embeds ?? {}).length > 0">
+                        <template v-if="dropdownEmbeds.length > 0">
                             <DropdownMenu :modal="false">
                                 <DropdownMenuTrigger as-child>
                                     <Button class="px-3" variant="ghost" size="sm" :disabled="props.field.readOnly">
@@ -206,7 +211,7 @@
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent>
-                                    <template v-for="embed in props.field.embeds">
+                                    <template v-for="embed in dropdownEmbeds">
                                         <DropdownMenuItem @click="embedModal.open({ embed })">
                                             {{ embed.label }}
                                         </DropdownMenuItem>
