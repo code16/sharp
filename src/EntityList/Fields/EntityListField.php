@@ -16,7 +16,7 @@ class EntityListField implements Arrayable, IsEntityListField, IsSharpFieldWithH
     private function __construct(string $key)
     {
         $this->key = $key;
-        $this->sanitize = true;
+        $this->sanitizeHtml = true;
     }
 
     public static function make(string $key): self
@@ -55,7 +55,7 @@ class EntityListField implements Arrayable, IsEntityListField, IsSharpFieldWithH
             'label' => $this->label,
             'sortable' => $this->sortable,
             'html' => $this->html,
-            'sanitize' => $this->sanitize,
+            'sanitize' => $this->sanitizeHtml,
             'width' => $this->width,
             'hideOnXS' => $this->hideOnXs,
         ];

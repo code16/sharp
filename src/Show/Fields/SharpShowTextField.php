@@ -26,7 +26,7 @@ class SharpShowTextField extends SharpShowField implements IsSharpFieldWithEmbed
     protected function __construct(string $key, string $type, ?SharpShowFieldFormatter $formatter = null)
     {
         parent::__construct($key, $type, $formatter);
-        $this->sanitize = true;
+        $this->sanitizeHtml = true;
     }
 
     public static function make(string $key): SharpShowTextField
@@ -67,7 +67,7 @@ class SharpShowTextField extends SharpShowField implements IsSharpFieldWithEmbed
         return parent::buildArray([
             'label' => $this->label,
             'html' => $this->html,
-            'sanitize' => $this->sanitize,
+            'sanitize' => $this->sanitizeHtml,
             'collapseToWordCount' => $this->collapseToWordCount,
             'localized' => $this->localized,
             'embeds' => $this->innerComponentEmbedsConfiguration(false) ?: null,

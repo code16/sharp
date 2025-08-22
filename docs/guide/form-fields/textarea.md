@@ -16,7 +16,7 @@ Set a max character count.
 
 Unset the max character count.
 
-### `shouldSanitizeHtml()`
+### `setSanitizeHtml()`
 
 Enable HTML sanitization (to prevent XSS attacks if this field data is used as raw HTML).
 

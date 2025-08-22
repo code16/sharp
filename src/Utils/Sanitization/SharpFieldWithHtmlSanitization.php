@@ -4,11 +4,11 @@ namespace Code16\Sharp\Utils\Sanitization;
 
 trait SharpFieldWithHtmlSanitization
 {
-    protected bool $sanitize = false;
+    protected bool $sanitizeHtml = false;
 
-    public function shouldSanitizeHtml(bool $sanitize = true): self
+    public function setSanitizeHtml(bool $sanitizeHtml = true): self
     {
-        $this->sanitize = $sanitize;
+        $this->sanitizeHtml = $sanitizeHtml;
 
         return $this;
     }
@@ -18,6 +18,6 @@ trait SharpFieldWithHtmlSanitization
      */
     public function isSanitizingHtml(): bool
     {
-        return $this->sanitize;
+        return $this->sanitizeHtml;
     }
 }

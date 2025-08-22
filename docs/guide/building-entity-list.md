@@ -54,7 +54,7 @@ The optional `->setWidth()` method accepts either an integer (eg: `20` for 20%),
 To hide the column on small screens, use `->hideOnSmallScreens()`.
 
 ::: warning
-HTML sanitization is enabled by default for list fields (to prevent XSS attacks when displaying the list). You can disable it by using `->shouldSanitizeHtml(false)` field method.
+HTML sanitization is enabled by default for list fields (to prevent XSS attacks when displaying the list). You can disable it by using `->setSanitizeHtml(false)` field method.
 :::
 
 Sorting columns must be handled in the `getListData()` method, see below.

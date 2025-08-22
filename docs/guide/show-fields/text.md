@@ -20,9 +20,9 @@ Reset the collapse configuration.
 
 By default, the text is escaped. If you want to display HTML, set this to true.
 
-### `shouldSanitizeHtml(bool $sanitize = true)`
+### `setSanitizeHtml(bool $sanitizeHtml = true)`
 
-HTML sanitization is enabled by default for text fields (to prevent XSS attacks when displaying the show). To disable it, call `->shouldSanitizeHtml(false)`.
+HTML sanitization is enabled by default for text fields (to prevent XSS attacks when displaying the show). To disable it, call `->setSanitizeHtml(false)`.
 
 
 ### `allowEmbeds(array $embeds)`

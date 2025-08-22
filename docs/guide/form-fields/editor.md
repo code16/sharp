@@ -95,7 +95,7 @@ Unset the max character count.
 
 Display a character count in the status bar. Default is false.
 
-### `shouldSanitizeHtml(bool $sanitize = true)`
+### `setSanitizeHtml(bool $sanitizeHtml = true)`
 
 Toggle HTML sanitization (enabled by default). See [security](#security).
 
@@ -255,7 +255,7 @@ The [documentation on how to write an Embed class is available here](../form-edi
 
 ## Security
 
-Editor content is sanitized by default before storing the data (to prevent XSS attack when displaying HTML content). To disable sanitizing you can call `->shouldSanitizeHtml(false)`.
+Editor content is sanitized by default before storing the data (to prevent XSS attack when displaying HTML content). To disable sanitizing you can call `->setSanitizeHtml(false)`.
 
 ## Formatter
 

@@ -84,7 +84,7 @@ it('sanitizes value from front if configured', function () {
     expect(
         (new TextFormatter())
             ->fromFront(
-                SharpFormTextField::make('text')->shouldSanitizeHtml(),
+                SharpFormTextField::make('text')->setSanitizeHtml(),
                 'attribute',
                 '<script>alert("XSS")</script><img src="x" onerror="alert(\'XSS\')">'
             )

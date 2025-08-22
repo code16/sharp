@@ -375,7 +375,7 @@ it('allows to disable HTML sanitization', function () {
             $fields->addField(
                 EntityListField::make('name')
                     ->setLabel('Name')
-                    ->shouldSanitizeHtml(false)
+                    ->setSanitizeHtml(false)
                     ->setWidth(.5)
             );
         }

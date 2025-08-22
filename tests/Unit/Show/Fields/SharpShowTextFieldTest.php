@@ -60,7 +60,7 @@ it('handle localized attribute', function () {
 
 it('allows to disable HTML sanitization', function () {
     $field = SharpShowTextField::make('textfield')
-        ->shouldSanitizeHtml(false)
+        ->setSanitizeHtml(false)
         ->setLabel('Label');
 
     expect($field->toArray()['sanitize'])->toBe(false);

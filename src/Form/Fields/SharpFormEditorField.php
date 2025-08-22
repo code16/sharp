@@ -69,7 +69,7 @@ class SharpFormEditorField extends SharpFormField implements IsSharpFieldWithEmb
     protected function __construct(string $key, string $type, ?SharpFieldFormatter $formatter = null)
     {
         parent::__construct($key, $type, $formatter);
-        $this->sanitize = true;
+        $this->sanitizeHtml = true;
     }
 
     public static function make(string $key): self
