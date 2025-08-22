@@ -90,15 +90,6 @@ class SharpUploadModel extends Model
 
     public function playablePreviewUrl(): string
     {
-        $path = $this->file_name;
-        $thumbnailDisk = Storage::disk(sharp()->config()->get('uploads.thumbnails_disk'));
-
-        if (! $thumbnailDisk->exists($this->file_name)) {
-            if (Storage::disk($this->disk)->exists($path)) {
-                Storage::disk('public')->writeStream($path, Storage::disk($this->disk)->readStream($path));
-            }
-        }
-
-        return $thumbnailDisk->url($path);
+        return Storage::disk($this->disk)->temporaryUrl($this->file_name, now()->addMinutes(30));
     }
 }
