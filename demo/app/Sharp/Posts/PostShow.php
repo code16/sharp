@@ -154,7 +154,7 @@ class PostShow extends SharpShow
             ->setCustomTransformer('cover', new SharpUploadModelThumbnailUrlTransformer(500))
             ->setCustomTransformer(
                 'attachments[document]',
-                new SharpUploadModelFormAttributeTransformer(withThumbnails: true)
+                new SharpUploadModelFormAttributeTransformer(withPlayablePreview: true)
             )
             ->setCustomTransformer('attachments[link_url]', fn ($value, $instance) => $instance->is_link
                 ? sprintf('<a href="%s" alt="">%s</a>', $value, str($value)->limit(30))

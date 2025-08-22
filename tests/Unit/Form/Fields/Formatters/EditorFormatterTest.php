@@ -155,6 +155,7 @@ it('allows to format a text with uploads to front', function () {
                         '/storage/thumbnails/data/Posts/1/200-200_q-90/image.jpg?%s',
                         Storage::disk('public')->lastModified('/thumbnails/data/Posts/1/200-200_q-90/image.jpg')
                     ),
+                    'playable_preview_url' => null,
                     'size' => 120,
                     'mime_type' => 'image/jpeg',
                     'filters' => null,
@@ -168,6 +169,7 @@ it('allows to format a text with uploads to front', function () {
                     'path' => 'data/Posts/1/doc.pdf',
                     'disk' => 'local',
                     'thumbnail' => null,
+                    'playable_preview_url' => null,
                     'size' => 120,
                     'mime_type' => 'application/pdf',
                     'filters' => null,
@@ -287,6 +289,7 @@ it('allows to format embeds with uploads to front', function () {
                         'path' => 'data/Posts/1/image.jpg',
                         'disk' => 'local',
                         'thumbnail' => $thumbnail,
+                        'playable_preview_url' => null,
                         'size' => 120,
                         'mime_type' => 'image/jpeg',
                         'filters' => null,

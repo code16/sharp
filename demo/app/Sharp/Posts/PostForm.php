@@ -67,7 +67,7 @@ class PostForm extends SharpForm
                         SharpFormEditorUpload::make()
                             ->setStorageDisk('local')
                             ->setStorageBasePath('data/posts/{id}/embed')
-                            ->setMaxFileSize(1)
+                            ->setMaxFileSize(2)
                             ->setHasLegend()
                     )
                     ->setMaxLength(2000)
@@ -126,8 +126,8 @@ class PostForm extends SharpForm
                     )
                     ->addItemField(
                         SharpFormUploadField::make('document')
-                            ->setMaxFileSize(1)
-                            ->setAllowedExtensions(['pdf', 'zip'])
+                            ->setMaxFileSize(2)
+                            ->setAllowedExtensions(['pdf', 'zip', 'mp4', 'mp3'])
                             ->setStorageDisk('local')
                             ->setStorageBasePath('data/posts/{id}')
                             ->addConditionalDisplay('!is_link'),
@@ -203,7 +203,7 @@ class PostForm extends SharpForm
         return $this
             ->setCustomTransformer('author_id', fn ($value, Post $instance) => $instance->author)
             ->setCustomTransformer('cover', new SharpUploadModelFormAttributeTransformer())
-            ->setCustomTransformer('attachments[document]', new SharpUploadModelFormAttributeTransformer())
+            ->setCustomTransformer('attachments[document]', new SharpUploadModelFormAttributeTransformer(withPlayablePreview: true))
             ->transform(Post::with('cover', 'attachments', 'categories')->findOrFail($id));
     }
 
