@@ -21,6 +21,7 @@ class HandleUploadedFileJob implements ShouldQueue
         public string $disk,
         public string $filePath,
         public bool $shouldOptimizeImage = true,
+        public bool $shouldSanitizeSvg = true,
         public ?array $transformFilters = null,
         public ?string $instanceId = null,
     ) {}
@@ -45,9 +46,16 @@ class HandleUploadedFileJob implements ShouldQueue
         if ($this->transformFilters) {
             // There are transformation and field was configured to handle transformation on the source image
             HandleTransformedFileJob::dispatchSync(
-                $tmpDisk,
-                $tmpFilePath,
-                $this->transformFilters
+                disk: $tmpDisk,
+                filePath: $tmpFilePath,
+                transformFilters: $this->transformFilters
+            );
+        }
+
+        if ($this->shouldSanitizeSvg && Storage::disk($tmpDisk)->mimeType($tmpFilePath) === 'image/svg+xml') {
+            SanitizeSvgJob::dispatchSync(
+                disk: $tmpDisk,
+                filePath: $tmpFilePath
             );
         }
 
