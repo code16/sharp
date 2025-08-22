@@ -44,6 +44,7 @@
     import { useEntityListHighlightedItem } from "@/composables/useEntityListHighlightedItem";
     import RootCardHeader from "@/components/ui/RootCardHeader.vue";
     import StateBadge from "@/components/ui/StateBadge.vue";
+    import { sanitize } from "@/utils/sanitize";
 
     const props = defineProps<{
         show: ShowData,
@@ -179,7 +180,11 @@
                                                 <div class="flex flex-wrap gap-4">
                                                     <div class="flex gap-4">
                                                         <template v-if="section.title || (i == 0 && show.getTitle(locale))">
-                                                            <CardTitle :id="`section-${i}-title`" class="py-1 -my-1" v-html="section.title || (i == 0 && show.getTitle(locale))">
+                                                            <CardTitle
+                                                                :id="`section-${i}-title`"
+                                                                class="py-1 -my-1"
+                                                                v-html="section.title || (i == 0 && sanitize(show.getTitle(locale)))"
+                                                            >
                                                             </CardTitle>
                                                         </template>
                                                         <template v-if="section.collapsable">

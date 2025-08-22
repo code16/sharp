@@ -2,15 +2,19 @@
 
 namespace Code16\Sharp\Show\Fields;
 
+use Code16\Sharp\Show\Fields\Formatters\SharpShowFieldFormatter;
 use Code16\Sharp\Show\Fields\Formatters\TextFormatter;
 use Code16\Sharp\Utils\Fields\IsSharpFieldWithEmbeds;
 use Code16\Sharp\Utils\Fields\IsSharpFieldWithLocalization;
 use Code16\Sharp\Utils\Fields\SharpFieldWithEmbeds;
 use Code16\Sharp\Utils\Fields\SharpFieldWithLocalization;
+use Code16\Sharp\Utils\Sanitization\IsSharpFieldWithHtmlSanitization;
+use Code16\Sharp\Utils\Sanitization\SharpFieldWithHtmlSanitization;
 
-class SharpShowTextField extends SharpShowField implements IsSharpFieldWithEmbeds, IsSharpFieldWithLocalization
+class SharpShowTextField extends SharpShowField implements IsSharpFieldWithEmbeds, IsSharpFieldWithHtmlSanitization, IsSharpFieldWithLocalization
 {
     use SharpFieldWithEmbeds;
+    use SharpFieldWithHtmlSanitization;
     use SharpFieldWithLocalization;
 
     const FIELD_TYPE = 'text';
@@ -18,6 +22,12 @@ class SharpShowTextField extends SharpShowField implements IsSharpFieldWithEmbed
     protected ?string $label = null;
     protected ?int $collapseToWordCount = null;
     protected bool $html = true;
+
+    protected function __construct(string $key, string $type, ?SharpShowFieldFormatter $formatter = null)
+    {
+        parent::__construct($key, $type, $formatter);
+        $this->sanitizeHtml = true;
+    }
 
     public static function make(string $key): SharpShowTextField
     {
@@ -57,6 +67,7 @@ class SharpShowTextField extends SharpShowField implements IsSharpFieldWithEmbed
         return parent::buildArray([
             'label' => $this->label,
             'html' => $this->html,
+            'sanitize' => $this->sanitizeHtml,
             'collapseToWordCount' => $this->collapseToWordCount,
             'localized' => $this->localized,
             'embeds' => $this->innerComponentEmbedsConfiguration(false) ?: null,

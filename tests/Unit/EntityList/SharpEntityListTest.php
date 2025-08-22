@@ -32,6 +32,7 @@ it('gets fields with layout', function () {
             'label' => 'Name',
             'sortable' => false,
             'html' => true,
+            'sanitize' => true,
             'width' => '50%',
             'hideOnXS' => false,
         ],
@@ -364,4 +365,21 @@ it('allows to configure a create button label', function () {
     $list->buildListConfig();
 
     expect($list->listConfig()['createButtonLabel'])->toEqual('New post...');
+});
+
+it('allows to disable HTML sanitization', function () {
+    $list = new class() extends FakeSharpEntityList
+    {
+        public function buildList(EntityListFieldsContainer $fields): void
+        {
+            $fields->addField(
+                EntityListField::make('name')
+                    ->setLabel('Name')
+                    ->setSanitizeHtml(false)
+                    ->setWidth(.5)
+            );
+        }
+    };
+
+    expect($list->fields()[0]['sanitize'])->toBeFalse();
 });

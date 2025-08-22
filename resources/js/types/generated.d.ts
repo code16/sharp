@@ -184,6 +184,7 @@ export type EntityListFieldData = {
   width: string | null;
   hideOnXS: boolean;
   html: boolean | null;
+  sanitize: boolean | null;
   tooltip: string | null;
 };
 export type EntityListItemMeta = {
@@ -883,6 +884,7 @@ export type ShowTextFieldData = {
   type: "text";
   emptyVisible: boolean;
   html: boolean;
+  sanitize: boolean;
   localized: boolean | null;
   collapseToWordCount: number | null;
   embeds: { [key: string]: EmbedData } | null;
