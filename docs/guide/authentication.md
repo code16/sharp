@@ -147,7 +147,7 @@ First, require two packages needed for this feature:
 
 ```bash
 composer require pragmarx/google2fa-laravel
-composer require bacon/bacon-qr-code:"~2.0"
+composer require bacon/bacon-qr-code:"~3.0"
 ```
 
 Then, you'll need to configure the totp handler:
