@@ -55,6 +55,7 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
                         disk: $field->storageDisk(),
                         filePath: $formatted['file_name'],
                         shouldOptimizeImage: $field->isImageOptimize(),
+                        shouldSanitizeSvg: $field->isImageSanitizeSvg(),
                         transformFilters: $field->isImageTransformOriginal()
                             ? ($value['filters'] ?? null)
                             : null,
