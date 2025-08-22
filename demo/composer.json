@@ -6,6 +6,7 @@
         "bacon/bacon-qr-code": "~2.0",
         "blade-ui-kit/blade-icons": "^1.6",
         "code16/laravel-content-renderer": "^1.2",
+        "enshrined/svg-sanitize": "^0.21.0",
         "guzzlehttp/guzzle": "^7.2",
         "inertiajs/inertia-laravel": "^2.0",
         "intervention/image": "^3.4",

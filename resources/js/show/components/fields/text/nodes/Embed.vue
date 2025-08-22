@@ -13,7 +13,7 @@
 </script>
 
 <template>
-    <component :is="embed.tag" class="block my-4 first:mt-0 last:mb-0 bg-background border rounded-md p-4">
+    <component :is="embed.tag" class="block my-4 first:mt-0 last:mb-0 bg-background border rounded-md p-4 max-w-[600px]">
         <template v-if="embed.displayEmbedHeader">
             <EmbedHeader :embed="embed" />
         </template>

@@ -35,7 +35,7 @@ final class FormEditorFieldData extends Data
         public ?array $uploads = null,
         #[LiteralTypeScriptType('{ [embedKey:string]:EmbedData }')]
         public ?array $embeds = null,
-        #[LiteralTypeScriptType('Array<FormEditorToolbarButton>')]
+        #[LiteralTypeScriptType('Array<FormEditorToolbarButton | `embed:${string}`>')]
         public ?array $toolbar = null,
         public ?int $maxHeight = null,
         public ?int $maxLength = null,

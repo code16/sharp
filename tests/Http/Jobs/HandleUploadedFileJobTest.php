@@ -119,8 +119,45 @@ it('handles image transformations on a newly uploaded file if isTransformOrigina
         ],
     );
 
-    $this->assertNotEquals(
-        $originalSize,
-        Storage::disk('local')->size('data/image.jpg')
+    expect(Storage::disk('local')->size('data/image.jpg'))->not->toEqual($originalSize);
+});
+
+it('sanitizes svg files', function () {
+    UploadedFile::fake()
+        ->createWithContent(
+            'image.svg',
+            '<svg xmlns="http://www.w3.org/2000/svg"><script>alert("XSS")</script><rect width="10" height="10"></rect></svg>'
+        )
+        ->storeAs('/tmp', 'image.svg', ['disk' => 'local']);
+
+    HandleUploadedFileJob::dispatch(
+        uploadedFileName: 'image.svg',
+        disk: 'local',
+        filePath: 'data/image.svg',
+        shouldOptimizeImage: false,
+        shouldSanitizeSvg: true,
     );
+
+    expect(Storage::disk('local')->get('data/image.svg'))
+        ->toEqual('<svg xmlns="http://www.w3.org/2000/svg"><rect width="10" height="10"></rect></svg>');
+});
+
+it('does not sanitize svg files if not configured', function () {
+    UploadedFile::fake()
+        ->createWithContent(
+            'image.svg',
+            '<svg xmlns="http://www.w3.org/2000/svg"><script>alert("XSS")</script><rect width="10" height="10"></rect></svg>'
+        )
+        ->storeAs('/tmp', 'image.svg', ['disk' => 'local']);
+
+    HandleUploadedFileJob::dispatch(
+        uploadedFileName: 'image.svg',
+        disk: 'local',
+        filePath: 'data/image.svg',
+        shouldOptimizeImage: false,
+        shouldSanitizeSvg: false,
+    );
+
+    expect(Storage::disk('local')->get('data/image.svg'))
+        ->toEqual('<svg xmlns="http://www.w3.org/2000/svg"><script>alert("XSS")</script><rect width="10" height="10"></rect></svg>');
 });

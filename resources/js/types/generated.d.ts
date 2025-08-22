@@ -369,7 +369,7 @@ export type FormEditorFieldData = {
   showCharacterCount: boolean;
   uploads: FormEditorFieldUploadData | null;
   embeds: { [embedKey: string]: EmbedData };
-  toolbar: Array<FormEditorToolbarButton>;
+  toolbar: Array<FormEditorToolbarButton | `embed:${string}`>;
   maxHeight: number | null;
   maxLength: number | null;
   placeholder: string | null;

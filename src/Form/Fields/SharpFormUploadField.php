@@ -23,6 +23,7 @@ class SharpFormUploadField extends SharpFormField
     protected ?Dimensions $imageDimensionConstraints = null;
     protected bool $imageCompactThumbnail = false;
     protected bool $imageOptimize = false;
+    protected bool $imageSanitizeSvg = true;
     protected ?array $imageCropRatio = null;
     protected ?array $imageTransformableFileTypes = null;
 
@@ -91,6 +92,18 @@ class SharpFormUploadField extends SharpFormField
     public function isImageOptimize(): bool
     {
         return $this->imageOptimize;
+    }
+
+    public function setImageSanitizeSvg(bool $imageSanitizeSvg = true): self
+    {
+        $this->imageSanitizeSvg = $imageSanitizeSvg;
+
+        return $this;
+    }
+
+    public function isImageSanitizeSvg(): bool
+    {
+        return $this->imageSanitizeSvg;
     }
 
     public function setImageCompactThumbnail(bool $compactThumbnail = true): self
