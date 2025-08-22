@@ -55,6 +55,10 @@ SharpFormEditorField::make("description")
      ]);
 ```
 
+::: warning
+HTML included using RAW_HTML button is not sanitized.
+:::
+
 If you have editor embeds you can add them to the toolbar alongside other buttons (instead of the embeds dropdown) :
 
 ```php
@@ -90,6 +94,10 @@ Unset the max character count.
 ### `showCharacterCount(bool $showCharacterCount = true)`
 
 Display a character count in the status bar. Default is false.
+
+### `setSanitizeHtml(bool $sanitizeHtml = true)`
+
+Toggle HTML sanitization (enabled by default). See [security](#security).
 
 ## Embed images and files in content
 
@@ -244,6 +252,10 @@ In practice, the Editor field can allow custom embeds, which defines how the dat
 This method expects an array of embeds that could be inserted in the content, declared as full class names. An embed class must extend `Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed`.
 
 The [documentation on how to write an Embed class is available here](../form-editor-embeds.md).
+
+## Security
+
+Editor content is sanitized by default before storing the data (to prevent XSS attack when displaying HTML content). To disable sanitizing you can call `->setSanitizeHtml(false)`.
 
 ## Formatter
 

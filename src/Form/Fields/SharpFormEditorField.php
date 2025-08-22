@@ -7,16 +7,20 @@ use Code16\Sharp\Exceptions\SharpInvalidConfigException;
 use Code16\Sharp\Form\Fields\Editor\Uploads\FormEditorUploadForm;
 use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
 use Code16\Sharp\Form\Fields\Formatters\EditorFormatter;
+use Code16\Sharp\Form\Fields\Formatters\SharpFieldFormatter;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithMaxLength;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
 use Code16\Sharp\Utils\Fields\IsSharpFieldWithEmbeds;
 use Code16\Sharp\Utils\Fields\IsSharpFieldWithLocalization;
 use Code16\Sharp\Utils\Fields\SharpFieldWithEmbeds;
 use Code16\Sharp\Utils\Fields\SharpFieldWithLocalization;
+use Code16\Sharp\Utils\Sanitization\IsSharpFieldWithHtmlSanitization;
+use Code16\Sharp\Utils\Sanitization\SharpFieldWithHtmlSanitization;
 
-class SharpFormEditorField extends SharpFormField implements IsSharpFieldWithEmbeds, IsSharpFieldWithLocalization
+class SharpFormEditorField extends SharpFormField implements IsSharpFieldWithEmbeds, IsSharpFieldWithHtmlSanitization, IsSharpFieldWithLocalization
 {
     use SharpFieldWithEmbeds;
+    use SharpFieldWithHtmlSanitization;
     use SharpFieldWithLocalization;
     use SharpFormFieldWithMaxLength {
         setMaxLength as protected parentSetMaxLength;
@@ -61,6 +65,12 @@ class SharpFormEditorField extends SharpFormField implements IsSharpFieldWithEmb
     protected bool $renderAsMarkdown = false;
     protected bool $withoutParagraphs = false;
     protected bool $showCharacterCount = false;
+
+    protected function __construct(string $key, string $type, ?SharpFieldFormatter $formatter = null)
+    {
+        parent::__construct($key, $type, $formatter);
+        $this->sanitizeHtml = true;
+    }
 
     public static function make(string $key): self
     {
@@ -154,6 +164,14 @@ class SharpFormEditorField extends SharpFormField implements IsSharpFieldWithEmb
             'fields' => $form->fields(),
             'layout' => $form->formLayout(),
         ];
+    }
+
+    /**
+     * @internal
+     */
+    public function getToolbar(): array
+    {
+        return $this->toolbar;
     }
 
     protected function toolbarArray(): ?array

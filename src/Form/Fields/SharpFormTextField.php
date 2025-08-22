@@ -7,9 +7,12 @@ use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithMaxLength;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
 use Code16\Sharp\Utils\Fields\IsSharpFieldWithLocalization;
 use Code16\Sharp\Utils\Fields\SharpFieldWithLocalization;
+use Code16\Sharp\Utils\Sanitization\IsSharpFieldWithHtmlSanitization;
+use Code16\Sharp\Utils\Sanitization\SharpFieldWithHtmlSanitization;
 
-class SharpFormTextField extends SharpFormField implements IsSharpFieldWithLocalization
+class SharpFormTextField extends SharpFormField implements IsSharpFieldWithHtmlSanitization, IsSharpFieldWithLocalization
 {
+    use SharpFieldWithHtmlSanitization;
     use SharpFieldWithLocalization;
     use SharpFormFieldWithMaxLength;
     use SharpFormFieldWithPlaceholder;
