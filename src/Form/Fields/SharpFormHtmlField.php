@@ -11,10 +11,18 @@ class SharpFormHtmlField extends SharpFormField
     const FIELD_TYPE = 'html';
 
     private View|string $template;
+    private bool $liveRefresh = false;
 
     public static function make(string $key): self
     {
         return new static($key, static::FIELD_TYPE, new HtmlFormatter());
+    }
+
+    public function setLiveRefresh(bool $liveRefresh = true): self
+    {
+        $this->liveRefresh = $liveRefresh;
+
+        return $this;
     }
 
     public function setTemplate(View|string $template): self
@@ -35,6 +43,8 @@ class SharpFormHtmlField extends SharpFormField
 
     public function toArray(): array
     {
-        return parent::buildArray([]);
+        return parent::buildArray([
+            'liveRefresh' => $this->liveRefresh,
+        ]);
     }
 }
