@@ -16,7 +16,17 @@ class FakePicturable extends Model
         return $this->morphOne(SharpUploadModel::class, 'model');
     }
 
+    public function video(): MorphOne
+    {
+        return $this->morphOne(SharpUploadModel::class, 'model');
+    }
+
     public function pictures(): MorphMany
+    {
+        return $this->morphMany(SharpUploadModel::class, 'model');
+    }
+
+    public function songs(): MorphMany
     {
         return $this->morphMany(SharpUploadModel::class, 'model');
     }
