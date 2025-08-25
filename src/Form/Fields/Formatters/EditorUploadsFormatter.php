@@ -45,9 +45,9 @@ class EditorUploadsFormatter extends SharpFieldFormatter implements FormatsAfter
                         ->uploadsConfig()
                         ->formatter()
                         ->setInstanceId($this->instanceId)
-                        ->fromFront($field->uploadsConfig(), 'file', $value['uploads'][$key]['file']);
+                        ->fromFront($field->uploadsConfig(), 'file', ((array) $value['uploads'])[$key]['file']);
                     $element->setAttribute('file', json_encode($file));
-                    if ($legend = $value['uploads'][$key]['legend'] ?? null) {
+                    if ($legend = ((array) $value['uploads'])[$key]['legend'] ?? null) {
                         $element->setAttribute('legend', $legend);
                     }
                     $element->removeAttribute('data-key');

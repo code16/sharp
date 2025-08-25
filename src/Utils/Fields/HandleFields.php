@@ -93,6 +93,10 @@ trait HandleFields
                         ->toFront($field, $value)
                     : $value;
             })
+            ->when(
+                in_array(HandleFormHtmlFields::class, class_uses_recursive(static::class)),
+                fn ($data) => collect($this->formatHtmlFields($data->all()))
+            )
             ->all();
     }
 

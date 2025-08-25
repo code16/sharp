@@ -18,7 +18,7 @@
     import { slugify } from "@/utils";
     import { Badge } from "@/components/ui/badge";
     import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-    import { FieldMeta } from "@/form/types";
+    import { FieldMeta, FormFieldEmitInputOptions } from "@/form/types";
     import StickyTop from "@/components/StickyTop.vue";
     import StickyBottom from "@/components/StickyBottom.vue";
     import { Menu } from 'lucide-vue-next';
@@ -26,6 +26,11 @@
     import RootCardHeader from "@/components/ui/RootCardHeader.vue";
     import { vScrollIntoView } from "@/directives/scroll-into-view";
     import { useResizeObserver } from "@vueuse/core";
+    import debounce from "lodash/debounce";
+    import { api } from "@/api/api";
+    import { route } from "@/utils/url";
+    import { useParentCommands } from "@/commands/useCommands";
+    import merge from 'lodash/merge';
 
     const props = defineProps<{
         form: Form
@@ -77,12 +82,30 @@
         props.form.setMeta(fieldKey, { uploading });
     }
 
-    function onFieldInput(fieldKey: string, value: FormFieldData['value'], { force = false } = {}) {
+    const parentCommands = useParentCommands();
+    const refresh = debounce((data) => {
+        api.post(route('code16.sharp.api.form.refresh.update', {
+            entityKey: props.form.entityKey,
+            instance_id: props.form.instanceId,
+            embed_key: props.form.embedKey,
+            entity_list_command_key: parentCommands?.commandContainer === 'entityList' ? props.form.commandKey : null,
+            show_command_key: parentCommands?.commandContainer === 'show' ? props.form.commandKey : null,
+        }), data)
+            .then(response => {
+                props.form.data = merge({}, props.form.data, response.data.form.data);
+            });
+    }, 200);
+
+    function onFieldInput(fieldKey: string, value: FormFieldData['value'], inputOptions: FormFieldEmitInputOptions = {}) {
         const data = {
             ...props.form.data,
-            ...(!force ? getDependantFieldsResetData(props.form.fields, fieldKey) : null),
+            ...(!inputOptions.force ? getDependantFieldsResetData(props.form.fields, fieldKey) : null),
             [fieldKey]: value,
         };
+
+        if((props.form.shouldRefresh(fieldKey) || inputOptions.shouldRefresh) && !inputOptions.skipRefresh) {
+            refresh(data);
+        }
 
         props.form.data = data;
         props.form.serializedData = data;

@@ -6,7 +6,7 @@
     import { computed, nextTick, ref, watch, watchEffect } from "vue";
     import { Button, buttonVariants } from '@/components/ui/button';
     import { showAlert } from "@/utils/dialogs";
-    import { FieldMeta, FieldsMeta, FormFieldEmits, FormFieldProps } from "@/form/types";
+    import { FieldMeta, FieldsMeta, FormFieldEmitInputOptions, FormFieldEmits, FormFieldProps } from "@/form/types";
     import FieldGridRow from "@/components/ui/FieldGridRow.vue";
     import FieldGridColumn from "@/components/ui/FieldGridColumn.vue";
     import { Toggle } from "@/components/ui/toggle";
@@ -81,7 +81,7 @@
         emit('input', props.value?.map(((item, index) => ({ ...item, [errorIndex]: index }))), { preserveError: true });
     });
 
-    emit('input', props.value?.map(item => ({ ...item, [itemKey]: itemKeyIndex++ })), { force: true });
+    emit('input', props.value?.map(item => ({ ...item, [itemKey]: itemKeyIndex++ })), { force: true, skipRefresh: true });
 
     watchArray(() => props.value ?? [], async (newList, oldList, added) => {
         if(!added.length) {
@@ -142,17 +142,26 @@
         e.target.value = '';
     }
 
-    function onFieldInput(itemIndex: number, itemFieldKey: string, itemFieldValue: FormFieldData['value'], { force = false } = {}) {
+    function onFieldInput(
+        itemIndex: number,
+        itemFieldKey: string,
+        itemFieldValue: FormFieldData['value'],
+        inputOptions: FormFieldEmitInputOptions
+    ) {
         emit('input', props.value.map((item, i) => {
             if(i === itemIndex) {
                 return {
                     ...item,
-                    ...(!force ? getDependantFieldsResetData(props.field.itemFields, itemFieldKey) : null),
+                    ...(!inputOptions.force ? getDependantFieldsResetData(props.field.itemFields, itemFieldKey) : null),
                     [itemFieldKey]: itemFieldValue,
                 }
             }
             return item;
-        }));
+        }), {
+            force: inputOptions.force,
+            skipRefresh: inputOptions.skipRefresh,
+            shouldRefresh: form.shouldRefresh(itemFieldKey, props.field.itemFields)
+        });
     }
 
     function onFieldLocaleChange(fieldKey: string, locale: string) {
