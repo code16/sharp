@@ -3,7 +3,6 @@
 namespace Code16\Sharp\Utils\Fields;
 
 use Code16\Sharp\Form\Fields\SharpFormField;
-use Code16\Sharp\Form\Fields\SharpFormHtmlField;
 use Code16\Sharp\Show\Fields\SharpShowField;
 use Illuminate\Support\Collection;
 
@@ -88,38 +87,16 @@ trait HandleFields
 
                 $field = $this->findFieldByKey($key);
 
-                if ($field instanceof SharpFormHtmlField) {
-                    return $value;
-                }
-
                 return $field
                     ? $field->formatter()
                         ->setDataLocalizations($this->getDataLocalizations())
                         ->toFront($field, $value)
                     : $value;
             })
-            ->pipe(function (Collection $data) {
-                $formData = collect($data)->map(function ($value, $key) {
-                    if ($field = $this->findFieldByKey($key)) {
-                        return $field->formatter()
-                            ->setDataLocalizations($this->getDataLocalizations())
-                            ->fromFront($field, $key, $value);
-                    }
-
-                    return $value;
-                })->all();
-
-                return $data->map(function ($value, $key) use ($formData) {
-                    if (($field = $this->findFieldByKey($key)) instanceof SharpFormHtmlField) {
-                        return $field->formatter()
-                            ->setRenderData(fieldKey: $key, formData: $formData)
-                            ->setDataLocalizations($this->getDataLocalizations())
-                            ->toFront($field, $value);
-                    }
-
-                    return $value;
-                });
-            })
+            ->when(
+                in_array(HandleFormHtmlFields::class, class_uses_recursive(static::class)),
+                fn ($data) => collect($this->formatHtmlFields($data->all()))
+            )
             ->all();
     }
 

@@ -8,6 +8,7 @@ use Code16\Sharp\Form\Fields\SharpFormHtmlField;
 trait HandleFormFields
 {
     use HandleFields;
+    use HandleFormHtmlFields;
 
     /**
      * Applies Field Formatters and validate $data.
@@ -21,28 +22,7 @@ trait HandleFormFields
             app($this->formValidatorClass);
         }
 
-        $formattedData = collect($data)
-            ->filter(function ($value, $key) {
-                // Ignore HTML fields
-                if ($this->findFieldByKey($key) instanceof SharpFormHtmlField) {
-                    return false;
-                }
-
-                // Filter only configured fields
-                return in_array($key, $this->getDataKeys());
-            })
-            ->map(function ($value, $key) use ($instanceId) {
-                if (! $field = $this->findFieldByKey($key)) {
-                    return $value;
-                }
-
-                return $field
-                    ->formatter()
-                    ->setInstanceId($instanceId)
-                    ->setDataLocalizations($this->getDataLocalizations())
-                    ->fromFront($field, $key, $value);
-            })
-            ->all();
+        $formattedData = $this->formatRequestData($data, $instanceId);
 
         if (! $legacyValidation) {
             if (method_exists($this, 'rules')) {
@@ -75,4 +55,31 @@ trait HandleFormFields
             })
             ->all();
     }
+
+    final protected function formatRequestData(array $data, ?string $instanceId = null)
+    {
+        return collect($data)
+            ->filter(function ($value, $key) {
+                // Ignore HTML fields
+                if ($this->findFieldByKey($key) instanceof SharpFormHtmlField) {
+                    return false;
+                }
+
+                // Filter only configured fields
+                return in_array($key, $this->getDataKeys());
+            })
+            ->map(function ($value, $key) use ($instanceId) {
+                if (! $field = $this->findFieldByKey($key)) {
+                    return $value;
+                }
+
+                return $field
+                    ->formatter()
+                    ->setInstanceId($instanceId)
+                    ->setDataLocalizations($this->getDataLocalizations())
+                    ->fromFront($field, $key, $value);
+            })
+            ->all();
+    }
+
 }

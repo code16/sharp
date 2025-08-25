@@ -10,7 +10,6 @@
     import { onUnmounted, ref, useTemplateRef, watch } from "vue";
     import { __ } from "@/utils/i18n";
     import { Button } from '@/components/ui/button';
-    import { useResizeObserver } from "@vueuse/core";
     import { slugify } from "@/utils";
 
     const props = defineProps<{

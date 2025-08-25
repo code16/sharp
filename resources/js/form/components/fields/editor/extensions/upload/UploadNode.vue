@@ -19,7 +19,7 @@
     const uploadComponent = ref<InstanceType<typeof Upload>>();
     const upload = computed(() => uploadManager.getUpload(props.node.attrs['data-key']));
 
-    useEditorNode({
+    useEditorNode(props, {
         onAdded: () => {
             uploadManager.restoreUpload(props.node.attrs['data-key']);
         },

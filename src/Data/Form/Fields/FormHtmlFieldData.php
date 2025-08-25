@@ -19,8 +19,10 @@ final class FormHtmlFieldData extends Data
 
     public function __construct(
         public string $key,
+        public bool $liveRefresh,
         #[LiteralTypeScriptType('"'.FormFieldType::Html->value.'"')]
         public FormFieldType $type,
+        public ?array $liveRefreshLinkedFields = null,
         public ?string $label = null,
         public ?bool $readOnly = null,
         public ?FormConditionalDisplayData $conditionalDisplay = null,

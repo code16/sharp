@@ -287,6 +287,14 @@ export class Form implements FormData, CommandFormData, EventTarget {
         }, 0);
     }
 
+    shouldRefresh(updatedFieldKey: string, fields = this.fields): boolean {
+        return Object.values(fields).some(field =>
+            field.type === 'html'
+            && field.liveRefresh
+            && (!field.liveRefreshLinkedFields || field.liveRefreshLinkedFields.includes(updatedFieldKey))
+        );
+    }
+
     eventTarget: EventTarget = new EventTarget();
 
     addEventListener(type: FormEvents, callback: EventListener, options?: AddEventListenerOptions | boolean): void {
