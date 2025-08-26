@@ -44,25 +44,27 @@ trait HandleFormHtmlFields
                 }
 
                 if ($field instanceof SharpFormListField && $field->itemFields()->whereInstanceOf(SharpFormHtmlField::class)->isNotEmpty()) {
-                    return collect($value)->map(function ($item, $index) use ($field, $key, $formattedData, $keepOnlyHtmlFields) {
-                        return collect($item)->mapWithKeys(function ($itemValue, $itemKey) use ($field, $key, $index, $formattedData, $keepOnlyHtmlFields) {
-                            $itemField = $field->findItemFormFieldByKey($itemKey);
+                    return [
+                        $key => collect($value)->map(function ($item, $index) use ($field, $key, $formattedData, $keepOnlyHtmlFields) {
+                            return collect($item)->mapWithKeys(function ($itemValue, $itemKey) use ($field, $key, $index, $formattedData, $keepOnlyHtmlFields) {
+                                $itemField = $field->findItemFormFieldByKey($itemKey);
 
-                            if ($itemField instanceof SharpFormHtmlField) {
-                                $fieldKey = "$key.$index.$itemKey";
+                                if ($itemField instanceof SharpFormHtmlField) {
+                                    $fieldKey = "$key.$index.$itemKey";
 
-                                return [
-                                    $itemKey => $itemField->render([
-                                        'fieldKey' => $fieldKey,
-                                        ...$formattedData,
-                                        ...(is_array($itemValue) ? $itemValue : []),
-                                    ], $fieldKey),
-                                ];
-                            }
+                                    return [
+                                        $itemKey => $itemField->render([
+                                            'fieldKey' => $fieldKey,
+                                            ...$formattedData,
+                                            ...(is_array($itemValue) ? $itemValue : []),
+                                        ], $fieldKey),
+                                    ];
+                                }
 
-                            return $keepOnlyHtmlFields ? [] : [$key => $itemValue];
-                        })->all();
-                    })->all();
+                                return $keepOnlyHtmlFields ? [] : [$itemKey => $itemValue];
+                            })->all();
+                        })->all(),
+                    ];
                 }
 
                 return $keepOnlyHtmlFields ? [] : [$key => $value];

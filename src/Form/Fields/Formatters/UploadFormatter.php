@@ -31,7 +31,7 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
             );
 
             return tap($this->normalizeFromFront($value, [
-                'file_name' => $field->storageDisk()
+                'file_name' => $field->storageDisk() && ! sharp()->context()->isFormRefresh()
                     ? sprintf(
                         '%s/%s',
                         str($field->storageBasePath())->replace('{id}', $this->instanceId ?? '{id}'),
@@ -44,7 +44,9 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
                     ->size($uploadedFieldRelativePath),
                 'mime_type' => Storage::disk(sharp()->config()->get('uploads.tmp_disk'))
                     ->mimeType($uploadedFieldRelativePath),
-                'disk' => $field->storageDisk() ?: sharp()->config()->get('uploads.tmp_disk'),
+                'disk' => $field->storageDisk() && ! sharp()->context()->isFormRefresh()
+                    ? $field->storageDisk()
+                    : sharp()->config()->get('uploads.tmp_disk'),
                 'filters' => $field->isImageTransformOriginal()
                     ? null
                     : $value['filters'] ?? null,

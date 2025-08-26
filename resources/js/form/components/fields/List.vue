@@ -152,14 +152,14 @@
             if(i === itemIndex) {
                 return {
                     ...item,
-                    ...(!inputOptions.force ? getDependantFieldsResetData(props.field.itemFields, itemFieldKey) : null),
+                    ...(!inputOptions?.force ? getDependantFieldsResetData(props.field.itemFields, itemFieldKey) : null),
                     [itemFieldKey]: itemFieldValue,
                 }
             }
             return item;
         }), {
-            force: inputOptions.force,
-            skipRefresh: inputOptions.skipRefresh,
+            force: inputOptions?.force,
+            skipRefresh: inputOptions?.skipRefresh,
             shouldRefresh: form.shouldRefresh(itemFieldKey, props.field.itemFields)
         });
     }

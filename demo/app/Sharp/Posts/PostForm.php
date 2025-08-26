@@ -9,6 +9,7 @@ use App\Sharp\Utils\Embeds\AuthorEmbed;
 use App\Sharp\Utils\Embeds\CodeEmbed;
 use App\Sharp\Utils\Embeds\RelatedPostEmbed;
 use App\Sharp\Utils\Embeds\TableOfContentsEmbed;
+use Carbon\Carbon;
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
@@ -28,7 +29,10 @@ use Code16\Sharp\Form\Layout\FormLayoutFieldset;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class PostForm extends SharpForm
 {
@@ -152,6 +156,23 @@ class PostForm extends SharpForm
                             ->setStorageDisk('local')
                             ->setStorageBasePath('data/posts/{id}')
                             ->addConditionalDisplay('!is_link'),
+                    )
+                    ->addItemField(
+                        SharpFormHtmlField::make('document_infos')
+                            ->setTemplate(function (array $data, string $fieldKey) {
+                                $itemData = Arr::get($data, Str::beforeLast($fieldKey, '.'));
+                                if (! isset($itemData['document']['file_name'])) {
+                                    return '';
+                                }
+
+                                return sprintf(
+                                    'File last modified at : %s',
+                                    Carbon::createFromTimestamp(
+                                        Storage::disk($itemData['document']['disk'])
+                                            ->lastModified($itemData['document']['file_name'])
+                                    )
+                                );
+                            })
                     ),
             )
             ->when(sharp()->context()->isUpdate(), fn ($formFields) => $formFields->addField(
@@ -193,7 +214,8 @@ class PostForm extends SharpForm
                             ->withListField('attachments', function (FormLayoutColumn $item) {
                                 $item->withFields(title: 8, is_link: 4)
                                     ->withField('link_url')
-                                    ->withField('document');
+                                    ->withField('document')
+                                    ->withField('document_infos');
                             });
                     })
                     ->addColumn(6, function (FormLayoutColumn $column) {

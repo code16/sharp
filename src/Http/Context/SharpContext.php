@@ -95,6 +95,11 @@ class SharpContext
         return $current?->instanceId();
     }
 
+    public function isFormRefresh(): bool
+    {
+        return request()->routeIs('code16.sharp.api.form.refresh.update');
+    }
+
     public function findListInstance(string $instanceId, ?Closure $notFoundCallback = null): mixed
     {
         if (isset($this->cachedListInstances)) {
