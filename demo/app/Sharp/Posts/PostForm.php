@@ -159,6 +159,7 @@ class PostForm extends SharpForm
                     )
                     ->addItemField(
                         SharpFormHtmlField::make('document_infos')
+                            ->setLiveRefresh(linkedFields: ['document'])
                             ->setTemplate(function (array $data, string $fieldKey) {
                                 $itemData = Arr::get($data, Str::beforeLast($fieldKey, '.'));
                                 if (! isset($itemData['document']['file_name'])) {
@@ -166,7 +167,7 @@ class PostForm extends SharpForm
                                 }
 
                                 return sprintf(
-                                    'File last modified at : %s',
+                                    'File uploaded at : %s',
                                     Carbon::createFromTimestamp(
                                         Storage::disk($itemData['document']['disk'])
                                             ->lastModified($itemData['document']['file_name'])
