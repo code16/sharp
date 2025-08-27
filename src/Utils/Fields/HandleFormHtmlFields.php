@@ -36,39 +36,46 @@ trait HandleFormHtmlFields
                 if ($field instanceof SharpFormHtmlField) {
                     return [
                         $key => $field->render([
-                            'fieldKey' => $key,
                             ...$formattedData,
                             ...(is_array($value) ? $value : []),
-                        ], $key),
+                        ]),
                     ];
                 }
 
-                if ($field instanceof SharpFormListField && $field->itemFields()->whereInstanceOf(SharpFormHtmlField::class)->isNotEmpty()) {
+                if ($field instanceof SharpFormListField
+                    && $field->itemFields()->whereInstanceOf(SharpFormHtmlField::class)->isNotEmpty()
+                ) {
                     return [
-                        $key => collect($value)->map(function ($item, $index) use ($field, $key, $formattedData, $keepOnlyHtmlFields) {
-                            return collect($item)->mapWithKeys(function ($itemValue, $itemKey) use ($field, $key, $index, $formattedData, $keepOnlyHtmlFields) {
-                                $itemField = $field->findItemFormFieldByKey($itemKey);
-
-                                if ($itemField instanceof SharpFormHtmlField) {
-                                    $fieldKey = "$key.$index.$itemKey";
-
-                                    return [
-                                        $itemKey => $itemField->render([
-                                            'fieldKey' => $fieldKey,
-                                            ...$formattedData,
-                                            ...(is_array($itemValue) ? $itemValue : []),
-                                        ], $fieldKey),
-                                    ];
-                                }
-
-                                return $keepOnlyHtmlFields ? [] : [$itemKey => $itemValue];
-                            })->all();
-                        })->all(),
+                        $key => $this->formatListHtmlFields($field, $value, $formattedData, $keepOnlyHtmlFields),
                     ];
                 }
 
                 return $keepOnlyHtmlFields ? [] : [$key => $value];
             })
             ->all();
+    }
+
+    private function formatListHtmlFields(
+        SharpFormListField $field,
+        array $listValue,
+        array $formattedData,
+        bool $keepOnlyHtmlFields
+    ): array {
+        return collect($listValue)->map(fn ($item, $index) => collect($item)->mapWithKeys(
+            function ($itemFieldValue, $itemFieldKey) use ($field, $index, $formattedData, $keepOnlyHtmlFields) {
+                $itemField = $field->findItemFormFieldByKey($itemFieldKey);
+
+                if ($itemField instanceof SharpFormHtmlField) {
+                    return [
+                        $itemFieldKey => $itemField->render([
+                            ...($formattedData[$field->key][$index] ?? []),
+                            ...(is_array($itemFieldValue) ? $itemFieldValue : []),
+                        ]),
+                    ];
+                }
+
+                return $keepOnlyHtmlFields ? [] : [$itemFieldKey => $itemFieldValue];
+            })->all()
+        )->all();
     }
 }

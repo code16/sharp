@@ -29,10 +29,8 @@ use Code16\Sharp\Form\Layout\FormLayoutFieldset;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class PostForm extends SharpForm
 {
@@ -160,17 +158,16 @@ class PostForm extends SharpForm
                     ->addItemField(
                         SharpFormHtmlField::make('document_infos')
                             ->setLiveRefresh(linkedFields: ['document'])
-                            ->setTemplate(function (array $data, string $fieldKey) {
-                                $itemData = Arr::get($data, Str::beforeLast($fieldKey, '.'));
-                                if (! isset($itemData['document']['file_name'])) {
+                            ->setTemplate(function (array $data) {
+                                if (! isset($data['document']['file_name'])) {
                                     return '';
                                 }
 
                                 return sprintf(
                                     'File uploaded at : %s',
                                     Carbon::createFromTimestamp(
-                                        Storage::disk($itemData['document']['disk'])
-                                            ->lastModified($itemData['document']['file_name'])
+                                        Storage::disk($data['document']['disk'])
+                                            ->lastModified($data['document']['file_name'])
                                     )
                                 );
                             })

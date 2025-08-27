@@ -11,7 +11,7 @@ class SharpFormHtmlField extends SharpFormField
 {
     const FIELD_TYPE = 'html';
 
-    /** @var View|Closure(array, string)|string */
+    /** @var View|Closure(array)|string */
     private View|Closure|string $template;
 
     private bool $liveRefresh = false;
@@ -42,12 +42,12 @@ class SharpFormHtmlField extends SharpFormField
         return $this;
     }
 
-    public function render(array $data, string $fieldKey): string
+    public function render(array $data): string
     {
         if ($this->template instanceof Closure) {
-            $view = ($this->template)($data, $fieldKey);
+            $view = ($this->template)($data);
 
-            return $view instanceof View ? $view->render() : $view;
+            return $view instanceof View ? $view->with($data)->render() : $view;
         }
 
         if (is_string($this->template)) {
