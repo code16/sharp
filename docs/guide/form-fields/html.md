@@ -6,7 +6,7 @@ This field is read-only, and is meant to display some dynamic information in the
 
 ## Configuration
 
-### `setTemplate(string|View $template)`
+### `setTemplate(string|Closure|View $template)`
 
 Write the blade template as a string. Example:
 
@@ -34,6 +34,8 @@ You can also pass a view (blade) :
 SharpFormHtmlField::make('panel')
     ->setTemplate(view('sharp.form-htm-field'))
 ```
+
+### `setLiveRefresh(bool $liveRefresh = true, array $linkedeFields = [])`
 
 ## Formatter
 
