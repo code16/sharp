@@ -7,21 +7,20 @@ use Code16\Sharp\Form\Fields\SharpFormListField;
 
 trait HandleFormHtmlFields
 {
-    final public function hasHtmlFields(bool $withLiveRefresh = false): bool
+    final public function hasHtmlFields(): bool
     {
-        $htmlFields = collect($this->getBuiltFields())
+        return collect($this->getBuiltFields())
             ->whereInstanceOf(SharpFormHtmlField::class)
             ->merge(
                 collect($this->getBuiltFields())
                     ->whereInstanceOf(SharpFormListField::class)
                     ->map(fn ($field) => $field->itemFields()->whereInstanceOf(SharpFormHtmlField::class))
             )
-            ->flatten();
-
-        return $withLiveRefresh ? $htmlFields->some->hasLiveRefresh() : $htmlFields->isNotEmpty();
+            ->flatten()
+            ->isNotEmpty();
     }
 
-    final public function formatHtmlFields(array $frontData, bool $keepOnlyHtmlFields = false): array
+    final public function formatHtmlFields(array $frontData, bool $keepOnlyRefreshableFields = false): array
     {
         if (! $this->hasHtmlFields()) {
             return $frontData;
@@ -30,27 +29,29 @@ trait HandleFormHtmlFields
         $formattedData = $this->formatRequestData($frontData);
 
         return collect($frontData)
-            ->mapWithKeys(function ($value, $key) use ($formattedData, $keepOnlyHtmlFields) {
+            ->mapWithKeys(function ($value, $key) use ($formattedData, $keepOnlyRefreshableFields) {
                 $field = $this->findFieldByKey($key);
 
                 if ($field instanceof SharpFormHtmlField) {
-                    return [
-                        $key => $field->render([
-                            ...$formattedData,
-                            ...(is_array($value) ? $value : []),
-                        ]),
-                    ];
+                    return $keepOnlyRefreshableFields && ! $field->hasLiveRefresh()
+                        ? []
+                        : [
+                            $key => $field->render([
+                                ...$formattedData,
+                                ...(is_array($value) ? $value : []),
+                            ]),
+                        ];
                 }
 
                 if ($field instanceof SharpFormListField
                     && $field->itemFields()->whereInstanceOf(SharpFormHtmlField::class)->isNotEmpty()
                 ) {
                     return [
-                        $key => $this->formatListHtmlFields($field, $value, $formattedData, $keepOnlyHtmlFields),
+                        $key => $this->formatListHtmlFields($field, $value, $formattedData, $keepOnlyRefreshableFields),
                     ];
                 }
 
-                return $keepOnlyHtmlFields ? [] : [$key => $value];
+                return $keepOnlyRefreshableFields ? [] : [$key => $value];
             })
             ->all();
     }
@@ -59,22 +60,24 @@ trait HandleFormHtmlFields
         SharpFormListField $field,
         array $listValue,
         array $formattedData,
-        bool $keepOnlyHtmlFields
+        bool $keepOnlyRefreshableFields
     ): array {
         return collect($listValue)->map(fn ($item, $index) => collect($item)->mapWithKeys(
-            function ($itemFieldValue, $itemFieldKey) use ($field, $index, $formattedData, $keepOnlyHtmlFields) {
+            function ($itemFieldValue, $itemFieldKey) use ($field, $index, $formattedData, $keepOnlyRefreshableFields) {
                 $itemField = $field->findItemFormFieldByKey($itemFieldKey);
 
                 if ($itemField instanceof SharpFormHtmlField) {
-                    return [
-                        $itemFieldKey => $itemField->render([
-                            ...($formattedData[$field->key][$index] ?? []),
-                            ...(is_array($itemFieldValue) ? $itemFieldValue : []),
-                        ]),
-                    ];
+                    return $keepOnlyRefreshableFields && ! $itemField->hasLiveRefresh()
+                        ? []
+                        : [
+                            $itemFieldKey => $itemField->render([
+                                ...($formattedData[$field->key][$index] ?? []),
+                                ...(is_array($itemFieldValue) ? $itemFieldValue : []),
+                            ]),
+                        ];
                 }
 
-                return $keepOnlyHtmlFields ? [] : [$itemFieldKey => $itemFieldValue];
+                return $keepOnlyRefreshableFields ? [] : [$itemFieldKey => $itemFieldValue];
             })->all()
         )->all();
     }

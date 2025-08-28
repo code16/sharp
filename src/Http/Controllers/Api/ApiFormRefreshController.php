@@ -16,7 +16,7 @@ class ApiFormRefreshController extends ApiController
             'form' => [
                 'data' => $fieldContainer->formatHtmlFields(
                     request()->all(),
-                    keepOnlyHtmlFields: true,
+                    keepOnlyRefreshableFields: true,
                 ),
             ],
         ]);
