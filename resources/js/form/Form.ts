@@ -39,8 +39,6 @@ export class Form implements FormData, CommandFormData, EventTarget {
         errors: {},
     });
 
-    serializedData: FormData['data'];
-
     entityKey: string;
     instanceId: string | number | null;
     embedKey?: string;
@@ -57,7 +55,6 @@ export class Form implements FormData, CommandFormData, EventTarget {
         this.instanceId = instanceId;
         this.embedKey = additionalProps?.embedKey;
         this.commandKey = additionalProps?.commandKey;
-        this.serializedData = this.data;
     }
 
     get data() {

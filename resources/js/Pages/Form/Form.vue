@@ -36,7 +36,7 @@
     function submit() {
         router.post(
             props.endpointUrl,
-            form.serializedData,
+            form.data,
             {
                 onStart: () => { loading.value = true },
                 onFinish: () => { loading.value = false },
