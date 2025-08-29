@@ -33,7 +33,7 @@ jobs:
 
     env: ${{ matrix.env }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v5
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -54,6 +54,8 @@ jobs:
         run: |
           composer require "laravel/framework:${LARAVEL}" "orchestra/testbench:${TESTBENCH}" --no-interaction --no-update
           composer update --prefer-stable --prefer-dist --no-interaction
+      - name: Run Security Audit
+        run: composer audit
       - name: Execute tests via Pest
         run: ./vendor/bin/pest --parallel
       - uses: 8398a7/action-slack@v2.4.0

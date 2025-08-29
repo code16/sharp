@@ -19,7 +19,7 @@
         "ext-mbstring": "*",
         "blade-ui-kit/blade-icons": "^1.6",
         "code16/laravel-content-renderer": "^1.1",
-        "enshrined/svg-sanitize": "^0.21.0",
+        "enshrined/svg-sanitize": "^0.22.0",
         "inertiajs/inertia-laravel": "^2.0",
         "intervention/image": "^3.4",
         "laravel/framework": "^11.0|^12.0",

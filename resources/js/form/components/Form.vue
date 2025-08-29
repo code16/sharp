@@ -58,7 +58,7 @@
 
         loading.value = true;
 
-        return postFn({ ...form.serializedData, ...extraData })
+        return postFn({ ...form.data, ...extraData })
             .catch(error => {
                 if (error.response?.status === 422) {
                     props.form.onError(error.response.data.errors ?? {})
@@ -108,7 +108,6 @@
         }
 
         props.form.data = data;
-        props.form.serializedData = data;
     }
 
     const title = useTemplateRef<HTMLElement>('title');

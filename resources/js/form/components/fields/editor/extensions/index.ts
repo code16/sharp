@@ -37,9 +37,9 @@ import { FormEditorFieldData, FormEditorToolbarButton } from "@/types";
 
 export function getExtensions(field: FormEditorFieldData) {
     const toolbarHas = (buttonName: FormEditorToolbarButton | FormEditorToolbarButton[]) =>
-        !field.toolbar || field.toolbar.some(button =>
+        field.toolbar?.some(button =>
             Array.isArray(buttonName)
-                ? buttonName.includes(button)
+                ? buttonName.includes(button as FormEditorToolbarButton)
                 : button === buttonName
         );
 

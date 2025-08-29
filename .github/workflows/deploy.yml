@@ -1,5 +1,6 @@
 name: Deploy
 on:
+  workflow_dispatch:
   push:
     tags:
     - 'v9.*'
@@ -8,4 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Ping forge to start deploy
-        run: curl https://forge.laravel.com/servers/503638/sites/1462752/deploy/http?token=${{ secrets.FORGE_DEPLOY_TOKEN }}
+        run: |
+          for url in $FORGE_DEPLOY_URLS; do
+            echo "Pinging $url..."
+            curl "$url"
+          done
+        env:
+          FORGE_DEPLOY_URLS: ${{ secrets.FORGE_DEPLOY_URLS }}

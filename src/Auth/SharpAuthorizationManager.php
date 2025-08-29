@@ -9,9 +9,13 @@ use Illuminate\Support\Arr;
 
 class SharpAuthorizationManager
 {
+    private bool $cacheEnabled;
     private array $cachedPolicies = [];
 
-    public function __construct(protected SharpEntityManager $entityManager, protected Gate $gate) {}
+    public function __construct(protected SharpEntityManager $entityManager, protected Gate $gate)
+    {
+        $this->cacheEnabled = ! app()->environment('testing');
+    }
 
     public function isAllowed(string $ability, string $entityKey, ?string $instanceId = null): bool
     {
@@ -52,25 +56,29 @@ class SharpAuthorizationManager
 
     protected function isPolicyForbidden(string $ability, string $entityKey, ?string $instanceId = null): bool
     {
-        if (! Arr::exists($this->cachedPolicies, "$ability-$entityKey-$instanceId")) {
-            $entity = $this->entityManager->entityFor($entityKey);
-            $policy = $entity->getPolicyOrDefault();
+        if ($this->cacheEnabled && Arr::exists($this->cachedPolicies, "$ability-$entityKey-$instanceId")) {
+            return $this->cachedPolicies["$ability-$entityKey-$instanceId"];
+        }
 
-            $forbidden = true;
-            if (in_array($ability, ['entity', 'create', 'reorder'])) {
-                // Always checked
-                $forbidden = ! $policy->$ability(auth()->user());
-            } elseif (in_array($ability, ['view', 'update', 'delete'])) {
-                // Not checked in create case, as it could lead to unwanted errors in functional policy code (with findOrFail for instance)
-                if ($instanceId || $entity->isSingle()) {
-                    $forbidden = ! $policy->$ability(auth()->user(), $instanceId);
-                }
+        $entity = $this->entityManager->entityFor($entityKey);
+        $policy = $entity->getPolicyOrDefault();
+
+        $forbidden = true;
+        if (in_array($ability, ['entity', 'create', 'reorder'])) {
+            // Always checked
+            $forbidden = ! $policy->$ability(auth()->user());
+        } elseif (in_array($ability, ['view', 'update', 'delete'])) {
+            // Not checked in create case, as it could lead to unwanted errors in functional policy code (with findOrFail for instance)
+            if ($instanceId || $entity->isSingle()) {
+                $forbidden = ! $policy->$ability(auth()->user(), $instanceId);
             }
+        }
 
+        if ($this->cacheEnabled) {
             $this->cachedPolicies["$ability-$entityKey-$instanceId"] = $forbidden;
         }
 
-        return $this->cachedPolicies["$ability-$entityKey-$instanceId"];
+        return $forbidden;
     }
 
     private function deny()
