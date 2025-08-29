@@ -5,6 +5,7 @@ use Code16\Sharp\Http\Controllers\Api\ApiEntityListFiltersController;
 use Code16\Sharp\Http\Controllers\Api\ApiFilterAutocompleteController;
 use Code16\Sharp\Http\Controllers\Api\ApiFormAutocompleteController;
 use Code16\Sharp\Http\Controllers\Api\ApiFormEditorUploadFormController;
+use Code16\Sharp\Http\Controllers\Api\ApiFormRefreshController;
 use Code16\Sharp\Http\Controllers\Api\ApiFormUploadController;
 use Code16\Sharp\Http\Controllers\Api\ApiFormUploadThumbnailController;
 use Code16\Sharp\Http\Controllers\Api\ApiSearchController;
@@ -104,6 +105,9 @@ Route::group([
 
     Route::post('/form/autocomplete/{entityKey}/{autocompleteFieldKey}', [ApiFormAutocompleteController::class, 'index'])
         ->name('code16.sharp.api.form.autocomplete.index');
+
+    Route::post('/form/refresh/{entityKey}', [ApiFormRefreshController::class, 'update'])
+        ->name('code16.sharp.api.form.refresh.update');
 
     Route::post('/filters/autocomplete/{entityKey}/{filterKey}', [ApiFilterAutocompleteController::class, 'index'])
         ->name('code16.sharp.api.filters.autocomplete.index');

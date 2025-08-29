@@ -60,7 +60,7 @@
             && !props.field.options.find(o => o.label === searchTerm.value);
     });
 
-    emit('input', props.value?.map(option => withItemKey(option)));
+    emit('input', props.value?.map(option => withItemKey(option)), { skipRefresh: true });
 </script>
 
 <template>

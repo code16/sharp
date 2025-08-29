@@ -315,6 +315,12 @@ declare module 'ziggy-js' {
             "name": "autocompleteFieldKey"
         }
     ],
+    "code16.sharp.api.form.refresh.update": [
+        {
+            "name": "entityKey",
+            "binding": "key"
+        }
+    ],
     "code16.sharp.api.filters.autocomplete.index": [
         {
             "name": "entityKey",

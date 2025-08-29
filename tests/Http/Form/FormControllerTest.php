@@ -7,9 +7,12 @@ use Code16\Sharp\Form\Fields\SharpFormAutocompleteListField;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteLocalField;
 use Code16\Sharp\Form\Fields\SharpFormCheckField;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
+use Code16\Sharp\Form\Fields\SharpFormHtmlField;
+use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
+use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Entities\SinglePersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonForm;
@@ -604,5 +607,79 @@ it('allows to override entirely the form title', function () {
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('form.title', 'My custom create title')
+        );
+});
+
+it('handles html fields', function () {
+    fakeFormFor('person', new class() extends SharpForm
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields
+                ->addField(
+                    SharpFormTextField::make('name')
+                )
+                ->addField(
+                    SharpFormHtmlField::make('html_string')
+                        ->setTemplate('<h1>{{ $name }}</h1><p>{{ $text }}</p>')
+                )
+                ->addField(
+                    SharpFormHtmlField::make('html_view')
+                        ->setTemplate(view('fixtures::form-html-field'))
+                )
+                ->addField(
+                    SharpFormHtmlField::make('html_closure')
+                        ->setTemplate(fn ($data) => sprintf('<h1>%s</h1><p>%s</p>', $data['name'], $data['text'])
+                        )
+                )
+                ->addField(
+                    SharpFormListField::make('list')
+                        ->addItemField(
+                            SharpFormTextField::make('list_name')
+                        )
+                        ->addItemField(
+                            SharpFormHtmlField::make('list_html')
+                                ->setTemplate(fn ($data) => sprintf('<h1>%s</h1><p>%s</p>', $data['list_name'], $data['text'])
+                                )
+                        )
+                );
+        }
+
+        public function buildFormLayout(FormLayout $formLayout): void
+        {
+            $formLayout->addColumn(12, function (FormLayoutColumn $column) {
+                $column->withField('html_string')
+                    ->withField('html_view')
+                    ->withField('html_closure')
+                    ->withListField('list', function (FormLayoutColumn $column) {
+                        $column->withField('list_name')
+                            ->withField('list_html');
+                    });
+            });
+        }
+
+        public function find($id): array
+        {
+            return $this->setCustomTransformer('html_string', fn ($value) => ['text' => 'example'])
+                ->setCustomTransformer('html_view', fn ($value) => ['text' => 'example'])
+                ->setCustomTransformer('html_closure', fn ($value) => ['text' => 'example'])
+                ->transform([
+                    'name' => 'Albert Einstein',
+                    'list' => [
+                        ['id' => 1, 'list_name' => 'Marie Curie', 'list_html' => ['text' => 'example']],
+                    ],
+                ]);
+        }
+
+        public function update(mixed $id, array $data) {}
+    });
+
+    $this->get('/sharp/s-list/person/s-form/person/1')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('form.data.html_string', '<h1>Albert Einstein</h1><p>example</p>')
+            ->where('form.data.html_view', "<h1>Albert Einstein</h1><p>example</p>\n")
+            ->where('form.data.html_closure', '<h1>Albert Einstein</h1><p>example</p>')
+            ->where('form.data.list.0.list_html', '<h1>Marie Curie</h1><p>example</p>')
         );
 });

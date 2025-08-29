@@ -25,6 +25,7 @@ use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
 use Code16\Sharp\Form\SharpSingleForm;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Illuminate\Database\Eloquent\Builder;
 
 class TestForm extends SharpSingleForm
 {
@@ -161,7 +162,16 @@ class TestForm extends SharpSingleForm
                             ->setListItemTemplate('{{ $name }}')
                             ->setResultItemTemplate('{{ $name }} ({{ $id }})')
                             ->setRemoteCallback(function ($search, $data) {
-                                dd($data);
+                                $users = User::orderBy('name');
+
+                                foreach (explode(' ', trim($search)) as $word) {
+                                    $users->where(function (Builder $query) use ($word) {
+                                        $query->orWhere('name', 'like', "%$word%")
+                                            ->orWhere('email', 'like', "%$word%");
+                                    });
+                                }
+
+                                return $users->limit(10)->get();
                             }, linkedFields: ['select']),
                     )
                     ->addItemField(SharpFormEditorField::make('markdown2')
@@ -170,6 +180,18 @@ class TestForm extends SharpSingleForm
                         ->setToolbar([
                             SharpFormEditorField::B, SharpFormEditorField::I, SharpFormEditorField::A,
                         ]),
+                    )
+                    ->addItemField(
+                        SharpFormHtmlField::make('document_infos')
+                            ->setLiveRefresh(linkedFields: ['select'])
+                            ->setTemplate(function (array $data) {
+                                return isset($data['select'])
+                                    ? sprintf(
+                                        'You have selected : %s',
+                                        $this->options()[$data['select']]
+                                    )
+                                    : '';
+                            })
                     ),
             )
             ->addField(

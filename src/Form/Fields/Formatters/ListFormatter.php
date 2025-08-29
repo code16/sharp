@@ -4,6 +4,7 @@ namespace Code16\Sharp\Form\Fields\Formatters;
 
 use Closure;
 use Code16\Sharp\Form\Fields\SharpFormField;
+use Code16\Sharp\Form\Fields\SharpFormHtmlField;
 use Code16\Sharp\Form\Fields\SharpFormListField;
 
 class ListFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
@@ -68,7 +69,7 @@ class ListFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
                 foreach ($item as $key => $value) {
                     $itemField = $field->findItemFormFieldByKey($key);
 
-                    if ($itemField) {
+                    if ($itemField && ! $itemField instanceof SharpFormHtmlField) {
                         $itemArray[$key] = $this->itemFieldFormatter($itemField)
                             ->setInstanceId($this->instanceId)
                             ->fromFront($itemField, $key, $value);

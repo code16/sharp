@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
     import { FormEditorFieldData } from "@/types";
-    import { computed, provide, ref, watch } from "vue";
+    import { computed, nextTick, onBeforeUnmount, onMounted, provide, ref, watch } from "vue";
     import { Editor, BubbleMenu, isActive } from "@tiptap/vue-3";
     import debounce from 'lodash/debounce';
     import { EditorContent } from '@tiptap/vue-3';
@@ -60,6 +60,8 @@
     });
     const embedModal = ref<InstanceType<typeof EditorEmbedModal>>();
     const linkDropdown = ref<InstanceType<typeof LinkDropdown>>();
+    const isMounted = ref(false);
+    const isUnmounting = ref(false);
 
     provide<ParentEditor>('editor', {
         props,
@@ -67,6 +69,8 @@
         uploadModal,
         embedManager,
         embedModal,
+        isMounted,
+        isUnmounting,
     } satisfies ParentEditor);
 
     const editor = useLocalizedEditor(
@@ -150,6 +154,16 @@
             return editor;
         }
     );
+
+    onMounted(() => {
+        setTimeout(() => {
+            isMounted.value = true;
+        }, 10);
+    });
+
+    onBeforeUnmount(() => {
+        isUnmounting.value = true;
+    });
 
     const dropdownEmbeds = computed(() =>
         Object.values(props.field.embeds ?? {})

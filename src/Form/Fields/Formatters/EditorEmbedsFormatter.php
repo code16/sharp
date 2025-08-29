@@ -42,7 +42,7 @@ class EditorEmbedsFormatter extends SharpFieldFormatter implements FormatsAfterU
                     foreach ($elements as $element) {
                         $dataKey = $element->getAttribute('data-key');
                         foreach ($embed->getBuiltFields() as $fieldKey => $field) {
-                            $embedData = $value['embeds'][$embedKey][$dataKey];
+                            $embedData = ((array) $value['embeds'][$embedKey])[$dataKey];
                             $fieldValue = $embedData[$fieldKey] ?? null;
                             if ($field->formatter() instanceof UploadFormatter) {
                                 $fieldValue = $field->formatter()

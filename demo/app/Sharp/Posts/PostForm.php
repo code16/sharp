@@ -9,6 +9,7 @@ use App\Sharp\Utils\Embeds\AuthorEmbed;
 use App\Sharp\Utils\Embeds\CodeEmbed;
 use App\Sharp\Utils\Embeds\RelatedPostEmbed;
 use App\Sharp\Utils\Embeds\TableOfContentsEmbed;
+use Carbon\Carbon;
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
@@ -16,6 +17,7 @@ use Code16\Sharp\Form\Fields\SharpFormAutocompleteRemoteField;
 use Code16\Sharp\Form\Fields\SharpFormCheckField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
+use Code16\Sharp\Form\Fields\SharpFormHtmlField;
 use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormTagsField;
 use Code16\Sharp\Form\Fields\SharpFormTextareaField;
@@ -27,6 +29,8 @@ use Code16\Sharp\Form\Layout\FormLayoutFieldset;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Storage;
 
 class PostForm extends SharpForm
 {
@@ -105,6 +109,25 @@ class PostForm extends SharpForm
                     ->setHasTime(),
             )
             ->addField(
+                SharpFormHtmlField::make('publication_label')
+                    ->setLiveRefresh(linkedFields: ['author_id', 'published_at'])
+                    ->setTemplate(function (array $data) {
+                        if (! isset($data['published_at'])) {
+                            return '';
+                        }
+
+                        return Blade::render(<<<'blade'
+                            This post will be published on {{ $published_at }}
+                            @if($author)
+                                by {{ $author->name }}.
+                            @endif
+                        blade, [
+                            'published_at' => \Carbon\Carbon::parse($data['published_at'])->isoFormat('LLLL'),
+                            'author' => \App\Models\User::find($data['author_id']),
+                        ]);
+                    })
+            )
+            ->addField(
                 SharpFormListField::make('attachments')
                     ->setLabel('Attachments')
                     ->setAddable()->setAddText('Add an attachment')
@@ -131,6 +154,23 @@ class PostForm extends SharpForm
                             ->setStorageDisk('local')
                             ->setStorageBasePath('data/posts/{id}')
                             ->addConditionalDisplay('!is_link'),
+                    )
+                    ->addItemField(
+                        SharpFormHtmlField::make('document_infos')
+                            ->setLiveRefresh(linkedFields: ['document'])
+                            ->setTemplate(function (array $data) {
+                                if (! isset($data['document']['file_name'])) {
+                                    return '';
+                                }
+
+                                return sprintf(
+                                    'File uploaded at : %s',
+                                    Carbon::createFromTimestamp(
+                                        Storage::disk($data['document']['disk'])
+                                            ->lastModified($data['document']['file_name'])
+                                    )
+                                );
+                            })
                     ),
             )
             ->when(sharp()->context()->isUpdate(), fn ($formFields) => $formFields->addField(
@@ -168,10 +208,12 @@ class PostForm extends SharpForm
                                 fn ($column) => $column->withField('author_id')
                             )
                             ->withFields('published_at', 'categories')
+                            ->withField('publication_label')
                             ->withListField('attachments', function (FormLayoutColumn $item) {
                                 $item->withFields(title: 8, is_link: 4)
                                     ->withField('link_url')
-                                    ->withField('document');
+                                    ->withField('document')
+                                    ->withField('document_infos');
                             });
                     })
                     ->addColumn(6, function (FormLayoutColumn $column) {
