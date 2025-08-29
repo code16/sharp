@@ -92,7 +92,7 @@
             show_command_key: parentCommands?.commandContainer === 'show' ? props.form.commandKey : null,
         }), data)
             .then(response => {
-                props.form.data = merge({}, props.form.data, response.data.form.data);
+                merge(props.form.data, response.data.form.data);
             });
     }, 200);
 
