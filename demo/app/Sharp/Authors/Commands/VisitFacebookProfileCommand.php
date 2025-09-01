@@ -14,7 +14,8 @@ class VisitFacebookProfileCommand extends InstanceCommand
 
     public function buildCommandConfig(): void
     {
-        $this->configureDescription('You will leave Sharp');
+        $this->configureDescription('You will leave Sharp')
+            ->configureIcon('lucide-facebook');
     }
 
     public function execute(mixed $instanceId, array $data = []): array

@@ -33,6 +33,7 @@ abstract class Command
     private ?string $confirmationTitle = null;
     private ?string $confirmationButtonLabel = null;
     private ?string $description = null;
+    private ?string $icon = null;
 
     protected function info(string $message, bool $reload = false): array
     {
@@ -146,6 +147,13 @@ abstract class Command
         return $this;
     }
 
+    final protected function configureIcon(string $icon): self
+    {
+        $this->icon = $icon;
+
+        return $this;
+    }
+
     /**
      * Check if the current user is allowed to use this Command.
      */
@@ -177,6 +185,11 @@ abstract class Command
     final public function getDescription(): ?string
     {
         return $this->description;
+    }
+
+    final public function getIcon(): ?string
+    {
+        return $this->icon;
     }
 
     final public function getFormModalTitle(?array $formData): ?string

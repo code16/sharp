@@ -53,6 +53,7 @@ it('returns commands config', function () {
                     'instanceSelection' => null,
                     'confirmation' => null,
                     'hasForm' => false,
+                    'icon' => null,
                 ],
             ],
         ],
@@ -66,6 +67,7 @@ it('returns commands config', function () {
                     'description' => null,
                     'confirmation' => null,
                     'hasForm' => false,
+                    'icon' => null,
                 ],
             ],
         ],
@@ -265,7 +267,7 @@ it('handles authorization in an instance command', function () {
     expect($list->listConfig()['commands']['instance'][0][0]['authorization'])->toEqual([1, 2]);
 });
 
-it('allows to define a description on a command', function () {
+it('allows to define a description & icon on a command', function () {
     $list = new class() extends FakeSharpEntityList
     {
         public function getEntityCommands(): ?array
@@ -280,7 +282,8 @@ it('allows to define a description on a command', function () {
 
                     public function buildCommandConfig(): void
                     {
-                        $this->configureDescription('My Entity Command description');
+                        $this->configureDescription('My Entity Command description')
+                            ->configureIcon('testicon-user');
                     }
 
                     public function execute(array $data = []): array {}
@@ -291,7 +294,13 @@ it('allows to define a description on a command', function () {
 
     $list->buildListConfig();
 
-    expect($list->listConfig()['commands']['entity'][0][0]['description'])->toEqual('My Entity Command description');
+    expect($list->listConfig()['commands']['entity'][0][0])->toMatchArray([
+        'description' => 'My Entity Command description',
+        'icon' => [
+            'name' => 'testicon-user',
+            'svg' => '<svg><!--user--></svg>',
+        ],
+    ]);
 });
 
 it('allows to define separators in instance commands', function () {

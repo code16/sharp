@@ -34,6 +34,7 @@ it('returns list commands config of a dashboard', function () {
             'description' => null,
             'confirmation' => null,
             'hasForm' => false,
+            'icon' => null,
         ]);
 });
 
@@ -113,6 +114,7 @@ it('allows to define that the dashboard command has a form', function () {
                         'authorization' => true,
                         'confirmation' => null,
                         'description' => null,
+                        'icon' => null,
                     ],
                 ],
             ],
