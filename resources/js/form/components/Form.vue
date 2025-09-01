@@ -103,11 +103,11 @@
             [fieldKey]: value,
         };
 
+        props.form.data = data;
+
         if((props.form.shouldRefresh(fieldKey) || inputOptions.shouldRefresh) && !inputOptions.skipRefresh) {
             refresh(data);
         }
-
-        props.form.data = data;
     }
 
     const title = useTemplateRef<HTMLElement>('title');

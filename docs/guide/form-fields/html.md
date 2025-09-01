@@ -6,7 +6,7 @@ This field is read-only, and is meant to display some dynamic information in the
 
 ## Configuration
 
-### `setTemplate(string|Closure|View $template)`
+### `setTemplate(string|View|Closure $template)`
 
 Write the blade template as a string. Example:
 
@@ -35,7 +35,32 @@ SharpFormHtmlField::make('panel')
     ->setTemplate(view('sharp.form-htm-field'))
 ```
 
-### `setLiveRefresh(bool $liveRefresh = true, array $linkedeFields = [])`
+Using a closure:
+
+```php
+SharpFormHtmlField::make('panel')
+    ->setTemplate(function (array $data) {
+        return 'You have chosen:'.$data['another_form_field'].'. Date: '.$data['date'];
+    })
+```
+
+#### Accessing to other field values in the form
+
+In the template, all other field values of the form are available (alongside the Html field value). This is particularly useful when using `setLiveRefresh()` (described below).
+
+### `setLiveRefresh(bool $liveRefresh = true, ?array $linkedFields = null)`
+
+Use this method to dynamically update Html field when the user changes another field. 
+The `$linkedFields` parameter allows filtering which field to watch (without it the internal refresh endpoint is called on any field update).
+
+```php
+SharpFormHtmlField::make('total')
+    ->setLiveRefresh(linkedFields: ['products'])
+    ->setTemplate(function (array $data) {
+        return 'Total:'.collect($data['products'])
+            ->sum(fn ($product) => $product['price']);
+    })
+```
 
 ## Formatter
 
