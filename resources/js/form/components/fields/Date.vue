@@ -207,9 +207,10 @@ function onMinuteChange(minute: string) {
         </FormFieldLayout>
 
         <PopoverContent
-            class="flex p-0 w-auto overflow-hidden"
+            class="flex p-0 w-auto overflow-auto max-w-[var(--reka-popover-content-available-width)]"
             @open-auto-focus.prevent
-            :avoid-collisions="false"
+            avoid-collisions
+            :side-flip="false"
             align="start"
         >
             <template v-if="props.field.hasDate">
