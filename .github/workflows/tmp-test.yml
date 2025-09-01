@@ -9,8 +9,6 @@ jobs:
       - name: Test
         run: echo "Test"
   deploy:
-    runs-on: ubuntu-latest
     needs: test
-    steps:
-      - name: Deploy docs
-        uses: code16/sharp/.github/workflows/deploy.yml@main
+    uses: code16/sharp/.github/workflows/deploy.yml@main
+
