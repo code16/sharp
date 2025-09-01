@@ -16,6 +16,56 @@
                     ]
                 }
             ]
+        },
+        {
+            "complete": "bladeIcon",
+            "condition": [
+                {
+                    "classFqn": [
+                        "Code16\\Sharp\\Utils\\Menu\\HasSharpMenuItems"
+                    ],
+                    "methodNames": [
+                        "addEntityLink"
+                    ],
+                    "parameters": [
+                        3
+                    ]
+                },
+                {
+                    "classFqn": [
+                        "Code16\\Sharp\\Form\\Fields\\Embeds\\SharpFormEditorEmbed"
+                    ],
+                    "methodNames": [
+                        "configureIcon"
+                    ],
+                    "parameters": [
+                        1
+                    ]
+                },
+                {
+                    "classFqn": [
+                        "Code16\\Sharp\\EntityList\\Commands\\Command"
+                    ],
+                    "methodNames": [
+                        "configureIcon"
+                    ],
+                    "parameters": [
+                        1
+                    ]
+                },
+                {
+                    "place": "parameter",
+                    "classFqn": [
+                        "Code16\\Sharp\\EntityList\\EntityListEntities"
+                    ],
+                    "methodNames": [
+                        "addEntity"
+                    ],
+                    "parameters": [
+                        3
+                    ]
+                }
+            ]
         }
     ],
     "view": {
