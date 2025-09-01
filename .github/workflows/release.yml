@@ -64,5 +64,6 @@ jobs:
           file_pattern: src/SharpInternalServiceProvider.php
           tagging_message: "v${{ steps.version.outputs.version }}"
   deploy:
-    uses: code16/sharp/.github/workflows/deploy.yml@main
     needs: release
+    uses: code16/sharp/.github/workflows/deploy.yml@main
+    secrets: inherit

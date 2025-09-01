@@ -11,4 +11,5 @@ jobs:
   deploy:
     needs: test
     uses: code16/sharp/.github/workflows/deploy.yml@main
+    secrets: inherit
 
