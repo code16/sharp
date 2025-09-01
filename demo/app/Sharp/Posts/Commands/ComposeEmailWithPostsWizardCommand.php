@@ -21,7 +21,8 @@ class ComposeEmailWithPostsWizardCommand extends EntityWizardCommand
 
     public function buildCommandConfig(): void
     {
-        $this->configureDescription('Use this wizard command to compose a message choosing posts links in a list');
+        $this->configureDescription('Use this wizard command to compose a message choosing posts links in a list')
+            ->configureIcon('lucide-mail');
     }
 
     public function buildFormFieldsForFirstStep(FieldsContainer $formFields): void

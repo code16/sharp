@@ -44,6 +44,7 @@ export type CommandData = {
     buttonLabel: string | null;
   } | null;
   hasForm: boolean;
+  icon: IconData | null;
   authorization: Array<string | number> | boolean;
   instanceSelection: InstanceSelectionMode | null;
   primary: boolean | null;

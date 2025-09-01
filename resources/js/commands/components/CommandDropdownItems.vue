@@ -6,6 +6,7 @@
     import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
     import { useBreakpoints } from "@/composables/useBreakpoints";
     import { showAlert } from "@/utils/dialogs";
+    import Icon from "@/components/ui/Icon.vue";
 
     const props = defineProps<{
         commands: CommandData[][],
@@ -38,6 +39,9 @@
                                 @click="$emit('select', command)"
                                 :disabled="requiresSelection(command)"
                             >
+                                <template v-if="command.icon">
+                                    <Icon :icon="command.icon" class="size-4" />
+                                </template>
                                 <div>
                                     {{ command.label }}
                                     <template v-if="command.description">

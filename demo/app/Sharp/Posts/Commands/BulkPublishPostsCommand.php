@@ -15,6 +15,7 @@ class BulkPublishPostsCommand extends EntityCommand
     public function buildCommandConfig(): void
     {
         $this->configureDescription('Bulk command to publish posts')
+            ->configureIcon('lucide-check-check')
             ->configureInstanceSelectionRequired();
     }
 

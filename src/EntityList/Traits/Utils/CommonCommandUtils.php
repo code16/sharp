@@ -4,6 +4,7 @@ namespace Code16\Sharp\EntityList\Traits\Utils;
 
 use Code16\Sharp\EntityList\Commands\Command;
 use Code16\Sharp\EntityList\Commands\EntityCommand;
+use Code16\Sharp\Utils\Icons\IconManager;
 use Illuminate\Support\Collection;
 
 trait CommonCommandUtils
@@ -30,6 +31,7 @@ trait CommonCommandUtils
                     'authorization' => $instanceId
                         ? $handler->authorizeFor($instanceId)
                         : $handler->getGlobalAuthorization(),
+                    'icon' => app(IconManager::class)->iconToArray($handler->getIcon()),
                     ...$handler instanceof EntityCommand ? [
                         'instanceSelection' => $handler->getInstanceSelectionMode(),
                     ] : [],
