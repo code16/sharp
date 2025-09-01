@@ -120,12 +120,14 @@ class PostForm extends SharpForm
                                 by {{ $author->name }}.
                             @endif
                             <br>
-                            {{ count($linkAttachments) }} link attachments, {{ count($fileAttachments) }} file attachments.
+                            Including {{ count($attachments) }} attachments
+                            ({{ count($fileAttachments) }} files, {{ count($linkAttachments) }} links).
                         blade, [
                             'published_at' => \Carbon\Carbon::parse($data['published_at'])->isoFormat('LLLL'),
                             'author' => \App\Models\User::find($data['author_id']),
-                            'linkAttachments' => collect($data['attachments'])->where('is_link', true)->values(),
-                            'fileAttachments' => collect($data['attachments'])->where('is_link', false)->values(),
+                            'attachments' => $data['attachments'] ?? [],
+                            'linkAttachments' => collect($data['attachments'] ?? [])->where('is_link', true),
+                            'fileAttachments' => collect($data['attachments'] ?? [])->where('is_link', false),
                         ]);
                     })
             )
