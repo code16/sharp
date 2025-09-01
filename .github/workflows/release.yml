@@ -63,6 +63,9 @@ jobs:
           commit_message: "Update version to v${{ steps.version.outputs.version }}"
           file_pattern: src/SharpInternalServiceProvider.php
           tagging_message: "v${{ steps.version.outputs.version }}"
-
+  deploy:
+    runs-on: ubuntu-latest
+    needs: release
+    steps:
       - name: Deploy docs
         uses: code16/sharp/.github/workflows/deploy.yml@main

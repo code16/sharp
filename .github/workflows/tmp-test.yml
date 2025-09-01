@@ -3,8 +3,14 @@ name: Test dispatch
 on:
   workflow_dispatch:
 jobs:
-  lint:
+  test:
     runs-on: ubuntu-latest
+    steps:
+      - name: Test
+        run: echo "Test"
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test
     steps:
       - name: Deploy docs
         uses: code16/sharp/.github/workflows/deploy.yml@main
