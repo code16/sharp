@@ -11,6 +11,7 @@ use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\HasModalFormLayout;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Fields\HandleFields;
+use Code16\Sharp\Utils\Fields\HandleFormHtmlFields;
 use Code16\Sharp\Utils\Icons\IconManager;
 use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
 use Code16\Sharp\Utils\Traits\HandleValidation;
@@ -24,6 +25,7 @@ use Illuminate\View\View;
 abstract class SharpFormEditorEmbed
 {
     use HandleFields;
+    use HandleFormHtmlFields;
     use HandlePageAlertMessage;
     use HandleValidation;
     use HasModalFormLayout;

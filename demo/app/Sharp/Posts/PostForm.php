@@ -16,6 +16,7 @@ use Code16\Sharp\Form\Fields\SharpFormAutocompleteRemoteField;
 use Code16\Sharp\Form\Fields\SharpFormCheckField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
+use Code16\Sharp\Form\Fields\SharpFormHtmlField;
 use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormTagsField;
 use Code16\Sharp\Form\Fields\SharpFormTextareaField;
@@ -27,6 +28,7 @@ use Code16\Sharp\Form\Layout\FormLayoutFieldset;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Illuminate\Support\Facades\Blade;
 
 class PostForm extends SharpForm
 {
@@ -105,6 +107,29 @@ class PostForm extends SharpForm
                     ->setHasTime(),
             )
             ->addField(
+                SharpFormHtmlField::make('publication_label')
+                    ->setLiveRefresh(linkedFields: ['author_id', 'published_at', 'attachments'])
+                    ->setTemplate(function (array $data) {
+                        if (! isset($data['published_at'])) {
+                            return '';
+                        }
+
+                        return Blade::render(<<<'blade'
+                            This post will be published on {{ $published_at }}
+                            @if($author)
+                                by {{ $author->name }}.
+                            @endif
+                            <br>
+                            {{ count($linkAttachments) }} link attachments, {{ count($fileAttachments) }} file attachments.
+                        blade, [
+                            'published_at' => \Carbon\Carbon::parse($data['published_at'])->isoFormat('LLLL'),
+                            'author' => \App\Models\User::find($data['author_id']),
+                            'linkAttachments' => collect($data['attachments'])->where('is_link', true)->values(),
+                            'fileAttachments' => collect($data['attachments'])->where('is_link', false)->values(),
+                        ]);
+                    })
+            )
+            ->addField(
                 SharpFormListField::make('attachments')
                     ->setLabel('Attachments')
                     ->setAddable()->setAddText('Add an attachment')
@@ -131,7 +156,7 @@ class PostForm extends SharpForm
                             ->setStorageDisk('local')
                             ->setStorageBasePath('data/posts/{id}')
                             ->addConditionalDisplay('!is_link'),
-                    ),
+                    )
             )
             ->when(sharp()->context()->isUpdate(), fn ($formFields) => $formFields->addField(
                 SharpFormAutocompleteRemoteField::make('author_id')
@@ -168,10 +193,10 @@ class PostForm extends SharpForm
                                 fn ($column) => $column->withField('author_id')
                             )
                             ->withFields('published_at', 'categories')
+                            ->withField('publication_label')
                             ->withListField('attachments', function (FormLayoutColumn $item) {
                                 $item->withFields(title: 8, is_link: 4)
-                                    ->withField('link_url')
-                                    ->withField('document');
+                                    ->withField('link_url');
                             });
                     })
                     ->addColumn(6, function (FormLayoutColumn $column) {

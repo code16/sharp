@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Form\Fields;
 
+use Closure;
 use Code16\Sharp\Form\Fields\Formatters\HtmlFormatter;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Blade;
@@ -10,14 +11,31 @@ class SharpFormHtmlField extends SharpFormField
 {
     const FIELD_TYPE = 'html';
 
-    private View|string $template;
+    /** @var View|Closure(array)|string */
+    private View|Closure|string $template;
+
+    private bool $liveRefresh = false;
+    private ?array $liveRefreshLinkedFields = null;
 
     public static function make(string $key): self
     {
         return new static($key, static::FIELD_TYPE, new HtmlFormatter());
     }
 
-    public function setTemplate(View|string $template): self
+    public function setLiveRefresh(bool $liveRefresh = true, ?array $linkedFields = null): self
+    {
+        $this->liveRefresh = $liveRefresh;
+        $this->liveRefreshLinkedFields = $linkedFields;
+
+        return $this;
+    }
+
+    public function hasLiveRefresh(): bool
+    {
+        return $this->liveRefresh;
+    }
+
+    public function setTemplate(View|Closure|string $template): self
     {
         $this->template = $template;
 
@@ -26,6 +44,12 @@ class SharpFormHtmlField extends SharpFormField
 
     public function render(array $data): string
     {
+        if ($this->template instanceof Closure) {
+            $view = ($this->template)($data);
+
+            return $view instanceof View ? $view->with($data)->render() : $view;
+        }
+
         if (is_string($this->template)) {
             return Blade::render($this->template, $data);
         }
@@ -35,6 +59,9 @@ class SharpFormHtmlField extends SharpFormField
 
     public function toArray(): array
     {
-        return parent::buildArray([]);
+        return parent::buildArray([
+            'liveRefresh' => $this->liveRefresh,
+            'liveRefreshLinkedFields' => $this->liveRefreshLinkedFields,
+        ]);
     }
 }

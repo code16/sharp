@@ -31,7 +31,7 @@
         });
     }
 
-    useEditorNode({
+    useEditorNode(props, {
         onAdded: () => {
             embedManager.restoreEmbed(props.node.attrs['data-key'], props.extension.options.embed)
         },

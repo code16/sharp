@@ -54,6 +54,7 @@ export type CommandFormConfigData = {
   buttonLabel: string | null;
   showSubmitAndReopenButton: boolean;
   submitAndReopenButtonLabel: string | null;
+  shouldRefresh: boolean;
 };
 export type CommandFormData = {
   data: { [key: string]: FormFieldData["value"] };
@@ -133,6 +134,7 @@ export type EmbedData = {
 };
 export type EmbedFormData = {
   data: { [key: string]: FormFieldData["value"] };
+  config: { shouldRefresh: boolean };
   fields: { [key: string]: FormFieldData };
   layout: FormLayoutData | null;
 };
@@ -304,6 +306,7 @@ export type FormConditionalDisplayData = {
 };
 export type FormConfigData = {
   isSingle: boolean;
+  shouldRefresh: boolean;
 };
 export type FormCustomFieldData = {
   value?: any;
@@ -464,6 +467,8 @@ export type FormGeolocationFieldData = {
 export type FormHtmlFieldData = {
   value?: { [key: string]: any } | null;
   key: string;
+  liveRefresh: boolean;
+  liveRefreshLinkedFields: Array<any> | null;
   type: "html";
   label: string | null;
   readOnly: boolean | null;

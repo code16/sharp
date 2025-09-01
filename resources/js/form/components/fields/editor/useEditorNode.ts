@@ -1,8 +1,12 @@
 import { onBeforeUnmount, onMounted } from "vue";
 import { useParentEditor } from "@/form/components/fields/editor/useParentEditor";
+import { ExtensionNodeProps } from "@/form/components/fields/editor/types";
 
 
-export function useEditorNode({ onAdded, onRemoved }: { onAdded: () => void, onRemoved: () => void }) {
+export function useEditorNode(
+    props: ExtensionNodeProps<any, any>,
+    { onAdded, onRemoved }: { onAdded: () => void, onRemoved: () => void }
+) {
     const parentEditor = useParentEditor();
     const locale = parentEditor.props.locale;
 
@@ -12,10 +16,12 @@ export function useEditorNode({ onAdded, onRemoved }: { onAdded: () => void, onR
     // }, { flush: 'sync' });
 
     onMounted(() => {
-        onAdded();
+        if(parentEditor.isMounted.value) {
+            onAdded();
+        }
     });
     onBeforeUnmount(() => {
-        if(!parentEditor.props.field.localized || locale === parentEditor.props.locale) {
+        if(!parentEditor.isUnmounting.value && (!parentEditor.props.field.localized || locale === parentEditor.props.locale)) {
             onRemoved();
         }
     });
