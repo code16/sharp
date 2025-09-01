@@ -736,7 +736,7 @@
                                                         <template v-if="field.type === 'state'">
                                                             <DropdownMenu>
                                                                 <DropdownMenuTrigger as-child>
-                                                                    <Button class="relative disabled:opacity-100 -mx-3 hover:bg-transparent aria-expanded:bg-transparent" variant="ghost" size="sm" :disabled="!entityList.instanceCanUpdateState(item)" :aria-label="__('sharp::entity_list.state_dropdown.aria_label', { current_state_label: entityList.instanceStateValue(item)?.label })">
+                                                                    <Button class="relative z-10 disabled:opacity-100 -mx-3 hover:bg-transparent aria-expanded:bg-transparent" variant="ghost" size="sm" :disabled="!entityList.instanceCanUpdateState(item)" :aria-label="__('sharp::entity_list.state_dropdown.aria_label', { current_state_label: entityList.instanceStateValue(item)?.label })">
                                                                         <StateBadge :state-value="entityList.instanceStateValue(item)">
                                                                             {{ entityList.instanceStateValue(item)?.label }}
                                                                         </StateBadge>
