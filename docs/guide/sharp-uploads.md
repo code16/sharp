@@ -336,3 +336,26 @@ $this->addField(
 ```
 
 In this code, the `legend` designates a custom attribute.
+
+## Preview audio or video upload
+
+If the field allows to upload an audio or video file, you can display a preview of it by specifying the `withPlayablePreview` option:
+
+```php
+class MyForm extends SharpForm
+{
+    // ...
+    function find($id): array
+    {
+        return $this
+            ->setCustomTransformer(
+                'video', 
+                new SharpUploadModelFormAttributeTransformer(withPlayablePreview: true)
+            )
+            ->transform(Book::with('video')->findOrFail($id));
+    }
+```
+
+::: warning
+This feature is using Laravel's file [Temporary URL](https://laravel.com/docs/12.x/filesystem#temporary-urls) feature which only supports S3 & local driver.
+:::

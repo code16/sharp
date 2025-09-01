@@ -5,6 +5,7 @@ namespace Code16\Sharp\Form\Eloquent\Uploads;
 use Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\Thumbnail;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Facades\Storage;
 
 class SharpUploadModel extends Model
 {
@@ -85,5 +86,10 @@ class SharpUploadModel extends Model
             })
             ->setAppendTimestamp()
             ->make($width, $height);
+    }
+
+    public function playablePreviewUrl(): string
+    {
+        return Storage::disk($this->disk)->temporaryUrl($this->file_name, now()->addMinutes(30));
     }
 }
