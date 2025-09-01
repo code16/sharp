@@ -1,0 +1,10 @@
+name: Test dispatch
+
+on:
+  workflow_dispatch:
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy docs
+        uses: code16/sharp/.github/workflows/deploy.yml@main
