@@ -147,10 +147,10 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
         );
     }
 
-    private function getRelativeUrlIfPossible(string $url): ?string
+    private function getRelativeUrlIfPossible(?string $url): ?string
     {
         // Return relative URL if possible, to avoid CORS issues in multidomain case.
-        return Str::startsWith($url, config('app.url'))
+        return $url && Str::startsWith($url, config('app.url'))
             ? Str::after($url, config('app.url'))
             : $url;
     }
