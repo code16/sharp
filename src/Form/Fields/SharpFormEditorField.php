@@ -65,6 +65,7 @@ class SharpFormEditorField extends SharpFormField implements IsSharpFieldWithEmb
     protected bool $renderAsMarkdown = false;
     protected bool $withoutParagraphs = false;
     protected bool $showCharacterCount = false;
+    protected bool $allowFullscreen = false;
 
     protected function __construct(string $key, string $type, ?SharpFieldFormatter $formatter = null)
     {
@@ -136,6 +137,13 @@ class SharpFormEditorField extends SharpFormField implements IsSharpFieldWithEmb
     public function setRenderContentAsMarkdown(bool $renderAsMarkdown = true): self
     {
         $this->renderAsMarkdown = $renderAsMarkdown;
+
+        return $this;
+    }
+
+    public function allowFullscreen(bool $allowFullscreen = true): self
+    {
+        $this->allowFullscreen = $allowFullscreen;
 
         return $this;
     }
@@ -251,6 +259,7 @@ class SharpFormEditorField extends SharpFormField implements IsSharpFieldWithEmb
                 'inline' => $this->withoutParagraphs,
                 'showCharacterCount' => $this->showCharacterCount,
                 'maxLength' => $this->maxLength,
+                'allowFullscreen' => $this->allowFullscreen,
                 'uploads' => $this->innerComponentUploadsConfiguration(),
                 'embeds' => $this->innerComponentEmbedsConfiguration(),
             ],

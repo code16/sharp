@@ -1,40 +1,40 @@
 @layer components {
   .content {
     > :where(h1) {
-      @apply mb-3 text-xl font-semibold tracking-tight border-b pb-0.5;
+      @apply mb-[.75em] text-[1.375em]/[1.2] font-semibold tracking-tight border-b pb-[.15em];
     }
     > :where(h2) {
-      @apply mb-2 text-lg font-semibold tracking-tight;
+      @apply mb-[.5em] text-[1.25em]/[1.2] font-semibold tracking-tight;
     }
     > :where(h3) {
-      @apply mb-1.5 text-sm font-semibold tracking-tight;
+      @apply mb-[.5em] text-[1em]/[1.2] font-semibold tracking-tight;
     }
     > :where(h4, h5, h6) {
-      @apply mb-1 font-semibold;
+      @apply mb-[.5em] text-[1em]/[1.2] font-semibold;
     }
     > :where(p) {
-      @apply mb-4;
+      @apply mb-[1.25em];
     }
     > :where(ul) {
-      @apply mb-4 ml-6 list-disc;
+      @apply mb-[1.25em] pl-[1.75em] list-disc;
       > :where(li) {
-        @apply mb-2;
+        @apply mb-[.5em];
       }
       > :where(:last-child) {
         @apply mb-0;
       }
     }
     > :where(ol) {
-      @apply mb-4 ml-6 list-decimal;
+      @apply mb-[1.25em] pl-[1.75em] list-decimal;
       > :where(li) {
-        @apply mb-2;
+        @apply mb-[.5em];
       }
       > :where(:last-child) {
         @apply mb-0;
       }
     }
     > :where(blockquote) {
-      @apply mb-4 relative flow-root pl-4 border-l-2 before:block before:-mt-0.5;
+      @apply mb-[1.25em] relative flow-root pl-[1.125em] border-l-2 before:block before:-mt-[.2lh] after:block after:-mb-[.2lh];
       > :where(p,ul,ol) {
         @apply mt-2;
       }
@@ -46,28 +46,28 @@
       }
     }
     > :where(table) {
-      @apply mb-4 w-full;
+      @apply mb-[1.25em] w-full;
       :where(tr) {
         @apply m-0 border-t p-0 even:bg-muted;
       }
       :where(th) {
-        @apply border px-4 py-2 text-left font-bold [&[align=center]]:text-center [&[align=right]]:text-right;
+        @apply border px-[1.125em] py-[.625em] text-left font-[650] [&[align=center]]:text-center [&[align=right]]:text-right;
       }
       :where(td) {
-        @apply border px-4 py-2 text-left [&[align=center]]:text-center [&[align=right]]:text-right;
+        @apply border px-[1.125em] py-[.625em] text-left [&[align=center]]:text-center [&[align=right]]:text-right;
       }
     }
     :where(code) {
       @apply rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm;
     }
     > :where(pre) {
-      @apply mb-4 !whitespace-pre overflow-x-auto;
+      @apply mb-[1.25em] !whitespace-pre overflow-x-auto;
       > :where(code) {
-          @apply block py-2 px-4 bg-muted rounded-md [font-size:inherit];
+          @apply block py-[.625em] px-[1.125em] bg-muted rounded-md [font-size:inherit];
       }
     }
     > :where(hr) {
-      @apply mb-4;
+      @apply mb-[1.25em];
     }
     :where(a:not([style],[class])) {
       @apply relative p-1.5 -m-1.5 text-primary underline underline-offset-4 decoration-primary/20 hover:decoration-inherit;
@@ -76,10 +76,21 @@
       @apply font-[650];
     }
     > :where(:first-child) {
-      @apply mt-0;
+      @apply mt-0!;
     }
     > :where(:last-child) {
-      @apply mb-0;
+      @apply mb-0!;
+    }
+  }
+  .content-lg {
+    > :where(h1) {
+      @apply mt-[1em] text-[1.75em]/[1.2];
+    }
+    > :where(h2) {
+      @apply mt-[1.25em] text-[1.5em]/[1.2];
+    }
+    > :where(h3) {
+      @apply mt-[1em] text-[1.25em]/[1.2];
     }
   }
   .content-sm {

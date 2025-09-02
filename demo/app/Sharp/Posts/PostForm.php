@@ -72,6 +72,7 @@ class PostForm extends SharpForm
                             ->setMaxFileSize(2)
                             ->setHasLegend()
                     )
+                    ->allowFullscreen()
                     ->setMaxLength(2000)
                     ->setHeight(300, 0)
             )

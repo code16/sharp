@@ -4,9 +4,7 @@ import { Text } from '@tiptap/extension-text';
 import { Paragraph } from '@tiptap/extension-paragraph';
 import { Blockquote } from '@tiptap/extension-blockquote';
 import { Bold } from '@tiptap/extension-bold';
-import { History } from '@tiptap/extension-history';
-import { Gapcursor } from '@tiptap/extension-gapcursor';
-import { Dropcursor } from '@tiptap/extension-dropcursor';
+import { UndoRedo, Placeholder, Gapcursor, Dropcursor, CharacterCount, TrailingNode } from '@tiptap/extensions';
 import { BulletList } from '@tiptap/extension-bullet-list';
 import { Code } from '@tiptap/extension-code';
 import { Heading } from '@tiptap/extension-heading';
@@ -15,7 +13,6 @@ import { Image } from '@tiptap/extension-image';
 import { Italic } from '@tiptap/extension-italic';
 import { ListItem } from '@tiptap/extension-list-item';
 import { HorizontalRule } from '@tiptap/extension-horizontal-rule';
-import { Placeholder } from '@tiptap/extension-placeholder';
 import { Table } from '@tiptap/extension-table';
 import { TableRow } from '@tiptap/extension-table-row';
 import { TableHeader } from '@tiptap/extension-table-header';
@@ -27,11 +24,9 @@ import { OrderedList } from '@tiptap/extension-ordered-list';
 import { Link } from '@tiptap/extension-link';
 import { Selection } from './Selection';
 import { Html } from './html/Html';
-import { TrailingNode } from './TrailingNode';
 import { Iframe } from './iframe/Iframe';
 import { Clipboard } from './Clipboard';
 import { Small } from './Small';
-import { CharacterCount } from '@tiptap/extension-character-count';
 import { FormEditorFieldData, FormEditorToolbarButton } from "@/types";
 
 
@@ -77,7 +72,6 @@ export function getExtensions(field: FormEditorFieldData) {
                 return this.parent();
             },
         }),
-        History,
         toolbarHas('highlight') && Highlight,
         toolbarHas([
             'heading-1',
@@ -119,6 +113,7 @@ export function getExtensions(field: FormEditorFieldData) {
         ],
         Text,
         !field.inline && TrailingNode,
+        UndoRedo,
     ]
         .flat()
         .filter(extension => !!extension);

@@ -31,6 +31,7 @@ final class FormEditorFieldData extends Data
         public bool $markdown,
         public bool $inline,
         public bool $showCharacterCount,
+        public bool $allowFullscreen,
         #[LiteralTypeScriptType('FormEditorFieldUploadData | null')]
         public ?array $uploads = null,
         #[LiteralTypeScriptType('{ [embedKey:string]:EmbedData }')]
