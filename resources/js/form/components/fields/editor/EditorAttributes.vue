@@ -6,7 +6,7 @@
     const props = defineProps<{
         editor: Editor,
         class: string,
-        style: StyleValue,
+        style?: StyleValue,
     }>();
 
     const attrs = useAttrs();

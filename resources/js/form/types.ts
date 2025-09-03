@@ -42,8 +42,9 @@ export type FormFieldEmitInputOptions = {
     shouldRefresh?: boolean,
 };
 
-export type FormFieldEmits<Data extends FormFieldData> = {
+export type FormFieldEmits<Data extends FormFieldData = FormFieldData> = {
     (e: 'input', value: Data['value'], options?: FormFieldEmitInputOptions): void
     (e: 'error', error: string): void
     (e: 'clear'): void
+    (e: 'locale-change', locale: string): void
 }

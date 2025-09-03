@@ -17,10 +17,10 @@
     import Upload from "./fields/upload/Upload.vue";
     import { useParentForm } from "../useParentForm";
 
-    import { FormFieldEmitInputOptions, FormFieldProps } from "@/form/types";
+    import { FormFieldEmitInputOptions, FormFieldEmits, FormFieldProps } from "@/form/types";
 
-    const props = defineProps<FormFieldProps>();
-    const emit = defineEmits(['input', 'locale-change']);
+    const props = defineProps<FormFieldProps<FormFieldData, any>>();
+    const emit = defineEmits<FormFieldEmits>();
     const form = useParentForm();
 
     const components: Record<FormFieldData['type'], Component> = {

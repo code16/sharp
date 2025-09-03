@@ -12,7 +12,7 @@
         watch,
         watchEffect
     } from "vue";
-    import { Editor, BubbleMenu, isActive } from "@tiptap/vue-3";
+    import { Editor,  isActive } from "@tiptap/vue-3";
     import debounce from 'lodash/debounce';
     import { EditorContent } from '@tiptap/vue-3';
     import { normalizeText } from "@/form/util/text";
@@ -50,7 +50,9 @@
     import { Separator } from "@/components/ui/separator";
     import { Toggle } from "@/components/ui/toggle";
     import { Maximize2, Minimize2 } from "lucide-vue-next";
-    import { useEventListener } from "@vueuse/core";
+    import { useElementSize, useEventListener } from "@vueuse/core";
+    import FormFieldLocaleSelect from "@/form/components/FormFieldLocaleSelect.vue";
+    import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
     const emit = defineEmits<FormFieldEmits<FormEditorFieldData>>();
     const props = defineProps<FormFieldProps<FormEditorFieldData>>();
@@ -180,6 +182,23 @@
         isUnmounting.value = true;
     });
 
+    declare module '@tiptap/core' {
+        interface Storage {
+            scrollYPercentage: number;
+        }
+    }
+
+    const editorContainer = useTemplateRef('editorContainer');
+    const editorContainerSize = useElementSize(editorContainer);
+    function onEditorScroll(e) {
+        editor.value.storage.scrollYPercentage = e.target.scrollTop / e.target.scrollHeight;
+    }
+    watch([editor, isFullscreen], async () => {
+        await nextTick();
+        await nextTick();
+        const scrollY = editorContainer.value.scrollHeight * (editor.value.storage.scrollYPercentage || 0);
+        editorContainer.value?.scrollTo(0, scrollY);
+    });
 
     async function onFullscreenChange(fullscreen: boolean) {
         if (fullscreen) {
@@ -211,8 +230,14 @@
 </script>
 
 <template>
-    <FormFieldLayout v-bind="props" field-group>
-        <component :is="isFullscreen ? 'dialog' : 'div'" class="editor flex flex-col rounded-md border border-input bg-background focus-within:not-open:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background open:rounded-lg open:size-full open:max-w-7xl [&:modal]:overflow-hidden open:m-auto backdrop:bg-black/50"
+    <FormFieldLayout v-bind="props" @locale-change="emit('locale-change', $event)" field-group>
+        <component :is="isFullscreen ? 'dialog' : 'div'" class="backdrop:bg-black/50"
+            :class="cn(
+                'editor flex flex-col rounded-md overflow-clip border border-input bg-background',
+                isFullscreen
+                    ? 'rounded-none sm:rounded-lg h-full max-sm:max-w-full w-[min(100%,80rem)] [&:modal]:overflow-hidden m-auto'
+                    : 'focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background'
+            )"
             @close="onFullscreenChange(false)"
             :data-fullscreen="isFullscreen ? true : null"
             ref="el"
@@ -221,11 +246,19 @@
                 <StickyTop
                     class="sticky top-(--stacked-top) in-data-fullscreen:top-0 in-[[role=dialog]]:top-0 p-1.5 border-b data-stuck:z-10 data-[stuck]:bg-background"
                 >
-                    <div class="flex gap-x-1">
-                        <div class="flex-1 pl-2 h-9 hidden in-data-fullscreen:flex items-center">
-                            <Label>{{ field.label }}</Label>
-                        </div>
-                        <div class="flex-1 flex gap-x-1 gap-y-0 flex-wrap in-data-fullscreen:max-w-4xl in-data-fullscreen:flex-auto in-data-fullscreen:px-6" ref="header">
+                    <div class="flex flex-wrap sm:flex-nowrap gap-x-1 sm:in-data-fullscreen:gap-0">
+                        <template v-if="isFullscreen">
+                            <div class="flex-1 h-9 flex items-center min-w-20">
+                                <div class="flex-1 min-w-0">
+                                    <Label as="div" class="ml-2 block  truncate">{{ field.label }}</Label>
+                                </div>
+                            </div>
+                        </template>
+                        <div :class="cn('flex-1 flex gap-x-1 gap-y-0 flex-wrap', {
+                                'flex-auto order-1 w-full sm:order-none sm:max-w-3xl sm:px-3.5': isFullscreen,
+                            })"
+                            ref="header"
+                        >
                             <template v-for="button in props.field.toolbar">
                                 <template v-if="button === 'link'">
                                     <LinkDropdown v-bind="props" :editor="editor" :ref="(c) => linkDropdown = c as InstanceType<typeof LinkDropdown>" />
@@ -278,10 +311,16 @@
                                 </DropdownMenu>
                             </template>
                         </div>
+
                         <template v-if="field.allowFullscreen">
-                            <div class="h-9 flex gap-x-1 justify-end items-center in-data-fullscreen:flex-1">
+                            <div class="h-9 flex gap-x-1 justify-end items-center sm:in-data-fullscreen:flex-1">
+                                <template v-if="field.localized && isFullscreen">
+                                    <div class="lg:hidden">
+                                        <FormFieldLocaleSelect v-bind="props" :teleport-to="el" @locale-change="emit('locale-change', $event)" />
+                                    </div>
+                                </template>
                                 <Separator orientation="vertical" class="h-4" />
-                                <Toggle :model-value="isFullscreen" size="sm" @update:model-value="onFullscreenChange">
+                                <Toggle :autofocus="isFullscreen" :model-value="isFullscreen" size="sm" @update:model-value="onFullscreenChange">
                                     <template v-if="isFullscreen">
                                         <Minimize2 class="size-4" />
                                     </template>
@@ -295,26 +334,52 @@
                 </StickyTop>
             </template>
 
-            <EditorContent class="min-h-0 flex-1 grid grid-cols-1 overflow-y-auto" :editor="editor" :key="locale ?? 'editor'" />
-
-            <EditorAttributes
-                :editor="editor"
-                :class="cn(
-                    'group/editor content min-h-20 w-full rounded-b-md overflow-y-auto focus:outline-none px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50',
-                    '[&_.selection-highlight]:bg-[Highlight] [&_.selection-highlight]:py-0.5',
-                    '[&_.ProseMirror-selectednode]:outline-none! [&:focus_.ProseMirror-selectednode]:ring-1 [&_.ProseMirror-selectednode]:ring-primary',
-                    {
-                        'content-lg max-w-4xl mx-auto py-6 px-8 text-base overflow-visible min-h-max': isFullscreen,
-                        'min-h-(--min-height)': field.minHeight && !isFullscreen,
-                        'max-h-(--max-height)': field.maxHeight && !isFullscreen,
-                    },
-                )"
+            <div :class="cn('flex-1 grid grid-cols-1 overflow-y-auto', {
+                    'min-h-20': !isFullscreen,
+                    'min-h-(--min-height)': field.minHeight && !isFullscreen,
+                    'max-h-(--max-height)': field.maxHeight && !isFullscreen,
+                })"
                 :style="{
                     '--min-height': field.minHeight ? `${field.minHeight}px` : null,
                     '--max-height': field.maxHeight ? `${field.maxHeight}px` : null,
+                    '--height': `${editorContainerSize.height.value}px`,
                 }"
-                role="textbox"
-            />
+                @scroll="onEditorScroll"
+                ref="editorContainer"
+            >
+                <div class="relative grid grid-cols-1">
+                    <template v-if="isFullscreen && field.localized">
+                        <div class="absolute inset-0 hidden lg:flex items-start pointer-events-none">
+                            <ToggleGroup
+                                class="sticky top-0 p-1 max-h-(--height) overflow-y-auto overflow-x-clip flex-col justify-start just pointer-events-auto"
+                                :model-value="locale"
+                                @update:model-value="emit('locale-change', $event as string)"
+                            >
+                                <template v-for="formLocale in form.locales">
+                                    <ToggleGroupItem class="shrink-0 uppercase text-xs justify-start w-20" size="sm" :value="formLocale">
+                                        {{ formLocale }}
+                                    </ToggleGroupItem>
+                                </template>
+                            </ToggleGroup>
+                        </div>
+                    </template>
+
+                    <EditorContent class="grid grid-cols-1" :editor="editor" :key="locale ?? 'editor'" />
+
+                    <EditorAttributes
+                        :editor="editor"
+                        :class="cn(
+                            'group/editor content w-full rounded-b-md focus:outline-none px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50',
+                            '[&_.selection-highlight]:bg-[Highlight] [&_.selection-highlight]:py-0.5',
+                            '[&_.ProseMirror-selectednode]:outline-none! [&:focus_.ProseMirror-selectednode]:ring-1 [&_.ProseMirror-selectednode]:ring-primary',
+                            {
+                                'content-lg max-w-3xl mx-auto py-6 px-4 sm:px-6 text-base min-h-max': isFullscreen,
+                            },
+                        )"
+                        role="textbox"
+                    />
+                </div>
+            </div>
 
 <!--            <BubbleMenu-->
 <!--                :editor="editor"-->
