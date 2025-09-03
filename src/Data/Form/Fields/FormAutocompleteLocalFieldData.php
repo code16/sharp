@@ -34,7 +34,6 @@ final class FormAutocompleteLocalFieldData extends Data
         public ?array $templateData = null,
         /** @var array<string> */
         public ?array $searchKeys = null,
-        public ?bool $localized = null,
         /** @var FormDynamicAttributeData[]|null */
         public ?array $dynamicAttributes = null,
         public ?string $label = null,

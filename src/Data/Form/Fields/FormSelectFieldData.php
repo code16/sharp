@@ -33,7 +33,6 @@ final class FormSelectFieldData extends Data
         /** @var FormDynamicAttributeData[]|null */
         public ?array $dynamicAttributes = null,
         public ?int $maxSelected = null,
-        public ?bool $localized = null,
         public ?string $label = null,
         public ?bool $readOnly = null,
         public ?FormConditionalDisplayData $conditionalDisplay = null,
