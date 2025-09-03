@@ -179,13 +179,13 @@ function onMinuteChange(minute: string) {
                         :aria-describedby="ariaDescribedBy"
                         :model-value="inputValue"
                         @update:model-value="onDateInput"
-                        @touchstart="isTouch = true"
+                        @touchstart.passive="isTouch = true"
                         @click.prevent="open = !isTouch"
                         ref="input"
                     />
                 </PopoverTrigger>
                 <div class="absolute right-px rounded-md top-px w-10 bottom-px bg-background hidden not-[@supports_selector(::-webkit-calendar-picker-indicator)]:block"
-                    @touchstart="isTouch = true"
+                    @touchstart.passive="isTouch = true"
                     @click="($refs.input.$el as HTMLInputElement).focus(); open = !isTouch"
                 ></div>
                 <template v-if="props.value">
