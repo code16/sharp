@@ -50,6 +50,7 @@
     import { Separator } from "@/components/ui/separator";
     import { Toggle } from "@/components/ui/toggle";
     import { Maximize2, Minimize2 } from "lucide-vue-next";
+    import { useEventListener } from "@vueuse/core";
 
     const emit = defineEmits<FormFieldEmits<FormEditorFieldData>>();
     const props = defineProps<FormFieldProps<FormEditorFieldData>>();
@@ -187,11 +188,21 @@
             await nextTick();
             el.value.showModal();
         } else {
-            el.value.close();
+            el.value.close?.();
             document.body.style.overflow = '';
             isFullscreen.value = false;
         }
     }
+
+    useEventListener('pointerdown', (e) => {
+        if(isFullscreen.value && e.target === el.value) {
+            window.addEventListener('pointerup', (e) => {
+                if(e.target === el.value) {
+                    onFullscreenChange(false);
+                }
+            }, { once: true });
+        }
+    });
 
     const dropdownEmbeds = computed(() =>
         Object.values(props.field.embeds ?? {})
@@ -201,8 +212,7 @@
 
 <template>
     <FormFieldLayout v-bind="props" field-group>
-        <component :is="isFullscreen ? 'dialog' : 'div'" class="editor flex flex-col rounded-md border border-input bg-background focus-within:not-open:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background open:size-full [&:modal]:overflow-hidden open:m-auto backdrop:bg-black/80"
-            @click.self="onFullscreenChange(false)"
+        <component :is="isFullscreen ? 'dialog' : 'div'" class="editor flex flex-col rounded-md border border-input bg-background focus-within:not-open:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background open:rounded-lg open:size-full open:max-w-7xl [&:modal]:overflow-hidden open:m-auto backdrop:bg-black/50"
             @close="onFullscreenChange(false)"
             :data-fullscreen="isFullscreen ? true : null"
             ref="el"
@@ -285,6 +295,8 @@
                 </StickyTop>
             </template>
 
+            <EditorContent class="min-h-0 flex-1 grid grid-cols-1 overflow-y-auto" :editor="editor" :key="locale ?? 'editor'" />
+
             <EditorAttributes
                 :editor="editor"
                 :class="cn(
@@ -292,7 +304,7 @@
                     '[&_.selection-highlight]:bg-[Highlight] [&_.selection-highlight]:py-0.5',
                     '[&_.ProseMirror-selectednode]:outline-none! [&:focus_.ProseMirror-selectednode]:ring-1 [&_.ProseMirror-selectednode]:ring-primary',
                     {
-                        'content-lg max-w-4xl mx-auto py-6 px-8 text-base': isFullscreen,
+                        'content-lg max-w-4xl mx-auto py-6 px-8 text-base overflow-visible min-h-max': isFullscreen,
                         'min-h-(--min-height)': field.minHeight && !isFullscreen,
                         'max-h-(--max-height)': field.maxHeight && !isFullscreen,
                     },
@@ -302,9 +314,7 @@
                     '--max-height': field.maxHeight ? `${field.maxHeight}px` : null,
                 }"
                 role="textbox"
-            >
-                <EditorContent class="min-h-0 flex-1 overflow-y-auto" :editor="editor" :key="locale ?? 'editor'" />
-            </EditorAttributes>
+            />
 
 <!--            <BubbleMenu-->
 <!--                :editor="editor"-->

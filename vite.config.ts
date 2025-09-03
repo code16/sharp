@@ -25,7 +25,6 @@ export default defineConfig(({ mode, command }) => {
                 'ziggy-js': path.resolve(__dirname, 'vendor/tightenco/ziggy'),
                 // ...rekaAliases()
             },
-            preserveSymlinks: false,
         },
         server: {
             // hmr: false,
