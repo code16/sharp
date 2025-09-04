@@ -49,10 +49,13 @@
     import Icon from "@/components/ui/Icon.vue";
     import { Separator } from "@/components/ui/separator";
     import { Toggle } from "@/components/ui/toggle";
-    import { Maximize2, Minimize2 } from "lucide-vue-next";
+    import { GripVertical, Maximize2, Minimize2 } from "lucide-vue-next";
     import { useElementSize, useEventListener } from "@vueuse/core";
     import FormFieldLocaleSelect from "@/form/components/FormFieldLocaleSelect.vue";
-    import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+    import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+    import { vScrollIntoView } from "@/directives/scroll-into-view";
+    import { DragHandle } from "@tiptap/extension-drag-handle-vue-3";
+    import { offset } from '@floating-ui/vue';
 
     const emit = defineEmits<FormFieldEmits<FormEditorFieldData>>();
     const props = defineProps<FormFieldProps<FormEditorFieldData>>();
@@ -347,20 +350,23 @@
                 @scroll="onEditorScroll"
                 ref="editorContainer"
             >
-                <div class="relative grid grid-cols-1">
+                <div class="relative grid grid-cols-1 content-start">
                     <template v-if="isFullscreen && field.localized">
                         <div class="absolute inset-0 hidden lg:flex items-start pointer-events-none">
-                            <ToggleGroup
-                                class="sticky top-0 p-1 max-h-(--height) overflow-y-auto overflow-x-clip flex-col justify-start just pointer-events-auto"
-                                :model-value="locale"
-                                @update:model-value="emit('locale-change', $event as string)"
-                            >
-                                <template v-for="formLocale in form.locales">
-                                    <ToggleGroupItem class="shrink-0 uppercase text-xs justify-start w-20" size="sm" :value="formLocale">
-                                        {{ formLocale }}
-                                    </ToggleGroupItem>
-                                </template>
-                            </ToggleGroup>
+                            <div class="sticky top-0 p-1 overflow-y-auto overflow-x-clip max-h-(--height) pointer-events-auto">
+                                <Tabs :model-value="locale" @update:model-value="emit('locale-change', $event as string)">
+                                    <TabsList class="flex flex-col h-auto">
+                                        <template v-for="formLocale in form.locales">
+                                            <TabsTrigger :value="formLocale"
+                                                class="shrink-0 uppercase text-xs min-w-12 scroll-my-1 first:scroll-mt-2 last:scroll-mb-2"
+                                                v-scroll-into-view.nearest="locale === formLocale"
+                                            >
+                                                {{ formLocale }}
+                                            </TabsTrigger>
+                                        </template>
+                                    </TabsList>
+                                </Tabs>
+                            </div>
                         </div>
                     </template>
 
@@ -378,6 +384,15 @@
                         )"
                         role="textbox"
                     />
+
+                    <template v-if="isFullscreen">
+                        <DragHandle :compute-position-config="{ middleware: [offset({ mainAxis:10, crossAxis: 4 })] }" :editor="editor">
+                            <div class="grid place-content-center h-4 w-3 rounded-sm duration-300 transition-opacity cursor-grab hover:bg-foreground hover:border-foreground hover:text-background">
+                                <div class="absolute -inset-3"></div>
+                                <GripVertical class="h-3.5 w-5.5 text-foreground/50" />
+                            </div>
+                        </DragHandle>
+                    </template>
                 </div>
             </div>
 
