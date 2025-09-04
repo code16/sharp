@@ -70,7 +70,7 @@
     "cropperjs": "^1.5.12",
     "dompurify": "^3.2.6",
     "filesize": "^10.1.0",
-    "flexsearch": "^0.7.43",
+    "flexsearch": "^0.8.205",
     "leaflet": "^1.9.4",
     "lodash": "^4.17.21",
     "lucide-vue-next": "^0.511.0",
