@@ -51,6 +51,7 @@ class EditorUploadsFormatter extends SharpFieldFormatter implements FormatsAfter
                         $element->setAttribute('legend', $legend);
                     }
                     $element->removeAttribute('data-key');
+                    $element->removeAttribute('data-value');
                 }
 
                 return $this->toHtml($domDocument);

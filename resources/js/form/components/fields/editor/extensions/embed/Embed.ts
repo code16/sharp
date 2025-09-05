@@ -5,14 +5,19 @@ import { ExtensionAttributesSpec, WithRequiredOptions } from "@/form/components/
 import { EmbedData } from "@/types";
 import { ContentEmbedManager } from "@/content/ContentEmbedManager";
 import { Form } from "@/form/Form";
+import { Plugin } from "@tiptap/pm/state";
+import { Fragment, Slice } from "@tiptap/pm/model";
+import { getAllNodesAfterUpdate } from "@/form/components/fields/editor/utils/tiptap/getAllNodesAfterUpdate";
 
 export type EmbedNodeAttributes = {
     'data-key': string,
+    'data-value': EmbedData['value'],
 }
 
 export type EmbedOptions = {
     embed: EmbedData,
     embedManager: ContentEmbedManager<Form>,
+    locale?: string,
 }
 
 export const Embed: WithRequiredOptions<Node<EmbedOptions>> = Node.create<EmbedOptions>({
@@ -29,6 +34,20 @@ export const Embed: WithRequiredOptions<Node<EmbedOptions>> = Node.create<EmbedO
     addAttributes(): ExtensionAttributesSpec<EmbedNodeAttributes> {
         return {
             'data-key': {},
+            'data-value': {
+                parseHTML(element) {
+                    return element.hasAttribute('data-value')
+                        ? JSON.parse(element.getAttribute('data-value'))
+                        : null;
+                },
+                renderHTML(attributes: EmbedNodeAttributes) {
+                    return {
+                        'data-value': attributes['data-value']
+                            ? JSON.stringify(attributes['data-value'])
+                            : null
+                    };
+                },
+            },
         }
     },
 
@@ -42,6 +61,42 @@ export const Embed: WithRequiredOptions<Node<EmbedOptions>> = Node.create<EmbedO
 
     renderHTML({ HTMLAttributes }) {
         return [this.options.embed.tag, HTMLAttributes];
+    },
+
+    addProseMirrorPlugins() {
+        const { name, options } = this;
+        return [
+            new Plugin({
+                props: {
+                    transformCopied(slice: Slice) {
+                        return new Slice(
+                            Fragment.fromArray(
+                                slice.content.content.map(node => {
+                                    if(node.type.name === name) {
+                                        return node.type.create({
+                                            ...node.attrs,
+                                            'data-value': options.embedManager.getEmbed(node.attrs['data-key'], options.embed),
+                                        })
+                                    }
+                                    return node;
+                                })
+                            ),
+                            slice.openStart,
+                            slice.openEnd
+                        );
+                    },
+                }
+            })
+        ]
+    },
+
+    onUpdate({ transaction, appendedTransactions }) {
+        this.options.embedManager.syncEmbeds(
+            getAllNodesAfterUpdate(this.name, transaction, appendedTransactions)
+                .map(node => node.attrs['data-key']),
+            this.options.embed,
+            this.options.locale
+        )
     },
 
     addCommands() {

@@ -56,6 +56,7 @@
     import { vScrollIntoView } from "@/directives/scroll-into-view";
     import { DragHandle } from "@tiptap/extension-drag-handle-vue-3";
     import { offset } from '@floating-ui/vue';
+    import { getAllNodesAfterUpdate } from "@/form/components/fields/editor/utils/tiptap/getAllNodesAfterUpdate";
 
     const emit = defineEmits<FormFieldEmits<FormEditorFieldData>>();
     const props = defineProps<FormFieldProps<FormEditorFieldData>>();
@@ -110,8 +111,9 @@
                         return Embed.extend({
                             name: `embed:${embed.key}`,
                             addOptions() {
-                                return { embed, embedManager }
-                            }
+                                return { embed, embedManager, locale }
+                            },
+
                         })
                     }),
             ].filter(Boolean);

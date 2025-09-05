@@ -9,6 +9,7 @@ type ContentEmbed = {
     embed: EmbedData,
     removed?: boolean,
     value: EmbedData['value'],
+    locale?: string,
 }
 
 export class ContentEmbedManager<Root extends Form | Show> {
@@ -84,18 +85,18 @@ export class ContentEmbedManager<Root extends Form | Show> {
         return id;
     }
 
-    restoreEmbed(id: string, embed: EmbedData) {
-        this.contentEmbeds[embed.key][id] = {
-            ...this.contentEmbeds[embed.key][id],
-            removed: false,
-        }
-        this.onEmbedsUpdated(this.serializedEmbeds);
-    }
-
-    removeEmbed(id: string, embed: EmbedData) {
-        this.contentEmbeds[embed.key][id] = {
-            ...this.contentEmbeds[embed.key][id],
-            removed: true,
+    syncEmbeds(ids: string[], embed: EmbedData, locale: string | null) {
+        if(this.contentEmbeds[embed.key]) {
+            this.contentEmbeds[embed.key] = Object.fromEntries(
+                Object.entries(this.contentEmbeds[embed.key])
+                    .map(([id, e]) => [
+                        id,
+                        ({
+                            ...e,
+                            removed: !ids.find(i => String(i) === id && e.locale === locale),
+                        })
+                    ])
+            );
         }
         this.onEmbedsUpdated(this.serializedEmbeds);
     }
