@@ -53,7 +53,7 @@ trait FormatsLocalizedValue
     }
 
     /**
-     * @param  ?Closure<string>  $transformContent
+     * @param  ?Closure<string, ?string>  $transformContent
      */
     protected function maybeLocalized(SharpFormField|SharpShowField $field, $value, ?Closure $transformContent = null): array|string|null
     {
@@ -63,10 +63,10 @@ trait FormatsLocalizedValue
             return collect($this->dataLocalizations ?? [])
                 ->mapWithKeys(fn ($locale) => [$locale => null])
                 ->merge($value)
-                ->map(fn ($content) => $content !== null ? $transformContent($content) : null)
+                ->map(fn ($content, $locale) => $content !== null ? $transformContent($content, $locale) : null)
                 ->toArray();
         }
 
-        return $value === null ? null : $transformContent($value);
+        return $value === null ? null : $transformContent($value, null);
     }
 }

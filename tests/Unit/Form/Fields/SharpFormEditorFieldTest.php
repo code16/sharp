@@ -24,6 +24,7 @@ it('sets only default values', function () {
             ],
             'markdown' => false,
             'inline' => false,
+            'allowFullscreen' => false,
         ]);
 });
 

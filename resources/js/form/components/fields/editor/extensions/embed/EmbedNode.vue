@@ -3,7 +3,7 @@
     import { Button } from '@/components/ui/button';
     import NodeRenderer from "../../NodeRenderer.vue";
     import { Embed, EmbedNodeAttributes } from "@/form/components/fields/editor/extensions/embed/Embed";
-    import { computed, onBeforeUnmount, onMounted } from "vue";
+    import { computed } from "vue";
     import { ExtensionNodeProps } from "@/form/components/fields/editor/types";
     import { useParentEditor } from "@/form/components/fields/editor/useParentEditor";
     import {
@@ -12,15 +12,16 @@
         DropdownMenuItem, DropdownMenuSeparator,
         DropdownMenuTrigger
     } from "@/components/ui/dropdown-menu";
-    import { MoreHorizontal } from "lucide-vue-next";
+    import {  MoreHorizontal } from "lucide-vue-next";
     import EmbedHeader from "@/components/EmbedHeader.vue";
+    import NodeDragHandle from "@/form/components/fields/editor/NodeDragHandle.vue";
 
     const props = defineProps<ExtensionNodeProps<typeof Embed, EmbedNodeAttributes>>();
 
     const parentEditor = useParentEditor();
     const embedManager = useParentEditor().embedManager;
     const embedModal = useParentEditor().embedModal;
-    const embedData = computed(() => embedManager.getEmbed(props.node.attrs['data-key'], props.extension.options.embed));
+    const embedData = computed(() => embedManager.getEmbed(props.extension.options.embed, props.node.attrs['data-key']));
 
     function onRemove() {
         props.editor.commands.setNodeSelection(props.getPos());
@@ -33,7 +34,7 @@
 
 <template>
     <NodeRenderer
-        class="my-4 first:mt-0 last:mb-0 border rounded-md items-center p-4 flex gap-4 group-focus/editor:data-[textselected]:border-primary"
+        class="relative my-4 first:mt-0 last:mb-0 border rounded-md items-center p-4 flex gap-4 select-none group-focus/editor:data-[textselected]:border-primary"
         :class="{ 'group-focus/editor:border-primary': props.selected }"
         :node="node"
     >
@@ -55,7 +56,11 @@
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                     <template v-if="Object.keys(extension.options.embed.fields).length > 0">
-                        <DropdownMenuItem @click="embedModal.open({ id: node.attrs['data-key'], embed: extension.options.embed })">
+                        <DropdownMenuItem @click="embedModal.open({
+                            id: node.attrs['data-key'],
+                            embed: extension.options.embed,
+                            locale: extension.options.locale,
+                        })">
                             {{ __('sharp::form.editor.extension_node.edit_button') }}
                         </DropdownMenuItem>
                     </template>
@@ -69,5 +74,6 @@
                 </DropdownMenuContent>
             </DropdownMenu>
         </template>
+        <NodeDragHandle />
     </NodeRenderer>
 </template>

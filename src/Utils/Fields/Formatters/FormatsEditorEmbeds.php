@@ -24,7 +24,7 @@ trait FormatsEditorEmbeds
 
         $embeds = [];
 
-        $text = $this->maybeLocalized($field, $value, function (string $content) use (&$embeds, $field) {
+        $text = $this->maybeLocalized($field, $value, function (string $content, ?string $locale) use (&$embeds, $field) {
             $domDocument = $this->parseHtml($content);
 
             foreach ($field->embeds() as $embed) {
@@ -42,6 +42,7 @@ trait FormatsEditorEmbeds
                                 ? $this->tryJsonDecode($element->getAttribute(Str::kebab($fieldKey)))
                                 : null;
                         })
+                        ->when($locale)->merge(['_locale' => $locale])
                         ->pipe(function ($collection) use ($embed) {
                             return $embed->transformDataWithRenderedTemplate(
                                 $collection->toArray(),

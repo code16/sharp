@@ -54,9 +54,6 @@
     import FormFieldLocaleSelect from "@/form/components/FormFieldLocaleSelect.vue";
     import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
     import { vScrollIntoView } from "@/directives/scroll-into-view";
-    import { DragHandle } from "@tiptap/extension-drag-handle-vue-3";
-    import { offset } from '@floating-ui/vue';
-    import { getAllNodesAfterUpdate } from "@/form/components/fields/editor/utils/tiptap/getAllNodesAfterUpdate";
 
     const emit = defineEmits<FormFieldEmits<FormEditorFieldData>>();
     const props = defineProps<FormFieldProps<FormEditorFieldData>>();
@@ -113,7 +110,6 @@
                             addOptions() {
                                 return { embed, embedManager, locale }
                             },
-
                         })
                     }),
             ].filter(Boolean);
@@ -277,7 +273,7 @@
                                         :model-value="editor.isActive(button)"
                                         :disabled="props.field.readOnly"
                                         :title="props.field.embeds[button.replace('embed:', '')]?.label"
-                                        @click="embedModal.open({ embed: props.field.embeds[button.replace('embed:', '')] })"
+                                        @click="embedModal.open({ embed: props.field.embeds[button.replace('embed:', '')], locale: props.locale })"
                                     >
                                         <Icon :icon="field.embeds[button.replace('embed:', '')]?.icon" class="size-4" />
                                     </Toggle>
@@ -308,7 +304,7 @@
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent>
                                         <template v-for="embed in dropdownEmbeds">
-                                            <DropdownMenuItem @click="embedModal.open({ embed })">
+                                            <DropdownMenuItem @click="embedModal.open({ embed, locale: props.locale })">
                                                 {{ embed.label }}
                                             </DropdownMenuItem>
                                         </template>
@@ -339,7 +335,7 @@
                 </StickyTop>
             </template>
 
-            <div :class="cn('flex-1 grid grid-cols-1 overflow-y-auto', {
+            <div :class="cn('flex-1 grid grid-cols-1 overflow-y-auto overflow-x-clip', {
                     'min-h-20': !isFullscreen,
                     'min-h-(--min-height)': field.minHeight && !isFullscreen,
                     'max-h-(--max-height)': field.maxHeight && !isFullscreen,
@@ -352,7 +348,7 @@
                 @scroll="onEditorScroll"
                 ref="editorContainer"
             >
-                <div class="relative grid grid-cols-1 content-start">
+                <div class="relative grid grid-cols-1">
                     <template v-if="isFullscreen && field.localized">
                         <div class="absolute inset-0 hidden lg:flex items-start pointer-events-none">
                             <div class="sticky top-0 p-1 overflow-y-auto overflow-x-clip max-h-(--height) pointer-events-auto">
@@ -381,20 +377,11 @@
                             '[&_.selection-highlight]:bg-[Highlight] [&_.selection-highlight]:py-0.5',
                             '[&_.ProseMirror-selectednode]:outline-none! [&:focus_.ProseMirror-selectednode]:ring-1 [&_.ProseMirror-selectednode]:ring-primary',
                             {
-                                'content-lg max-w-3xl mx-auto py-6 px-4 sm:px-6 text-base min-h-max': isFullscreen,
+                                'content-lg max-w-3xl mx-auto py-6 px-4 sm:px-12 text-base min-h-max': isFullscreen,
                             },
                         )"
                         role="textbox"
                     />
-
-                    <template v-if="isFullscreen">
-                        <DragHandle :compute-position-config="{ middleware: [offset({ mainAxis:10, crossAxis: 4 })] }" :editor="editor">
-                            <div class="grid place-content-center h-4 w-3 rounded-sm duration-300 transition-opacity cursor-grab hover:bg-foreground hover:border-foreground hover:text-background">
-                                <div class="absolute -inset-3"></div>
-                                <GripVertical class="h-3.5 w-5.5 text-foreground/50" />
-                            </div>
-                        </DragHandle>
-                    </template>
                 </div>
             </div>
 

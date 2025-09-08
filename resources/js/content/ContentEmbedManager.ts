@@ -3,7 +3,7 @@ import { EmbedData, FormData, FormEditorFieldData } from "@/types";
 import { api } from "@/api/api";
 import { route } from "@/utils/url";
 import { Show } from "@/show/Show";
-import { reactive } from "vue";
+import { reactive, watch } from "vue";
 
 type ContentEmbed = {
     embed: EmbedData,
@@ -71,32 +71,36 @@ export class ContentEmbedManager<Root extends Form | Show> {
         );
     }
 
-    getEmbed(id: string, embed: EmbedData): EmbedData['value'] {
-        return this.contentEmbeds[embed.key][id].value;
+    getEmbed(embed: EmbedData, id: string): EmbedData["value"] {
+        return this.contentEmbeds[embed.key]?.[id]?.value;
     }
 
-    newEmbed(embed: EmbedData): string {
+    newEmbed(embed: EmbedData, locale: string | null, value?: EmbedData['value']): string {
         const id = String(Object.keys(this.contentEmbeds[embed.key] ?? {}).length);
         this.contentEmbeds[embed.key] ??= {};
         this.contentEmbeds[embed.key][id] = {
             embed,
-            value: null,
+            value: value ? { ...value, _locale: locale } : null,
         };
         return id;
     }
 
-    syncEmbeds(ids: string[], embed: EmbedData, locale: string | null) {
+    syncEmbeds(embed: EmbedData, locale: string | null, nodes: { id?:string }[]) {
         if(this.contentEmbeds[embed.key]) {
-            this.contentEmbeds[embed.key] = Object.fromEntries(
-                Object.entries(this.contentEmbeds[embed.key])
-                    .map(([id, e]) => [
-                        id,
-                        ({
-                            ...e,
-                            removed: !ids.find(i => String(i) === id && e.locale === locale),
-                        })
-                    ])
-            );
+            this.contentEmbeds[embed.key] = {
+                ...Object.fromEntries(
+                    Object.entries(this.contentEmbeds[embed.key])
+                        .map(([id, e]) => [
+                            id,
+                            ({
+                                ...e,
+                                removed: e.value?._locale == locale
+                                    ? !nodes.find(node => String(node.id) === id)
+                                    : e.removed,
+                            })
+                        ])
+                ),
+            };
         }
         this.onEmbedsUpdated(this.serializedEmbeds);
     }
@@ -114,7 +118,7 @@ export class ContentEmbedManager<Root extends Form | Show> {
             .then(response => response.data);
     }
 
-    async postForm(id: string, embed: EmbedData, data: EmbedData['value']): Promise<{ id:string }> {
+    async postForm(id: string, embed: EmbedData, locale: string | null, data: EmbedData['value']): Promise<{ id:string }> {
         const { entityKey, instanceId } = this.root;
         const responseData = await api
             .post(
@@ -125,11 +129,14 @@ export class ContentEmbedManager<Root extends Form | Show> {
             )
             .then(response => response.data);
 
-        id ??= this.newEmbed(embed);
+        id ??= this.newEmbed(embed, locale);
 
         this.contentEmbeds[embed.key][id] = {
             embed,
-            value: responseData,
+            value: {
+                ...responseData,
+                _locale: locale,
+            },
         }
 
         this.onEmbedsUpdated(this.serializedEmbeds);

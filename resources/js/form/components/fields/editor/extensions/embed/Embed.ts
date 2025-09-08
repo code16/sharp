@@ -29,6 +29,8 @@ export const Embed: WithRequiredOptions<Node<EmbedOptions>> = Node.create<EmbedO
 
     isolating: true,
 
+    draggable: true,
+
     priority: 150,
 
     addAttributes(): ExtensionAttributesSpec<EmbedNodeAttributes> {
@@ -69,13 +71,17 @@ export const Embed: WithRequiredOptions<Node<EmbedOptions>> = Node.create<EmbedO
             new Plugin({
                 props: {
                     transformCopied(slice: Slice) {
+                        if(!slice.content.content.find(n => n.type.name === name)) {
+                            return slice;
+                        }
                         return new Slice(
                             Fragment.fromArray(
                                 slice.content.content.map(node => {
                                     if(node.type.name === name) {
                                         return node.type.create({
                                             ...node.attrs,
-                                            'data-value': options.embedManager.getEmbed(node.attrs['data-key'], options.embed),
+                                            'data-key': null,
+                                            'data-value': options.embedManager.getEmbed(options.embed, node.attrs['data-key']),
                                         })
                                     }
                                     return node;
@@ -85,6 +91,25 @@ export const Embed: WithRequiredOptions<Node<EmbedOptions>> = Node.create<EmbedO
                             slice.openEnd
                         );
                     },
+                    transformPasted(slice: Slice) {
+                        if(!slice.content.content.find(n => n.type.name === name)) {
+                            return slice;
+                        }
+                        return new Slice(
+                            Fragment.fromArray(
+                                slice.content.content.map(node => {
+                                    if(node.type.name === name && node.attrs['data-key'] == null) {
+                                        return node.type.create({
+                                            'data-key': options.embedManager.newEmbed(options.embed, options.locale, node.attrs['data-value'])
+                                        });
+                                    }
+                                    return node;
+                                })
+                            ),
+                            slice.openStart,
+                            slice.openEnd
+                        )
+                    }
                 }
             })
         ]
@@ -92,10 +117,12 @@ export const Embed: WithRequiredOptions<Node<EmbedOptions>> = Node.create<EmbedO
 
     onUpdate({ transaction, appendedTransactions }) {
         this.options.embedManager.syncEmbeds(
-            getAllNodesAfterUpdate(this.name, transaction, appendedTransactions)
-                .map(node => node.attrs['data-key']),
             this.options.embed,
-            this.options.locale
+            this.options.locale,
+            getAllNodesAfterUpdate(this.name, transaction, appendedTransactions)
+                .map(node => ({
+                    id: node.attrs['data-key'],
+                })),
         )
     },
 

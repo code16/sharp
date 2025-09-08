@@ -19,11 +19,11 @@
 
     const props = defineProps<{
         field: FormEditorFieldData,
-        editor: Editor
+        editor: Editor,
     }>();
     const parentForm = useParentForm();
     const embedManager = useParentEditor().embedManager;
-    const modalEmbed = ref<{ id?: string, embed: EmbedData, form?: Form, loading?: boolean } | null>(null);
+    const modalEmbed = ref<{ id?: string, embed: EmbedData, locale: string | null, form?: Form, loading?: boolean } | null>(null);
     const modalForm = useTemplateRef<InstanceType<typeof FormComponent>>('modalForm');
     const modalOpen = ref(false);
 
@@ -32,6 +32,7 @@
         const { id } = await embedManager.postForm(
             modalEmbed.value.id,
             modalEmbed.value.embed,
+            modalEmbed.value.locale,
             data
         )
             .finally(() => {
@@ -48,12 +49,13 @@
         }
     }
 
-    async function open({ id, embed }: { id?: string, embed: EmbedData }) {
+    async function open({ id, embed, locale }: { id?: string, embed: EmbedData, locale: string | null }) {
         if(Object.keys(embed.fields).length > 0) {
             const embedForm = await embedManager.postResolveForm(id, embed);
             modalEmbed.value = {
                 id,
                 embed,
+                locale,
                 form: new Form(embedForm, parentForm.entityKey, parentForm.instanceId, { embedKey: embed.key }),
             }
             modalOpen.value = true;
@@ -61,6 +63,7 @@
             modalEmbed.value = {
                 id,
                 embed,
+                locale,
             }
             await postForm(null);
         }
@@ -68,7 +71,7 @@
 
     defineExpose({
         open,
-    })
+    });
 </script>
 
 <template>
@@ -84,6 +87,7 @@
                 :form="modalEmbed?.form"
                 :post-fn="postForm"
                 modal
+                persist-thumbnail-url
                 ref="modalForm"
             />
 
