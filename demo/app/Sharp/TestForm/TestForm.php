@@ -253,6 +253,8 @@ class TestForm extends SharpSingleForm
                         SharpFormEditorField::QUOTE,
                         SharpFormEditorField::CODE,
                         SharpFormEditorField::SEPARATOR,
+                        SharpFormEditorField::IFRAME,
+                        SharpFormEditorField::TABLE,
                         SharpFormEditorField::CODE_BLOCK,
                     ])
                     ->allowUploads(

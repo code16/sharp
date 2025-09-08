@@ -19,15 +19,6 @@
     const uploadComponent = ref<InstanceType<typeof Upload>>();
     const upload = computed(() => uploadManager.getUpload(props.node.attrs['data-key']));
 
-    useEditorNode(props, {
-        onAdded: () => {
-            uploadManager.restoreUpload(props.node.attrs['data-key']);
-        },
-        onRemoved: () => {
-            uploadManager.removeUpload(props.node.attrs['data-key']);
-        },
-    });
-
     function onThumbnailGenerated(preview: string) {
         uploadManager.updateUpload(props.node.attrs['data-key'], {
             file: {
@@ -68,7 +59,7 @@
     function onEdit(event: CustomEvent) {
         if(parentEditor.props.field.uploads.fields.legend) {
             event.preventDefault();
-            uploadModal.value.open(props.node.attrs['data-key']);
+            uploadModal.value.open({ id: props.node.attrs['data-key'], locale: props.extension.options.locale });
         }
     }
 </script>

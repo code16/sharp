@@ -11,7 +11,7 @@ import { getAllNodesAfterUpdate } from "@/form/components/fields/editor/utils/ti
 
 export type EmbedNodeAttributes = {
     'data-key': string,
-    'data-value': EmbedData['value'],
+    'data-value'?: EmbedData['value'],
 }
 
 export type EmbedOptions = {

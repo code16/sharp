@@ -63,17 +63,10 @@
 
     const uploadManager = new ContentUploadManager(form, props.value?.uploads, {
         editorField: props.field,
-        onUploadsUpdated(uploads) {
-            emit('input', { ...props.value, uploads });
-        }
     });
     const uploadModal = ref<InstanceType<typeof EditorUploadModal>>();
 
-    const embedManager = new ContentEmbedManager(form, props.field.embeds, props.value?.embeds, {
-        onEmbedsUpdated(embeds) {
-            emit('input', { ...props.value, embeds });
-        }
-    });
+    const embedManager = new ContentEmbedManager(form, props.field.embeds, props.value?.embeds);
     const el = useTemplateRef<HTMLDialogElement>('el');
     const embedModal = ref<InstanceType<typeof EditorEmbedModal>>();
     const linkDropdown = ref<InstanceType<typeof LinkDropdown>>();
@@ -91,6 +84,16 @@
         isUnmounting,
     } satisfies ParentEditor);
 
+    watch(() => [embedManager.contentEmbeds, uploadManager.contentUploads], () => {
+        emit('input', {
+            ...props.value,
+            uploads: uploadManager.serializedUploads,
+            embeds: embedManager.serializedEmbeds,
+        });
+    }, {
+        deep: true,
+    })
+
     const editor = useLocalizedEditor(
         props,
         (locale) => {
@@ -102,6 +105,7 @@
                 }),
                 props.field.uploads && Upload.configure({
                     uploadManager,
+                    locale,
                 }),
                 ...Object.values(props.field.embeds ?? {})
                     .map((embed) => {
@@ -141,7 +145,7 @@
             editor.on('update', debounce(() => {
                 const error = validate();
                 const content = props.field.markdown
-                    ? normalizeText(editor.storage.markdown.getMarkdown() ?? '')
+                    ? normalizeText((editor.storage as any).markdown.getMarkdown() ?? '')
                     : normalizeText(trimHTML(editor.getHTML(), { inline: props.field.inline }));
 
                 if(props.field.localized) {
@@ -288,8 +292,8 @@
                                         :disabled="field.readOnly"
                                         :title="buttons[button].label()"
                                         @click="button === 'upload' || button === 'upload-image'
-                                        ? uploadModal.open()
-                                        : buttons[button].command(editor)"
+                                            ? uploadModal.open({ locale: props.locale })
+                                            : buttons[button].command(editor)"
                                     >
                                         <component :is="buttons[button].icon" class="size-4" />
                                     </Toggle>

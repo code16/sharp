@@ -31,13 +31,9 @@ export class ContentEmbedManager<Root extends Form | Show> {
         root: Root,
         embeds: ContentEmbedManager<Root>['embeds'] | null,
         initialEmbeds: FormEditorFieldData['value']['embeds'],
-        config: {
-            onEmbedsUpdated: ContentEmbedManager<Root>['onEmbedsUpdated']
-        } = { onEmbedsUpdated: null }
     ) {
         this.root = root;
         this.embeds = embeds ?? {};
-        this.onEmbedsUpdated = config.onEmbedsUpdated;
         this.contentEmbeds = Object.fromEntries(
             Object.entries(initialEmbeds ?? {}).map(([embedKey, embeds]) =>
                 [embedKey, Object.fromEntries(
@@ -90,19 +86,18 @@ export class ContentEmbedManager<Root extends Form | Show> {
             this.contentEmbeds[embed.key] = {
                 ...Object.fromEntries(
                     Object.entries(this.contentEmbeds[embed.key])
-                        .map(([id, e]) => [
+                        .map(([id, contentEmbed]) => [
                             id,
                             ({
-                                ...e,
-                                removed: e.value?._locale == locale
-                                    ? !nodes.find(node => String(node.id) === id)
-                                    : e.removed,
+                                ...contentEmbed,
+                                removed: contentEmbed.value?._locale == locale
+                                    ? !nodes.some(node => String(node.id) === id)
+                                    : contentEmbed.removed,
                             })
                         ])
                 ),
             };
         }
-        this.onEmbedsUpdated(this.serializedEmbeds);
     }
 
     postResolveForm(id: string, embed: EmbedData): Promise<FormData> {
