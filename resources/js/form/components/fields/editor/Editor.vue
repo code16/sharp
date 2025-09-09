@@ -54,6 +54,7 @@
     import FormFieldLocaleSelect from "@/form/components/FormFieldLocaleSelect.vue";
     import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
     import { vScrollIntoView } from "@/directives/scroll-into-view";
+    import { provideParentDialogElement } from "@/composables/useParentDialogElement";
 
     const emit = defineEmits<FormFieldEmits<FormEditorFieldData>>();
     const props = defineProps<FormFieldProps<FormEditorFieldData>>();
@@ -67,12 +68,14 @@
     const uploadModal = ref<InstanceType<typeof EditorUploadModal>>();
 
     const embedManager = new ContentEmbedManager(form, props.field.embeds, props.value?.embeds);
-    const el = useTemplateRef<HTMLDialogElement>('el');
+    const el = useTemplateRef<HTMLDialogElement | HTMLDivElement>('el');
     const embedModal = ref<InstanceType<typeof EditorEmbedModal>>();
     const linkDropdown = ref<InstanceType<typeof LinkDropdown>>();
     const isMounted = ref(false);
     const isUnmounting = ref(false);
     const isFullscreen = ref(false);
+
+    provideParentDialogElement(el);
 
     provide<ParentEditor>('editor', {
         props,

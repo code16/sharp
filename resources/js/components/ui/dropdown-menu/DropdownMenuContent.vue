@@ -9,6 +9,7 @@ import {
 } from 'reka-ui'
 import { cn } from '@/utils/cn'
 import { useMenuBoundaryElement } from "@/Layouts/Layout.vue";
+import { useParentDialogElement } from "@/composables/useParentDialogElement";
 
 const props = withDefaults(
   defineProps<DropdownMenuContentProps & { class?: HTMLAttributes['class'] }>(),
@@ -27,10 +28,11 @@ const delegatedProps = computed(() => {
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
 const menuBoundary = useMenuBoundaryElement();
+const parentDialogElement = useParentDialogElement();
 </script>
 
 <template>
-  <DropdownMenuPortal>
+  <DropdownMenuPortal :to="parentDialogElement ?? undefined">
     <DropdownMenuContent
       v-bind="forwarded"
       :collision-boundary="typeof props.collisionBoundary === 'undefined' ? menuBoundary : props.collisionBoundary"

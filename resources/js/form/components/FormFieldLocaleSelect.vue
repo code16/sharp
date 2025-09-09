@@ -7,7 +7,7 @@ import { FormFieldEmits, FormFieldProps } from "@/form/types";
 import { FormFieldData } from "@/types";
 import { useParentForm } from "@/form/useParentForm";
 
-const props = defineProps<FormFieldProps<FormFieldData, any> & { teleportTo?: HTMLElement, isFieldLayout?: boolean }>();
+const props = defineProps<FormFieldProps<FormFieldData, any> & { isFieldLayout?: boolean }>();
 const emit = defineEmits<FormFieldEmits>();
 const form = useParentForm();
 </script>
@@ -19,7 +19,7 @@ const form = useParentForm();
             :class="{ '-my-2': isFieldLayout }"
             :aria-label="__('sharp::form.field_locale_selector.aria_label', { field_label:field.label })"
         />
-        <SelectContent :teleport-to="teleportTo">
+        <SelectContent>
             <template v-for="itemLocale in form.locales" :key="itemLocale">
                 <SelectItem :value="itemLocale">
                     <div class="flex items-center">
