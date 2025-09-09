@@ -68,6 +68,7 @@ it('allows to format a text with uploads to front', function () {
                     'id' => null,
                 ],
                 'legend' => 'Legendary',
+                '_locale' => null,
             ],
             '1' => [
                 'file' => [
@@ -82,6 +83,7 @@ it('allows to format a text with uploads to front', function () {
                     'id' => null,
                 ],
                 'legend' => null,
+                '_locale' => null,
             ],
         ],
     ]);
