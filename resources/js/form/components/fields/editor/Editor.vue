@@ -412,7 +412,7 @@
                                                     {{ formLocale }}
                                                 </div>
                                                 <template v-if="form.fieldHasError(field, fieldErrorKey, formLocale)">
-                                                    <svg class="absolute top-1/2  right-2.5 -translate-y-1/2 translate-x-1/2 size-1.5 fill-destructive opacity-75 group-data-[state=active]/tab:opacity-100" viewBox="0 0 8 8" aria-hidden="true">
+                                                    <svg class="absolute top-1/2 right-2.5 -translate-y-1/2 translate-x-1/2 size-2 fill-destructive" viewBox="0 0 8 8" aria-hidden="true">
                                                         <circle cx="4" cy="4" r="3" />
                                                     </svg>
                                                 </template>
