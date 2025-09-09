@@ -120,9 +120,7 @@ export const Embed: WithRequiredOptions<Node<EmbedOptions>> = Node.create<EmbedO
             this.options.embed,
             this.options.locale,
             getAllNodesAfterUpdate(this.name, transaction, appendedTransactions)
-                .map(node => ({
-                    id: node.attrs['data-key'],
-                })),
+                .map(node => node.attrs['data-key']),
         )
     },
 

@@ -11,6 +11,7 @@ import {
 } from 'reka-ui'
 import { X } from 'lucide-vue-next'
 import { cn } from '@/utils/cn'
+    import { useParentHTMLDialogElement } from "@/composables/useParentDialogElement";
 
 const props = defineProps<DialogContentProps & { class?: HTMLAttributes['class'] }>()
 const emits = defineEmits<DialogContentEmits>()
@@ -21,11 +22,12 @@ const delegatedProps = computed(() => {
   return delegated
 })
 
-const forwarded = useForwardPropsEmits(delegatedProps, emits)
+const forwarded = useForwardPropsEmits(delegatedProps, emits);
+    const parentHTMLDialogElement = useParentHTMLDialogElement();
 </script>
 
 <template>
-  <DialogPortal>
+  <DialogPortal :to="parentHTMLDialogElement ?? undefined">
     <DialogOverlay
       class="fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
     />

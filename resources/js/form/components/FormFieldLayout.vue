@@ -10,6 +10,7 @@
     import { useId } from "@/composables/useId";
 
     import FormFieldLocaleSelect from "@/form/components/FormFieldLocaleSelect.vue";
+    import FormFieldError from "@/form/components/FormFieldError.vue";
 
     defineOptions({
         inheritAttrs: false
@@ -23,6 +24,7 @@
     }>();
     const emit = defineEmits<FormFieldEmits & {
         (e: 'label-click'),
+        (e: 'locale-select:close-auto-focus', event: Event),
     }>();
     const form = useParentForm();
     const id = useId(`form-field_${props.fieldErrorKey}`);
@@ -99,7 +101,12 @@
                         </div>
                     </template>
                     <template v-if="'localized' in field && field.localized">
-                        <FormFieldLocaleSelect v-bind="props" is-field-layout @locale-change="emit('locale-change', $event)" />
+                        <FormFieldLocaleSelect
+                            v-bind="props"
+                            is-field-layout
+                            @locale-change="emit('locale-change', $event)"
+                            @close-auto-focus="emit('locale-select:close-auto-focus', $event)"
+                        />
                     </template>
 <!--                    <template v-if="'localized' in field && field.localized">-->
 <!--                        <div class="ml-auto flex items-center h-3.5 gap-0 md:gap-1">-->
@@ -148,25 +155,7 @@
 
                     <template v-if="form.fieldHasError(field, fieldErrorKey)">
                         <div :id="`${id}-error`" class="mb-1 text-sm text-destructive leading-4">
-                            <span class="">
-                                <template v-if="form.fieldError(fieldErrorKey)">
-                                    {{ form.fieldError(fieldErrorKey) }}
-                                </template>
-                                <template v-else-if="'localized' in field && field.localized">
-                                    <template v-if="form.fieldError(`${fieldErrorKey}.${locale}`)">
-                                        {{ form.fieldError(`${fieldErrorKey}.${locale}`) }}
-                                    </template>
-                                    <template v-else>
-                                        {{
-                                            trans_choice(
-                                              'sharp::form.validation_error.localized',
-                                                form.fieldLocalesContainingError(fieldErrorKey).length,
-                                                { locales: form.fieldLocalesContainingError(fieldErrorKey).map(l => l.toUpperCase()) }
-                                            )
-                                        }}
-                                    </template>
-                                </template>
-                            </span>
+                            <FormFieldError v-bind="props" />
                         </div>
                     </template>
                 </div>

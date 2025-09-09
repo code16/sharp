@@ -1,9 +1,9 @@
 import { api } from "@/api/api";
 import { route } from "@/utils/url";
 import { Form } from "@/form/Form";
-import { FormEditorFieldData, FormUploadFieldValueData } from "@/types";
+import { FormEditorFieldData } from "@/types";
 import { Show } from "@/show/Show";
-import { FormEditorUploadData, MaybeLocalizedContent } from "@/content/types";
+import { FormEditorUploadData } from "@/content/types";
 import { reactive } from "vue";
 
 type ContentUpload = {
@@ -13,9 +13,7 @@ type ContentUpload = {
 
 export class ContentUploadManager<Root extends Form | Show> {
     root: Form | Show;
-    onUploadsUpdated: Root extends Form ? (uploads: { [id:string]: FormEditorUploadData }) => any : null;
     editorField: Root extends Form ? FormEditorFieldData : null;
-
     state = reactive<{ contentUploads: { [id:string]: ContentUpload } }>({
         contentUploads: {}
     });
@@ -80,12 +78,10 @@ export class ContentUploadManager<Root extends Form | Show> {
                     })
                 ])
         );
-        // this.onUploadsUpdated(this.serializedUploads);
     }
 
     updateUpload(id: string, value: FormEditorUploadData) {
         this.contentUploads[id].value = { ...this.contentUploads[id].value, ...value };
-        // this.onUploadsUpdated(this.serializedUploads);
     }
 
     async postForm(id: string | null, locale: string | null, data: FormEditorUploadData): Promise<{ id:string }> {
@@ -104,8 +100,6 @@ export class ContentUploadManager<Root extends Form | Show> {
         this.contentUploads[id] = {
             value: responseData,
         }
-
-        this.onUploadsUpdated(this.serializedUploads);
 
         return { id };
     }

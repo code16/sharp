@@ -8,7 +8,7 @@ import { FormFieldData } from "@/types";
 import { useParentForm } from "@/form/useParentForm";
 
 const props = defineProps<FormFieldProps<FormFieldData, any> & { isFieldLayout?: boolean }>();
-const emit = defineEmits<FormFieldEmits>();
+const emit = defineEmits<FormFieldEmits & { (e: 'close-auto-focus', event: Event): void }>();
 const form = useParentForm();
 </script>
 
@@ -19,13 +19,13 @@ const form = useParentForm();
             :class="{ '-my-2': isFieldLayout }"
             :aria-label="__('sharp::form.field_locale_selector.aria_label', { field_label:field.label })"
         />
-        <SelectContent>
-            <template v-for="itemLocale in form.locales" :key="itemLocale">
-                <SelectItem :value="itemLocale">
+        <SelectContent @close-auto-focus="emit('close-auto-focus', $event)">
+            <template v-for="formLocale in form.locales" :key="formLocale">
+                <SelectItem :value="formLocale">
                     <div class="flex items-center">
-                        <span class="uppercase text-xs">{{ itemLocale }}</span>
-                        <template v-if="form.fieldLocalesContainingError(fieldErrorKey).includes(itemLocale)">
-                            <svg class="ml-1 h-2 w-2 fill-destructive" viewBox="0 0 8 8" aria-hidden="true">
+                        <span class="uppercase text-xs">{{ formLocale }}</span>
+                        <template v-if="form.fieldLocalesContainingError(fieldErrorKey).includes(formLocale)">
+                            <svg class="ml-1 size-2 fill-destructive" viewBox="0 0 8 8" aria-hidden="true">
                                 <circle cx="4" cy="4" r="3" />
                             </svg>
                         </template>

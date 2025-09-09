@@ -14,7 +14,6 @@ type ContentEmbed = {
 
 export class ContentEmbedManager<Root extends Form | Show> {
     embeds: { [embedKey:string]: EmbedData } = {};
-    onEmbedsUpdated: Root extends Form ? (embeds: FormEditorFieldData['value']['embeds']) => any : null
     root: Form | Show;
 
     state = reactive<{
@@ -81,23 +80,21 @@ export class ContentEmbedManager<Root extends Form | Show> {
         return id;
     }
 
-    syncEmbeds(embed: EmbedData, locale: string | null, nodes: { id?:string }[]) {
-        if(this.contentEmbeds[embed.key]) {
-            this.contentEmbeds[embed.key] = {
-                ...Object.fromEntries(
-                    Object.entries(this.contentEmbeds[embed.key])
-                        .map(([id, contentEmbed]) => [
-                            id,
-                            ({
-                                ...contentEmbed,
-                                removed: contentEmbed.value?._locale == locale
-                                    ? !nodes.some(node => String(node.id) === id)
-                                    : contentEmbed.removed,
-                            })
-                        ])
-                ),
-            };
-        }
+    syncEmbeds(embed: EmbedData, locale: string | null, ids: (string | number)[]) {
+        this.contentEmbeds[embed.key] = {
+            ...Object.fromEntries(
+                Object.entries(this.contentEmbeds[embed.key] ?? {})
+                    .map(([id, contentEmbed]) => [
+                        id,
+                        ({
+                            ...contentEmbed,
+                            removed: contentEmbed.value?._locale == locale
+                                ? !ids.some(i => String(i) === id)
+                                : contentEmbed.removed,
+                        })
+                    ])
+            ),
+        };
     }
 
     postResolveForm(id: string, embed: EmbedData): Promise<FormData> {
@@ -133,8 +130,6 @@ export class ContentEmbedManager<Root extends Form | Show> {
                 _locale: locale,
             },
         }
-
-        this.onEmbedsUpdated(this.serializedEmbeds);
 
         return {
             id

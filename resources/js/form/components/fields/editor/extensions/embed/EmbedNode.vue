@@ -34,7 +34,7 @@
 
 <template>
     <NodeRenderer
-        class="relative my-4 first:mt-0 last:mb-0 border rounded-md items-center p-4 flex gap-4 select-none group-focus/editor:data-[textselected]:border-primary"
+        class="relative my-4 first:mt-0 last:mb-0 border rounded-md items-center p-4 flex gap-4 group-focus/editor:data-[textselected]:border-primary"
         :class="{ 'group-focus/editor:border-primary': props.selected }"
         :node="node"
     >

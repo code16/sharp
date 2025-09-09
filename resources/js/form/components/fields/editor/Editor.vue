@@ -55,6 +55,8 @@
     import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
     import { vScrollIntoView } from "@/directives/scroll-into-view";
     import { provideParentDialogElement } from "@/composables/useParentDialogElement";
+    import EditorHelpText from "@/form/components/fields/editor/EditorHelpText.vue";
+    import FormFieldError from "@/form/components/FormFieldError.vue";
 
     const emit = defineEmits<FormFieldEmits<FormEditorFieldData>>();
     const props = defineProps<FormFieldProps<FormEditorFieldData>>();
@@ -73,7 +75,6 @@
     const linkDropdown = ref<InstanceType<typeof LinkDropdown>>();
     const isMounted = ref(false);
     const isUnmounting = ref(false);
-    const isFullscreen = ref(false);
 
     provideParentDialogElement(el);
 
@@ -196,6 +197,8 @@
         }
     }
 
+    const isFullscreen = ref(false);
+    const fullscreenPlaceholderHeight = ref(0);
     const editorContainer = useTemplateRef('editorContainer');
     const editorContainerSize = useElementSize(editorContainer);
     function onEditorScroll(e) {
@@ -210,15 +213,19 @@
 
     async function onFullscreenChange(fullscreen: boolean) {
         if (fullscreen) {
+            fullscreenPlaceholderHeight.value = el.value.offsetHeight;
             isFullscreen.value = true;
             document.body.style.overflow = 'hidden';
             await nextTick();
-            el.value.showModal();
+            (el.value as HTMLDialogElement).showModal();
         } else {
-            el.value.close?.();
+            (el.value as HTMLDialogElement).close?.();
             document.body.style.overflow = '';
             isFullscreen.value = false;
         }
+        setTimeout(() => {
+            editor.value.commands.focus();
+        });
     }
 
     useEventListener('pointerdown', (e) => {
@@ -231,6 +238,21 @@
         }
     });
 
+    async function onLocaleChange(locale: string, focus?:boolean) {
+        emit('locale-change', locale);
+        if(focus) {
+            setTimeout(() => {
+                editor.value.commands.focus();
+            });
+        }
+    }
+
+    function onLocaleSelectCloseAutoFocus() {
+        setTimeout(() => {
+            editor.value.commands.focus();
+        });
+    }
+
     const dropdownEmbeds = computed(() =>
         Object.values(props.field.embeds ?? {})
             .filter(embed => !props.field.toolbar?.includes(`embed:${embed.key}`))
@@ -238,7 +260,17 @@
 </script>
 
 <template>
-    <FormFieldLayout v-bind="props" @locale-change="emit('locale-change', $event)" field-group>
+    <FormFieldLayout
+        v-bind="props"
+        @locale-change="onLocaleChange"
+        @locale-select:close-auto-focus.prevent="onLocaleSelectCloseAutoFocus"
+        field-group
+    >
+        <div v-show="isFullscreen"
+            class="h-(--height)"
+            :style="{'--height':`${fullscreenPlaceholderHeight}px`}"
+        ></div>
+
         <component :is="isFullscreen ? 'dialog' : 'div'" class="backdrop:bg-black/50"
             :class="cn(
                 'editor flex flex-col rounded-md overflow-clip border border-input bg-background',
@@ -250,9 +282,9 @@
             :data-fullscreen="isFullscreen ? true : null"
             ref="el"
         >
-            <template v-if="editor && field.toolbar">
+            <template v-if="editor && (field.toolbar || isFullscreen)">
                 <StickyTop
-                    class="sticky top-(--stacked-top) in-data-fullscreen:top-0 in-[[role=dialog]]:top-0 p-1.5 border-b data-stuck:z-10 data-[stuck]:bg-background"
+                    class="sticky top-(--stacked-top) overflow-y-auto in-data-fullscreen:top-0 in-[[role=dialog]]:top-0 p-1.5 border-b data-stuck:z-10 data-[stuck]:bg-background"
                 >
                     <div class="flex flex-wrap sm:flex-nowrap gap-x-1 sm:in-data-fullscreen:gap-0">
                         <template v-if="isFullscreen">
@@ -319,12 +351,18 @@
                                 </DropdownMenu>
                             </template>
                         </div>
-
+                        <template v-if="isFullscreen">
+                            <div class="shrink-0 overflow-y-auto [scrollbar-gutter:stable]"></div>
+                        </template>
                         <template v-if="field.allowFullscreen">
                             <div class="h-9 flex gap-x-1 justify-end items-center sm:in-data-fullscreen:flex-1">
                                 <template v-if="field.localized && isFullscreen">
                                     <div class="lg:hidden">
-                                        <FormFieldLocaleSelect v-bind="props" :teleport-to="el" @locale-change="emit('locale-change', $event)" />
+                                        <FormFieldLocaleSelect
+                                            v-bind="props"
+                                            @locale-change="onLocaleChange"
+                                            @close-auto-focus.prevent="onLocaleSelectCloseAutoFocus"
+                                        />
                                     </div>
                                 </template>
                                 <Separator orientation="vertical" class="h-4" />
@@ -342,11 +380,15 @@
                 </StickyTop>
             </template>
 
-            <div :class="cn('flex-1 grid grid-cols-1 overflow-y-auto overflow-x-clip', {
-                    'min-h-20': !isFullscreen,
-                    'min-h-(--min-height)': field.minHeight && !isFullscreen,
-                    'max-h-(--max-height)': field.maxHeight && !isFullscreen,
-                })"
+            <div :class="cn(
+                    'flex-1 grid grid-cols-1 overflow-y-auto overflow-x-clip',
+                    isFullscreen
+                        ? 'lg:[scrollbar-gutter:stable]'
+                        : ['min-h-20', {
+                            'min-h-(--min-height)': field.minHeight,
+                            'max-h-(--max-height)': field.maxHeight,
+                        }]
+                )"
                 :style="{
                     '--min-height': field.minHeight ? `${field.minHeight}px` : null,
                     '--max-height': field.maxHeight ? `${field.maxHeight}px` : null,
@@ -359,14 +401,21 @@
                     <template v-if="isFullscreen && field.localized">
                         <div class="absolute inset-0 hidden lg:flex items-start pointer-events-none">
                             <div class="sticky top-0 p-1 overflow-y-auto overflow-x-clip max-h-(--height) pointer-events-auto">
-                                <Tabs :model-value="locale" @update:model-value="emit('locale-change', $event as string)">
-                                    <TabsList class="flex flex-col h-auto">
+                                <Tabs :model-value="locale" @update:model-value="onLocaleChange($event as string, true)">
+                                    <TabsList class="flex flex-col items-stretch h-auto">
                                         <template v-for="formLocale in form.locales">
                                             <TabsTrigger :value="formLocale"
-                                                class="shrink-0 uppercase text-xs min-w-12 scroll-my-1 first:scroll-mt-2 last:scroll-mb-2"
+                                                class="group/tab relative shrink-0 uppercase px-5 text-xs text-start scroll-my-1 first:scroll-mt-2 last:scroll-mb-2"
                                                 v-scroll-into-view.nearest="locale === formLocale"
                                             >
-                                                {{ formLocale }}
+                                                <div class="flex-1">
+                                                    {{ formLocale }}
+                                                </div>
+                                                <template v-if="form.fieldHasError(field, fieldErrorKey, formLocale)">
+                                                    <svg class="absolute top-1/2  right-2.5 -translate-y-1/2 translate-x-1/2 size-1.5 fill-destructive opacity-75 group-data-[state=active]/tab:opacity-100" viewBox="0 0 8 8" aria-hidden="true">
+                                                        <circle cx="4" cy="4" r="3" />
+                                                    </svg>
+                                                </template>
                                             </TabsTrigger>
                                         </template>
                                     </TabsList>
@@ -384,53 +433,52 @@
                             '[&_.selection-highlight]:bg-[Highlight] [&_.selection-highlight]:py-0.5',
                             '[&_.ProseMirror-selectednode]:outline-none! [&:focus_.ProseMirror-selectednode]:ring-1 [&_.ProseMirror-selectednode]:ring-primary',
                             {
-                                'content-lg max-w-3xl mx-auto py-6 px-4 sm:px-12 text-base min-h-max': isFullscreen,
+                                'content-lg max-w-3xl mx-auto py-6 px-4 sm:px-6 text-base min-h-max': isFullscreen,
                             },
                         )"
                         role="textbox"
                     />
                 </div>
             </div>
-
-<!--            <BubbleMenu-->
-<!--                :editor="editor"-->
-<!--                :should-show="({ state }) => isActive(state, 'link')"-->
-<!--                :key="'bubble-menu-' + (props.locale ?? '')"-->
-<!--            >-->
-<!--                <Button @click="linkDropdown.open()">-->
-<!--                    Update link-->
-<!--                </Button>-->
-<!--            </BubbleMenu>-->
-
-            <template v-if="props.field.uploads">
-                <EditorUploadModal
-                    :field="field"
-                    :editor="editor"
-                    ref="uploadModal"
-                />
-            </template>
-
-            <template v-if="props.field.embeds">
-                <EditorEmbedModal
-                    :editor="editor"
-                    :field="field"
-                    ref="embedModal"
-                />
+            <template v-if="editor && isFullscreen && (field.showCharacterCount || form.fieldHasError(field, fieldErrorKey))">
+                <div class="flex flex-wrap items-center gap-y-1.5 gap-x-2 lg:gap-x-0 py-2.5 px-3 overflow-y-auto lg:[scrollbar-gutter:stable] border-border border-t">
+                    <div class="flex-1">
+                        <template v-if="editor && field.showCharacterCount">
+                            <EditorHelpText class="text-xs/3 text-muted-foreground truncate" v-bind="props" :editor="editor" />
+                        </template>
+                    </div>
+                    <div class="lg:w-full max-w-3xl lg:px-6">
+                        <template v-if="form.fieldHasError(field, fieldErrorKey)">
+                            <div class="text-sm/4 text-destructive">
+                                <FormFieldError v-bind="props" />
+                            </div>
+                        </template>
+                    </div>
+                    <div class="flex-1 hidden lg:block"></div>
+                </div>
             </template>
         </component>
+
         <template v-if="editor && field.showCharacterCount">
             <div class="mt-2 text-xs text-muted-foreground">
-                <template v-if="field.maxLength">
-                    <div :class="{ 'text-destructive': editor.storage.characterCount.characters() > field.maxLength }">
-                        {{ __('sharp::form.editor.character_count', { count: `${editor.storage.characterCount.characters()} / ${field.maxLength}` }) }}
-                    </div>
-                </template>
-                <template v-else>
-                    <div>
-                        {{ __('sharp::form.editor.character_count', { count: editor.storage.characterCount.characters() }) }}
-                    </div>
-                </template>
+                <EditorHelpText v-bind="props" :editor="editor" />
             </div>
+        </template>
+
+        <template v-if="props.field.uploads">
+            <EditorUploadModal
+                :field="field"
+                :editor="editor"
+                ref="uploadModal"
+            />
+        </template>
+
+        <template v-if="props.field.embeds">
+            <EditorEmbedModal
+                :editor="editor"
+                :field="field"
+                ref="embedModal"
+            />
         </template>
     </FormFieldLayout>
 </template>

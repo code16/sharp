@@ -12,8 +12,12 @@ export function provideParentDialogElement(dialog: Ref<HTMLElement>) {
     );
 }
 
+export function useParentHTMLDialogElement() {
+    return inject<ComputedRef<HTMLDialogElement | undefined>>('parentDialog', undefined);
+}
+
 export function useParentDialogElement() {
-    const parentDialogElement = inject<ComputedRef<HTMLDialogElement | undefined>>('parentDialog', undefined);
+    const parentHTMLDialogElement = useParentHTMLDialogElement();
     const rekaDialogContext = injectDialogRootContext(null);
 
     if(rekaDialogContext) {
@@ -24,8 +28,8 @@ export function useParentDialogElement() {
             rekaDialogElement.value = rekaDialogContext?.contentElement.value?.parentElement;
         });
 
-        return computed(() => parentDialogElement.value ?? rekaDialogElement.value);
+        return computed(() => parentHTMLDialogElement.value ?? rekaDialogElement.value);
     }
 
-    return parentDialogElement;
+    return parentHTMLDialogElement;
 }
