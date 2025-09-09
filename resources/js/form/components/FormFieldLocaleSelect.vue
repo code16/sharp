@@ -28,7 +28,7 @@ const form = useParentForm();
                             {{ formLocale }}
                         </span>
                         <template v-if="form.fieldHasError(field, fieldErrorKey, formLocale)">
-                            <svg class="ml-1 size-1.5 fill-destructive" viewBox="0 0 8 8" aria-hidden="true">
+                            <svg class="ml-1.5 size-2 fill-destructive" viewBox="0 0 8 8" aria-hidden="true">
                                 <circle cx="4" cy="4" r="3" />
                             </svg>
                         </template>
