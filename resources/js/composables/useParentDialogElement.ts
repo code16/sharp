@@ -1,35 +1,19 @@
-import { computed, ComputedRef, inject, nextTick, onMounted, provide, ref, Ref } from "vue";
+import { computed, nextTick, onMounted, ref } from "vue";
 import { injectDialogRootContext } from "reka-ui";
 
-export function provideParentDialogElement(dialog: Ref<HTMLElement>) {
-    provide<ComputedRef<HTMLDialogElement | undefined>>(
-        'parentDialog',
-        computed(() =>
-            dialog.value instanceof HTMLDialogElement
-                ? dialog.value
-                : undefined
-        )
-    );
-}
 
-export function useParentHTMLDialogElement() {
-    return inject<ComputedRef<HTMLDialogElement | undefined>>('parentDialog', undefined);
-}
 
+/**
+ * Ensure that poppers + dialogs are a child of another parent dialog element for correct positioning / z-index
+ */
 export function useParentDialogElement() {
-    const parentHTMLDialogElement = useParentHTMLDialogElement();
     const rekaDialogContext = injectDialogRootContext(null);
+    const rekaDialogElement = ref<HTMLElement | undefined>();
 
-    if(rekaDialogContext) {
-        const rekaDialogElement = ref<HTMLElement | undefined>();
+    onMounted(async () => {
+        await nextTick();
+        rekaDialogElement.value = rekaDialogContext?.contentElement.value?.parentElement;
+    });
 
-        onMounted(async () => {
-            await nextTick();
-            rekaDialogElement.value = rekaDialogContext?.contentElement.value?.parentElement;
-        });
-
-        return computed(() => parentHTMLDialogElement.value ?? rekaDialogElement.value);
-    }
-
-    return parentHTMLDialogElement;
+    return computed(() => rekaDialogElement.value);
 }

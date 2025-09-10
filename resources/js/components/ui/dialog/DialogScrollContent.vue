@@ -11,7 +11,6 @@
     } from 'reka-ui'
     import { X } from 'lucide-vue-next'
     import { cn } from '@/utils/cn'
-    import { useParentHTMLDialogElement } from "@/composables/useParentDialogElement";
 
     const props = defineProps<DialogContentProps & { class?: HTMLAttributes['class'] }>()
     const emits = defineEmits<DialogContentEmits>()
@@ -24,7 +23,6 @@
 
     const forwarded = useForwardPropsEmits(delegatedProps, emits)
     const overlay = useTemplateRef<InstanceType<typeof DialogOverlay>>('overlay');
-    const parentHTMLDialogElement = useParentHTMLDialogElement();
     defineExpose({
         scrollToTop: () => {
             overlay.value.$el.scrollTo(0, 0);
@@ -33,7 +31,7 @@
 </script>
 
 <template>
-  <DialogPortal :to="parentHTMLDialogElement ?? undefined">
+  <DialogPortal>
     <DialogOverlay
       class="fixed inset-0 z-50 grid grid-cols-1 place-items-center overflow-y-auto bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
         ref="overlay"

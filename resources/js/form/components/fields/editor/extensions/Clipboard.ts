@@ -2,6 +2,28 @@ import { Command, Extension } from "@tiptap/core";
 import { Plugin } from '@tiptap/pm/state';
 import { DOMParser } from '@tiptap/pm/model';
 import { __ } from "@/utils/i18n";
+import { EditorView } from "@tiptap/pm/view";
+
+function dispatchCopy(view: EditorView) {
+    const clipboardData = new DataTransfer();
+    const event = new ClipboardEvent('copy', {
+        bubbles: true,
+        cancelable: true,
+        clipboardData,
+    });
+
+    view.dom.dispatchEvent(event);
+
+    const clipboardItem = new ClipboardItem({
+        'text/html': clipboardData.getData('text/html'),
+        'text/plain': clipboardData.getData('text/plain'),
+    });
+
+    navigator.clipboard.write([clipboardItem]).then(() => {
+    }).catch(err => {
+        alert(__('sharp::errors.failed_to_write_to_clipboard'));
+    });
+}
 
 export const Clipboard = Extension.create({
     name: 'clipboard',
@@ -36,6 +58,28 @@ export const Clipboard = Extension.create({
                         }
                         return html;
                     },
+
+                    handleKeyDown(view, event) {
+                        // fix bug when copy isn't working in chrome https://github.com/ProseMirror/prosemirror/issues/884
+                        if((event.metaKey || event.ctrlKey) && event.key === 'c') {
+                            let copied = false;
+                            view.dom.addEventListener('copy', () => {
+                                copied = true;
+                            }, { once: true });
+                            setTimeout(() => {
+                                if(!copied) {
+                                    dispatchCopy(view);
+                                }
+                            }, 50);
+
+                        }
+                    },
+
+                    handleDOMEvents: {
+                        copy(view, event) {
+                            console.log(event);
+                        }
+                    }
                 },
             })
         ]
@@ -45,24 +89,7 @@ export const Clipboard = Extension.create({
             copyNode: (pos: number): Command => ({ editor, dispatch }) => {
                 if(dispatch) {
                     editor.commands.setNodeSelection(pos);
-                    const clipboardData = new DataTransfer();
-                    const event = new ClipboardEvent('copy', {
-                        bubbles: true,
-                        cancelable: true,
-                        clipboardData,
-                    });
-
-                    editor.view.dom.dispatchEvent(event);
-
-                    const clipboardItem = new ClipboardItem({
-                        'text/html': clipboardData.getData('text/html'),
-                        'text/plain': clipboardData.getData('text/plain'),
-                    });
-
-                    navigator.clipboard.write([clipboardItem]).then(() => {
-                    }).catch(err => {
-                        alert(__('sharp::errors.failed_to_write_to_clipboard'));
-                    });
+                    dispatchCopy(editor.view);
                 }
 
                 return true;

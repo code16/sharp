@@ -8,8 +8,8 @@
     import { FormUploadFieldData } from "@/types";
     import { ExtensionNodeProps } from "@/form/components/fields/editor/types";
     import { useParentEditor } from "@/form/components/fields/editor/useParentEditor";
-    import { useEditorNode } from "@/form/components/fields/editor/useEditorNode";
     import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
+    import NodeDragHandle from "@/form/components/fields/editor/NodeDragHandle.vue";
 
     const props = defineProps<ExtensionNodeProps<typeof UploadExtension, UploadNodeAttributes>>();
 
@@ -66,7 +66,7 @@
 
 <template>
     <NodeRenderer
-        class="block my-4 first:mt-0 last:mb-0 border rounded-md p-4 outline-none"
+        class="relative block my-4 first:mt-0 last:mb-0 border rounded-md p-4 outline-none"
         :class="{ 'group-focus/editor:border-primary': props.selected }"
         :node="node"
     >
@@ -98,5 +98,6 @@
                 </DropdownMenuItem>
             </template>
         </Upload>
+        <NodeDragHandle />
     </NodeRenderer>
 </template>
