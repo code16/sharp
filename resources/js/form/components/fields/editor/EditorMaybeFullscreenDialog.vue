@@ -9,8 +9,11 @@
     const isFullscreen = defineModel<boolean>('fullscreen');
 
     function onBackdropPointerDown(pointerDownEvent: PointerEvent) {
+        const downSelection = window.getSelection().toString();
         window.addEventListener('pointerup', (pointerUpEvent: PointerEvent) => {
-            if(pointerDownEvent.target === pointerUpEvent.target) {
+            if(pointerDownEvent.target === pointerUpEvent.target
+                && downSelection === window.getSelection().toString()
+            ) {
                 isFullscreen.value = false;
             }
         }, { once: true });
