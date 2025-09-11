@@ -197,7 +197,7 @@
         setTimeout(() => editor.value.commands.focus());
     });
 
-    async function onLocaleChange(locale: string, focus?:boolean) {
+    async function onLocaleChange(locale: string, focus?: boolean) {
         emit('locale-change', locale);
         if(focus) {
             setTimeout(() => {
@@ -230,12 +230,12 @@
             :style="{'--height':`${fullscreenPlaceholderHeight}px`}"
         ></div>
 
-        <EditorMaybeFullscreenDialog v-model:fullscreen="isFullscreen">
+        <EditorMaybeFullscreenDialog v-bind="props" v-model:fullscreen="isFullscreen">
             <div
                 :class="cn(
                 'editor flex flex-col rounded-md overflow-clip border border-input bg-background',
                     isFullscreen
-                        ? 'border-none rounded-none'
+                        ? 'border-none rounded-none bg-transparent'
                         : 'focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background'
                 )"
                 :data-fullscreen="isFullscreen ? true : null"

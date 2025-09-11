@@ -3,6 +3,7 @@ import { Plugin } from '@tiptap/pm/state';
 import { DOMParser } from '@tiptap/pm/model';
 import { __ } from "@/utils/i18n";
 import { EditorView } from "@tiptap/pm/view";
+import { NodeSelection } from "@tiptap/pm/state";
 
 function dispatchCopy(view: EditorView) {
     const clipboardData = new DataTransfer();
@@ -62,16 +63,20 @@ export const Clipboard = Extension.create({
                     handleKeyDown(view, event) {
                         // fix bug when copy isn't working in chrome https://github.com/ProseMirror/prosemirror/issues/884
                         if((event.metaKey || event.ctrlKey) && event.key === 'c') {
-                            let copied = false;
-                            view.dom.addEventListener('copy', () => {
-                                copied = true;
-                            }, { once: true });
-                            setTimeout(() => {
-                                if(!copied) {
-                                    dispatchCopy(view);
-                                }
-                            }, 50);
-
+                            if(view.state.selection instanceof NodeSelection
+                                && view.state.selection.node.isBlock
+                                && view.state.selection.node.isAtom
+                            ) {
+                                let copied = false;
+                                view.dom.addEventListener('copy', () => {
+                                    copied = true;
+                                }, { once: true });
+                                setTimeout(() => {
+                                    if(!copied) {
+                                        dispatchCopy(view);
+                                    }
+                                }, 50);
+                            }
                         }
                     },
 
