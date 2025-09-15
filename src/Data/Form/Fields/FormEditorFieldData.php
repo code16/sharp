@@ -32,6 +32,8 @@ final class FormEditorFieldData extends Data
         public bool $inline,
         public bool $showCharacterCount,
         public bool $allowFullscreen,
+        #[LiteralTypeScriptType('{ pattern: string, replacement: string, locale?: string }[]')]
+        public array $textInputReplacements,
         #[LiteralTypeScriptType('FormEditorFieldUploadData | null')]
         public ?array $uploads = null,
         #[LiteralTypeScriptType('{ [embedKey:string]:EmbedData }')]

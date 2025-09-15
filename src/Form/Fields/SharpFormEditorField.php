@@ -4,6 +4,8 @@ namespace Code16\Sharp\Form\Fields;
 
 use Code16\Sharp\Enums\FormEditorToolbarButton;
 use Code16\Sharp\Exceptions\SharpInvalidConfigException;
+use Code16\Sharp\Form\Fields\Editor\EditorTextInputReplacement;
+use Code16\Sharp\Form\Fields\Editor\EditorTextInputReplacementPreset;
 use Code16\Sharp\Form\Fields\Editor\Uploads\FormEditorUploadForm;
 use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
 use Code16\Sharp\Form\Fields\Formatters\EditorFormatter;
@@ -66,6 +68,7 @@ class SharpFormEditorField extends SharpFormField implements IsSharpFieldWithEmb
     protected bool $withoutParagraphs = false;
     protected bool $showCharacterCount = false;
     protected bool $allowFullscreen = false;
+    protected array $textInputReplacements = [];
 
     protected function __construct(string $key, string $type, ?SharpFieldFormatter $formatter = null)
     {
@@ -137,6 +140,13 @@ class SharpFormEditorField extends SharpFormField implements IsSharpFieldWithEmb
     public function setRenderContentAsMarkdown(bool $renderAsMarkdown = true): self
     {
         $this->renderAsMarkdown = $renderAsMarkdown;
+
+        return $this;
+    }
+
+    public function setTextInputReplacements(array $replacements): self
+    {
+        $this->textInputReplacements = $replacements;
 
         return $this;
     }
@@ -260,6 +270,9 @@ class SharpFormEditorField extends SharpFormField implements IsSharpFieldWithEmb
                 'showCharacterCount' => $this->showCharacterCount,
                 'maxLength' => $this->maxLength,
                 'allowFullscreen' => $this->allowFullscreen,
+                'textInputReplacements' => collect($this->textInputReplacements)
+                    ->flatMap(fn (EditorTextInputReplacement|EditorTextInputReplacementPreset $replacement) => $replacement->toArray())
+                    ->all(),
                 'uploads' => $this->innerComponentUploadsConfiguration(),
                 'embeds' => $this->innerComponentEmbedsConfiguration(),
             ],
