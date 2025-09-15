@@ -7,6 +7,7 @@ export type MaybeLocalizedContent = {
 export type FormEditorUploadData = {
     file: FormUploadFieldValueData,
     legend?: string,
+    _locale?: string | null,
 }
 
 export type FormattedContent<Content extends MaybeLocalizedContent> = Content & { formatted:true };

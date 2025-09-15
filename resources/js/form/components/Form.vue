@@ -301,7 +301,7 @@
                 </template>
             </CardContent>
             <template v-if="$slots.footer">
-                <StickyBottom class="group sticky z-30 -bottom-2 lg:bottom-0 pointer-events-none" sentinel-class="bottom-2 lg:bottom-0">
+                <StickyBottom class="group [@media(height>=400px)]:sticky z-30 -bottom-2 lg:bottom-0 pointer-events-none" sentinel-class="bottom-2 lg:bottom-0">
                     <CardFooter class="justify-end px-0 pt-4">
                         <div class="relative pointer-events-auto">
                             <div class="absolute -inset-4 -bottom-6 @[64rem]:-inset-6 transition-[border-color] border-transparent border-l border-t rounded-tl-lg rounded-br-lg -z-10 group-data-[stuck]:bg-card group-data-[stuck]:border-border"

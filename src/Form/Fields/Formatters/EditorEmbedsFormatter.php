@@ -74,6 +74,7 @@ class EditorEmbedsFormatter extends SharpFieldFormatter implements FormatsAfterU
                             }
                         }
                         $element->removeAttribute('data-key');
+                        $element->removeAttribute('data-value');
                     }
                 }
 

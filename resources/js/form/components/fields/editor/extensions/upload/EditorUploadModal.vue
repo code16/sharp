@@ -27,11 +27,15 @@
     const uploadManager = useParentEditor().uploadManager;
     const modalOpen = ref(false);
     const modalForm = useTemplateRef<InstanceType<typeof FormComponent>>('modalForm');
-    const modalUpload = ref<{ id: string, form: Form, loading?: boolean } | null>(null);
+    const modalUpload = ref<{ id: string, form: Form, loading?: boolean, locale: string | null } | null>(null);
 
     async function postForm(data: FormEditorUploadData) {
         modalUpload.value.loading = true;
-        const { id } = await uploadManager.postForm(modalUpload.value.id, data)
+        const { id } = await uploadManager.postForm(
+            modalUpload.value.id,
+            modalUpload.value.locale,
+            data
+        )
             .finally(() => {
                 modalUpload.value.loading = false;
             });
@@ -43,7 +47,7 @@
         modalOpen.value = false;
     }
 
-    function open(id?: string) {
+    function open({ id, locale }: { id?: string, locale?: string | null }) {
         if(props.field.uploads.fields.legend) {
             modalUpload.value = {
                 id,
@@ -56,6 +60,7 @@
                     parentForm.entityKey,
                     parentForm.instanceId,
                 ),
+                locale,
             }
             modalOpen.value = true;
             if(id == null) {

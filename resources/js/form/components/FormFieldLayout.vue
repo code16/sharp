@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { computed, ref } from "vue";
-    import { FormFieldProps } from "@/form/types";
+    import { FormFieldEmits, FormFieldProps } from "@/form/types";
     import { useParentForm } from "@/form/useParentForm";
     import { __, trans_choice } from "@/utils/i18n";
     import { Label } from "@/components/ui/label";
@@ -8,9 +8,9 @@
     import StickyTop from "@/components/StickyTop.vue";
     import { FormFieldData } from "@/types";
     import { useId } from "@/composables/useId";
-    import { Select, SelectContent, SelectItem,  SelectValue } from "@/components/ui/select";
 
-    import LocaleSelectTrigger from "@/components/LocaleSelectTrigger.vue";
+    import FormFieldLocaleSelect from "@/form/components/FormFieldLocaleSelect.vue";
+    import FormFieldError from "@/form/components/FormFieldError.vue";
 
     defineOptions({
         inheritAttrs: false
@@ -22,9 +22,9 @@
         stickyLabel?: boolean,
         ariaLabel?: string,
     }>();
-    const emit = defineEmits<{
+    const emit = defineEmits<FormFieldEmits & {
         (e: 'label-click'),
-        (e: 'locale-change', locale: string)
+        (e: 'locale-select:close-auto-focus', event: Event),
     }>();
     const form = useParentForm();
     const id = useId(`form-field_${props.fieldErrorKey}`);
@@ -101,26 +101,12 @@
                         </div>
                     </template>
                     <template v-if="'localized' in field && field.localized">
-                        <Select :model-value="props.locale" @update:model-value="emit('locale-change', $event as string)">
-                            <LocaleSelectTrigger
-                                class="ml-auto w-auto border-transparent hover:border-input aria-expanded:border-input -my-2"
-                                :aria-label="__('sharp::form.field_locale_selector.aria_label', { field_label:field.label })"
-                            />
-                            <SelectContent>
-                                <template v-for="itemLocale in form.locales" :key="itemLocale">
-                                    <SelectItem :value="itemLocale">
-                                        <div class="flex items-center">
-                                            <span class="uppercase text-xs">{{ itemLocale }}</span>
-                                            <template v-if="form.fieldLocalesContainingError(fieldErrorKey).includes(itemLocale)">
-                                                <svg class="ml-1 h-2 w-2 fill-destructive" viewBox="0 0 8 8" aria-hidden="true">
-                                                    <circle cx="4" cy="4" r="3" />
-                                                </svg>
-                                            </template>
-                                        </div>
-                                    </SelectItem>
-                                </template>
-                            </SelectContent>
-                        </Select>
+                        <FormFieldLocaleSelect
+                            v-bind="props"
+                            is-field-layout
+                            @locale-change="emit('locale-change', $event)"
+                            @close-auto-focus="emit('locale-select:close-auto-focus', $event)"
+                        />
                     </template>
 <!--                    <template v-if="'localized' in field && field.localized">-->
 <!--                        <div class="ml-auto flex items-center h-3.5 gap-0 md:gap-1">-->
@@ -169,25 +155,7 @@
 
                     <template v-if="form.fieldHasError(field, fieldErrorKey)">
                         <div :id="`${id}-error`" class="mb-1 text-sm text-destructive leading-4">
-                            <span class="">
-                                <template v-if="form.fieldError(fieldErrorKey)">
-                                    {{ form.fieldError(fieldErrorKey) }}
-                                </template>
-                                <template v-else-if="'localized' in field && field.localized">
-                                    <template v-if="form.fieldError(`${fieldErrorKey}.${locale}`)">
-                                        {{ form.fieldError(`${fieldErrorKey}.${locale}`) }}
-                                    </template>
-                                    <template v-else>
-                                        {{
-                                            trans_choice(
-                                              'sharp::form.validation_error.localized',
-                                                form.fieldLocalesContainingError(fieldErrorKey).length,
-                                                { locales: form.fieldLocalesContainingError(fieldErrorKey).map(l => l.toUpperCase()) }
-                                            )
-                                        }}
-                                    </template>
-                                </template>
-                            </span>
+                            <FormFieldError v-bind="props" />
                         </div>
                     </template>
                 </div>

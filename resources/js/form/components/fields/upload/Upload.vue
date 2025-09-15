@@ -462,7 +462,7 @@
                                     </template>
                                 </div>
                                 <template v-if="value?.size ?? uppyFile?.size">
-                                    <div class="mt-2 text-xs text-muted-foreground">
+                                    <div class="mt-2 text-xs text-muted-foreground truncate">
                                         {{ filesizeLabel(value?.size ?? uppyFile.size) }}
                                     </div>
                                 </template>

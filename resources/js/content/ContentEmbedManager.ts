@@ -3,17 +3,17 @@ import { EmbedData, FormData, FormEditorFieldData } from "@/types";
 import { api } from "@/api/api";
 import { route } from "@/utils/url";
 import { Show } from "@/show/Show";
-import { reactive } from "vue";
+import { reactive, watch } from "vue";
 
 type ContentEmbed = {
     embed: EmbedData,
     removed?: boolean,
     value: EmbedData['value'],
+    locale?: string,
 }
 
 export class ContentEmbedManager<Root extends Form | Show> {
     embeds: { [embedKey:string]: EmbedData } = {};
-    onEmbedsUpdated: Root extends Form ? (embeds: FormEditorFieldData['value']['embeds']) => any : null
     root: Form | Show;
 
     state = reactive<{
@@ -30,13 +30,9 @@ export class ContentEmbedManager<Root extends Form | Show> {
         root: Root,
         embeds: ContentEmbedManager<Root>['embeds'] | null,
         initialEmbeds: FormEditorFieldData['value']['embeds'],
-        config: {
-            onEmbedsUpdated: ContentEmbedManager<Root>['onEmbedsUpdated']
-        } = { onEmbedsUpdated: null }
     ) {
         this.root = root;
         this.embeds = embeds ?? {};
-        this.onEmbedsUpdated = config.onEmbedsUpdated;
         this.contentEmbeds = Object.fromEntries(
             Object.entries(initialEmbeds ?? {}).map(([embedKey, embeds]) =>
                 [embedKey, Object.fromEntries(
@@ -70,34 +66,35 @@ export class ContentEmbedManager<Root extends Form | Show> {
         );
     }
 
-    getEmbed(id: string, embed: EmbedData): EmbedData['value'] {
-        return this.contentEmbeds[embed.key][id].value;
+    getEmbed(embed: EmbedData, id: string): EmbedData["value"] {
+        return this.contentEmbeds[embed.key]?.[id]?.value;
     }
 
-    newEmbed(embed: EmbedData): string {
+    newEmbed(embed: EmbedData, locale: string | null, value?: EmbedData['value']): string {
         const id = String(Object.keys(this.contentEmbeds[embed.key] ?? {}).length);
         this.contentEmbeds[embed.key] ??= {};
         this.contentEmbeds[embed.key][id] = {
             embed,
-            value: null,
+            value: value ? { ...value, _locale: locale } : null,
         };
         return id;
     }
 
-    restoreEmbed(id: string, embed: EmbedData) {
-        this.contentEmbeds[embed.key][id] = {
-            ...this.contentEmbeds[embed.key][id],
-            removed: false,
-        }
-        this.onEmbedsUpdated(this.serializedEmbeds);
-    }
-
-    removeEmbed(id: string, embed: EmbedData) {
-        this.contentEmbeds[embed.key][id] = {
-            ...this.contentEmbeds[embed.key][id],
-            removed: true,
-        }
-        this.onEmbedsUpdated(this.serializedEmbeds);
+    syncEmbeds(embed: EmbedData, locale: string | null, ids: (string | number)[]) {
+        this.contentEmbeds[embed.key] = {
+            ...Object.fromEntries(
+                Object.entries(this.contentEmbeds[embed.key] ?? {})
+                    .map(([id, contentEmbed]) => [
+                        id,
+                        ({
+                            ...contentEmbed,
+                            removed: contentEmbed.value?._locale == locale
+                                ? !ids.some(i => String(i) === id)
+                                : contentEmbed.removed,
+                        })
+                    ])
+            ),
+        };
     }
 
     postResolveForm(id: string, embed: EmbedData): Promise<FormData> {
@@ -113,7 +110,7 @@ export class ContentEmbedManager<Root extends Form | Show> {
             .then(response => response.data);
     }
 
-    async postForm(id: string, embed: EmbedData, data: EmbedData['value']): Promise<{ id:string }> {
+    async postForm(id: string, embed: EmbedData, locale: string | null, data: EmbedData['value']): Promise<{ id:string }> {
         const { entityKey, instanceId } = this.root;
         const responseData = await api
             .post(
@@ -124,14 +121,15 @@ export class ContentEmbedManager<Root extends Form | Show> {
             )
             .then(response => response.data);
 
-        id ??= this.newEmbed(embed);
+        id ??= this.newEmbed(embed, locale);
 
         this.contentEmbeds[embed.key][id] = {
             embed,
-            value: responseData,
+            value: {
+                ...responseData,
+                _locale: locale,
+            },
         }
-
-        this.onEmbedsUpdated(this.serializedEmbeds);
 
         return {
             id

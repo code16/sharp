@@ -24,7 +24,8 @@ export default defineConfig(({ mode, command }) => {
                 'vue': 'vue/dist/vue.esm-browser.js',
                 'ziggy-js': path.resolve(__dirname, 'vendor/tightenco/ziggy'),
                 // ...rekaAliases()
-            }
+            },
+            // preserveSymlinks: true,
         },
         server: {
             // hmr: false,

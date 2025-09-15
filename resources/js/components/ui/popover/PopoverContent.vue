@@ -9,6 +9,7 @@ import {
     useForwardPropsEmits,
 } from 'reka-ui'
 import { cn } from '@/utils/cn'
+    import { useParentDialogElement } from "@/composables/useParentDialogElement";
 
 defineOptions({
   inheritAttrs: false,
@@ -30,21 +31,12 @@ const delegatedProps = computed(() => {
   return delegated
 })
 
-const dialogContext = injectDialogRootContext(null);
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
-const parentDialogElement = ref<HTMLElement>();
-
-onMounted(() => {
-    if(dialogContext) {
-        nextTick(() => {
-            parentDialogElement.value = dialogContext.contentElement.value.parentElement;
-        });
-    }
-});
+const parentDialogElement = useParentDialogElement();
 </script>
 
 <template>
-  <PopoverPortal :to="parentDialogElement">
+  <PopoverPortal :to="parentDialogElement ?? undefined">
     <PopoverContent
       v-bind="{ ...forwarded, ...$attrs }"
       :class="

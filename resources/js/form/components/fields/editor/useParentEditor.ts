@@ -16,8 +16,6 @@ export type ParentEditor = {
     embedModal: Ref<InstanceType<typeof EditorEmbedModal>>
     uploadManager: ContentUploadManager<Form>,
     uploadModal: Ref<InstanceType<typeof EditorUploadModal>>,
-    isMounted: Ref<boolean>,
-    isUnmounting: Ref<boolean>,
 };
 
 export function useParentEditor() {

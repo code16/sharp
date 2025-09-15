@@ -16,7 +16,7 @@ trait FormatsEditorUploads
     {
         $uploads = [];
 
-        $text = $this->maybeLocalized($field, $value, function (string $content) use (&$uploads) {
+        $text = $this->maybeLocalized($field, $value, function (string $content, ?string $locale) use (&$uploads) {
             if (! str_contains($content, '<x-sharp-image') && ! str_contains($content, '<x-sharp-file')) {
                 return $content;
             }
@@ -34,6 +34,7 @@ trait FormatsEditorUploads
                     'legend' => $element->hasAttribute('legend')
                         ? $element->getAttribute('legend')
                         : null,
+                    '_locale' => $locale,
                 ];
                 $element->setAttribute('data-key', count($uploads) - 1);
                 $element->removeAttribute('file');

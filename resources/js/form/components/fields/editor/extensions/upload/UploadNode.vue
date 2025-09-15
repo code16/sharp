@@ -8,8 +8,8 @@
     import { FormUploadFieldData } from "@/types";
     import { ExtensionNodeProps } from "@/form/components/fields/editor/types";
     import { useParentEditor } from "@/form/components/fields/editor/useParentEditor";
-    import { useEditorNode } from "@/form/components/fields/editor/useEditorNode";
     import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
+    import NodeDragHandle from "@/form/components/fields/editor/NodeDragHandle.vue";
 
     const props = defineProps<ExtensionNodeProps<typeof UploadExtension, UploadNodeAttributes>>();
 
@@ -18,15 +18,6 @@
     const uploadManager = useParentEditor().uploadManager;
     const uploadComponent = ref<InstanceType<typeof Upload>>();
     const upload = computed(() => uploadManager.getUpload(props.node.attrs['data-key']));
-
-    useEditorNode(props, {
-        onAdded: () => {
-            uploadManager.restoreUpload(props.node.attrs['data-key']);
-        },
-        onRemoved: () => {
-            uploadManager.removeUpload(props.node.attrs['data-key']);
-        },
-    });
 
     function onThumbnailGenerated(preview: string) {
         uploadManager.updateUpload(props.node.attrs['data-key'], {
@@ -68,14 +59,14 @@
     function onEdit(event: CustomEvent) {
         if(parentEditor.props.field.uploads.fields.legend) {
             event.preventDefault();
-            uploadModal.value.open(props.node.attrs['data-key']);
+            uploadModal.value.open({ id: props.node.attrs['data-key'], locale: props.extension.options.locale });
         }
     }
 </script>
 
 <template>
     <NodeRenderer
-        class="block my-4 first:mt-0 last:mb-0 border rounded-md p-4 outline-none"
+        class="relative block my-4 first:mt-0 last:mb-0 border rounded-md p-4 outline-none"
         :class="{ 'group-focus/editor:border-primary': props.selected }"
         :node="node"
     >
@@ -107,5 +98,6 @@
                 </DropdownMenuItem>
             </template>
         </Upload>
+        <NodeDragHandle />
     </NodeRenderer>
 </template>

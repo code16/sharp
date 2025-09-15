@@ -201,6 +201,7 @@ class TestForm extends SharpSingleForm
 //                    ->setReadOnly()
                     ->setLocalized()
                     ->setLabel('Wysiwyg')
+                    ->allowFullscreen()
                     ->setToolbar([
                         SharpFormEditorField::B,
                         SharpFormEditorField::I,
@@ -252,6 +253,8 @@ class TestForm extends SharpSingleForm
                         SharpFormEditorField::QUOTE,
                         SharpFormEditorField::CODE,
                         SharpFormEditorField::SEPARATOR,
+                        SharpFormEditorField::IFRAME,
+                        SharpFormEditorField::TABLE,
                         SharpFormEditorField::CODE_BLOCK,
                     ])
                     ->allowUploads(

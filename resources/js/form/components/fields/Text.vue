@@ -38,7 +38,7 @@
 </script>
 
 <template>
-    <FormFieldLayout v-bind="props" v-slot="{ id, ariaDescribedBy }">
+    <FormFieldLayout v-bind="props" @locale-change="emit('locale-change', $event)" v-slot="{ id, ariaDescribedBy }">
         <div class="relative">
             <Input
                 :id="id"

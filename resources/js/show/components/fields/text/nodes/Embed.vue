@@ -9,7 +9,7 @@
     }>();
 
     const embedManager = inject<ContentEmbedManager<Show>>('embedManager');
-    const embedData = embedManager.getEmbed(useAttrs()['data-key'] as string, props.embed);
+    const embedData = embedManager.getEmbed(props.embed, useAttrs()['data-key'] as string);
 </script>
 
 <template>
