@@ -4,8 +4,8 @@ namespace Code16\Sharp\Form\Fields;
 
 use Code16\Sharp\Enums\FormEditorToolbarButton;
 use Code16\Sharp\Exceptions\SharpInvalidConfigException;
-use Code16\Sharp\Form\Fields\Editor\EditorTextInputReplacement;
-use Code16\Sharp\Form\Fields\Editor\EditorTextInputReplacementPreset;
+use Code16\Sharp\Form\Fields\Editor\TextInputReplacement\EditorTextInputReplacement;
+use Code16\Sharp\Form\Fields\Editor\TextInputReplacement\EditorTextInputReplacementPreset;
 use Code16\Sharp\Form\Fields\Editor\Uploads\FormEditorUploadForm;
 use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
 use Code16\Sharp\Form\Fields\Formatters\EditorFormatter;
@@ -271,7 +271,10 @@ class SharpFormEditorField extends SharpFormField implements IsSharpFieldWithEmb
                 'maxLength' => $this->maxLength,
                 'allowFullscreen' => $this->allowFullscreen,
                 'textInputReplacements' => collect($this->textInputReplacements)
-                    ->flatMap(fn (EditorTextInputReplacement|EditorTextInputReplacementPreset $replacement) => $replacement->toArray())
+                    ->flatMap(fn (EditorTextInputReplacement|EditorTextInputReplacementPreset $replacement) => $replacement instanceof EditorTextInputReplacementPreset
+                            ? $replacement->toArray()
+                            : [$replacement]
+                    )
                     ->all(),
                 'uploads' => $this->innerComponentUploadsConfiguration(),
                 'embeds' => $this->innerComponentEmbedsConfiguration(),

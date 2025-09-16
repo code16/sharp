@@ -58,8 +58,9 @@
     import FormFieldError from "@/form/components/FormFieldError.vue";
     import EditorMaybeFullscreenDialog from "@/form/components/fields/editor/EditorMaybeFullscreenDialog.vue";
     import { DecorateHiddenCharacters } from "@/form/components/fields/editor/extensions/DecorateHiddenCharacters";
-    import { TrailingNode, UndoRedo } from "@tiptap/extensions";
-    import { Extension, textInputRule } from "@tiptap/core";
+    import {
+        getTextInputReplacementsExtension
+    } from "@/form/components/fields/editor/extensions/TextInputReplacements";
 
     const emit = defineEmits<FormFieldEmits<FormEditorFieldData>>();
     const props = defineProps<FormFieldProps<FormEditorFieldData>>();
@@ -104,26 +105,16 @@
                 field.markdown && Markdown.configure({
                     breaks: config('sharp.markdown_editor.nl2br'),
                 }),
-                props.field.uploads && Upload.configure({
-                    uploadManager,
-                    locale,
-                }),
-                Extension.create({
-                    name: 'textInputReplacements',
-                    addInputRules() {
-                        return field.textInputReplacements
-                            .filter(replacement => !replacement.locale || replacement.locale === locale)
-                            .map(replacement => textInputRule({
-                                find: new RegExp(replacement.pattern.replace(/^\//, '').replace(/\/$/, '').replace(/\$?$/, '$')),
-                                replace: replacement.replacement,
-                            }));
-                    },
-                }),
+                getTextInputReplacementsExtension(field, locale),
                 DecorateHiddenCharacters.configure({
                     class: cn(
                         `relative pl-[.125em] after:block after:absolute after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2 after:opacity-25`,
                         `data-[key=nbsp]:after:content-['°']`,
                     ),
+                }),
+                props.field.uploads && Upload.configure({
+                    uploadManager,
+                    locale,
                 }),
                 ...Object.values(props.field.embeds ?? {})
                     .map((embed) => {
