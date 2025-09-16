@@ -273,7 +273,7 @@ class SharpFormEditorField extends SharpFormField implements IsSharpFieldWithEmb
                 'textInputReplacements' => collect($this->textInputReplacements)
                     ->flatMap(fn (EditorTextInputReplacement|EditorTextInputReplacementPreset $replacement) => $replacement instanceof EditorTextInputReplacementPreset
                             ? $replacement->toArray()
-                            : [$replacement]
+                            : [$replacement->toArray()]
                     )
                     ->all(),
                 'uploads' => $this->innerComponentUploadsConfiguration(),
