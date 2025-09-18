@@ -132,6 +132,7 @@ it('handles multiple filter values', function () {
                     public function values(): array
                     {
                         return [
+                            '0' => 'Void',
                             'physicist' => 'Physicist',
                             'physician' => 'Physician',
                         ];
@@ -145,6 +146,7 @@ it('handles multiple filter values', function () {
             return collect([
                 ['id' => 1, 'name' => 'Marie Curie', 'job' => 'physicist'],
                 ['id' => 2, 'name' => 'Louis Pasteur', 'job' => 'physician'],
+                ['id' => 3, 'name' => 'John Void', 'job' => '0'],
             ])
                 ->filter(fn ($item) => in_array($item['job'], $this->queryParams->filterFor('job')))
                 ->values();
@@ -166,6 +168,18 @@ it('handles multiple filter values', function () {
                 ->etc()
             )
             ->count('entityList.data', 2)
+        );
+
+    $this
+        ->get('/sharp/s-list/person?filter_job=0')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->has('entityList.data.0', fn (Assert $json) => $json
+                ->where('id', 3)
+                ->where('name', 'John Void')
+                ->etc()
+            )
+            ->count('entityList.data', 1)
         );
 });
 

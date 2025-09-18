@@ -102,7 +102,6 @@ class FilterContainer
             ])
             ->mapWithKeys(function (Filter $handler) {
                 return [
-                    // we pass through fromQueryParam() & toQueryParam() to ensure the value is formatted correctly
                     $handler->getKey() => $handler->toQueryParam($handler->defaultValue()),
                 ];
             });
