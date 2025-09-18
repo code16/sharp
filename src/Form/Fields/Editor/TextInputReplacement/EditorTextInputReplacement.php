@@ -14,7 +14,7 @@ class EditorTextInputReplacement implements Arrayable
         protected string $replacement,
         protected ?string $locale = null,
     ) {
-        if(!str_starts_with($pattern, '/') || !str_ends_with($pattern, '/')) {
+        if (! str_starts_with($pattern, '/') || ! str_ends_with($pattern, '/')) {
             throw new \Exception("The replacement pattern \"$pattern\" must start and end with a slash");
         }
     }
