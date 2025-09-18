@@ -260,7 +260,6 @@ export type FormAutocompleteLocalFieldData = {
   resultItemTemplate: string | null;
   templateData: { [key: string]: any } | null;
   searchKeys: Array<string> | null;
-  localized: boolean | null;
   dynamicAttributes: Array<FormDynamicAttributeData> | null;
   label: string | null;
   readOnly: boolean | null;
@@ -369,6 +368,11 @@ export type FormEditorFieldData = {
   inline: boolean;
   showCharacterCount: boolean;
   allowFullscreen: boolean;
+  textInputReplacements: {
+    pattern: string;
+    replacement: string;
+    locale?: string;
+  }[];
   uploads: FormEditorFieldUploadData | null;
   embeds: { [embedKey: string]: EmbedData };
   toolbar: Array<FormEditorToolbarButton | `embed:${string}`>;
@@ -544,7 +548,6 @@ export type FormSelectFieldData = {
   inline: boolean;
   dynamicAttributes: Array<FormDynamicAttributeData> | null;
   maxSelected: number | null;
-  localized: boolean | null;
   label: string | null;
   readOnly: boolean | null;
   conditionalDisplay: FormConditionalDisplayData | null;
@@ -560,7 +563,6 @@ export type FormTagsFieldData = {
   options: Array<{ id: string | number; label: string }>;
   maxTagCount: number | null;
   placeholder: string | null;
-  localized: boolean | null;
   label: string | null;
   readOnly: boolean | null;
   conditionalDisplay: FormConditionalDisplayData | null;

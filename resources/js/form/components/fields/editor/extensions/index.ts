@@ -1,4 +1,4 @@
-import { Extension, getExtensionField, getSchema } from "@tiptap/core";
+import { Extension, getExtensionField, getSchema, textInputRule } from "@tiptap/core";
 import { Document } from '@tiptap/extension-document';
 import { Text } from '@tiptap/extension-text';
 import { Paragraph } from '@tiptap/extension-paragraph';

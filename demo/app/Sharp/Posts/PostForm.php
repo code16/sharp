@@ -11,6 +11,8 @@ use App\Sharp\Utils\Embeds\RelatedPostEmbed;
 use App\Sharp\Utils\Embeds\TableOfContentsEmbed;
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
+use Code16\Sharp\Form\Fields\Editor\TextInputReplacement\EditorTextInputReplacement;
+use Code16\Sharp\Form\Fields\Editor\TextInputReplacement\EditorTextInputReplacementPreset;
 use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteRemoteField;
 use Code16\Sharp\Form\Fields\SharpFormCheckField;
@@ -72,6 +74,10 @@ class PostForm extends SharpForm
                             ->setMaxFileSize(2)
                             ->setHasLegend()
                     )
+                    ->setTextInputReplacements([
+                        EditorTextInputReplacementPreset::frenchTypography(locale: 'fr', guillemets: true),
+                        new EditorTextInputReplacement('/:\+1:/', '👍'),
+                    ])
                     ->allowFullscreen()
                     ->setMaxLength(2000)
                     ->setHeight(300, 0)

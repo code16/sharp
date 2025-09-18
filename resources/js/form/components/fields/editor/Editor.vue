@@ -57,6 +57,10 @@
     import EditorHelpText from "@/form/components/fields/editor/EditorHelpText.vue";
     import FormFieldError from "@/form/components/FormFieldError.vue";
     import EditorMaybeFullscreenDialog from "@/form/components/fields/editor/EditorMaybeFullscreenDialog.vue";
+    import { DecorateHiddenCharacters } from "@/form/components/fields/editor/extensions/DecorateHiddenCharacters";
+    import {
+        getTextInputReplacementsExtension
+    } from "@/form/components/fields/editor/extensions/TextInputReplacements";
 
     const emit = defineEmits<FormFieldEmits<FormEditorFieldData>>();
     const props = defineProps<FormFieldProps<FormEditorFieldData>>();
@@ -101,6 +105,13 @@
                 field.markdown && Markdown.configure({
                     breaks: config('sharp.markdown_editor.nl2br'),
                 }),
+                getTextInputReplacementsExtension(field, locale),
+                DecorateHiddenCharacters.configure({
+                    class: cn(
+                        `relative pl-[.125em] cursor-text after:block after:absolute after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2 after:opacity-25`,
+                        `data-[key=nbsp]:after:content-['°']`,
+                    ),
+                }),
                 props.field.uploads && Upload.configure({
                     uploadManager,
                     locale,
@@ -121,7 +132,7 @@
                     ? props.value?.text?.[locale] ?? ''
                     : props.value?.text ?? '',
                 editable: !field.readOnly,
-                enableInputRules: false,
+                enableInputRules: ['textInputReplacements'],
                 enablePasteRules: [Iframe],
                 extensions,
                 injectCSS: false,

@@ -1,6 +1,8 @@
 <?php
 
 use Code16\Sharp\Exceptions\SharpInvalidConfigException;
+use Code16\Sharp\Form\Fields\Editor\TextInputReplacement\EditorTextInputReplacement;
+use Code16\Sharp\Form\Fields\Editor\TextInputReplacement\EditorTextInputReplacementPreset;
 use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Tests\Unit\Form\Fields\Formatters\Fixtures\EditorFormatterTestEmbed;
@@ -25,6 +27,7 @@ it('sets only default values', function () {
             'markdown' => false,
             'inline' => false,
             'allowFullscreen' => false,
+            'textInputReplacements' => [],
         ]);
 });
 
@@ -177,3 +180,18 @@ it('throws an exception when setting an embed item in the toolbar without allowi
 
     $formField->toArray();
 })->throws(SharpInvalidConfigException::class);
+
+it('allows to define text input replacements', function () {
+    $formField = SharpFormEditorField::make('text')
+        ->setTextInputReplacements([
+            new EditorTextInputReplacementPreset([
+                new EditorTextInputReplacement('/(c)/', '©'),
+            ]),
+            new EditorTextInputReplacement('/(r)/', '®'),
+        ]);
+
+    expect($formField->toArray()['textInputReplacements'])->toEqual([
+        ['pattern' => '/(c)/', 'replacement' => '©', 'locale' => null],
+        ['pattern' => '/(r)/', 'replacement' => '®', 'locale' => null],
+    ]);
+});
