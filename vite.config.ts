@@ -21,7 +21,7 @@ export default defineConfig(({ mode, command }) => {
         },
         resolve: {
             alias: {
-                'vue': 'vue/dist/vue.esm-browser.js',
+                'vue': 'vue/dist/vue.esm-bundler.js',
                 'ziggy-js': path.resolve(__dirname, 'vendor/tightenco/ziggy'),
                 // ...rekaAliases()
             },
