@@ -107,10 +107,15 @@
                 }),
                 getTextInputReplacementsExtension(field, locale),
                 DecorateHiddenCharacters.configure({
-                    class: cn(
-                        `relative pl-[.125em] cursor-text after:block after:absolute after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2 after:opacity-25`,
-                        `data-[key=nbsp]:after:content-['°']`,
-                    ),
+                    class: `relative cursor-text selection:bg-transparent data-selected:bg-[Highlight] after:block after:opacity-25 after:absolute after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2 py-0.5`,
+                    characters: {
+                        nbsp: {
+                            class: `after:content-['°'] pl-[.125em]`,
+                        },
+                        shy: {
+                            class: `after:content-['-'] pl-[.25em]`,
+                        },
+                    }
                 }),
                 props.field.uploads && Upload.configure({
                     uploadManager,

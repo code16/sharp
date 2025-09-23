@@ -1,68 +1,90 @@
 import { Extension } from "@tiptap/core";
 import { Decoration, DecorationSet } from "@tiptap/pm/view";
-import { Plugin } from "@tiptap/pm/state";
-import { cn } from "@/utils/cn";
+import { Plugin, EditorState } from "@tiptap/pm/state";
 
-export const DecorateHiddenCharacters = Extension.create({
-    name: 'decorateHiddenCharacters',
+type Key = "nbsp" | "shy";
+
+type Options = {
+    class?: string;
+    characters?: {
+        [key in Key]: { class: string };
+    };
+};
+
+export const DecorateHiddenCharacters = Extension.create<Options>({
+    name: "decorateHiddenCharacters",
 
     addOptions() {
-        return {
-            class: '',
-        }
+        return {};
     },
 
-
     addProseMirrorPlugins() {
-        const buildDecorations = (doc) => {
-            const decorations = []
+        const buildCharDecorations = (
+            state: EditorState,
+            { char, key }: { char: string, key: Key }
+        ) => {
+            const decorations: Decoration[] = [];
 
+            state.doc.descendants((node, pos) => {
+                if (!node.isText) return true;
 
-            doc.descendants((node, pos) => {
-                if (!node.isText) return true
+                const text = node.text;
+                if (!text) return true;
 
-
-                const text = node.text
-                if (!text) return true
-
-                let idx = text.indexOf('\u00A0')
+                let idx = text.indexOf(char);
                 while (idx !== -1) {
-                    const from = pos + idx
-                    const to = from + 1
+                    const from = pos + idx;
+                    const to = from + 1;
+
+                    const isSelected =
+                        (from >= state.selection.from && from < state.selection.to) ||
+                        (to > state.selection.from && to <= state.selection.to);
+
                     const deco = Decoration.inline(from, to, {
-                        'data-key': 'nbsp',
-                        class: this.options.class,
-                    })
-                    decorations.push(deco)
-                    idx = text.indexOf('\u00A0', idx + 1)
+                        'data-key': key,
+                        'data-selected': isSelected ? 'true' : null,
+                        class: [
+                            this.options.class,
+                            this.options.characters?.[key]?.class,
+                        ]
+                            .filter(Boolean)
+                            .join(' '),
+                    });
+                    decorations.push(deco);
+
+                    idx = text.indexOf(char, idx + 1);
                 }
 
+                return true;
+            });
 
-                return true
-            })
+            return decorations;
+        };
 
-
-            return DecorationSet.create(doc, decorations)
-        }
-
+        const buildDecorations = (state: EditorState) => {
+            return DecorationSet.create(state.doc, [
+                ...buildCharDecorations(state, { char: '\u00A0', key: 'nbsp' }),
+                ...buildCharDecorations(state, { char: '\u00AD', key: 'shy' }),
+            ]);
+        };
 
         return [
             new Plugin({
                 state: {
-                    init(_, { doc }) {
-                        return buildDecorations(doc)
+                    init(_, state) {
+                        return buildDecorations(state);
                     },
-                    apply(tr, old) {
-                        if (!tr.docChanged) return old
-                        return buildDecorations(tr.doc)
+                    apply(tr, old, oldState, newState) {
+                        if (!tr.docChanged && !tr.selectionSet) return old;
+                        return buildDecorations(newState);
                     },
                 },
                 props: {
                     decorations(state) {
-                        return this.getState(state)
+                        return this.getState(state);
                     },
                 },
             }),
-        ]
+        ];
     },
-})
+});
