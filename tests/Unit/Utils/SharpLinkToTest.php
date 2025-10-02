@@ -4,6 +4,7 @@ use Code16\Sharp\Config\SharpConfigBuilder;
 use Code16\Sharp\Exceptions\SharpInvalidBreadcrumbItemException;
 use Code16\Sharp\Filters\SelectFilter;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
+use Code16\Sharp\Tests\Fixtures\Entities\PersonPhysicistEntity;
 use Code16\Sharp\Utils\Links\BreadcrumbBuilder;
 use Code16\Sharp\Utils\Links\LinkToDashboard;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
@@ -28,6 +29,15 @@ it('allows to generate a link to a form', function () {
     );
 });
 
+it('allows to generate a link to a form with another key for the list', function () {
+    $this->assertEquals(
+        '<a href="http://localhost/sharp/s-list/my-list-entity/s-form/my-entity/23" title="">test</a>',
+        LinkToForm::make('my-entity', 23)
+            ->withListEntityKey('my-list-entity')
+            ->renderAsText('test'),
+    );
+});
+
 it('allows to generate a link to a form through a show page', function () {
     $this->assertEquals(
         '<a href="http://localhost/sharp/s-list/my-entity/s-show/my-entity/23/s-form/my-entity/23" title="">test</a>',
@@ -37,10 +47,29 @@ it('allows to generate a link to a form through a show page', function () {
     );
 });
 
+it('allows to generate a link to a form through a show page with another key for the list', function () {
+    $this->assertEquals(
+        '<a href="http://localhost/sharp/s-list/my-list-entity/s-show/my-entity/23/s-form/my-entity/23" title="">test</a>',
+        LinkToForm::make('my-entity', 23)
+            ->withListEntityKey('my-list-entity')
+            ->throughShowPage()
+            ->renderAsText('test'),
+    );
+});
+
 it('allows to generate a link to a show page', function () {
     $this->assertEquals(
         '<a href="http://localhost/sharp/s-list/my-entity/s-show/my-entity/23" title="">test</a>',
         LinkToShowPage::make('my-entity', 23)
+            ->renderAsText('test'),
+    );
+});
+
+it('allows to generate a link to a show page with another key for the list', function () {
+    $this->assertEquals(
+        '<a href="http://localhost/sharp/s-list/my-list-entity/s-show/my-entity/23" title="">test</a>',
+        LinkToShowPage::make('my-entity', 23)
+            ->withListEntityKey('my-list-entity')
             ->renderAsText('test'),
     );
 });
@@ -68,6 +97,19 @@ it('allows to generate a link to a show page passing a SharpEntity class', funct
     $this->assertEquals(
         '<a href="http://localhost/sharp/s-list/person/s-show/person/23" title="">test</a>',
         LinkToShowPage::make(PersonEntity::class, 23)->renderAsText('test'),
+    );
+});
+
+it('allows to generate a link to a show page with another key for the list passing SharpEntity classes', function () {
+    app(SharpConfigBuilder::class)
+        ->declareEntity(PersonEntity::class)
+        ->declareEntity(PersonPhysicistEntity::class);
+
+    $this->assertEquals(
+        '<a href="http://localhost/sharp/s-list/person/s-show/person-physicist/23" title="">test</a>',
+        LinkToShowPage::make(PersonPhysicistEntity::class, 23)
+            ->withListEntityKey(PersonEntity::class)
+            ->renderAsText('test'),
     );
 });
 

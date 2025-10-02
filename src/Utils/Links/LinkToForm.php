@@ -23,7 +23,7 @@ class LinkToForm extends LinkToShowPage
             return route('code16.sharp.form.edit', [
                 'parentUri' => sprintf(
                     's-list/%s%s',
-                    $this->entityKey,
+                    $this->listEntityKey ?: $this->entityKey,
                     $this->throughShowPage ? '/'.parent::generateUri() : ''
                 ),
                 'entityKey' => $this->entityKey,
@@ -32,7 +32,7 @@ class LinkToForm extends LinkToShowPage
         }
 
         return route('code16.sharp.form.create', [
-            'parentUri' => sprintf('s-list/%s', $this->entityKey),
+            'parentUri' => sprintf('s-list/%s', $this->listEntityKey ?: $this->entityKey),
             'entityKey' => $this->entityKey,
         ]);
     }
