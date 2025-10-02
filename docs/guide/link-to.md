@@ -130,6 +130,12 @@ To manually build the querystring (which you should avoid).
 
 To generate a list > show > form breadcrumb, instead of (by default) just a list > form.
 
+### `withListEntityKey(string $entityClassOrKey)`
+
+`LinkToShow` and `LinkToForm` only
+
+Allows specifying the entity key of the list, very useful in multi-entities lists (see the [Entity map feature](building-entity-list.md#entity-map)).
+
 ### `withBreadcrumb(Closure $closure)`
 
 `LinkToForm` and `LinkToShowPage` only

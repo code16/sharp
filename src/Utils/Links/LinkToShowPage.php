@@ -3,11 +3,13 @@
 namespace Code16\Sharp\Utils\Links;
 
 use Closure;
+use Code16\Sharp\Utils\Entities\SharpEntityManager;
 
 class LinkToShowPage extends SharpLinkTo
 {
     protected string $instanceId;
     protected BreadcrumbBuilder $breadcrumbBuilder;
+    protected ?string $listEntityKey = null;
 
     public static function make(string $entityClassOrKey, string $instanceId): self
     {
@@ -24,6 +26,13 @@ class LinkToShowPage extends SharpLinkTo
     public function withBreadcrumb(Closure $closure): self
     {
         $this->breadcrumbBuilder = $closure(new BreadcrumbBuilder());
+
+        return $this;
+    }
+
+    public function withListEntityKey(string $entityClassOrKey): self
+    {
+        $this->listEntityKey = app(SharpEntityManager::class)->entityKeyFor($entityClassOrKey);
 
         return $this;
     }
@@ -47,7 +56,7 @@ class LinkToShowPage extends SharpLinkTo
     protected function generateUrl(): string
     {
         return route('code16.sharp.show.show', [
-            'parentUri' => sprintf('s-list/%s', $this->entityKey),
+            'parentUri' => sprintf('s-list/%s', $this->listEntityKey ?: $this->entityKey),
             'entityKey' => $this->entityKey,
             'instanceId' => $this->instanceId,
         ]);
