@@ -13,6 +13,7 @@
     import DateRangeFilterValue from "@/filters/components/filters/DateRangeFilterValue.vue";
     import { cn } from "@/utils/cn";
     import { FilterEmits, FilterProps } from "@/filters/types";
+    import { getDefaultDateLocale, getWeekStartsOn } from "@/utils/dates";
 
     const props = defineProps<FilterProps<DateRangeFilterData>>();
     const emit = defineEmits<FilterEmits<DateRangeFilterData>>();
@@ -158,8 +159,8 @@
                             :class="!inline ? 'hidden' : 'hidden md:block'"
                             v-model="localValue"
                             :number-of-months="2"
-                            :locale="window.navigator.language"
-                            :week-starts-on="props.filter.mondayFirst ? 1 : 0"
+                            :locale="getDefaultDateLocale()"
+                            :week-starts-on="getWeekStartsOn(props.filter.mondayFirst)"
                             @update:start-value="(startDate) => localValue.start = startDate as CalendarDate"
                             @update:model-value="onCalendarChange"
                             :key="renderKey"
