@@ -51,4 +51,13 @@ class ShowLayout implements HasLayout
                 ->all(),
         ];
     }
+
+    final public function addDashboardSection(string $dashboardKey, ?bool $collapsable = null): self
+    {
+        $this->sections[] = (new ShowLayoutSection(''))
+            ->addColumn(12, fn ($column) => $column->withField($dashboardKey))
+            ->when($collapsable !== null, fn ($section) => $section->setCollapsable($collapsable));
+
+        return $this;
+    }
 }
