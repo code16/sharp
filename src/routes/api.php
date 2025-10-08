@@ -1,5 +1,6 @@
 <?php
 
+use Code16\Sharp\Http\Controllers\Api\ApiDashboardFiltersController;
 use Code16\Sharp\Http\Controllers\Api\ApiEntityListController;
 use Code16\Sharp\Http\Controllers\Api\ApiEntityListFiltersController;
 use Code16\Sharp\Http\Controllers\Api\ApiFilterAutocompleteController;
@@ -70,6 +71,9 @@ Route::group([
     Route::get('/dashboard/{entityKey}', [DashboardController::class, 'show'])
         ->name('code16.sharp.api.dashboard')
         ->middleware('cache.headers:no_store');
+
+    Route::post('/dashboard/{entityKey}/filters', [ApiDashboardFiltersController::class, 'store'])
+        ->name('code16.sharp.api.dashboard.filters.store');
 
     Route::post('/show/{entityKey}/command/{commandKey}/{instanceId?}', [ApiShowInstanceCommandController::class, 'update'])
         ->name('code16.sharp.api.show.command.instance');
