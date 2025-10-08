@@ -26,6 +26,11 @@ class DashboardController extends SharpProtectedController
             'filterValues' => $dashboard->filterContainer()->getCurrentFilterValuesForFront(request()->all()),
         ];
 
+        if (request()->routeIs('code16.sharp.api.dashboard')) {
+            // EmbeddedDashboard case, need to return JSON
+            return response()->json(DashboardData::from($data)->toArray());
+        }
+
         return Inertia::render('Dashboard/Dashboard', [
             'dashboard' => DashboardData::from($data),
             'breadcrumb' => BreadcrumbData::from([

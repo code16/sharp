@@ -115,6 +115,11 @@ function fakeFormFor(string $entityKeyOrClass, $fakeImplementation)
     return test();
 }
 
+function fakeDashboardFor(string $entityKeyOrClass, $fakeImplementation)
+{
+    return fakeShowFor($entityKeyOrClass, $fakeImplementation);
+}
+
 function fakePolicyFor(string $entityKeyOrClass, $fakeImplementation)
 {
     app(SharpEntityManager::class)
