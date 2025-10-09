@@ -15,16 +15,6 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class CategoryShow extends SharpShow
 {
-    public function buildShowConfig(): void
-    {
-        $this->configureBreadcrumbCustomLabelAttribute('name');
-    }
-
-    public function find(mixed $id): array
-    {
-        return $this->transform(Category::findOrFail($id));
-    }
-
     protected function buildShowFields(FieldsContainer $showFields): void
     {
         $showFields
@@ -48,14 +38,23 @@ class CategoryShow extends SharpShow
     protected function buildShowLayout(ShowLayout $showLayout): void
     {
         $showLayout
-            ->addSection('', function (ShowLayoutSection $section) {
-                $section
-                    ->addColumn(6, function (ShowLayoutColumn $column) {
-                        $column->withField('name')
-                            ->withField('description');
-                    });
-            })
+            ->addSection(fn (ShowLayoutSection $section) => $section
+                ->addColumn(6, fn (ShowLayoutColumn $column) => $column
+                    ->withField('name')
+                    ->withField('description')
+                )
+            )
             ->addEntityListSection(PostEntity::class);
+    }
+
+    public function buildShowConfig(): void
+    {
+        $this->configureBreadcrumbCustomLabelAttribute('name');
+    }
+
+    public function find(mixed $id): array
+    {
+        return $this->transform(Category::findOrFail($id));
     }
 
     public function delete($id): void

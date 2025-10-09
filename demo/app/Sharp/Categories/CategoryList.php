@@ -18,11 +18,11 @@ class CategoryList extends SharpEntityList
         $fields
             ->addField(
                 EntityListField::make('name')
-                    ->setLabel('Name'),
+                    ->setLabel('Name')
             )
             ->addField(
                 EntityListField::make('posts_count')
-                    ->setLabel('# posts'),
+                    ->setLabel('# posts')
             );
     }
 
