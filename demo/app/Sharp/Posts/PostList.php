@@ -80,6 +80,10 @@ class PostList extends SharpEntityList
 
     protected function buildPageAlert(PageAlert $pageAlert): void
     {
+        if (sharp()->context()->isShow()) {
+            return;
+        }
+
         if (auth()->user()->isAdmin() && ($count = Post::where('state', 'draft')->count()) > 0) {
             $pageAlert
                 ->setMessage(sprintf('%d posts are still in draft', $count))
