@@ -34,6 +34,7 @@ import { createYear, createYearRange, toDate } from 'reka-ui/date'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { __ } from "@/utils/i18n";
+import { PopoverAnchor } from "reka-ui";
 import { getDefaultDateLocale, getWeekStartsOn } from "@/utils/dates";
 
 const props = defineProps<FormFieldProps<FormDateFieldData>>();
@@ -159,13 +160,20 @@ function onMinuteChange(minute: string) {
         );
     }
 }
+
+function onInputClick(e: MouseEvent) {
+    if(!isTouch.value) {
+        open.value = true;
+        e.preventDefault();
+    }
+}
 </script>
 
 <template>
     <Popover v-model:open="open" :modal="false">
         <FormFieldLayout v-bind="props" v-slot="{ id, ariaDescribedBy }">
             <div class="relative">
-                <PopoverTrigger as-child>
+                <PopoverAnchor as-child>
                     <Input
                         :id="id"
                         class="pl-10 min-w-full appearance-none text-left [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-date-and-time-value]:text-left"
@@ -181,10 +189,10 @@ function onMinuteChange(minute: string) {
                         :model-value="inputValue"
                         @update:model-value="onDateInput"
                         @touchstart.passive="isTouch = true"
-                        @click.prevent="open = !isTouch"
+                        @click="onInputClick"
                         ref="input"
                     />
-                </PopoverTrigger>
+                </PopoverAnchor>
                 <div class="absolute right-px rounded-md top-px w-10 bottom-px bg-background hidden not-[@supports_selector(::-webkit-calendar-picker-indicator)]:block"
                     @touchstart.passive="isTouch = true"
                     @click="($refs.input.$el as HTMLInputElement).focus(); open = !isTouch"
