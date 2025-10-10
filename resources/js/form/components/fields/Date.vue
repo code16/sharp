@@ -35,11 +35,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import { __ } from "@/utils/i18n";
 import { PopoverAnchor } from "reka-ui";
+import { getDefaultDateLocale, getWeekStartsOn } from "@/utils/dates";
 
 const props = defineProps<FormFieldProps<FormDateFieldData>>();
 const emit = defineEmits<FormFieldEmits<FormDateFieldData>>();
 
-const dateLocale = Intl.DateTimeFormat().resolvedOptions().locale;
+const dateLocale = getDefaultDateLocale();
 const open = ref(false);
 const isTouch = ref(false);
 
@@ -227,7 +228,7 @@ function onInputClick(e: MouseEvent) {
                     :model-value="calendarDateValue"
                     v-model:placeholder="calendarViewingDate"
                     :locale="dateLocale"
-                    :week-starts-on="props.field.mondayFirst ? 0 : 6"
+                    :week-starts-on="getWeekStartsOn(props.field.mondayFirst)"
                     @update:model-value="onCalendarDateChange"
                     class="p-3"
                 >

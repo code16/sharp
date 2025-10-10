@@ -21,14 +21,14 @@ class CategoryForm extends SharpForm
             ->addField(
                 SharpFormTextField::make('name')
                     ->setLabel('Name')
-                    ->setMaxLength(150),
+                    ->setMaxLength(150)
             )
             ->addField(
                 SharpFormTextareaField::make('description')
                     ->setLabel('Description')
                     ->setRowCount(4)
                     ->setLocalized()
-                    ->setMaxLength(500),
+                    ->setMaxLength(500)
             );
     }
 
@@ -44,11 +44,6 @@ class CategoryForm extends SharpForm
     public function buildFormConfig(): void
     {
         $this->configureDisplayShowPageAfterCreation();
-    }
-
-    public function getDataLocalizations(): array
-    {
-        return ['fr', 'en'];
     }
 
     public function find($id): array
@@ -71,5 +66,10 @@ class CategoryForm extends SharpForm
         $this->save($category, $data);
 
         return $category->id;
+    }
+
+    public function getDataLocalizations(): array
+    {
+        return ['fr', 'en'];
     }
 }
