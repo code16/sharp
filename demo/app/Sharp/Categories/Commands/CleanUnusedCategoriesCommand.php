@@ -15,7 +15,7 @@ class CleanUnusedCategoriesCommand extends EntityCommand
 
     public function buildCommandConfig(): void
     {
-        $this->configureConfirmationText('Delete all categories with 0 post attached?', title: 'Are you sure?')
+        $this->configureConfirmationText('Delete all categories without post attached?', title: 'Are you sure?')
             ->configureDescription('This action will remove all orphan categories');
     }
 

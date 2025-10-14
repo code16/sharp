@@ -95,6 +95,10 @@ Unset the max character count.
 
 Display a character count in the status bar. Default is false.
 
+### `allowFullscreen(bool $allowFullscreen = true)`
+
+Allow fullscreen mode. Default is false.
+
 ### `setSanitizeHtml(bool $sanitizeHtml = true)`
 
 Toggle HTML sanitization (enabled by default). See [security](#security).
