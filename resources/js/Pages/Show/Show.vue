@@ -235,7 +235,7 @@
                                                         </div>
                                                     </template>
                                                     <template v-if="i == 0">
-                                                        <div class="ml-auto flex flex-wrap -my-1 justify-end gap-3"
+                                                        <div class="ml-auto flex flex-wrap -my-1 justify-end gap-2"
                                                             :class="{ 'invisible': collapsed }"
                                                             role="group"
                                                             :aria-label="__('sharp::show.section_menu.aria_label', { title: show.getTitle(locale) })"
@@ -277,7 +277,7 @@
                                                                 </Select>
                                                             </template>
                                                             <template v-if="(show.allowedInstanceCommands?.flat().length || show.authorizations.delete || show.config.state && show.config.state.authorization) || show.authorizations.update">
-                                                                <div class="flex gap-3">
+                                                                <div class="flex gap-2">
                                                                     <template v-if="show.allowedInstanceCommands?.flat().length || show.authorizations.delete || show.config.state && show.config.state.authorization">
                                                                         <DropdownMenu>
                                                                             <DropdownMenuTrigger as-child>

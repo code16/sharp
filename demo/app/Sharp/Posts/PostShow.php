@@ -101,8 +101,8 @@ class PostShow extends SharpShow
                         $column->withField('content');
                     });
             })
-            ->addDashboardSection(PostDashboardEntity::class)
-            ->addEntityListSection(PostBlockEntity::class);
+            ->addDashboardSection(PostDashboardEntity::class, collapsable: true)
+            ->addEntityListSection(PostBlockEntity::class, collapsable: true);
     }
 
     public function buildShowConfig(): void

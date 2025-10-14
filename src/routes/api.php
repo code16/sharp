@@ -68,11 +68,11 @@ Route::group([
         ->name('code16.sharp.api.list.command.instance.form');
 
     // EmbeddedDashboards
-    Route::get('/dashboard/{entityKey}', [DashboardController::class, 'show'])
+    Route::get('/dashboard/{dashboardKey}', [DashboardController::class, 'show'])
         ->name('code16.sharp.api.dashboard')
         ->middleware('cache.headers:no_store');
 
-    Route::post('/dashboard/{entityKey}/filters', [ApiDashboardFiltersController::class, 'store'])
+    Route::post('/dashboard/{dashboardKey}/filters', [ApiDashboardFiltersController::class, 'store'])
         ->name('code16.sharp.api.dashboard.filters.store');
 
     Route::post('/show/{entityKey}/command/{commandKey}/{instanceId?}', [ApiShowInstanceCommandController::class, 'update'])

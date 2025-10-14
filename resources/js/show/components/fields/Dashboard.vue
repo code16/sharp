@@ -81,7 +81,7 @@
 
     async function onQueryChange(newQuery: DashboardData['query']) {
         const data = await api.get(
-            route('code16.sharp.api.dashboard', { entityKey: props.field.dashboardKey }),
+            route('code16.sharp.api.dashboard', { dashboardKey: props.field.dashboardKey }),
             { params: newQuery }
         )
             .then(response => response.data as DashboardData);
@@ -91,7 +91,7 @@
 
     async function onFilterChange(filter: FilterData, value: FilterData['value']) {
         const data = await api.post(
-            route('code16.sharp.api.dashboard.filters.store', { entityKey: props.field.dashboardKey }),
+            route('code16.sharp.api.dashboard.filters.store', { dashboardKey: props.field.dashboardKey }),
             {
                 query: dashboard.value.query,
                 filterValues: filters.nextValues(filter, value),
@@ -105,7 +105,7 @@
 
     async function onFiltersReset(resettedFilters: FilterData[]) {
         const data = await api.post(
-            route('code16.sharp.api.dashboard.filters.store', { entityKey: props.field.dashboardKey }),
+            route('code16.sharp.api.dashboard.filters.store', { dashboardKey: props.field.dashboardKey }),
             {
                 query: { ...dashboard.value.query, search: null },
                 filterValues: filters.defaultValues(resettedFilters),
@@ -127,30 +127,29 @@
 </script>
 
 <template>
-    <RootCard>
-        <RootCardHeader>
-            <CardTitle :id="ariaLabelledby" class="line-clamp-2">
-                {{ field.label }}
-            </CardTitle>
-            <template v-if="collapsable">
-                <Button variant="ghost" size="sm" class="w-9 p-0 -my-1.5 -mr-3" @click="onToggle">
-                    <ChevronsUpDown class="w-4 h-4" />
-                </Button>
-            </template>
-        </RootCardHeader>
-        <CardContent v-show="!collapsed">
-            <DashboardComponent
-                :dashboard="dashboard"
-                :dashboard-key="field.dashboardKey"
-                :filters="filters"
-                :commands="commands"
-                :collapsed="collapsed"
-                :title="field.label"
-                inline
-                @filter-change="onFilterChange"
-                @filters-reset="onFiltersReset"
-                v-bind="$attrs"
-            />
-        </CardContent>
-    </RootCard>
+    <DashboardComponent
+        :dashboard="dashboard"
+        :dashboard-key="field.dashboardKey"
+        :filters="filters"
+        :commands="commands"
+        :collapsed="collapsed"
+        :title="field.label"
+        inline
+        @filter-change="onFilterChange"
+        @filters-reset="onFiltersReset"
+        v-bind="$attrs"
+    >
+        <template #title>
+            <div class="flex items-center gap-x-4">
+                <CardTitle :id="ariaLabelledby" class="line-clamp-2">
+                    {{ field.label }}
+                </CardTitle>
+                <template v-if="collapsable">
+                    <Button variant="ghost" size="sm" class="w-9 p-0 -my-1.5 -mr-3" @click="onToggle">
+                        <ChevronsUpDown class="w-4 h-4" />
+                    </Button>
+                </template>
+            </div>
+        </template>
+    </DashboardComponent>
 </template>

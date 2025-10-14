@@ -7,10 +7,11 @@
     import { route } from "@/utils/url";
     import Title from "@/components/Title.vue";
     import { useCommands } from "@/commands/useCommands";
-    import { watch } from "vue";
+    import { ref, watch } from "vue";
     import PageBreadcrumb from "@/components/PageBreadcrumb.vue";
     import { config } from "@/utils/config";
     import DashboardComponent from "@/dashboard/components/Dashboard.vue";
+    import { Dashboard } from "@/dashboard/Dashboard";
 
     const props = defineProps<{
         dashboard: DashboardData,
@@ -18,10 +19,12 @@
     }>();
 
     const dashboardKey = route().params.dashboardKey as string;
+    const dashboard = ref(new Dashboard(props.dashboard, dashboardKey));
     const filters = useFilters(props.dashboard.config.filters, props.dashboard.filterValues);
     const commands = useCommands('dashboard');
 
     watch(() => props.dashboard, () => {
+        dashboard.value = new Dashboard(props.dashboard, dashboardKey);
         filters.update(props.dashboard.config.filters, props.dashboard.filterValues);
     });
 
@@ -62,7 +65,7 @@
             <div :class="dashboard.pageAlert ? 'pt-4' : 'pt-10'">
                 <DashboardComponent
                     :dashboard-key="dashboardKey"
-                    :dashboard="props.dashboard"
+                    :dashboard="dashboard"
                     :filters="filters"
                     :commands="commands"
                     :title="breadcrumb.items[0].label"

@@ -84,7 +84,7 @@ class SharpShowDashboardField extends SharpShowField
             ]),
             function (array &$options) {
                 $options['endpointUrl'] = route('code16.sharp.api.dashboard', [
-                    'entityKey' => $this->dashboardKey,
+                    'dashboardKey' => $this->dashboardKey,
                     'current_page_url' => request()->url(),
                     ...app(SharpEntityManager::class)
                         ->entityFor($this->dashboardKey)
