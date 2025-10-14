@@ -36,8 +36,8 @@ class PostDashboard extends SharpDashboard
     {
         $dashboardLayout
             ->addRow(function (DashboardLayoutRow $row) {
-                $row->addWidget(.75, 'visits_line')
-                    ->addWidget(.25, 'visits_count');
+                $row->addWidget(6, 'visits_line')
+                    ->addWidget(6, 'visits_count');
             });
     }
 

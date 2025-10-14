@@ -90,6 +90,9 @@ export type DashboardData = {
   data: { [key: string]: any };
   filterValues: FilterValuesData;
   pageAlert: PageAlertData | null;
+  query: {
+    [filterKey: string]: string;
+  };
 };
 export type DashboardLayoutData = {
   sections: Array<DashboardLayoutSectionData>;
@@ -797,6 +800,17 @@ export type ShowCustomFieldData = {
   type: string;
   emptyVisible: boolean;
 };
+export type ShowDashboardFieldData = {
+  value?: null;
+  key: string;
+  type: "dashboard";
+  emptyVisible: boolean;
+  dashboardKey: string;
+  hiddenCommands: Array<string>;
+  endpointUrl: string;
+  label: string | null;
+  hiddenFilters: { [key: string]: any } | null;
+};
 export type ShowData = {
   title: string | { [locale: string]: string } | null;
   authorizations: InstanceAuthorizationsData;
@@ -824,6 +838,7 @@ export type ShowEntityListFieldData = {
   hiddenFilters: { [key: string]: any } | null;
 };
 export type ShowFieldData =
+  | ShowDashboardFieldData
   | ShowEntityListFieldData
   | ShowFileFieldData
   | ShowListFieldData
@@ -835,7 +850,8 @@ export type ShowFieldType =
   | "list"
   | "picture"
   | "text"
-  | "entityList";
+  | "entityList"
+  | "dashboard";
 export type ShowFileFieldData = {
   value?: {
     disk: string;

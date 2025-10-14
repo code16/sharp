@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { computed, provide, ref } from "vue";
-    import { BreadcrumbData, CommandData, ShowData, ShowEntityListFieldData } from "@/types";
+    import { BreadcrumbData, CommandData, ShowDashboardFieldData, ShowData, ShowEntityListFieldData } from "@/types";
     import WithCommands from "@/commands/components/WithCommands.vue";
     import Section from "@/show/components/Section.vue";
     import { Button } from '@/components/ui/button';
@@ -23,7 +23,7 @@
     import FieldGridRow from "@/components/ui/FieldGridRow.vue";
     import FieldGridColumn from "@/components/ui/FieldGridColumn.vue";
     import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-    import EntityList from "@/show/components/fields/entity-list/EntityList.vue";
+    import EntityList from "@/show/components/fields/EntityList.vue";
     import { ChevronsUpDown } from "lucide-vue-next";
     import StickyTop from "@/components/StickyTop.vue";
     import { Select, SelectContent, SelectItem } from "@/components/ui/select";
@@ -45,6 +45,7 @@
     import RootCardHeader from "@/components/ui/RootCardHeader.vue";
     import StateBadge from "@/components/ui/StateBadge.vue";
     import { sanitize } from "@/utils/sanitize";
+    import Dashboard from "@/show/components/fields/Dashboard.vue";
 
     const props = defineProps<{
         show: ShowData,
@@ -168,6 +169,25 @@
                                                 </template>
                                                 <template v-else>
                                                     Undefined EntityList <span class="font-mono">{{ fieldLayout.key }}</span>
+                                                </template>
+                                            </template>
+                                        </template>
+                                    </template>
+                                </template>
+                                <template v-else-if="show.sectionHasField(section, 'dashboard')">
+                                    <template v-for="column in section.columns">
+                                        <template v-for="row in column.fields">
+                                            <template v-for="fieldLayout in row">
+                                                <template v-if="show.fields[fieldLayout.key]">
+                                                    <Dashboard
+                                                        :field="show.fields[fieldLayout.key] as ShowDashboardFieldData"
+                                                        :collapsable="section.collapsable"
+                                                        :value="null"
+                                                        :aria-labelledby="`section-${i}-title`"
+                                                    />
+                                                </template>
+                                                <template v-else>
+                                                    Undefined Dashboard <span class="font-mono">{{ fieldLayout.key }}</span>
                                                 </template>
                                             </template>
                                         </template>

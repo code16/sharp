@@ -108,7 +108,7 @@ export class Show implements ShowData {
             return config('app.debug');
         }
 
-        if(field.type === 'entityList') {
+        if(field.type === 'entityList' || field.type === 'dashboard') {
             return true;
         }
 
