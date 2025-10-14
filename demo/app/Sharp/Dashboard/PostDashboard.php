@@ -13,6 +13,7 @@ use Code16\Sharp\Dashboard\Widgets\SharpFigureWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
 use Code16\Sharp\Dashboard\Widgets\SharpLineGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\WidgetsContainer;
+use Code16\Sharp\EntityList\Filters\HiddenFilter;
 
 class PostDashboard extends SharpDashboard
 {
@@ -44,18 +45,15 @@ class PostDashboard extends SharpDashboard
     public function getFilters(): ?array
     {
         return [
-            'stats-section' => [
-                PeriodRequiredFilter::class,
-            ],
+            PeriodRequiredFilter::class,
+            HiddenFilter::make('post'),
         ];
     }
 
     public function getDashboardCommands(): ?array
     {
         return [
-            'stats-section' => [
-                ExportStatsAsCsvCommand::class,
-            ],
+            ExportStatsAsCsvCommand::class,
         ];
     }
 

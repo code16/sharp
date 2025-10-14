@@ -144,15 +144,10 @@ class SharpShowEntityListField extends SharpShowField
                 'hiddenCommands' => $this->hiddenCommands,
                 'hiddenFilters' => count($this->hiddenFilters)
                     ? collect($this->hiddenFilters)
-                        ->map(function ($value) {
-                            // Filter value can be a Closure
-                            if (is_callable($value)) {
-                                // Call it with current instanceId
-                                return $value(sharp()->context()->instanceId());
-                            }
-
-                            return $value;
-                        })
+                        ->map(fn ($value) => is_callable($value)
+                            ? $value(sharp()->context()->instanceId())
+                            : $value
+                        )
                         ->all()
                     : null,
             ]),
