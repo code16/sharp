@@ -75,7 +75,10 @@ class SharpShowDashboardField extends SharpShowField
                 'hiddenCommands' => $this->hiddenCommands,
                 'hiddenFilters' => count($this->hiddenFilters)
                     ? collect($this->hiddenFilters)
-                        ->map(fn ($value) => is_callable($value) ? $value() : $value)
+                        ->map(fn ($value) => is_callable($value)
+                            ? $value(sharp()->context()->instanceId())
+                            : $value
+                        )
                         ->all()
                     : null,
             ]),

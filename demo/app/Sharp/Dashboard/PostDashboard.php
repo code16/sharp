@@ -46,7 +46,7 @@ class PostDashboard extends SharpDashboard
     {
         return [
             PeriodRequiredFilter::class,
-            HiddenFilter::make('post_id'),
+            HiddenFilter::make('post'),
         ];
     }
 
