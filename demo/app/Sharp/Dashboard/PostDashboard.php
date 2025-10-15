@@ -2,7 +2,6 @@
 
 namespace App\Sharp\Dashboard;
 
-use App\Sharp\Dashboard\Commands\ExportStatsAsCsvCommand;
 use App\Sharp\Utils\Filters\PeriodRequiredFilter;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
@@ -24,22 +23,27 @@ class PostDashboard extends SharpDashboard
                 SharpLineGraphWidget::make('visits_line')
                     ->setTitle('Visits')
                     ->setHeight(200)
-                    ->setShowLegend()
-                    ->setCurvedLines(),
+                    ->setShowLegend(false)
+                    ->setDisplayHorizontalAxisAsTimeline()
             )
             ->addWidget(
-                SharpFigureWidget::make('visits_count')
+                SharpFigureWidget::make('visit_count')
                     ->setTitle('Total visits'),
+            )
+            ->addWidget(
+                SharpFigureWidget::make('page_count')
+                    ->setTitle('Total pageviews'),
             );
     }
 
     protected function buildDashboardLayout(DashboardLayout $dashboardLayout): void
     {
         $dashboardLayout
-            ->addRow(function (DashboardLayoutRow $row) {
-                $row->addWidget(6, 'visits_line')
-                    ->addWidget(6, 'visits_count');
-            });
+            ->addFullWidthWidget('visits_line')
+            ->addRow(fn (DashboardLayoutRow $row) => $row
+                ->addWidget(6, 'visit_count')
+                ->addWidget(6, 'page_count')
+            );
     }
 
     public function getFilters(): ?array
@@ -50,22 +54,13 @@ class PostDashboard extends SharpDashboard
         ];
     }
 
-    public function getDashboardCommands(): ?array
-    {
-        return [
-            ExportStatsAsCsvCommand::class,
-        ];
-    }
-
     protected function buildWidgetsData(): void
     {
-        $visitTotalCount = rand(10, 25000);
+        $visitCount = $this->getStartDate()->diffInDays($this->getEndDate()) * rand(10, 100);
 
         $this
-            ->setFigureData(
-                'visits_count',
-                figure: $visitTotalCount,
-            )
+            ->setFigureData('visit_count', figure: $visitCount)
+            ->setFigureData('page_count', figure: $visitCount * rand(2, 10))
             ->addGraphDataSet(
                 'visits_line',
                 SharpGraphWidgetDataSet::make(collect(CarbonPeriod::create($this->getStartDate(), $this->getEndDate()))

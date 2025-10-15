@@ -68,7 +68,7 @@ class PostShow extends SharpShow
             )
             ->addField(
                 SharpShowDashboardField::make(PostDashboardEntity::class)
-                    ->setLabel('Stats and figures')
+                    ->setLabel('Analytics')
                     ->hideFilterWithValue('post', fn ($instanceId) => $instanceId)
             )
             ->addField(
