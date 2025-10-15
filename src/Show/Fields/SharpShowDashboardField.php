@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Show\Fields;
 
+use Code16\Sharp\Auth\SharpAuthorizationManager;
 use Code16\Sharp\Filters\Filter;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 
@@ -81,6 +82,9 @@ class SharpShowDashboardField extends SharpShowField
                         )
                         ->all()
                     : null,
+                'authorizations' => [
+                    'view' => app(SharpAuthorizationManager::class)->isAllowed('entity', $this->dashboardKey),
+                ],
             ]),
             function (array &$options) {
                 $options['endpointUrl'] = route('code16.sharp.api.dashboard', [
