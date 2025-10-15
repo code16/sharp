@@ -21,7 +21,8 @@ it('allows to define a EEL field', function () {
         ->emptyVisible->toBeFalse()
         ->showCount->toBeFalse()
         ->hiddenCommands->toEqual(['entity' => [], 'instance' => []])
-        ->endpointUrl->toStartWith(route('code16.sharp.api.list', [PersonEntity::$entityKey]));
+        ->endpointUrl->toStartWith(route('code16.sharp.api.list', [PersonEntity::$entityKey]))
+        ->authorizations->toEqual(['view' => true]);
 });
 
 it('allows to define EEL field with default key', function () {
