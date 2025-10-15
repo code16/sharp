@@ -158,14 +158,16 @@
                                         <template v-for="row in column.fields">
                                             <template v-for="fieldLayout in row">
                                                 <template v-if="show.fields[fieldLayout.key]">
-                                                    <EntityList
-                                                        :field="show.fields[fieldLayout.key] as ShowEntityListFieldData"
-                                                        :collapsable="section.collapsable"
-                                                        :value="null"
-                                                        :highlighted-instance-id="highlightedEntityKey === (show.fields[fieldLayout.key] as ShowEntityListFieldData).entityListKey ? highlightedInstanceId : null"
-                                                        :aria-labelledby="`section-${i}-title`"
-                                                        @reordering="onEntityListReordering(fieldLayout.key, $event)"
-                                                    />
+                                                    <template v-if="(show.fields[fieldLayout.key] as ShowEntityListFieldData).authorizations.view">
+                                                        <EntityList
+                                                            :field="show.fields[fieldLayout.key] as ShowEntityListFieldData"
+                                                            :collapsable="section.collapsable"
+                                                            :value="null"
+                                                            :highlighted-instance-id="highlightedEntityKey === (show.fields[fieldLayout.key] as ShowEntityListFieldData).entityListKey ? highlightedInstanceId : null"
+                                                            :aria-labelledby="`section-${i}-title`"
+                                                            @reordering="onEntityListReordering(fieldLayout.key, $event)"
+                                                        />
+                                                    </template>
                                                 </template>
                                                 <template v-else>
                                                     Undefined EntityList <span class="font-mono">{{ fieldLayout.key }}</span>
@@ -179,12 +181,14 @@
                                         <template v-for="row in column.fields">
                                             <template v-for="fieldLayout in row">
                                                 <template v-if="show.fields[fieldLayout.key]">
-                                                    <Dashboard
-                                                        :field="show.fields[fieldLayout.key] as ShowDashboardFieldData"
-                                                        :collapsable="section.collapsable"
-                                                        :value="null"
-                                                        :aria-labelledby="`section-${i}-title`"
-                                                    />
+                                                    <template v-if="(show.fields[fieldLayout.key] as ShowDashboardFieldData).authorizations.view">
+                                                        <Dashboard
+                                                            :field="show.fields[fieldLayout.key] as ShowDashboardFieldData"
+                                                            :collapsable="section.collapsable"
+                                                            :value="null"
+                                                            :aria-labelledby="`section-${i}-title`"
+                                                        />
+                                                    </template>
                                                 </template>
                                                 <template v-else>
                                                     Undefined Dashboard <span class="font-mono">{{ fieldLayout.key }}</span>

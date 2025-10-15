@@ -29,7 +29,7 @@
 
     const props = defineProps<{
         dashboardKey: string,
-        dashboard: Dashboard,
+        dashboard: Dashboard | null,
         filters: FilterManager,
         commands: CommandManager,
         inline?: boolean,

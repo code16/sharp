@@ -3,7 +3,7 @@
 namespace Code16\Sharp\Data\Show\Fields;
 
 use Code16\Sharp\Data\Data;
-use Code16\Sharp\Data\EmbeddedFieldAuthorizationsData;
+use Code16\Sharp\Data\Show\ShowFieldAuthorizationsData;
 use Code16\Sharp\Enums\ShowFieldType;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 use Spatie\TypeScriptTransformer\Attributes\Optional;
@@ -25,7 +25,7 @@ final class ShowDashboardFieldData extends Data
         /** @var string[] */
         public array $hiddenCommands,
         public string $endpointUrl,
-        public EmbeddedFieldAuthorizationsData $authorizations,
+        public ShowFieldAuthorizationsData $authorizations,
         public ?string $label = null,
         /** @var array<string, mixed> */
         public ?array $hiddenFilters = null,
@@ -33,7 +33,7 @@ final class ShowDashboardFieldData extends Data
 
     public static function from(array $field): self
     {
-        $field['authorizations'] = EmbeddedFieldAuthorizationsData::from($field['authorizations']);
+        $field['authorizations'] = ShowFieldAuthorizationsData::from($field['authorizations']);
 
         return new self(...$field);
     }

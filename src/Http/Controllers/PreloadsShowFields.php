@@ -22,7 +22,7 @@ trait PreloadsShowFields
                         ->firstWhere('key', $field->key)
                     );
 
-                if ($section && ! $section->collapsable) {
+                if ($section && ! $section->collapsable && $field->authorizations->view) {
                     app(AddLinkHeadersForPreloadedRequests::class)->preload($field->endpointUrl);
                 }
             }

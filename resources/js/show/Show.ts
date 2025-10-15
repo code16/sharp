@@ -109,7 +109,7 @@ export class Show implements ShowData {
         }
 
         if(field.type === 'entityList' || field.type === 'dashboard') {
-            return true;
+            return field.authorizations.view;
         }
 
         if(field.emptyVisible) {
