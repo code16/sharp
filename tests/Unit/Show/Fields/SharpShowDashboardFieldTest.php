@@ -1,5 +1,6 @@
 <?php
 
+use Code16\Sharp\Auth\SharpAuthorizationManager;
 use Code16\Sharp\Show\Fields\SharpShowDashboardField;
 use Code16\Sharp\Tests\Fixtures\Entities\DashboardEntity;
 
@@ -70,4 +71,24 @@ it('handles hideDashboardCommand', function () {
     expect($field->toArray()['hiddenCommands'])->toEqual(
         ['c1', 'c2', 'c3']
     );
+});
+
+it('handles authorizations', function () {
+    $field = SharpShowDashboardField::make(DashboardEntity::$entityKey);
+
+    app()->bind(SharpAuthorizationManager::class, fn () => new class() extends SharpAuthorizationManager
+    {
+        public function __construct() {}
+
+        public function isAllowed(string $ability, string $entityKey, ?string $instanceId = null): bool
+        {
+            if ($ability == 'entity' && $entityKey == DashboardEntity::$entityKey) {
+                return false;
+            }
+
+            return true;
+        }
+    });
+
+    expect($field->toArray()['authorizations']['view'])->toBeFalse();
 });

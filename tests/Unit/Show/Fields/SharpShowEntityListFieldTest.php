@@ -1,5 +1,6 @@
 <?php
 
+use Code16\Sharp\Auth\SharpAuthorizationManager;
 use Code16\Sharp\Show\Fields\SharpShowEntityListField;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 
@@ -131,4 +132,24 @@ it('handles hideInstanceCommands', function () {
     expect($field->toArray()['hiddenCommands']['instance'])->toEqual(
         ['c1', 'c2', 'c3'],
     );
+});
+
+it('handles authorizations', function () {
+    $field = SharpShowEntityListField::make(PersonEntity::$entityKey);
+
+    app()->bind(SharpAuthorizationManager::class, fn () => new class() extends SharpAuthorizationManager
+    {
+        public function __construct() {}
+
+        public function isAllowed(string $ability, string $entityKey, ?string $instanceId = null): bool
+        {
+            if ($ability == 'entity' && $entityKey == PersonEntity::$entityKey) {
+                return false;
+            }
+
+            return true;
+        }
+    });
+
+    expect($field->toArray()['authorizations']['view'])->toBeFalse();
 });
