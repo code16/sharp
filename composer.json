@@ -1,6 +1,7 @@
 {
     "name": "code16/sharp",
     "description": "Laravel Content Management Framework",
+    "license": "MIT",
     "authors": [
         {
             "name": "Philippe Lonchampt",
@@ -60,7 +61,7 @@
         }
     },
     "scripts": {
-        "test": "vendor/bin/testbench package:test --parallel",
+        "test": "vendor/bin/pest --parallel",
         "typescript:generate": "php demo/artisan ziggy:generate --types-only; php demo/artisan typescript:transform",
         "post-autoload-dump": [
             "git config core.hooksPath scripts/hooks"

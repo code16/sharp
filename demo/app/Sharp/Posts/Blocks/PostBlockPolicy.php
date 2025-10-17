@@ -9,15 +9,29 @@ use Code16\Sharp\Auth\SharpEntityPolicy;
 
 class PostBlockPolicy extends SharpEntityPolicy
 {
+    public function entity($user): bool
+    {
+        // Only authorized in EEL case
+        return sharp()->context()->breadcrumb()->previousShowSegment(PostEntity::class) !== null;
+    }
+
     public function view($user, $instanceId): bool
     {
-        return $user->isAdmin()
-            || PostBlock::find($instanceId)?->post?->author_id === $user->id;
+        $block = sharp()
+            ->context()
+            ->findListInstance($instanceId, fn ($postBlockId) => PostBlock::find($postBlockId));
+
+        return $block && ($user->isAdmin() || $block->post?->author_id === $user->id);
     }
 
     public function create($user): bool
     {
-        return $user->isAdmin()
-            || Post::find(sharp()->context()->breadcrumb()->previousShowSegment(PostEntity::class)->instanceId())?->author_id === $user->id;
+        if (! $postId = sharp()->context()->breadcrumb()->previousShowSegment(PostEntity::class)?->instanceId()) {
+            return false;
+        }
+
+        $post = Post::find($postId);
+
+        return $post && ($user->isAdmin() || $post->author_id === $user->id);
     }
 }
