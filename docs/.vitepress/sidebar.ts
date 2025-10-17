@@ -57,7 +57,7 @@ export function sidebar(): DefaultTheme.SidebarItem[] {
                 { text: 'Picture', link: '/guide/show-fields/picture.md' },
                 { text: 'List', link: '/guide/show-fields/list.md' },
                 { text: 'File', link: '/guide/show-fields/file.md' },
-                { text: 'Embedded EntityList', link: '/guide/show-fields/embedded-entity-list.md' },
+                { text: 'Entity List', link: '/guide/show-fields/entity-list.md' },
                 // { text: 'Custom show field', link: '/guide/custom-show-fields.md' }
             ]
         },

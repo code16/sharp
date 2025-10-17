@@ -202,5 +202,5 @@ You must remove all `->declareEntity()` calls in order to use `->declareEntityRe
 :::
 
 ::: warning
-If you are using a custom entity resolver, you won’t be able to use the `SharpEntity` classes in the [menu](building-menu.md), or in [`LinkTo` links](link-to.md), or for [embedded entity lists](show-fields/embedded-entity-list.md): you will have to use the entity key instead. For instance: `LinkToForm::make('products', $id)`.
+If you are using a custom entity resolver, you won’t be able to use the `SharpEntity` classes in the [menu](building-menu.md), or in [`LinkTo` links](link-to.md), or for [Entity List fields](show-fields/entity-list.md): you will have to use the entity key instead. For instance: `LinkToForm::make('products', $id)`.
 :::

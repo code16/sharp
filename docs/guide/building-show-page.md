@@ -56,7 +56,7 @@ class MyShow extends SharpShow
 
 Each available Show field is detailed below; here are the attributes they all share :
 
-- `setShowIfEmpty(bool $show = true): self`: by default, an empty field (meaning: with null or empty data) is not displayed at all in the Show UI. You can change this behaviour with this attribute. This method has no impact for [embedded EntityList](show-fields/embedded-entity-list.md).
+- `setShowIfEmpty(bool $show = true): self`: by default, an empty field (meaning: with null or empty data) is not displayed at all in the Show UI. You can change this behaviour with this attribute. This method has no impact for the [Entity List field](show-fields/entity-list.md).
 
 #### Available simple Show fields
 
@@ -95,9 +95,9 @@ Notice that you have three possibilities for the actual code of this Entity List
 
 As always with Sharp, implementation is up to you.
 
-The next thing to do is to scope the data of the embedded Entity List. In our case, we want to display and interact only with the products for this order... For this and more on personalization, refer to the detailed documentation of this field:
+The next thing to do is to scope the data of the Entity List field. In our case, we want to display and interact only with the products for this order... For this and more on personalization, refer to the detailed documentation of this field:
 
-- [embedded EntityList](show-fields/embedded-entity-list.md)
+- [Entity List field](show-fields/entity-list.md)
 
 ### `buildShowLayout(ShowLayout $showLayout): void`
 
