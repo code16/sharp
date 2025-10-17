@@ -10,4 +10,5 @@ enum ShowFieldType: string
     case Picture = 'picture';
     case Text = 'text';
     case EntityList = 'entityList';
+    case Dashboard = 'dashboard';
 }

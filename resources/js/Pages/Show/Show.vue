@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { computed, provide, ref } from "vue";
-    import { BreadcrumbData, CommandData, ShowData, ShowEntityListFieldData } from "@/types";
+    import { BreadcrumbData, CommandData, ShowDashboardFieldData, ShowData, ShowEntityListFieldData } from "@/types";
     import WithCommands from "@/commands/components/WithCommands.vue";
     import Section from "@/show/components/Section.vue";
     import { Button } from '@/components/ui/button';
@@ -23,7 +23,7 @@
     import FieldGridRow from "@/components/ui/FieldGridRow.vue";
     import FieldGridColumn from "@/components/ui/FieldGridColumn.vue";
     import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-    import EntityList from "@/show/components/fields/entity-list/EntityList.vue";
+    import EntityList from "@/show/components/fields/EntityList.vue";
     import { ChevronsUpDown } from "lucide-vue-next";
     import StickyTop from "@/components/StickyTop.vue";
     import { Select, SelectContent, SelectItem } from "@/components/ui/select";
@@ -45,6 +45,7 @@
     import RootCardHeader from "@/components/ui/RootCardHeader.vue";
     import StateBadge from "@/components/ui/StateBadge.vue";
     import { sanitize } from "@/utils/sanitize";
+    import Dashboard from "@/show/components/fields/Dashboard.vue";
 
     const props = defineProps<{
         show: ShowData,
@@ -157,17 +158,40 @@
                                         <template v-for="row in column.fields">
                                             <template v-for="fieldLayout in row">
                                                 <template v-if="show.fields[fieldLayout.key]">
-                                                    <EntityList
-                                                        :field="show.fields[fieldLayout.key] as ShowEntityListFieldData"
-                                                        :collapsable="section.collapsable"
-                                                        :value="null"
-                                                        :highlighted-instance-id="highlightedEntityKey === (show.fields[fieldLayout.key] as ShowEntityListFieldData).entityListKey ? highlightedInstanceId : null"
-                                                        :aria-labelledby="`section-${i}-title`"
-                                                        @reordering="onEntityListReordering(fieldLayout.key, $event)"
-                                                    />
+                                                    <template v-if="(show.fields[fieldLayout.key] as ShowEntityListFieldData).authorizations.view">
+                                                        <EntityList
+                                                            :field="show.fields[fieldLayout.key] as ShowEntityListFieldData"
+                                                            :collapsable="section.collapsable"
+                                                            :value="null"
+                                                            :highlighted-instance-id="highlightedEntityKey === (show.fields[fieldLayout.key] as ShowEntityListFieldData).entityListKey ? highlightedInstanceId : null"
+                                                            :aria-labelledby="`section-${i}-title`"
+                                                            @reordering="onEntityListReordering(fieldLayout.key, $event)"
+                                                        />
+                                                    </template>
                                                 </template>
                                                 <template v-else>
                                                     Undefined EntityList <span class="font-mono">{{ fieldLayout.key }}</span>
+                                                </template>
+                                            </template>
+                                        </template>
+                                    </template>
+                                </template>
+                                <template v-else-if="show.sectionHasField(section, 'dashboard')">
+                                    <template v-for="column in section.columns">
+                                        <template v-for="row in column.fields">
+                                            <template v-for="fieldLayout in row">
+                                                <template v-if="show.fields[fieldLayout.key]">
+                                                    <template v-if="(show.fields[fieldLayout.key] as ShowDashboardFieldData).authorizations.view">
+                                                        <Dashboard
+                                                            :field="show.fields[fieldLayout.key] as ShowDashboardFieldData"
+                                                            :collapsable="section.collapsable"
+                                                            :value="null"
+                                                            :aria-labelledby="`section-${i}-title`"
+                                                        />
+                                                    </template>
+                                                </template>
+                                                <template v-else>
+                                                    Undefined Dashboard <span class="font-mono">{{ fieldLayout.key }}</span>
                                                 </template>
                                             </template>
                                         </template>
@@ -215,7 +239,7 @@
                                                         </div>
                                                     </template>
                                                     <template v-if="i == 0">
-                                                        <div class="ml-auto flex flex-wrap -my-1 justify-end gap-3"
+                                                        <div class="ml-auto flex flex-wrap -my-1 justify-end gap-2"
                                                             :class="{ 'invisible': collapsed }"
                                                             role="group"
                                                             :aria-label="__('sharp::show.section_menu.aria_label', { title: show.getTitle(locale) })"
@@ -257,7 +281,7 @@
                                                                 </Select>
                                                             </template>
                                                             <template v-if="(show.allowedInstanceCommands?.flat().length || show.authorizations.delete || show.config.state && show.config.state.authorization) || show.authorizations.update">
-                                                                <div class="flex gap-3">
+                                                                <div class="flex gap-2">
                                                                     <template v-if="show.allowedInstanceCommands?.flat().length || show.authorizations.delete || show.config.state && show.config.state.authorization">
                                                                         <DropdownMenu>
                                                                             <DropdownMenuTrigger as-child>

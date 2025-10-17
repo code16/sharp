@@ -212,6 +212,16 @@ declare module 'ziggy-js' {
             "name": "instanceId"
         }
     ],
+    "code16.sharp.api.dashboard": [
+        {
+            "name": "dashboardKey"
+        }
+    ],
+    "code16.sharp.api.dashboard.filters.store": [
+        {
+            "name": "dashboardKey"
+        }
+    ],
     "code16.sharp.api.show.command.instance": [
         {
             "name": "entityKey"

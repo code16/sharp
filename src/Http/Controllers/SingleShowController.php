@@ -11,7 +11,7 @@ use Inertia\Inertia;
 class SingleShowController extends SharpProtectedController
 {
     use HandlesSharpNotificationsInRequest;
-    use PreloadsShowEntityLists;
+    use PreloadsShowFields;
 
     public function show(EntityKey $entityKey)
     {

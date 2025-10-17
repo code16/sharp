@@ -7,32 +7,23 @@ use Code16\Sharp\Data\Show\ShowFieldAuthorizationsData;
 use Code16\Sharp\Enums\ShowFieldType;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 use Spatie\TypeScriptTransformer\Attributes\Optional;
-use Spatie\TypeScriptTransformer\Attributes\TypeScriptType;
 
 /**
  * @internal
  */
-final class ShowEntityListFieldData extends Data
+final class ShowDashboardFieldData extends Data
 {
     #[Optional]
     public null $value;
 
     public function __construct(
         public string $key,
-        #[LiteralTypeScriptType('"'.ShowFieldType::EntityList->value.'"')]
+        #[LiteralTypeScriptType('"'.ShowFieldType::Dashboard->value.'"')]
         public ShowFieldType $type,
         public bool $emptyVisible,
-        public string $entityListKey,
-        #[TypeScriptType([
-            'instance' => 'string[]',
-            'entity' => 'string[]',
-        ])]
+        public string $dashboardKey,
+        /** @var string[] */
         public array $hiddenCommands,
-        public bool $showEntityState,
-        public bool $showReorderButton,
-        public bool $showCreateButton,
-        public bool $showSearchField,
-        public bool $showCount,
         public string $endpointUrl,
         public ShowFieldAuthorizationsData $authorizations,
         public ?string $label = null,

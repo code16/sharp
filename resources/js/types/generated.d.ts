@@ -90,6 +90,9 @@ export type DashboardData = {
   data: { [key: string]: any };
   filterValues: FilterValuesData;
   pageAlert: PageAlertData | null;
+  query: {
+    [filterKey: string]: string;
+  };
 };
 export type DashboardLayoutData = {
   sections: Array<DashboardLayoutSectionData>;
@@ -136,6 +139,9 @@ export type EmbedFormData = {
   data: { [key: string]: FormFieldData["value"] };
   fields: { [key: string]: FormFieldData };
   layout: FormLayoutData | null;
+};
+export type EmbeddedFieldAuthorizationsData = {
+  view: boolean;
 };
 export type EntityListAuthorizationsData = {
   create: boolean;
@@ -797,6 +803,18 @@ export type ShowCustomFieldData = {
   type: string;
   emptyVisible: boolean;
 };
+export type ShowDashboardFieldData = {
+  value?: null;
+  key: string;
+  type: "dashboard";
+  emptyVisible: boolean;
+  dashboardKey: string;
+  hiddenCommands: Array<string>;
+  endpointUrl: string;
+  authorizations: EmbeddedFieldAuthorizationsData;
+  label: string | null;
+  hiddenFilters: { [key: string]: any } | null;
+};
 export type ShowData = {
   title: string | { [locale: string]: string } | null;
   authorizations: InstanceAuthorizationsData;
@@ -820,10 +838,12 @@ export type ShowEntityListFieldData = {
   showSearchField: boolean;
   showCount: boolean;
   endpointUrl: string;
+  authorizations: EmbeddedFieldAuthorizationsData;
   label: string | null;
   hiddenFilters: { [key: string]: any } | null;
 };
 export type ShowFieldData =
+  | ShowDashboardFieldData
   | ShowEntityListFieldData
   | ShowFileFieldData
   | ShowListFieldData
@@ -835,7 +855,8 @@ export type ShowFieldType =
   | "list"
   | "picture"
   | "text"
-  | "entityList";
+  | "entityList"
+  | "dashboard";
 export type ShowFileFieldData = {
   value?: {
     disk: string;
