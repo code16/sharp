@@ -756,28 +756,30 @@
                                                             </DropdownMenu>
                                                         </template>
                                                         <template v-else-if="field.type === 'badge'">
-                                                            <TooltipProvider>
-                                                                <Tooltip :disabled="!field.tooltip" :delay-duration="0">
-                                                                    <TooltipTrigger as-child>
-                                                                        <div :class="field.tooltip ? 'relative z-2' : ''">
-                                                                            <template v-if="field.tooltip">
-                                                                                <div class="absolute -inset-2"></div>
-                                                                            </template>
-                                                                            <template v-if="item[field.key] === true">
-                                                                                <div class="size-2.5 bg-primary rounded-full"></div>
-                                                                            </template>
-                                                                            <template v-else-if="typeof item[field.key] === 'number' || (typeof item[field.key] === 'string' && item[field.key].length)">
-                                                                                <Badge class="px-1.5 justify-center min-w-5.5">
-                                                                                    {{ item[field.key] }}
-                                                                                </Badge>
-                                                                            </template>
-                                                                        </div>
-                                                                    </TooltipTrigger>
-                                                                    <TooltipContent :side-offset="10">
-                                                                        <div v-html="field.tooltip"></div>
-                                                                    </TooltipContent>
-                                                                </Tooltip>
-                                                            </TooltipProvider>
+                                                            <template v-if="entityList.instanceHasBadge(item, field)">
+                                                                <TooltipProvider>
+                                                                    <Tooltip :disabled="!field.tooltip" :delay-duration="0">
+                                                                        <TooltipTrigger as-child>
+                                                                            <div :class="field.tooltip ? 'relative z-2' : ''">
+                                                                                <template v-if="field.tooltip">
+                                                                                    <div class="absolute -inset-2"></div>
+                                                                                </template>
+                                                                                <template v-if="item[field.key] === true">
+                                                                                    <div class="size-2.5 bg-primary rounded-full"></div>
+                                                                                </template>
+                                                                                <template v-else>
+                                                                                    <Badge class="px-1.5 justify-center min-w-5.5">
+                                                                                        {{ item[field.key] }}
+                                                                                    </Badge>
+                                                                                </template>
+                                                                            </div>
+                                                                        </TooltipTrigger>
+                                                                        <TooltipContent :side-offset="10">
+                                                                            <div v-html="field.tooltip"></div>
+                                                                        </TooltipContent>
+                                                                    </Tooltip>
+                                                                </TooltipProvider>
+                                                            </template>
                                                         </template>
                                                         <template v-else>
                                                             <template v-if="field.html && typeof item[field.key] === 'string'">
