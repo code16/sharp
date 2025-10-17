@@ -6,7 +6,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="robots" content="noindex, nofollow" />
 
-        <script>
+        <script @if($nonce = \Illuminate\Support\Facades\Vite::cspNonce()) nonce="{{ $nonce }}" @endif>
             const preference = localStorage.getItem('vueuse-color-scheme') || 'auto';
             if(preference === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches || preference === 'dark') {
                 document.documentElement.classList.add('dark');
@@ -27,7 +27,7 @@
             config()->set('ziggy', ['only' => 'code16.sharp.*', 'skip-route-function' => true]);
             \Tighten\Ziggy\BladeRouteGenerator::$generated = false; // Don't generate "merge script" (https://github.com/code16/sharp/issues/649)
         @endphp
-        @routes
+        @routes(nonce: \Illuminate\Support\Facades\Vite::cspNonce())
         @inertiaHead
 
         <x-sharp::vite-wrapper>
