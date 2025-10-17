@@ -19,7 +19,7 @@
         "spatie/laravel-translatable": "^6.0",
         "symfony/html-sanitizer": "^7.3",
         "technikermathe/blade-lucide-icons": "^3.98",
-        "tightenco/ziggy": "^1.8"
+        "tightenco/ziggy": "^2.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

@@ -25,7 +25,7 @@
 
         @php
             config()->set('ziggy', ['only' => 'code16.sharp.*', 'skip-route-function' => true]);
-            \Tightenco\Ziggy\BladeRouteGenerator::$generated = false; // Don't generate "merge script" (https://github.com/code16/sharp/issues/649)
+            \Tighten\Ziggy\BladeRouteGenerator::$generated = false; // Don't generate "merge script" (https://github.com/code16/sharp/issues/649)
         @endphp
         @routes
         @inertiaHead
