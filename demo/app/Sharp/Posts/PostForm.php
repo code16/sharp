@@ -30,6 +30,7 @@ use Code16\Sharp\Form\Layout\FormLayoutFieldset;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Blade;
 
 class PostForm extends SharpForm
@@ -130,8 +131,8 @@ class PostForm extends SharpForm
                             Including {{ count($attachments) }} attachments
                             ({{ count($fileAttachments) }} files, {{ count($linkAttachments) }} links).
                         blade, [
-                            'published_at' => \Carbon\Carbon::parse($data['published_at'])->isoFormat('LLLL'),
-                            'author' => \App\Models\User::find($data['author_id']),
+                            'published_at' => isset($data['published_at']) ? Carbon::parse($data['published_at'])->isoFormat('LLLL') : null,
+                            'author' => isset($data['author_id']) ? User::find($data['author_id']) : null,
                             'attachments' => $data['attachments'] ?? [],
                             'linkAttachments' => collect($data['attachments'] ?? [])->where('is_link', true),
                             'fileAttachments' => collect($data['attachments'] ?? [])->where('is_link', false),
