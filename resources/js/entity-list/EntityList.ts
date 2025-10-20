@@ -148,13 +148,17 @@ export class EntityList implements EntityListData {
         );
     }
 
+    instanceHasBadge(instance: EntityListInstance, field: EntityListFieldData): boolean {
+        return (
+            instance[field.key] === true
+            || typeof instance[field.key] === 'number'
+            || typeof instance[field.key] === 'string' && instance[field.key].length > 0
+        );
+    }
+
     fieldShouldBeVisible(field: EntityListFieldData, showEntityState: boolean): boolean {
         if(field.type === 'badge') {
-            return this.data.some(item =>
-                item[field.key] === true
-                || typeof item[field.key] === 'number'
-                || typeof item[field.key] === 'string' && item[field.key].length > 0
-            );
+            return this.data.some(item => this.instanceHasBadge(item, field));
         }
 
         if(field.type === 'state') {
