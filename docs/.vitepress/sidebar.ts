@@ -58,6 +58,7 @@ export function sidebar(): DefaultTheme.SidebarItem[] {
                 { text: 'List', link: '/guide/show-fields/list.md' },
                 { text: 'File', link: '/guide/show-fields/file.md' },
                 { text: 'Entity List', link: '/guide/show-fields/entity-list.md' },
+                { text: 'Dashboard', link: '/guide/show-fields/dashboard.md' },
                 // { text: 'Custom show field', link: '/guide/custom-show-fields.md' }
             ]
         },

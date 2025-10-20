@@ -138,6 +138,29 @@ Use it to show or hide the search field in this particular Entity List (useful w
 
 Use it to show or hide the count of items in the Entity List.
 
+## Display in layout
+
+To display your entity list in your show page's layout, you have to use the `addEntityListSection()` method in your Show Page's `buildShowLayout()` method.
+
+```php
+protected function buildShowLayout(ShowLayout $showLayout): void
+    {
+        $showLayout
+            ->addSection(function (ShowLayoutSection $section) {
+                $section
+                    ->addColumn(7, function (ShowLayoutColumn $column) {
+                        $column
+                            ->withFields(categories: 5, author: 7)
+                           // ...
+                    })
+                    ->addColumn(5, function (ShowLayoutColumn $column) {
+                        // ...
+                    });
+            })
+            ->addEntityListSection(ProductEntity::class);
+    }
+```
+
 ## Transformer
 
 There is no transformer, since Sharp will NOT look for an attribute in the instance sent. The data of the Entity List is brought by a distinct XHR call, the same Sharp will use for any Entity List.
