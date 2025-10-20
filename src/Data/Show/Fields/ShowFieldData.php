@@ -7,7 +7,8 @@ use Code16\Sharp\Enums\ShowFieldType;
 use Spatie\TypeScriptTransformer\Attributes\TypeScriptType;
 
 #[TypeScriptType(
-    ShowEntityListFieldData::class
+    ShowDashboardFieldData::class
+    .'|'.ShowEntityListFieldData::class
 //    .'|'.ShowCustomFieldData::class
     .'|'.ShowFileFieldData::class
     .'|'.ShowListFieldData::class
@@ -26,6 +27,7 @@ final class ShowFieldData extends Data
         $field['type'] = ShowFieldType::tryFrom($field['type']) ?? $field['type'];
 
         return match ($field['type']) {
+            ShowFieldType::Dashboard => ShowDashboardFieldData::from($field),
             ShowFieldType::EntityList => ShowEntityListFieldData::from($field),
             ShowFieldType::File => ShowFileFieldData::from($field),
             ShowFieldType::List => ShowListFieldData::from($field),

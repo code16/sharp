@@ -5,6 +5,7 @@ namespace App\Sharp\Posts;
 use App\Models\Post;
 use App\Sharp\Entities\AuthorEntity;
 use App\Sharp\Entities\PostBlockEntity;
+use App\Sharp\Entities\PostDashboardEntity;
 use App\Sharp\Entities\PostEntity;
 use App\Sharp\Posts\Commands\EvaluateDraftPostWizardCommand;
 use App\Sharp\Posts\Commands\PreviewPostCommand;
@@ -14,6 +15,7 @@ use App\Sharp\Utils\Embeds\RelatedPostEmbed;
 use App\Sharp\Utils\Embeds\TableOfContentsEmbed;
 use App\Sharp\Utils\Filters\CategoryFilter;
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
+use Code16\Sharp\Show\Fields\SharpShowDashboardField;
 use Code16\Sharp\Show\Fields\SharpShowEntityListField;
 use Code16\Sharp\Show\Fields\SharpShowFileField;
 use Code16\Sharp\Show\Fields\SharpShowListField;
@@ -65,6 +67,11 @@ class PostShow extends SharpShow
                     )
             )
             ->addField(
+                SharpShowDashboardField::make(PostDashboardEntity::class)
+                    ->setLabel('Analytics')
+                    ->hideFilterWithValue('post', fn ($instanceId) => $instanceId)
+            )
+            ->addField(
                 SharpShowEntityListField::make(PostBlockEntity::class)
                     ->setLabel('Blocks')
                     ->hideFilterWithValue('post', fn ($instanceId) => $instanceId)
@@ -94,6 +101,7 @@ class PostShow extends SharpShow
                         $column->withField('content');
                     });
             })
+            ->addDashboardSection(PostDashboardEntity::class)
             ->addEntityListSection(PostBlockEntity::class);
     }
 

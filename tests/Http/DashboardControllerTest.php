@@ -14,12 +14,12 @@ use Code16\Sharp\Utils\PageAlerts\PageAlert;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
-    sharp()->config()->addEntity('stats', DashboardEntity::class);
+    sharp()->config()->declareEntity(DashboardEntity::class);
     login();
 });
 
 it('gets dashboard widgets, layout and data', function () {
-    fakeShowFor('stats', new class() extends SharpDashboard
+    fakeDashboardFor(DashboardEntity::class, new class() extends SharpDashboard
     {
         protected function buildWidgets(WidgetsContainer $widgetsContainer): void
         {
@@ -56,7 +56,7 @@ it('gets dashboard widgets, layout and data', function () {
 
     $this->withoutExceptionHandling();
 
-    $this->get('/sharp/s-dashboard/stats')
+    $this->get('/sharp/s-dashboard/'.DashboardEntity::$entityKey)
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->has('dashboard', fn (Assert $dashboard) => $dashboard
@@ -79,7 +79,7 @@ it('gets dashboard widgets, layout and data', function () {
 
 it('allows to configure a page alert', function () {
     $this->withoutExceptionHandling();
-    fakeShowFor('stats', new class() extends TestDashboard
+    fakeDashboardFor(DashboardEntity::class, new class() extends TestDashboard
     {
         public function buildPageAlert(PageAlert $pageAlert): void
         {
@@ -90,7 +90,7 @@ it('allows to configure a page alert', function () {
         }
     });
 
-    $this->get('/sharp/s-dashboard/stats')
+    $this->get('/sharp/s-dashboard/'.DashboardEntity::$entityKey)
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('dashboard.pageAlert', [
@@ -104,7 +104,7 @@ it('allows to configure a page alert', function () {
 });
 
 it('allows to configure a page alert with a closure as content', function () {
-    fakeShowFor('stats', new class() extends TestDashboard
+    fakeDashboardFor(DashboardEntity::class, new class() extends TestDashboard
     {
         public function buildPageAlert(PageAlert $pageAlert): void
         {
@@ -127,7 +127,7 @@ it('allows to configure a page alert with a closure as content', function () {
         }
     });
 
-    $this->get('/sharp/s-dashboard/stats')
+    $this->get('/sharp/s-dashboard/'.DashboardEntity::$entityKey)
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('dashboard.pageAlert', [

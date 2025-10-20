@@ -12,7 +12,7 @@ use Inertia\Inertia;
 class ShowController extends SharpProtectedController
 {
     use HandlesSharpNotificationsInRequest;
-    use PreloadsShowEntityLists;
+    use PreloadsShowFields;
 
     public function show(string $parentUri, EntityKey $entityKey, string $instanceId)
     {
