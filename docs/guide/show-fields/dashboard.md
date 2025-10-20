@@ -1,6 +1,8 @@
 # Dashboard
 
-Class: `Code16\Sharp\Show\Fields\SharpShowDashboardField`
+Class: `Code16\Sharp\Show\Fields\SharpShowDashboardField`.
+
+The field allows you to integrate a [Dashboard](../building-dashboard.md) into your Show Page.
 
 ## Constructor
 

@@ -2,6 +2,8 @@
 
 Class: `Code16\Sharp\Show\Fields\SharpShowEntityListField`
 
+The field allows you to integrate an [Entity List](../building-entity-list.md) into your Show Page.
+
 ## Constructor
 
 This field needs, as first parameter, either the entity key or the `SharpEntity` class that declares the Entity List which will be included in the Show Page.
