@@ -38,18 +38,14 @@ export class Dashboard {
     }
 
     get visibleCommands(): ConfigCommandsData {
-        if(this.hiddenCommands) {
-            return Object.fromEntries(
-                Object.entries(this.config.commands ?? {}).map(([key, commands]) => [
-                    key,
-                    commands.map(group => group.filter(command => {
-                        return !this.hiddenCommands.includes(command.key);
-                    }))
-                ])
-            );
-        }
-
-        return this.config.commands;
+        return Object.fromEntries(
+            Object.entries(this.config.commands ?? {}).map(([key, commands]) => [
+                key,
+                commands.map(group => group.filter(command => {
+                    return command.authorization && !this.hiddenCommands?.includes(command.key);
+                }))
+            ])
+        );
     }
 
     sectionVisibleFilters(section: DashboardLayoutSectionData) {
