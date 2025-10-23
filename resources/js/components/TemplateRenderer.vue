@@ -10,25 +10,28 @@
 </script>
 <script lang="ts" setup>
     import { computed } from 'vue';
+    import type { Component } from 'vue';
 
     const props = defineProps<{
-        templateData?: Record<string, any>,
-        templateProps?: string[],
         template: string,
+        components?: Record<string, Component>,
     }>();
 
     const component = computed(() => ({
-        components,
-        template: `<div class="SharpTemplate">${props.template ?? ''}</div>`,
-        props: [
-            ...(props.templateProps || []),
-            ...Object.keys(props.templateData ?? {}),
-        ],
+        components: {
+            ...components,
+            ...props.components,
+        },
+        template: `<div data-sharp-template>${sanitizeForVue(props.template ?? '')}</div>`,
     }));
+
+    function sanitizeForVue(template: string) {
+        return template.replaceAll('{{', '&lcub;&lcub;').replaceAll('}}', '&rcub;&rcub;');
+    }
 </script>
 
 <template>
-    <component :is="component" v-bind="templateData ?? {}">
+    <component :is="component">
         <slot />
     </component>
 </template>

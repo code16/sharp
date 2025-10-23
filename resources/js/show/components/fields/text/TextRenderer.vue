@@ -4,7 +4,7 @@
     import Html from "@/show/components/fields/text/nodes/Html.vue";
     import { ShowTextFieldData } from "@/types";
     import Embed from "@/show/components/fields/text/nodes/Embed.vue";
-    import { components } from '@/components/TemplateRenderer.vue';
+    import TemplateRenderer from '@/components/TemplateRenderer.vue';
 
     const props = defineProps<{
         field: ShowTextFieldData,
@@ -21,31 +21,27 @@
             dom.content.removeChild(htmlNode);
         });
         return dom.innerHTML;
-    })
+    });
 
-    const component = computed<Component>(() => ({
-        template: `<div>${formattedContent.value}</div>`,
-        components: {
-            ...components,
-            'x-sharp-file': File,
-            'x-sharp-image': File,
-            'html-content': Html,
-            ...Object.fromEntries(
-                Object.entries(props.field.embeds ?? {})
-                    .map(([embedKey, embed]) => [
-                        embed.tag,
-                        {
-                            template: '<Embed :embed="embed" v-bind="$attrs"></Embed>',
-                            components: { Embed },
-                            data: () => ({ embed }),
-                        }
-                    ])
-            ),
-        },
+    const components = computed(() => ({
+        'x-sharp-file': File,
+        'x-sharp-image': File,
+        'html-content': Html,
+        ...Object.fromEntries(
+            Object.entries(props.field.embeds ?? {})
+                .map(([embedKey, embed]) => [
+                    embed.tag,
+                    {
+                        template: '<Embed :embed="embed" v-bind="$attrs"></Embed>',
+                        components: { Embed },
+                        data: () => ({ embed }),
+                    }
+                ])
+        ),
     }));
 </script>
 
 <template>
-    <component :is="component" />
+    <TemplateRenderer :template="formattedContent" :components="components" />
 </template>
 
