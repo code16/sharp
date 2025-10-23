@@ -44,4 +44,3 @@
 <template>
     <TemplateRenderer :template="formattedContent" :components="components" />
 </template>
-
