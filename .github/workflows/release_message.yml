@@ -3,6 +3,17 @@ on:
   release:
     types: [published]
   workflow_dispatch:
+    inputs:
+      tag_name:
+        description: "Tag de la release"
+        required: true
+      html_url:
+        description: "URL de la release"
+        required: false
+      description:
+        description: "Description du message"
+        required: false
+        default: "Release triggered manually"
 
 jobs:
   github-releases-to-discord:
@@ -11,9 +22,27 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Set release info
+        id: vars
+        run: |
+          if [ "${{ github.event_name }}" = "release" ]; then
+            echo "tag_name=${{ github.event.release.tag_name }}" >> $GITHUB_OUTPUT
+            echo "html_url=${{ github.event.release.html_url }}" >> $GITHUB_OUTPUT
+            echo "description=${{ github.event.release.body }}" >> $GITHUB_OUTPUT
+          else
+            echo "tag_name=${{ github.event.inputs.tag_name }}" >> $GITHUB_OUTPUT
+            echo "html_url=${{ github.event.inputs.html_url || '' }}" >> $GITHUB_OUTPUT
+            echo "description=${{ github.event.inputs.description }}" >> $GITHUB_OUTPUT
+          fi
+
       - name: Send Discord Release message
-        uses: SethCohen/github-releases-to-discord@v1
+        uses: sarisia/actions-status-discord@v1
         with:
           username: "Sharp"
-          webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          color: '3447003'
+          webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          color: 0x007BFF
+          title: "A new version of `code16/sharp` has been released!"
+          url: ${{ steps.vars.outputs.html_url }}
+          description: |
+            Version `${{ steps.vars.outputs.tag_name }}`
+            ${{ steps.vars.outputs.description }}
