@@ -39,6 +39,8 @@ jobs:
         uses: sarisia/actions-status-discord@v1
         with:
           username: "Sharp"
+          nocontext: true
+          noprefix: true
           webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
           color: 0x007BFF
           title: "A new version of `code16/sharp` has been released!"
