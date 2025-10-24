@@ -1,16 +1,9 @@
-<script lang="ts">
-    import { Card, CardContent } from '@/components/ui/card';
-    import { Badge } from '@/components/ui/badge';
-
-    export const components = {
-        'sharp-card': Card,
-        'sharp-card-content': CardContent,
-        'sharp-badge': Badge,
-    };
-</script>
 <script lang="ts" setup>
     import { computed } from 'vue';
     import type { Component } from 'vue';
+    import { Card, CardContent } from "@/components/ui/card";
+    import { Badge } from "@/components/ui/badge";
+    import { sanitizeVueTemplate } from "@/utils/sanitize";
 
     const props = defineProps<{
         template: string,
@@ -19,15 +12,13 @@
 
     const component = computed(() => ({
         components: {
-            ...components,
+            'sharp-card': Card,
+            'sharp-card-content': CardContent,
+            'sharp-badge': Badge,
             ...props.components,
         },
-        template: `<div data-sharp-template>${sanitizeForVue(props.template ?? '')}</div>`,
+        template: `<div data-sharp-template>${sanitizeVueTemplate(props.template ?? '')}</div>`,
     }));
-
-    function sanitizeForVue(template: string) {
-        return template.replaceAll('{{', '&lcub;&lcub;').replaceAll('}}', '&rcub;&rcub;');
-    }
 </script>
 
 <template>

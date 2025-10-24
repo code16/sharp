@@ -13,3 +13,8 @@ export function sanitize(html: string | null) {
         })
         : html;
 }
+
+// Separate function that sanitizes all rendered Vue template, '{{' & '}}' should always be escaped
+export function sanitizeVueTemplate(template: string) {
+    return template.replaceAll('{{', '&lcub;&lcub;').replaceAll('}}', '&rcub;&rcub;');
+}
