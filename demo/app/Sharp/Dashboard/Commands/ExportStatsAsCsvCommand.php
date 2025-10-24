@@ -38,6 +38,11 @@ class ExportStatsAsCsvCommand extends DashboardCommand
             );
     }
 
+    public function authorize(): bool
+    {
+        return auth()->user()->isAdmin();
+    }
+
     public function execute(array $data = []): array
     {
         $this->validate($data, [
