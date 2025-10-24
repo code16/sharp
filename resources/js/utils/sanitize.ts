@@ -6,7 +6,9 @@ export function sanitize(html: string | null) {
             ADD_TAGS: ['iframe'],
             CUSTOM_ELEMENT_HANDLING: {
                 tagNameCheck: () => true,
-                attributeNameCheck: () => true,
+                attributeNameCheck: (name) => {
+                    return !name.match(/^(v-)|:|@|#/); // remove vue related attributes
+                },
             },
         })
         : html;
