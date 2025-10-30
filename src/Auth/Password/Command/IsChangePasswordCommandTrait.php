@@ -2,8 +2,10 @@
 
 namespace Code16\Sharp\Auth\Password\Command;
 
+use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\Rules\Password;
 
 trait IsChangePasswordCommandTrait
@@ -41,18 +43,34 @@ trait IsChangePasswordCommandTrait
 
     public function rules(): array
     {
-        return [
-            'password' => [
-                'required',
-                'current_password',
+        $rules = RateLimiter::attempt(
+            'sharp-password-change-'.auth()->id(),
+            3,
+            fn () => [
+                'password' => [
+                    'required',
+                    'current_password',
+                ],
+                'new_password' => [
+                    'required',
+                    'string',
+                    $this->passwordRule ?? Password::min(8),
+                    ...$this->confirmPassword ? ['confirmed'] : [],
+                ],
             ],
-            'new_password' => [
-                'required',
-                'string',
-                $this->passwordRule ?? Password::min(8),
-                ...$this->confirmPassword ? ['confirmed'] : [],
-            ],
-        ];
+        );
+
+        if (! $rules) {
+            throw new SharpApplicativeException(
+                trans(
+                    'sharp::auth.password_change.command.rate_limit_exceeded', [
+                        'seconds' => RateLimiter::availableIn('sharp-password-change-'.auth()->id()),
+                    ]
+                )
+            );
+        }
+
+        return $rules;
     }
 
     protected function configureConfirmPassword(?bool $confirmPassword = true): self
