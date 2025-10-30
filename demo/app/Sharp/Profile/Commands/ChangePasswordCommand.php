@@ -6,7 +6,7 @@ use Code16\Sharp\Auth\Password\Command\IsChangePasswordCommandTrait;
 use Code16\Sharp\EntityList\Commands\SingleInstanceCommand;
 use Illuminate\Validation\Rules\Password;
 
-class UpdateProfilePasswordCommand extends SingleInstanceCommand
+class ChangePasswordCommand extends SingleInstanceCommand
 {
     use IsChangePasswordCommandTrait;
 

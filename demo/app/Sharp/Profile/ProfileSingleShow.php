@@ -3,8 +3,8 @@
 namespace App\Sharp\Profile;
 
 use App\Sharp\Profile\Commands\Activate2faCommand;
+use App\Sharp\Profile\Commands\ChangePasswordCommand;
 use App\Sharp\Profile\Commands\Deactivate2faCommand;
-use App\Sharp\Profile\Commands\UpdateProfilePasswordCommand;
 use Code16\Sharp\Show\Fields\SharpShowPictureField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
 use Code16\Sharp\Show\Layout\ShowLayout;
@@ -47,7 +47,7 @@ class ProfileSingleShow extends SharpSingleShow
     public function getInstanceCommands(): ?array
     {
         return [
-            UpdateProfilePasswordCommand::class,
+            ChangePasswordCommand::class,
             ...sharp()->config()->get('auth.2fa.handler') === 'totp'
                 ? [Activate2faCommand::class, Deactivate2faCommand::class]
                 : [],
