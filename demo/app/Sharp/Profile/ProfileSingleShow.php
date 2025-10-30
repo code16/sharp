@@ -46,12 +46,12 @@ class ProfileSingleShow extends SharpSingleShow
 
     public function getInstanceCommands(): ?array
     {
-        return array_merge(
-            [UpdateProfilePasswordCommand::class],
-            config('sharp.auth.2fa.handler') === 'totp'
+        return [
+            UpdateProfilePasswordCommand::class,
+            ...sharp()->config()->get('auth.2fa.handler') === 'totp'
                 ? [Activate2faCommand::class, Deactivate2faCommand::class]
-                : []
-        );
+                : [],
+        ];
     }
 
     public function findSingle(): array

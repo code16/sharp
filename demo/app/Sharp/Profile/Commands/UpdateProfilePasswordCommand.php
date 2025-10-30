@@ -2,53 +2,31 @@
 
 namespace App\Sharp\Profile\Commands;
 
+use Code16\Sharp\Auth\Password\Command\IsChangePasswordCommandTrait;
 use Code16\Sharp\EntityList\Commands\SingleInstanceCommand;
-use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
-use Code16\Sharp\Form\Fields\SharpFormTextField;
-use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Illuminate\Validation\Rules\Password;
 
 class UpdateProfilePasswordCommand extends SingleInstanceCommand
 {
-    public function label(): ?string
-    {
-        return 'Update password...';
-    }
+    use IsChangePasswordCommandTrait;
 
-    public function buildFormFields(FieldsContainer $formFields): void
+    public function buildCommandConfig(): void
     {
-        $formFields
-            ->addField(
-                SharpFormTextField::make('password')
-                    ->setLabel('Current password')
-                    ->setInputTypePassword()
-            )
-            ->addField(
-                SharpFormTextField::make('new_password')
-                    ->setLabel('New password')
-                    ->setInputTypePassword()
-            )
-            ->addField(
-                SharpFormTextField::make('new_password_confirmation')
-                    ->setLabel('Confirm new password')
-                    ->setInputTypePassword()
+        $this->configureConfirmPassword()
+            ->configurePasswordRule(
+                Password::min(8)
+                    ->numbers()
+                    ->symbols()
+                    ->uncompromised()
             );
     }
 
     protected function executeSingle(array $data): array
     {
-        $this->validate($data, [
-            'password' => 'required',
-            'new_password' => ['required', 'confirmed', 'string', 'min:8'],
-        ]);
-
-        $granted = auth()->validate([
-            'email' => auth()->user()->email,
-            'password' => $data['password'],
-        ]);
-
-        if (! $granted) {
-            throw new SharpApplicativeException('Your current password is invalid.');
-        }
+        // We do not really update the password in the context of the demo
+        //        auth()->user()->update([
+        //            'password' => $data['password'],
+        //        ]);
 
         $this->notify('Password updated!');
 
