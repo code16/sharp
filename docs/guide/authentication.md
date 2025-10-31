@@ -365,7 +365,7 @@ In this example we chose to create a `SingleInstanceCommand`, since it’s a com
 
 ## User impersonation (dev only)
 
-At the development stage, it can be useful to replace the login form by a user impersonation. Sharp allows doing that out of the box:
+At the development stage, it can be useful to replace the login form by a user impersonation. Sharp allows you to do that out of the box:
 
 ```php
 class SharpServiceProvider extends SharpAppServiceProvider
