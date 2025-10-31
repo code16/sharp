@@ -311,6 +311,33 @@ it('allows to configure a page alert', function () {
         );
 });
 
+it('allows to configure a page alert on a specific section', function () {
+    fakeShowFor('person', new class() extends PersonShow
+    {
+        public function buildPageAlert(PageAlert $pageAlert): void
+        {
+            $pageAlert
+                ->setLevelInfo()
+                ->onSection('my-section')
+                ->setMessage('My page alert')
+                ->setButton('My button', 'https://example.com');
+        }
+    });
+
+    $this->get('/sharp/s-list/person/s-show/person/1')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('show.pageAlert', [
+                'level' => PageAlertLevel::Info->value,
+                'text' => 'My page alert',
+                'sectionKey' => 'my-section',
+                'buttonLabel' => 'My button',
+                'buttonUrl' => 'https://example.com',
+            ])
+            ->etc()
+        );
+});
+
 it('allows to configure a page alert with a closure as content', function () {
     fakeShowFor('person', new class() extends PersonShow
     {
