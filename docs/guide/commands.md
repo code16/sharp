@@ -176,7 +176,7 @@ Finally, let's review the return possibilities: after a Command has been execute
 - `return $this->refresh(mixed $ids)`*: refresh only instance(s) with an id in `$ids`, which can be either a single id or an array.
 - `return $this->view(string $bladeView, array $params = [])`: display a view right in Sharp; useful for page previews.
 - `return $this->html(string $htmlContent)`: display an HTML content.
-- `return $this->link(string $link, bool $targetBlank = false)`: redirect to the given path. The second argument, optional (default is `false`), is a boolean to open the link in a new tab.
+- `return $this->link(string $link, bool $openInNewTab = false)`: redirect to the given path. The second argument, optional (default is `false`), is a boolean to open the link in a new tab.
 - `return $this->download(string $filePath, ?string $fileName = null, ?string $diskName = null)`: the browser will download the specified file.
 - `return $this->streamDownload(string $fileContent, string $fileName)`: the browser will stream the specified file.
 

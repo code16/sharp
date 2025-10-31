@@ -238,11 +238,11 @@ it('allows to call an link entity command', function () {
         ->assertJson([
             'action' => 'link',
             'link' => 'https://sharp.code16.fr',
-            'targetBlank' => false,
+            'openInNewTab' => false,
         ]);
 });
 
-it('allows to call an link + targetBlank entity command', function () {
+it('allows to call an link + openInNewTab entity command', function () {
     fakeListFor('person', new class() extends PersonList
     {
         protected function getEntityCommands(): ?array
@@ -257,7 +257,7 @@ it('allows to call an link + targetBlank entity command', function () {
 
                     public function execute(array $data = []): array
                     {
-                        return $this->link('https://sharp.code16.fr', targetBlank: true);
+                        return $this->link('https://sharp.code16.fr', openInNewTab: true);
                     }
                 },
             ];
@@ -269,7 +269,7 @@ it('allows to call an link + targetBlank entity command', function () {
         ->assertJson([
             'action' => 'link',
             'link' => 'https://sharp.code16.fr',
-            'targetBlank' => true,
+            'openInNewTab' => true,
         ]);
 });
 
