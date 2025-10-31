@@ -28,4 +28,15 @@ return [
             ],
         ],
     ],
+    'password_change' => [
+        'command' => [
+            'label' => 'Change password...',
+            'fields' => [
+                'current_password' => 'Current password',
+                'new_password' => 'New password',
+                'new_password_confirm' => 'Confirm new password',
+            ],
+            'rate_limit_exceeded' => 'You have made too many attempts. Please try again in :seconds seconds.',
+        ],
+    ],
 ];

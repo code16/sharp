@@ -28,4 +28,15 @@ return [
             ],
         ],
     ],
+    'password_change' => [
+        'command' => [
+            'label' => 'Modifier le mot de passe...',
+            'fields' => [
+                'current_password' => 'Mot de passe actuel',
+                'new_password' => 'Nouveau mot de passe',
+                'new_password_confirm' => 'Confirmer le nouveau mot de passe',
+            ],
+            'rate_limit_exceeded' => 'Vous avez effectué trop de tentatives. Veuillez réessayer dans :seconds secondes.',
+        ],
+    ],
 ];

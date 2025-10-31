@@ -243,7 +243,7 @@ class My2faNotificationHandler extends Sharp2faNotificationHandler // or Sharp2f
 
 ## Forgotten password
 
-You can activate the classic Laravel Breeze workflow of forgotten password with a simple config:
+You can activate the classic Laravel workflow of forgotten password with a simple config:
 
 ```php
 class SharpServiceProvider extends SharpAppServiceProvider
@@ -306,9 +306,66 @@ class SharpServiceProvider extends SharpAppServiceProvider
 
 These customizations will not interfere with any default behavior that you may have implemented for your app, outside Sharp.
 
+## Allow the current user to change his password
+
+Sharp provides a helper trait to quickly build a command that lets the currently authenticated user change his password: `Code16\Sharp\Auth\Password\Command\IsChangePasswordCommandTrait`. Using this trait, you can quickly build a Sharp command, with a few configuration options.
+
+The trait will take care of the form, validation and rate-limiting. Note that:
+
+- This helper is designed for the “current user changes his own password” scenario. If you need admin-managed password resets for other users, implement a different command with the proper authorization checks.
+- Persisting the new password is up to you (see example below).
+
+### Configuration and behavior
+
+You can configure the behavior of the command with the following methods (should be called in your `buildCommandConfig()` method):
+
+- `configureConfirmPassword(?bool $confirm = true)`:  (false by default) enable password confirmation.
+- `configurePasswordRule(Password $rule)`: (default: `Password::min(8)`) change the default password validation rule.
+- `configureValidateCurrentPassword(?bool $validate = true)`: (true by default) if true, a `password` field that uses Laravel’s `current_password` rule (which compares against the currently authenticated user’s stored password) is added. Make sure you use Eloquent, and that your `User` model stores a hashed password as usual.
+
+### Full example
+
+```php
+use Code16\Sharp\Auth\Password\Command\IsChangePasswordCommandTrait;
+// ...
+
+class ChangePasswordCommand extends SingleInstanceCommand
+{
+    use IsChangePasswordCommandTrait;
+
+    public function buildCommandConfig(): void
+    {
+        $this->configureConfirmPassword()
+            ->configurePasswordRule(
+                Password::min(8)
+                    ->numbers()
+                    ->symbols()
+                    ->uncompromised()
+            );
+    }
+
+    protected function executeSingle(array $data): array
+    {
+        // The trait handles validation and rate limiting.
+    
+        auth()->user()->update([
+            'password' => $data['new_password'], // Considering hashing is done by the model (cast)
+        ]);
+
+        $this->notify('Password updated!');
+
+        return $this->reload();
+    }
+}
+```
+
+::: info
+In this example we chose to create a `SingleInstanceCommand`, since it’s a common use-case to attach such a command to a "Profile" single Show Page that could be [placed in the user menu](building-menu.md#add-links-in-the-user-profile-menu), but you can decide to create an `EntityCommand` or even an `InstanceCommand` instead.
+:::
+
 ## User impersonation (dev only)
 
-At the development stage, it can be useful to replace the login form by a user impersonation. Sharp allows to do that out of the box:
+At the development stage, it can be useful to replace the login form by a user impersonation. Sharp allows you to do that out of the box:
 
 ```php
 class SharpServiceProvider extends SharpAppServiceProvider
@@ -392,3 +449,4 @@ class SharpServiceProvider extends SharpAppServiceProvider
     }
 }
 ```
+
