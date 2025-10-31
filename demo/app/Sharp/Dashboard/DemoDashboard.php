@@ -135,6 +135,7 @@ class DemoDashboard extends SharpDashboard
     {
         $pageAlert
             ->setLevelInfo()
+            ->onSection('stats-section')
             ->setMessage(
                 sprintf(
                     'Graphs below are delimited by period %s - %s (and yes, visits figures are randomly generated)',

@@ -12,6 +12,7 @@ class PageAlert
     protected PageAlertLevel $pageAlertLevel = PageAlertLevel::Info;
     protected ?string $text;
     protected array $data;
+    protected ?string $sectionKey = null;
     protected ?string $buttonLabel = null;
     protected ?string $buttonUrl = null;
 
@@ -54,6 +55,13 @@ class PageAlert
         return $this->setLevel(PageAlertLevel::Secondary);
     }
 
+    public function onSection(string $sectionKey): self
+    {
+        $this->sectionKey = $sectionKey;
+
+        return $this;
+    }
+
     public function setMessage(Closure|string $message): self
     {
         $this->text = $message instanceof Closure
@@ -77,6 +85,7 @@ class PageAlert
             ? Arr::whereNotNull([
                 'level' => $this->pageAlertLevel,
                 'text' => $this->text,
+                'sectionKey' => $this->sectionKey,
                 'buttonLabel' => $this->buttonLabel,
                 'buttonUrl' => $this->buttonUrl,
             ])
