@@ -319,11 +319,11 @@ The trat will take care of the form, validation and rate-limiting. Note that:
 
 You can configure the behavior of the command with the following methods (should be called in your `buildCommandConfig()` method):
 
-- `configureConfirmPassword(?bool $confirm = true)`: enable password confirmation (false by default)
-- `configurePasswordRule(Password $rule)`: change the default password validation rule (default: `Password::min(8)`)
-- `configureValidateCurrentPassword(?bool $validate = true)`: if true, a `password` field that uses Laravel’s `current_password` rule, which compares against the currently authenticated user’s stored password, is added. Make sure your `User` model stores a hashed password as usual. (true by default)
+- `configureConfirmPassword(?bool $confirm = true)`:  (false by default) enable password confirmation.
+- `configurePasswordRule(Password $rule)`: (default: `Password::min(8)`) change the default password validation rule.
+- `configureValidateCurrentPassword(?bool $validate = true)`: (true by default) if true, a `password` field that uses Laravel’s `current_password` rule (which compares against the currently authenticated user’s stored password) is added. Make sure you use Eloquent, and that your `User` model stores a hashed password as usual.
 
-### Example
+### Full example
 
 ```php
 use Code16\Sharp\Auth\Password\Command\IsChangePasswordCommandTrait;
@@ -358,6 +358,10 @@ class ChangePasswordCommand extends SingleInstanceCommand
     }
 }
 ```
+
+::: info
+In this example we chose to create a `SingleInstanceCommand`, since it’s a common use-case to attach such a command to a "Profile" single Show Page that could be [placed in the user menu](building-menu.md#add-links-in-the-user-profile-menu), but you can decide to create an `EntityCommand` or even an `InstanceCommand` instead.
+:::
 
 ## User impersonation (dev only)
 
