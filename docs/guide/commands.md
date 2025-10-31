@@ -169,18 +169,18 @@ Here is the full list of available methods:
 
 ### Command return types
 
-Finally, let's review the return possibilities: after a Command has been executed, the code must return something to tell to the front what to do next. There are height of them:
+Finally, let's review the return possibilities: after a Command has been executed, the code must return something to tell to the front what to do next. There are eight of them:
 
-- `return $this->info('some text', reload: true)`: displays the entered text in a modal. The second argument, optional (default is `false`), is a boolean to also mark Sharp to reload the page.
+- `return $this->info(string $message, bool $reload = false)`: displays the entered text in a modal. The second argument allows reloading the page first.
 - `return $this->reload()`: reload the current page (with context).
-- `return $this->refresh(1)`*: refresh only the instance with an id on `1`. We can pass an id array also to refresh more than one instance.
-- `return $this->view('view.name', ['some'=>'params'])`: display a view right in Sharp; useful for page previews.
-- `return $this->html('...')`: display an HTML content.
-- `return $this->link('/path/to/redirect')`: redirect to the given path.
-- `return $this->download('path', 'diskName')`: the browser will download the specified file.
-- `return $this->streamDownload('path', 'name')`: the browser will stream the specified file.
+- `return $this->refresh(mixed $ids)`*: refresh only instance(s) with an id in `$ids`, which can be either a single id or an array.
+- `return $this->view(string $bladeView, array $params = [])`: display a view right in Sharp; useful for page previews.
+- `return $this->html(string $htmlContent)`: display an HTML content.
+- `return $this->link(string $link, bool $targetBlank = false)`: redirect to the given path. The second argument, optional (default is `false`), is a boolean to open the link in a new tab.
+- `return $this->download(string $filePath, ?string $fileName = null, ?string $diskName = null)`: the browser will download the specified file.
+- `return $this->streamDownload(string $fileContent, string $fileName)`: the browser will stream the specified file.
 
-\* `refresh()` is only useful in an Entity List case (in a Dashboard or a Show Page, it will be treated as a `reload()`). In order to make it work properly, you have to slightly adapt the `getListData()` of your Entity List implementation, making use of `$this->queryParams->specificIds()`:
+\* `refresh()` is only useful in an Entity List case (in a Dashboard or a Show Page, it will be treated as a `reload()`). To make it work properly, you have to slightly adapt the `getListData()` of your Entity List implementation, making use of `$this->queryParams->specificIds()`:
 
 ```php
 class OrderList extends SharpEntityList

@@ -46,7 +46,7 @@ abstract class EntityState extends InstanceCommand
         throw new SharpInvalidConfigException('StreamDownload return type is not supported for a state.');
     }
 
-    protected function link(string $link): array
+    protected function link(string $link, bool $targetBlank = false): array
     {
         throw new SharpInvalidConfigException('Link return type is not supported for a state.');
     }

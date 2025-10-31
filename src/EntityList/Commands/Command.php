@@ -44,11 +44,12 @@ abstract class Command
         ];
     }
 
-    protected function link(string $link): array
+    protected function link(string $link, bool $targetBlank = false): array
     {
         return [
             'action' => CommandAction::Link->value,
             'link' => $link,
+            'targetBlank' => $targetBlank,
         ];
     }
 
