@@ -25,7 +25,7 @@ class ChangePasswordCommand extends SingleInstanceCommand
     {
         // We do not really update the password in the context of the demo
         //        auth()->user()->update([
-        //            'password' => $data['password'],
+        //            'password' => $data['new_password'],
         //        ]);
 
         $this->notify('Password updated!');

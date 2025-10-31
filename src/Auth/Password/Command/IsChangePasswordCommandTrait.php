@@ -11,6 +11,7 @@ use Illuminate\Validation\Rules\Password;
 trait IsChangePasswordCommandTrait
 {
     private bool $confirmPassword = false;
+    private bool $validateCurrentPassword = true;
     private ?Password $passwordRule = null;
 
     public function label(): ?string
@@ -21,10 +22,13 @@ trait IsChangePasswordCommandTrait
     public function buildFormFields(FieldsContainer $formFields): void
     {
         $formFields
-            ->addField(
-                SharpFormTextField::make('password')
-                    ->setLabel(trans('sharp::auth.password_change.command.fields.current_password'))
-                    ->setInputTypePassword()
+            ->when(
+                $this->validateCurrentPassword,
+                fn (FieldsContainer $formFields) => $formFields->addField(
+                    SharpFormTextField::make('password')
+                        ->setLabel(trans('sharp::auth.password_change.command.fields.current_password'))
+                        ->setInputTypePassword()
+                )
             )
             ->addField(
                 SharpFormTextField::make('new_password')
@@ -47,10 +51,9 @@ trait IsChangePasswordCommandTrait
             'sharp-password-change-'.auth()->id(),
             3,
             fn () => [
-                'password' => [
-                    'required',
-                    'current_password',
-                ],
+                ...$this->validateCurrentPassword
+                    ? ['password' => ['required', 'current_password']]
+                    : [],
                 'new_password' => [
                     'required',
                     'string',
@@ -76,6 +79,13 @@ trait IsChangePasswordCommandTrait
     protected function configureConfirmPassword(?bool $confirmPassword = true): self
     {
         $this->confirmPassword = $confirmPassword;
+
+        return $this;
+    }
+
+    protected function configureValidateCurrentPassword(?bool $validateCurrentPassword = true): self
+    {
+        $this->validateCurrentPassword = $validateCurrentPassword;
 
         return $this;
     }

@@ -131,6 +131,54 @@ it('shows confirmation field when enabled and enforces custom password rule and 
         ->assertOk();
 });
 
+it('allows to hide the current password field', function () {
+    fakeShowFor(SinglePersonEntity::class, new class() extends SinglePersonShow
+    {
+        public function getInstanceCommands(): ?array
+        {
+            return [
+                'change_password_confirm' => new class() extends SingleInstanceCommand
+                {
+                    use IsChangePasswordCommandTrait;
+
+                    public function buildCommandConfig(): void
+                    {
+                        $this->configureValidateCurrentPassword(false);
+                    }
+
+                    protected function executeSingle(array $data): array
+                    {
+                        return $this->reload();
+                    }
+                },
+            ];
+        }
+    });
+
+    // Form does not contain the current password field
+    $this
+        ->getJson(route('code16.sharp.api.show.command.singleInstance.form', [
+            'entityKey' => 'single-person',
+            'commandKey' => 'change_password_confirm',
+        ]))
+        ->assertOk()
+        ->assertJson(function (Assert $json) {
+            $json
+                ->missing('fields.password')
+                ->where('fields.new_password.key', 'new_password')
+                ->etc();
+        });
+
+    // Succeeds with valid data
+    $this
+        ->postJson(route('code16.sharp.api.show.command.instance', ['single-person', 'change_password_confirm']), [
+            'data' => [
+                'new_password' => 'Password1!',
+            ],
+        ])
+        ->assertOk();
+});
+
 it('rate limits after too many attempts and returns a helpful message', function () {
     fakeShowFor(SinglePersonEntity::class, new class() extends SinglePersonShow
     {
