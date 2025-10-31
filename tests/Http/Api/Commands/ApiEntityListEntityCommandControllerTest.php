@@ -211,6 +211,68 @@ it('allows to call a refresh entity command', function () {
         ]);
 });
 
+it('allows to call an link entity command', function () {
+    fakeListFor('person', new class() extends PersonList
+    {
+        protected function getEntityCommands(): ?array
+        {
+            return [
+                'cmd' => new class() extends EntityCommand
+                {
+                    public function label(): ?string
+                    {
+                        return 'entity';
+                    }
+
+                    public function execute(array $data = []): array
+                    {
+                        return $this->link('https://sharp.code16.fr');
+                    }
+                },
+            ];
+        }
+    });
+
+    $this->postJson(route('code16.sharp.api.list.command.entity', ['person', 'cmd']))
+        ->assertOk()
+        ->assertJson([
+            'action' => 'link',
+            'link' => 'https://sharp.code16.fr',
+            'openInNewTab' => false,
+        ]);
+});
+
+it('allows to call an link + openInNewTab entity command', function () {
+    fakeListFor('person', new class() extends PersonList
+    {
+        protected function getEntityCommands(): ?array
+        {
+            return [
+                'cmd' => new class() extends EntityCommand
+                {
+                    public function label(): ?string
+                    {
+                        return 'entity';
+                    }
+
+                    public function execute(array $data = []): array
+                    {
+                        return $this->link('https://sharp.code16.fr', openInNewTab: true);
+                    }
+                },
+            ];
+        }
+    });
+
+    $this->postJson(route('code16.sharp.api.list.command.entity', ['person', 'cmd']))
+        ->assertOk()
+        ->assertJson([
+            'action' => 'link',
+            'link' => 'https://sharp.code16.fr',
+            'openInNewTab' => true,
+        ]);
+});
+
 it('allows to call a form entity command and it handles 422', function () {
     fakeListFor('person', new class() extends PersonList
     {
