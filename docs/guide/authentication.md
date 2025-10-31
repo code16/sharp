@@ -310,7 +310,7 @@ These customizations will not interfere with any default behavior that you may h
 
 Sharp provides a helper trait to quickly build a command that lets the currently authenticated user change his password: `Code16\Sharp\Auth\Password\Command\IsChangePasswordCommandTrait`. Using this trait, you can quickly build a Sharp command, with a few configuration options.
 
-The trat will take care of the form, validation and rate-limiting. Note that:
+The trait will take care of the form, validation and rate-limiting. Note that:
 
 - This helper is designed for the “current user changes his own password” scenario. If you need admin-managed password resets for other users, implement a different command with the proper authorization checks.
 - Persisting the new password is up to you (see example below).
