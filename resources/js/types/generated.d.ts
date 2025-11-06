@@ -65,7 +65,7 @@ export type CommandFormData = {
   pageAlert: PageAlertData | null;
 };
 export type CommandResponseData =
-  | { action: "link"; link: string }
+  | { action: "link"; link: string; openInNewTab: boolean }
   | { action: "info"; message: string; reload: boolean }
   | { action: "refresh"; items?: Array<{ [key: string]: any }> }
   | { action: "reload" }
@@ -139,9 +139,6 @@ export type EmbedFormData = {
   data: { [key: string]: FormFieldData["value"] };
   fields: { [key: string]: FormFieldData };
   layout: FormLayoutData | null;
-};
-export type EmbeddedFieldAuthorizationsData = {
-  view: boolean;
 };
 export type EntityListAuthorizationsData = {
   create: boolean;
@@ -811,7 +808,7 @@ export type ShowDashboardFieldData = {
   dashboardKey: string;
   hiddenCommands: Array<string>;
   endpointUrl: string;
-  authorizations: EmbeddedFieldAuthorizationsData;
+  authorizations: ShowFieldAuthorizationsData;
   label: string | null;
   hiddenFilters: { [key: string]: any } | null;
 };
@@ -838,9 +835,12 @@ export type ShowEntityListFieldData = {
   showSearchField: boolean;
   showCount: boolean;
   endpointUrl: string;
-  authorizations: EmbeddedFieldAuthorizationsData;
+  authorizations: ShowFieldAuthorizationsData;
   label: string | null;
   hiddenFilters: { [key: string]: any } | null;
+};
+export type ShowFieldAuthorizationsData = {
+  view: boolean;
 };
 export type ShowFieldData =
   | ShowDashboardFieldData
