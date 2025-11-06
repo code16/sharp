@@ -140,9 +140,6 @@ export type EmbedFormData = {
   fields: { [key: string]: FormFieldData };
   layout: FormLayoutData | null;
 };
-export type EmbeddedFieldAuthorizationsData = {
-  view: boolean;
-};
 export type EntityListAuthorizationsData = {
   create: boolean;
   reorder: boolean;
@@ -726,6 +723,7 @@ export type OrderedListWidgetData = {
 export type PageAlertData = {
   level: PageAlertLevel;
   text: string;
+  sectionKey: string | null;
   buttonLabel: string | null;
   buttonUrl: string | null;
 };
@@ -811,7 +809,7 @@ export type ShowDashboardFieldData = {
   dashboardKey: string;
   hiddenCommands: Array<string>;
   endpointUrl: string;
-  authorizations: EmbeddedFieldAuthorizationsData;
+  authorizations: ShowFieldAuthorizationsData;
   label: string | null;
   hiddenFilters: { [key: string]: any } | null;
 };
@@ -838,9 +836,12 @@ export type ShowEntityListFieldData = {
   showSearchField: boolean;
   showCount: boolean;
   endpointUrl: string;
-  authorizations: EmbeddedFieldAuthorizationsData;
+  authorizations: ShowFieldAuthorizationsData;
   label: string | null;
   hiddenFilters: { [key: string]: any } | null;
+};
+export type ShowFieldAuthorizationsData = {
+  view: boolean;
 };
 export type ShowFieldData =
   | ShowDashboardFieldData

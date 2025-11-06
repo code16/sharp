@@ -66,7 +66,7 @@
 
 <template>
     <WithCommands :commands="commands">
-        <template v-if="dashboard?.pageAlert">
+        <template v-if="dashboard && dashboard.pageAlert && !dashboard.pageAlert.sectionKey">
             <PageAlert
                 class="mb-8"
                 :page-alert="dashboard.pageAlert"
@@ -185,6 +185,12 @@
                                             {{ title }}
                                         </h2>
                                     </template>
+                                </template>
+                                <template v-if="dashboard.pageAlert?.sectionKey && dashboard.pageAlert.sectionKey === section.key">
+                                    <PageAlert
+                                        class="mb-4"
+                                        :page-alert="dashboard.pageAlert"
+                                    />
                                 </template>
                                 <template v-if="dashboard.sectionVisibleFilters(section)?.length || dashboard.visibleCommands?.[section.key]?.flat().length">
                                     <div class="flex gap-2 mb-4">
