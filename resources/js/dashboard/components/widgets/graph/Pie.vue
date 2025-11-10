@@ -1,69 +1,42 @@
 <script setup lang="ts">
+    import { computed } from "vue";
     import { GraphWidgetData } from "@/types";
-    import { useApexCharts } from "@/dashboard/components/widgets/graph/useApexCharts";
-    import { computed, useTemplateRef } from "vue";
     import { normalizeColor } from "@/dashboard/utils/chart";
-    import ApexChart from "vue3-apexcharts";
     import { DashboardWidgetProps } from "@/dashboard/types";
     import { useBreakpoints } from "@/composables/useBreakpoints";
+    import { VisSingleContainer, VisDonut, VisTooltip, VisBulletLegend } from "@unovis/vue";
 
     const props = defineProps<DashboardWidgetProps<GraphWidgetData>>();
 
     const breakpoints = useBreakpoints();
-    const { apexChartsComponent, options } = useApexCharts(props, ({ width }) => {
-        const datasets = props.value?.datasets?.filter(dataset => dataset.data?.length > 0);
-        return {
-            chart: {
-                type: 'pie',
-            },
-            grid: {
-                padding: {
-                }
-            },
-            dataLabels: {
-                enabled: true,
-                style: {
-                    fontFamily: 'inherit'
-                },
-                dropShadow: {
-                    enabled: false,
-                },
-            },
-            plotOptions: {
-                pie: {
-                    dataLabels: {
-                        offset: -10
-                    },
-                    offsetX: breakpoints.sm ? -10 : 0,
-                    customScale: width && breakpoints.sm && width < 380 ? 1.1 : 1,
-                },
-            },
-            stroke: {
-                show: false,
-            },
-            colors: datasets?.map(dataset => normalizeColor(dataset.color)),
-            labels: datasets?.map(dataset => dataset.label ?? ''),
-            legend: breakpoints.sm ? {
-                position: 'right',
-                offsetY: width && width < 400 ? -20 : 0,
-                offsetX: width && width < 400 ? -25 : 0,
-            } : {
-                position: 'bottom',
-                offsetX: -20,
-            },
-            series: datasets?.map(dataset => dataset.data[0]),
-        }
-    });
+
+    const datasets = computed(() => (props.value?.datasets ?? []).filter(d => (d.data?.length ?? 0) > 0));
+    const items = computed(() => datasets.value.map(ds => ({
+        name: ds.label ?? '',
+        color: normalizeColor(ds.color),
+        value: ds.data[0] ?? 0,
+    })));
+    const showLegend = computed(() => props.widget.showLegend && !props.widget.minimal);
+    const height = computed(() => props.widget.height ?? '100%');
 </script>
 
 <template>
-    <div ref="el">
-        <ApexChart
-            class="min-h-[250px] sm:min-h-0"
-            :options="options"
-            :series="options.series"
-            :height="options.chart.height"
-            ref="apexChartsComponent"
-        />
+    <div>
+        <div class="min-h-[250px] sm:min-h-0" :class="breakpoints.sm ? 'sm:flex sm:items-center sm:gap-4' : ''">
+            <VisSingleContainer :style="{ height }">
+                <VisDonut
+                    :data="items"
+                    :value="d => d.value"
+                    :category="d => d.name"
+                    :color="d => d.color"
+                    :innerRadius="0"
+                />
+                <VisTooltip />
+            </VisSingleContainer>
+
+            <div v-if="showLegend" :class="breakpoints.sm ? 'sm:ml-4' : 'mt-2'">
+                <VisBulletLegend :items="items.map(i => ({ name: i.name, color: i.color }))" />
+            </div>
+        </div>
     </div>
 </template>
