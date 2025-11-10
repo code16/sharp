@@ -134,8 +134,8 @@
 
         <WithCommands :commands="commands">
             <div class="@container">
-                <div :class="show.pageAlert ? 'pt-4' : 'pt-6 @3xl:pt-10'">
-                    <template v-if="show.pageAlert">
+                <div :class="show.pageAlert && !show.pageAlert.sectionKey ? 'pt-4' : 'pt-6 @3xl:pt-10'">
+                    <template v-if="show.pageAlert && !show.pageAlert.sectionKey">
                         <div class="container">
                             <PageAlert
                                 class="mb-4"
@@ -153,6 +153,14 @@
                                 v-show="show.sectionShouldBeVisible(section, locale) || i == 0"
                                 v-slot="{ collapsed, onCollapseToggle }"
                             >
+                                <template v-if="show.pageAlert?.sectionKey && show.pageAlert.sectionKey === section.key">
+                                    <div class="container">
+                                        <PageAlert
+                                            class="mb-4"
+                                            :page-alert="show.pageAlert"
+                                        />
+                                    </div>
+                                </template>
                                 <template v-if="show.sectionHasField(section, 'entityList')">
                                     <template v-for="column in section.columns">
                                         <template v-for="row in column.fields">

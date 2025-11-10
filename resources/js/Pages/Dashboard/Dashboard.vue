@@ -62,7 +62,7 @@
         </template>
 
         <div class="container @container mx-auto">
-            <div :class="dashboard.pageAlert ? 'pt-4' : 'pt-10'">
+            <div :class="dashboard.pageAlert && !dashboard.pageAlert.sectionKey ? 'pt-4' : 'pt-10'">
                 <DashboardComponent
                     :dashboard-key="dashboardKey"
                     :dashboard="dashboard"

@@ -723,6 +723,7 @@ export type OrderedListWidgetData = {
 export type PageAlertData = {
   level: PageAlertLevel;
   text: string;
+  sectionKey: string | null;
   buttonLabel: string | null;
   buttonUrl: string | null;
 };

@@ -9,7 +9,7 @@ export class Dashboard {
     layout: DashboardData['layout'];
     data: DashboardData['data'];
     filterValues: DashboardData['filterValues'];
-    pageAlert:DashboardData['pageAlert'];
+    pageAlert: DashboardData['pageAlert'];
     query: DashboardData['query'];
 
     dashboardKey: string;

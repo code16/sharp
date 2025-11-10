@@ -91,3 +91,33 @@ class MyEntityList extends SharpEntityList
 }
 ```
 
+## Attach the page alert to a specific section (Show Page and Dashboard only)
+
+The `onSection()` method allows you to specify the section where the alert should be displayed (instead of the default, the top of the page):
+
+```php
+class MyShow extends SharpShow
+{
+    // ...
+    
+    protected function buildShowLayout(ShowLayout $showLayout): void
+    {
+        $showLayout
+            ->addSection(function (ShowLayoutSection $section) {
+                $section
+                    ->setKey('content')
+                    ->addColumn(/* ... */);
+            })
+            ->addSection(/* ... */);
+    }
+    
+    protected function buildPageAlert(PageAlert $pageAlert): void
+    {
+        $pageAlert
+            ->setMessage('This page has been edited recently.')
+            ->onSection('content');
+    }
+}
+```
+
+
