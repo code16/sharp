@@ -44,11 +44,12 @@ abstract class Command
         ];
     }
 
-    protected function link(string $link): array
+    protected function link(string $link, bool $openInNewTab = false): array
     {
         return [
             'action' => CommandAction::Link->value,
             'link' => $link,
+            'openInNewTab' => $openInNewTab,
         ];
     }
 

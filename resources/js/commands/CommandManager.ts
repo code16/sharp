@@ -41,25 +41,27 @@ export class CommandManager {
 
     get defaultCommandResponseHandlers(): CommandResponseHandlers {
         return {
-            info: async ({ message, reload }, { formModal }) => {
-                await showAlert(message, {
+            info: async (data, { formModal }) => {
+                await showAlert(data.message, {
                     title: __('sharp::modals.command.info.title'),
                 });
                 if(formModal.shouldReopen) {
                     formModal.reloadAndReopen();
-                } else if(reload) {
+                } else if(data.reload) {
                     await this.handleCommandResponse({ action: 'reload' });
                 }
             },
-            link: ({ link }, { formModal }) => {
+            link: (data, { formModal }) => {
                 if(formModal.shouldReopen) {
                     formModal.reloadAndReopen();
                     return;
                 }
-                if(isSharpLink(link)) {
-                    router.visit(link);
+                if(data.openInNewTab) {
+                    window.open(data.link, '_blank');
+                } else if(isSharpLink(data.link)) {
+                    router.visit(data.link);
                 } else {
-                    location.href = link;
+                    location.href = data.link;
                 }
             },
             reload: (data, { formModal }) => {
