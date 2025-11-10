@@ -1,0 +1,1 @@
+import{d as e,c as a,w as t,$ as o,o as n,j as s,t as c,u as _,_ as r}from"./sharp-ByW3i59E.js";const i={class:"@container"},l={class:"container pt-6 @3xl:pt-10"},d={class:"text-xl"},f=e({__name:"Welcome",setup(p){return(m,u)=>(n(),a(o,null,{default:t(()=>[s("div",i,[s("div",l,[s("h1",d,c(_(r)("sharp::menu.no-dashboard-message")),1)])])]),_:1}))}});export{f as default};
