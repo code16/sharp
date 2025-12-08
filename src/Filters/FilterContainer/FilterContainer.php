@@ -3,14 +3,11 @@
 namespace Code16\Sharp\Filters\FilterContainer;
 
 use Code16\Sharp\Exceptions\SharpException;
-use Code16\Sharp\Filters\AutocompleteRemoteRequiredFilter;
-use Code16\Sharp\Filters\DateRangeRequiredFilter;
 use Code16\Sharp\Filters\Filter;
 use Code16\Sharp\Filters\FilterContainer\Concerns\BuildsFiltersConfigArray;
 use Code16\Sharp\Filters\FilterContainer\Concerns\HandlesFiltersInQueryParams;
 use Code16\Sharp\Filters\FilterContainer\Concerns\HandlesFiltersInSession;
 use Code16\Sharp\Filters\FilterContainer\Concerns\ProvidesFilterValuesToFront;
-use Code16\Sharp\Filters\SelectRequiredFilter;
 use Illuminate\Support\Collection;
 
 class FilterContainer
@@ -95,11 +92,6 @@ class FilterContainer
     {
         return $this->getFilterHandlers()
             ->flatten()
-            ->whereInstanceOf([
-                SelectRequiredFilter::class,
-                DateRangeRequiredFilter::class,
-                AutocompleteRemoteRequiredFilter::class,
-            ])
             ->mapWithKeys(function (Filter $handler) {
                 return [
                     $handler->getKey() => $handler->toQueryParam($handler->defaultValue()),
