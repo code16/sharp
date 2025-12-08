@@ -6,8 +6,6 @@ use Code16\Sharp\Enums\FilterType;
 
 /**
  * @internal
- *
- * @mixin Filter
  */
 trait SelectFilterTrait
 {
