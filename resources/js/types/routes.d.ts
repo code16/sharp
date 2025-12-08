@@ -4,340 +4,420 @@ declare module 'ziggy-js' {
     "code16.sharp.home": [],
     "code16.sharp.dashboard": [
         {
-            "name": "dashboardKey"
+            "name": "dashboardKey",
+            "required": true
         }
     ],
     "code16.sharp.dashboard.filters.store": [
         {
-            "name": "dashboardKey"
+            "name": "dashboardKey",
+            "required": true
         }
     ],
     "code16.sharp.list": [
         {
-            "name": "entityKey"
+            "name": "entityKey",
+            "required": true
         }
     ],
     "code16.sharp.list.filters.store": [
         {
-            "name": "entityKey"
+            "name": "entityKey",
+            "required": true
         }
     ],
     "code16.sharp.single-show": [
         {
             "name": "entityKey",
+            "required": true,
             "binding": "key"
         }
     ],
     "code16.sharp.download.show": [
         {
-            "name": "entityKey"
+            "name": "entityKey",
+            "required": true
         },
         {
-            "name": "instanceId"
+            "name": "instanceId",
+            "required": false
         }
     ],
     "code16.sharp.show.show": [
         {
-            "name": "parentUri"
+            "name": "parentUri",
+            "required": true
         },
         {
             "name": "entityKey",
+            "required": true,
             "binding": "key"
         },
         {
-            "name": "instanceId"
+            "name": "instanceId",
+            "required": true
         }
     ],
     "code16.sharp.show.delete": [
         {
-            "name": "parentUri"
+            "name": "parentUri",
+            "required": true
         },
         {
-            "name": "entityKey"
+            "name": "entityKey",
+            "required": true
         },
         {
-            "name": "instanceId"
+            "name": "instanceId",
+            "required": true
         }
     ],
     "code16.sharp.form.create": [
         {
-            "name": "parentUri"
+            "name": "parentUri",
+            "required": true
         },
         {
             "name": "entityKey",
+            "required": true,
             "binding": "key"
         }
     ],
     "code16.sharp.form.store": [
         {
-            "name": "parentUri"
+            "name": "parentUri",
+            "required": true
         },
         {
             "name": "entityKey",
+            "required": true,
             "binding": "key"
         }
     ],
     "code16.sharp.form.edit": [
         {
-            "name": "parentUri"
+            "name": "parentUri",
+            "required": true
         },
         {
             "name": "entityKey",
+            "required": true,
             "binding": "key"
         },
         {
-            "name": "instanceId"
+            "name": "instanceId",
+            "required": false
         }
     ],
     "code16.sharp.form.update": [
         {
-            "name": "parentUri"
+            "name": "parentUri",
+            "required": true
         },
         {
             "name": "entityKey",
+            "required": true,
             "binding": "key"
         },
         {
-            "name": "instanceId"
+            "name": "instanceId",
+            "required": false
         }
     ],
     "code16.sharp.filters.update": [
         {
-            "name": "filterKey"
+            "name": "filterKey",
+            "required": true
         }
     ],
     "code16.sharp.update-assets": [],
     "code16.sharp.api.dashboard.command.form": [
         {
-            "name": "dashboardKey"
+            "name": "dashboardKey",
+            "required": true
         },
         {
-            "name": "commandKey"
+            "name": "commandKey",
+            "required": true
         }
     ],
     "code16.sharp.api.dashboard.command": [
         {
-            "name": "dashboardKey"
+            "name": "dashboardKey",
+            "required": true
         },
         {
-            "name": "commandKey"
+            "name": "commandKey",
+            "required": true
         }
     ],
     "code16.sharp.api.list.command.quick-creation-form.create": [
         {
             "name": "entityKey",
+            "required": true,
             "binding": "key"
         },
         {
             "name": "formEntityKey",
+            "required": true,
             "binding": "key"
         }
     ],
     "code16.sharp.api.list.command.quick-creation-form.store": [
         {
             "name": "entityKey",
+            "required": true,
             "binding": "key"
         },
         {
             "name": "formEntityKey",
+            "required": true,
             "binding": "key"
         }
     ],
     "code16.sharp.api.list": [
         {
-            "name": "entityKey"
+            "name": "entityKey",
+            "required": true
         }
     ],
     "code16.sharp.api.list.filters.store": [
         {
-            "name": "entityKey"
+            "name": "entityKey",
+            "required": true
         }
     ],
     "code16.sharp.api.list.reorder": [
         {
-            "name": "entityKey"
+            "name": "entityKey",
+            "required": true
         }
     ],
     "code16.sharp.api.list.delete": [
         {
-            "name": "entityKey"
+            "name": "entityKey",
+            "required": true
         },
         {
-            "name": "instanceId"
+            "name": "instanceId",
+            "required": true
         }
     ],
     "code16.sharp.api.list.state": [
         {
-            "name": "entityKey"
+            "name": "entityKey",
+            "required": true
         },
         {
-            "name": "instanceId"
+            "name": "instanceId",
+            "required": true
         }
     ],
     "code16.sharp.api.list.command.entity": [
         {
-            "name": "entityKey"
+            "name": "entityKey",
+            "required": true
         },
         {
-            "name": "commandKey"
+            "name": "commandKey",
+            "required": true
         }
     ],
     "code16.sharp.api.list.command.entity.form": [
         {
-            "name": "entityKey"
+            "name": "entityKey",
+            "required": true
         },
         {
-            "name": "commandKey"
+            "name": "commandKey",
+            "required": true
         }
     ],
     "code16.sharp.api.list.command.instance": [
         {
-            "name": "entityKey"
+            "name": "entityKey",
+            "required": true
         },
         {
-            "name": "commandKey"
+            "name": "commandKey",
+            "required": true
         },
         {
-            "name": "instanceId"
+            "name": "instanceId",
+            "required": true
         }
     ],
     "code16.sharp.api.list.command.instance.form": [
         {
-            "name": "entityKey"
+            "name": "entityKey",
+            "required": true
         },
         {
-            "name": "commandKey"
+            "name": "commandKey",
+            "required": true
         },
         {
-            "name": "instanceId"
+            "name": "instanceId",
+            "required": true
         }
     ],
     "code16.sharp.api.dashboard": [
         {
-            "name": "dashboardKey"
+            "name": "dashboardKey",
+            "required": true
         }
     ],
     "code16.sharp.api.dashboard.filters.store": [
         {
-            "name": "dashboardKey"
+            "name": "dashboardKey",
+            "required": true
         }
     ],
     "code16.sharp.api.show.command.instance": [
         {
-            "name": "entityKey"
+            "name": "entityKey",
+            "required": true
         },
         {
-            "name": "commandKey"
+            "name": "commandKey",
+            "required": true
         },
         {
-            "name": "instanceId"
+            "name": "instanceId",
+            "required": false
         }
     ],
     "code16.sharp.api.show.command.instance.form": [
         {
-            "name": "entityKey"
+            "name": "entityKey",
+            "required": true
         },
         {
-            "name": "commandKey"
+            "name": "commandKey",
+            "required": true
         },
         {
-            "name": "instanceId"
+            "name": "instanceId",
+            "required": true
         }
     ],
     "code16.sharp.api.show.command.singleInstance.form": [
         {
-            "name": "entityKey"
+            "name": "entityKey",
+            "required": true
         },
         {
-            "name": "commandKey"
+            "name": "commandKey",
+            "required": true
         }
     ],
     "code16.sharp.api.show.state": [
         {
-            "name": "entityKey"
+            "name": "entityKey",
+            "required": true
         },
         {
-            "name": "instanceId"
+            "name": "instanceId",
+            "required": false
         }
     ],
     "code16.sharp.api.search.index": [],
     "code16.sharp.api.embed.form.show": [
         {
-            "name": "embedKey"
+            "name": "embedKey",
+            "required": true
         },
         {
-            "name": "entityKey"
+            "name": "entityKey",
+            "required": true
         }
     ],
     "code16.sharp.api.embed.form.update": [
         {
-            "name": "embedKey"
+            "name": "embedKey",
+            "required": true
         },
         {
-            "name": "entityKey"
+            "name": "entityKey",
+            "required": true
         }
     ],
     "code16.sharp.api.embed.instance.form.show": [
         {
-            "name": "embedKey"
+            "name": "embedKey",
+            "required": true
         },
         {
-            "name": "entityKey"
+            "name": "entityKey",
+            "required": true
         },
         {
-            "name": "instanceId"
+            "name": "instanceId",
+            "required": true
         }
     ],
     "code16.sharp.api.embed.instance.form.update": [
         {
-            "name": "embedKey"
+            "name": "embedKey",
+            "required": true
         },
         {
-            "name": "entityKey"
+            "name": "entityKey",
+            "required": true
         },
         {
-            "name": "instanceId"
+            "name": "instanceId",
+            "required": true
         }
     ],
     "code16.sharp.api.form.editor.upload.form.update": [
         {
-            "name": "entityKey"
+            "name": "entityKey",
+            "required": true
         },
         {
-            "name": "instanceId"
+            "name": "instanceId",
+            "required": false
         }
     ],
     "code16.sharp.api.form.upload.thumbnail.show": [
         {
-            "name": "entityKey"
+            "name": "entityKey",
+            "required": true
         },
         {
-            "name": "instanceId"
+            "name": "instanceId",
+            "required": false
         }
     ],
     "code16.sharp.api.form.upload": [],
     "code16.sharp.api.form.autocomplete.index": [
         {
             "name": "entityKey",
+            "required": true,
             "binding": "key"
         },
         {
-            "name": "autocompleteFieldKey"
+            "name": "autocompleteFieldKey",
+            "required": true
         }
     ],
     "code16.sharp.api.form.refresh.update": [
         {
             "name": "entityKey",
+            "required": true,
             "binding": "key"
         }
     ],
     "code16.sharp.api.filters.autocomplete.index": [
         {
             "name": "entityKey",
+            "required": true,
             "binding": "key"
         },
         {
-            "name": "filterKey"
+            "name": "filterKey",
+            "required": true
         }
     ],
     "code16.sharp.login": [],
@@ -349,7 +429,8 @@ declare module 'ziggy-js' {
     "code16.sharp.password.request.post": [],
     "code16.sharp.password.reset": [
         {
-            "name": "token"
+            "name": "token",
+            "required": true
         }
     ],
     "code16.sharp.password.reset.post": [],
