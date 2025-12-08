@@ -430,7 +430,7 @@ it('allows to call a streamDownload entity command', function () {
     $response = $this
         ->postJson(route('code16.sharp.api.list.command.entity', ['person', 'cmd']))
         ->assertOk()
-        ->assertHeader('content-type', 'text/html; charset=UTF-8');
+        ->assertHeader('content-type', 'text/html; charset=utf-8');
 
     expect($response->headers->get('content-disposition'))
         ->toContain('stream.txt');

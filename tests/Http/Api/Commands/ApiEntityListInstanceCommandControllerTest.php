@@ -315,7 +315,7 @@ it('allows to call a streamDownload instance command', function () {
     $response = $this
         ->postJson(route('code16.sharp.api.list.command.instance', ['person', 'instance_streamDownload', 1]))
         ->assertOk()
-        ->assertHeader('content-type', 'text/html; charset=UTF-8');
+        ->assertHeader('content-type', 'text/html; charset=utf-8');
 
     expect($response->headers->get('content-disposition'))
         ->toContain('stream.txt');

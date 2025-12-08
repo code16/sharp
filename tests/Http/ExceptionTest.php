@@ -116,5 +116,5 @@ it('renders debug 500 API error', function () {
 
     $this->getJson('/sharp/api/list/person')
         ->assertStatus(500)
-        ->assertHeader('Content-Type', 'text/html; charset=UTF-8');
+        ->assertHeader('Content-Type', 'text/html; charset=utf-8');
 });
