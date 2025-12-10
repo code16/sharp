@@ -17,12 +17,28 @@ Route::group([
     'prefix' => '/'.sharp()->config()->get('custom_url_segment'),
     'middleware' => ['sharp_common', 'sharp_web'],
 ], function () {
+    // Redirect GET routes without filterKey
+    Route::get('s-dashboard/{dashboardKey}', fn ($entityKey) => redirect(
+        route('code16.sharp.dashboard', [
+            sharp()->context()->globalFilterUrlSegmentValue(),
+            $entityKey]
+        )
+    ));
+    Route::get('s-list/{entityKey}', fn ($entityKey) => redirect(
+        route('code16.sharp.list', [
+            sharp()->context()->globalFilterUrlSegmentValue(),
+            $entityKey,
+        ])
+    ));
+    Route::get('s-show/{entityKey}', fn ($entityKey) => redirect(
+        route('code16.sharp.single-show', [
+            sharp()->context()->globalFilterUrlSegmentValue(),
+            $entityKey,
+        ])
+    ));
+
     Route::get('/', [HomeController::class, 'index'])
         ->name('code16.sharp.home');
-
-    Route::get('s-dashboard/{dashboardKey}', fn ($entityKey) => redirect(
-        route('code16.sharp.dashboard', ['root', $entityKey])
-    ));
 
     Route::get('{filterKey}/s-dashboard/{dashboardKey}', [DashboardController::class, 'show'])
         ->name('code16.sharp.dashboard');
@@ -30,19 +46,11 @@ Route::group([
     Route::post('/s-dashboard/{dashboardKey}', [DashboardFiltersController::class, 'store'])
         ->name('code16.sharp.dashboard.filters.store');
 
-    Route::get('s-list/{entityKey}', fn ($entityKey) => redirect(
-        route('code16.sharp.list', ['root', $entityKey])
-    ));
-
     Route::get('{filterKey}/s-list/{entityKey}', [EntityListController::class, 'show'])
         ->name('code16.sharp.list');
 
     Route::post('/s-list/{entityKey}/filters', [EntityListFiltersController::class, 'store'])
         ->name('code16.sharp.list.filters.store');
-
-    Route::get('s-show/{entityKey}', fn ($entityKey) => redirect(
-        route('code16.sharp.single-show', ['root', $entityKey])
-    ));
 
     Route::get('{filterKey}/s-show/{entityKey}', [SingleShowController::class, 'show'])
         ->name('code16.sharp.single-show');
@@ -53,6 +61,31 @@ Route::group([
     Route::where([
         'parentUri' => '(s-list|s-show)/.+',
     ])->group(function () {
+        // Redirect GET routes without filterKey
+        Route::get('{parentUri}/s-show/{entityKey}/{instanceId}', fn ($parentUri, $entityKey, $instanceId) => redirect(
+            route('code16.sharp.show.show', [
+                sharp()->context()->globalFilterUrlSegmentValue(),
+                $parentUri,
+                $entityKey,
+                $instanceId,
+            ])
+        ));
+        Route::get('{parentUri}/s-form/{entityKey}', fn ($parentUri, $entityKey) => redirect(
+            route('code16.sharp.form.create', [
+                sharp()->context()->globalFilterUrlSegmentValue(),
+                $parentUri,
+                $entityKey,
+            ])
+        ));
+        Route::get('{parentUri}/s-form/{entityKey}/{instanceId}', fn ($parentUri, $entityKey, $instanceId) => redirect(
+            route('code16.sharp.form.edit', [
+                sharp()->context()->globalFilterUrlSegmentValue(),
+                $parentUri,
+                $entityKey,
+                $instanceId,
+            ])
+        ));
+
         Route::get('/{filterKey}/{parentUri}/s-show/{entityKey}/{instanceId}', [ShowController::class, 'show'])
             ->name('code16.sharp.show.show');
 
