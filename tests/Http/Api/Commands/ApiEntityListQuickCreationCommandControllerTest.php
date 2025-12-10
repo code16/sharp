@@ -287,6 +287,7 @@ it('returns a link action on a quick creation in an EEL case command with a form
     $this
         ->get(
             route('code16.sharp.show.show', [
+                'filterKey' => 'root',
                 'parentUri' => 's-list/person/',
                 'person',
                 1,
@@ -303,6 +304,6 @@ it('returns a link action on a quick creation in an EEL case command with a form
         ->assertOk()
         ->assertJson([
             'action' => 'link',
-            'link' => url('/sharp/s-list/person/s-show/person/1/s-show/colleague/4'),
+            'link' => url('/sharp/root/s-list/person/s-show/person/1/s-show/colleague/4'),
         ]);
 });

@@ -10,10 +10,12 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
-    sharp()->config()
-        ->displayBreadcrumb()
-        ->declareEntity(PersonEntity::class);
+    sharp()->config()->displayBreadcrumb()->declareEntity(PersonEntity::class);
     login();
+
+    // We add a default here to avoid putting this everywhere in unit tests
+    // it's handled by middleware in a real request, but we don't want to test that here.
+    \Illuminate\Support\Facades\URL::defaults(['filterKey' => \Code16\Sharp\Filters\GlobalFilters\GlobalFilters::$defaultKey]);
 });
 
 it('builds the breadcrumb for an entity list', function () {

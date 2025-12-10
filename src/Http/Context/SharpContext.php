@@ -23,6 +23,15 @@ class SharpContext
         return $handler->currentValue();
     }
 
+    public function globalFilterUrlSegmentValue(): string
+    {
+        return collect(sharp()->config()->get('global_filters'))
+            ->map(fn ($globalFilterClassOrInstance) => is_string($globalFilterClassOrInstance) ? app($globalFilterClassOrInstance) : $globalFilterClassOrInstance)
+            ->map(fn (GlobalRequiredFilter $globalFilter) => $globalFilter->currentValue())
+            ->filter()
+            ->implode('-') ?: GlobalFilters::$defaultKey;
+    }
+
     public function retainedFilterValue(string $handlerClassOrKey): array|string|null
     {
         $key = class_exists($handlerClassOrKey)

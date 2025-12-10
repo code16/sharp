@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Http\Context;
 
-use Code16\Sharp\Filters\GlobalRequiredFilter;
 use Code16\Sharp\Http\Context\Util\BreadcrumbItem;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Entities\ValueObjects\EntityKey;
@@ -79,7 +78,7 @@ class SharpBreadcrumb
             sprintf(
                 '%s/%s/%s',
                 sharp()->config()->get('custom_url_segment'),
-                $this->getGlobalFilterKey(),
+                sharp()->context()->globalFilterUrlSegmentValue(),
                 $this->getCurrentPath()
             )
         );
@@ -98,7 +97,7 @@ class SharpBreadcrumb
             sprintf(
                 '%s/%s/%s',
                 sharp()->config()->get('custom_url_segment'),
-                $this->getGlobalFilterKey(),
+                sharp()->context()->globalFilterUrlSegmentValue(),
                 $this->breadcrumbItems()
                     ->slice(0, -1)
                     ->map(fn (BreadcrumbItem $item) => $item->toUri())
@@ -332,15 +331,5 @@ class SharpBreadcrumb
     {
         $this->breadcrumbItems = null;
         $this->forcedSegments = collect($segments)->values();
-    }
-
-    private function getGlobalFilterKey(): string
-    {
-        $globalFilterValues = collect(sharp()->config()->get('global_filters'))
-            ->map(fn ($globalFilterClassOrInstance) => is_string($globalFilterClassOrInstance) ? app($globalFilterClassOrInstance) : $globalFilterClassOrInstance)
-            ->map(fn (GlobalRequiredFilter $globalFilter) => $globalFilter->currentValue())
-            ->filter();
-
-        return $globalFilterValues->isEmpty() ? 'root' : $globalFilterValues->implode('-');
     }
 }

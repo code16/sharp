@@ -166,7 +166,7 @@ it('allows to define a current breadcrumb', function () {
         ->getSharpForm('leaves', 6);
 
     $this->assertEquals(
-        'http://localhost/sharp/s-list/trees/s-show/trees/2/s-show/leaves/6/s-form/leaves/6',
+        'http://localhost/sharp/root/s-list/trees/s-show/trees/2/s-show/leaves/6/s-form/leaves/6',
         $response->uri,
     );
 });
@@ -195,7 +195,7 @@ it('allows to define a current breadcrumb with legacy API', function () {
         ->getSharpForm('leaves', 6);
 
     $this->assertEquals(
-        'http://localhost/sharp/s-list/trees/s-show/trees/2/s-show/leaves/6/s-form/leaves/6',
+        'http://localhost/sharp/root/s-list/trees/s-show/trees/2/s-show/leaves/6/s-form/leaves/6',
         $response->uri,
     );
 });

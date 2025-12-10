@@ -11,6 +11,8 @@ final class GlobalFilters implements Arrayable
 {
     use HasFilters;
 
+    public static string $defaultKey = 'root';
+
     public function getFilters(): array
     {
         return collect(sharp()->config()->get('global_filters'))
