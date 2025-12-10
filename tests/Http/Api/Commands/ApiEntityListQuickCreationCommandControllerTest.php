@@ -153,7 +153,6 @@ it('logs an error if the form’s update() method does not return the instance i
 });
 
 it('sharp()->context()->breadcrumb() is correct', function () {
-
     fakeListFor('person', new class() extends PersonList
     {
         public function buildListConfig(): void
@@ -171,8 +170,8 @@ it('sharp()->context()->breadcrumb() is correct', function () {
                 ->isForm()->toBeTrue()
                 ->entityKey()->toBe('person');
 
-            expect(sharp()->context()->breadcrumb())
-                ->getCurrentSegmentUrl()->toBe(url('/sharp/s-list/person/s-form/person'));
+            expect(sharp()->context()->breadcrumb()->getCurrentSegmentUrl())
+                ->toBe(url('/sharp/root/s-list/person/s-form/person'));
         }
     });
 
@@ -181,7 +180,7 @@ it('sharp()->context()->breadcrumb() is correct', function () {
             route('code16.sharp.api.list.command.quick-creation-form.create', ['person', 'person']),
             ['data' => []],
             [
-                SharpBreadcrumb::CURRENT_PAGE_URL_HEADER => url('/sharp/s-list/person'),
+                SharpBreadcrumb::CURRENT_PAGE_URL_HEADER => url('/sharp/root/s-list/person'),
             ]
         )
         ->assertOk()
@@ -246,7 +245,7 @@ it('returns a link action on a quick creation command with a form with configure
         }
     });
 
-    $this->get(route('code16.sharp.list', ['person']));
+    $this->get(route('code16.sharp.list', ['root', 'person']));
 
     $this
         ->postJson(
@@ -256,7 +255,7 @@ it('returns a link action on a quick creation command with a form with configure
         ->assertOk()
         ->assertJson([
             'action' => 'link',
-            'link' => url('/sharp/s-list/person/s-show/person/4'),
+            'link' => url('/sharp/root/s-list/person/s-show/person/4'),
         ]);
 });
 
