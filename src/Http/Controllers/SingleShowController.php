@@ -13,7 +13,7 @@ class SingleShowController extends SharpProtectedController
     use HandlesSharpNotificationsInRequest;
     use PreloadsShowFields;
 
-    public function show(EntityKey $entityKey)
+    public function show(string $filterKey, EntityKey $entityKey)
     {
         $this->authorizationManager->check('view', $entityKey);
 

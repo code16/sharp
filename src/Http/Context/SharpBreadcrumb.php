@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Http\Context;
 
+use Code16\Sharp\Filters\GlobalRequiredFilter;
 use Code16\Sharp\Http\Context\Util\BreadcrumbItem;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Entities\ValueObjects\EntityKey;
@@ -76,8 +77,9 @@ class SharpBreadcrumb
     {
         return url(
             sprintf(
-                '%s/%s',
+                '%s/%s/%s',
                 sharp()->config()->get('custom_url_segment'),
+                $this->getGlobalFilterKey(),
                 $this->getCurrentPath()
             )
         );
@@ -94,8 +96,9 @@ class SharpBreadcrumb
     {
         return url(
             sprintf(
-                '%s/%s',
+                '%s/%s/%s',
                 sharp()->config()->get('custom_url_segment'),
+                $this->getGlobalFilterKey(),
                 $this->breadcrumbItems()
                     ->slice(0, -1)
                     ->map(fn (BreadcrumbItem $item) => $item->toUri())
@@ -311,12 +314,17 @@ class SharpBreadcrumb
             $urlToParse = request()->header(static::CURRENT_PAGE_URL_HEADER) ?? request()->query('current_page_url');
 
             return collect(explode('/', parse_url($urlToParse)['path']))
-                ->filter(fn (string $segment) => strlen(trim($segment))
-                    && $segment !== sharp()->config()->get('custom_url_segment')
-                )
+                ->filter(fn (string $segment) => strlen(trim($segment)))
+                ->skip(2)
                 ->values();
         }
 
+        if (request()->isMethod('GET')) {
+            // Have to skip /sharp/{filterKey}
+            return collect(request()->segments())->skip(2)->values();
+        }
+
+        // Have to skip /sharp
         return collect(request()->segments())->skip(1)->values();
     }
 
@@ -324,5 +332,15 @@ class SharpBreadcrumb
     {
         $this->breadcrumbItems = null;
         $this->forcedSegments = collect($segments)->values();
+    }
+
+    private function getGlobalFilterKey(): string
+    {
+        $globalFilterValues = collect(sharp()->config()->get('global_filters'))
+            ->map(fn ($globalFilterClassOrInstance) => is_string($globalFilterClassOrInstance) ? app($globalFilterClassOrInstance) : $globalFilterClassOrInstance)
+            ->map(fn (GlobalRequiredFilter $globalFilter) => $globalFilter->currentValue())
+            ->filter();
+
+        return $globalFilterValues->isEmpty() ? 'root' : $globalFilterValues->implode('-');
     }
 }

@@ -22,7 +22,7 @@ class FormController extends SharpProtectedController
         parent::__construct();
     }
 
-    public function create(string $parentUri, EntityKey $entityKey)
+    public function create(string $filterKey, string $parentUri, EntityKey $entityKey)
     {
         $entity = $this->entityManager->entityFor($entityKey);
 
@@ -30,7 +30,7 @@ class FormController extends SharpProtectedController
 
         if ($form instanceof SharpSingleForm) {
             // There is no creation in SingleForms
-            return $this->edit($parentUri, $entityKey);
+            return $this->edit($filterKey, $parentUri, $entityKey);
         }
 
         $this->authorizationManager->check('create', $entityKey);
@@ -56,7 +56,7 @@ class FormController extends SharpProtectedController
         ]);
     }
 
-    public function edit(string $parentUri, EntityKey $entityKey, ?string $instanceId = null)
+    public function edit(string $filterKey, string $parentUri, EntityKey $entityKey, ?string $instanceId = null)
     {
         $entity = $this->entityManager->entityFor($entityKey);
 
