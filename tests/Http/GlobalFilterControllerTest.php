@@ -62,7 +62,7 @@ it('the current value of the global filter is sent with every inertia request', 
     sharp()->config()->declareEntity(PersonEntity::class);
 
     $this
-        ->get('/sharp/s-list/person')
+        ->get('/sharp/root/s-list/person')
         ->assertInertia(fn (Assert $page) => $page
             ->has('globalFilters.config.filters._root.0', fn (Assert $filter) => $filter
                 ->where('key', 'test')
@@ -77,7 +77,7 @@ it('the current value of the global filter is sent with every inertia request', 
         ->post(route('code16.sharp.filters.update', 'test'), ['value' => 3]);
 
     $this
-        ->get('/sharp/s-list/person')
+        ->get('/sharp/root/s-list/person')
         ->assertInertia(fn (Assert $page) => $page
             ->has('globalFilters.config.filters._root.0', fn (Assert $filter) => $filter
                 ->where('key', 'test')
