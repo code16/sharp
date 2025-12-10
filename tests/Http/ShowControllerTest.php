@@ -232,7 +232,7 @@ it('allows instance deletion from the show', function () {
     fakeShowFor('person', $personShow);
 
     $this->delete('/sharp/s-list/person/s-show/person/1')
-        ->assertRedirect('/sharp/s-list/person');
+        ->assertRedirect('/sharp/root/s-list/person');
 
     expect($personShow->wasDeleted)->toBeTrue();
 });
@@ -448,5 +448,56 @@ it('allows to configure a localized title attribute', function () {
                 'fr' => 'Physicien',
                 'en' => 'Physicist',
             ])
+        );
+});
+
+it('returns form edit url', function () {
+    fakeShowFor('person', new class() extends PersonShow
+    {
+        public function buildShowConfig(): void {}
+
+        public function find($id): array
+        {
+            return $this
+                ->transform([
+                    'name' => 'James Clerk Maxwell',
+                ]);
+        }
+    });
+
+    $this->get('/sharp/root/s-list/person/s-show/person/1')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('show.config.formEditUrl', route('code16.sharp.form.edit', [
+                'parentUri' => 's-list/person/s-show/person/1',
+                'entityKey' => 'person',
+                'instanceId' => 1,
+            ]))
+        );
+});
+
+it('returns form edit url for single show', function () {
+    sharp()->config()->declareEntity(SinglePersonEntity::class);
+
+    fakeShowFor('single-person', new class() extends PersonSingleShow
+    {
+        public function buildShowConfig(): void {}
+
+        public function findSingle(): array
+        {
+            return $this
+                ->transform([
+                    'name' => 'James Clerk Maxwell',
+                ]);
+        }
+    });
+
+    $this->get('/sharp/root/s-show/single-person')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('show.config.formEditUrl', route('code16.sharp.form.edit', [
+                'parentUri' => 's-show/single-person',
+                'entityKey' => 'single-person',
+            ]))
         );
 });

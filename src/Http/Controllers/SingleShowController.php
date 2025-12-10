@@ -25,7 +25,13 @@ class SingleShowController extends SharpProtectedController
 
         $payload = ShowData::from([
             'title' => $showData[$show->titleAttribute()] ?? $entity->getLabelOrFail($entityKey->multiformKey()),
-            'config' => $show->showConfig(null),
+            'config' => [
+                ...$show->showConfig(null),
+                'formEditUrl' => route('code16.sharp.form.edit', [
+                    'parentUri' => sharp()->context()->breadcrumb()->getCurrentPath(),
+                    'entityKey' => $entityKey,
+                ]),
+            ],
             'fields' => $show->fields(),
             'layout' => $show->showLayout(),
             'data' => $show->applyFormatters($showData),

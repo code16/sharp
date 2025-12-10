@@ -8,7 +8,6 @@ import {
     ShowListFieldData,
     ShowTextFieldData
 } from "@/types";
-import { getAppendableParentUri, route } from "@/utils/url";
 import { config } from "@/utils/config";
 
 
@@ -29,21 +28,6 @@ export class Show implements ShowData {
         Object.assign(this, data);
         this.entityKey = entityKey;
         this.instanceId = instanceId;
-    }
-
-    get formUrl(): string {
-        if(route().params.instanceId) {
-            return route('code16.sharp.form.edit', {
-                parentUri: getAppendableParentUri(),
-                entityKey: this.entityKey,
-                instanceId: this.instanceId,
-            });
-        }
-
-        return route('code16.sharp.form.create', {
-            parentUri: getAppendableParentUri(),
-            entityKey: this.entityKey,
-        });
     }
 
     get instanceState(): string | number | null {

@@ -4,8 +4,13 @@ declare module 'ziggy-js' {
     "code16.sharp.home": [],
     "code16.sharp.dashboard": [
         {
-            "name": "dashboardKey",
+            "name": "filterKey",
             "required": true
+        },
+        {
+            "name": "dashboardKey",
+            "required": true,
+            "binding": "key"
         }
     ],
     "code16.sharp.dashboard.filters.store": [
@@ -16,8 +21,13 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.list": [
         {
-            "name": "entityKey",
+            "name": "filterKey",
             "required": true
+        },
+        {
+            "name": "entityKey",
+            "required": true,
+            "binding": "key"
         }
     ],
     "code16.sharp.list.filters.store": [
@@ -27,6 +37,10 @@ declare module 'ziggy-js' {
         }
     ],
     "code16.sharp.single-show": [
+        {
+            "name": "filterKey",
+            "required": true
+        },
         {
             "name": "entityKey",
             "required": true,
@@ -44,6 +58,10 @@ declare module 'ziggy-js' {
         }
     ],
     "code16.sharp.show.show": [
+        {
+            "name": "filterKey",
+            "required": true
+        },
         {
             "name": "parentUri",
             "required": true
@@ -74,6 +92,10 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.form.create": [
         {
+            "name": "filterKey",
+            "required": true
+        },
+        {
             "name": "parentUri",
             "required": true
         },
@@ -95,6 +117,10 @@ declare module 'ziggy-js' {
         }
     ],
     "code16.sharp.form.edit": [
+        {
+            "name": "filterKey",
+            "required": true
+        },
         {
             "name": "parentUri",
             "required": true
@@ -177,8 +203,13 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.api.list": [
         {
-            "name": "entityKey",
+            "name": "filterKey",
             "required": true
+        },
+        {
+            "name": "entityKey",
+            "required": true,
+            "binding": "key"
         }
     ],
     "code16.sharp.api.list.filters.store": [
@@ -263,8 +294,13 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.api.dashboard": [
         {
-            "name": "dashboardKey",
+            "name": "filterKey",
             "required": true
+        },
+        {
+            "name": "dashboardKey",
+            "required": true,
+            "binding": "key"
         }
     ],
     "code16.sharp.api.dashboard.filters.store": [
