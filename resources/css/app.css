@@ -4,7 +4,7 @@
 @import './shadcn.css';
 @import './shadcn-overrides.css';
 @import './content.css';
-@import './nprogress.css';
+@import './progress.css';
 
 @source '../views/**/*.blade.php';
 @source '../js/**/*.vue';

@@ -43,7 +43,7 @@ createInertiaApp({
     },
     progress: {
         delay: progressDelay,
-        color: 'var(--nprogress-color, oklch(var(--primary-oklch)))',
+        color: 'var(--progress-color)',
     }
 });
 
