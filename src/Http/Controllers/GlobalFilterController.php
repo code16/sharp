@@ -14,7 +14,7 @@ class GlobalFilterController extends SharpProtectedController
 
         abort_if(! $handler instanceof GlobalRequiredFilter, 404);
 
-        $handler->setCurrentValue(request('value'), throwIfInvalid: false);
+        $handler->setCurrentValue(request('value'));
 
         return redirect()->route('code16.sharp.home', [
             'filterKey' => sharp()->context()->globalFilterUrlSegmentValue(),

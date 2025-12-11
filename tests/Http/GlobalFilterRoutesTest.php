@@ -39,11 +39,6 @@ it('redirects to route with correct filterKey when missing and global filters ar
 
     $this->get('/sharp/s-list/person')
         ->assertRedirect('/sharp/two/s-list/person');
-
-    $this->post(route('code16.sharp.filters.update', 'test'), ['value' => 'three']);
-
-    $this->get('/sharp/s-list/person/s-show/person/1')
-        ->assertRedirect('/sharp/three/s-list/person/s-show/person/1');
 });
 
 it('sets the current filterKey according to the URL', function () {
@@ -60,7 +55,7 @@ it('wont set an invalid value of the current filterKey according to the URL', fu
     fakeGlobalFilter();
 
     $this->get('/sharp/five/s-list/person/s-show/person/1')
-        ->assertNotFound();
+        ->assertOk();
 
     expect(sharp()->context()->globalFilterValue('test'))->toEqual('two');
 });
@@ -71,12 +66,6 @@ it('redirects to route with correct filterKeys when missing and multiple global 
 
     $this->get('/sharp/s-list/person')
         ->assertRedirect('/sharp/two~two/s-list/person');
-
-    $this->post(route('code16.sharp.filters.update', 'test1'), ['value' => 'one']);
-    $this->post(route('code16.sharp.filters.update', 'test2'), ['value' => 'three']);
-
-    $this->get('/sharp/s-list/person/s-show/person/1')
-        ->assertRedirect('/sharp/one~three/s-list/person/s-show/person/1');
 });
 
 it('sets the current multiple filterKeys according to the URL', function () {

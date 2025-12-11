@@ -2,8 +2,6 @@
 
 namespace Code16\Sharp\Filters;
 
-use Code16\Sharp\Exceptions\SharpInvalidFilterValueException;
-
 abstract class GlobalRequiredFilter extends SelectRequiredFilter
 {
     private mixed $currentValue = null;
@@ -15,7 +13,7 @@ abstract class GlobalRequiredFilter extends SelectRequiredFilter
             : $this->defaultValue();
     }
 
-    final public function setCurrentValue(mixed $value, bool $throwIfInvalid = true): void
+    final public function setCurrentValue(mixed $value): void
     {
         if ($value === null) {
             $this->currentValue = null;
@@ -26,10 +24,6 @@ abstract class GlobalRequiredFilter extends SelectRequiredFilter
         $formattedValue = collect($this->formattedValues())
             ->where('id', $value)
             ->first();
-
-        if ($throwIfInvalid && ! $formattedValue) {
-            throw new SharpInvalidFilterValueException('['.$value.'] is not a valid value for this filter.');
-        }
 
         $this->currentValue = $formattedValue['id'] ?? null;
     }

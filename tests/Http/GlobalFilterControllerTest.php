@@ -78,11 +78,8 @@ it('sends the current value of the global filter with every inertia request', fu
         );
 
     $this
-        ->post(route('code16.sharp.filters.update', 'test'), ['value' => 3]);
-
-    $this
         ->followingRedirects()
-        ->get('/sharp/s-list/person')
+        ->get('/sharp/3/s-list/person')
         ->assertInertia(fn (Assert $page) => $page
             ->has('globalFilters.config.filters._root.0', fn (Assert $filter) => $filter
                 ->where('key', 'test')
