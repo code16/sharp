@@ -2,6 +2,8 @@
 
 namespace Code16\Sharp\Filters;
 
+use Code16\Sharp\Exceptions\SharpInvalidFilterValueException;
+
 abstract class GlobalRequiredFilter extends SelectRequiredFilter
 {
     final public function currentValue(): mixed
@@ -29,7 +31,11 @@ abstract class GlobalRequiredFilter extends SelectRequiredFilter
             ->where('id', $value)
             ->first();
 
-        session()->put($this->getSessionKey(), $formattedValue['id'] ?? null);
+        if (! $formattedValue) {
+            throw new SharpInvalidFilterValueException('['.$value.'] is not a valid value for this filter.');
+        }
+
+        session()->put($this->getSessionKey(), $formattedValue['id']);
     }
 
     private function getSessionKey(): string
