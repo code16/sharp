@@ -6,6 +6,7 @@ use Code16\Sharp\Filters\Concerns\HasFilters;
 use Code16\Sharp\Filters\Filter;
 use Code16\Sharp\Filters\GlobalRequiredFilter;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Support\Collection;
 
 final class GlobalFilters implements Arrayable
 {
@@ -13,12 +14,17 @@ final class GlobalFilters implements Arrayable
 
     public static string $defaultKey = 'root';
     public static string $valuesUrlSeparator = '~';
+    private ?Collection $globalFilters = null;
 
     public function getFilters(): array
     {
-        return collect(sharp()->config()->get('global_filters'))
-            ->filter(fn (GlobalRequiredFilter $filter) => $filter->authorize())
-            ->all();
+        if ($this->globalFilters === null) {
+            $this->globalFilters = collect(sharp()->config()->get('global_filters'))
+                ->filter(fn (GlobalRequiredFilter $filter) => $filter->authorize())
+                ->values();
+        }
+
+        return $this->globalFilters->all();
     }
 
     public function isEnabled(): bool
@@ -35,15 +41,11 @@ final class GlobalFilters implements Arrayable
             'filterValues' => [
                 'default' => $this->filterContainer()->getFilterHandlers()
                     ->flatten()
-                    ->mapWithKeys(function (Filter $handler) {
-                        return [$handler->getKey() => $handler->defaultValue()];
-                    })
+                    ->mapWithKeys(fn (Filter $handler) => [$handler->getKey() => $handler->defaultValue()])
                     ->toArray(),
                 'current' => $this->filterContainer()->getFilterHandlers()
                     ->flatten()
-                    ->mapWithKeys(function (Filter $handler) {
-                        return [$handler->getKey() => $handler->currentValue()];
-                    })
+                    ->mapWithKeys(fn (Filter $handler) => [$handler->getKey() => $handler->currentValue()])
                     ->toArray(),
                 'valuated' => [], // not needed here
             ],

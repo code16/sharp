@@ -36,24 +36,27 @@ it('allows to user to update a global filter', function () {
     $this->withoutExceptionHandling();
 
     $this
-        ->post(route('code16.sharp.filters.update', 'test'), ['value' => 1])
-        ->assertRedirect(route('code16.sharp.home'));
+        ->followingRedirects()
+        ->post(route('code16.sharp.filters.update', 'test'), ['value' => '1'])
+        ->assertOk();
 
-    $this->assertEquals(1, sharp()->context()->globalFilterValue('test'));
+    $this->assertEquals('1', sharp()->context()->globalFilterValue('test'));
 });
 
 it('sets to global filter to the default value if missing', function () {
     $this
+        ->followingRedirects()
         ->post(route('code16.sharp.filters.update', 'test'))
-        ->assertRedirect(route('code16.sharp.home'));
+        ->assertOk();
 
     $this->assertEquals(2, sharp()->context()->globalFilterValue('test'));
 });
 
 it('does not allow to set a global filter to an unexpected value', function () {
     $this
+        ->followingRedirects()
         ->post(route('code16.sharp.filters.update', 'test'), ['value' => 4])
-        ->assertRedirect(route('code16.sharp.home'));
+        ->assertOk();
 
     $this->assertEquals(2, sharp()->context()->globalFilterValue('test'));
 });

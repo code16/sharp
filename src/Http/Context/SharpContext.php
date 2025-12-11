@@ -12,11 +12,11 @@ class SharpContext
     private Collection $cachedListInstances;
     private SharpBreadcrumb $breadcrumb;
 
+    public function __construct(private GlobalFilters $globalFiltersHandler) {}
+
     public function globalFilterValue(string $handlerClassOrKey): array|string|null
     {
-        $handler = class_exists($handlerClassOrKey)
-            ? app($handlerClassOrKey)
-            : app(GlobalFilters::class)->findFilter($handlerClassOrKey);
+        $handler = $this->globalFiltersHandler->findFilter($handlerClassOrKey);
 
         abort_if(! $handler instanceof GlobalRequiredFilter, 404);
 
@@ -25,13 +25,8 @@ class SharpContext
 
     public function globalFilterUrlSegmentValue(): string
     {
-        return collect(sharp()->config()->get('global_filters'))
-            ->map(fn ($globalFilterClassOrInstance) => is_string($globalFilterClassOrInstance)
-                ? app($globalFilterClassOrInstance)
-                : $globalFilterClassOrInstance
-            )
+        return collect($this->globalFiltersHandler->getFilters())
             ->map(fn (GlobalRequiredFilter $globalFilter) => $globalFilter->currentValue())
-            ->filter()
             ->implode(GlobalFilters::$valuesUrlSeparator) ?: GlobalFilters::$defaultKey;
     }
 

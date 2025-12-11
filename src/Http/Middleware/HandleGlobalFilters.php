@@ -10,27 +10,25 @@ use Illuminate\Support\Facades\URL;
 
 class HandleGlobalFilters
 {
+    public function __construct(private GlobalFilters $globalFiltersHandler) {}
+
     public function handle(Request $request, Closure $next)
     {
-        URL::defaults(['filterKey' => sharp()->context()->globalFilterUrlSegmentValue()]);
-
         if ($request->isMethod('GET') && ($filterKey = $request->route('filterKey'))) {
             $filterKeys = explode(GlobalFilters::$valuesUrlSeparator, $filterKey);
-            $configuredGlobalFilters = collect(sharp()->config()->get('global_filters'))
-                ->map(fn ($globalFilterClassOrInstance) => is_string($globalFilterClassOrInstance)
-                    ? app($globalFilterClassOrInstance)
-                    : $globalFilterClassOrInstance
-                );
 
-            if (count($configuredGlobalFilters) != 0 && count($filterKeys) != count($configuredGlobalFilters)) {
+            if ($this->globalFiltersHandler->isEnabled()
+                && count($filterKeys) != count($this->globalFiltersHandler->getFilters())) {
                 return redirect()->route('code16.sharp.home');
             }
 
-            $configuredGlobalFilters
-                ->each(fn (GlobalRequiredFilter $globalFilter, $index) => $globalFilter
+            collect($this->globalFiltersHandler->getFilters())
+                ->each(fn (GlobalRequiredFilter $globalFilter, int $index) => $globalFilter
                     ->setCurrentValue($filterKeys[$index])
                 );
         }
+
+        URL::defaults(['filterKey' => sharp()->context()->globalFilterUrlSegmentValue()]);
 
         return $next($request);
     }

@@ -18,6 +18,11 @@ Route::group([
     'middleware' => ['sharp_common', 'sharp_web'],
 ], function () {
     // Redirect GET routes without filterKey
+    Route::get('/', fn () => redirect(
+        route('code16.sharp.home', [
+            'filterKey' => sharp()->context()->globalFilterUrlSegmentValue(),
+        ])
+    ));
     Route::get('s-dashboard/{dashboardKey}', fn ($entityKey) => redirect(
         route('code16.sharp.dashboard', [
             'filterKey' => sharp()->context()->globalFilterUrlSegmentValue(),
@@ -37,7 +42,7 @@ Route::group([
         ])
     ));
 
-    Route::get('/', [HomeController::class, 'index'])
+    Route::get('/home/{filterKey}', [HomeController::class, 'index'])
         ->name('code16.sharp.home');
 
     Route::get('{filterKey}/s-dashboard/{dashboardKey}', [DashboardController::class, 'show'])

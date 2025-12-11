@@ -314,6 +314,7 @@ class SharpBreadcrumb
 
             return collect(explode('/', parse_url($urlToParse)['path']))
                 ->filter(fn (string $segment) => strlen(trim($segment)))
+                // Have to skip /sharp/{filterKey}
                 ->skip(2)
                 ->values();
         }
