@@ -89,6 +89,8 @@ return [
     'editor.dialogs.iframe.insert_title' => 'Insert Iframe (embed)',
     'editor.dialogs.iframe.update_title' => 'Update Iframe (embed)',
     'editor.dialogs.iframe.invalid_message' => 'Iframe code is invalid',
+    'editor.dialogs.code_block.language_label' => 'Language',
+    'editor.dialogs.code_block.toggle_off' => 'Convert to paragraph',
 
     'editor.dialogs.embed.submit_button_insert' => 'Insert',
     'editor.dialogs.embed.submit_button_update' => 'Update',
