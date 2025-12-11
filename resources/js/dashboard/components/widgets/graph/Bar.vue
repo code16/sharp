@@ -1,49 +1,42 @@
 <script setup lang="ts">
-    import { computed } from "vue";
-    import { normalizeColor } from "@/dashboard/utils/chart";
     import { GraphWidgetData } from "@/types";
     import { DashboardWidgetProps } from "@/dashboard/types";
-    import { VisXYContainer, VisAxis, VisStackedBar, VisTooltip, VisBulletLegend } from "@unovis/vue";
-    import { Scale, StackedBar } from '@unovis/ts'
+    import { VisXYContainer, VisAxis, VisStackedBar, VisGroupedBar, VisTooltip, VisBulletLegend } from "@unovis/vue";
+    import { AxisConfigInterface, Scale, StackedBar } from '@unovis/ts'
+    import { useXYChart } from "@/dashboard/components/widgets/graph/useXYChart";
 
     const props = defineProps<DashboardWidgetProps<GraphWidgetData>>();
 
-    // const data = computed(() => props.value?.datasets?.map(ds => ({})))
-
-    const series = computed(() => props.value?.datasets?.map(ds => ({
-        name: ds.label,
-        color: normalizeColor(ds.color),
-        data: props.value?.labels?.map((label, i) => ({
-            x: props.widget.dateLabels ? new Date(label) : label,
-            i,
-            y: ds.data[i] ?? 0,
-        }))
-    })));
+    const { data, x, y } = useXYChart(props);
+    const tickFormat: AxisConfigInterface<number[]>['tickFormat'] = (tick) => {
+        return props.value?.labels?.[tick as number] || '';
+    }
 </script>
 
 <template>
     <div :class="{ 'mb-2': widget.showLegend && !widget.minimal }">
-        <VisXYContainer>
+        <VisXYContainer >
+<!--            :x-scale="props.widget.dateLabels ? Scale.scaleTime() : Scale.scaleLinear()" -->
             <template v-if="!props.widget.minimal">
-                <VisAxis type="x" />
-                <VisAxis type="y" />
-            </template>
-
-<!--                <VisStackedBar-->
-<!--                    :data="s.data"-->
-<!--                    :x="(d, i) => i"-->
-<!--                    :y="d => d.y"-->
-<!--                    :orientation="widget.options?.horizontal ? 'horizontal' : 'vertical'"-->
-<!--                    :color="() => s.color"-->
-<!--                    :id="() => s.name"-->
-<!--                />-->
-
-            <VisTooltip />
-            <template v-if="widget.showLegend && !widget.minimal">
-                <VisBulletLegend
-                    :items="series.map(s => ({ name: s.name, color: s.color }))"
+                <VisAxis :type="widget.options?.horizontal ? 'x' : 'y'" />
+                <VisAxis :type="widget.options?.horizontal ? 'y' : 'x'"
+                    :tickValues="props.value?.labels.map((_, i) => i)"
+                    :tickFormat="tickFormat"
                 />
             </template>
+
+            <VisGroupedBar
+                :data="data"
+                :x="x"
+                :y="y"
+                :orientation="widget.options?.horizontal ? 'horizontal' : 'vertical'"
+                :color="(_, i) => props.value?.datasets[i].color"
+            />
+
+            <VisTooltip />
         </VisXYContainer>
+        <template v-if="widget.showLegend && !widget.minimal">
+            <VisBulletLegend :items="props.value.datasets?.map(dataset => ({ name: dataset.label, color: dataset.color }))" />
+        </template>
     </div>
 </template>

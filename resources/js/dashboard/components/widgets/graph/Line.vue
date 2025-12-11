@@ -3,47 +3,39 @@
     import { normalizeColor } from "@/dashboard/utils/chart";
     import { GraphWidgetData } from "@/types";
     import { DashboardWidgetProps } from "@/dashboard/types";
-    import { VisXYContainer, VisAxis, VisLine, VisTooltip, VisBulletLegend } from "@unovis/vue";
-    import { CurveType } from "@unovis/ts";
+    import { VisXYContainer, VisAxis, VisLine, VisTooltip, VisBulletLegend, VisGroupedBar } from "@unovis/vue";
+    import { AxisConfigInterface, CurveType } from "@unovis/ts";
+    import { useXYChart } from "@/dashboard/components/widgets/graph/useXYChart";
+    import { XYComponentConfigInterface } from "@unovis/ts/core/xy-component/config";
 
     const props = defineProps<DashboardWidgetProps<GraphWidgetData>>();
 
-    const labels = computed(() => props.value?.labels ?? []);
-    const datasets = computed(() => props.value?.datasets ?? []);
-    const curved = computed(() => props.widget.options?.curved ?? true);
-    const series = computed(() => datasets.value.map(ds => ({
-        name: ds.label,
-        color: normalizeColor(ds.color),
-        data: labels.value.map((label, i) => ({
-            x: props.widget.dateLabels ? new Date(label) : label,
-            y: ds.data[i] ?? 0,
-        }))
-    })));
-    const showLegend = computed(() => props.widget.showLegend && !props.widget.minimal);
-    const height = computed(() => props.widget.height ?? '100%');
+    const { data, x, y } = useXYChart(props);
+
+    const tickFormat: AxisConfigInterface<number[]>['tickFormat'] = (tick) => {
+        return props.value?.labels?.[tick as number];
+    }
 </script>
 
 <template>
-    <div class="mt-2" :class="{ 'mb-2': showLegend }">
-        <VisXYContainer :style="{ height }">
+    <div class="mt-2" :class="{ 'mb-2': props.widget.showLegend && !props.widget.minimal }">
+        <VisXYContainer :data="data">
             <template v-if="!props.widget.minimal">
-                <VisAxis type="x" />
+                <VisAxis type="x" :tickFormat="tickFormat" />
                 <VisAxis type="y" />
             </template>
 
-            <template v-for="s in series" :key="s.name">
-                <VisLine
-                    :data="s.data"
-                    :x="d => d.x"
-                    :y="d => d.y"
-                    :color="() => s.color"
-                    :curveType="curved ? CurveType.MonotoneX : CurveType.Linear"
-                    :id="() => s.name"
-                />
-            </template>
+            <VisLine
+                :x="x"
+                :y="y"
+                :color="(_, i) => props.value?.datasets[i].color"
+                :curveType="props.widget.options.curved ? CurveType.MonotoneX : CurveType.Linear"
+            />
 
             <VisTooltip />
-            <VisBulletLegend v-if="showLegend" :items="series.map(s => ({ name: s.name, color: s.color }))" />
         </VisXYContainer>
+        <template v-if="props.widget.showLegend && !props.widget.minimal">
+            <VisBulletLegend :items="props.value.datasets?.map(dataset => ({ name: dataset.label, color: dataset.color }))" />
+        </template>
     </div>
 </template>

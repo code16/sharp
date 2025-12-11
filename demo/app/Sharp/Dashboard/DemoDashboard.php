@@ -63,7 +63,7 @@ class DemoDashboard extends SharpDashboard
                     ->setTitle('Visits')
                     ->setHeight(200)
                     ->setShowLegend()
-                    ->setMinimal()
+                    // ->setMinimal()
                     ->setCurvedLines(),
             )
             ->addWidget(
@@ -105,7 +105,7 @@ class DemoDashboard extends SharpDashboard
                         ->addWidget(6, 'authors_bar')
                         ->addWidget(6, 'categories_pie')
                     )
-                    // ->addFullWidthWidget('visits_line')
+                    ->addFullWidthWidget('visits_line')
                     ->addRow(fn (DashboardLayoutRow $row) => $row
                         ->addWidget(5, 'list')
                         ->addWidget(7, 'highlighted_post')
