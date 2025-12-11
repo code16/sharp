@@ -6,14 +6,11 @@ use Closure;
 use Code16\Sharp\Filters\GlobalFilters\GlobalFilters;
 use Code16\Sharp\Filters\GlobalRequiredFilter;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\URL;
 
 class HandleGlobalFilters
 {
     public function handle(Request $request, Closure $next)
     {
-        URL::defaults(['filterKey' => sharp()->context()->globalFilterUrlSegmentValue()]);
-
         if ($request->isMethod('GET') && ($filterKey = $request->route('filterKey'))) {
             $filterKeys = explode(GlobalFilters::$valuesUrlSeparator, $filterKey);
             $configuredGlobalFilters = collect(sharp()->config()->get('global_filters'))
