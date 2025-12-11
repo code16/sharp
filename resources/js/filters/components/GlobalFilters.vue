@@ -13,7 +13,7 @@
 
     function onChanged(filter: FilterData, value: FilterData['value']) {
         router.post(
-            route('code16.sharp.filters.update', { filterKey: filter.key }),
+            route('code16.sharp.filters.update', { key: filter.key }),
             { value },
             { preserveState: false, preserveScroll: false }
         );
