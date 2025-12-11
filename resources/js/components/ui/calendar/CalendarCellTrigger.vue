@@ -28,7 +28,7 @@ const forwardedProps = useForwardProps(delegatedProps)
       // Unavailable
       'data-[unavailable]:text-destructive-foreground data-[unavailable]:line-through',
       // Outside months
-      'data-[outside-view]:text-muted-foreground',
+      'data-[outside-view]:invisible data-[outside-view]:text-muted-foreground',
       props.class,
     )"
     v-bind="forwardedProps"
