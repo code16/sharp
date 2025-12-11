@@ -44,7 +44,6 @@ it('redirects to route with correct filterKey when missing and global filters ar
 it('sets the current filterKey according to the URL', function () {
     fakeGlobalFilter();
 
-    $this->post(route('code16.sharp.filters.update', 'test'), ['value' => 'three']);
     $this->get('/sharp/one/s-list/person/s-show/person/1')
         ->assertOk();
 
@@ -72,8 +71,6 @@ it('sets the current multiple filterKeys according to the URL', function () {
     fakeGlobalFilter('test1');
     fakeGlobalFilter('test2');
 
-    $this->post(route('code16.sharp.filters.update', 'test1'), ['value' => 'three']);
-    $this->post(route('code16.sharp.filters.update', 'test2'), ['value' => 'three']);
     $this->get('/sharp/one~two/s-list/person/s-show/person/1')
         ->assertOk();
 

@@ -231,7 +231,7 @@ it('allows instance deletion from the show', function () {
 
     fakeShowFor('person', $personShow);
 
-    $this->delete('/sharp/s-list/person/s-show/person/1')
+    $this->delete('/sharp/root/s-list/person/s-show/person/1')
         ->assertRedirect('/sharp/root/s-list/person');
 
     expect($personShow->wasDeleted)->toBeTrue();
@@ -242,7 +242,7 @@ it('disallows instance deletion without authorization', function () {
         ->entityFor('person')
         ->setProhibitedActions(['delete']);
 
-    $this->delete('/sharp/s-list/person/s-show/person/1')
+    $this->delete('/sharp/root/s-list/person/s-show/person/1')
         ->assertForbidden();
 });
 

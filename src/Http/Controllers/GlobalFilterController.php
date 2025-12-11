@@ -8,9 +8,9 @@ use Illuminate\Http\RedirectResponse;
 
 class GlobalFilterController extends SharpProtectedController
 {
-    public function update(string $filterKey, GlobalFilters $globalFilters): RedirectResponse
+    public function update(string $filterKey, string $key, GlobalFilters $globalFilters): RedirectResponse
     {
-        $handler = $globalFilters->findFilter($filterKey);
+        $handler = $globalFilters->findFilter($key);
 
         abort_if(! $handler instanceof GlobalRequiredFilter, 404);
 

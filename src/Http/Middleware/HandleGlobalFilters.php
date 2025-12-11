@@ -14,7 +14,7 @@ class HandleGlobalFilters
 
     public function handle(Request $request, Closure $next)
     {
-        if ($request->isMethod('GET') && ($filterKey = $request->route('filterKey'))) {
+        if ($filterKey = $request->route('filterKey')) {
             $filterKeys = explode(GlobalFilters::$valuesUrlSeparator, $filterKey);
 
             if ($this->globalFiltersHandler->isEnabled()

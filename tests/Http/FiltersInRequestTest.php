@@ -225,11 +225,14 @@ it('saves retained filters in the session when set', function () {
 
     $this
         ->withoutExceptionHandling()
-        ->post(route('code16.sharp.list.filters.store', ['entityKey' => 'person']), [
-            'filterValues' => [
-                'job' => 'physicist',
-            ],
-        ])
+        ->post(
+            route('code16.sharp.list.filters.store', [
+                'filterKey' => 'root',
+                'entityKey' => 'person',
+            ]), [
+                'filterValues' => ['job' => 'physicist'],
+            ]
+        )
         ->assertSessionHasNoErrors()
         ->assertRedirect('/sharp/root/s-list/person?filter_job=physicist');
 
@@ -318,11 +321,14 @@ it('handles retained multiple filter', function () {
     expect(session()->all())->not->toHaveKey('_sharp_retained_filter_job');
 
     $this
-        ->post(route('code16.sharp.list.filters.store', ['entityKey' => 'person']), [
-            'filterValues' => [
-                'job' => ['physicist', 'physician'],
-            ],
-        ])
+        ->post(
+            route('code16.sharp.list.filters.store', [
+                'filterKey' => 'root',
+                'entityKey' => 'person',
+            ]), [
+                'filterValues' => ['job' => ['physicist', 'physician']],
+            ]
+        )
         ->assertSessionHasNoErrors()
         ->assertRedirect('/sharp/root/s-list/person?filter_job='.urlencode('physicist,physician'));
 
@@ -476,11 +482,16 @@ it('fakes request segments to fix the breadcrumb in case it is built', function 
     });
 
     $this
-        ->post(route('code16.sharp.list.filters.store', ['entityKey' => 'person']), [
-            'filterValues' => [
-                'job' => 'physicist',
-            ],
-        ])
+        ->post(
+            route('code16.sharp.list.filters.store', [
+                'filterKey' => 'root',
+                'entityKey' => 'person',
+            ]), [
+                'filterValues' => [
+                    'job' => 'physicist',
+                ],
+            ]
+        )
         ->assertSessionHasNoErrors()
         ->assertRedirect('/sharp/root/s-list/person?filter_job=physicist');
 });

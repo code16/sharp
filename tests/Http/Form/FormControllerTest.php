@@ -155,7 +155,7 @@ it('returns configured form layout', function () {
 
 it('stores or updates an instance and redirect to the list', function () {
     $this
-        ->post('/sharp/s-list/person/s-form/person', [
+        ->post('/sharp/root/s-list/person/s-form/person', [
             'name' => 'Stephen Hawking',
         ])
         ->assertRedirectContains('/sharp/root/s-list/person')
@@ -163,7 +163,7 @@ it('stores or updates an instance and redirect to the list', function () {
         ->assertRedirectContains('highlighted_instance_id=1');
 
     $this
-        ->post('/sharp/s-list/person/s-form/person/1', [
+        ->post('/sharp/root/s-list/person/s-form/person/1', [
             'name' => 'Stephen Hawking',
         ])
         ->assertRedirectContains('/sharp/root/s-list/person')
@@ -175,7 +175,7 @@ it('redirects to the show after an update', function () {
     $this->get('/sharp/root/s-list/person/s-show/person/1/s-form/person/1');
 
     $this
-        ->post('/sharp/s-list/person/s-show/person/1/s-form/person/1', [
+        ->post('/sharp/root/s-list/person/s-show/person/1/s-form/person/1', [
             'name' => 'Stephen Hawking',
         ])
         ->assertRedirectContains('/sharp/root/s-list/person/s-show/person/1')
@@ -193,7 +193,7 @@ it('creates an instance and redirect to the show if configured', function () {
     });
 
     $this
-        ->post('/sharp/s-list/person/s-form/person', [
+        ->post('/sharp/root/s-list/person/s-form/person', [
             'name' => 'Stephen Hawking',
         ])
         ->assertRedirect('/sharp/root/s-list/person/s-show/person/1');
@@ -208,7 +208,7 @@ it('logs an error if the update() method does not return the instance id', funct
     });
 
     $this
-        ->post('/sharp/s-list/person/s-form/person')
+        ->post('/sharp/root/s-list/person/s-form/person')
         ->assertRedirect()
         ->assertSessionDoesntHaveErrors();
 
@@ -225,13 +225,13 @@ it('validates an instance before store and update with the rules() method', func
     });
 
     $this
-        ->post('/sharp/s-list/person/s-form/person', [
+        ->post('/sharp/root/s-list/person/s-form/person', [
             'name' => '',
         ])
         ->assertSessionHasErrors('name');
 
     $this
-        ->post('/sharp/s-list/person/s-form/person/1', [
+        ->post('/sharp/root/s-list/person/s-form/person/1', [
             'name' => '',
         ])
         ->assertSessionHasErrors('name');
@@ -262,7 +262,7 @@ it('passes the formatted data to the rules() method', function () {
     });
 
     $this
-        ->post('/sharp/s-list/person/s-form/person/1', [
+        ->post('/sharp/root/s-list/person/s-form/person/1', [
             'job' => 'Physicist',
             'name' => 'Marie Curie',
         ])
@@ -279,13 +279,13 @@ it('validates an instance before store and update with a validate() call', funct
     });
 
     $this
-        ->post('/sharp/s-list/person/s-form/person', [
+        ->post('/sharp/root/s-list/person/s-form/person', [
             'name' => '',
         ])
         ->assertSessionHasErrors('name');
 
     $this
-        ->post('/sharp/s-list/person/s-form/person/1', [
+        ->post('/sharp/root/s-list/person/s-form/person/1', [
             'name' => '',
         ])
         ->assertSessionHasErrors('name');
@@ -306,7 +306,7 @@ it('formats data before validation', function () {
     });
 
     $this
-        ->post('/sharp/s-list/person/s-form/person', [
+        ->post('/sharp/root/s-list/person/s-form/person', [
             'name' => ['text' => 'ba'],
         ])
         ->assertSessionHasErrors('name');
@@ -336,7 +336,7 @@ it('calls prepareForValidation() before validation on applicable fields', functi
     });
 
     $this
-        ->post('/sharp/s-list/person/s-form/person', [
+        ->post('/sharp/root/s-list/person/s-form/person', [
             'jobs' => [
                 ['id' => null,  'job' => ['id' => 1, 'label' => 'Physicist']],
                 ['id' => null],
@@ -384,7 +384,7 @@ it('updates an instance on a single form case', function () {
     sharp()->config()->declareEntity(SinglePersonEntity::class);
 
     $this
-        ->post('/sharp/s-show/single-person/s-form/single-person', [
+        ->post('/sharp/root/s-show/single-person/s-form/single-person', [
             'name' => 'Stephen Hawking',
         ])
         ->assertRedirect('/sharp/root/s-show/single-person');
@@ -503,13 +503,13 @@ it('allows to use the legacy validation', function () {
     });
 
     $this
-        ->post('/sharp/s-list/person/s-form/person', [
+        ->post('/sharp/root/s-list/person/s-form/person', [
             'name' => '',
         ])
         ->assertSessionHasErrors('name');
 
     $this
-        ->post('/sharp/s-list/person/s-form/person/1', [
+        ->post('/sharp/root/s-list/person/s-form/person/1', [
             'name' => '',
         ])
         ->assertSessionHasErrors('name');

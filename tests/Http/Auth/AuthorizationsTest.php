@@ -30,12 +30,12 @@ it('allows to configure prohibited actions on entities', function () {
     // Can't access to the form
     $this->get('/sharp/root/s-list/person/s-form/person')->assertForbidden();
     $this->get('/sharp/root/s-list/person/s-form/person/1')->assertForbidden();
-    $this->post('/sharp/s-list/person/s-form/person')->assertForbidden();
-    $this->post('/sharp/s-list/person/s-form/person/1')->assertForbidden();
+    $this->post('/sharp/root/s-list/person/s-form/person')->assertForbidden();
+    $this->post('/sharp/root/s-list/person/s-form/person/1')->assertForbidden();
 
     // Can't delete
     $this->deleteJson(route('code16.sharp.api.list.delete', ['person', 1]))->assertForbidden();
-    $this->delete('/sharp/s-list/person/s-show/person/1')->assertForbidden();
+    $this->delete('/sharp/root/s-list/person/s-show/person/1')->assertForbidden();
 
     // We can still view the list
     $this->get('/sharp/root/s-list/person')
@@ -59,7 +59,7 @@ it('allows to access to the form in readonly mode if there is no show', function
         ->setProhibitedActions(['update']);
 
     $this->get('/sharp/root/s-list/person/s-form/person/1')->assertOk();
-    $this->post('/sharp/s-list/person/s-form/person/1')->assertForbidden();
+    $this->post('/sharp/root/s-list/person/s-form/person/1')->assertForbidden();
 });
 
 it('handles default prohibited actions on entity', function () {
@@ -71,9 +71,9 @@ it('handles default prohibited actions on entity', function () {
     $this->get('/sharp/root/s-list/person/s-show/person/50')->assertOk();
     $this->get('/sharp/root/s-list/person/s-form/person')->assertOk();
     $this->get('/sharp/root/s-list/person/s-form/person/50')->assertForbidden();
-    $this->post('/sharp/s-list/person/s-form/person')->assertRedirect();
-    $this->post('/sharp/s-list/person/s-form/person/50')->assertForbidden();
-    $this->delete('/sharp/s-list/person/s-show/person/50')->assertForbidden();
+    $this->post('/sharp/root/s-list/person/s-form/person')->assertRedirect();
+    $this->post('/sharp/root/s-list/person/s-form/person/50')->assertForbidden();
+    $this->delete('/sharp/root/s-list/person/s-show/person/50')->assertForbidden();
 });
 
 it('returns prohibited actions with a show or form get request', function () {
@@ -229,10 +229,10 @@ it('checks the main entity prohibited actions in case of a sub entity', function
         ->setProhibitedActions(['delete']);
 
     $this->get('/sharp/root/s-list/person/s-form/person:big')->assertOk();
-    $this->post('/sharp/s-list/person/s-form/person:big')->assertRedirect();
+    $this->post('/sharp/root/s-list/person/s-form/person:big')->assertRedirect();
     $this->get('/sharp/root/s-list/person/s-form/person:big/50')->assertOk();
-    $this->post('/sharp/s-list/person/s-form/person:big/50')->assertRedirect();
-    $this->delete('/sharp/s-list/person/s-show/person:big/50')->assertForbidden();
+    $this->post('/sharp/root/s-list/person/s-form/person:big/50')->assertRedirect();
+    $this->delete('/sharp/root/s-list/person/s-show/person:big/50')->assertForbidden();
     $this->get('/sharp/root/s-list/person')->assertOk();
 });
 

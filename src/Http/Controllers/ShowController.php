@@ -66,7 +66,7 @@ class ShowController extends SharpProtectedController
         ]);
     }
 
-    public function delete(string $parentUri, string $entityKey, string $instanceId)
+    public function delete(string $filterKey, string $parentUri, string $entityKey, string $instanceId)
     {
         $this->authorizationManager->check('delete', $entityKey, $instanceId);
 

@@ -38,13 +38,13 @@ it('allows to configure a policy', function () {
     $this->get('/sharp/root/s-list/person/s-form/person/1')->assertOk();
     $this->get('/sharp/root/s-list/person/s-form/person')->assertOk();
 
-    $this->post('/sharp/s-list/person/s-form/person/1')->assertRedirect();
-    $this->post('/sharp/s-list/person/s-form/person')->assertRedirect();
+    $this->post('/sharp/root/s-list/person/s-form/person/1')->assertRedirect();
+    $this->post('/sharp/root/s-list/person/s-form/person')->assertRedirect();
 
-    $this->delete('/sharp/s-list/person/s-show/person/50')->assertForbidden();
+    $this->delete('/sharp/root/s-list/person/s-show/person/50')->assertForbidden();
 
     // Update policy with an id > 1 returns 403
-    $this->post('/sharp/s-list/person/s-form/person/2')->assertForbidden();
+    $this->post('/sharp/root/s-list/person/s-form/person/2')->assertForbidden();
 });
 
 it('returns policies with a show or form get request', function () {

@@ -114,7 +114,7 @@ class FormController extends SharpProtectedController
         ]);
     }
 
-    public function update(string $parentUri, EntityKey $entityKey, ?string $instanceId = null)
+    public function update(string $filterKey, string $parentUri, EntityKey $entityKey, ?string $instanceId = null)
     {
         $this->authorizationManager->check('update', $entityKey, $instanceId);
 
@@ -142,7 +142,7 @@ class FormController extends SharpProtectedController
         return redirect()->to($this->previousUrlWithHighlightedQuery($previousUrl, $entityKey, $instanceId));
     }
 
-    public function store(string $parentUri, EntityKey $entityKey)
+    public function store(string $filterKey, string $parentUri, EntityKey $entityKey)
     {
         $form = $this->entityManager
             ->entityFor($entityKey)
@@ -150,7 +150,7 @@ class FormController extends SharpProtectedController
 
         if ($form instanceof SharpSingleForm) {
             // There is no creation in SingleForms
-            return $this->update($parentUri, $entityKey);
+            return $this->update($filterKey, $parentUri, $entityKey);
         }
 
         $this->authorizationManager->check('create', $entityKey);

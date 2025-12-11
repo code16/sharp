@@ -319,13 +319,8 @@ class SharpBreadcrumb
                 ->values();
         }
 
-        if (request()->isMethod('GET')) {
-            // Have to skip /sharp/{filterKey}
-            return collect(request()->segments())->skip(2)->values();
-        }
-
-        // Have to skip /sharp
-        return collect(request()->segments())->skip(1)->values();
+        // Have to skip /sharp/{filterKey}
+        return collect(request()->segments())->skip(2)->values();
     }
 
     public function forceRequestSegments(array|Collection $segments): void

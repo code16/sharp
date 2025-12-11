@@ -42,25 +42,25 @@ Route::group([
         ])
     ));
 
-    Route::get('/home/{filterKey}', [HomeController::class, 'index'])
+    Route::get('{filterKey}/home', [HomeController::class, 'index'])
         ->name('code16.sharp.home');
 
     Route::get('{filterKey}/s-dashboard/{dashboardKey}', [DashboardController::class, 'show'])
         ->name('code16.sharp.dashboard');
 
-    Route::post('/s-dashboard/{dashboardKey}', [DashboardFiltersController::class, 'store'])
+    Route::post('{filterKey}/s-dashboard/{dashboardKey}', [DashboardFiltersController::class, 'store'])
         ->name('code16.sharp.dashboard.filters.store');
 
     Route::get('{filterKey}/s-list/{entityKey}', [EntityListController::class, 'show'])
         ->name('code16.sharp.list');
 
-    Route::post('/s-list/{entityKey}/filters', [EntityListFiltersController::class, 'store'])
+    Route::post('{filterKey}/s-list/{entityKey}/filters', [EntityListFiltersController::class, 'store'])
         ->name('code16.sharp.list.filters.store');
 
     Route::get('{filterKey}/s-show/{entityKey}', [SingleShowController::class, 'show'])
         ->name('code16.sharp.single-show');
 
-    Route::get('download/{entityKey}/{instanceId?}', [DownloadController::class, 'show'])
+    Route::get('{filterKey}/download/{entityKey}/{instanceId?}', [DownloadController::class, 'show'])
         ->name('code16.sharp.download.show');
 
     Route::where([
@@ -94,23 +94,23 @@ Route::group([
         Route::get('/{filterKey}/{parentUri}/s-show/{entityKey}/{instanceId}', [ShowController::class, 'show'])
             ->name('code16.sharp.show.show');
 
-        Route::delete('/{parentUri}/s-show/{entityKey}/{instanceId}', [ShowController::class, 'delete'])
+        Route::delete('/{filterKey}/{parentUri}/s-show/{entityKey}/{instanceId}', [ShowController::class, 'delete'])
             ->name('code16.sharp.show.delete');
 
         Route::get('/{filterKey}/{parentUri}/s-form/{entityKey}', [FormController::class, 'create'])
             ->name('code16.sharp.form.create');
 
-        Route::post('/{parentUri}/s-form/{entityKey}', [FormController::class, 'store'])
+        Route::post('/{filterKey}/{parentUri}/s-form/{entityKey}', [FormController::class, 'store'])
             ->name('code16.sharp.form.store');
 
         Route::get('/{filterKey}/{parentUri}/s-form/{entityKey}/{instanceId?}', [FormController::class, 'edit'])
             ->name('code16.sharp.form.edit');
 
-        Route::post('/{parentUri}/s-form/{entityKey}/{instanceId?}', [FormController::class, 'update'])
+        Route::post('/{filterKey}/{parentUri}/s-form/{entityKey}/{instanceId?}', [FormController::class, 'update'])
             ->name('code16.sharp.form.update');
     });
 
-    Route::post('/filters/{filterKey}', [GlobalFilterController::class, 'update'])
+    Route::post('{filterKey}/filters/{key}', [GlobalFilterController::class, 'update'])
         ->name('code16.sharp.filters.update');
 
     Route::post('/update-assets', UpdateAssetsController::class)
