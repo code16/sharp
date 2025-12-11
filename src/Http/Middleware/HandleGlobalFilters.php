@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Http\Middleware;
 
 use Closure;
+use Code16\Sharp\Exceptions\SharpInvalidFilterValueException;
 use Code16\Sharp\Filters\GlobalFilters\GlobalFilters;
 use Code16\Sharp\Filters\GlobalRequiredFilter;
 use Illuminate\Http\Request;
@@ -22,10 +23,14 @@ class HandleGlobalFilters
                 return redirect()->route('code16.sharp.home');
             }
 
-            collect($this->globalFiltersHandler->getFilters())
-                ->each(fn (GlobalRequiredFilter $globalFilter, int $index) => $globalFilter
-                    ->setCurrentValue($filterKeys[$index])
-                );
+            try {
+                collect($this->globalFiltersHandler->getFilters())
+                    ->each(fn (GlobalRequiredFilter $globalFilter, int $index) => $globalFilter
+                        ->setCurrentValue($filterKeys[$index])
+                    );
+            } catch (SharpInvalidFilterValueException) {
+                abort(404);
+            }
         }
 
         URL::defaults(['filterKey' => sharp()->context()->globalFilterUrlSegmentValue()]);
