@@ -12,6 +12,7 @@ final class GlobalFilters implements Arrayable
     use HasFilters;
 
     public static string $defaultKey = 'root';
+    public static string $valuesUrlSeparator = '~';
 
     public function getFilters(): array
     {

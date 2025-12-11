@@ -65,16 +65,43 @@ it('wont set an invalid value of the current filterKey according to the URL', fu
     expect(sharp()->context()->globalFilterValue('test'))->toEqual('two');
 });
 
-// TODO test multiple filters
+it('redirects to route with correct filterKeys when missing and multiple global filters are defined', function () {
+    fakeGlobalFilter('test1');
+    fakeGlobalFilter('test2');
 
-function fakeGlobalFilter(): void
+    $this->get('/sharp/s-list/person')
+        ->assertRedirect('/sharp/two~two/s-list/person');
+
+    $this->post(route('code16.sharp.filters.update', 'test1'), ['value' => 'one']);
+    $this->post(route('code16.sharp.filters.update', 'test2'), ['value' => 'three']);
+
+    $this->get('/sharp/s-list/person/s-show/person/1')
+        ->assertRedirect('/sharp/one~three/s-list/person/s-show/person/1');
+});
+
+it('sets the current multiple filterKeys according to the URL', function () {
+    fakeGlobalFilter('test1');
+    fakeGlobalFilter('test2');
+
+    $this->post(route('code16.sharp.filters.update', 'test1'), ['value' => 'three']);
+    $this->post(route('code16.sharp.filters.update', 'test2'), ['value' => 'three']);
+    $this->get('/sharp/one~two/s-list/person/s-show/person/1')
+        ->assertOk();
+
+    expect(sharp()->context()->globalFilterValue('test1'))->toEqual('one');
+    expect(sharp()->context()->globalFilterValue('test2'))->toEqual('two');
+});
+
+function fakeGlobalFilter(string $key = 'test'): void
 {
     sharp()->config()->addGlobalFilter(
-        new class() extends GlobalRequiredFilter
+        new class($key) extends GlobalRequiredFilter
         {
+            public function __construct(private string $key) {}
+
             public function buildFilterConfig(): void
             {
-                $this->configureKey('test');
+                $this->configureKey($this->key);
             }
 
             public function values(): array

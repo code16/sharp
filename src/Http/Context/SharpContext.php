@@ -32,7 +32,7 @@ class SharpContext
             )
             ->map(fn (GlobalRequiredFilter $globalFilter) => $globalFilter->currentValue())
             ->filter()
-            ->implode(':') ?: GlobalFilters::$defaultKey;
+            ->implode(GlobalFilters::$valuesUrlSeparator) ?: GlobalFilters::$defaultKey;
     }
 
     public function retainedFilterValue(string $handlerClassOrKey): array|string|null
