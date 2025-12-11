@@ -21,7 +21,7 @@ Route::group([
     Route::get('s-dashboard/{dashboardKey}', fn ($entityKey) => redirect(
         route('code16.sharp.dashboard', [
             'filterKey' => sharp()->context()->globalFilterUrlSegmentValue(),
-            'entityKey' => $entityKey,
+            'dashboardKey' => $entityKey,
         ])
     ));
     Route::get('s-list/{entityKey}', fn ($entityKey) => redirect(
