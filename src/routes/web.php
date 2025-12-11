@@ -20,20 +20,20 @@ Route::group([
     // Redirect GET routes without filterKey
     Route::get('s-dashboard/{dashboardKey}', fn ($entityKey) => redirect(
         route('code16.sharp.dashboard', [
-            sharp()->context()->globalFilterUrlSegmentValue(),
-            $entityKey]
-        )
+            'filterKey' => sharp()->context()->globalFilterUrlSegmentValue(),
+            'entityKey' => $entityKey,
+        ])
     ));
     Route::get('s-list/{entityKey}', fn ($entityKey) => redirect(
         route('code16.sharp.list', [
-            sharp()->context()->globalFilterUrlSegmentValue(),
-            $entityKey,
+            'filterKey' => sharp()->context()->globalFilterUrlSegmentValue(),
+            'entityKey' => $entityKey,
         ])
     ));
     Route::get('s-show/{entityKey}', fn ($entityKey) => redirect(
         route('code16.sharp.single-show', [
-            sharp()->context()->globalFilterUrlSegmentValue(),
-            $entityKey,
+            'filterKey' => sharp()->context()->globalFilterUrlSegmentValue(),
+            'entityKey' => $entityKey,
         ])
     ));
 
@@ -64,25 +64,25 @@ Route::group([
         // Redirect GET routes without filterKey
         Route::get('{parentUri}/s-show/{entityKey}/{instanceId}', fn ($parentUri, $entityKey, $instanceId) => redirect(
             route('code16.sharp.show.show', [
-                sharp()->context()->globalFilterUrlSegmentValue(),
-                $parentUri,
-                $entityKey,
-                $instanceId,
+                'filterKey' => sharp()->context()->globalFilterUrlSegmentValue(),
+                'parentUri' => $parentUri,
+                'entityKey' => $entityKey,
+                'instanceId' => $instanceId,
             ])
         ));
         Route::get('{parentUri}/s-form/{entityKey}', fn ($parentUri, $entityKey) => redirect(
             route('code16.sharp.form.create', [
-                sharp()->context()->globalFilterUrlSegmentValue(),
-                $parentUri,
-                $entityKey,
+                'filterKey' => sharp()->context()->globalFilterUrlSegmentValue(),
+                'parentUri' => $parentUri,
+                'entityKey' => $entityKey,
             ])
         ));
         Route::get('{parentUri}/s-form/{entityKey}/{instanceId}', fn ($parentUri, $entityKey, $instanceId) => redirect(
             route('code16.sharp.form.edit', [
-                sharp()->context()->globalFilterUrlSegmentValue(),
-                $parentUri,
-                $entityKey,
-                $instanceId,
+                'filterKey' => sharp()->context()->globalFilterUrlSegmentValue(),
+                'parentUri' => $parentUri,
+                'entityKey' => $entityKey,
+                'instanceId' => $instanceId,
             ])
         ));
 
