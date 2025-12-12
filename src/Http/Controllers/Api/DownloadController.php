@@ -19,7 +19,8 @@ class DownloadController extends ApiController
         );
 
         return response(
-            Storage::disk($disk)->get($path), 200, [
+            content: Storage::disk($disk)->get($path),
+            headers: [
                 'Content-Type' => Storage::disk($disk)->mimeType($path),
                 'Content-Disposition' => 'attachment',
             ],
