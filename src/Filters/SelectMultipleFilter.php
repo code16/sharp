@@ -4,8 +4,10 @@ namespace Code16\Sharp\Filters;
 
 use Illuminate\Support\Arr;
 
-abstract class SelectMultipleFilter extends SelectFilter
+abstract class SelectMultipleFilter extends Filter
 {
+    use SelectFilterTrait;
+
     public function fromQueryParam($value): array
     {
         return $value !== null
@@ -20,5 +22,10 @@ abstract class SelectMultipleFilter extends SelectFilter
         return count($values)
             ? implode(',', $values)
             : null;
+    }
+
+    public function defaultValue(): array
+    {
+        return [];
     }
 }

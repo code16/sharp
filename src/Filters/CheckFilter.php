@@ -16,6 +16,11 @@ class CheckFilter extends Filter
         return $value;
     }
 
+    public function defaultValue(): bool
+    {
+        return false;
+    }
+
     public function toArray(): array
     {
         return parent::buildArray([

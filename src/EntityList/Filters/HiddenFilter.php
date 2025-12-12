@@ -27,4 +27,9 @@ class HiddenFilter extends Filter
     {
         return [];
     }
+
+    public function defaultValue(): mixed
+    {
+        return null;
+    }
 }

@@ -2,8 +2,10 @@
 
 namespace Code16\Sharp\Filters;
 
-abstract class DateRangeRequiredFilter extends DateRangeFilter
+abstract class DateRangeRequiredFilter extends Filter
 {
+    use DateRangeFilterTrait;
+
     /**
      * @return array Expected format: ["start" => Carbon::yesterday(), "end" => Carbon::today()]
      */

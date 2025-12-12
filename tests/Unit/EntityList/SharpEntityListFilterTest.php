@@ -319,6 +319,68 @@ it('allows to define searchKeys on a filter', function () {
     expect($list->listConfig()['filters']['_root'][0]['searchKeys'])->toEqual(['a', 'b']);
 });
 
+it('allows unrequired filter to have a default value', function () {
+    $list = new class() extends FakeSharpEntityList
+    {
+        public function getFilters(): array
+        {
+            return [
+                new class() extends SelectFilter
+                {
+                    public function buildFilterConfig(): void
+                    {
+                        $this->configureKey('select');
+                    }
+
+                    public function values(): array
+                    {
+                        return ['A' => 'A', 'B' => 'B'];
+                    }
+
+                    public function defaultValue(): mixed
+                    {
+                        return 'B';
+                    }
+                },
+
+                new class() extends DateRangeFilter
+                {
+                    public function buildFilterConfig(): void
+                    {
+                        $this->configureKey('date');
+                    }
+
+                    public function defaultValue(): mixed
+                    {
+                        return [
+                            'start' => today()->subDay(),
+                            'end' => today(),
+                        ];
+                    }
+                },
+            ];
+        }
+    };
+
+    $list->buildListConfig();
+    $filterValues = $list->filterContainer()->getCurrentFilterValuesForFront(null);
+
+    expect($filterValues['default']['select'])->toEqual('B')
+        ->and($filterValues['current']['select'])->toEqual('B')
+        ->and($filterValues['default']['date'])->toMatchArray([
+            'start' => today()->subDay()->format('Y-m-d'),
+            'end' => today()->format('Y-m-d'),
+        ])
+        ->and($filterValues['current']['date'])->toMatchArray([
+            'start' => today()->subDay()->format('Y-m-d'),
+            'end' => today()->format('Y-m-d'),
+        ])
+        ->and($filterValues['valuated'])->toEqual([
+            'select' => false,
+            'date' => false,
+        ]);
+});
+
 it('allows to declare a filter as retained and to set its default value', function () {
     $list = new class() extends FakeSharpEntityList
     {
