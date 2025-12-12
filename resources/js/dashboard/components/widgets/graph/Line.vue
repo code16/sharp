@@ -1,12 +1,9 @@
 <script setup lang="ts">
-    import { computed } from "vue";
-    import { normalizeColor } from "@/dashboard/utils/chart";
     import { GraphWidgetData } from "@/types";
     import { DashboardWidgetProps } from "@/dashboard/types";
-    import { VisXYContainer, VisAxis, VisLine, VisTooltip, VisBulletLegend, VisGroupedBar } from "@unovis/vue";
+    import { VisXYContainer, VisAxis, VisLine, VisTooltip, VisBulletLegend, VisCrosshair } from "@unovis/vue";
     import { AxisConfigInterface, CurveType } from "@unovis/ts";
     import { useXYChart } from "@/dashboard/components/widgets/graph/useXYChart";
-    import { XYComponentConfigInterface } from "@unovis/ts/core/xy-component/config";
 
     const props = defineProps<DashboardWidgetProps<GraphWidgetData>>();
 
@@ -18,7 +15,7 @@
 </script>
 
 <template>
-    <div class="mt-2" :class="{ 'mb-2': props.widget.showLegend && !props.widget.minimal }">
+    <div class="mt-2">
         <VisXYContainer :data="data">
             <template v-if="!props.widget.minimal">
                 <VisAxis type="x" :tickFormat="tickFormat" />
@@ -32,10 +29,14 @@
                 :curveType="props.widget.options.curved ? CurveType.MonotoneX : CurveType.Linear"
             />
 
+            <VisCrosshair :color="(_, i) => props.value?.datasets[i].color" />
+
             <VisTooltip />
         </VisXYContainer>
         <template v-if="props.widget.showLegend && !props.widget.minimal">
-            <VisBulletLegend :items="props.value.datasets?.map(dataset => ({ name: dataset.label, color: dataset.color }))" />
+            <div class="mt-4 flex justify-center">
+                <VisBulletLegend :items="props.value.datasets?.map(dataset => ({ name: dataset.label, color: dataset.color }))" />
+            </div>
         </template>
     </div>
 </template>

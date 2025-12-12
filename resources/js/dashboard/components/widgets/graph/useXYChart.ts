@@ -15,6 +15,7 @@ export function useXYChart(props: DashboardWidgetProps<GraphWidgetData>) {
     }, []));
     const x: XYComponentConfigInterface<Datum>['x'] = (d, i) => i;
     const y = computed<XYComponentConfigInterface<Datum>['y']>(() => props.value?.datasets.map((dataset, i) => (d) => d[i]));
+    const color: XYComponentConfigInterface<Datum>['color'] = (_, i) => props.value?.datasets[i].color;
 
     return { data, x, y };
 }
