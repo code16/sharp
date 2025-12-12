@@ -17,18 +17,19 @@ class HandleGlobalFilters
         if ($filterKey = $request->route('filterKey')) {
             $filterKeys = explode(GlobalFilters::$valuesUrlSeparator, $filterKey);
 
-            if ($this->globalFiltersHandler->isEnabled()
-                && count($filterKeys) != count($this->globalFiltersHandler->getFilters())
-            ) {
-                return redirect()->route('code16.sharp.home', [
-                    'filterKey' => sharp()->context()->globalFilterUrlSegmentValue(),
-                ]);
-            }
+            if ($this->globalFiltersHandler->isEnabled()) {
+                $globalFilters = $this->globalFiltersHandler->getFilters();
+                if (count($filterKeys) !== count($globalFilters)) {
+                    return redirect()->route('code16.sharp.home', [
+                        'filterKey' => sharp()->context()->globalFilterUrlSegmentValue(),
+                    ]);
+                }
 
-            collect($this->globalFiltersHandler->getFilters())
-                ->each(fn (GlobalRequiredFilter $globalFilter, int $index) => $globalFilter
-                    ->setCurrentValue($filterKeys[$index])
-                );
+                collect($globalFilters)
+                    ->each(fn (GlobalRequiredFilter $globalFilter, int $index) => $globalFilter
+                        ->setCurrentValue($filterKeys[$index])
+                    );
+            }
         }
 
         URL::defaults(['filterKey' => sharp()->context()->globalFilterUrlSegmentValue()]);
