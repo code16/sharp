@@ -27,7 +27,8 @@ class SharpBreadcrumb
 
     public function allSegments(): array
     {
-        $url = sharp()->config()->get('custom_url_segment');
+        $url = sharp()->config()->get('custom_url_segment')
+            .'/'.sharp()->context()->globalFilterUrlSegmentValue();
 
         return $this
             ->breadcrumbItems()
