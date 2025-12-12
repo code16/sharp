@@ -18,7 +18,7 @@ class HandleGlobalFilters
             $filterKeys = explode(GlobalFilters::$valuesUrlSeparator, $filterKey);
 
             if ($this->globalFiltersHandler->isEnabled()
-                && count($filterKeys) != count($this->globalFiltersHandler->getFilters())
+                && count($filterKeys) !== count($this->globalFiltersHandler->getFilters())
             ) {
                 return redirect()->route('code16.sharp.home', [
                     'filterKey' => sharp()->context()->globalFilterUrlSegmentValue(),
