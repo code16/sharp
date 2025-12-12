@@ -44,6 +44,7 @@ class SharpConfigBuilder
                 \Illuminate\Session\Middleware\StartSession::class,
                 \Illuminate\View\Middleware\ShareErrorsFromSession::class,
                 \Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class,
+                \Code16\Sharp\Http\Middleware\HandleGlobalFilters::class,
                 \Illuminate\Routing\Middleware\SubstituteBindings::class,
             ],
             'web' => [

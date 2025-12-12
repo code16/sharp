@@ -340,7 +340,7 @@
                                                                     </template>
                                                                     <template v-if="show.authorizations.update">
                                                                         <Button class="h-8 pointer-events-auto" size="sm" :disabled="isReordering" as-child>
-                                                                            <Link :as="isReordering ? 'button' : 'a'" :href="show.formUrl">
+                                                                            <Link :as="isReordering ? 'button' : 'a'" :href="show.config.formEditUrl">
                                                                                 {{ props.show.config.editButtonLabel || __('sharp::action_bar.show.edit_button') }}
                                                                             </Link>
                                                                         </Button>

@@ -352,13 +352,13 @@ it('handles ordered list widget item url', function () {
                         'id' => 1,
                         'label' => 'John Wayne',
                         'count' => 888,
-                        'url' => 'http://localhost/sharp/s-list/my-entity?filter_type=1',
+                        'url' => 'http://localhost/sharp/root/s-list/my-entity?filter_type=1',
                     ],
                     [
                         'id' => 2,
                         'label' => 'Jane Wayne',
                         'count' => 771,
-                        'url' => 'http://localhost/sharp/s-list/my-entity?filter_type=2',
+                        'url' => 'http://localhost/sharp/root/s-list/my-entity?filter_type=2',
                     ],
                     [
                         'id' => 3,

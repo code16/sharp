@@ -11,6 +11,14 @@ uses(TestCase::class)
     ->in(__DIR__);
 
 uses()
+    ->beforeEach(function () {
+        // We add a default here to avoid putting this everywhere in unit tests
+        // it's handled by middleware in a real request, but we don't want to test that here.
+        \Illuminate\Support\Facades\URL::defaults(['filterKey' => \Code16\Sharp\Filters\GlobalFilters\GlobalFilters::$defaultKey]);
+    })
+    ->in(__DIR__.'/Unit');
+
+uses()
     ->group('eloquent')
     ->beforeEach(function () {
         Schema::create('people', function (Blueprint $table) {

@@ -33,7 +33,7 @@ it('gets formatted show data for an instance', function () {
         }
     });
 
-    $this->get('/sharp/s-list/person/s-show/person/1')
+    $this->get('/sharp/root/s-list/person/s-show/person/1')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('show.data.name', ['text' => 'James Clerk Maxwell'])
@@ -52,7 +52,7 @@ it('gets formatted show data even without data transformation', function () {
         }
     });
 
-    $this->get('/sharp/s-list/person/s-show/person/1')
+    $this->get('/sharp/root/s-list/person/s-show/person/1')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('show.data.name', ['text' => 'James Clerk Maxwell'])
@@ -76,7 +76,7 @@ it('filters out data which is not a field', function () {
         }
     });
 
-    $this->get('/sharp/s-list/person/s-show/person/1')
+    $this->get('/sharp/root/s-list/person/s-show/person/1')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->has('show.data.name')
@@ -114,7 +114,7 @@ it('gets attribute for entity state if defined', function () {
         }
     });
 
-    $this->get('/sharp/s-list/person/s-show/person/1')
+    $this->get('/sharp/root/s-list/person/s-show/person/1')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->has('show.data.name')
@@ -133,7 +133,7 @@ it('returns configured show fields', function () {
         }
     });
 
-    $this->get('/sharp/s-list/person/s-show/person/1')
+    $this->get('/sharp/root/s-list/person/s-show/person/1')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->has('show.fields.name', fn (Assert $page) => $page
@@ -170,7 +170,7 @@ it('returns configured show layout', function () {
 
     $this->withoutExceptionHandling();
 
-    $this->get('/sharp/s-list/person/s-show/person/1')
+    $this->get('/sharp/root/s-list/person/s-show/person/1')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->has('show.layout.sections.0.columns.0', fn (Assert $page) => $page
@@ -191,7 +191,7 @@ it('returns show configuration', function () {
         }
     });
 
-    $this->get('/sharp/s-list/person/s-show/person/1')
+    $this->get('/sharp/root/s-list/person/s-show/person/1')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('show.config.breadcrumbAttribute', 'name')
@@ -211,7 +211,7 @@ it('gets show data for an instance in a single show case', function () {
         }
     });
 
-    $this->get('/sharp/s-show/single-person')
+    $this->get('/sharp/root/s-show/single-person')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('show.data.name.text', 'Ernest Rutherford')
@@ -231,8 +231,8 @@ it('allows instance deletion from the show', function () {
 
     fakeShowFor('person', $personShow);
 
-    $this->delete('/sharp/s-list/person/s-show/person/1')
-        ->assertRedirect('/sharp/s-list/person');
+    $this->delete('/sharp/root/s-list/person/s-show/person/1')
+        ->assertRedirect('/sharp/root/s-list/person');
 
     expect($personShow->wasDeleted)->toBeTrue();
 });
@@ -242,7 +242,7 @@ it('disallows instance deletion without authorization', function () {
         ->entityFor('person')
         ->setProhibitedActions(['delete']);
 
-    $this->delete('/sharp/s-list/person/s-show/person/1')
+    $this->delete('/sharp/root/s-list/person/s-show/person/1')
         ->assertForbidden();
 });
 
@@ -273,13 +273,13 @@ it('returns commands authorization in config', function () {
         }
     });
 
-    $this->get('/sharp/s-list/person/s-show/person/1')
+    $this->get('/sharp/root/s-list/person/s-show/person/1')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('show.config.commands.instance.0.0.authorization', true)
         );
 
-    $this->get('/sharp/s-list/person/s-show/person/11')
+    $this->get('/sharp/root/s-list/person/s-show/person/11')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('show.config.commands.instance.0.0.authorization', false)
@@ -298,7 +298,7 @@ it('allows to configure a page alert', function () {
         }
     });
 
-    $this->get('/sharp/s-list/person/s-show/person/1')
+    $this->get('/sharp/root/s-list/person/s-show/person/1')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('show.pageAlert', [
@@ -324,7 +324,7 @@ it('allows to configure a page alert on a specific section', function () {
         }
     });
 
-    $this->get('/sharp/s-list/person/s-show/person/1')
+    $this->get('/sharp/root/s-list/person/s-show/person/1')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('show.pageAlert', [
@@ -359,7 +359,7 @@ it('allows to configure a page alert with a closure as content', function () {
         }
     });
 
-    $this->get('/sharp/s-list/person/s-show/person/1')
+    $this->get('/sharp/root/s-list/person/s-show/person/1')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('show.pageAlert', [
@@ -385,7 +385,7 @@ it('passes through transformers to return show data for an instance', function (
         }
     });
 
-    $this->get('/sharp/s-list/person/s-show/person/1')
+    $this->get('/sharp/root/s-list/person/s-show/person/1')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('show.data.name', ['text' => 'JAMES CLERK MAXWELL'])
@@ -409,7 +409,7 @@ it('allows to configure a title attribute', function () {
         }
     });
 
-    $this->get('/sharp/s-list/person/s-show/person/1')
+    $this->get('/sharp/root/s-list/person/s-show/person/1')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('show.title', 'James Clerk Maxwell')
@@ -441,12 +441,63 @@ it('allows to configure a localized title attribute', function () {
         }
     });
 
-    $this->get('/sharp/s-list/person/s-show/person/1')
+    $this->get('/sharp/root/s-list/person/s-show/person/1')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('show.title', [
                 'fr' => 'Physicien',
                 'en' => 'Physicist',
             ])
+        );
+});
+
+it('returns form edit url', function () {
+    fakeShowFor('person', new class() extends PersonShow
+    {
+        public function buildShowConfig(): void {}
+
+        public function find($id): array
+        {
+            return $this
+                ->transform([
+                    'name' => 'James Clerk Maxwell',
+                ]);
+        }
+    });
+
+    $this->get('/sharp/root/s-list/person/s-show/person/1')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('show.config.formEditUrl', route('code16.sharp.form.edit', [
+                'parentUri' => 's-list/person/s-show/person/1',
+                'entityKey' => 'person',
+                'instanceId' => 1,
+            ]))
+        );
+});
+
+it('returns form edit url for single show', function () {
+    sharp()->config()->declareEntity(SinglePersonEntity::class);
+
+    fakeShowFor('single-person', new class() extends PersonSingleShow
+    {
+        public function buildShowConfig(): void {}
+
+        public function findSingle(): array
+        {
+            return $this
+                ->transform([
+                    'name' => 'James Clerk Maxwell',
+                ]);
+        }
+    });
+
+    $this->get('/sharp/root/s-show/single-person')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('show.config.formEditUrl', route('code16.sharp.form.edit', [
+                'parentUri' => 's-show/single-person',
+                'entityKey' => 'single-person',
+            ]))
         );
 });

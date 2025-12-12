@@ -17,50 +17,100 @@ Route::group([
     'prefix' => '/'.sharp()->config()->get('custom_url_segment'),
     'middleware' => ['sharp_common', 'sharp_web'],
 ], function () {
-    Route::get('/', [HomeController::class, 'index'])
+    // Redirect GET routes without filterKey
+    Route::get('/', fn () => redirect(
+        route('code16.sharp.home', [
+            'filterKey' => sharp()->context()->globalFilterUrlSegmentValue(),
+        ])
+    ));
+    Route::get('s-dashboard/{dashboardKey}', fn ($entityKey) => redirect(
+        route('code16.sharp.dashboard', [
+            'filterKey' => sharp()->context()->globalFilterUrlSegmentValue(),
+            'dashboardKey' => $entityKey,
+        ])
+    ));
+    Route::get('s-list/{entityKey}', fn ($entityKey) => redirect(
+        route('code16.sharp.list', [
+            'filterKey' => sharp()->context()->globalFilterUrlSegmentValue(),
+            'entityKey' => $entityKey,
+        ])
+    ));
+    Route::get('s-show/{entityKey}', fn ($entityKey) => redirect(
+        route('code16.sharp.single-show', [
+            'filterKey' => sharp()->context()->globalFilterUrlSegmentValue(),
+            'entityKey' => $entityKey,
+        ])
+    ));
+
+    Route::get('{filterKey}/home', [HomeController::class, 'index'])
         ->name('code16.sharp.home');
 
-    Route::get('/s-dashboard/{dashboardKey}', [DashboardController::class, 'show'])
+    Route::get('{filterKey}/s-dashboard/{dashboardKey}', [DashboardController::class, 'show'])
         ->name('code16.sharp.dashboard');
 
-    Route::post('/s-dashboard/{dashboardKey}', [DashboardFiltersController::class, 'store'])
+    Route::post('{filterKey}/s-dashboard/{dashboardKey}', [DashboardFiltersController::class, 'store'])
         ->name('code16.sharp.dashboard.filters.store');
 
-    Route::get('/s-list/{entityKey}', [EntityListController::class, 'show'])
+    Route::get('{filterKey}/s-list/{entityKey}', [EntityListController::class, 'show'])
         ->name('code16.sharp.list');
 
-    Route::post('/s-list/{entityKey}/filters', [EntityListFiltersController::class, 'store'])
+    Route::post('{filterKey}/s-list/{entityKey}/filters', [EntityListFiltersController::class, 'store'])
         ->name('code16.sharp.list.filters.store');
 
-    Route::get('/s-show/{entityKey}', [SingleShowController::class, 'show'])
+    Route::get('{filterKey}/s-show/{entityKey}', [SingleShowController::class, 'show'])
         ->name('code16.sharp.single-show');
 
-    Route::get('/download/{entityKey}/{instanceId?}', [DownloadController::class, 'show'])
+    Route::get('{filterKey}/download/{entityKey}/{instanceId?}', [DownloadController::class, 'show'])
         ->name('code16.sharp.download.show');
 
     Route::where([
         'parentUri' => '(s-list|s-show)/.+',
     ])->group(function () {
-        Route::get('/{parentUri}/s-show/{entityKey}/{instanceId}', [ShowController::class, 'show'])
+        // Redirect GET routes without filterKey
+        Route::get('{parentUri}/s-show/{entityKey}/{instanceId}', fn ($parentUri, $entityKey, $instanceId) => redirect(
+            route('code16.sharp.show.show', [
+                'filterKey' => sharp()->context()->globalFilterUrlSegmentValue(),
+                'parentUri' => $parentUri,
+                'entityKey' => $entityKey,
+                'instanceId' => $instanceId,
+            ])
+        ));
+        Route::get('{parentUri}/s-form/{entityKey}', fn ($parentUri, $entityKey) => redirect(
+            route('code16.sharp.form.create', [
+                'filterKey' => sharp()->context()->globalFilterUrlSegmentValue(),
+                'parentUri' => $parentUri,
+                'entityKey' => $entityKey,
+            ])
+        ));
+        Route::get('{parentUri}/s-form/{entityKey}/{instanceId}', fn ($parentUri, $entityKey, $instanceId) => redirect(
+            route('code16.sharp.form.edit', [
+                'filterKey' => sharp()->context()->globalFilterUrlSegmentValue(),
+                'parentUri' => $parentUri,
+                'entityKey' => $entityKey,
+                'instanceId' => $instanceId,
+            ])
+        ));
+
+        Route::get('/{filterKey}/{parentUri}/s-show/{entityKey}/{instanceId}', [ShowController::class, 'show'])
             ->name('code16.sharp.show.show');
 
-        Route::delete('/{parentUri}/s-show/{entityKey}/{instanceId}', [ShowController::class, 'delete'])
+        Route::delete('/{filterKey}/{parentUri}/s-show/{entityKey}/{instanceId}', [ShowController::class, 'delete'])
             ->name('code16.sharp.show.delete');
 
-        Route::get('/{parentUri}/s-form/{entityKey}', [FormController::class, 'create'])
+        Route::get('/{filterKey}/{parentUri}/s-form/{entityKey}', [FormController::class, 'create'])
             ->name('code16.sharp.form.create');
 
-        Route::post('/{parentUri}/s-form/{entityKey}', [FormController::class, 'store'])
+        Route::post('/{filterKey}/{parentUri}/s-form/{entityKey}', [FormController::class, 'store'])
             ->name('code16.sharp.form.store');
 
-        Route::get('/{parentUri}/s-form/{entityKey}/{instanceId?}', [FormController::class, 'edit'])
+        Route::get('/{filterKey}/{parentUri}/s-form/{entityKey}/{instanceId?}', [FormController::class, 'edit'])
             ->name('code16.sharp.form.edit');
 
-        Route::post('/{parentUri}/s-form/{entityKey}/{instanceId?}', [FormController::class, 'update'])
+        Route::post('/{filterKey}/{parentUri}/s-form/{entityKey}/{instanceId?}', [FormController::class, 'update'])
             ->name('code16.sharp.form.update');
     });
 
-    Route::post('/filters/{filterKey}', [GlobalFilterController::class, 'update'])
+    Route::post('{filterKey}/filters', [GlobalFilterController::class, 'update'])
         ->name('code16.sharp.filters.update');
 
     Route::post('/update-assets', UpdateAssetsController::class)

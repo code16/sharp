@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Storage;
 
 class DownloadController extends ApiController
 {
-    public function show(string $entityKey, ?string $instanceId = null)
+    public function show(string $filterKey, string $entityKey, ?string $instanceId = null)
     {
         $this->authorizationManager->check('view', $entityKey, $instanceId);
 

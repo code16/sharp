@@ -4,7 +4,7 @@ namespace Code16\Sharp\Http\Controllers;
 
 class EntityListFiltersController extends SharpProtectedController
 {
-    public function store(string $entityKey)
+    public function store(string $filterKey, string $entityKey)
     {
         $this->authorizationManager->check('entity', $entityKey);
 
@@ -13,7 +13,7 @@ class EntityListFiltersController extends SharpProtectedController
         //  in case it is built in the functional code (buildListConfig() for instance)
         sharp()->context()->breadcrumb()->forceRequestSegments(
             collect(request()->segments())
-                ->slice(1, -1)
+                ->slice(2, -1)
                 ->values()
         );
 

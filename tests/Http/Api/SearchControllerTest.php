@@ -35,12 +35,12 @@ it('returns result on a valid search', function () {
                 'resultLinks' => [
                     [
                         'label' => 'John Wayne',
-                        'link' => url('sharp/s-list/person/s-show/person/1'),
+                        'link' => url('sharp/root/s-list/person/s-show/person/1'),
                         'detail' => null,
                     ],
                     [
                         'label' => 'Jane Ford',
-                        'link' => url('sharp/s-list/person/s-show/person/2'),
+                        'link' => url('sharp/root/s-list/person/s-show/person/2'),
                         'detail' => 'Some detail',
                     ],
                 ],
@@ -157,7 +157,7 @@ it('handles multiple result sets', function () {
                     'resultLinks' => [
                         [
                             'label' => 'John Wayne',
-                            'link' => url('sharp/s-list/person/s-show/person/1'),
+                            'link' => url('sharp/root/s-list/person/s-show/person/1'),
                             'detail' => null,
                         ],
                     ],
@@ -171,7 +171,7 @@ it('handles multiple result sets', function () {
                     'resultLinks' => [
                         [
                             'label' => 'Aston Martin',
-                            'link' => url('sharp/s-list/car/s-show/car/1'),
+                            'link' => url('sharp/root/s-list/car/s-show/car/1'),
                             'detail' => null,
                         ],
                     ],
@@ -238,7 +238,7 @@ it('the global search is sent with every inertia request, if enabled and authori
     sharp()->config()->declareEntity(PersonEntity::class);
 
     $this
-        ->get('/sharp/s-list/person')
+        ->get('/sharp/root/s-list/person')
         ->assertInertia(fn (Assert $page) => $page
             ->where('globalSearch', null)
         );
@@ -256,14 +256,14 @@ it('the global search is sent with every inertia request, if enabled and authori
     );
 
     $this
-        ->get('/sharp/s-list/person')
+        ->get('/sharp/root/s-list/person')
         ->assertInertia(fn (Assert $page) => $page
             ->where('globalSearch', null)
         );
 
     $this
         ->actingAs(User::make(['email' => 'authorized-user@test.fr']))
-        ->get('/sharp/s-list/person')
+        ->get('/sharp/root/s-list/person')
         ->assertInertia(fn (Assert $page) => $page
             ->where('globalSearch', [
                 'config' => [

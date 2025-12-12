@@ -52,9 +52,10 @@ it('gets dashboard data as JSON in an EmbeddedDashboard case', function () {
         }
     });
 
-    $this->getJson('/sharp/api/dashboard/'.DashboardEntity::$entityKey, headers: [
-        SharpBreadcrumb::CURRENT_PAGE_URL_HEADER => url('/sharp/s-list/person/s-show/person/1'),
-    ])
+    $this
+        ->getJson('/sharp/api/root/dashboard/'.DashboardEntity::$entityKey, headers: [
+            SharpBreadcrumb::CURRENT_PAGE_URL_HEADER => url('/sharp/root/s-list/person/s-show/person/1'),
+        ])
         ->assertOk()
         ->assertJson(fn (AssertableJson $json) => $json
             ->has('data.panel.data', fn (AssertableJson $json) => $json

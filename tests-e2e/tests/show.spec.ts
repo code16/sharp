@@ -6,7 +6,7 @@ import { init } from "../helpers";
 test.describe('show', () => {
   test('display show', async ({ page }) => {
     await init(page, { seed: { show: true } });
-    await page.goto('/sharp/s-list/test-models/s-show/test-models/1');
+    await page.goto('/sharp/root/s-list/test-models/s-show/test-models/1');
     await expect(page.getByRole('heading', { name: 'Example' })).toBeVisible();
   });
 
@@ -16,7 +16,7 @@ test.describe('show', () => {
         await init(page, { seed: { show: true } });
       }),
       goto: ({ page }, use) => use(async () => {
-        await page.goto('/sharp/s-list/test-models/s-show/test-models/1');
+        await page.goto('/sharp/root/s-list/test-models/s-show/test-models/1');
       }),
       openCommandDropdown: ({ page }, use) => use(async () => {
         await page
@@ -31,7 +31,7 @@ test.describe('show', () => {
 
   test('state', async ({ page }) => {
     await init(page, { seed: { show: true } });
-    await page.goto('/sharp/s-list/test-models/s-show/test-models/1');
+    await page.goto('/sharp/root/s-list/test-models/s-show/test-models/1');
     const stateButton = page.getByRole('group', { name: 'Menu for Example' }).getByRole('button', { name: 'Update state' });
     const actionsButton = page.getByRole('group', { name: 'Menu for Example' }).getByRole('button', { name: 'Actions' });
     await expect(stateButton).toHaveText('Draft');
@@ -58,7 +58,7 @@ test.describe('show', () => {
 test.describe('single show', () => {
   test('display single show', async ({ page }) => {
     await init(page, { seed: { show: true } });
-    await page.goto('/sharp/s-show/test-models-single');
+    await page.goto('/sharp/root/s-show/test-models-single');
     await expect(page.getByRole('heading', { name: 'Example' })).toBeVisible();
   });
 });

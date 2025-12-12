@@ -789,6 +789,7 @@ export type SessionData = {
 export type SessionStatusLevel = "error" | "success";
 export type ShowConfigData = {
   deleteConfirmationText: string;
+  formEditUrl: string;
   isSingle: boolean;
   commands: ConfigCommandsData | null;
   titleAttribute: string | null;

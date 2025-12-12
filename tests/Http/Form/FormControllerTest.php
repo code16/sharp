@@ -40,7 +40,7 @@ it('gets form data for an instance', function () {
         }
     });
 
-    $this->get('/sharp/s-list/person/s-form/person/1')
+    $this->get('/sharp/root/s-list/person/s-form/person/1')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('form.data.name', 'James Clerk Maxwell')
@@ -59,7 +59,7 @@ it('gets form initial data for an entity in creation', function () {
         }
     });
 
-    $this->get('/sharp/s-list/person/s-form/person')
+    $this->get('/sharp/root/s-list/person/s-form/person')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('form.data.name', 'Who is this guy?')
@@ -84,7 +84,7 @@ it('filters out data which is not a field', function () {
         }
     });
 
-    $this->get('/sharp/s-list/person/s-form/person/1')
+    $this->get('/sharp/root/s-list/person/s-form/person/1')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->has('form.data.name')
@@ -102,7 +102,7 @@ it('returns configured form fields', function () {
         }
     });
 
-    $this->get('/sharp/s-list/person/s-form/person/1')
+    $this->get('/sharp/root/s-list/person/s-form/person/1')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->has('form.fields.name', fn (Assert $page) => $page
@@ -137,7 +137,7 @@ it('returns configured form layout', function () {
         }
     });
 
-    $this->get('/sharp/s-list/person/s-form/person/1')
+    $this->get('/sharp/root/s-list/person/s-form/person/1')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->has('form.layout.tabs.0.columns.0', fn (Assert $page) => $page
@@ -155,30 +155,30 @@ it('returns configured form layout', function () {
 
 it('stores or updates an instance and redirect to the list', function () {
     $this
-        ->post('/sharp/s-list/person/s-form/person', [
+        ->post('/sharp/root/s-list/person/s-form/person', [
             'name' => 'Stephen Hawking',
         ])
-        ->assertRedirectContains('/sharp/s-list/person')
+        ->assertRedirectContains('/sharp/root/s-list/person')
         ->assertRedirectContains('highlighted_entity_key=person')
         ->assertRedirectContains('highlighted_instance_id=1');
 
     $this
-        ->post('/sharp/s-list/person/s-form/person/1', [
+        ->post('/sharp/root/s-list/person/s-form/person/1', [
             'name' => 'Stephen Hawking',
         ])
-        ->assertRedirectContains('/sharp/s-list/person')
+        ->assertRedirectContains('/sharp/root/s-list/person')
         ->assertRedirectContains('highlighted_entity_key=person')
         ->assertRedirectContains('highlighted_instance_id=1');
 });
 
 it('redirects to the show after an update', function () {
-    $this->get('/sharp/s-list/person/s-show/person/1/s-form/person/1');
+    $this->get('/sharp/root/s-list/person/s-show/person/1/s-form/person/1');
 
     $this
-        ->post('/sharp/s-list/person/s-show/person/1/s-form/person/1', [
+        ->post('/sharp/root/s-list/person/s-show/person/1/s-form/person/1', [
             'name' => 'Stephen Hawking',
         ])
-        ->assertRedirectContains('/sharp/s-list/person/s-show/person/1')
+        ->assertRedirectContains('/sharp/root/s-list/person/s-show/person/1')
         ->assertRedirectContains('highlighted_entity_key=person')
         ->assertRedirectContains('highlighted_instance_id=1');
 });
@@ -193,10 +193,10 @@ it('creates an instance and redirect to the show if configured', function () {
     });
 
     $this
-        ->post('/sharp/s-list/person/s-form/person', [
+        ->post('/sharp/root/s-list/person/s-form/person', [
             'name' => 'Stephen Hawking',
         ])
-        ->assertRedirect('/sharp/s-list/person/s-show/person/1');
+        ->assertRedirect('/sharp/root/s-list/person/s-show/person/1');
 });
 
 it('logs an error if the update() method does not return the instance id', function () {
@@ -208,7 +208,7 @@ it('logs an error if the update() method does not return the instance id', funct
     });
 
     $this
-        ->post('/sharp/s-list/person/s-form/person')
+        ->post('/sharp/root/s-list/person/s-form/person')
         ->assertRedirect()
         ->assertSessionDoesntHaveErrors();
 
@@ -225,13 +225,13 @@ it('validates an instance before store and update with the rules() method', func
     });
 
     $this
-        ->post('/sharp/s-list/person/s-form/person', [
+        ->post('/sharp/root/s-list/person/s-form/person', [
             'name' => '',
         ])
         ->assertSessionHasErrors('name');
 
     $this
-        ->post('/sharp/s-list/person/s-form/person/1', [
+        ->post('/sharp/root/s-list/person/s-form/person/1', [
             'name' => '',
         ])
         ->assertSessionHasErrors('name');
@@ -262,7 +262,7 @@ it('passes the formatted data to the rules() method', function () {
     });
 
     $this
-        ->post('/sharp/s-list/person/s-form/person/1', [
+        ->post('/sharp/root/s-list/person/s-form/person/1', [
             'job' => 'Physicist',
             'name' => 'Marie Curie',
         ])
@@ -279,13 +279,13 @@ it('validates an instance before store and update with a validate() call', funct
     });
 
     $this
-        ->post('/sharp/s-list/person/s-form/person', [
+        ->post('/sharp/root/s-list/person/s-form/person', [
             'name' => '',
         ])
         ->assertSessionHasErrors('name');
 
     $this
-        ->post('/sharp/s-list/person/s-form/person/1', [
+        ->post('/sharp/root/s-list/person/s-form/person/1', [
             'name' => '',
         ])
         ->assertSessionHasErrors('name');
@@ -306,7 +306,7 @@ it('formats data before validation', function () {
     });
 
     $this
-        ->post('/sharp/s-list/person/s-form/person', [
+        ->post('/sharp/root/s-list/person/s-form/person', [
             'name' => ['text' => 'ba'],
         ])
         ->assertSessionHasErrors('name');
@@ -336,7 +336,7 @@ it('calls prepareForValidation() before validation on applicable fields', functi
     });
 
     $this
-        ->post('/sharp/s-list/person/s-form/person', [
+        ->post('/sharp/root/s-list/person/s-form/person', [
             'jobs' => [
                 ['id' => null,  'job' => ['id' => 1, 'label' => 'Physicist']],
                 ['id' => null],
@@ -356,7 +356,7 @@ it('handles application exception as 417', function () {
     });
 
     $this
-        ->get('/sharp/s-list/person/s-form/person/5')
+        ->get('/sharp/root/s-list/person/s-form/person/5')
         ->assertStatus(417);
 });
 
@@ -373,7 +373,7 @@ it('gets form data for an instance in a single form case', function () {
         }
     });
 
-    $this->get('/sharp/s-show/single-person/s-form/single-person')
+    $this->get('/sharp/root/s-show/single-person/s-form/single-person')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('form.data.name', 'Ernest Rutherford')
@@ -384,10 +384,10 @@ it('updates an instance on a single form case', function () {
     sharp()->config()->declareEntity(SinglePersonEntity::class);
 
     $this
-        ->post('/sharp/s-show/single-person/s-form/single-person', [
+        ->post('/sharp/root/s-show/single-person/s-form/single-person', [
             'name' => 'Stephen Hawking',
         ])
-        ->assertRedirect('/sharp/s-show/single-person');
+        ->assertRedirect('/sharp/root/s-show/single-person');
 });
 
 it('gets form data for an instance of a sub entity (multiforms case)', function () {
@@ -424,13 +424,13 @@ it('gets form data for an instance of a sub entity (multiforms case)', function 
             ],
         ]);
 
-    $this->get('/sharp/s-list/person/s-form/person:nobelized/1')
+    $this->get('/sharp/root/s-list/person/s-form/person:nobelized/1')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('form.data.name', 'Marie Curie')
         );
 
-    $this->get('/sharp/s-list/person/s-form/person:nope/1')
+    $this->get('/sharp/root/s-list/person/s-form/person:nope/1')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('form.data.name', 'Rosalind Franklin')
@@ -451,7 +451,7 @@ it('allows to configure a page alert', function () {
         }
     });
 
-    $this->get('/sharp/s-list/person/s-form/person/1')
+    $this->get('/sharp/root/s-list/person/s-form/person/1')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('form.pageAlert', [
@@ -485,7 +485,7 @@ it('allows to configure a page alert with a closure as content', function () {
         }
     });
 
-    $this->get('/sharp/s-list/person/s-form/person/1')
+    $this->get('/sharp/root/s-list/person/s-form/person/1')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('form.pageAlert', [
@@ -503,13 +503,13 @@ it('allows to use the legacy validation', function () {
     });
 
     $this
-        ->post('/sharp/s-list/person/s-form/person', [
+        ->post('/sharp/root/s-list/person/s-form/person', [
             'name' => '',
         ])
         ->assertSessionHasErrors('name');
 
     $this
-        ->post('/sharp/s-list/person/s-form/person/1', [
+        ->post('/sharp/root/s-list/person/s-form/person/1', [
             'name' => '',
         ])
         ->assertSessionHasErrors('name');
@@ -534,10 +534,10 @@ it('formats form title based on parent show breadcrumb', function () {
 
     fakeFormFor('person', new PersonForm());
 
-    $this->get('/sharp/s-list/person/s-show/person/1')
+    $this->get('/sharp/root/s-list/person/s-show/person/1')
         ->assertOk();
 
-    $this->get('/sharp/s-list/person/s-show/person/1/s-form/person/1')
+    $this->get('/sharp/root/s-list/person/s-show/person/1/s-form/person/1')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('form.title', 'Edit “Marie Curie”')
@@ -577,10 +577,10 @@ it('formats form title based on configured breadcrumb attribute', function () {
         }
     });
 
-    $this->get('/sharp/s-list/person/s-show/person/1')
+    $this->get('/sharp/root/s-list/person/s-show/person/1')
         ->assertOk();
 
-    $this->get('/sharp/s-list/person/s-show/person/1/s-form/person/1')
+    $this->get('/sharp/root/s-list/person/s-show/person/1/s-form/person/1')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('form.title', 'Edit “Albert Einstein”')
@@ -597,13 +597,13 @@ it('allows to override entirely the form title', function () {
         }
     });
 
-    $this->get('/sharp/s-list/person/s-form/person/1')
+    $this->get('/sharp/root/s-list/person/s-form/person/1')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('form.title', 'My custom edit title')
         );
 
-    $this->get('/sharp/s-list/person/s-form/person')
+    $this->get('/sharp/root/s-list/person/s-form/person')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('form.title', 'My custom create title')
@@ -674,7 +674,7 @@ it('handles html fields', function () {
         public function update(mixed $id, array $data) {}
     });
 
-    $this->get('/sharp/s-list/person/s-form/person/1')
+    $this->get('/sharp/root/s-list/person/s-form/person/1')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('form.data.html_string', '<h1>Albert Einstein</h1><p>example</p>')

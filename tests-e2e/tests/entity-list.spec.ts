@@ -20,7 +20,7 @@ type EntityListSuiteArgs = {
 test.describe('entity list', () => {
   test('display entity list', async ({ page }) => {
     await init(page, { seed: { entityList: true } });
-    await page.goto('/sharp/s-list/test-models');
+    await page.goto('/sharp/root/s-list/test-models');
     await expect(page.getByRole('heading', { name: 'Test models' })).toBeVisible();
     await expect(page.getByRole('table')).toBeVisible();
     await expect(page.getByText('20 items', { exact: true }).first()).toBeVisible();
@@ -30,7 +30,7 @@ test.describe('entity list', () => {
       await init(page, { seed: { entityList: true }, ...options });
     }),
     goto: ({ page }, use) => use(async () => {
-      await page.goto('/sharp/s-list/test-models');
+      await page.goto('/sharp/root/s-list/test-models');
     }),
     reload: ({ page }, use) => use(async () => {
       await page.reload();
@@ -43,7 +43,7 @@ test.describe('entity list', () => {
           await init(page, { seed: { entityList: true } });
         }),
         goto: ({ page }, use) => use(async () => {
-          await page.goto('/sharp/s-list/test-models');
+          await page.goto('/sharp/root/s-list/test-models');
         }),
         openCommandDropdown: ({ page }, use) => use(async () => {
           await page.getByRole('button', { name: 'Actions' }).first().click();
@@ -56,7 +56,7 @@ test.describe('entity list', () => {
             await init(page, { seed: { entityList: true } });
           }),
           goto: ({ page }, use) => use(async () => {
-            await page.goto('/sharp/s-list/test-models');
+            await page.goto('/sharp/root/s-list/test-models');
           }),
           openCommandDropdown: ({ page }, use) => use(async () => {
             await page.getByRole('button', { name: 'Actions' }).first().click();
@@ -71,7 +71,7 @@ test.describe('entity list', () => {
           await init(page, { seed: { entityList: true } });
         }),
         goto: ({ page }, use) => use(async () => {
-          await page.goto('/sharp/s-list/test-models');
+          await page.goto('/sharp/root/s-list/test-models');
         }),
         openCommandDropdown: ({ page }, use) => use(async () => {
           await page.getByRole('table').getByRole('button', { name: 'Actions' }).first().click();
@@ -88,7 +88,7 @@ test.describe('show entity list', () => {
       await init(page, { seed: { entityList: true }, ...options });
     }),
     goto: ({ page }, use) => use(async () => {
-      await page.goto('/sharp/s-list/test-models/s-show/test-models/1');
+      await page.goto('/sharp/root/s-list/test-models/s-show/test-models/1');
     }),
     reload: ({ page }, use) => use(async () => {
     }),
@@ -100,7 +100,7 @@ test.describe('show entity list', () => {
           await init(page, { seed: { entityList: true } });
         }),
         goto: ({ page }, use) => use(async () => {
-          await page.goto('/sharp/s-list/test-models/s-show/test-models/1');
+          await page.goto('/sharp/root/s-list/test-models/s-show/test-models/1');
         }),
         openCommandDropdown: ({ page }, use) => use(async () => {
           await page.getByRole('region', { name: 'Test models' }).getByRole('button', { name: 'Actions' }).first().click();
@@ -114,7 +114,7 @@ test.describe('show entity list', () => {
           await init(page, { seed: { entityList: true } });
         }),
         goto: ({ page }, use) => use(async () => {
-          await page.goto('/sharp/s-list/test-models/s-show/test-models/1');
+          await page.goto('/sharp/root/s-list/test-models/s-show/test-models/1');
         }),
         openCommandDropdown: ({ page }, use) => use(async () => {
           await page.getByRole('region', { name: 'Test models' })

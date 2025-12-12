@@ -39,7 +39,7 @@ Route::group([
         ->name('code16.sharp.api.list.command.quick-creation-form.store');
 
     // EmbeddedEntityLists
-    Route::get('/list/{entityKey}', [EntityListController::class, 'show'])
+    Route::get('/{filterKey}/list/{entityKey}', [EntityListController::class, 'show'])
         ->name('code16.sharp.api.list')
         ->middleware('cache.headers:no_store');
 
@@ -68,7 +68,7 @@ Route::group([
         ->name('code16.sharp.api.list.command.instance.form');
 
     // EmbeddedDashboards
-    Route::get('/dashboard/{dashboardKey}', [DashboardController::class, 'show'])
+    Route::get('/{filterKey}/dashboard/{dashboardKey}', [DashboardController::class, 'show'])
         ->name('code16.sharp.api.dashboard')
         ->middleware('cache.headers:no_store');
 

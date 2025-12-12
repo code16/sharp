@@ -24,9 +24,8 @@ trait FakesBreadcrumb
                     protected function getSegmentsFromRequest(): Collection
                     {
                         return collect(explode('/', parse_url(url($this->url))['path']))
-                            ->filter(fn (string $segment) => strlen(trim($segment))
-                                && $segment !== sharp()->config()->get('custom_url_segment')
-                            )
+                            ->filter()
+                            ->skip(2)
                             ->values();
                     }
                 };

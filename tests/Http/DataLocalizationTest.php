@@ -38,13 +38,13 @@ it('adds the locales array if configured to the form', function () {
         }
     });
 
-    $this->get('/sharp/s-list/person/s-form/person')
+    $this->get('/sharp/root/s-list/person/s-form/person')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('form.locales', ['fr', 'en'])
         );
 
-    $this->get('/sharp/s-list/person/s-form/person/1')
+    $this->get('/sharp/root/s-list/person/s-form/person/1')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('form.locales', ['fr', 'en'])
@@ -70,7 +70,7 @@ it('throws when a localized field is configured without form locales', function 
 
     $this->withoutExceptionHandling();
 
-    $this->get('/sharp/s-list/person/s-form/person');
+    $this->get('/sharp/root/s-list/person/s-form/person');
 })
     ->throws(\Code16\Sharp\Exceptions\SharpInvalidConfigException::class, 'The "name" field is localized but no locales are defined');
 
@@ -95,7 +95,7 @@ it('does not add the locales array if configured but there is no localized field
         }
     });
 
-    $this->get('/sharp/s-list/person/s-form/person')
+    $this->get('/sharp/root/s-list/person/s-form/person')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('form.locales', [])
@@ -126,13 +126,13 @@ it('adds the locales array if configured in a form list field', function () {
         }
     });
 
-    $this->get('/sharp/s-list/person/s-form/person')
+    $this->get('/sharp/root/s-list/person/s-form/person')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('form.locales', ['fr', 'en'])
         );
 
-    $this->get('/sharp/s-list/person/s-form/person/1')
+    $this->get('/sharp/root/s-list/person/s-form/person/1')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('form.locales', ['fr', 'en'])
@@ -161,7 +161,7 @@ it('adds the locales array if configured in the show', function () {
         }
     });
 
-    $this->get('/sharp/s-list/person/s-show/person/1')
+    $this->get('/sharp/root/s-list/person/s-show/person/1')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('show.locales', ['fr', 'en'])

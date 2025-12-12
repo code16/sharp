@@ -39,7 +39,7 @@ it('dispatches HandlePostedFilesJob on update and on create if needed', function
         ->storeAs('/tmp', 'image.jpg', ['disk' => 'local']);
 
     $this
-        ->post('/sharp/s-list/person/s-form/person/2', [
+        ->post('/sharp/root/s-list/person/s-form/person/2', [
             'file' => [
                 'name' => '/image.jpg',
                 'uploaded' => true,
@@ -58,7 +58,7 @@ it('dispatches HandlePostedFilesJob on update and on create if needed', function
         ->storeAs('/tmp', 'image-2.jpg', ['disk' => 'local']);
 
     $this
-        ->post('/sharp/s-list/person/s-form/person', [
+        ->post('/sharp/root/s-list/person/s-form/person', [
             'text' => '<x-sharp-image data-key="0"></x-sharp-image>',
             'file' => [
                 'name' => '/image-2.jpg',
@@ -95,7 +95,7 @@ it('dispatches HandlePostedFilesJob for editors on update and on create if neede
         ->storeAs('/tmp', 'image.jpg', ['disk' => 'local']);
 
     $this
-        ->post('/sharp/s-list/person/s-form/person/2', [
+        ->post('/sharp/root/s-list/person/s-form/person/2', [
             'bio' => [
                 'text' => '<x-sharp-image data-key="0"></x-sharp-image>',
                 'uploads' => [
@@ -122,7 +122,7 @@ it('dispatches HandlePostedFilesJob for editors on update and on create if neede
         ->storeAs('/tmp', 'image-2.jpg', ['disk' => 'local']);
 
     $this
-        ->post('/sharp/s-list/person/s-form/person', [
+        ->post('/sharp/root/s-list/person/s-form/person', [
             'bio' => [
                 'text' => '<x-sharp-image data-key="0"></x-sharp-image>',
                 'uploads' => [
@@ -166,7 +166,7 @@ it('dispatches HandlePostedFilesJob for lists on update and on create if needed'
         ->storeAs('/tmp', 'image.jpg', ['disk' => 'local']);
 
     $this
-        ->post('/sharp/s-list/person/s-form/person/2', [
+        ->post('/sharp/root/s-list/person/s-form/person/2', [
             'pictures' => [
                 [
                     'id' => 1,
@@ -191,7 +191,7 @@ it('dispatches HandlePostedFilesJob for lists on update and on create if needed'
         ->storeAs('/tmp', 'image-2.jpg', ['disk' => 'local']);
 
     $this
-        ->post('/sharp/s-list/person/s-form/person', [
+        ->post('/sharp/root/s-list/person/s-form/person', [
             'pictures' => [
                 [
                     'id' => 1,
@@ -235,7 +235,7 @@ it('does not dispatch HandlePostedFilesJob if not needed', function () {
     });
 
     $this
-        ->post('/sharp/s-list/person/s-form/person/2', [
+        ->post('/sharp/root/s-list/person/s-form/person/2', [
             'name' => 'Stephen Hawking',
             'file' => [
                 'name' => 'doc.pdf',
@@ -259,7 +259,7 @@ it('does not dispatch HandlePostedFilesJob if not needed', function () {
         ->assertRedirect();
 
     $this
-        ->post('/sharp/s-list/person/s-form/person', [
+        ->post('/sharp/root/s-list/person/s-form/person', [
             'name' => 'Marie Curie',
             'file' => [
                 'name' => 'doc.pdf',
@@ -300,7 +300,7 @@ it('does not dispatch HandlePostedFilesJob when temporary', function () {
         ->storeAs('/tmp', 'image.jpg', ['disk' => 'local']);
 
     $this
-        ->post('/sharp/s-list/person/s-form/person/2', [
+        ->post('/sharp/root/s-list/person/s-form/person/2', [
             'name' => 'Stephen Hawking',
             'file' => [
                 'name' => 'image.jpg',
@@ -311,7 +311,7 @@ it('does not dispatch HandlePostedFilesJob when temporary', function () {
         ->assertRedirect();
 
     $this
-        ->post('/sharp/s-list/person/s-form/person', [
+        ->post('/sharp/root/s-list/person/s-form/person', [
             'name' => 'Marie Curie',
             'file' => [
                 'name' => 'image.jpg',
@@ -351,7 +351,7 @@ it('handles isTransformOriginal to transform the image on a newly uploaded file'
         ->storeAs('/tmp', 'image.jpg', ['disk' => 'local']);
 
     $this
-        ->post('/sharp/s-list/person/s-form/person/12', [
+        ->post('/sharp/root/s-list/person/s-form/person/12', [
             'file' => [
                 'name' => '/image.jpg',
                 'uploaded' => true,
@@ -408,7 +408,7 @@ it('handles isTransformOriginal to transform the image on an existing file', fun
         ->storeAs('/data/test', 'image.jpg', ['disk' => 'local']);
 
     $this
-        ->post('/sharp/s-list/person/s-form/person/1', [
+        ->post('/sharp/root/s-list/person/s-form/person/1', [
             'file' => [
                 'path' => 'data/test/image.jpg',
                 'size' => 12,
@@ -457,7 +457,7 @@ it('pushes jobs on right queue / connections', function () {
         ->storeAs('/tmp', 'image.jpg', ['disk' => 'local']);
 
     $this
-        ->post('/sharp/s-list/person/s-form/person/2', [
+        ->post('/sharp/root/s-list/person/s-form/person/2', [
             'file' => [
                 'name' => '/image.jpg',
                 'uploaded' => true,
@@ -477,7 +477,7 @@ it('pushes jobs on right queue / connections', function () {
     );
 
     $this
-        ->post('/sharp/s-list/person/s-form/person/2', [
+        ->post('/sharp/root/s-list/person/s-form/person/2', [
             'file' => [
                 'name' => '/image.jpg',
                 'uploaded' => true,

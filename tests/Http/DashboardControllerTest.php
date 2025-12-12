@@ -56,7 +56,7 @@ it('gets dashboard widgets, layout and data', function () {
 
     $this->withoutExceptionHandling();
 
-    $this->get('/sharp/s-dashboard/'.DashboardEntity::$entityKey)
+    $this->get('/sharp/root/s-dashboard/'.DashboardEntity::$entityKey)
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->has('dashboard', fn (Assert $dashboard) => $dashboard
@@ -90,7 +90,7 @@ it('allows to configure a page alert', function () {
         }
     });
 
-    $this->get('/sharp/s-dashboard/'.DashboardEntity::$entityKey)
+    $this->get('/sharp/root/s-dashboard/'.DashboardEntity::$entityKey)
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('dashboard.pageAlert', [
@@ -127,7 +127,7 @@ it('allows to configure a page alert with a closure as content', function () {
         }
     });
 
-    $this->get('/sharp/s-dashboard/'.DashboardEntity::$entityKey)
+    $this->get('/sharp/root/s-dashboard/'.DashboardEntity::$entityKey)
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('dashboard.pageAlert', [

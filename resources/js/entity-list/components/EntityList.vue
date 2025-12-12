@@ -13,7 +13,7 @@
     import { computed, ref, watch } from "vue";
     import { showAlert, showDeleteConfirm } from "@/utils/dialogs";
     import { EntityListInstance, InstanceId } from "../types";
-    import { getAppendableParentUri, route } from "@/utils/url";
+    import { route } from "@/utils/url";
     import { Button } from '@/components/ui/button';
     import { api } from "@/api/api";
     import EntityListPagination from "@/entity-list/components/EntityListPagination.vue";
@@ -500,7 +500,7 @@
                                             class="h-8 gap-1"
                                             size="sm"
                                             :disabled="reordering || selecting"
-                                            :href="route('code16.sharp.form.create', { parentUri: getAppendableParentUri(), entityKey })"
+                                            :href="entityList.config.formCreateUrl"
                                             @click="onCreate"
                                         >
                                             {{ props.entityList.config.createButtonLabel || __('sharp::action_bar.list.create_button') }}

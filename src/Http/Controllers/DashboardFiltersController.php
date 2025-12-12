@@ -4,7 +4,7 @@ namespace Code16\Sharp\Http\Controllers;
 
 class DashboardFiltersController extends SharpProtectedController
 {
-    public function store(string $dashboardKey)
+    public function store(string $filterKey, string $dashboardKey)
     {
         $this->authorizationManager->check('entity', $dashboardKey);
 

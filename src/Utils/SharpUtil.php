@@ -8,12 +8,7 @@ use Code16\Sharp\SharpInternalServiceProvider;
 
 class SharpUtil
 {
-    protected SharpContext $context;
-
-    public function __construct()
-    {
-        $this->context = new SharpContext();
-    }
+    public function __construct(protected SharpContext $context) {}
 
     public function version(): string
     {

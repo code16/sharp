@@ -8,5 +8,5 @@ it('handles SharpLinkTo link', function () {
         ->setTemplate('<b>test</b>')
         ->setLink(LinkToEntityList::make('entity'));
 
-    expect($widget->toArray()['link'])->toEqual(url('sharp/s-list/entity'));
+    expect($widget->toArray()['link'])->toEqual(url('sharp/root/s-list/entity'));
 });

@@ -17,7 +17,7 @@ function setTestAuthGuard(): void
 }
 
 it('redirects guests to the login page', function () {
-    $this->get('/sharp/s-list/person')
+    $this->get('/sharp/root/s-list/person')
         ->assertRedirect(route('code16.sharp.login'));
 });
 
@@ -165,12 +165,12 @@ it('allows custom auth guard', function () {
 
     login(new User(['name' => 'ok']));
 
-    $this->get('/sharp/s-list/person')
+    $this->get('/sharp/root/s-list/person')
         ->assertOk();
 
     login(new User(['name' => 'ko']));
 
-    $this->get('/sharp/s-list/person')
+    $this->get('/sharp/root/s-list/person')
         ->assertRedirect(route('code16.sharp.login'));
 });
 

@@ -15,7 +15,7 @@ use Code16\Sharp\Utils\Links\LinkToSingleShowPage;
 
 it('allows to generate a link to an entity list', function () {
     $this->assertEquals(
-        '<a href="http://localhost/sharp/s-list/my-entity" title="">test</a>',
+        '<a href="http://localhost/sharp/root/s-list/my-entity" title="">test</a>',
         LinkToEntityList::make('my-entity')
             ->renderAsText('test'),
     );
@@ -23,7 +23,7 @@ it('allows to generate a link to an entity list', function () {
 
 it('allows to generate a link to a form', function () {
     $this->assertEquals(
-        '<a href="http://localhost/sharp/s-list/my-entity/s-form/my-entity/23" title="">test</a>',
+        '<a href="http://localhost/sharp/root/s-list/my-entity/s-form/my-entity/23" title="">test</a>',
         LinkToForm::make('my-entity', 23)
             ->renderAsText('test'),
     );
@@ -31,7 +31,7 @@ it('allows to generate a link to a form', function () {
 
 it('allows to generate a link to a form with another key for the list', function () {
     $this->assertEquals(
-        '<a href="http://localhost/sharp/s-list/my-list-entity/s-form/my-entity/23" title="">test</a>',
+        '<a href="http://localhost/sharp/root/s-list/my-list-entity/s-form/my-entity/23" title="">test</a>',
         LinkToForm::make('my-entity', 23)
             ->withListEntityKey('my-list-entity')
             ->renderAsText('test'),
@@ -40,7 +40,7 @@ it('allows to generate a link to a form with another key for the list', function
 
 it('allows to generate a link to a form through a show page', function () {
     $this->assertEquals(
-        '<a href="http://localhost/sharp/s-list/my-entity/s-show/my-entity/23/s-form/my-entity/23" title="">test</a>',
+        '<a href="http://localhost/sharp/root/s-list/my-entity/s-show/my-entity/23/s-form/my-entity/23" title="">test</a>',
         LinkToForm::make('my-entity', 23)
             ->throughShowPage()
             ->renderAsText('test'),
@@ -49,7 +49,7 @@ it('allows to generate a link to a form through a show page', function () {
 
 it('allows to generate a link to a form through a show page with another key for the list', function () {
     $this->assertEquals(
-        '<a href="http://localhost/sharp/s-list/my-list-entity/s-show/my-entity/23/s-form/my-entity/23" title="">test</a>',
+        '<a href="http://localhost/sharp/root/s-list/my-list-entity/s-show/my-entity/23/s-form/my-entity/23" title="">test</a>',
         LinkToForm::make('my-entity', 23)
             ->withListEntityKey('my-list-entity')
             ->throughShowPage()
@@ -59,7 +59,7 @@ it('allows to generate a link to a form through a show page with another key for
 
 it('allows to generate a link to a show page', function () {
     $this->assertEquals(
-        '<a href="http://localhost/sharp/s-list/my-entity/s-show/my-entity/23" title="">test</a>',
+        '<a href="http://localhost/sharp/root/s-list/my-entity/s-show/my-entity/23" title="">test</a>',
         LinkToShowPage::make('my-entity', 23)
             ->renderAsText('test'),
     );
@@ -67,7 +67,7 @@ it('allows to generate a link to a show page', function () {
 
 it('allows to generate a link to a show page with another key for the list', function () {
     $this->assertEquals(
-        '<a href="http://localhost/sharp/s-list/my-list-entity/s-show/my-entity/23" title="">test</a>',
+        '<a href="http://localhost/sharp/root/s-list/my-list-entity/s-show/my-entity/23" title="">test</a>',
         LinkToShowPage::make('my-entity', 23)
             ->withListEntityKey('my-list-entity')
             ->renderAsText('test'),
@@ -76,7 +76,7 @@ it('allows to generate a link to a show page with another key for the list', fun
 
 it('allows to generate a link to a single show page', function () {
     $this->assertEquals(
-        '<a href="http://localhost/sharp/s-show/my-entity" title="">test</a>',
+        '<a href="http://localhost/sharp/root/s-show/my-entity" title="">test</a>',
         LinkToSingleShowPage::make('my-entity')
             ->renderAsText('test'),
     );
@@ -84,7 +84,7 @@ it('allows to generate a link to a single show page', function () {
 
 it('allows to generate a link to a dashboard page', function () {
     $this->assertEquals(
-        '<a href="http://localhost/sharp/s-dashboard/my-entity" title="">test</a>',
+        '<a href="http://localhost/sharp/root/s-dashboard/my-entity" title="">test</a>',
         LinkToDashboard::make('my-entity')
             ->renderAsText('test'),
     );
@@ -95,7 +95,7 @@ it('allows to generate a link to a show page passing a SharpEntity class', funct
         ->declareEntity(PersonEntity::class);
 
     $this->assertEquals(
-        '<a href="http://localhost/sharp/s-list/person/s-show/person/23" title="">test</a>',
+        '<a href="http://localhost/sharp/root/s-list/person/s-show/person/23" title="">test</a>',
         LinkToShowPage::make(PersonEntity::class, 23)->renderAsText('test'),
     );
 });
@@ -106,7 +106,7 @@ it('allows to generate a link to a show page with another key for the list passi
         ->declareEntity(PersonPhysicistEntity::class);
 
     $this->assertEquals(
-        '<a href="http://localhost/sharp/s-list/person/s-show/person-physicist/23" title="">test</a>',
+        '<a href="http://localhost/sharp/root/s-list/person/s-show/person-physicist/23" title="">test</a>',
         LinkToShowPage::make(PersonPhysicistEntity::class, 23)
             ->withListEntityKey(PersonEntity::class)
             ->renderAsText('test'),
@@ -115,13 +115,12 @@ it('allows to generate a link to a show page with another key for the list passi
 
 it('allows to generate an url to a show page with a specific breadcrumb', function () {
     $this->assertEquals(
-        'http://localhost/sharp/s-list/base-entity/s-show/base-entity/3/s-show/my-entity/4',
+        'http://localhost/sharp/root/s-list/base-entity/s-show/base-entity/3/s-show/my-entity/4',
         LinkToShowPage::make('my-entity', 4)
-            ->withBreadcrumb(function (BreadcrumbBuilder $builder) {
-                return $builder
-                    ->appendEntityList('base-entity')
-                    ->appendShowPage('base-entity', 3);
-            })
+            ->withBreadcrumb(fn (BreadcrumbBuilder $builder) => $builder
+                ->appendEntityList('base-entity')
+                ->appendShowPage('base-entity', 3)
+            )
             ->renderAsUrl(),
     );
 });
@@ -131,7 +130,7 @@ it('allows to generate an url to a show page with a specific breadcrumb passing 
         ->declareEntity(PersonEntity::class);
 
     $this->assertEquals(
-        'http://localhost/sharp/s-list/person/s-show/person/3/s-show/person/4',
+        'http://localhost/sharp/root/s-list/person/s-show/person/3/s-show/person/4',
         LinkToShowPage::make(PersonEntity::class, 4)
             ->withBreadcrumb(function (BreadcrumbBuilder $builder) {
                 return $builder
@@ -144,7 +143,7 @@ it('allows to generate an url to a show page with a specific breadcrumb passing 
 
 it('allows to generate an url to a form with a specific breadcrumb', function () {
     $this->assertEquals(
-        'http://localhost/sharp/s-list/base-entity/s-show/base-entity/3/s-show/my-entity/4/s-form/my-entity/4',
+        'http://localhost/sharp/root/s-list/base-entity/s-show/base-entity/3/s-show/my-entity/4/s-form/my-entity/4',
         LinkToForm::make('my-entity', 4)
             ->withBreadcrumb(function (BreadcrumbBuilder $builder) {
                 return $builder
@@ -158,7 +157,7 @@ it('allows to generate an url to a form with a specific breadcrumb', function ()
 
 it('allows to generate an url to a show page with a specific breadcrumb starting with a single show page', function () {
     $this->assertEquals(
-        'http://localhost/sharp/s-show/base-entity/s-show/my-entity/4',
+        'http://localhost/sharp/root/s-show/base-entity/s-show/my-entity/4',
         LinkToShowPage::make('my-entity', 4)
             ->withBreadcrumb(function (BreadcrumbBuilder $builder) {
                 return $builder->appendSingleShowPage('base-entity');
@@ -190,7 +189,7 @@ it('allows to not push a entity list anywhere else than in the first spot', func
 
 it('allows to generate a link to an entity single form', function () {
     $this->assertEquals(
-        '<a href="http://localhost/sharp/s-show/my-entity/s-form/my-entity" title="">test</a>',
+        '<a href="http://localhost/sharp/root/s-show/my-entity/s-form/my-entity" title="">test</a>',
         LinkToSingleForm::make('my-entity')
             ->renderAsText('test'),
     );
@@ -198,7 +197,7 @@ it('allows to generate a link to an entity single form', function () {
 
 it('allows to generate a link to an entity list with a search', function () {
     $this->assertEquals(
-        '<a href="http://localhost/sharp/s-list/my-entity?search=my-search" title="">test</a>',
+        '<a href="http://localhost/sharp/root/s-list/my-entity?search=my-search" title="">test</a>',
         LinkToEntityList::make('my-entity')
             ->setSearch('my-search')
             ->renderAsText('test'),
@@ -207,7 +206,7 @@ it('allows to generate a link to an entity list with a search', function () {
 
 it('allows to generate a link to an entity list with a filter', function () {
     $this->assertEquals(
-        '<a href="http://localhost/sharp/s-list/my-entity?filter_country=France&filter_city=Paris" title="">test</a>',
+        '<a href="http://localhost/sharp/root/s-list/my-entity?filter_country=France&filter_city=Paris" title="">test</a>',
         LinkToEntityList::make('my-entity')
             ->addFilter('country', 'France')
             ->addFilter('city', 'Paris')
@@ -233,7 +232,7 @@ it('allows to generate a link to an entity list with a filter classname', functi
     };
 
     $this->assertEquals(
-        '<a href="http://localhost/sharp/s-list/my-entity?filter_my-key=1" title="">test</a>',
+        '<a href="http://localhost/sharp/root/s-list/my-entity?filter_my-key=1" title="">test</a>',
         LinkToEntityList::make('my-entity')
             ->addFilter($filter::class, 1)
             ->renderAsText('test'),
@@ -242,7 +241,7 @@ it('allows to generate a link to an entity list with a filter classname', functi
 
 it('allows to generate a link to an entity list with a sort', function () {
     $this->assertEquals(
-        '<a href="http://localhost/sharp/s-list/my-entity?sort=name&dir=desc" title="">test</a>',
+        '<a href="http://localhost/sharp/root/s-list/my-entity?sort=name&dir=desc" title="">test</a>',
         LinkToEntityList::make('my-entity')
             ->setSort('name', 'desc')
             ->renderAsText('test'),
@@ -251,7 +250,7 @@ it('allows to generate a link to an entity list with a sort', function () {
 
 it('allows to generate a link with a tooltip', function () {
     $this->assertEquals(
-        '<a href="http://localhost/sharp/s-list/my-entity" title="tooltip">test</a>',
+        '<a href="http://localhost/sharp/root/s-list/my-entity" title="tooltip">test</a>',
         LinkToEntityList::make('my-entity')
             ->setTooltip('tooltip')
             ->renderAsText('test'),
@@ -260,7 +259,7 @@ it('allows to generate a link with a tooltip', function () {
 
 it('allows to generate an url', function () {
     $this->assertEquals(
-        'http://localhost/sharp/s-list/my-entity',
+        'http://localhost/sharp/root/s-list/my-entity',
         LinkToEntityList::make('my-entity')
             ->renderAsUrl(),
     );

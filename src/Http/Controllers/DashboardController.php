@@ -4,11 +4,12 @@ namespace Code16\Sharp\Http\Controllers;
 
 use Code16\Sharp\Data\BreadcrumbData;
 use Code16\Sharp\Data\Dashboard\DashboardData;
+use Code16\Sharp\Utils\Entities\ValueObjects\EntityKey;
 use Inertia\Inertia;
 
 class DashboardController extends SharpProtectedController
 {
-    public function show(string $dashboardKey)
+    public function show(string $filterKey, EntityKey $dashboardKey)
     {
         $this->authorizationManager->check('entity', $dashboardKey);
 
