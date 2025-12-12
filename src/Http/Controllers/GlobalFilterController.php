@@ -3,18 +3,16 @@
 namespace Code16\Sharp\Http\Controllers;
 
 use Code16\Sharp\Filters\GlobalFilters\GlobalFilters;
-use Code16\Sharp\Filters\GlobalRequiredFilter;
 use Illuminate\Http\RedirectResponse;
 
 class GlobalFilterController extends SharpProtectedController
 {
-    public function update(string $filterKey, string $key, GlobalFilters $globalFilters): RedirectResponse
+    public function update(string $filterKey, GlobalFilters $globalFilters): RedirectResponse
     {
-        $handler = $globalFilters->findFilter($key);
-
-        abort_if(! $handler instanceof GlobalRequiredFilter, 404);
-
-        $handler->setCurrentValue(request('value'));
+        collect(request()->input('filterValues'))
+            ->each(function ($value, $key) use ($globalFilters) {
+                $globalFilters->findFilter($key)->setCurrentValue($value);
+            });
 
         return redirect()->route('code16.sharp.home', [
             'filterKey' => sharp()->context()->globalFilterUrlSegmentValue(),

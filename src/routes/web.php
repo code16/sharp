@@ -110,7 +110,7 @@ Route::group([
             ->name('code16.sharp.form.update');
     });
 
-    Route::post('{filterKey}/filters/{key}', [GlobalFilterController::class, 'update'])
+    Route::post('{filterKey}/filters', [GlobalFilterController::class, 'update'])
         ->name('code16.sharp.filters.update');
 
     Route::post('/update-assets', UpdateAssetsController::class)
