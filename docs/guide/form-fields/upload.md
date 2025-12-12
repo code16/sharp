@@ -36,7 +36,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
             ->configureDownloads(
                 allowedDisks: ['local', 'public'],
             )
-            // [...]
+            // ...
     }
 }
 ```
