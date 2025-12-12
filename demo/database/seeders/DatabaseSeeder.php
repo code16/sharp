@@ -26,6 +26,8 @@ class DatabaseSeeder extends Seeder
         $editor2 = User::factory(['email' => 'editor2@example.org'])
             ->create();
 
+        User::factory(50)->create();
+
         collect([$admin, $editor1, $editor2])
             ->shuffle()
             ->each(function (User $user, int $k) {

@@ -2,40 +2,37 @@
     import { computed } from "vue";
     import { GraphWidgetData } from "@/types";
     import { DashboardWidgetProps } from "@/dashboard/types";
-    import { useBreakpoints } from "@/composables/useBreakpoints";
     import { VisSingleContainer, VisDonut, VisTooltip, VisBulletLegend } from "@unovis/vue";
+    import { BulletLegendConfigInterface, DonutConfigInterface } from "@unovis/ts";
 
     const props = defineProps<DashboardWidgetProps<GraphWidgetData>>();
 
-    const breakpoints = useBreakpoints();
-
-    const datasets = computed(() => (props.value?.datasets ?? []).filter(d => (d.data?.length ?? 0) > 0));
-    const items = computed(() => datasets.value.map(dataset => ({
+    const data = computed(() => props.value?.datasets?.map(dataset => ({
         name: dataset.label ?? '',
         color: dataset.color,
         value: dataset.data[0] ?? 0,
     })));
-    const showLegend = computed(() => props.widget.showLegend && !props.widget.minimal);
-    const height = computed(() => props.widget.height ?? '100%');
 </script>
 
 <template>
-    <div>
-        <div class="min-h-[250px] sm:min-h-0" :class="breakpoints.sm ? 'sm:flex sm:items-center sm:gap-4' : ''">
-            <VisSingleContainer :style="{ height }">
-                <VisDonut
-                    :data="items"
-                    :value="d => d.value"
-                    :category="d => d.name"
-                    :color="d => d.color"
-                    :innerRadius="0"
-                />
-                <VisTooltip />
-            </VisSingleContainer>
+    <div class="min-h-[250px] sm:min-h-0 flex flex-col gap-y-2 gap-x-4 sm:flex-row sm:items-center sm:gap-4">
+        <VisSingleContainer>
+            <VisDonut
+                v-bind="{
+                    data: data,
+                    value: d => d.value,
+                    color: d => d.color,
+                } as DonutConfigInterface<typeof data[number]>"
+            />
+            <VisTooltip />
+        </VisSingleContainer>
 
-            <div v-if="showLegend" :class="breakpoints.sm ? 'sm:ml-4' : 'mt-2'">
-                <VisBulletLegend :items="props.value.datasets?.map(dataset => ({ name: dataset.label, color: dataset.color }))" />
-            </div>
-        </div>
+        <template v-if="props.widget.showLegend && !props.widget.minimal">
+            <VisBulletLegend
+                v-bind="{
+                    items: props.value.datasets?.map(dataset => ({ name: dataset.label, color: dataset.color })),
+                } as BulletLegendConfigInterface"
+            />
+        </template>
     </div>
 </template>

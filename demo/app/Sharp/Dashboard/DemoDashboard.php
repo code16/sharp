@@ -52,7 +52,7 @@ class DemoDashboard extends SharpDashboard
                 SharpBarGraphWidget::make('authors_bar')
                     ->setTitle('Posts by author')
                     ->setShowLegend(false)
-                    ->setHorizontal(),
+                // ->setHorizontal(),
             )
             ->addWidget(
                 SharpPieGraphWidget::make('categories_pie')
@@ -63,6 +63,7 @@ class DemoDashboard extends SharpDashboard
                     ->setTitle('Visits')
                     ->setHeight(200)
                     ->setShowLegend()
+                    ->setDisplayHorizontalAxisAsTimeline()
                     // ->setMinimal()
                     ->setCurvedLines(),
             )
@@ -176,7 +177,8 @@ class DemoDashboard extends SharpDashboard
     {
         $visits = collect(CarbonPeriod::create($this->getStartDate(), $this->getEndDate()))
             ->mapWithKeys(function (Carbon $day, $k) {
-                return [$day->isoFormat('L') => (int) (rand(10000, 20000) * 1.02)];
+                // return [$day->isoFormat('L') => (int) (rand(10000, 20000) * 1.02)];
+                return [$day->format('Y-m-d') => (int) (rand(10000, 20000) * 1.02)];
             });
 
         $this
@@ -205,7 +207,7 @@ class DemoDashboard extends SharpDashboard
                     )]
             )
             ->orderBy('posts_count', 'desc')
-            ->limit(8)
+            ->limit(10)
             ->get()
             ->pluck('posts_count', 'name');
 
