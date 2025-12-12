@@ -1,9 +1,16 @@
 import DOMPurify from 'dompurify';
 
+DOMPurify.addHook('afterSanitizeAttributes', function (node) {
+    if (node.tagName === 'A' && !node.getAttribute('rel')?.includes('noopener')) {
+        node.setAttribute('rel', `${node.getAttribute('rel') ?? ''} noopener`.trim());
+    }
+});
+
 export function sanitize(html: string | null) {
     return html
         ? DOMPurify.sanitize(html, {
             ADD_TAGS: ['iframe'],
+            ADD_ATTR: ['target'],
             CUSTOM_ELEMENT_HANDLING: {
                 tagNameCheck: () => true,
                 attributeNameCheck: (name) => {
