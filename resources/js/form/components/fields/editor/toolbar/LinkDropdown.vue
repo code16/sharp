@@ -79,7 +79,7 @@
     }
 
     defineExpose({
-        open: () => { open.value = true; onOpen() },
+        open,
     });
 </script>
 
@@ -91,8 +91,7 @@
     >
         <PopoverTrigger as-child>
             <Toggle
-                class="data-[state=open]:bg-accent"
-                :class="props.editor.isActive('link') ? 'bg-accent' : ''"
+                :model-value="open || props.editor.isActive('link')"
                 size="sm"
                 :disabled="props.field.readOnly"
                 :title="__('sharp::form.editor.toolbar.link.title')"

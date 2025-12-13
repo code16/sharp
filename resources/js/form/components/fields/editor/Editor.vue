@@ -61,6 +61,7 @@
     import {
         getTextInputReplacementsExtension
     } from "@/form/components/fields/editor/extensions/TextInputReplacements";
+    import CodeBlockDropdown from "@/form/components/fields/editor/toolbar/CodeBlockDropdown.vue";
 
     const emit = defineEmits<FormFieldEmits<FormEditorFieldData>>();
     const props = defineProps<FormFieldProps<FormEditorFieldData>>();
@@ -77,6 +78,7 @@
     const el = useTemplateRef<HTMLDialogElement | HTMLDivElement>('el');
     const embedModal = ref<InstanceType<typeof EditorEmbedModal>>();
     const linkDropdown = ref<InstanceType<typeof LinkDropdown>>();
+    const codeBlockDropdown = ref<InstanceType<typeof CodeBlockDropdown>>();
 
     provide<ParentEditor>('editor', {
         props,
@@ -254,6 +256,7 @@
                         ? 'border-none rounded-none bg-transparent'
                         : 'focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background'
                 )"
+                :data-has-dropdown-open="codeBlockDropdown?.open ? true : null"
                 :data-fullscreen="isFullscreen ? true : null"
                 ref="el"
             >
@@ -280,6 +283,9 @@
                                     </template>
                                     <template v-else-if="button === 'table'">
                                         <TableDropdown v-bind="props" :editor="editor" />
+                                    </template>
+                                    <template v-else-if="button === 'code-block'">
+                                        <CodeBlockDropdown v-bind="props" :editor="editor" :ref="(c) => codeBlockDropdown = c as InstanceType<typeof CodeBlockDropdown>" />
                                     </template>
                                     <template v-else-if="button.startsWith('embed:')">
                                         <Toggle

@@ -18,7 +18,6 @@ import { TableRow } from '@tiptap/extension-table-row';
 import { TableHeader } from '@tiptap/extension-table-header';
 import { TableCell } from '@tiptap/extension-table-cell';
 import { Highlight } from '@tiptap/extension-highlight';
-import { CodeBlock } from '@tiptap/extension-code-block';
 import { Superscript } from '@tiptap/extension-superscript';
 import { OrderedList } from '@tiptap/extension-ordered-list';
 import { Link } from '@tiptap/extension-link';
@@ -28,7 +27,7 @@ import { Iframe } from './iframe/Iframe';
 import { Clipboard } from './Clipboard';
 import { Small } from './Small';
 import { FormEditorFieldData, FormEditorToolbarButton } from "@/types";
-
+import { CodeBlock } from "@/form/components/fields/editor/extensions/CodeBlock";
 
 export function getExtensions(field: FormEditorFieldData) {
     const toolbarHas = (buttonName: FormEditorToolbarButton | FormEditorToolbarButton[]) =>

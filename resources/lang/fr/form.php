@@ -92,6 +92,9 @@ return [
     'editor.dialogs.iframe.update_title' => 'Modifier l’Iframe (video, audio...)',
     'editor.dialogs.iframe.invalid_message' => 'Le code de l’Iframe est invalide',
 
+    'editor.dialogs.code_block.language_label' => 'Langage',
+    'editor.dialogs.code_block.toggle_off' => 'Convertir en paragraphe',
+
     'editor.dialogs.embed.submit_button_insert' => 'Insérer',
     'editor.dialogs.embed.submit_button_update' => 'Mettre à jour',
 
