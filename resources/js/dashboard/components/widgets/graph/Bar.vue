@@ -1,16 +1,15 @@
 <script setup lang="ts">
     import { GraphWidgetData } from "@/types";
     import { DashboardWidgetProps } from "@/dashboard/types";
-    import { VisAxis, VisBulletLegend, VisCrosshair, VisGroupedBar, VisTooltip, VisXYContainer } from "@unovis/vue";
+    import { VisAxis, VisBulletLegend, VisCrosshair, VisGroupedBar, VisStackedBar, VisTooltip, VisXYContainer } from "@unovis/vue";
     import {
         AxisConfigInterface,
-        BulletLegendConfigInterface, CrosshairConfigInterface,
-        FitMode,
-        GroupedBar,
+        BulletLegendConfigInterface,
+        CrosshairConfigInterface,
+        FitMode, GroupedBar,
         GroupedBarConfigInterface,
         TextAlign,
-        TooltipConfigInterface,
-        TrimMode,
+        TrimMode, XYContainerConfigInterface,
     } from '@unovis/ts'
     import { Datum, useXYChart } from "@/dashboard/components/widgets/graph/useXYChart";
     import { computed } from "vue";
@@ -23,53 +22,61 @@
         return props.value?.labels?.[tick as number] || '';
     }
 
-    const rotate = computed(() => props.value?.labels?.length >= 10);
+    const rotate = computed(() => !props.widget.options.horizontal && props.value?.labels?.length >= 10);
 </script>
 
 <template>
     <div class="flex flex-col gap-4">
-        <VisXYContainer class="flex-1 min-h-0" :data="data">
+        <VisXYContainer class="flex-1 min-h-0"
+            v-bind="{ } as XYContainerConfigInterface<Datum>"
+            :data="data"
+        >
             <template v-if="!props.widget.minimal">
                 <VisAxis
                     v-bind="{
-                        type: widget.options?.horizontal ? 'x' : 'y',
+                        type: props.widget.options?.horizontal ? 'x' : 'y',
+
                     } as AxisConfigInterface<Datum>"
                 />
                 <VisAxis
                     v-bind="{
-                        type: widget.options?.horizontal ? 'y' : 'x',
+                        type: props.widget.options?.horizontal ? 'y' : 'x',
+                         gridLine: false,
                         // tickValues: props.value?.labels.map((_, i) => i),
                         numTicks: props.value?.labels.length - 1,
                         tickFormat: tickFormat,
                         tickTextTrimType: TrimMode.End,
-                        tickTextAlign: rotate ? TextAlign.Left : TextAlign.Center,
+                        tickTextAlign: rotate ? TextAlign.Left : props.widget.options.horizontal ? TextAlign.Right : TextAlign.Center,
                         tickTextFitMode: rotate ? FitMode.Wrap : FitMode.Trim,
                         tickTextAngle: rotate ? 45 : undefined,
                         tickTextWidth: rotate ? 100 : undefined,
-                    } as AxisConfigInterface<Datum>"
+                    // } as AxisConfigInterface<Datum>"
                 />
             </template>
 
-            <VisCrosshair
-                v-bind="{
+            <template v-if="!props.widget.options?.horizontal">
+                <VisCrosshair
+                    v-bind="{
                     color: color,
                     template: tooltipTemplate,
-                    // hideWhenFarFromPointer: false,
+                    hideWhenFarFromPointer: false,
                 } as CrosshairConfigInterface<Datum>"
-            />
+                />
+            </template>
+
+            <VisTooltip :triggers="{ [GroupedBar.selectors.barGroup]: tooltipTemplate }" />
 
             <VisGroupedBar
                 v-bind="{
                     x: x,
                     y: y,
-                    orientation: widget.options?.horizontal ? 'horizontal' : 'vertical',
+                    orientation: props.widget.options?.horizontal ? 'horizontal' : 'vertical',
                     color: color,
                 } as GroupedBarConfigInterface<Datum>"
             />
-            <VisTooltip v-bind="{ triggers: { [GroupedBar.selectors.root]: tooltipTemplate } } as TooltipConfigInterface" />
         </VisXYContainer>
 
-        <template v-if="widget.showLegend && !widget.minimal">
+        <template v-if="props.widget.showLegend && !props.widget.minimal">
             <div class="flex justify-center">
                 <VisBulletLegend
                     v-bind="{
