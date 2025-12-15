@@ -7,7 +7,6 @@ use App\Models\Media;
 use App\Sharp\AppSearchEngine;
 use App\Sharp\Demo2faNotificationHandler;
 use App\Sharp\DummyGlobalFilter;
-use App\Sharp\DummyGlobalFilter2;
 use App\Sharp\SharpMenu;
 use Code16\Sharp\Config\SharpConfigBuilder;
 use Code16\Sharp\SharpAppServiceProvider;
@@ -20,7 +19,6 @@ class DemoSharpServiceProvider extends SharpAppServiceProvider
             ->setName('Demo project')
             ->discoverEntities()
             ->addGlobalFilter(DummyGlobalFilter::class)
-            ->addGlobalFilter(DummyGlobalFilter2::class)
             ->configureUploadsThumbnailCreation(uploadModelClass: Media::class)
             ->setSharpMenu(SharpMenu::class)
             ->setThemeColor('#004c9b')
