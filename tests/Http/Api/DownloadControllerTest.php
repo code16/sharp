@@ -91,6 +91,7 @@ it('allows to download a file of an allowed disk', function () {
     $this
         ->get(
             route('code16.sharp.download.show', [
+                'filterKey' => 'root',
                 'entityKey' => 'person',
                 'instanceId' => 1,
                 'disk' => 'local',
@@ -109,6 +110,7 @@ it('does not allow to download a file of a not allowed disk', function () {
     $this
         ->get(
             route('code16.sharp.download.show', [
+                'filterKey' => 'root',
                 'entityKey' => 'person',
                 'instanceId' => 1,
                 'disk' => 'local',
