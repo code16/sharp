@@ -10,6 +10,13 @@ class DownloadController extends ApiController
     {
         $this->authorizationManager->check('view', $entityKey, $instanceId);
 
+        if (
+            ($allowedDisks = sharp()->config()->get('downloads.allowed_disks')) !== null // Legacy config
+            && $allowedDisks != '*'
+        ) {
+            abort_if(! in_array(request()->get('disk'), $allowedDisks), 403);
+        }
+
         abort_if(
             ! ($path = request()->get('path'))
             || ! ($disk = request()->get('disk'))
@@ -19,7 +26,8 @@ class DownloadController extends ApiController
         );
 
         return response(
-            Storage::disk($disk)->get($path), 200, [
+            content: Storage::disk($disk)->get($path),
+            headers: [
                 'Content-Type' => Storage::disk($disk)->mimeType($path),
                 'Content-Disposition' => 'attachment',
             ],

@@ -1,0 +1,8 @@
+
+:root {
+  --progress-color: var(--primary);
+}
+
+body:has([role=dialog][data-state=open]) {
+  --progress-color: oklch(from var(--sharp-config-primary) 0.98 min(c, 0.1) h);
+}

@@ -94,6 +94,9 @@ class SharpConfigBuilder
             'file_handling_queue' => 'default',
             'file_handling_queue_connection' => 'sync',
         ],
+        'downloads' => [
+            'allowed_disks' => '*',
+        ],
         'search' => [
             'enabled' => false,
         ],
@@ -317,6 +320,13 @@ class SharpConfigBuilder
         $this->config['uploads']['thumbnails_dir'] = $thumbnailsDir;
         $this->config['uploads']['model_class'] = $uploadModelClass;
         $this->config['uploads']['image_driver'] = $imageDriverClass;
+
+        return $this;
+    }
+
+    public function configureDownloads(array $allowedDisks): self
+    {
+        $this->config['downloads']['allowed_disks'] = $allowedDisks;
 
         return $this;
     }
