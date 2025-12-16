@@ -100,7 +100,7 @@
             endpoint: route('code16.sharp.api.form.upload'),
             fieldName: 'file',
             headers: {
-                'accept': 'application/json',
+                'Accept': 'application/json',
                 'X-CSRF-TOKEN': getCsrfToken(),
             },
         })
@@ -176,13 +176,17 @@
             uppyFile.value = uppy.getFile(file.id);
             console.log('upload-success', JSON.parse(JSON.stringify(uppyFile.value)));
         })
-        .on('upload-error', (file, error, response) => {
-            if(response) {
-                if(response.status === 422) {
-                    emit('error', (response.body.errors as Record<string, string[]>).file?.join(', '), file.data);
+        .on('upload-error', (file, error, request?: XMLHttpRequest) => {
+            if(request) {
+                const data = request.getResponseHeader('Content-Type')?.includes('/json')
+                    ? JSON.parse(request.response)
+                    : request.response;
+                const status = request.status;
+                if(status === 422) {
+                    emit('error', data.errors.file?.join(', '), file.data);
                 } else {
-                    const message = getErrorMessage({ data: response.body, status: response.status });
-                    handleErrorAlert({ data: response.body, status: response.status, method: 'post' });
+                    const message = getErrorMessage({ data, status });
+                    handleErrorAlert({ data, status, method: 'post' });
                     emit('error', message, file.data);
                 }
             } else {
