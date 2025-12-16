@@ -59,25 +59,32 @@ Call the Sharp API to delete an `$entityKey` instance on the Show Page.
 
 Call the `$commandKeyOrClassName` Entity Command with the optional `$data`.
 
-For a wizard command, you can call each step like this:
+In case of a wizard command, here’s how you can specify the step in the `$commandStep` parameter:
+
 ```php 
- $step = $this->callSharpEntityCommandFromList(
-    'websiteDeploymentTargets', 
-    MyWizardEntityCommand::class, 
-    [
-        'name' => 'Value 1',
-        'other_key' => 2,
-    ]) // we are not defining the step here because it's the first step
+it('allows the user to use the wizard', function () {
+    // First step, no need to declare any previous step
+    $step = $this
+        ->callSharpEntityCommandFromList(
+            entityKey: 'myCommand',
+            commandKeyOrClassName: MyWizardCommand::class,
+            data: ['some_key' => 'some value'],
+        ) 
         ->assertOk()
-        ->json('step'); //get back the step key from the response
-    
- // call next step
- $this->callSharpEntityCommandFromList(
-    'websiteDeploymentTargets', 
-    MyWizardEntityCommand::class, 
-    ['another_key' => "Value 2"], 
-    commandStep: $step
- )->assertOk();
+        ->json('step'); // Get back the step key from the response
+
+    // Second step
+    $this
+        ->callSharpEntityCommandFromList(
+            entityKey: 'myCommand', 
+            commandKeyOrClassName: MyWizardCommand::class, 
+            data: ['another_key' => 'another value'], 
+            commandStep: $step // We must specify the step we got from the first call
+        )
+        ->assertOk();
+
+    // ...
+});
 ```
 
 #### `callSharpInstanceCommandFromList(string $entityKey, $instanceId, string $commandKeyOrClassName, array $data, ?string $commandStep = null)`
@@ -97,7 +104,7 @@ For a wizard command, you can refer to the [previous example](#callsharpentityco
 Most of the time, the breadcrumb automatically set by Sharp is enough. But sometimes it can be useful to define a whole Sharp context before calling an endpoint, and that's the purpose of this method. The `$callback` contains a built instance of Code16\Sharp\Utils\Links\BreadcrumbBuilder, which can be used like this:
 
 ```php
-it('allow the user to display a leaf form', function () {
+it('allows the user to display a leaf form', function () {
     $this
         ->loginAsSharpUser()
         ->withSharpBreadcrumb(function (BreadcrumbBuilder $builder) {
