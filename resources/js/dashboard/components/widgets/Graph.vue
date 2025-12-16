@@ -31,10 +31,11 @@
                 v-bind="props"
                 class="[&_svg]:rounded-b-[calc(.5rem-1px)] [&_svg]:overflow-visible"
                 :class="[
-                    !widget.height ? 'aspect-(--ratio)' : '',
+                    widget.height ? 'h-(--height)' : 'aspect-(--ratio)',
                 ]"
                 :style="{
                     '--ratio': `${widget.ratioX} / ${widget.ratioY}`,
+                    '--height': widget.height ? `${widget.height}px` : '',
                 }"
             />
         </CardContent>

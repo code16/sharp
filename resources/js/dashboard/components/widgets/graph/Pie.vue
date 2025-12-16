@@ -1,69 +1,79 @@
 <script setup lang="ts">
-    import { GraphWidgetData } from "@/types";
-    import { useApexCharts } from "@/dashboard/components/widgets/graph/useApexCharts";
-    import { computed, useTemplateRef } from "vue";
-    import { normalizeColor } from "@/dashboard/utils/chart";
-    import ApexChart from "vue3-apexcharts";
-    import { DashboardWidgetProps } from "@/dashboard/types";
-    import { useBreakpoints } from "@/composables/useBreakpoints";
+    import { computed } from 'vue'
+    import { DashboardWidgetProps } from '@/dashboard/types'
+    import { GraphWidgetData } from '@/types'
+    import { useBreakpoints } from '@/composables/useBreakpoints'
+    import { normalizeColor } from '@/dashboard/utils/chart'
+    import { useEcharts } from '@/dashboard/components/widgets/graph/useEcharts'
 
-    const props = defineProps<DashboardWidgetProps<GraphWidgetData>>();
+    import VChart from 'vue-echarts'
 
-    const breakpoints = useBreakpoints();
-    const { apexChartsComponent, options } = useApexCharts(props, ({ width }) => {
-        const datasets = props.value?.datasets?.filter(dataset => dataset.data?.length > 0);
+    const props = defineProps<DashboardWidgetProps<GraphWidgetData>>()
+
+    const breakpoints = useBreakpoints()
+
+    const { echartsComponent, options } = useEcharts(props, ({ width }) => {
+        const datasets =
+            props.value?.datasets?.filter(d => d.data?.length > 0) ?? []
+
+        const isSmall = breakpoints.sm
+        const veryNarrow = width && width < 380
+
         return {
-            chart: {
-                type: 'pie',
-            },
-            grid: {
-                padding: {
-                }
-            },
-            dataLabels: {
-                enabled: true,
-                style: {
-                    fontFamily: 'inherit'
-                },
-                dropShadow: {
-                    enabled: false,
-                },
-            },
-            plotOptions: {
-                pie: {
-                    dataLabels: {
-                        offset: -10
+            series: [
+                {
+                    type: 'pie',
+                    radius: veryNarrow && isSmall ? '65%' : '70%',
+                    center: isSmall ? ['40%', '50%'] : ['50%', '50%'],
+                    avoidLabelOverlap: true,
+
+                    label: {
+                        show: true,
+                        formatter: '{d}%',
+                        fontFamily: 'inherit',
                     },
-                    offsetX: breakpoints.sm ? -10 : 0,
-                    customScale: width && breakpoints.sm && width < 380 ? 1.1 : 1,
+
+                    labelLine: {
+                        show: true,
+                    },
+
+                    itemStyle: {
+                        borderWidth: 0,
+                    },
+
+                    data: datasets.map(dataset => ({
+                        value: dataset.data[0],
+                        name: dataset.label ?? '',
+                        itemStyle: {
+                            color: normalizeColor(dataset.color),
+                        },
+                    })),
                 },
-            },
-            stroke: {
-                show: false,
-            },
-            colors: datasets?.map(dataset => normalizeColor(dataset.color)),
-            labels: datasets?.map(dataset => dataset.label ?? ''),
-            legend: breakpoints.sm ? {
-                position: 'right',
-                offsetY: width && width < 400 ? -20 : 0,
-                offsetX: width && width < 400 ? -25 : 0,
-            } : {
-                position: 'bottom',
-                offsetX: -20,
-            },
-            series: datasets?.map(dataset => dataset.data[0]),
+            ],
+
+            legend: isSmall
+                ? {
+                    orient: 'vertical',
+                    right: 0,
+                    top: width && width < 400 ? '45%' : 'center',
+                }
+                : {
+                    orient: 'horizontal',
+                    bottom: 0,
+                    left: 'center',
+                },
         }
-    });
+    })
 </script>
 
 <template>
-    <div ref="el">
-        <ApexChart
+    <div>
+        <VChart
+            ref="echartsComponent"
             class="min-h-[250px] sm:min-h-0"
-            :options="options"
-            :series="options.series"
-            :height="options.chart.height"
-            ref="apexChartsComponent"
+            :option="options"
+            autoresize
         />
     </div>
+
 </template>
