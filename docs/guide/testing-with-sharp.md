@@ -23,39 +23,39 @@ The trait adds a few helpers:
 
 Logs in the given user as a Sharp user.
 
-#### `getSharpShow(string $entityKey, $instanceId)`
+#### `getSharpShow(string $entityClassNameOrKey, $instanceId)`
 
-Call the Sharp API to display the Show Page for the Entity `$entityKey` and instance `$instanceId`.
+Call the Sharp API to display the Show Page for the Entity `$entityClassNameOrKey` and instance `$instanceId`.
 
-#### `getSharpForm(string $entityKey, $instanceId = null)`
+#### `getSharpForm(string $entityClassNameOrKey, $instanceId = null)`
 
-Call the Sharp API to display the Form for the Entity `$entityKey`. If `$instanceId` is provided, it will be an edit form, and otherwise a creation one.
+Call the Sharp API to display the Form for the Entity `$entityClassNameOrKey`. If `$instanceId` is provided, it will be an edit form, and otherwise a creation one.
 
-#### `getSharpSingleForm(string $entityKey)`
+#### `getSharpSingleForm(string $entityClassNameOrKey)`
 
-Call the Sharp API to display the edit Form for the single Entity `$entityKey`.
+Call the Sharp API to display the edit Form for the single Entity `$entityClassNameOrKey`.
 
-#### `updateSharpForm(string $entityKey, $instanceId, array $data)`
+#### `updateSharpForm(string $entityClassNameOrKey, $instanceId, array $data)`
 
-Call the Sharp API to update the Entity `$entityKey` of id `$instanceId`, with `$data`.
+Call the Sharp API to update the Entity `$entityClassNameOrKey` of id `$instanceId`, with `$data`.
 
-#### `updateSharpSingleForm(string $entityKey, array $data)`
+#### `updateSharpSingleForm(string $entityClassNameOrKey, array $data)`
 
-Call the Sharp API to update the single Entity `$entityKey` with `$data`.
+Call the Sharp API to update the single Entity `$entityClassNameOrKey` with `$data`.
 
-#### `storeSharpForm(string $entityKey, array $data)`
+#### `storeSharpForm(string $entityClassNameOrKey, array $data)`
 
-Call the Sharp API to store a new Entity `$entityKey` with `$data`.
+Call the Sharp API to store a new Entity `$entityClassNameOrKey` with `$data`.
 
-#### `deleteFromSharpList(string $entityKey, $instanceId)`
+#### `deleteFromSharpList(string $entityClassNameOrKey, $instanceId)`
 
-Call the Sharp API to delete an `$entityKey` instance on the Entity List.
+Call the Sharp API to delete an `$entityClassNameOrKey` instance on the Entity List.
 
-#### `deleteFromSharpShow(string $entityKey, $instanceId)`
+#### `deleteFromSharpShow(string $entityClassNameOrKey, $instanceId)`
 
-Call the Sharp API to delete an `$entityKey` instance on the Show Page.
+Call the Sharp API to delete an `$entityClassNameOrKey` instance on the Show Page.
 
-#### `callSharpEntityCommandFromList(string $entityKey, string $commandKeyOrClassName, array $data, ?string $commandStep = null)`
+#### `callSharpEntityCommandFromList(string $entityClassNameOrKey, string $commandKeyOrClassName, array $data, ?string $commandStep = null)`
 
 Call the `$commandKeyOrClassName` Entity Command with the optional `$data`.
 
@@ -66,7 +66,7 @@ it('allows the user to use the wizard', function () {
     // First step, no need to declare any previous step
     $step = $this
         ->callSharpEntityCommandFromList(
-            entityKey: 'myCommand',
+            entityClassNameOrKey: MyEntity::class,
             commandKeyOrClassName: MyWizardCommand::class,
             data: ['some_key' => 'some value'],
         ) 
@@ -76,7 +76,7 @@ it('allows the user to use the wizard', function () {
     // Second step
     $this
         ->callSharpEntityCommandFromList(
-            entityKey: 'myCommand', 
+            entityClassNameOrKey: MyEntity::class, 
             commandKeyOrClassName: MyWizardCommand::class, 
             data: ['another_key' => 'another value'], 
             commandStep: $step // We must specify the step we got from the first call
@@ -87,13 +87,13 @@ it('allows the user to use the wizard', function () {
 });
 ```
 
-#### `callSharpInstanceCommandFromList(string $entityKey, $instanceId, string $commandKeyOrClassName, array $data, ?string $commandStep = null)`
+#### `callSharpInstanceCommandFromList(string $entityClassNameOrKey, $instanceId, string $commandKeyOrClassName, array $data, ?string $commandStep = null)`
 
 Call the `$commandKeyOrClassName` Instance Command with the optional `$data`.
 
 For a wizard command, you can refer to the [previous example](#callsharpentitycommandfromlist-string-entitykey-string-commandkeyorclassname-array-data-string-commandstep-null).
 
-#### `callSharpInstanceCommandFromShow(string $entityKey, $instanceId, string $commandKeyOrClassName, array $data, ?string $commandStep = null)`
+#### `callSharpInstanceCommandFromShow(string $entityClassNameOrKey, $instanceId, string $commandKeyOrClassName, array $data, ?string $commandStep = null)`
 
 Call the `$commandKeyOrClassName` Instance Command with the optional `$data`.
 
