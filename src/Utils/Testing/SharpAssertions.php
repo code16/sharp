@@ -3,9 +3,11 @@
 namespace Code16\Sharp\Utils\Testing;
 
 use Closure;
+use Code16\Sharp\Filters\GlobalFilters\GlobalFilters;
 use Code16\Sharp\Http\Context\SharpBreadcrumb;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Links\BreadcrumbBuilder;
+use Illuminate\Support\Facades\URL;
 
 trait SharpAssertions
 {
@@ -42,6 +44,8 @@ trait SharpAssertions
 
     public function deleteFromSharpShow(string $entityClassNameOrKey, $instanceId)
     {
+        URL::defaults(['filterKey' => GlobalFilters::$defaultKey]);
+
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
 
         return $this
@@ -59,6 +63,8 @@ trait SharpAssertions
 
     public function deleteFromSharpList(string $entityClassNameOrKey, $instanceId)
     {
+        URL::defaults(['filterKey' => GlobalFilters::$defaultKey]);
+
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
 
         return $this
@@ -73,6 +79,8 @@ trait SharpAssertions
 
     public function getSharpForm(string $entityClassNameOrKey, $instanceId = null)
     {
+        URL::defaults(['filterKey' => GlobalFilters::$defaultKey]);
+
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
 
         return $this
@@ -100,6 +108,8 @@ trait SharpAssertions
 
     public function getSharpSingleForm(string $entityClassNameOrKey)
     {
+        URL::defaults(['filterKey' => GlobalFilters::$defaultKey]);
+
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
 
         return $this
@@ -117,6 +127,8 @@ trait SharpAssertions
 
     public function updateSharpForm(string $entityClassNameOrKey, $instanceId, array $data)
     {
+        URL::defaults(['filterKey' => GlobalFilters::$defaultKey]);
+
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
 
         return $this
@@ -135,6 +147,8 @@ trait SharpAssertions
 
     public function updateSharpSingleForm(string $entityClassNameOrKey, array $data)
     {
+        URL::defaults(['filterKey' => GlobalFilters::$defaultKey]);
+
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
 
         return $this
@@ -152,6 +166,8 @@ trait SharpAssertions
 
     public function getSharpShow(string $entityClassNameOrKey, $instanceId)
     {
+        URL::defaults(['filterKey' => GlobalFilters::$defaultKey]);
+
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
 
         return $this
@@ -170,6 +186,8 @@ trait SharpAssertions
 
     public function storeSharpForm(string $entityClassNameOrKey, array $data)
     {
+        URL::defaults(['filterKey' => GlobalFilters::$defaultKey]);
+
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
 
         return $this
@@ -193,6 +211,8 @@ trait SharpAssertions
         array $data = [],
         ?string $commandStep = null
     ) {
+        URL::defaults(['filterKey' => GlobalFilters::$defaultKey]);
+
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
 
         $commandKey = class_exists($commandKeyOrClassName)
@@ -222,6 +242,8 @@ trait SharpAssertions
         array $data = [],
         ?string $commandStep = null
     ) {
+        URL::defaults(['filterKey' => GlobalFilters::$defaultKey]);
+
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
 
         $commandKey = class_exists($commandKeyOrClassName)
@@ -250,6 +272,8 @@ trait SharpAssertions
         array $data = [],
         ?string $commandStep = null
     ) {
+        URL::defaults(['filterKey' => GlobalFilters::$defaultKey]);
+
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
 
         $commandKey = class_exists($commandKeyOrClassName)
