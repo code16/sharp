@@ -50,11 +50,11 @@ it('sets the current filterKey according to the URL', function () {
     expect(sharp()->context()->globalFilterValue('test'))->toEqual('one');
 });
 
-it('wont set an invalid value of the current filterKey according to the URL', function () {
+it('redirects to the homepage if an invalid filterKey is set in the URL', function () {
     fakeGlobalFilter();
 
     $this->get('/sharp/five/s-list/person/s-show/person/1')
-        ->assertOk();
+        ->assertRedirect(route('code16.sharp.home', ['filterKey' => 'two']));
 
     expect(sharp()->context()->globalFilterValue('test'))->toEqual('two');
 });

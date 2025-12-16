@@ -29,6 +29,12 @@ class HandleGlobalFilters
                     ->each(fn (GlobalRequiredFilter $globalFilter, int $index) => $globalFilter
                         ->setCurrentValue($filterKeys[$index])
                     );
+
+                if (sharp()->context()->globalFilterUrlSegmentValue() !== $filterKey) {
+                    return redirect()->route('code16.sharp.home', [
+                        'filterKey' => sharp()->context()->globalFilterUrlSegmentValue(),
+                    ]);
+                }
             }
         }
 

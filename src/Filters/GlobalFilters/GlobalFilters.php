@@ -54,10 +54,6 @@ final class GlobalFilters implements Arrayable
 
     public function findFilter(string $key): ?Filter
     {
-        return collect($this->getFilters())
-            ->firstWhere(fn (GlobalRequiredFilter $filter) => class_exists($key)
-                ? $filter instanceof $key
-                : $filter->getKey() === $key
-            );
+        return $this->filterContainer()->findFilterHandler($key);
     }
 }
