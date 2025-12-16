@@ -33,18 +33,18 @@ it('allows to configure a policy', function () {
         }
     });
 
-    $this->get('/sharp/s-list/person')->assertOk();
-    $this->get('/sharp/s-list/person/s-show/person/1')->assertOk();
-    $this->get('/sharp/s-list/person/s-form/person/1')->assertOk();
-    $this->get('/sharp/s-list/person/s-form/person')->assertOk();
+    $this->get('/sharp/root/s-list/person')->assertOk();
+    $this->get('/sharp/root/s-list/person/s-show/person/1')->assertOk();
+    $this->get('/sharp/root/s-list/person/s-form/person/1')->assertOk();
+    $this->get('/sharp/root/s-list/person/s-form/person')->assertOk();
 
-    $this->post('/sharp/s-list/person/s-form/person/1')->assertRedirect();
-    $this->post('/sharp/s-list/person/s-form/person')->assertRedirect();
+    $this->post('/sharp/root/s-list/person/s-form/person/1')->assertRedirect();
+    $this->post('/sharp/root/s-list/person/s-form/person')->assertRedirect();
 
-    $this->delete('/sharp/s-list/person/s-show/person/50')->assertForbidden();
+    $this->delete('/sharp/root/s-list/person/s-show/person/50')->assertForbidden();
 
     // Update policy with an id > 1 returns 403
-    $this->post('/sharp/s-list/person/s-form/person/2')->assertForbidden();
+    $this->post('/sharp/root/s-list/person/s-form/person/2')->assertForbidden();
 });
 
 it('returns policies with a show or form get request', function () {
@@ -62,7 +62,7 @@ it('returns policies with a show or form get request', function () {
     });
 
     $this
-        ->get('/sharp/s-list/person/s-form/person')
+        ->get('/sharp/root/s-list/person/s-form/person')
         ->assertInertia(fn (Assert $page) => $page
             ->where('form.authorizations', [
                 'delete' => false,
@@ -72,7 +72,7 @@ it('returns policies with a show or form get request', function () {
             ])
         );
 
-    $this->get('/sharp/s-list/person/s-show/person/1')
+    $this->get('/sharp/root/s-list/person/s-show/person/1')
         ->assertInertia(fn (Assert $page) => $page
             ->where('show.authorizations', [
                 'delete' => false,
@@ -82,7 +82,7 @@ it('returns policies with a show or form get request', function () {
             ])
         );
 
-    $this->get('/sharp/s-list/person/s-show/person/2')
+    $this->get('/sharp/root/s-list/person/s-show/person/2')
         ->assertInertia(fn (Assert $page) => $page
             ->where('show.authorizations', [
                 'delete' => false,
@@ -102,11 +102,11 @@ it('allows to access to the form in readonly mode if there is no show', function
         }
     });
 
-    $this->get('/sharp/s-list/person/s-form/person/2')->assertForbidden();
+    $this->get('/sharp/root/s-list/person/s-form/person/2')->assertForbidden();
 
     fakeShowFor('person', null);
 
-    $this->get('/sharp/s-list/person/s-form/person/2')->assertOk();
+    $this->get('/sharp/root/s-list/person/s-form/person/2')->assertOk();
 });
 
 it('returns policies with a list get request', function () {
@@ -130,7 +130,7 @@ it('returns policies with a list get request', function () {
     });
 
     $this
-        ->get('/sharp/s-list/person')
+        ->get('/sharp/root/s-list/person')
         ->assertInertia(fn (Assert $page) => $page
             ->where('entityList.authorizations', [
                 'reorder' => true,
@@ -168,7 +168,7 @@ it('returns policies with a SharpShowEntityListField on a show get request', fun
 
     $this
         ->actingAs(new User(['name' => 'bob']))
-        ->get('/sharp/s-list/person/s-show/person/1')
+        ->get('/sharp/root/s-list/person/s-show/person/1')
         ->assertInertia(fn (Assert $page) => $page
             ->where('show.fields.'.PersonPhysicistEntity::class.'.authorizations', [
                 'view' => false,
@@ -177,7 +177,7 @@ it('returns policies with a SharpShowEntityListField on a show get request', fun
 
     $this
         ->actingAs(new User(['name' => 'admin']))
-        ->get('/sharp/s-list/person/s-show/person/1')
+        ->get('/sharp/root/s-list/person/s-show/person/1')
         ->assertInertia(fn (Assert $page) => $page
             ->where('show.fields.'.PersonPhysicistEntity::class.'.authorizations', [
                 'view' => true,
@@ -206,7 +206,7 @@ it('returns policies with a SharpShowDashboardField on a show get request', func
 
     $this
         ->actingAs(new User(['name' => 'bob']))
-        ->get('/sharp/s-list/person/s-show/person/1')
+        ->get('/sharp/root/s-list/person/s-show/person/1')
         ->assertInertia(fn (Assert $page) => $page
             ->where('show.fields.'.DashboardEntity::class.'.authorizations', [
                 'view' => false,
@@ -215,7 +215,7 @@ it('returns policies with a SharpShowDashboardField on a show get request', func
 
     $this
         ->actingAs(new User(['name' => 'admin']))
-        ->get('/sharp/s-list/person/s-show/person/1')
+        ->get('/sharp/root/s-list/person/s-show/person/1')
         ->assertInertia(fn (Assert $page) => $page
             ->where('show.fields.'.DashboardEntity::class.'.authorizations', [
                 'view' => true,
@@ -237,7 +237,7 @@ it('overrides policies with global authorizations', function () {
     });
 
     $this
-        ->get('/sharp/s-list/person/s-show/person/1')
+        ->get('/sharp/root/s-list/person/s-show/person/1')
         ->assertInertia(fn (Assert $page) => $page
             ->where('show.authorizations.update', false)
         );
@@ -254,7 +254,7 @@ it('allows to set the entity authorization in a policy', function () {
 
     login(new User(['name' => 'unauthorized-user']));
 
-    $this->get('/sharp/s-list/person')
+    $this->get('/sharp/root/s-list/person')
         ->assertForbidden();
 });
 
@@ -271,11 +271,11 @@ it('allows to set dashboard view policy to handle whole dashboard visibility', f
 
     login(new User(['name' => 'unauthorized-user']));
 
-    $this->get('/sharp/s-dashboard/'.DashboardEntity::$entityKey)->assertForbidden();
+    $this->get('/sharp/root/s-dashboard/'.DashboardEntity::$entityKey)->assertForbidden();
 });
 
 it('does not check view, update and delete policies on create case', function () {
-    $this->get('/sharp/s-list/person/s-form/person')
+    $this->get('/sharp/root/s-list/person/s-form/person')
         ->assertInertia(fn (Assert $page) => $page
             ->where('form.authorizations', [
                 'delete' => false,

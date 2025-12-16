@@ -36,32 +36,36 @@ it('allows to user to update a global filter', function () {
     $this->withoutExceptionHandling();
 
     $this
-        ->post(route('code16.sharp.filters.update', 'test'), ['value' => 1])
-        ->assertRedirect(route('code16.sharp.home'));
+        ->followingRedirects()
+        ->post(route('code16.sharp.filters.update', ['test']), ['filterValues' => ['test' => '1']])
+        ->assertOk();
 
-    $this->assertEquals(1, sharp()->context()->globalFilterValue('test'));
+    $this->assertEquals('1', sharp()->context()->globalFilterValue('test'));
 });
 
 it('sets to global filter to the default value if missing', function () {
     $this
-        ->post(route('code16.sharp.filters.update', 'test'))
-        ->assertRedirect(route('code16.sharp.home'));
+        ->followingRedirects()
+        ->post(route('code16.sharp.filters.update', ['test']), ['filterValues' => []])
+        ->assertOk();
 
     $this->assertEquals(2, sharp()->context()->globalFilterValue('test'));
 });
 
 it('does not allow to set a global filter to an unexpected value', function () {
     $this
-        ->post(route('code16.sharp.filters.update', 'test'), ['value' => 4])
-        ->assertRedirect(route('code16.sharp.home'));
+        ->followingRedirects()
+        ->post(route('code16.sharp.filters.update', ['test']), ['filterValues' => ['test' => 4]])
+        ->assertOk();
 
     $this->assertEquals(2, sharp()->context()->globalFilterValue('test'));
 });
 
-it('the current value of the global filter is sent with every inertia request', function () {
+it('sends the current value of the global filter with every inertia request', function () {
     sharp()->config()->declareEntity(PersonEntity::class);
 
     $this
+        ->followingRedirects()
         ->get('/sharp/s-list/person')
         ->assertInertia(fn (Assert $page) => $page
             ->has('globalFilters.config.filters._root.0', fn (Assert $filter) => $filter
@@ -74,10 +78,8 @@ it('the current value of the global filter is sent with every inertia request', 
         );
 
     $this
-        ->post(route('code16.sharp.filters.update', 'test'), ['value' => 3]);
-
-    $this
-        ->get('/sharp/s-list/person')
+        ->followingRedirects()
+        ->get('/sharp/3/s-list/person')
         ->assertInertia(fn (Assert $page) => $page
             ->has('globalFilters.config.filters._root.0', fn (Assert $filter) => $filter
                 ->where('key', 'test')

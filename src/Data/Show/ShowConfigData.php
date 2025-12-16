@@ -13,6 +13,7 @@ final class ShowConfigData extends Data
 {
     public function __construct(
         public string $deleteConfirmationText,
+        public string $formEditUrl,
         public bool $isSingle = false,
         public ?ConfigCommandsData $commands = null,
         public ?string $titleAttribute = null,

@@ -78,9 +78,7 @@ trait SelectFilterTrait
 
         if (! is_array(collect($values)->first())) {
             return collect($values)
-                ->map(function ($label, $id) {
-                    return compact('id', 'label');
-                })
+                ->map(fn ($label, $id) => compact('id', 'label'))
                 ->values()
                 ->all();
         }

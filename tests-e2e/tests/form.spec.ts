@@ -11,7 +11,7 @@ async function createForm(page: Page) {
     await page.getByRole('button', { name: 'Create' }).click();
     const response = await responsePromise;
     expect(await response.headerValue('Location'), 'Should not redirect with errors (422)').not.toBe(page.url());
-    await page.goto('/sharp/s-list/test-models/s-form/test-models/1');
+    await page.goto('/sharp/root/s-list/test-models/s-form/test-models/1');
   });
 }
 
@@ -21,7 +21,7 @@ async function updateForm(page: Page) {
     await page.getByRole('button', { name: 'Update' }).click();
     const response = await responsePromise;
     expect(await response.headerValue('Location'), 'Should not redirect with errors (422)').not.toBe(page.url());
-    await page.goto('/sharp/s-list/test-models/s-form/test-models/1');
+    await page.goto('/sharp/root/s-list/test-models/s-form/test-models/1');
   });
 }
 
@@ -35,7 +35,7 @@ test.describe('form', () => {
   test.describe('fields', () => {
     test('autocomplete local', async ({ page }) => {
       await init(page);
-      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      await page.goto('/sharp/root/s-list/test-models/s-form/test-models');
       await page.getByRole('combobox', { name: 'Autocomplete local' }).click();
       const menu = page.getByRole('dialog');
       await expect(menu.getByRole('option')).toHaveCount(10);
@@ -62,7 +62,7 @@ test.describe('form', () => {
     });
     test('autocomplete remote endpoint', async ({ page }) => {
       await init(page);
-      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      await page.goto('/sharp/root/s-list/test-models/s-form/test-models');
       await page.getByRole('combobox', { name: 'Autocomplete remote endpoint' }).click();
       const menu = page.getByRole('dialog');
       await expect(menu).toContainText('Enter at least 1 character to search');
@@ -84,7 +84,7 @@ test.describe('form', () => {
     });
     test('autocomplete remote callback', async ({ page }) => {
       await init(page);
-      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      await page.goto('/sharp/root/s-list/test-models/s-form/test-models');
       await page.getByRole('combobox', { name: 'Autocomplete remote callback' }).click();
       const menu = page.getByRole('dialog');
       await expect(menu.getByRole('option')).toHaveCount(10);
@@ -108,7 +108,7 @@ test.describe('form', () => {
     });
     test('autocomplete list', async ({ page }) => {
       await init(page);
-      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      await page.goto('/sharp/root/s-list/test-models/s-form/test-models');
       const list = page.getByLabel('Autocomplete list');
       await list.getByRole('button', { name: 'Add an item' }).click();
       await list.getByRole('combobox', { name: 'Autocomplete list item' }).click();
@@ -129,14 +129,14 @@ test.describe('form', () => {
     });
     test('check', async ({ page }) => {
       await init(page);
-      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      await page.goto('/sharp/root/s-list/test-models/s-form/test-models');
       await page.getByRole('checkbox', { name: 'Check' }).click();
       await createForm(page);
       await expect(page.getByRole('checkbox', { name: 'Check' })).toBeChecked();
     });
     test('date', async ({ page }) => {
       await init(page);
-      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      await page.goto('/sharp/root/s-list/test-models/s-form/test-models');
       const input = page.getByLabel('Date', { exact: true });
       await input.fill('2021-01-01');
       await page.getByRole('button', { name: 'Clear Date', exact: true }).click();
@@ -147,7 +147,7 @@ test.describe('form', () => {
     });
     test('date picker', async ({ page }) => {
       await init(page);
-      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      await page.goto('/sharp/root/s-list/test-models/s-form/test-models');
       const input = page.getByLabel('Date', { exact: true });
       await input.fill('2021-01-01');
       await input.click();
@@ -163,7 +163,7 @@ test.describe('form', () => {
     });
     test('date time', async ({ page }) => {
       await init(page);
-      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      await page.goto('/sharp/root/s-list/test-models/s-form/test-models');
       const input = page.getByLabel('Date time', { exact: true });
       await input.fill('2021-01-01T12:34');
       await page.getByRole('button', { name: 'Clear Date time' }).click();
@@ -174,7 +174,7 @@ test.describe('form', () => {
     });
     test('date time picker', async ({ page }) => {
       await init(page);
-      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      await page.goto('/sharp/root/s-list/test-models/s-form/test-models');
       const input = page.getByLabel('Date time', { exact: true });
       await input.fill('2021-01-01T12:34');
       await input.click();
@@ -192,7 +192,7 @@ test.describe('form', () => {
     });
     test('time', async ({ page }) => {
       await init(page);
-      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      await page.goto('/sharp/root/s-list/test-models/s-form/test-models');
       const input = page.getByLabel('Time', { exact: true });
       await input.fill('12:34');
       await page.getByRole('button', { name: 'Clear Time', exact: true }).click();
@@ -203,7 +203,7 @@ test.describe('form', () => {
     });
     test('time picker', async ({ page }) => {
       await init(page);
-      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      await page.goto('/sharp/root/s-list/test-models/s-form/test-models');
       const input = page.getByLabel('Time', { exact: true });
       await input.fill('12:34');
       await input.click();
@@ -219,12 +219,12 @@ test.describe('form', () => {
     });
     test('html', async ({ page }) => {
       await init(page);
-      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      await page.goto('/sharp/root/s-list/test-models/s-form/test-models');
       expect(await page.getByLabel('Html', { exact: true }).innerHTML()).toContain('Your name is <strong>John</strong>');
     });
     test('list', async ({ page }) => {
       await init(page);
-      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      await page.goto('/sharp/root/s-list/test-models/s-form/test-models');
       const list = page.getByLabel('List', { exact: true });
       await list.getByRole('button', { name: 'Add an item' }).click();
       await list.getByRole('textbox', { name: 'List item text' }).nth(0).fill('example 1');
@@ -255,7 +255,7 @@ test.describe('form', () => {
     });
     test('editor', async ({ page }) => {
       await init(page);
-      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      await page.goto('/sharp/root/s-list/test-models/s-form/test-models');
       const editor = page.getByLabel('Editor HTML', { exact: true });
       await test.step('default text', async () => {
         await editor.getByRole('textbox').pressSequentially('default');
@@ -427,7 +427,7 @@ test.describe('form', () => {
     });
     test('editor embeds', async ({ page }) => {
       await init(page);
-      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      await page.goto('/sharp/root/s-list/test-models/s-form/test-models');
       const editor = page.getByLabel('Editor HTML', { exact: true });
       await editor.getByRole('button', { name: 'Insert...' }).click();
       await page.getByRole('menu').getByRole('menuitem', { name: 'Test embed' }).click();
@@ -449,7 +449,7 @@ test.describe('form', () => {
     });
     test('editor localized', async ({ page }) => {
       await init(page);
-      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      await page.goto('/sharp/root/s-list/test-models/s-form/test-models');
       const editor = page.getByLabel('Editor HTML localized', { exact: true });
       const localeSelect = page.getByRole('combobox', { name: 'Change language for field Editor HTML localized' });
       await editor.getByRole('textbox').pressSequentially('Test EN');
@@ -470,7 +470,7 @@ test.describe('form', () => {
     });
     test('editor markdown', async ({ page }) => {
       await init(page);
-      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      await page.goto('/sharp/root/s-list/test-models/s-form/test-models');
       const editor = page.getByLabel('Editor markdown', { exact: true });
       await editor.getByRole('button', { name: 'Bold' }).click();
       await editor.getByRole('textbox').pressSequentially('strong');
@@ -481,7 +481,7 @@ test.describe('form', () => {
     });
     test('number', async ({ page }) => {
       await init(page);
-      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      await page.goto('/sharp/root/s-list/test-models/s-form/test-models');
       const input = page.getByLabel('Number', { exact: true });
       expect(await input.getAttribute('type')).toBe('number');
       await input.fill('4');
@@ -490,7 +490,7 @@ test.describe('form', () => {
     });
     test('select dropdown single', async ({ page }) => {
       await init(page);
-      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      await page.goto('/sharp/root/s-list/test-models/s-form/test-models');
       const select = page.getByRole('combobox', { name: 'Select dropdown', exact: true });
       await select.click();
       await page.getByRole('menu').getByRole('menuitemcheckbox', { name: 'Option 1', exact: true }).click();
@@ -503,7 +503,7 @@ test.describe('form', () => {
     });
     test('select dropdown multiple', async ({ page }) => {
       await init(page);
-      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      await page.goto('/sharp/root/s-list/test-models/s-form/test-models');
       const select = page.getByRole('combobox', { name: 'Select dropdown multiple', exact: true });
       await select.click();
       await page.getByRole('menu').getByRole('menuitemcheckbox', { name: 'Option 1', exact: true }).click();
@@ -517,7 +517,7 @@ test.describe('form', () => {
     });
     test('select radios', async ({ page }) => {
       await init(page);
-      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      await page.goto('/sharp/root/s-list/test-models/s-form/test-models');
       await expect(page.getByLabel('Select radios').getByRole('radio', { name: 'Option 1', exact: true })).toBeChecked();
       await page.getByLabel('Select radios').getByRole('radio', { name: 'Option 2', exact: true }).click();
       await expect(page.getByLabel('Select radios').getByRole('radio', { name: 'Option 2', exact: true })).toBeChecked();
@@ -526,7 +526,7 @@ test.describe('form', () => {
     });
     test('select checkboxes', async ({ page }) => {
       await init(page);
-      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      await page.goto('/sharp/root/s-list/test-models/s-form/test-models');
       await page.getByLabel('Select checkboxes').getByRole('checkbox', { name: 'Option 1', exact: true }).click();
       await page.getByLabel('Select checkboxes').getByRole('checkbox', { name: 'Option 2', exact: true }).click();
       await expect(page.getByLabel('Select checkboxes').getByRole('checkbox', { name: 'Option 1', exact: true })).toBeChecked();
@@ -537,7 +537,7 @@ test.describe('form', () => {
     });
     test('select checkboxes select all', async ({ page }) => {
       await init(page);
-      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      await page.goto('/sharp/root/s-list/test-models/s-form/test-models');
       await page.getByLabel('Select checkboxes').getByRole('checkbox', { name: 'Select all', exact: true }).click();
       const checkboxes = Array.from({ length: 10 }).map((_, i) =>
         page.getByLabel('Select checkboxes').getByRole('checkbox', { name: `Option ${i + 1}`, exact: true })
@@ -556,7 +556,7 @@ test.describe('form', () => {
     });
     test('tags', async ({ page }) => {
       await init(page, { seed: { tags: true } });
-      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      await page.goto('/sharp/root/s-list/test-models/s-form/test-models');
       const field = page.getByLabel('Tags', { exact: true });
       await field.getByRole('combobox').click();
       await page.getByRole('listbox').getByRole('option', { name: 'Tag 1', exact: true }).click();
@@ -579,7 +579,7 @@ test.describe('form', () => {
     });
     test('textarea', async ({ page }) => {
       await init(page);
-      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      await page.goto('/sharp/root/s-list/test-models/s-form/test-models');
       const textarea = page.getByRole('textbox', { name: 'Textarea', exact: true });
       await textarea.fill('textarea');
       await expect(textarea).toHaveValue('textarea');
@@ -588,7 +588,7 @@ test.describe('form', () => {
     });
     test('textarea localized', async ({ page }) => {
       await init(page);
-      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      await page.goto('/sharp/root/s-list/test-models/s-form/test-models');
       const textarea = page.getByRole('textbox', { name: 'Textarea localized', exact: true });
       const localeSelect = page.getByRole('combobox', { name: 'Change language for field Textarea localized' });
       await textarea.fill('Test EN');
@@ -609,7 +609,7 @@ test.describe('form', () => {
     });
     test('text', async ({ page }) => {
       await init(page);
-      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      await page.goto('/sharp/root/s-list/test-models/s-form/test-models');
       const input = page.getByRole('textbox', { name: 'Text', exact: true });
       await input.fill('text');
       await expect(input).toHaveValue('text');
@@ -618,7 +618,7 @@ test.describe('form', () => {
     });
     test('text localized', async ({ page }) => {
       await init(page);
-      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      await page.goto('/sharp/root/s-list/test-models/s-form/test-models');
       const input = page.getByRole('textbox', { name: 'Text localized', exact: true });
       const localeSelect = page.getByRole('combobox', { name: 'Change language for field Text localized' });
       await input.fill('Test EN');
@@ -639,7 +639,7 @@ test.describe('form', () => {
     });
     test('upload', async ({ page }) => {
       await init(page);
-      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      await page.goto('/sharp/root/s-list/test-models/s-form/test-models');
       const upload = page.getByLabel('Upload');
       await upload.locator('input').setInputFiles(path.resolve(__dirname, '../fixtures/upload.pdf'));
       await expect(upload).toContainText('upload.pdf');
@@ -665,7 +665,7 @@ test.describe('form', () => {
     });
     test('upload image', async ({ page }) => {
       await init(page);
-      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      await page.goto('/sharp/root/s-list/test-models/s-form/test-models');
       const upload = page.getByLabel('Upload');
       await upload.locator('input').setInputFiles(path.resolve(__dirname, '../fixtures/upload-image.jpg'));
       await expect(upload).toContainText('upload-image.jpg');
@@ -679,7 +679,7 @@ test.describe('form', () => {
     });
     test('upload invalid', async ({ page }) => {
       await init(page);
-      await page.goto('/sharp/s-list/test-models/s-form/test-models');
+      await page.goto('/sharp/root/s-list/test-models/s-form/test-models');
       const upload = page.getByLabel('Upload');
       await upload.locator('input').setInputFiles(path.resolve(__dirname, '../fixtures/upload-too-large.pdf'));
       await expect(page.getByLabel('Upload')).toHaveAccessibleDescription(/The selected file is too big/);
@@ -687,7 +687,7 @@ test.describe('form', () => {
   });
   test('validation', async ({ page }) => {
     await init(page);
-    await page.goto('/sharp/s-list/test-models/s-form/test-models:required');
+    await page.goto('/sharp/root/s-list/test-models/s-form/test-models:required');
     await page.getByRole('button', { name: 'Create' }).click();
     async function hasError(field: Locator, error: RegExp) {
       await test.step(`hasError`, async () => {
@@ -734,9 +734,9 @@ test.describe('form', () => {
 
   test('tabs', async ({ page }) => {
     await init(page);
-    await page.goto('/sharp/s-list/test-models/s-form/test-models');
+    await page.goto('/sharp/root/s-list/test-models/s-form/test-models');
     await expect(page.getByRole('tablist')).toBeHidden();
-    await page.goto('/sharp/s-list/test-models/s-form/test-models:tabs');
+    await page.goto('/sharp/root/s-list/test-models/s-form/test-models:tabs');
     await expect(page.getByRole('tablist')).toBeVisible();
     await expect(page.getByRole('tab', { name: 'Tab 1' })).toHaveAttribute('aria-selected', 'true');
     await expect(page.getByRole('textbox', { name: 'Text', exact: true })).toBeVisible();
@@ -756,7 +756,7 @@ test.describe('form', () => {
 test.describe('single form', () => {
   test('display single form', async ({ page }) => {
     await init(page, { seed: { show: true } });
-    await page.goto('/sharp/s-show/test-models-single/s-form/test-models-single');
+    await page.goto('/sharp/root/s-show/test-models-single/s-form/test-models-single');
     await expect(page.getByRole('heading', { name: 'Edit “Test model single”' })).toBeVisible();
   });
 });

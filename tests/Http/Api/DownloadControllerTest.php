@@ -18,6 +18,7 @@ it('allows to download a file from a form field', function () {
     $response = $this
         ->get(
             route('code16.sharp.download.show', [
+                'filterKey' => 'root',
                 'entityKey' => 'person',
                 'instanceId' => 1,
                 'disk' => 'local',
@@ -37,6 +38,7 @@ it('allows to download a file from a show field', function () {
     $response = $this
         ->get(
             route('code16.sharp.download.show', [
+                'filterKey' => 'root',
                 'entityKey' => 'person',
                 'instanceId' => 1,
                 'disk' => 'local',
@@ -53,6 +55,7 @@ it('returns a 404 for a missing file', function () {
     $this
         ->get(
             route('code16.sharp.download.show', [
+                'filterKey' => 'root',
                 'entityKey' => 'person',
                 'instanceId' => 1,
                 'fileName' => 'test.jpg',
@@ -69,6 +72,7 @@ it('does not allow to download a file without authorization', function () {
     $this
         ->get(
             route('code16.sharp.download.show', [
+                'filterKey' => 'root',
                 'entityKey' => 'person',
                 'instanceId' => 1,
                 'disk' => 'local',
@@ -87,6 +91,7 @@ it('allows to download a file of an allowed disk', function () {
     $this
         ->get(
             route('code16.sharp.download.show', [
+                'filterKey' => 'root',
                 'entityKey' => 'person',
                 'instanceId' => 1,
                 'disk' => 'local',
@@ -105,6 +110,7 @@ it('does not allow to download a file of a not allowed disk', function () {
     $this
         ->get(
             route('code16.sharp.download.show', [
+                'filterKey' => 'root',
                 'entityKey' => 'person',
                 'instanceId' => 1,
                 'disk' => 'local',

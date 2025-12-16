@@ -14,7 +14,7 @@ class ShowController extends SharpProtectedController
     use HandlesSharpNotificationsInRequest;
     use PreloadsShowFields;
 
-    public function show(string $parentUri, EntityKey $entityKey, string $instanceId)
+    public function show(string $filterKey, string $parentUri, EntityKey $entityKey, string $instanceId)
     {
         $this->authorizationManager->check('view', $entityKey, $instanceId);
 
@@ -28,7 +28,14 @@ class ShowController extends SharpProtectedController
         $showData = $show->instance($instanceId);
         $payload = ShowData::from([
             'title' => $showData[$show->titleAttribute()] ?? $entity->getLabelOrFail($entityKey->multiformKey()),
-            'config' => $show->showConfig($instanceId),
+            'config' => [
+                ...$show->showConfig($instanceId),
+                'formEditUrl' => route('code16.sharp.form.edit', [
+                    'parentUri' => sharp()->context()->breadcrumb()->getCurrentPath(),
+                    'entityKey' => $entityKey,
+                    'instanceId' => $instanceId,
+                ]),
+            ],
             'fields' => $show->fields(),
             'layout' => $show->showLayout(),
             'data' => $show->applyFormatters($showData),
@@ -59,7 +66,7 @@ class ShowController extends SharpProtectedController
         ]);
     }
 
-    public function delete(string $parentUri, string $entityKey, string $instanceId)
+    public function delete(string $filterKey, string $parentUri, string $entityKey, string $instanceId)
     {
         $this->authorizationManager->check('delete', $entityKey, $instanceId);
 

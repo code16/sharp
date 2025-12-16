@@ -139,9 +139,10 @@ it('gets list data as JSON in an EEL case', function () {
         }
     });
 
-    $this->getJson('/sharp/api/list/person', headers: [
-        SharpBreadcrumb::CURRENT_PAGE_URL_HEADER => url('/sharp/s-list/person/s-show/person/1'),
-    ])
+    $this
+        ->getJson('/sharp/api/root/list/person', headers: [
+            SharpBreadcrumb::CURRENT_PAGE_URL_HEADER => url('/sharp/root/s-list/person/s-show/person/1'),
+        ])
         ->assertOk()
         ->assertJson(fn (AssertableJson $json) => $json
             ->has('data.0', fn (AssertableJson $json) => $json->where('id', 1)
@@ -168,9 +169,10 @@ it('sets appropriate `_meta` for each item linking to a show in an EEL case', fu
         }
     });
 
-    $this->getJson('/sharp/api/list/person', headers: [
-        SharpBreadcrumb::CURRENT_PAGE_URL_HEADER => url('/sharp/s-list/person/s-show/person/1'),
-    ])
+    $this
+        ->getJson('/sharp/api/root/list/person', headers: [
+            SharpBreadcrumb::CURRENT_PAGE_URL_HEADER => url('/sharp/root/s-list/person/s-show/person/1'),
+        ])
         ->assertOk()
         ->assertJson(fn (AssertableJson $json) => $json
             ->has('data.0', fn (AssertableJson $json) => $json
@@ -211,9 +213,10 @@ it('sets appropriate `_meta` for each item linking to a form in an EEL case', fu
 
     fakeShowFor('person', null);
 
-    $this->getJson('/sharp/api/list/person', headers: [
-        SharpBreadcrumb::CURRENT_PAGE_URL_HEADER => url('/sharp/s-list/person/s-show/person/1'),
-    ])
+    $this
+        ->getJson('/sharp/api/root/list/person', headers: [
+            SharpBreadcrumb::CURRENT_PAGE_URL_HEADER => url('/sharp/root/s-list/person/s-show/person/1'),
+        ])
         ->assertOk()
         ->assertJson(fn (AssertableJson $json) => $json
             ->has('data.0', fn (AssertableJson $json) => $json
@@ -268,9 +271,10 @@ it('sets appropriate `_meta` for with entities map', function () {
         }
     });
 
-    $this->getJson('/sharp/api/list/person', headers: [
-        SharpBreadcrumb::CURRENT_PAGE_URL_HEADER => url('/sharp/s-list/person/s-show/person/1'),
-    ])
+    $this
+        ->getJson('/sharp/api/root/list/person', headers: [
+            SharpBreadcrumb::CURRENT_PAGE_URL_HEADER => url('/sharp/root/s-list/person/s-show/person/1'),
+        ])
         ->assertOk()
         ->assertJson(fn (AssertableJson $json) => $json
             ->count('data', 3)
@@ -303,9 +307,10 @@ it('gets paginated data if wanted as JSON in an EEL case', function () {
         }
     });
 
-    $this->getJson('/sharp/api/list/person', headers: [
-        SharpBreadcrumb::CURRENT_PAGE_URL_HEADER => url('/sharp/s-list/person/s-show/person/1'),
-    ])
+    $this
+        ->getJson('/sharp/api/root/list/person', headers: [
+            SharpBreadcrumb::CURRENT_PAGE_URL_HEADER => url('/sharp/root/s-list/person/s-show/person/1'),
+        ])
         ->assertOk()
         ->assertJson(fn (AssertableJson $json) => $json
             ->has('data.0', fn (AssertableJson $json) => $json->where('id', 1)
@@ -360,9 +365,10 @@ it('get entities if configured', function () {
         }
     });
 
-    $this->getJson('/sharp/api/list/person', headers: [
-        SharpBreadcrumb::CURRENT_PAGE_URL_HEADER => url('/sharp/s-list/person/s-show/person/1'),
-    ])
+    $this
+        ->getJson('/sharp/api/root/list/person', headers: [
+            SharpBreadcrumb::CURRENT_PAGE_URL_HEADER => url('/sharp/root/s-list/person/s-show/person/1'),
+        ])
         ->assertOk()
         ->assertJson(fn (AssertableJson $json) => $json
             ->count('data', 3)

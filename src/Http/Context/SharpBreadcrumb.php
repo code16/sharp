@@ -27,7 +27,8 @@ class SharpBreadcrumb
 
     public function allSegments(): array
     {
-        $url = sharp()->config()->get('custom_url_segment');
+        $url = sharp()->config()->get('custom_url_segment')
+            .'/'.sharp()->context()->globalFilterUrlSegmentValue();
 
         return $this
             ->breadcrumbItems()
@@ -76,8 +77,9 @@ class SharpBreadcrumb
     {
         return url(
             sprintf(
-                '%s/%s',
+                '%s/%s/%s',
                 sharp()->config()->get('custom_url_segment'),
+                sharp()->context()->globalFilterUrlSegmentValue(),
                 $this->getCurrentPath()
             )
         );
@@ -94,8 +96,9 @@ class SharpBreadcrumb
     {
         return url(
             sprintf(
-                '%s/%s',
+                '%s/%s/%s',
                 sharp()->config()->get('custom_url_segment'),
+                sharp()->context()->globalFilterUrlSegmentValue(),
                 $this->breadcrumbItems()
                     ->slice(0, -1)
                     ->map(fn (BreadcrumbItem $item) => $item->toUri())
@@ -311,13 +314,14 @@ class SharpBreadcrumb
             $urlToParse = request()->header(static::CURRENT_PAGE_URL_HEADER) ?? request()->query('current_page_url');
 
             return collect(explode('/', parse_url($urlToParse)['path']))
-                ->filter(fn (string $segment) => strlen(trim($segment))
-                    && $segment !== sharp()->config()->get('custom_url_segment')
-                )
+                ->filter(fn (string $segment) => strlen(trim($segment)))
+                // Have to skip /sharp/{filterKey}
+                ->skip(2)
                 ->values();
         }
 
-        return collect(request()->segments())->skip(1)->values();
+        // Have to skip /sharp/{filterKey}
+        return collect(request()->segments())->skip(2)->values();
     }
 
     public function forceRequestSegments(array|Collection $segments): void
