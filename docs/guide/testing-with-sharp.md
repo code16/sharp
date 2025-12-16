@@ -59,13 +59,38 @@ Call the Sharp API to delete an `$entityKey` instance on the Show Page.
 
 Call the `$commandKeyOrClassName` Entity Command with the optional `$data`.
 
+For a wizard command, you can call each step like this:
+```php 
+ $step = $this->callSharpEntityCommandFromList(
+    'websiteDeploymentTargets', 
+    MyWizardEntityCommand::class, 
+    [
+        'name' => 'Value 1',
+        'other_key' => 2,
+    ]) // we are not defining the step here because it's the first step
+        ->assertOk()
+        ->json('step'); //get back the step key from the response
+    
+ // call next step
+ $this->callSharpEntityCommandFromList(
+    'websiteDeploymentTargets', 
+    MyWizardEntityCommand::class, 
+    ['another_key' => "Value 2"], 
+    commandStep: $step
+ )->assertOk();
+```
+
 #### `callSharpInstanceCommandFromList(string $entityKey, $instanceId, string $commandKeyOrClassName, array $data, ?string $commandStep = null)`
 
 Call the `$commandKeyOrClassName` Instance Command with the optional `$data`.
 
+For a wizard command, you can refer to the [previous example](#callsharpentitycommandfromlist-string-entitykey-string-commandkeyorclassname-array-data-string-commandstep-null).
+
 #### `callSharpInstanceCommandFromShow(string $entityKey, $instanceId, string $commandKeyOrClassName, array $data, ?string $commandStep = null)`
 
 Call the `$commandKeyOrClassName` Instance Command with the optional `$data`.
+
+For a wizard command, you can refer to the [previous example](#callsharpentitycommandfromlist-string-entitykey-string-commandkeyorclassname-array-data-string-commandstep-null).
 
 #### `withSharpBreadcrumb(Closure $callback): self`
 
