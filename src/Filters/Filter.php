@@ -63,4 +63,5 @@ abstract class Filter
     abstract public function toArray(): array;
     abstract public function fromQueryParam($value): mixed;
     abstract public function toQueryParam($value): mixed;
+    abstract public function defaultValue(): mixed;
 }
