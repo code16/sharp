@@ -1,6 +1,5 @@
 <?php
 
-use Code16\Sharp\Filters\GlobalRequiredFilter;
 use Code16\Sharp\Tests\Fixtures\Entities\DashboardEntity;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Entities\SinglePersonEntity;
@@ -77,32 +76,3 @@ it('sets the current multiple filterKeys according to the URL', function () {
     expect(sharp()->context()->globalFilterValue('test1'))->toEqual('one');
     expect(sharp()->context()->globalFilterValue('test2'))->toEqual('two');
 });
-
-function fakeGlobalFilter(string $key = 'test'): void
-{
-    sharp()->config()->addGlobalFilter(
-        new class($key) extends GlobalRequiredFilter
-        {
-            public function __construct(private string $key) {}
-
-            public function buildFilterConfig(): void
-            {
-                $this->configureKey($this->key);
-            }
-
-            public function values(): array
-            {
-                return [
-                    'one' => 'Company One',
-                    'two' => 'Company Two',
-                    'three' => 'Company Three',
-                ];
-            }
-
-            public function defaultValue(): mixed
-            {
-                return 'two';
-            }
-        }
-    );
-}

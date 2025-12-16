@@ -200,6 +200,35 @@ it('allows to define a current breadcrumb with legacy API', function () {
     );
 });
 
+it('allows to test getSharpForm for edit with global filter keys', function () {
+    fakeGlobalFilter('test-1');
+
+    $this->assertEquals(
+        route('code16.sharp.form.edit', ['root', 's-list/leaves', 'leaves', 6]),
+        fakeResponse()
+            ->getSharpForm('leaves', 6)
+            ->uri,
+    );
+
+    $this->assertEquals(
+        route('code16.sharp.form.edit', ['one', 's-list/leaves', 'leaves', 6]),
+        fakeResponse()
+            ->withSharpGlobalFilterKeys('one')
+            ->getSharpForm('leaves', 6)
+            ->uri,
+    );
+
+    fakeGlobalFilter('test-2');
+
+    $this->assertEquals(
+        route('code16.sharp.form.edit', ['one~two', 's-list/leaves', 'leaves', 6]),
+        fakeResponse()
+            ->withSharpGlobalFilterKeys(['one', 'two'])
+            ->getSharpForm('leaves', 6)
+            ->uri,
+    );
+});
+
 function fakeResponse()
 {
     return new class('fake') extends Orchestra\Testbench\TestCase

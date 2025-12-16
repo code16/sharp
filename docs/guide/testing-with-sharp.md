@@ -117,3 +117,20 @@ it('allows the user to display a leaf form', function () {
         ->assertOk();
 });
 ```
+
+#### `withSharpGlobalFilterKeys(array|string $filterKeys): self`
+
+You can specify the global filter keys to use in the Sharp context.
+
+```php
+it('allows the user to display a leaf form', function () {
+    $tenant = Tenant::factory()->create();
+    $user = User::factory()->create(['tenant_id' => $tenant->id]);
+
+    $this
+        ->loginAsSharpUser($user)
+        ->withSharpGlobalFilterKeys($tenant->key)
+        ->getSharpForm(LeafEntity::class, 16)
+        ->assertOk();
+});
+```

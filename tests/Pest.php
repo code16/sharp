@@ -1,5 +1,6 @@
 <?php
 
+use Code16\Sharp\Filters\GlobalRequiredFilter;
 use Code16\Sharp\Tests\Fixtures\User;
 use Code16\Sharp\Tests\TestCase;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
@@ -146,4 +147,32 @@ function createImage(string $disk = 'local', string $name = 'test.png'): string
     $file = UploadedFile::fake()->image($name, 600, 600);
 
     return $file->storeAs('data', $name, ['disk' => $disk]);
+}
+
+function fakeGlobalFilter(string $key = 'test'): void
+{
+    sharp()->config()->addGlobalFilter(
+        new class($key) extends GlobalRequiredFilter
+        {
+            public function __construct(private string $key) {}
+
+            public function buildFilterConfig(): void
+            {
+                $this->configureKey($this->key);
+            }
+
+            public function values(): array
+            {
+                return [
+                    'one' => 'One',
+                    'two' => 'Two',
+                ];
+            }
+
+            public function defaultValue(): mixed
+            {
+                return 'two';
+            }
+        }
+    );
 }
