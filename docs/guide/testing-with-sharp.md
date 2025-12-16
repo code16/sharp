@@ -47,11 +47,11 @@ Call the Sharp API to update the single Entity `$entityKey` with `$data`.
 
 Call the Sharp API to store a new Entity `$entityKey` with `$data`.
 
-#### `deleteSharpEntityList(string $entityKey, $instanceId)`
+#### `deleteFromSharpList(string $entityKey, $instanceId)`
 
 Call the Sharp API to delete an `$entityKey` instance on the Entity List.
 
-#### `deleteSharpShow(string $entityKey, $instanceId)`
+#### `deleteFromSharpShow(string $entityKey, $instanceId)`
 
 Call the Sharp API to delete an `$entityKey` instance on the Show Page.
 
