@@ -10,7 +10,6 @@ use App\Sharp\Entities\PostEntity;
 use App\Sharp\Posts\Commands\EvaluateDraftPostWizardCommand;
 use App\Sharp\Posts\Commands\PreviewPostCommand;
 use App\Sharp\Utils\Embeds\AuthorEmbed;
-use App\Sharp\Utils\Embeds\CodeEmbed;
 use App\Sharp\Utils\Embeds\RelatedPostEmbed;
 use App\Sharp\Utils\Embeds\TableOfContentsEmbed;
 use App\Sharp\Utils\Filters\CategoryFilter;
@@ -41,7 +40,6 @@ class PostShow extends SharpShow
                     ->allowEmbeds([
                         RelatedPostEmbed::class,
                         AuthorEmbed::class,
-                        CodeEmbed::class,
                         TableOfContentsEmbed::class,
                     ])
                     ->collapseToWordCount(40)
@@ -157,7 +155,9 @@ class PostShow extends SharpShow
                     ->renderAsText($instance->author->name)
                 : null
             )
-            ->setCustomTransformer('categories', new SharpTagsTransformer('name')->setFilterLink(PostEntity::class, CategoryFilter::class))
+            ->setCustomTransformer('categories', (new SharpTagsTransformer('name'))
+                ->setFilterLink(PostEntity::class, CategoryFilter::class)
+            )
             ->setCustomTransformer('cover', new SharpUploadModelThumbnailUrlTransformer(500))
             ->setCustomTransformer(
                 'attachments[document]',
