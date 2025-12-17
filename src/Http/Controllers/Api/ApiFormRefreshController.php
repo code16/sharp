@@ -8,7 +8,7 @@ class ApiFormRefreshController extends ApiController
 {
     use HandlesFieldContainer;
 
-    public function update(EntityKey $entityKey)
+    public function update(string $filterKey, EntityKey $entityKey)
     {
         $fieldContainer = $this->getFieldContainer($entityKey);
 

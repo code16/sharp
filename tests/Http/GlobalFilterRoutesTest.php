@@ -1,8 +1,12 @@
 <?php
 
+use Code16\Sharp\EntityList\Commands\EntityCommand;
+use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\Fixtures\Entities\DashboardEntity;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Entities\SinglePersonEntity;
+use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 beforeEach(function () {
     sharp()->config()->declareEntity(PersonEntity::class);
@@ -44,6 +48,38 @@ it('sets the current filterKey according to the URL', function () {
     fakeGlobalFilter();
 
     $this->get('/sharp/one/s-list/person/s-show/person/1')
+        ->assertOk();
+
+    expect(sharp()->context()->globalFilterValue('test'))->toEqual('one');
+});
+
+it('sets the current filterKey according to the URL for API routes', function () {
+    fakeGlobalFilter();
+    fakeListFor('person', new class() extends PersonList
+    {
+        protected function getEntityCommands(): ?array
+        {
+            return [
+                'cmd' => new class() extends EntityCommand
+                {
+                    public function label(): ?string
+                    {
+                        return 'entity';
+                    }
+
+                    public function buildFormFields(FieldsContainer $formFields): void
+                    {
+                        $formFields->addField(SharpFormTextField::make('name'));
+                    }
+
+                    public function execute(array $data = []): array {}
+                },
+            ];
+        }
+    });
+
+    $this
+        ->getJson('/sharp/api/one/list/person/command/cmd/form')
         ->assertOk();
 
     expect(sharp()->context()->globalFilterValue('test'))->toEqual('one');

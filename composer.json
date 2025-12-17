@@ -62,7 +62,7 @@
     },
     "scripts": {
         "test": "vendor/bin/pest --parallel",
-        "typescript:generate": "php demo/artisan ziggy:generate --types-only; php demo/artisan typescript:transform",
+        "typescript:generate": "php demo/artisan sharp:typescript-generate",
         "post-autoload-dump": [
             "git config core.hooksPath scripts/hooks"
         ]

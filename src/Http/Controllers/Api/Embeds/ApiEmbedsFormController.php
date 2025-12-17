@@ -12,7 +12,7 @@ class ApiEmbedsFormController extends Controller
 
     public function __construct(private readonly SharpAuthorizationManager $authorizationManager) {}
 
-    public function show(string $embedKey, string $entityKey, ?string $instanceId = null)
+    public function show(string $filterKey, string $embedKey, string $entityKey, ?string $instanceId = null)
     {
         if ($instanceId) {
             $this->authorizationManager->check('view', $entityKey, $instanceId);
@@ -31,7 +31,7 @@ class ApiEmbedsFormController extends Controller
         ]);
     }
 
-    public function update(string $embedKey, string $entityKey, ?string $instanceId = null)
+    public function update(string $filterKey, string $embedKey, string $entityKey, ?string $instanceId = null)
     {
         if ($instanceId) {
             $this->authorizationManager->check('update', $entityKey, $instanceId);

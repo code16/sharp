@@ -13,7 +13,7 @@ class ApiFormAutocompleteController extends ApiController
 {
     use HandlesFieldContainer;
 
-    public function index(EntityKey $entityKey, string $autocompleteFieldKey)
+    public function index(string $filterKey, EntityKey $entityKey, string $autocompleteFieldKey)
     {
         $fieldContainer = $this->getFieldContainer($entityKey);
         $field = $fieldContainer->findFieldByKey($autocompleteFieldKey);

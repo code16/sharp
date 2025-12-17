@@ -8,7 +8,7 @@ use Code16\Sharp\Utils\StringUtil;
 
 class ApiSearchController extends ApiController
 {
-    public function index()
+    public function index(string $filterKey)
     {
         $searchEngine = sharp()->config()->get('search.engine');
 

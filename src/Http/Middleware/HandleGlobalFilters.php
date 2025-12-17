@@ -30,9 +30,9 @@ class HandleGlobalFilters
                         ->setCurrentValue($filterKeys[$index])
                     );
 
-                if (! $request->wantsJson()
+                if (sharp()->context()->globalFilterUrlSegmentValue() !== $filterKey
+                    && ! $request->wantsJson()
                     && $request->isMethod('GET')
-                    && sharp()->context()->globalFilterUrlSegmentValue() !== $filterKey
                 ) {
                     return redirect()->route('code16.sharp.home', [
                         'filterKey' => sharp()->context()->globalFilterUrlSegmentValue(),
