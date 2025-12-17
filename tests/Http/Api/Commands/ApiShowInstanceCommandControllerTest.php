@@ -36,7 +36,12 @@ it('allows to call an info instance command from a show', function () {
         }
     });
 
-    $this->postJson(route('code16.sharp.api.show.command.instance', ['person', 'cmd', 1]))
+    $this->postJson(route('code16.sharp.api.show.command.instance', [
+        'filterKey' => 'root',
+        'entityKey' => 'person',
+        'commandKey' => 'cmd',
+        'instanceId' => 1,
+    ]))
         ->assertOk()
         ->assertJson([
             'action' => 'info',
@@ -68,7 +73,12 @@ it('allows to call an info instance command from a single show', function () {
         }
     });
 
-    $this->postJson(route('code16.sharp.api.show.command.instance', ['single-person', 'cmd']))
+    $this
+        ->postJson(route('code16.sharp.api.show.command.instance', [
+            'filterKey' => 'root',
+            'entityKey' => 'single-person',
+            'commandKey' => 'cmd',
+        ]))
         ->assertOk()
         ->assertJson([
             'action' => 'info',
@@ -121,7 +131,12 @@ it('gets form and initialize form data in an instance command of a show', functi
     });
 
     $this
-        ->getJson(route('code16.sharp.api.show.command.instance.form', ['person', 'cmd', 1]))
+        ->getJson(route('code16.sharp.api.show.command.instance.form', [
+            'filterKey' => 'root',
+            'entityKey' => 'person',
+            'commandKey' => 'cmd',
+            'instanceId' => 1,
+        ]))
         ->assertOk()
         ->assertJsonFragment([
             'data' => [
@@ -161,7 +176,12 @@ it('gets form and initialize form data in an instance command of a show', functi
 
     $this
         ->postJson(
-            route('code16.sharp.api.show.command.instance', ['person', 'cmd', 1]),
+            route('code16.sharp.api.show.command.instance', [
+                'filterKey' => 'root',
+                'entityKey' => 'person',
+                'commandKey' => 'cmd',
+                'instanceId' => 1,
+            ]),
             ['data' => ['name' => '']]
         )
         ->assertJsonValidationErrors(['name']);
@@ -214,6 +234,7 @@ it('gets form and initialize form data in an instance command of a single show',
     $this
         ->getJson(
             route('code16.sharp.api.show.command.singleInstance.form', [
+                'filterKey' => 'root',
                 'entityKey' => 'single-person',
                 'commandKey' => 'single_cmd',
             ])
@@ -257,7 +278,11 @@ it('gets form and initialize form data in an instance command of a single show',
 
     $this
         ->postJson(
-            route('code16.sharp.api.show.command.instance', ['single-person', 'single_cmd']),
+            route('code16.sharp.api.show.command.instance', [
+                'filterKey' => 'root',
+                'entityKey' => 'single-person',
+                'commandKey' => 'single_cmd',
+            ]),
             ['data' => ['name' => '']]
         )
         ->assertJsonValidationErrors(['name']);

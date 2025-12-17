@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "@googlemaps/js-api-loader": "^1.16.8",
-    "@inertiajs/vue3": "^2.0.2",
+    "@inertiajs/vue3": "^2.2.20",
     "@tiptap/core": "^3.3.0",
     "@tiptap/extension-character-count": "^3.3.0",
     "@tiptap/extension-code-block": "^3.3.0",
@@ -78,7 +78,6 @@
     "leaflet": "^1.9.4",
     "lodash": "^4.17.21",
     "lucide-vue-next": "^0.542.0",
-    "nprogress": "^0.2.0",
     "qs": "^6.6.0",
     "reka-ui": "^2.6.1",
     "sortablejs": "^1.15.2",

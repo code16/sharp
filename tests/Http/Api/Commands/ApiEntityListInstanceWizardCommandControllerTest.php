@@ -39,7 +39,11 @@ it('displays first step form on the first call of a wizard instance command', fu
     });
 
     $this
-        ->getJson(route('code16.sharp.api.list.command.instance.form', ['person', 'wizard', 1]))
+        ->getJson(route('code16.sharp.api.list.command.instance.form', [
+            'filterKey' => 'root',
+            'entityKey' => 'person',
+            'commandKey' => 'wizard',
+            'instanceId' => 1]))
         ->assertOk()
         ->assertJsonFragment([
             'fields' => [
@@ -105,12 +109,21 @@ it('allows to post first step of a wizard instance command', function () {
     });
 
     $this
-        ->postJson(route('code16.sharp.api.list.command.instance', ['person', 'wizard', 1]))
+        ->postJson(route('code16.sharp.api.list.command.instance', [
+            'filterKey' => 'root',
+            'entityKey' => 'person',
+            'commandKey' => 'wizard',
+            'instanceId' => 1]))
         ->assertJsonValidationErrors('name');
 
     $this
         ->postJson(
-            route('code16.sharp.api.list.command.instance', ['person', 'wizard', 1]),
+            route('code16.sharp.api.list.command.instance', [
+                'filterKey' => 'root',
+                'entityKey' => 'person',
+                'commandKey' => 'wizard',
+                'instanceId' => 1,
+            ]),
             ['data' => ['name' => 'test']],
         )
         ->assertOk()
@@ -174,6 +187,7 @@ it('allows to check if context is valid', function () {
     $this
         ->getJson(
             route('code16.sharp.api.list.command.instance.form', [
+                'filterKey' => 'root',
                 'entityKey' => 'person',
                 'commandKey' => 'wizard',
                 'instanceId' => 1,
@@ -185,7 +199,12 @@ it('allows to check if context is valid', function () {
     // First post step 1...
     $this
         ->postJson(
-            route('code16.sharp.api.list.command.instance', ['person', 'wizard', 1]),
+            route('code16.sharp.api.list.command.instance', [
+                'filterKey' => 'root',
+                'entityKey' => 'person',
+                'commandKey' => 'wizard',
+                'instanceId' => 1,
+            ]),
         )
         ->assertOk();
 
@@ -193,6 +212,7 @@ it('allows to check if context is valid', function () {
     $this
         ->getJson(
             route('code16.sharp.api.list.command.instance.form', [
+                'filterKey' => 'root',
                 'entityKey' => 'person',
                 'commandKey' => 'wizard',
                 'instanceId' => 1,
@@ -263,7 +283,11 @@ it('allows to post second step of a wizard instance command', function () {
     // First post step 1...
     $this
         ->postJson(
-            route('code16.sharp.api.list.command.instance', ['person', 'wizard', 1]),
+            route('code16.sharp.api.list.command.instance', [
+                'filterKey' => 'root',
+                'entityKey' => 'person',
+                'commandKey' => 'wizard',
+                'instanceId' => 1]),
             ['data' => ['name' => 'test']],
         )
         ->assertOk();
@@ -333,13 +357,18 @@ it('allows to define a global method for step execution', function () {
 
     // First post step 1...
     $this
-        ->postJson(route('code16.sharp.api.list.command.instance', ['person', 'wizard', 1]))
+        ->postJson(route('code16.sharp.api.list.command.instance', [
+            'filterKey' => 'root',
+            'entityKey' => 'person',
+            'commandKey' => 'wizard',
+            'instanceId' => 1]))
         ->assertOk();
 
     // Then get step 2
     $this
         ->getJson(
             route('code16.sharp.api.list.command.instance.form', [
+                'filterKey' => 'root',
                 'entityKey' => 'person',
                 'commandKey' => 'wizard',
                 'instanceId' => 1,

@@ -23,7 +23,23 @@ class SharpServiceProvider extends SharpAppServiceProvider
 }
 ```
 
-The fourth argument, `keepOriginalImageOnTransform`, is a boolean that defines if the original image should be kept when a transformation is applied on it (meaning that transformations are stored and applied on-the-fly: this is transparent when using Sharp’s [built-in way to handle uploads](../sharp-uploads.md). It can be overriden by each field (see below).
+The fourth argument, `keepOriginalImageOnTransform`, is a boolean that defines if the original image should be kept when a transformation is applied on it (meaning that transformations are stored and applied on-the-fly: this is transparent when using Sharp’s [built-in way to handle uploads](../sharp-uploads.md). It can be overridden by each field (see below).
+
+Sharp allows admins to download all uploaded files directly from the Upload field UI. However, this capability may introduce security concerns, since Sharp can access any file on the server (although this is largely mitigated by Flysystem, which is used under the hood). You can control this behavior by specifying a list of allowed disks in the configuration:
+
+```php
+class SharpServiceProvider extends SharpAppServiceProvider
+{
+    protected function configureSharp(SharpConfigBuilder $config): void
+    {
+        $config
+            ->configureDownloads(
+                allowedDisks: ['local', 'public'],
+            )
+            // ...
+    }
+}
+```
 
 ## Field Configuration
 

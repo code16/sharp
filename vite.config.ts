@@ -23,6 +23,7 @@ export default defineConfig(({ mode, command }) => {
             alias: {
                 'vue': 'vue/dist/vue.esm-bundler.js',
                 'ziggy-js': path.resolve(__dirname, 'vendor/tightenco/ziggy'),
+                // '@unovis/vue': path.resolve(__dirname, '../unovis/packages/vue/src'),
                 // ...rekaAliases()
             },
             // preserveSymlinks: true,
@@ -39,6 +40,7 @@ export default defineConfig(({ mode, command }) => {
                     // './resources/css/app.css',
                 ],
             },
+            // watch: { usePolling: true }
         },
         plugins: [
             // circleDependency(),

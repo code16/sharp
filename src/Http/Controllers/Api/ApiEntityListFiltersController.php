@@ -4,7 +4,7 @@ namespace Code16\Sharp\Http\Controllers\Api;
 
 class ApiEntityListFiltersController extends ApiController
 {
-    public function store(string $entityKey)
+    public function store(string $filterKey, string $entityKey)
     {
         $this->authorizationManager->check('entity', $entityKey);
 

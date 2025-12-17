@@ -34,7 +34,11 @@ it('allows to call a quick creation command with the standard form', function ()
 
     $this
         ->getJson(
-            route('code16.sharp.api.list.command.quick-creation-form.create', ['person', 'person']),
+            route('code16.sharp.api.list.command.quick-creation-form.create', [
+                'filterKey' => 'root',
+                'entityKey' => 'person',
+                'formEntityKey' => 'person',
+            ]),
         )
         ->assertOk()
         ->assertJson([
@@ -69,7 +73,11 @@ it('allows to call a quick creation command with custom form fields', function (
 
     $this
         ->getJson(
-            route('code16.sharp.api.list.command.quick-creation-form.create', ['person', 'person']),
+            route('code16.sharp.api.list.command.quick-creation-form.create', [
+                'filterKey' => 'root',
+                'entityKey' => 'person',
+                'formEntityKey' => 'person',
+            ]),
         )
         ->assertOk()
         ->assertJsonCount(1, 'fields');
@@ -83,7 +91,11 @@ it('fails when calling a quick creation command on a not configured list', funct
 
     $this
         ->getJson(
-            route('code16.sharp.api.list.command.quick-creation-form.create', ['person', 'person']),
+            route('code16.sharp.api.list.command.quick-creation-form.create', [
+                'filterKey' => 'root',
+                'entityKey' => 'person',
+                'formEntityKey' => 'person',
+            ]),
         )
         ->assertStatus(403);
 });
@@ -118,7 +130,11 @@ it('allows to post a quick creation command', function () {
 
     $this
         ->postJson(
-            route('code16.sharp.api.list.command.quick-creation-form.create', ['person', 'person']),
+            route('code16.sharp.api.list.command.quick-creation-form.create', [
+                'filterKey' => 'root',
+                'entityKey' => 'person',
+                'formEntityKey' => 'person',
+            ]),
             ['data' => ['name' => 'Marie Curie', 'job' => 'Scientist']],
         )
         ->assertOk()
@@ -143,7 +159,11 @@ it('logs an error if the form’s update() method does not return the instance i
 
     $this
         ->postJson(
-            route('code16.sharp.api.list.command.quick-creation-form.create', ['person', 'person']),
+            route('code16.sharp.api.list.command.quick-creation-form.create', [
+                'filterKey' => 'root',
+                'entityKey' => 'person',
+                'formEntityKey' => 'person',
+            ]),
             ['data' => []],
         )
         ->assertOk()
@@ -153,7 +173,6 @@ it('logs an error if the form’s update() method does not return the instance i
 });
 
 it('sharp()->context()->breadcrumb() is correct', function () {
-
     fakeListFor('person', new class() extends PersonList
     {
         public function buildListConfig(): void
@@ -171,17 +190,21 @@ it('sharp()->context()->breadcrumb() is correct', function () {
                 ->isForm()->toBeTrue()
                 ->entityKey()->toBe('person');
 
-            expect(sharp()->context()->breadcrumb())
-                ->getCurrentSegmentUrl()->toBe(url('/sharp/s-list/person/s-form/person'));
+            expect(sharp()->context()->breadcrumb()->getCurrentSegmentUrl())
+                ->toBe(url('/sharp/root/s-list/person/s-form/person'));
         }
     });
 
     $this
         ->postJson(
-            route('code16.sharp.api.list.command.quick-creation-form.create', ['person', 'person']),
+            route('code16.sharp.api.list.command.quick-creation-form.create', [
+                'filterKey' => 'root',
+                'entityKey' => 'person',
+                'formEntityKey' => 'person',
+            ]),
             ['data' => []],
             [
-                SharpBreadcrumb::CURRENT_PAGE_URL_HEADER => url('/sharp/s-list/person'),
+                SharpBreadcrumb::CURRENT_PAGE_URL_HEADER => url('/sharp/root/s-list/person'),
             ]
         )
         ->assertOk()
@@ -217,7 +240,11 @@ it('validates posted data of a quick creation command', function () {
 
     $this
         ->postJson(
-            route('code16.sharp.api.list.command.quick-creation-form.create', ['person', 'person']),
+            route('code16.sharp.api.list.command.quick-creation-form.create', [
+                'filterKey' => 'root',
+                'entityKey' => 'person',
+                'formEntityKey' => 'person',
+            ]),
             ['data' => ['name' => '']],
         )
         ->assertStatus(422)
@@ -246,17 +273,21 @@ it('returns a link action on a quick creation command with a form with configure
         }
     });
 
-    $this->get(route('code16.sharp.list', ['person']));
+    $this->get(route('code16.sharp.list', ['root', 'person']));
 
     $this
         ->postJson(
-            route('code16.sharp.api.list.command.quick-creation-form.create', ['person', 'person']),
+            route('code16.sharp.api.list.command.quick-creation-form.create', [
+                'filterKey' => 'root',
+                'entityKey' => 'person',
+                'formEntityKey' => 'person',
+            ]),
             ['data' => ['name' => 'Marie Curie']],
         )
         ->assertOk()
         ->assertJson([
             'action' => 'link',
-            'link' => url('/sharp/s-list/person/s-show/person/4'),
+            'link' => url('/sharp/root/s-list/person/s-show/person/4'),
         ]);
 });
 
@@ -288,6 +319,7 @@ it('returns a link action on a quick creation in an EEL case command with a form
     $this
         ->get(
             route('code16.sharp.show.show', [
+                'filterKey' => 'root',
                 'parentUri' => 's-list/person/',
                 'person',
                 1,
@@ -304,6 +336,6 @@ it('returns a link action on a quick creation in an EEL case command with a form
         ->assertOk()
         ->assertJson([
             'action' => 'link',
-            'link' => url('/sharp/s-list/person/s-show/person/1/s-show/colleague/4'),
+            'link' => url('/sharp/root/s-list/person/s-show/person/1/s-show/colleague/4'),
         ]);
 });

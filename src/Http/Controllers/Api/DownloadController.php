@@ -6,9 +6,16 @@ use Illuminate\Support\Facades\Storage;
 
 class DownloadController extends ApiController
 {
-    public function show(string $entityKey, ?string $instanceId = null)
+    public function show(string $filterKey, string $entityKey, ?string $instanceId = null)
     {
         $this->authorizationManager->check('view', $entityKey, $instanceId);
+
+        if (
+            ($allowedDisks = sharp()->config()->get('downloads.allowed_disks')) !== null // Legacy config
+            && $allowedDisks != '*'
+        ) {
+            abort_if(! in_array(request()->get('disk'), $allowedDisks), 403);
+        }
 
         abort_if(
             ! ($path = request()->get('path'))
@@ -19,7 +26,8 @@ class DownloadController extends ApiController
         );
 
         return response(
-            Storage::disk($disk)->get($path), 200, [
+            content: Storage::disk($disk)->get($path),
+            headers: [
                 'Content-Type' => Storage::disk($disk)->mimeType($path),
                 'Content-Disposition' => 'attachment',
             ],

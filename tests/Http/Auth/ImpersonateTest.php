@@ -30,8 +30,10 @@ it('redirects to impersonation page if enabled and guest', function () {
         }
     });
 
-    $this->get(route('code16.sharp.home'))
-        ->assertRedirect(route('code16.sharp.impersonate'));
+    $this
+        ->followingRedirects()
+        ->get('/sharp')
+        ->assertInertia(fn (Assert $page) => $page->component('Auth/Impersonate'));
 });
 
 it('redirects to impersonation page if authenticated as non admin user', function () {
@@ -52,9 +54,10 @@ it('redirects to impersonation page if authenticated as non admin user', functio
     });
 
     $this
+        ->followingRedirects()
         ->actingAs(User::create(['id' => 1, 'name' => 'Marie Curie']))
-        ->get(route('code16.sharp.home'))
-        ->assertRedirect(route('code16.sharp.impersonate'));
+        ->get('/sharp')
+        ->assertInertia(fn (Assert $page) => $page->component('Auth/Impersonate'));
 });
 
 it('displays impersonatable users from a custom handler', function () {

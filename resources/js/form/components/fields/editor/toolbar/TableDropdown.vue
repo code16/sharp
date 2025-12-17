@@ -18,11 +18,10 @@
 </script>
 
 <template>
-    <DropdownMenu :modal="false">
+    <DropdownMenu :modal="false" v-slot="{ open }">
         <DropdownMenuTrigger as-child>
             <Toggle
-                class="data-[state=open]:bg-accent"
-                :class="props.editor.isActive('table') ? 'bg-accent' : ''"
+                :model-value="open || props.editor.isActive('table')"
                 size="sm"
                 :disabled="props.field.readOnly"
                 :title="__('sharp::form.editor.toolbar.table.title')"

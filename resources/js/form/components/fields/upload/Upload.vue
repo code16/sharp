@@ -68,6 +68,7 @@
     }>();
     const form = useParentForm();
     const transformedImg = ref<string>();
+    const persistedEditableImg = ref<string>();
     const playablePreviewUrl = ref<string>();
     const uppyFile = ref<UppyFile<{}, {}>>();
     const isEditable = computed(() => {
@@ -99,7 +100,7 @@
             endpoint: route('code16.sharp.api.form.upload'),
             fieldName: 'file',
             headers: {
-                'accept': 'application/json',
+                'Accept': 'application/json',
                 'X-CSRF-TOKEN': getCsrfToken(),
             },
         })
@@ -131,10 +132,16 @@
                     });
                     await onImageTransform(cropper);
                     cropper.destroy();
-                } else if(props.persistThumbnailUrl) {
-                    const response = await fetch(preview);
+                }
+                if(props.persistThumbnailUrl) {
+                    if(!transformedImg.value) {
+                        const response = await fetch(preview);
+                        const blob = await response.blob();
+                        transformedImg.value = URL.createObjectURL(blob);
+                    }
+                    const response = await fetch(await createThumbnail(uppyFile.value, { width: 1200, height: 1000 }));
                     const blob = await response.blob();
-                    transformedImg.value = URL.createObjectURL(blob);
+                    persistedEditableImg.value = URL.createObjectURL(blob);
                 }
             } else if(file.type?.startsWith('video/') || file.type?.startsWith('audio/')) {
                 playablePreviewUrl.value = URL.createObjectURL(file.data);
@@ -154,6 +161,7 @@
                 ...props.value,
                 ...response.body,
                 thumbnail: transformedImg?.value ?? uppyFile.value.preview,
+                editable_thumbnail: persistedEditableImg.value,
                 mime_type: file.type,
                 size: file.size,
             });
@@ -161,19 +169,24 @@
                 ...props.value,
                 ...response.body,
                 thumbnail: transformedImg?.value ?? uppyFile.value.preview,
+                editable_thumbnail: persistedEditableImg.value,
                 mime_type: file.type,
                 size: file.size,
             });
             uppyFile.value = uppy.getFile(file.id);
             console.log('upload-success', JSON.parse(JSON.stringify(uppyFile.value)));
         })
-        .on('upload-error', (file, error, response) => {
-            if(response) {
-                if(response.status === 422) {
-                    emit('error', (response.body.errors as Record<string, string[]>).file?.join(', '), file.data);
+        .on('upload-error', (file, error, request?: XMLHttpRequest) => {
+            if(request) {
+                const data = request.getResponseHeader('Content-Type')?.includes('/json')
+                    ? JSON.parse(request.response)
+                    : request.response;
+                const status = request.status;
+                if(status === 422) {
+                    emit('error', data.errors.file?.join(', '), file.data);
                 } else {
-                    const message = getErrorMessage({ data: response.body, status: response.status });
-                    handleErrorAlert({ data: response.body, status: response.status, method: 'post' });
+                    const message = getErrorMessage({ data, status });
+                    handleErrorAlert({ data, status, method: 'post' });
                     emit('error', message, file.data);
                 }
             } else {
@@ -267,26 +280,27 @@
                 }
 
                 editModalImageUrl.value = data.thumbnail;
-
-                await new Promise<void>(resolve => {
-                    const image = new Image();
-                    image.src = data.thumbnail;
-                    image.onload = () => {
-                        editModalCropperData.value = getCropDataFromFilters({
-                            filters: props.value.filters,
-                            imageWidth: image.naturalWidth,
-                            imageHeight: image.naturalHeight,
-                        });
-                        resolve();
-                    }
-                    image.onerror = () => {
-                        editModalImageUrl.value = props.value.thumbnail;
-                        resolve();
-                    }
-                });
+            } else if(props.value?.editable_thumbnail) {
+                editModalImageUrl.value = props.value.editable_thumbnail;
             } else if(uppyFile.value) {
                 editModalImageUrl.value = await createThumbnail(uppyFile.value, { width: 1200, height: 1000 });
             }
+            await new Promise<void>(resolve => {
+                const image = new Image();
+                image.src = editModalImageUrl.value;
+                image.onload = () => {
+                    editModalCropperData.value = getCropDataFromFilters({
+                        filters: props.value.filters,
+                        imageWidth: image.naturalWidth,
+                        imageHeight: image.naturalHeight,
+                    });
+                    resolve();
+                }
+                image.onerror = () => {
+                    editModalImageUrl.value = props.value.thumbnail;
+                    resolve();
+                }
+            });
         }
 
         editModalOpen.value = true;
@@ -352,7 +366,17 @@
         if(uppyFile.value) {
             uppy.removeFile(uppyFile.value.id);
             uppyFile.value = null;
+            if(transformedImg.value) {
+                URL.revokeObjectURL(transformedImg.value);
+            }
+            if(persistedEditableImg.value) {
+                URL.revokeObjectURL(playablePreviewUrl.value);
+            }
+            if(playablePreviewUrl.value) {
+                URL.revokeObjectURL(playablePreviewUrl.value);
+            }
             transformedImg.value = null;
+            persistedEditableImg.value = null;
             playablePreviewUrl.value = null;
             editModalImageUrl.value = null;
         }

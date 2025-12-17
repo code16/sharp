@@ -40,7 +40,11 @@ it('allows to call an info entity command', function () {
         }
     });
 
-    $this->postJson(route('code16.sharp.api.list.command.entity', ['person', 'cmd']))
+    $this->postJson(route('code16.sharp.api.list.command.entity', [
+        'filterKey' => 'root',
+        'entityKey' => 'person',
+        'commandKey' => 'cmd',
+    ]))
         ->assertOk()
         ->assertJson([
             'action' => 'info',
@@ -71,7 +75,11 @@ it('allows to call a reload entity command', function () {
         }
     });
 
-    $this->postJson(route('code16.sharp.api.list.command.entity', ['person', 'cmd']))
+    $this->postJson(route('code16.sharp.api.list.command.entity', [
+        'filterKey' => 'root',
+        'entityKey' => 'person',
+        'commandKey' => 'cmd',
+    ]))
         ->assertOk()
         ->assertJson([
             'action' => 'reload',
@@ -100,7 +108,11 @@ it('allows to call an info + reload entity command', function () {
         }
     });
 
-    $this->postJson(route('code16.sharp.api.list.command.entity', ['person', 'cmd']))
+    $this->postJson(route('code16.sharp.api.list.command.entity', [
+        'filterKey' => 'root',
+        'entityKey' => 'person',
+        'commandKey' => 'cmd',
+    ]))
         ->assertOk()
         ->assertJson([
             'action' => 'info',
@@ -131,7 +143,11 @@ it('allows to call a view entity command', function () {
         }
     });
 
-    $this->postJson(route('code16.sharp.api.list.command.entity', ['person', 'cmd']))
+    $this->postJson(route('code16.sharp.api.list.command.entity', [
+        'filterKey' => 'root',
+        'entityKey' => 'person',
+        'commandKey' => 'cmd',
+    ]))
         ->assertOk()
         ->assertJson([
             'action' => 'view',
@@ -160,7 +176,11 @@ it('allows to call a html instance command', function () {
         }
     });
 
-    $this->postJson(route('code16.sharp.api.list.command.entity', ['person', 'cmd']))
+    $this->postJson(route('code16.sharp.api.list.command.entity', [
+        'filterKey' => 'root',
+        'entityKey' => 'person',
+        'commandKey' => 'cmd',
+    ]))
         ->assertOk()
         ->assertJson([
             'action' => 'view',
@@ -200,7 +220,11 @@ it('allows to call a refresh entity command', function () {
         }
     });
 
-    $this->postJson(route('code16.sharp.api.list.command.entity', ['person', 'cmd']))
+    $this->postJson(route('code16.sharp.api.list.command.entity', [
+        'filterKey' => 'root',
+        'entityKey' => 'person',
+        'commandKey' => 'cmd',
+    ]))
         ->assertOk()
         ->assertJson([
             'action' => 'refresh',
@@ -233,7 +257,11 @@ it('allows to call an link entity command', function () {
         }
     });
 
-    $this->postJson(route('code16.sharp.api.list.command.entity', ['person', 'cmd']))
+    $this->postJson(route('code16.sharp.api.list.command.entity', [
+        'filterKey' => 'root',
+        'entityKey' => 'person',
+        'commandKey' => 'cmd',
+    ]))
         ->assertOk()
         ->assertJson([
             'action' => 'link',
@@ -264,7 +292,11 @@ it('allows to call an link + openInNewTab entity command', function () {
         }
     });
 
-    $this->postJson(route('code16.sharp.api.list.command.entity', ['person', 'cmd']))
+    $this->postJson(route('code16.sharp.api.list.command.entity', [
+        'filterKey' => 'root',
+        'entityKey' => 'person',
+        'commandKey' => 'cmd',
+    ]))
         ->assertOk()
         ->assertJson([
             'action' => 'link',
@@ -304,7 +336,11 @@ it('allows to call a form entity command and it handles 422', function () {
 
     $this
         ->postJson(
-            route('code16.sharp.api.list.command.entity', ['person', 'cmd']),
+            route('code16.sharp.api.list.command.entity', [
+                'filterKey' => 'root',
+                'entityKey' => 'person',
+                'commandKey' => 'cmd',
+            ]),
             ['data' => ['name' => 'Pierre']]
         )
         ->assertOk()
@@ -314,7 +350,11 @@ it('allows to call a form entity command and it handles 422', function () {
 
     $this
         ->postJson(
-            route('code16.sharp.api.list.command.entity', ['person', 'cmd']),
+            route('code16.sharp.api.list.command.entity', [
+                'filterKey' => 'root',
+                'entityKey' => 'person',
+                'commandKey' => 'cmd',
+            ]),
             ['data' => ['name' => '']]
         )
         ->assertJsonValidationErrors(['name']);
@@ -354,7 +394,11 @@ it('allows to validate posted data with the rules() method', function () {
 
     $this
         ->postJson(
-            route('code16.sharp.api.list.command.entity', ['person', 'cmd']),
+            route('code16.sharp.api.list.command.entity', [
+                'filterKey' => 'root',
+                'entityKey' => 'person',
+                'commandKey' => 'cmd',
+            ]),
             ['data' => ['name' => 'Pierre']]
         )
         ->assertOk()
@@ -364,7 +408,11 @@ it('allows to validate posted data with the rules() method', function () {
 
     $this
         ->postJson(
-            route('code16.sharp.api.list.command.entity', ['person', 'cmd']),
+            route('code16.sharp.api.list.command.entity', [
+                'filterKey' => 'root',
+                'entityKey' => 'person',
+                'commandKey' => 'cmd',
+            ]),
             ['data' => ['name' => '']]
         )
         ->assertJsonValidationErrors(['name']);
@@ -398,7 +446,11 @@ it('allows to call a download entity command', function () {
     });
 
     $response = $this
-        ->postJson(route('code16.sharp.api.list.command.entity', ['person', 'cmd']))
+        ->postJson(route('code16.sharp.api.list.command.entity', [
+            'filterKey' => 'root',
+            'entityKey' => 'person',
+            'commandKey' => 'cmd',
+        ]))
         ->assertOk();
 
     expect($response->headers->get('content-disposition'))
@@ -428,9 +480,13 @@ it('allows to call a streamDownload entity command', function () {
     });
 
     $response = $this
-        ->postJson(route('code16.sharp.api.list.command.entity', ['person', 'cmd']))
+        ->postJson(route('code16.sharp.api.list.command.entity', [
+            'filterKey' => 'root',
+            'entityKey' => 'person',
+            'commandKey' => 'cmd',
+        ]))
         ->assertOk()
-        ->assertHeader('content-type', 'text/html; charset=UTF-8');
+        ->assertHeader('content-type', 'text/html; charset=utf-8');
 
     expect($response->headers->get('content-disposition'))
         ->toContain('stream.txt');
@@ -459,7 +515,11 @@ it('returns an applicative exception as a 417 as always', function () {
     });
 
     $this
-        ->postJson(route('code16.sharp.api.list.command.entity', ['person', 'cmd']))
+        ->postJson(route('code16.sharp.api.list.command.entity', [
+            'filterKey' => 'root',
+            'entityKey' => 'person',
+            'commandKey' => 'cmd',
+        ]))
         ->assertStatus(417)
         ->assertJson([
             'message' => 'error',
@@ -490,7 +550,11 @@ it('allows to access to the full query in an entity command', function () {
     });
 
     $this
-        ->postJson(route('code16.sharp.api.list.command.entity', ['person', 'cmd']),
+        ->postJson(route('code16.sharp.api.list.command.entity', [
+            'filterKey' => 'root',
+            'entityKey' => 'person',
+            'commandKey' => 'cmd',
+        ]),
             ['query' => ['sort' => 'name', 'dir' => 'desc']]
         )
         ->assertOk()
@@ -527,7 +591,11 @@ it('provides selected ids in a bulk command', function () {
         }
     });
     $this
-        ->postJson(route('code16.sharp.api.list.command.entity', ['person', 'cmd']),
+        ->postJson(route('code16.sharp.api.list.command.entity', [
+            'filterKey' => 'root',
+            'entityKey' => 'person',
+            'commandKey' => 'cmd',
+        ]),
             ['query' => ['ids' => ['1', '2']]]
         )
         ->assertOk()
@@ -565,7 +633,7 @@ it('disallows to call an unauthorized entity command', function () {
     });
 
     $this
-        ->postJson(route('code16.sharp.api.list.command.entity', ['person', 'entity_unauthorized']))
+        ->postJson(route('code16.sharp.api.list.command.entity', ['root', 'person', 'entity_unauthorized']))
         ->assertStatus(403);
 });
 
@@ -605,7 +673,11 @@ it('returns the form fields of the entity command and build a basic layout if mi
     });
 
     $this
-        ->getJson(route('code16.sharp.api.list.command.entity.form', ['person', 'cmd']))
+        ->getJson(route('code16.sharp.api.list.command.entity.form', [
+            'filterKey' => 'root',
+            'entityKey' => 'person',
+            'commandKey' => 'cmd',
+        ]))
         ->assertOk()
         ->assertJsonFragment([
             'layout' => [
@@ -676,7 +748,11 @@ it('fails when referencing an undeclared form field in the layout', function () 
         }
     });
 
-    $this->getJson(route('code16.sharp.api.list.command.entity.form', ['person', 'cmd']));
+    $this->getJson(route('code16.sharp.api.list.command.entity.form', [
+        'filterKey' => 'root',
+        'entityKey' => 'person',
+        'commandKey' => 'cmd',
+    ]));
 })->throws(SharpFormFieldLayoutException::class, SharpFormFieldLayoutException::undeclaredField('title')->getMessage());
 
 it('allows to configure a page alert on an entity command', function () {
@@ -716,7 +792,11 @@ it('allows to configure a page alert on an entity command', function () {
 
     $this
         ->withoutExceptionHandling()
-        ->getJson(route('code16.sharp.api.list.command.entity.form', ['person', 'cmd']))
+        ->getJson(route('code16.sharp.api.list.command.entity.form', [
+            'filterKey' => 'root',
+            'entityKey' => 'person',
+            'commandKey' => 'cmd',
+        ]))
         ->assertOk()
         ->assertJsonFragment([
             'pageAlert' => [
@@ -761,7 +841,11 @@ it('handles localized form of the entity command', function () {
     });
 
     $this
-        ->getJson(route('code16.sharp.api.list.command.entity.form', ['person', 'cmd']))
+        ->getJson(route('code16.sharp.api.list.command.entity.form', [
+            'filterKey' => 'root',
+            'entityKey' => 'person',
+            'commandKey' => 'cmd',
+        ]))
         ->assertOk()
         ->assertJsonFragment([
             'fields' => [
@@ -817,7 +901,11 @@ it('allows to initialize form data in an entity command', function () {
     });
 
     $this
-        ->getJson(route('code16.sharp.api.list.command.entity.form', ['person', 'cmd']))
+        ->getJson(route('code16.sharp.api.list.command.entity.form', [
+            'filterKey' => 'root',
+            'entityKey' => 'person',
+            'commandKey' => 'cmd',
+        ]))
         ->assertOk()
         ->assertJsonFragment([
             'data' => [

@@ -1,5 +1,6 @@
 <?php
 
+use Code16\Sharp\Filters\GlobalRequiredFilter;
 use Code16\Sharp\Tests\Fixtures\User;
 use Code16\Sharp\Tests\TestCase;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
@@ -9,6 +10,14 @@ use Illuminate\Support\Facades\Schema;
 
 uses(TestCase::class)
     ->in(__DIR__);
+
+uses()
+    ->beforeEach(function () {
+        // We add a default here to avoid putting this everywhere in unit tests
+        // it's handled by middleware in a real request, but we don't want to test that here.
+        \Illuminate\Support\Facades\URL::defaults(['filterKey' => \Code16\Sharp\Filters\GlobalFilters\GlobalFilters::$defaultKey]);
+    })
+    ->in(__DIR__.'/Unit');
 
 uses()
     ->group('eloquent')
@@ -138,4 +147,32 @@ function createImage(string $disk = 'local', string $name = 'test.png'): string
     $file = UploadedFile::fake()->image($name, 600, 600);
 
     return $file->storeAs('data', $name, ['disk' => $disk]);
+}
+
+function fakeGlobalFilter(string $key = 'test'): void
+{
+    sharp()->config()->addGlobalFilter(
+        new class($key) extends GlobalRequiredFilter
+        {
+            public function __construct(private string $key) {}
+
+            public function buildFilterConfig(): void
+            {
+                $this->configureKey($this->key);
+            }
+
+            public function values(): array
+            {
+                return [
+                    'one' => 'One',
+                    'two' => 'Two',
+                ];
+            }
+
+            public function defaultValue(): mixed
+            {
+                return 'two';
+            }
+        }
+    );
 }

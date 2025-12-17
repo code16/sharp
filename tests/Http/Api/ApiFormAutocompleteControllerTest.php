@@ -44,6 +44,7 @@ it('allows to call an functional endpoint for a remote autocomplete field', func
 
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+            'filterKey' => 'root',
             'entityKey' => 'person',
             'autocompleteFieldKey' => 'autocomplete_field',
         ]), [
@@ -78,6 +79,7 @@ it('allows to call a closure for a remote autocomplete field', function () {
 
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+            'filterKey' => 'root',
             'entityKey' => 'person',
             'autocompleteFieldKey' => 'autocomplete_field',
         ]), [
@@ -118,6 +120,7 @@ it('allows to call a closure for a remote autocomplete field in list', function 
 
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+            'filterKey' => 'root',
             'entityKey' => 'person',
             'autocompleteFieldKey' => 'list.autocomplete_field',
             'formData' => [
@@ -159,6 +162,7 @@ it('allows to specify linked field passed to the closure', function () {
 
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+            'filterKey' => 'root',
             'entityKey' => 'person',
             'autocompleteFieldKey' => 'autocomplete_field',
         ]), [
@@ -198,6 +202,7 @@ it('formats autocomplete results as an array, and handle data wrapper', function
 
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+            'filterKey' => 'root',
             'entityKey' => 'person',
             'autocompleteFieldKey' => 'autocomplete_field',
         ]), [
@@ -234,6 +239,7 @@ it('renders autocomplete results with template', function () {
 
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+            'filterKey' => 'root',
             'entityKey' => 'person',
             'autocompleteFieldKey' => 'autocomplete_field',
         ]), [
@@ -270,6 +276,7 @@ it('passes the full data in the item variable in the template', function () {
 
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+            'filterKey' => 'root',
             'entityKey' => 'person',
             'autocompleteFieldKey' => 'autocomplete_field',
         ]), [
@@ -312,6 +319,7 @@ it('allows objects / models as the item variable in the template in a callback c
 
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+            'filterKey' => 'root',
             'entityKey' => 'person',
             'autocompleteFieldKey' => 'autocomplete_field',
         ]), [
@@ -346,6 +354,7 @@ it('allows Closure as item template', function () {
 
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+            'filterKey' => 'root',
             'entityKey' => 'person',
             'autocompleteFieldKey' => 'autocomplete_field',
         ]), [
@@ -376,6 +385,7 @@ it('fails if field is missing', function () {
 
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+            'filterKey' => 'root',
             'entityKey' => 'person',
             'autocompleteFieldKey' => 'autocomplete_field',
         ]));
@@ -396,6 +406,7 @@ it('fails if field is not a remote autocomplete field', function () {
 
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+            'filterKey' => 'root',
             'entityKey' => 'person',
             'autocompleteFieldKey' => 'name',
         ]));
@@ -421,6 +432,7 @@ it('validates that the sent remote endpoint is the same that was defined in the 
 
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+            'filterKey' => 'root',
             'entityKey' => 'person',
             'autocompleteFieldKey' => 'autocomplete_field',
         ]), [
@@ -448,6 +460,7 @@ it('allows the defined endpoint to have a querystring', function () {
 
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+            'filterKey' => 'root',
             'entityKey' => 'person',
             'autocompleteFieldKey' => 'autocomplete_field',
         ]), [
@@ -481,6 +494,7 @@ it('allows full and relative remote endpoint', function () {
     foreach (['/my/endpoint', url('/my/endpoint')] as $endpoint) {
         $this
             ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+                'filterKey' => 'root',
                 'entityKey' => 'person',
                 'autocompleteFieldKey' => 'autocomplete_field',
             ]), [
@@ -491,6 +505,7 @@ it('allows full and relative remote endpoint', function () {
 
         $this
             ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+                'filterKey' => 'root',
                 'entityKey' => 'person',
                 'autocompleteFieldKey' => 'autocomplete_full_field',
             ]), [
@@ -518,6 +533,7 @@ it('allows dynamic remote endpoint', function () {
 
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+            'filterKey' => 'root',
             'entityKey' => 'person',
             'autocompleteFieldKey' => 'autocomplete_field',
         ]), [
@@ -544,6 +560,7 @@ it('allows parametrized remote endpoint', function () {
 
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+            'filterKey' => 'root',
             'entityKey' => 'person',
             'autocompleteFieldKey' => 'autocomplete_field',
         ]), [
@@ -570,6 +587,7 @@ it('allows dynamic and parametrized remote endpoint', function () {
 
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+            'filterKey' => 'root',
             'entityKey' => 'person',
             'autocompleteFieldKey' => 'autocomplete_field',
         ]), [
@@ -596,6 +614,7 @@ it('won’t allow external remote endpoint', function () {
 
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+            'filterKey' => 'root',
             'entityKey' => 'person',
             'autocompleteFieldKey' => 'autocomplete_field',
         ]), [
@@ -623,6 +642,7 @@ it('allows internal remote endpoint with a querystring', function () {
 
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+            'filterKey' => 'root',
             'entityKey' => 'person',
             'autocompleteFieldKey' => 'autocomplete_field',
         ]), [
@@ -656,6 +676,7 @@ it('allows to call an functional endpoint for a remote autocomplete field in an 
 
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+            'filterKey' => 'root',
             'entityKey' => 'person',
             'autocompleteFieldKey' => 'autocomplete_field',
             'embed_key' => (new ApiFormAutocompleteControllerAutocompleteEmbed())->key(),
@@ -708,6 +729,7 @@ it('allows to call an functional endpoint for a remote autocomplete field in an 
 
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+            'filterKey' => 'root',
             'entityKey' => 'person',
             'autocompleteFieldKey' => 'autocomplete_field',
             'instance_id' => 1,
@@ -761,6 +783,7 @@ it('allows to call an functional endpoint for a remote autocomplete field in an 
 
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+            'filterKey' => 'root',
             'entityKey' => 'person',
             'autocompleteFieldKey' => 'autocomplete_field',
             'entity_list_command_key' => 'my-command',
@@ -813,6 +836,7 @@ it('allows to call an functional endpoint for a remote autocomplete field in an 
 
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+            'filterKey' => 'root',
             'entityKey' => 'person',
             'autocompleteFieldKey' => 'autocomplete_field',
             'instance_id' => 1,
@@ -866,6 +890,7 @@ it('allows to call an functional endpoint for a remote autocomplete field in an 
 
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+            'filterKey' => 'root',
             'entityKey' => 'person',
             'autocompleteFieldKey' => 'autocomplete_field',
             'show_command_key' => 'my-command',
@@ -923,6 +948,7 @@ it('won’t allow to call an functional endpoint for a remote autocomplete field
 
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
+            'filterKey' => 'root',
             'entityKey' => 'person',
             'autocompleteFieldKey' => 'autocomplete_field',
             'instance_id' => 1,

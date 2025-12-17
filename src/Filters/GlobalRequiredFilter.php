@@ -4,37 +4,28 @@ namespace Code16\Sharp\Filters;
 
 abstract class GlobalRequiredFilter extends SelectRequiredFilter
 {
+    private mixed $currentValue = null;
+
     final public function currentValue(): mixed
     {
-        $value = session()->get($this->getSessionKey());
-
-        if ($value === null) {
-            if (($value = $this->defaultValue()) !== null) {
-                session()->put($this->getSessionKey(), $value);
-            }
-        }
-
-        return $value;
+        return $this->currentValue !== null
+            ? $this->currentValue
+            : $this->defaultValue();
     }
 
     final public function setCurrentValue(mixed $value): void
     {
         if ($value === null) {
-            session()->forget($this->getSessionKey());
+            $this->currentValue = null;
 
             return;
         }
 
-        $value = collect($this->formattedValues())
-            ->where('id', request('value'))
+        $formattedValue = collect($this->formattedValues())
+            ->where('id', $value)
             ->first();
 
-        session()->put($this->getSessionKey(), $value ? $value['id'] : null);
-    }
-
-    private function getSessionKey(): string
-    {
-        return '_sharp_retained_global_filter_'.$this->getKey();
+        $this->currentValue = $formattedValue['id'] ?? null;
     }
 
     public function authorize(): bool

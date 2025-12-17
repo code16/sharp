@@ -69,7 +69,7 @@ it('can post a newly uploaded file in editor, create case', function () {
         ])
         ->json();
 
-    $this->post('/sharp/s-list/person/s-form/person', [
+    $this->post('/sharp/root/s-list/person/s-form/person', [
         'bio' => [
             'text' => <<<'HTML'
                 <x-sharp-file data-key="0"></x-sharp-file>
@@ -158,7 +158,7 @@ it('can post a newly uploaded file in editor, update case', function () {
         ])
         ->json();
 
-    $this->post('/sharp/s-list/person/s-form/person/1', [
+    $this->post('/sharp/root/s-list/person/s-form/person/1', [
         'bio' => [
             'text' => <<<'HTML'
                 <x-sharp-file data-key="0"></x-sharp-file>
@@ -233,7 +233,7 @@ it('can post an embed with upload, create case', function () {
         ])
         ->json();
 
-    $this->post('/sharp/s-list/person/s-form/person', [
+    $this->post('/sharp/root/s-list/person/s-form/person', [
         'bio' => [
             'text' => sprintf(
                 '<x-embed data-key="0"></x-embed>',

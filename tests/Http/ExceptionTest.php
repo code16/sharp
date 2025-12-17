@@ -20,7 +20,7 @@ it('renders inertia Exception', function () {
         }
     });
 
-    $this->get('/sharp/s-list/person')
+    $this->get('/sharp/root/s-list/person')
         ->assertStatus(500)
         ->assertInertia(fn (Assert $page) => $page
             ->component('Error')
@@ -38,7 +38,7 @@ it('renders inertia HttpException', function () {
         }
     });
 
-    $this->get('/sharp/s-list/person')
+    $this->get('/sharp/root/s-list/person')
         ->assertStatus(404)
         ->assertInertia(fn (Assert $page) => $page
             ->component('Error')
@@ -56,7 +56,7 @@ it('renders inertia SharpException', function () {
         }
     });
 
-    $this->get('/sharp/s-list/person')
+    $this->get('/sharp/root/s-list/person')
         ->assertStatus(403)
         ->assertInertia(fn (Assert $page) => $page
             ->component('Error')
@@ -72,7 +72,7 @@ it('renders inertia SharpException', function () {
         }
     });
 
-    $this->get('/sharp/s-list/person')
+    $this->get('/sharp/root/s-list/person')
         ->assertStatus(417)
         ->assertInertia(fn (Assert $page) => $page
             ->component('Error')
@@ -94,7 +94,7 @@ it('renders debug 500 error', function () {
 
     config()->set('app.debug', true);
 
-    $response = $this->get('/sharp/s-list/person')
+    $response = $this->get('/sharp/root/s-list/person')
         ->assertStatus(500);
 
     // response is not rendered in inertia
@@ -114,7 +114,7 @@ it('renders debug 500 API error', function () {
 
     config()->set('app.debug', true);
 
-    $this->getJson('/sharp/api/list/person')
+    $this->getJson('/sharp/api/root/list/person')
         ->assertStatus(500)
-        ->assertHeader('Content-Type', 'text/html; charset=UTF-8');
+        ->assertHeader('Content-Type', 'text/html; charset=utf-8');
 });

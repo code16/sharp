@@ -44,6 +44,7 @@ class SharpConfigBuilder
                 \Illuminate\Session\Middleware\StartSession::class,
                 \Illuminate\View\Middleware\ShareErrorsFromSession::class,
                 \Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class,
+                \Code16\Sharp\Http\Middleware\HandleGlobalFilters::class,
                 \Illuminate\Routing\Middleware\SubstituteBindings::class,
             ],
             'web' => [
@@ -92,6 +93,9 @@ class SharpConfigBuilder
             'image_driver' => \Intervention\Image\Drivers\Gd\Driver::class,
             'file_handling_queue' => 'default',
             'file_handling_queue_connection' => 'sync',
+        ],
+        'downloads' => [
+            'allowed_disks' => '*',
         ],
         'search' => [
             'enabled' => false,
@@ -316,6 +320,13 @@ class SharpConfigBuilder
         $this->config['uploads']['thumbnails_dir'] = $thumbnailsDir;
         $this->config['uploads']['model_class'] = $uploadModelClass;
         $this->config['uploads']['image_driver'] = $imageDriverClass;
+
+        return $this;
+    }
+
+    public function configureDownloads(array $allowedDisks): self
+    {
+        $this->config['downloads']['allowed_disks'] = $allowedDisks;
 
         return $this;
     }

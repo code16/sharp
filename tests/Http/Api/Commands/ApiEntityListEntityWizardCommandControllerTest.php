@@ -39,7 +39,11 @@ it('displays first step form on the first call of a wizard entity command', func
     });
 
     $this
-        ->getJson(route('code16.sharp.api.list.command.entity.form', ['person', 'wizard']))
+        ->getJson(route('code16.sharp.api.list.command.entity.form', [
+            'filterKey' => 'root',
+            'entityKey' => 'person',
+            'commandKey' => 'wizard',
+        ]))
         ->assertOk()
         ->assertJsonFragment([
             'fields' => [
@@ -105,12 +109,20 @@ it('allows to post first step of a wizard entity command', function () {
     });
 
     $this
-        ->postJson(route('code16.sharp.api.list.command.entity', ['person', 'wizard']))
+        ->postJson(route('code16.sharp.api.list.command.entity', [
+            'filterKey' => 'root',
+            'entityKey' => 'person',
+            'commandKey' => 'wizard',
+        ]))
         ->assertJsonValidationErrors('name');
 
     $this
         ->postJson(
-            route('code16.sharp.api.list.command.entity', ['person', 'wizard']),
+            route('code16.sharp.api.list.command.entity', [
+                'filterKey' => 'root',
+                'entityKey' => 'person',
+                'commandKey' => 'wizard',
+            ]),
             ['data' => ['name' => 'test']],
         )
         ->assertOk()
@@ -174,6 +186,7 @@ it('allows to check if context is valid', function () {
     $this
         ->getJson(
             route('code16.sharp.api.list.command.entity.form', [
+                'filterKey' => 'root',
                 'entityKey' => 'person',
                 'commandKey' => 'wizard',
                 'command_step' => 'next-step:test-key',
@@ -184,7 +197,11 @@ it('allows to check if context is valid', function () {
     // First post step 1...
     $this
         ->postJson(
-            route('code16.sharp.api.list.command.entity', ['person', 'wizard']),
+            route('code16.sharp.api.list.command.entity', [
+                'filterKey' => 'root',
+                'entityKey' => 'person',
+                'commandKey' => 'wizard',
+            ]),
         )
         ->assertOk();
 
@@ -261,7 +278,11 @@ it('allows to post second step of a wizard entity command', function () {
     // First post step 1...
     $this
         ->postJson(
-            route('code16.sharp.api.list.command.entity', ['person', 'wizard']),
+            route('code16.sharp.api.list.command.entity', [
+                'filterKey' => 'root',
+                'entityKey' => 'person',
+                'commandKey' => 'wizard',
+            ]),
             ['data' => ['name' => 'test']],
         )
         ->assertOk();
@@ -330,7 +351,11 @@ it('allows to define a global method for step execution', function () {
 
     // First post step 1...
     $this
-        ->postJson(route('code16.sharp.api.list.command.entity', ['person', 'wizard']))
+        ->postJson(route('code16.sharp.api.list.command.entity', [
+            'filterKey' => 'root',
+            'entityKey' => 'person',
+            'commandKey' => 'wizard',
+        ]))
         ->assertOk();
 
     // Then get step 2

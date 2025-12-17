@@ -6,7 +6,7 @@
         "bacon/bacon-qr-code": "~2.0",
         "blade-ui-kit/blade-icons": "^1.6",
         "code16/laravel-content-renderer": "^1.2",
-        "enshrined/svg-sanitize": "^0.21.0",
+        "enshrined/svg-sanitize": "^0.22.0",
         "guzzlehttp/guzzle": "^7.2",
         "inertiajs/inertia-laravel": "^2.0",
         "intervention/image": "^3.4",
@@ -27,7 +27,7 @@
         "laravel/sail": "^1.0.1",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^8.6",
-        "phpunit/phpunit": "^11.0",
+        "phpunit/phpunit": "^12.0",
         "spatie/laravel-ignition": "^2.0",
         "spatie/laravel-ray": "^1.29",
         "spatie/laravel-typescript-transformer": "^2.3"

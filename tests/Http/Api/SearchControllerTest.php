@@ -27,7 +27,7 @@ it('returns result on a valid search', function () {
     );
 
     $this
-        ->getJson('/sharp/api/search?q=some-search')
+        ->getJson('/sharp/api/root/search?q=some-search')
         ->assertJson([
             [
                 'label' => 'People',
@@ -35,12 +35,12 @@ it('returns result on a valid search', function () {
                 'resultLinks' => [
                     [
                         'label' => 'John Wayne',
-                        'link' => url('sharp/s-list/person/s-show/person/1'),
+                        'link' => url('sharp/root/s-list/person/s-show/person/1'),
                         'detail' => null,
                     ],
                     [
                         'label' => 'Jane Ford',
-                        'link' => url('sharp/s-list/person/s-show/person/2'),
+                        'link' => url('sharp/root/s-list/person/s-show/person/2'),
                         'detail' => 'Some detail',
                     ],
                 ],
@@ -59,7 +59,7 @@ it('allows to configure a custom empty state label', function () {
         }
     );
 
-    $this->getJson('/sharp/api/search?q=some-search')
+    $this->getJson('/sharp/api/root/search?q=some-search')
         ->assertJson(
             [
                 [
@@ -83,7 +83,7 @@ it('allows to configure hide when empty', function () {
         }
     );
 
-    $this->getJson('/sharp/api/search?q=some-search')
+    $this->getJson('/sharp/api/root/search?q=some-search')
         ->assertJson(
             [
                 [
@@ -112,7 +112,7 @@ it('raises validation errors', function () {
         }
     );
 
-    $this->getJson('/sharp/api/search?q=bb')
+    $this->getJson('/sharp/api/root/search?q=bb')
         ->assertJson(
             [
                 [
@@ -145,7 +145,7 @@ it('handles multiple result sets', function () {
         }
     );
 
-    $this->getJson('/sharp/api/search?q=some-search')
+    $this->getJson('/sharp/api/root/search?q=some-search')
         ->assertJson(
             [
                 [
@@ -157,7 +157,7 @@ it('handles multiple result sets', function () {
                     'resultLinks' => [
                         [
                             'label' => 'John Wayne',
-                            'link' => url('sharp/s-list/person/s-show/person/1'),
+                            'link' => url('sharp/root/s-list/person/s-show/person/1'),
                             'detail' => null,
                         ],
                     ],
@@ -171,7 +171,7 @@ it('handles multiple result sets', function () {
                     'resultLinks' => [
                         [
                             'label' => 'Aston Martin',
-                            'link' => url('sharp/s-list/car/s-show/car/1'),
+                            'link' => url('sharp/root/s-list/car/s-show/car/1'),
                             'detail' => null,
                         ],
                     ],
@@ -194,7 +194,7 @@ it('allows multiple search terms', function () {
         }
     );
 
-    $this->getJson('/sharp/api/search?q=john+%20wayne%20')
+    $this->getJson('/sharp/api/root/search?q=john+%20wayne%20')
         ->assertJsonFragment([
             'label' => 'John Wayne',
         ]);
@@ -204,7 +204,7 @@ it('returns a 404 if not enabled', function () {
     sharp()->config()->disableGlobalSearch();
 
     $this
-        ->getJson('/sharp/api/search?q=some-search')
+        ->getJson('/sharp/api/root/search?q=some-search')
         ->assertNotFound();
 });
 
@@ -225,12 +225,12 @@ it('returns a 403 if not authorized', function () {
     );
 
     $this
-        ->getJson('/sharp/api/search?q=some-search')
+        ->getJson('/sharp/api/root/search?q=some-search')
         ->assertForbidden();
 
     $this
         ->actingAs(User::make(['email' => 'authorized-user@test.fr']))
-        ->getJson('/sharp/api/search?q=some-search')
+        ->getJson('/sharp/api/root/search?q=some-search')
         ->assertOk();
 });
 
@@ -238,7 +238,7 @@ it('the global search is sent with every inertia request, if enabled and authori
     sharp()->config()->declareEntity(PersonEntity::class);
 
     $this
-        ->get('/sharp/s-list/person')
+        ->get('/sharp/root/s-list/person')
         ->assertInertia(fn (Assert $page) => $page
             ->where('globalSearch', null)
         );
@@ -256,14 +256,14 @@ it('the global search is sent with every inertia request, if enabled and authori
     );
 
     $this
-        ->get('/sharp/s-list/person')
+        ->get('/sharp/root/s-list/person')
         ->assertInertia(fn (Assert $page) => $page
             ->where('globalSearch', null)
         );
 
     $this
         ->actingAs(User::make(['email' => 'authorized-user@test.fr']))
-        ->get('/sharp/s-list/person')
+        ->get('/sharp/root/s-list/person')
         ->assertInertia(fn (Assert $page) => $page
             ->where('globalSearch', [
                 'config' => [

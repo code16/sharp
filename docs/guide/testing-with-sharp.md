@@ -23,56 +23,88 @@ The trait adds a few helpers:
 
 Logs in the given user as a Sharp user.
 
-#### `getSharpShow(string $entityKey, $instanceId)`
+#### `getSharpShow(string $entityClassNameOrKey, $instanceId)`
 
-Call the Sharp API to display the Show Page for the Entity `$entityKey` and instance `$instanceId`.
+Call the Sharp API to display the Show Page for the Entity `$entityClassNameOrKey` and instance `$instanceId`.
 
-#### `getSharpForm(string $entityKey, $instanceId = null)`
+#### `getSharpForm(string $entityClassNameOrKey, $instanceId = null)`
 
-Call the Sharp API to display the Form for the Entity `$entityKey`. If `$instanceId` is provided, it will be an edit form, and otherwise a creation one.
+Call the Sharp API to display the Form for the Entity `$entityClassNameOrKey`. If `$instanceId` is provided, it will be an edit form, and otherwise a creation one.
 
-#### `getSharpSingleForm(string $entityKey)`
+#### `getSharpSingleForm(string $entityClassNameOrKey)`
 
-Call the Sharp API to display the edit Form for the single Entity `$entityKey`.
+Call the Sharp API to display the edit Form for the single Entity `$entityClassNameOrKey`.
 
-#### `updateSharpForm(string $entityKey, $instanceId, array $data)`
+#### `updateSharpForm(string $entityClassNameOrKey, $instanceId, array $data)`
 
-Call the Sharp API to update the Entity `$entityKey` of id `$instanceId`, with `$data`.
+Call the Sharp API to update the Entity `$entityClassNameOrKey` of id `$instanceId`, with `$data`.
 
-#### `updateSharpSingleForm(string $entityKey, array $data)`
+#### `updateSharpSingleForm(string $entityClassNameOrKey, array $data)`
 
-Call the Sharp API to update the single Entity `$entityKey` with `$data`.
+Call the Sharp API to update the single Entity `$entityClassNameOrKey` with `$data`.
 
-#### `storeSharpForm(string $entityKey, array $data)`
+#### `storeSharpForm(string $entityClassNameOrKey, array $data)`
 
-Call the Sharp API to store a new Entity `$entityKey` with `$data`.
+Call the Sharp API to store a new Entity `$entityClassNameOrKey` with `$data`.
 
-#### `deleteSharpEntityList(string $entityKey, $instanceId)`
+#### `deleteFromSharpList(string $entityClassNameOrKey, $instanceId)`
 
-Call the Sharp API to delete an `$entityKey` instance on the Entity List.
+Call the Sharp API to delete an `$entityClassNameOrKey` instance on the Entity List.
 
-#### `deleteSharpShow(string $entityKey, $instanceId)`
+#### `deleteFromSharpShow(string $entityClassNameOrKey, $instanceId)`
 
-Call the Sharp API to delete an `$entityKey` instance on the Show Page.
+Call the Sharp API to delete an `$entityClassNameOrKey` instance on the Show Page.
 
-#### `callSharpEntityCommandFromList(string $entityKey, string $commandKeyOrClassName, array $data, ?string $commandStep = null)`
+#### `callSharpEntityCommandFromList(string $entityClassNameOrKey, string $commandKeyOrClassName, array $data, ?string $commandStep = null)`
 
 Call the `$commandKeyOrClassName` Entity Command with the optional `$data`.
 
-#### `callSharpInstanceCommandFromList(string $entityKey, $instanceId, string $commandKeyOrClassName, array $data, ?string $commandStep = null)`
+In case of a wizard command, here’s how you can specify the step in the `$commandStep` parameter:
+
+```php 
+it('allows the user to use the wizard', function () {
+    // First step, no need to declare any previous step
+    $step = $this
+        ->callSharpEntityCommandFromList(
+            entityClassNameOrKey: MyEntity::class,
+            commandKeyOrClassName: MyWizardCommand::class,
+            data: ['some_key' => 'some value'],
+        ) 
+        ->assertOk()
+        ->json('step'); // Get back the step key from the response
+
+    // Second step
+    $this
+        ->callSharpEntityCommandFromList(
+            entityClassNameOrKey: MyEntity::class, 
+            commandKeyOrClassName: MyWizardCommand::class, 
+            data: ['another_key' => 'another value'], 
+            commandStep: $step // We must specify the step we got from the first call
+        )
+        ->assertOk();
+
+    // ...
+});
+```
+
+#### `callSharpInstanceCommandFromList(string $entityClassNameOrKey, $instanceId, string $commandKeyOrClassName, array $data, ?string $commandStep = null)`
 
 Call the `$commandKeyOrClassName` Instance Command with the optional `$data`.
 
-#### `callSharpInstanceCommandFromShow(string $entityKey, $instanceId, string $commandKeyOrClassName, array $data, ?string $commandStep = null)`
+For a wizard command, you can refer to the [previous example](#callsharpentitycommandfromlist-string-entitykey-string-commandkeyorclassname-array-data-string-commandstep-null).
+
+#### `callSharpInstanceCommandFromShow(string $entityClassNameOrKey, $instanceId, string $commandKeyOrClassName, array $data, ?string $commandStep = null)`
 
 Call the `$commandKeyOrClassName` Instance Command with the optional `$data`.
+
+For a wizard command, you can refer to the [previous example](#callsharpentitycommandfromlist-string-entitykey-string-commandkeyorclassname-array-data-string-commandstep-null).
 
 #### `withSharpBreadcrumb(Closure $callback): self`
 
 Most of the time, the breadcrumb automatically set by Sharp is enough. But sometimes it can be useful to define a whole Sharp context before calling an endpoint, and that's the purpose of this method. The `$callback` contains a built instance of Code16\Sharp\Utils\Links\BreadcrumbBuilder, which can be used like this:
 
 ```php
-it('allow the user to display a leaf form', function () {
+it('allows the user to display a leaf form', function () {
     $this
         ->loginAsSharpUser()
         ->withSharpBreadcrumb(function (BreadcrumbBuilder $builder) {
@@ -81,6 +113,23 @@ it('allow the user to display a leaf form', function () {
                 ->appendShowPage(TreeEntity::class, 6)
                 ->appendShowPage(LeafEntity::class, 16);
         })
+        ->getSharpForm(LeafEntity::class, 16)
+        ->assertOk();
+});
+```
+
+#### `withSharpGlobalFilterKeys(array|string $filterKeys): self`
+
+You can specify the global filter keys to use in the Sharp context.
+
+```php
+it('allows the user to display a leaf form', function () {
+    $tenant = Tenant::factory()->create();
+    $user = User::factory()->create(['tenant_id' => $tenant->id]);
+
+    $this
+        ->loginAsSharpUser($user)
+        ->withSharpGlobalFilterKeys($tenant->key)
         ->getSharpForm(LeafEntity::class, 16)
         ->assertOk();
 });

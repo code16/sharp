@@ -166,7 +166,7 @@ it('allows to define a current breadcrumb', function () {
         ->getSharpForm('leaves', 6);
 
     $this->assertEquals(
-        'http://localhost/sharp/s-list/trees/s-show/trees/2/s-show/leaves/6/s-form/leaves/6',
+        'http://localhost/sharp/root/s-list/trees/s-show/trees/2/s-show/leaves/6/s-form/leaves/6',
         $response->uri,
     );
 });
@@ -195,8 +195,52 @@ it('allows to define a current breadcrumb with legacy API', function () {
         ->getSharpForm('leaves', 6);
 
     $this->assertEquals(
-        'http://localhost/sharp/s-list/trees/s-show/trees/2/s-show/leaves/6/s-form/leaves/6',
+        'http://localhost/sharp/root/s-list/trees/s-show/trees/2/s-show/leaves/6/s-form/leaves/6',
         $response->uri,
+    );
+});
+
+it('allows to test getSharpForm for edit with global filter keys', function () {
+    fakeGlobalFilter('test-1');
+
+    $this->assertEquals(
+        route('code16.sharp.form.edit', [
+            'filterKey' => 'root',
+            'parentUri' => 's-list/leaves',
+            'entityKey' => 'leaves',
+            'instanceId' => 6,
+        ]),
+        fakeResponse()
+            ->getSharpForm('leaves', 6)
+            ->uri,
+    );
+
+    $this->assertEquals(
+        route('code16.sharp.form.edit', [
+            'filterKey' => 'one',
+            'parentUri' => 's-list/leaves',
+            'entityKey' => 'leaves',
+            'instanceId' => 6,
+        ]),
+        fakeResponse()
+            ->withSharpGlobalFilterKeys('one')
+            ->getSharpForm('leaves', 6)
+            ->uri,
+    );
+
+    fakeGlobalFilter('test-2');
+
+    $this->assertEquals(
+        route('code16.sharp.form.edit', [
+            'filterKey' => 'one~two',
+            'parentUri' => 's-list/leaves',
+            'entityKey' => 'leaves',
+            'instanceId' => 6,
+        ]),
+        fakeResponse()
+            ->withSharpGlobalFilterKeys(['one', 'two'])
+            ->getSharpForm('leaves', 6)
+            ->uri,
     );
 });
 

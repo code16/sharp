@@ -13,7 +13,7 @@
         }
     ],
     "require": {
-        "php": "8.3.*|8.4.*",
+        "php": "8.3.*|8.4.*|8.5.*",
         "ext-dom": "*",
         "ext-intl": "*",
         "ext-json": "*",
@@ -39,9 +39,9 @@
         "mockery/mockery": "^1.5.0",
         "nunomaduro/collision": "^8.0",
         "orchestra/testbench": "^9.0|^10.0",
-        "pestphp/pest": "^3.0",
-        "pestphp/pest-plugin-laravel": "^3.0",
-        "phpunit/phpunit": "^11.0",
+        "pestphp/pest": "^3.0|^4.0",
+        "pestphp/pest-plugin-laravel": "^3.0|^4.0",
+        "phpunit/phpunit": "^11.0|^12.0",
         "spatie/laravel-ray": "^1.26",
         "spatie/laravel-typescript-transformer": "^2.3",
         "spatie/typescript-transformer": "^2.2"
@@ -62,7 +62,7 @@
     },
     "scripts": {
         "test": "vendor/bin/pest --parallel",
-        "typescript:generate": "php demo/artisan ziggy:generate --types-only; php demo/artisan typescript:transform",
+        "typescript:generate": "php demo/artisan sharp:typescript-generate",
         "post-autoload-dump": [
             "git config core.hooksPath scripts/hooks"
         ]

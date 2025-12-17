@@ -1,5 +1,5 @@
 import { Axios } from "axios";
-import NProgress from 'nprogress';
+import { progress } from '@inertiajs/core';
 
 export const progressDelay = 150;
 
@@ -11,7 +11,8 @@ export function installProgressInterceptors(api: Axios) {
         pendingRequests++;
         clearTimeout(timeout);
         timeout = setTimeout(() => {
-            NProgress.start();
+            progress.reveal();
+            progress.start();
         }, progressDelay);
     }
 
@@ -19,7 +20,7 @@ export function installProgressInterceptors(api: Axios) {
         pendingRequests--;
         clearTimeout(timeout);
         if(!pendingRequests) {
-            NProgress.done();
+            progress.finish();
         }
     }
 

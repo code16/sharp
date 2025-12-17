@@ -6,7 +6,6 @@ use App\Models\Category;
 use App\Models\Post;
 use App\Models\User;
 use App\Sharp\Utils\Embeds\AuthorEmbed;
-use App\Sharp\Utils\Embeds\CodeEmbed;
 use App\Sharp\Utils\Embeds\RelatedPostEmbed;
 use App\Sharp\Utils\Embeds\TableOfContentsEmbed;
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
@@ -59,14 +58,13 @@ class PostForm extends SharpForm
                         SharpFormEditorField::SEPARATOR,
                         SharpFormEditorField::IFRAME,
                         SharpFormEditorField::UPLOAD,
+                        SharpFormEditorField::CODE_BLOCK,
                         AuthorEmbed::class,
-                        CodeEmbed::class,
                     ])
                     ->allowEmbeds([
                         RelatedPostEmbed::class,
                         AuthorEmbed::class,
                         TableOfContentsEmbed::class,
-                        CodeEmbed::class,
                     ])
                     ->allowUploads(
                         SharpFormEditorUpload::make()
