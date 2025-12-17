@@ -12,7 +12,7 @@ class LinkToSingleShowPage extends SharpLinkTo
     public function renderAsUrl(): string
     {
         return route('code16.sharp.single-show', [
-            'globalFilter' => sharp()->context()->globalFilterUrlSegmentValue(),
+            'globalFilter' => $this->globalFilter ?: sharp()->context()->globalFilterUrlSegmentValue(),
             'entityKey' => $this->entityKey,
         ]);
     }

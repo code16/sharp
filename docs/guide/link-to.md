@@ -118,6 +118,10 @@ Set a filter and its value; for the filter, you can either pass its custom key o
 
 Set a default sort.
 
+### `withGlobalFilterValues(array|string $globalFilterValues)`
+
+Set a global filter value(s). Ex: `LinkToShowPage::make(...)->withGlobalFilterValues($tenant->id)->renderAsUrl()`.
+
 ### `setFullQuerystring(array $querystring)`
 
 `LinkToEntityList` only

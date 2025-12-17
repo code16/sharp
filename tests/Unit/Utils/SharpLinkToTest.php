@@ -264,3 +264,15 @@ it('allows to generate an url', function () {
             ->renderAsUrl(),
     );
 });
+
+it('allows to generate an url to a show page with a global filter', function () {
+    $this->assertEquals(
+        'http://localhost/sharp/tenant-1/s-list/my-entity/s-show/my-entity/3',
+        LinkToShowPage::make('my-entity', 3)
+            ->withBreadcrumb(fn (BreadcrumbBuilder $builder) => $builder
+                ->appendEntityList('my-entity')
+            )
+            ->withGlobalFilterValues('tenant-1')
+            ->renderAsUrl(),
+    );
+});
