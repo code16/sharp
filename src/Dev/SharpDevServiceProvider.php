@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Dev;
 
+use Code16\Sharp\Dev\Commands\TypescriptGenerateCommand;
 use Code16\Sharp\Dev\Commands\UpdateIdeJsonCommand;
 use Illuminate\Support\ServiceProvider;
 
@@ -15,6 +16,7 @@ class SharpDevServiceProvider extends ServiceProvider
 
             $this->commands([
                 UpdateIdeJsonCommand::class,
+                TypescriptGenerateCommand::class,
             ]);
         }
     }

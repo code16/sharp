@@ -34,7 +34,7 @@
             api.post(
                 route('code16.sharp.api.filters.autocomplete.index', {
                     entityKey: props.entityKey,
-                    filterKey: props.filter.key,
+                    filterHandlerKey: props.filter.key,
                     query,
                 }),
                 {},
