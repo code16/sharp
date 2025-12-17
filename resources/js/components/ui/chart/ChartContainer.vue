@@ -51,7 +51,9 @@ provideChartContext({
       '--vis-tooltip-backdrop-filter': 'none',
       '--vis-crosshair-circle-stroke-color': '#0000',
       '--vis-crosshair-line-stroke-width': cursor ? '1px' : '0px',
+      '--vis-crosshair-line-stroke-color': 'var(--border)',
       '--vis-font-family': 'var(--font-sans)',
+      '--vis-donut-background-color': 'var(--muted)'
     }"
   >
     <slot :id="uniqueId" :config="config" />

@@ -15,11 +15,8 @@
 
     const props = defineProps<DashboardWidgetProps<GraphWidgetData>>();
 
-    // props.value.datasets = props.value?.datasets.toReversed();
+    const { data, x, y, color, tooltipTemplate, xScale, chartConfig, xAxisConfig } = useXYChart(props);
 
-    const { data, x, y, color, tooltipTemplate, xScale, xTickValues, tickFormat, chartConfig } = useXYChart(props);
-
-    // const rotate = computed(() => props.value?.labels?.length >= 10);
     const svgDefs = computed(() => props.value?.datasets.map((dataset, i) => `
         <linearGradient id="fill-${i}" x1="0" y1="0" x2="0" y2="1">
             <stop
@@ -37,7 +34,7 @@
 </script>
 
 <template>
-    <ChartContainer class="flex flex-col" :config="chartConfig">
+    <ChartContainer class="flex flex-col" :config="chartConfig" cursor>
         <VisXYContainer class="flex-1 min-h-0"
             v-bind="{
                 xScale: xScale,
@@ -49,10 +46,9 @@
                 <VisAxis
                     v-bind="{
                         type: 'x',
-                        tickFormat: tickFormat,
-                        tickValues: xTickValues,
                         gridLine: false,
                         domainLine: false,
+                        ...xAxisConfig,
                     } as AxisConfigInterface<Datum>"
                 />
                 <VisAxis v-bind="{
@@ -66,7 +62,7 @@
                     x: x,
                     y: y,
                     color: color,
-                    lineWidth: 1,
+                    lineWidth: props.widget.options.filled ? 1 : 2,
                     curveType: props.widget.options.curved ? CurveType.MonotoneX : CurveType.Linear,
                 } as LineConfigInterface<Datum>"
             />
@@ -94,13 +90,15 @@
             />
             <ChartTooltip />
 
-<!--            <template v-if="props.value?.labels.length < 40">-->
-<!--                <template v-for="dataset in props.value?.datasets">-->
-<!--                    <VisScatter-->
-<!--                        v-bind="{ size: 4, x: x, y: y, strokeColor: color, color: 'var(&#45;&#45;background)' } as ScatterConfigInterface<Datum>"-->
-<!--                    />-->
-<!--                </template>-->
-<!--            </template>-->
+            <template v-if="props.widget.options.showDots">
+                <template v-for="dataset in props.value?.datasets">
+                    <VisScatter
+                        v-bind="{ size: 6, x: x, y: y,
+                        // strokeColor: color,
+                        color: color } as ScatterConfigInterface<Datum>"
+                    />
+                </template>
+            </template>
         </VisXYContainer>
         <template v-if="props.widget.showLegend && !props.widget.minimal">
             <ChartLegendContent />

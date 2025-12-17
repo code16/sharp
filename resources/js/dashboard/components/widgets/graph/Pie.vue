@@ -36,33 +36,21 @@
 
 <template>
     <ChartContainer class="min-h-[250px] sm:min-h-0 flex flex-col gap-y-2 gap-x-4 sm:gap-4" :config="chartConfig" ref="container">
-        <UseElementSize class="flex-1 min-h-0 flex flex-col" v-slot="{ width, height }">
-            <VisSingleContainer class="flex-1 min-h-0">
+<!--        <UseElementSize class="flex-1 min-h-0 flex flex-col" v-slot="{ width, height }">-->
+            <VisSingleContainer class="flex-1 min-h-0 ">
                 <VisDonut
                     v-bind="{
-                    data: data,
-                    value: d => d.value,
-                    color: d => d.color,
-                    // arcWidth: 47,
-                    arcWidth: width ? log(Math.round(Math.min(width, height) * .15), width, height) : 20,
-                    showBackground: false,
-                    attributes: {
-                         // [Donut.selectors.segment]: {
-                         //     'class'() {
-                         //         return `${Donut.selectors.segment} relative fill-(--color) hover:stroke-10! stroke-(--color)! transition-all [transform-box:fill-box] origin-center`;
-                         //     },
-                         //     'style'(data: CallbackData) {
-                         //         return `--color:${data.data.color}`;
-                         //         // return { '--color': data.color }
-                         //     }
-                         // }
-                    }
-                } as DonutConfigInterface<Datum>"
+                        data: data,
+                        value: d => d.value,
+                        color: d => d.color,
+                        // arcWidth: width ? log(Math.round(Math.min(width, height) * 0), width, height) : 20,
+                        // showBackground: false,
+                        arcWidth: 0,
+                    } as DonutConfigInterface<Datum>"
                 />
                 <ChartTooltip :triggers="{ [Donut.selectors.segment]: tooltipTemplate }" />
             </VisSingleContainer>
-        </UseElementSize>
-
+<!--        </UseElementSize>-->
 
         <template v-if="props.widget.showLegend && !props.widget.minimal">
             <ChartLegendContent />

@@ -15,42 +15,34 @@
         XYContainerConfigInterface,
     } from '@unovis/ts'
     import { Datum, useXYChart } from "@/dashboard/components/widgets/graph/useXYChart";
-    import { computed } from "vue";
     import { ChartContainer, ChartLegendContent, ChartTooltip, ChartCrosshair } from "@/components/ui/chart";
 
     const props = defineProps<DashboardWidgetProps<GraphWidgetData>>();
 
-    const { data, x, y, color, tooltipTemplate, chartConfig, tickFormat } = useXYChart(props);
-
-    const rotate = computed(() => !props.widget.options.horizontal && props.value?.labels?.length >= 10);
+    const { data, x, y, color, tooltipTemplate, chartConfig, xAxisConfig, xScale } = useXYChart(props);
 </script>
 
 <template>
-    <ChartContainer :config="chartConfig" class="flex flex-col gap-4">
+    <ChartContainer :config="chartConfig" class="flex flex-col" cursor>
         <VisXYContainer class="flex-1 min-h-0"
-            v-bind="{ } as XYContainerConfigInterface<Datum>"
+            v-bind="{
+                xScale: xScale,
+            } as XYContainerConfigInterface<Datum>"
             :data="data"
         >
             <template v-if="!props.widget.minimal">
                 <VisAxis
                     v-bind="{
-                        type: props.widget.options?.horizontal ? 'x' : 'y',
+                        type: props.widget.options?.horizontal ? 'y' : 'x',
+                        gridLine: false,
                         domainLine: false,
+                        ...xAxisConfig,
                     } as AxisConfigInterface<Datum>"
                 />
                 <VisAxis
                     v-bind="{
-                        type: props.widget.options?.horizontal ? 'y' : 'x',
-                         gridLine: false,
-                         domainLine: false,
-                        // tickValues: props.value?.labels.map((_, i) => i),
-                        numTicks: props.value?.labels.length - 1,
-                        tickFormat: tickFormat,
-                        tickTextTrimType: TrimMode.End,
-                        tickTextAlign: rotate ? TextAlign.Left : props.widget.options.horizontal ? TextAlign.Right : TextAlign.Center,
-                        tickTextFitMode: rotate ? FitMode.Wrap : FitMode.Trim,
-                        tickTextAngle: rotate ? 45 : undefined,
-                        tickTextWidth: rotate ? 100 : undefined,
+                        type: props.widget.options?.horizontal ? 'x' : 'y',
+                        domainLine: false,
                     } as AxisConfigInterface<Datum>"
                 />
             </template>
@@ -80,13 +72,6 @@
 
         <template v-if="props.widget.showLegend && !props.widget.minimal">
             <ChartLegendContent />
-            <div class="flex justify-center">
-                <VisBulletLegend
-                    v-bind="{
-                        items: props.value.datasets?.map(dataset => ({ name: dataset.label, color: dataset.color })),
-                    } as BulletLegendConfigInterface"
-                />
-            </div>
         </template>
     </ChartContainer>
 </template>

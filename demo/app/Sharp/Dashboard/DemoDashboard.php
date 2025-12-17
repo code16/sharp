@@ -45,6 +45,7 @@ class DemoDashboard extends SharpDashboard
             ->addWidget(
                 SharpBarGraphWidget::make('authors_bar')
                     ->setTitle('Posts by author')
+                    ->setShowAllLabels()
                     ->setShowLegend(false)
                 // ->setHorizontal(),
             )
@@ -58,8 +59,11 @@ class DemoDashboard extends SharpDashboard
                     ->setHeight(200)
                     // ->setShowLegend()
                     ->setDisplayHorizontalAxisAsTimeline()
-                    ->setMinimal()
-                    ->setFilled(),
+                // ->setShowAllLabels()
+                // ->setShowDots()
+                // ->setFilled()
+                // ->setMinimal()
+
             )
             ->addWidget(
                 SharpFigureWidget::make('draft_panel')
