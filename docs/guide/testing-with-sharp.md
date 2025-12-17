@@ -118,9 +118,9 @@ it('allows the user to display a leaf form', function () {
 });
 ```
 
-#### `withSharpGlobalFilterKeys(array|string $filterKeys): self`
+#### `withSharpGlobalFilterValues(array|string $filterValues): self`
 
-You can specify the global filter keys to use in the Sharp context.
+You can specify the global filter values to use in the Sharp context.
 
 ```php
 it('allows the user to display a leaf form', function () {
@@ -129,7 +129,7 @@ it('allows the user to display a leaf form', function () {
 
     $this
         ->loginAsSharpUser($user)
-        ->withSharpGlobalFilterKeys($tenant->key)
+        ->withSharpGlobalFilterValues($tenant->id)
         ->getSharpForm(LeafEntity::class, 16)
         ->assertOk();
 });

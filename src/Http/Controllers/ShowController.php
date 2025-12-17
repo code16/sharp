@@ -14,7 +14,7 @@ class ShowController extends SharpProtectedController
     use HandlesSharpNotificationsInRequest;
     use PreloadsShowFields;
 
-    public function show(string $filterKey, string $parentUri, EntityKey $entityKey, string $instanceId)
+    public function show(string $globalFilter, string $parentUri, EntityKey $entityKey, string $instanceId)
     {
         $this->authorizationManager->check('view', $entityKey, $instanceId);
 
@@ -66,7 +66,7 @@ class ShowController extends SharpProtectedController
         ]);
     }
 
-    public function delete(string $filterKey, string $parentUri, string $entityKey, string $instanceId)
+    public function delete(string $globalFilter, string $parentUri, string $entityKey, string $instanceId)
     {
         $this->authorizationManager->check('delete', $entityKey, $instanceId);
 

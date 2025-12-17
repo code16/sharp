@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Http\Context;
 
 use Closure;
+use Code16\Sharp\Exceptions\SharpInvalidGlobalFilterKeyException;
 use Code16\Sharp\Filters\GlobalFilters\GlobalFilters;
 use Code16\Sharp\Filters\GlobalRequiredFilter;
 use Illuminate\Support\Collection;
@@ -18,7 +19,10 @@ class SharpContext
     {
         $handler = $this->globalFiltersHandler->findFilter($handlerClassOrKey);
 
-        abort_if(! $handler instanceof GlobalRequiredFilter, 404);
+        throw_if(
+            ! $handler instanceof GlobalRequiredFilter,
+            new SharpInvalidGlobalFilterKeyException('Filter ['.$handlerClassOrKey.'] is not a global required filter.')
+        );
 
         return $handler->currentValue();
     }

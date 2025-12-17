@@ -3,12 +3,12 @@ declare module 'ziggy-js' {
   interface RouteList {
     "code16.sharp.home": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         }
     ],
     "code16.sharp.dashboard": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         },
         {
             "name": "dashboardKey",
@@ -18,7 +18,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.dashboard.filters.store": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         },
         {
             "name": "dashboardKey",
@@ -27,7 +27,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.list": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         },
         {
             "name": "entityKey",
@@ -37,7 +37,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.list.filters.store": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         },
         {
             "name": "entityKey",
@@ -46,7 +46,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.single-show": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         },
         {
             "name": "entityKey",
@@ -56,7 +56,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.download.show": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         },
         {
             "name": "entityKey",
@@ -69,7 +69,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.show.show": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         },
         {
             "name": "parentUri",
@@ -87,7 +87,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.show.delete": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         },
         {
             "name": "parentUri",
@@ -104,7 +104,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.form.create": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         },
         {
             "name": "parentUri",
@@ -118,7 +118,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.form.store": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         },
         {
             "name": "parentUri",
@@ -132,7 +132,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.form.edit": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         },
         {
             "name": "parentUri",
@@ -150,7 +150,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.form.update": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         },
         {
             "name": "parentUri",
@@ -168,13 +168,13 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.filters.update": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         }
     ],
     "code16.sharp.update-assets": [],
     "code16.sharp.api.dashboard.command.form": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         },
         {
             "name": "dashboardKey",
@@ -187,7 +187,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.api.dashboard.command": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         },
         {
             "name": "dashboardKey",
@@ -200,7 +200,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.api.list.command.quick-creation-form.create": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         },
         {
             "name": "entityKey",
@@ -215,7 +215,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.api.list.command.quick-creation-form.store": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         },
         {
             "name": "entityKey",
@@ -230,7 +230,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.api.list": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         },
         {
             "name": "entityKey",
@@ -240,7 +240,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.api.list.filters.store": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         },
         {
             "name": "entityKey",
@@ -249,7 +249,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.api.list.reorder": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         },
         {
             "name": "entityKey",
@@ -258,7 +258,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.api.list.delete": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         },
         {
             "name": "entityKey",
@@ -271,7 +271,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.api.list.state": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         },
         {
             "name": "entityKey",
@@ -284,7 +284,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.api.list.command.entity": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         },
         {
             "name": "entityKey",
@@ -297,7 +297,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.api.list.command.entity.form": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         },
         {
             "name": "entityKey",
@@ -310,7 +310,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.api.list.command.instance": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         },
         {
             "name": "entityKey",
@@ -327,7 +327,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.api.list.command.instance.form": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         },
         {
             "name": "entityKey",
@@ -344,7 +344,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.api.dashboard": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         },
         {
             "name": "dashboardKey",
@@ -354,7 +354,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.api.dashboard.filters.store": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         },
         {
             "name": "dashboardKey",
@@ -363,7 +363,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.api.show.command.instance": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         },
         {
             "name": "entityKey",
@@ -380,7 +380,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.api.show.command.instance.form": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         },
         {
             "name": "entityKey",
@@ -397,7 +397,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.api.show.command.singleInstance.form": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         },
         {
             "name": "entityKey",
@@ -410,7 +410,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.api.show.state": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         },
         {
             "name": "entityKey",
@@ -423,12 +423,12 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.api.search.index": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         }
     ],
     "code16.sharp.api.embed.form.show": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         },
         {
             "name": "embedKey",
@@ -441,7 +441,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.api.embed.form.update": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         },
         {
             "name": "embedKey",
@@ -454,7 +454,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.api.embed.instance.form.show": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         },
         {
             "name": "embedKey",
@@ -471,7 +471,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.api.embed.instance.form.update": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         },
         {
             "name": "embedKey",
@@ -488,7 +488,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.api.form.editor.upload.form.update": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         },
         {
             "name": "entityKey",
@@ -501,7 +501,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.api.form.upload.thumbnail.show": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         },
         {
             "name": "entityKey",
@@ -515,7 +515,7 @@ declare module 'ziggy-js' {
     "code16.sharp.api.form.upload": [],
     "code16.sharp.api.form.autocomplete.index": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         },
         {
             "name": "entityKey",
@@ -529,7 +529,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.api.form.refresh.update": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         },
         {
             "name": "entityKey",
@@ -539,7 +539,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.api.filters.autocomplete.index": [
         {
-            "name": "filterKey"
+            "name": "globalFilter"
         },
         {
             "name": "entityKey",

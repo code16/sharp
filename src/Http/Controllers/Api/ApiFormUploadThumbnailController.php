@@ -13,7 +13,7 @@ class ApiFormUploadThumbnailController extends Controller
     public function __construct(private readonly SharpAuthorizationManager $authorizationManager) {}
 
     // Used to generate large thumbnail for upload crop modal
-    public function show(string $filterKey, string $entityKey, ?string $instanceId = null)
+    public function show(string $globalFilter, string $entityKey, ?string $instanceId = null)
     {
         $this->authorizationManager->check('view', $entityKey, $instanceId);
 

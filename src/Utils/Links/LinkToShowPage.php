@@ -44,7 +44,7 @@ class LinkToShowPage extends SharpLinkTo
                 sprintf(
                     '%s/%s/%s/%s',
                     sharp()->config()->get('custom_url_segment'),
-                    sharp()->context()->globalFilterUrlSegmentValue(),
+                    $this->globalFilter ?: sharp()->context()->globalFilterUrlSegmentValue(),
                     $this->breadcrumbBuilder->generateUri(),
                     $this->generateUri()
                 )
@@ -57,6 +57,7 @@ class LinkToShowPage extends SharpLinkTo
     protected function generateUrl(): string
     {
         return route('code16.sharp.show.show', [
+            'globalFilter' => $this->globalFilter ?: sharp()->context()->globalFilterUrlSegmentValue(),
             'parentUri' => sprintf('s-list/%s', $this->listEntityKey ?: $this->entityKey),
             'entityKey' => $this->entityKey,
             'instanceId' => $this->instanceId,

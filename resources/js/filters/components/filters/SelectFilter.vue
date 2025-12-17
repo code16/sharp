@@ -79,10 +79,8 @@
                     :multiple="props.filter.multiple"
                     highlight-on-hover
                 >
-                    <template v-if="filter.searchable">
-                        <!-- v-show because otherwise highlight on hover does not work -->
-                        <CommandInput :placeholder="__('sharp::form.multiselect.placeholder')" />
-                    </template>
+                    <!-- v-show because otherwise highlight on hover does not work -->
+                    <CommandInput v-show="filter.searchable" :placeholder="__('sharp::form.multiselect.placeholder')" />
 
                     <CommandList class="scroll-pb-12">
                         <CommandEmpty>{{ __('sharp::form.autocomplete.no_results_text') }}</CommandEmpty>

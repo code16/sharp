@@ -205,7 +205,7 @@ it('allows to test getSharpForm for edit with global filter keys', function () {
 
     $this->assertEquals(
         route('code16.sharp.form.edit', [
-            'filterKey' => 'root',
+            'globalFilter' => 'root',
             'parentUri' => 's-list/leaves',
             'entityKey' => 'leaves',
             'instanceId' => 6,
@@ -217,13 +217,13 @@ it('allows to test getSharpForm for edit with global filter keys', function () {
 
     $this->assertEquals(
         route('code16.sharp.form.edit', [
-            'filterKey' => 'one',
+            'globalFilter' => 'one',
             'parentUri' => 's-list/leaves',
             'entityKey' => 'leaves',
             'instanceId' => 6,
         ]),
         fakeResponse()
-            ->withSharpGlobalFilterKeys('one')
+            ->withSharpGlobalFilterValues('one')
             ->getSharpForm('leaves', 6)
             ->uri,
     );
@@ -232,13 +232,13 @@ it('allows to test getSharpForm for edit with global filter keys', function () {
 
     $this->assertEquals(
         route('code16.sharp.form.edit', [
-            'filterKey' => 'one~two',
+            'globalFilter' => 'one~two',
             'parentUri' => 's-list/leaves',
             'entityKey' => 'leaves',
             'instanceId' => 6,
         ]),
         fakeResponse()
-            ->withSharpGlobalFilterKeys(['one', 'two'])
+            ->withSharpGlobalFilterValues(['one', 'two'])
             ->getSharpForm('leaves', 6)
             ->uri,
     );

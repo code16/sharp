@@ -37,7 +37,7 @@ it('allows to call an info instance command from a show', function () {
     });
 
     $this->postJson(route('code16.sharp.api.show.command.instance', [
-        'filterKey' => 'root',
+        'globalFilter' => 'root',
         'entityKey' => 'person',
         'commandKey' => 'cmd',
         'instanceId' => 1,
@@ -75,7 +75,7 @@ it('allows to call an info instance command from a single show', function () {
 
     $this
         ->postJson(route('code16.sharp.api.show.command.instance', [
-            'filterKey' => 'root',
+            'globalFilter' => 'root',
             'entityKey' => 'single-person',
             'commandKey' => 'cmd',
         ]))
@@ -132,7 +132,7 @@ it('gets form and initialize form data in an instance command of a show', functi
 
     $this
         ->getJson(route('code16.sharp.api.show.command.instance.form', [
-            'filterKey' => 'root',
+            'globalFilter' => 'root',
             'entityKey' => 'person',
             'commandKey' => 'cmd',
             'instanceId' => 1,
@@ -177,7 +177,7 @@ it('gets form and initialize form data in an instance command of a show', functi
     $this
         ->postJson(
             route('code16.sharp.api.show.command.instance', [
-                'filterKey' => 'root',
+                'globalFilter' => 'root',
                 'entityKey' => 'person',
                 'commandKey' => 'cmd',
                 'instanceId' => 1,
@@ -234,7 +234,7 @@ it('gets form and initialize form data in an instance command of a single show',
     $this
         ->getJson(
             route('code16.sharp.api.show.command.singleInstance.form', [
-                'filterKey' => 'root',
+                'globalFilter' => 'root',
                 'entityKey' => 'single-person',
                 'commandKey' => 'single_cmd',
             ])
@@ -279,7 +279,7 @@ it('gets form and initialize form data in an instance command of a single show',
     $this
         ->postJson(
             route('code16.sharp.api.show.command.instance', [
-                'filterKey' => 'root',
+                'globalFilter' => 'root',
                 'entityKey' => 'single-person',
                 'commandKey' => 'single_cmd',
             ]),

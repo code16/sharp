@@ -19,14 +19,13 @@ class ApiDashboardCommandController extends ApiController
         parent::__construct();
     }
 
-    public function show(string $filterKey, string $entityKey, string $commandKey)
+    public function show(string $globalFilter, string $entityKey, string $commandKey)
     {
         $dashboard = $this->getDashboardInstance($entityKey);
         $dashboard->buildDashboardConfig();
         $dashboard->initQueryParams(request()->query());
 
         $commandHandler = $this->getDashboardCommandHandler($dashboard, $commandKey);
-        $formData = $commandHandler->formData() ?: null;
 
         return response()->json(
             CommandFormData::from(
@@ -35,7 +34,7 @@ class ApiDashboardCommandController extends ApiController
         );
     }
 
-    public function update(string $filterKey, string $entityKey, string $commandKey)
+    public function update(string $globalFilter, string $entityKey, string $commandKey)
     {
         $dashboard = $this->getDashboardInstance($entityKey);
         $dashboard->buildDashboardConfig();
