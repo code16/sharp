@@ -33,7 +33,7 @@ class TypescriptGenerateCommand extends Command
         file_put_contents(
             $ziggyOutput = base_path(config('ziggy.output.path')),
             str(file_get_contents($ziggyOutput))
-                ->replaceMatches('/("name": "filterKey"),\s+"required": true/', '$1')
+                ->replaceMatches('/("name": "globalFilter"),\s+"required": true/', '$1')
         );
 
         Artisan::call('typescript:transform', [], $this->output);

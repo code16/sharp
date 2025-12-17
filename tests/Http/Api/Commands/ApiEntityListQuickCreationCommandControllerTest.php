@@ -35,7 +35,7 @@ it('allows to call a quick creation command with the standard form', function ()
     $this
         ->getJson(
             route('code16.sharp.api.list.command.quick-creation-form.create', [
-                'filterKey' => 'root',
+                'globalFilter' => 'root',
                 'entityKey' => 'person',
                 'formEntityKey' => 'person',
             ]),
@@ -74,7 +74,7 @@ it('allows to call a quick creation command with custom form fields', function (
     $this
         ->getJson(
             route('code16.sharp.api.list.command.quick-creation-form.create', [
-                'filterKey' => 'root',
+                'globalFilter' => 'root',
                 'entityKey' => 'person',
                 'formEntityKey' => 'person',
             ]),
@@ -92,7 +92,7 @@ it('fails when calling a quick creation command on a not configured list', funct
     $this
         ->getJson(
             route('code16.sharp.api.list.command.quick-creation-form.create', [
-                'filterKey' => 'root',
+                'globalFilter' => 'root',
                 'entityKey' => 'person',
                 'formEntityKey' => 'person',
             ]),
@@ -131,7 +131,7 @@ it('allows to post a quick creation command', function () {
     $this
         ->postJson(
             route('code16.sharp.api.list.command.quick-creation-form.create', [
-                'filterKey' => 'root',
+                'globalFilter' => 'root',
                 'entityKey' => 'person',
                 'formEntityKey' => 'person',
             ]),
@@ -160,7 +160,7 @@ it('logs an error if the form’s update() method does not return the instance i
     $this
         ->postJson(
             route('code16.sharp.api.list.command.quick-creation-form.create', [
-                'filterKey' => 'root',
+                'globalFilter' => 'root',
                 'entityKey' => 'person',
                 'formEntityKey' => 'person',
             ]),
@@ -198,7 +198,7 @@ it('sharp()->context()->breadcrumb() is correct', function () {
     $this
         ->postJson(
             route('code16.sharp.api.list.command.quick-creation-form.create', [
-                'filterKey' => 'root',
+                'globalFilter' => 'root',
                 'entityKey' => 'person',
                 'formEntityKey' => 'person',
             ]),
@@ -241,7 +241,7 @@ it('validates posted data of a quick creation command', function () {
     $this
         ->postJson(
             route('code16.sharp.api.list.command.quick-creation-form.create', [
-                'filterKey' => 'root',
+                'globalFilter' => 'root',
                 'entityKey' => 'person',
                 'formEntityKey' => 'person',
             ]),
@@ -278,7 +278,7 @@ it('returns a link action on a quick creation command with a form with configure
     $this
         ->postJson(
             route('code16.sharp.api.list.command.quick-creation-form.create', [
-                'filterKey' => 'root',
+                'globalFilter' => 'root',
                 'entityKey' => 'person',
                 'formEntityKey' => 'person',
             ]),
@@ -319,7 +319,7 @@ it('returns a link action on a quick creation in an EEL case command with a form
     $this
         ->get(
             route('code16.sharp.show.show', [
-                'filterKey' => 'root',
+                'globalFilter' => 'root',
                 'parentUri' => 's-list/person/',
                 'person',
                 1,

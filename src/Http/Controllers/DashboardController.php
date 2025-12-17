@@ -9,7 +9,7 @@ use Inertia\Inertia;
 
 class DashboardController extends SharpProtectedController
 {
-    public function show(string $filterKey, EntityKey $dashboardKey)
+    public function show(string $globalFilter, EntityKey $dashboardKey)
     {
         $this->authorizationManager->check('entity', $dashboardKey);
 

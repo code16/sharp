@@ -14,34 +14,34 @@ class HandleGlobalFilters
 
     public function handle(Request $request, Closure $next)
     {
-        if ($filterKey = $request->route('filterKey')) {
-            $filterKeys = explode(GlobalFilters::$valuesUrlSeparator, $filterKey);
+        if ($globalFilterValue = $request->route('globalFilter')) {
+            $globalFilterValues = explode(GlobalFilters::$valuesUrlSeparator, $globalFilterValue);
 
             if ($this->globalFiltersHandler->isEnabled()) {
                 $globalFilters = $this->globalFiltersHandler->getFilters();
-                if (count($filterKeys) !== count($globalFilters)) {
+                if (count($globalFilterValues) !== count($globalFilters)) {
                     return redirect()->route('code16.sharp.home', [
-                        'filterKey' => sharp()->context()->globalFilterUrlSegmentValue(),
+                        'globalFilter' => sharp()->context()->globalFilterUrlSegmentValue(),
                     ]);
                 }
 
                 collect($globalFilters)
                     ->each(fn (GlobalRequiredFilter $globalFilter, int $index) => $globalFilter
-                        ->setCurrentValue($filterKeys[$index])
+                        ->setCurrentValue($globalFilterValues[$index])
                     );
 
-                if (sharp()->context()->globalFilterUrlSegmentValue() !== $filterKey
+                if (sharp()->context()->globalFilterUrlSegmentValue() !== $globalFilterValue
                     && ! $request->wantsJson()
                     && $request->isMethod('GET')
                 ) {
                     return redirect()->route('code16.sharp.home', [
-                        'filterKey' => sharp()->context()->globalFilterUrlSegmentValue(),
+                        'globalFilter' => sharp()->context()->globalFilterUrlSegmentValue(),
                     ]);
                 }
             }
         }
 
-        URL::defaults(['filterKey' => sharp()->context()->globalFilterUrlSegmentValue()]);
+        URL::defaults(['globalFilter' => sharp()->context()->globalFilterUrlSegmentValue()]);
 
         return $next($request);
     }

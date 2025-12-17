@@ -2,12 +2,14 @@
 
 namespace Code16\Sharp\Utils\Links;
 
+use Code16\Sharp\Filters\GlobalFilters\GlobalFilters;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 
 abstract class SharpLinkTo
 {
     protected string $entityKey;
     protected string $tooltip = '';
+    protected ?string $globalFilter = null;
 
     protected function __construct(string $entityClassOrKey)
     {
@@ -17,6 +19,14 @@ abstract class SharpLinkTo
     public function setTooltip($tooltip): self
     {
         $this->tooltip = $tooltip;
+
+        return $this;
+    }
+
+    public function withGlobalFilterValues(array|string $globalFilterValues): self
+    {
+        $this->globalFilter = collect((array) $globalFilterValues)
+            ->implode(GlobalFilters::$valuesUrlSeparator);
 
         return $this;
     }

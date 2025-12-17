@@ -11,6 +11,9 @@ class LinkToDashboard extends SharpLinkTo
 
     public function renderAsUrl(): string
     {
-        return route('code16.sharp.dashboard', $this->entityKey);
+        return route('code16.sharp.dashboard', [
+            'globalFilter' => $this->globalFilter ?: sharp()->context()->globalFilterUrlSegmentValue(),
+            'dashboardKey' => $this->entityKey,
+        ]);
     }
 }

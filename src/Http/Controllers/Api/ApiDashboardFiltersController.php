@@ -4,7 +4,7 @@ namespace Code16\Sharp\Http\Controllers\Api;
 
 class ApiDashboardFiltersController extends ApiController
 {
-    public function store(string $filterKey, string $dashboardKey)
+    public function store(string $globalFilter, string $dashboardKey)
     {
         $this->authorizationManager->check('entity', $dashboardKey);
 

@@ -18,7 +18,7 @@ class EntityListController extends SharpProtectedController
     use HandlesEntityListItems;
     use HandlesSharpNotificationsInRequest;
 
-    public function show(string $filterKey, EntityKey $entityKey)
+    public function show(string $globalFilter, EntityKey $entityKey)
     {
         $this->authorizationManager->check('entity', $entityKey);
 

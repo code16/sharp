@@ -26,99 +26,99 @@ Route::group([
     'prefix' => '/'.sharp()->config()->get('custom_url_segment').'/api',
     'middleware' => ['sharp_common', 'sharp_api'],
 ], function () {
-    Route::get('/{filterKey}/dashboard/{dashboardKey}/command/{commandKey}/form', [ApiDashboardCommandController::class, 'show'])
+    Route::get('/{globalFilter}/dashboard/{dashboardKey}/command/{commandKey}/form', [ApiDashboardCommandController::class, 'show'])
         ->name('code16.sharp.api.dashboard.command.form');
 
-    Route::post('/{filterKey}/dashboard/{dashboardKey}/command/{commandKey}', [ApiDashboardCommandController::class, 'update'])
+    Route::post('/{globalFilter}/dashboard/{dashboardKey}/command/{commandKey}', [ApiDashboardCommandController::class, 'update'])
         ->name('code16.sharp.api.dashboard.command');
 
-    Route::get('/{filterKey}/list/{entityKey}/form/{formEntityKey}/create', [ApiEntityListQuickCreationCommandController::class, 'create'])
+    Route::get('/{globalFilter}/list/{entityKey}/form/{formEntityKey}/create', [ApiEntityListQuickCreationCommandController::class, 'create'])
         ->name('code16.sharp.api.list.command.quick-creation-form.create');
 
-    Route::post('/{filterKey}/list/{entityKey}/form/{formEntityKey}/create', [ApiEntityListQuickCreationCommandController::class, 'store'])
+    Route::post('/{globalFilter}/list/{entityKey}/form/{formEntityKey}/create', [ApiEntityListQuickCreationCommandController::class, 'store'])
         ->name('code16.sharp.api.list.command.quick-creation-form.store');
 
     // EmbeddedEntityLists
-    Route::get('/{filterKey}/list/{entityKey}', [EntityListController::class, 'show'])
+    Route::get('/{globalFilter}/list/{entityKey}', [EntityListController::class, 'show'])
         ->name('code16.sharp.api.list')
         ->middleware('cache.headers:no_store');
 
-    Route::post('/{filterKey}/list/{entityKey}/filters', [ApiEntityListFiltersController::class, 'store'])
+    Route::post('/{globalFilter}/list/{entityKey}/filters', [ApiEntityListFiltersController::class, 'store'])
         ->name('code16.sharp.api.list.filters.store');
 
-    Route::post('/{filterKey}/list/{entityKey}/reorder', [ApiEntityListController::class, 'update'])
+    Route::post('/{globalFilter}/list/{entityKey}/reorder', [ApiEntityListController::class, 'update'])
         ->name('code16.sharp.api.list.reorder');
 
-    Route::delete('/{filterKey}/list/{entityKey}/{instanceId}', [ApiEntityListController::class, 'delete'])
+    Route::delete('/{globalFilter}/list/{entityKey}/{instanceId}', [ApiEntityListController::class, 'delete'])
         ->name('code16.sharp.api.list.delete');
 
-    Route::post('/{filterKey}/list/{entityKey}/state/{instanceId}', [ApiEntityListEntityStateController::class, 'update'])
+    Route::post('/{globalFilter}/list/{entityKey}/state/{instanceId}', [ApiEntityListEntityStateController::class, 'update'])
         ->name('code16.sharp.api.list.state');
 
-    Route::post('/{filterKey}/list/{entityKey}/command/{commandKey}', [ApiEntityListEntityCommandController::class, 'update'])
+    Route::post('/{globalFilter}/list/{entityKey}/command/{commandKey}', [ApiEntityListEntityCommandController::class, 'update'])
         ->name('code16.sharp.api.list.command.entity');
 
-    Route::get('/{filterKey}/list/{entityKey}/command/{commandKey}/form', [ApiEntityListEntityCommandController::class, 'show'])
+    Route::get('/{globalFilter}/list/{entityKey}/command/{commandKey}/form', [ApiEntityListEntityCommandController::class, 'show'])
         ->name('code16.sharp.api.list.command.entity.form');
 
-    Route::post('/{filterKey}/list/{entityKey}/command/{commandKey}/{instanceId}', [ApiEntityListInstanceCommandController::class, 'update'])
+    Route::post('/{globalFilter}/list/{entityKey}/command/{commandKey}/{instanceId}', [ApiEntityListInstanceCommandController::class, 'update'])
         ->name('code16.sharp.api.list.command.instance');
 
-    Route::get('/{filterKey}/list/{entityKey}/command/{commandKey}/{instanceId}/form', [ApiEntityListInstanceCommandController::class, 'show'])
+    Route::get('/{globalFilter}/list/{entityKey}/command/{commandKey}/{instanceId}/form', [ApiEntityListInstanceCommandController::class, 'show'])
         ->name('code16.sharp.api.list.command.instance.form');
 
     // EmbeddedDashboards
-    Route::get('/{filterKey}/dashboard/{dashboardKey}', [DashboardController::class, 'show'])
+    Route::get('/{globalFilter}/dashboard/{dashboardKey}', [DashboardController::class, 'show'])
         ->name('code16.sharp.api.dashboard')
         ->middleware('cache.headers:no_store');
 
-    Route::post('/{filterKey}/dashboard/{dashboardKey}/filters', [ApiDashboardFiltersController::class, 'store'])
+    Route::post('/{globalFilter}/dashboard/{dashboardKey}/filters', [ApiDashboardFiltersController::class, 'store'])
         ->name('code16.sharp.api.dashboard.filters.store');
 
-    Route::post('/{filterKey}/show/{entityKey}/command/{commandKey}/{instanceId?}', [ApiShowInstanceCommandController::class, 'update'])
+    Route::post('/{globalFilter}/show/{entityKey}/command/{commandKey}/{instanceId?}', [ApiShowInstanceCommandController::class, 'update'])
         ->name('code16.sharp.api.show.command.instance');
 
-    Route::get('/{filterKey}/show/{entityKey}/command/{commandKey}/{instanceId}/form', [ApiShowInstanceCommandController::class, 'show'])
+    Route::get('/{globalFilter}/show/{entityKey}/command/{commandKey}/{instanceId}/form', [ApiShowInstanceCommandController::class, 'show'])
         ->name('code16.sharp.api.show.command.instance.form');
 
     // Specific route for single shows, because /show/{entityKey}/command/{commandKey}/{instanceId?}/data
     // does not work since instanceId is optional but not the last segment.
-    Route::get('/{filterKey}/show/{entityKey}/command/{commandKey}/form', [ApiShowInstanceCommandController::class, 'show'])
+    Route::get('/{globalFilter}/show/{entityKey}/command/{commandKey}/form', [ApiShowInstanceCommandController::class, 'show'])
         ->name('code16.sharp.api.show.command.singleInstance.form');
 
-    Route::post('/{filterKey}/show/{entityKey}/state/{instanceId?}', [ApiShowEntityStateController::class, 'update'])
+    Route::post('/{globalFilter}/show/{entityKey}/state/{instanceId?}', [ApiShowEntityStateController::class, 'update'])
         ->name('code16.sharp.api.show.state');
 
-    Route::get('/{filterKey}/search', [ApiSearchController::class, 'index'])
+    Route::get('/{globalFilter}/search', [ApiSearchController::class, 'index'])
         ->name('code16.sharp.api.search.index');
 
-    Route::post('/{filterKey}/embeds/{embedKey}/{entityKey}/form/init', [ApiEmbedsFormController::class, 'show'])
+    Route::post('/{globalFilter}/embeds/{embedKey}/{entityKey}/form/init', [ApiEmbedsFormController::class, 'show'])
         ->name('code16.sharp.api.embed.form.show');
 
-    Route::post('/{filterKey}/embeds/{embedKey}/{entityKey}/form', [ApiEmbedsFormController::class, 'update'])
+    Route::post('/{globalFilter}/embeds/{embedKey}/{entityKey}/form', [ApiEmbedsFormController::class, 'update'])
         ->name('code16.sharp.api.embed.form.update');
 
-    Route::post('/{filterKey}/embeds/{embedKey}/{entityKey}/{instanceId}/form/init', [ApiEmbedsFormController::class, 'show'])
+    Route::post('/{globalFilter}/embeds/{embedKey}/{entityKey}/{instanceId}/form/init', [ApiEmbedsFormController::class, 'show'])
         ->name('code16.sharp.api.embed.instance.form.show');
 
-    Route::post('/{filterKey}/embeds/{embedKey}/{entityKey}/{instanceId}/form', [ApiEmbedsFormController::class, 'update'])
+    Route::post('/{globalFilter}/embeds/{embedKey}/{entityKey}/{instanceId}/form', [ApiEmbedsFormController::class, 'update'])
         ->name('code16.sharp.api.embed.instance.form.update');
 
-    Route::post('/{filterKey}/form/editors/upload/form/{entityKey}/{instanceId?}', [ApiFormEditorUploadFormController::class, 'update'])
+    Route::post('/{globalFilter}/form/editors/upload/form/{entityKey}/{instanceId?}', [ApiFormEditorUploadFormController::class, 'update'])
         ->name('code16.sharp.api.form.editor.upload.form.update');
 
-    Route::post('/{filterKey}/upload/thumbnail/{entityKey}/{instanceId?}', [ApiFormUploadThumbnailController::class, 'show'])
+    Route::post('/{globalFilter}/upload/thumbnail/{entityKey}/{instanceId?}', [ApiFormUploadThumbnailController::class, 'show'])
         ->name('code16.sharp.api.form.upload.thumbnail.show');
 
     Route::post('/upload', [ApiFormUploadController::class, 'store'])
         ->name('code16.sharp.api.form.upload');
 
-    Route::post('/{filterKey}/form/autocomplete/{entityKey}/{autocompleteFieldKey}', [ApiFormAutocompleteController::class, 'index'])
+    Route::post('/{globalFilter}/form/autocomplete/{entityKey}/{autocompleteFieldKey}', [ApiFormAutocompleteController::class, 'index'])
         ->name('code16.sharp.api.form.autocomplete.index');
 
-    Route::post('/{filterKey}/form/refresh/{entityKey}', [ApiFormRefreshController::class, 'update'])
+    Route::post('/{globalFilter}/form/refresh/{entityKey}', [ApiFormRefreshController::class, 'update'])
         ->name('code16.sharp.api.form.refresh.update');
 
-    Route::post('/{filterKey}/filters/autocomplete/{entityKey}/{filterHandlerKey}', [ApiFilterAutocompleteController::class, 'index'])
+    Route::post('/{globalFilter}/filters/autocomplete/{entityKey}/{filterHandlerKey}', [ApiFilterAutocompleteController::class, 'index'])
         ->name('code16.sharp.api.filters.autocomplete.index');
 });
