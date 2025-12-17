@@ -17,7 +17,12 @@ it('returns fields and layout of an embed', function () {
 
     $this
         ->postJson(
-            route('code16.sharp.api.embed.instance.form.show', ['root', ApiEmbedsFormControllerTestEmbed::$key, 'person', 1]),
+            route('code16.sharp.api.embed.instance.form.show', [
+                'filterKey' => 'root',
+                'embedKey' => ApiEmbedsFormControllerTestEmbed::$key,
+                'entityKey' => 'person',
+                'instanceId' => 1,
+            ]),
             [
                 'name' => $name,
             ]
@@ -58,7 +63,12 @@ it('returns transformed and formatted data of an embed', function () {
 
     $this
         ->postJson(
-            route('code16.sharp.api.embed.instance.form.show', ['root', ApiEmbedsFormControllerTestEmbed::$key, 'person', 1]),
+            route('code16.sharp.api.embed.instance.form.show', [
+                'filterKey' => 'root',
+                'embedKey' => ApiEmbedsFormControllerTestEmbed::$key,
+                'entityKey' => 'person',
+                'instanceId' => 1,
+            ]),
             [
                 'name' => $name,
                 'bio' => $bio,
@@ -87,7 +97,12 @@ it('does not show an embed without entity permission', function () {
 
     $this
         ->postJson(
-            route('code16.sharp.api.embed.instance.form.show', ['root', ApiEmbedsFormControllerTestEmbed::$key, 'person', 1]),
+            route('code16.sharp.api.embed.instance.form.show', [
+                'filterKey' => 'root',
+                'embedKey' => ApiEmbedsFormControllerTestEmbed::$key,
+                'entityKey' => 'person',
+                'instanceId' => 1,
+            ]),
         )
         ->assertStatus(403);
 
@@ -109,7 +124,12 @@ it('does not show an embed without view permission', function () {
 
     $this
         ->postJson(
-            route('code16.sharp.api.embed.instance.form.show', ['root', ApiEmbedsFormControllerTestEmbed::$key, 'person', 1]),
+            route('code16.sharp.api.embed.instance.form.show', [
+                'filterKey' => 'root',
+                'embedKey' => ApiEmbedsFormControllerTestEmbed::$key,
+                'entityKey' => 'person',
+                'instanceId' => 1,
+            ]),
         )
         ->assertForbidden();
 
