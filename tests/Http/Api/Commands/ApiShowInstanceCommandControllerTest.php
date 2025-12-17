@@ -68,7 +68,12 @@ it('allows to call an info instance command from a single show', function () {
         }
     });
 
-    $this->postJson(route('code16.sharp.api.show.command.instance', ['root', 'single-person', 'cmd']))
+    $this
+        ->postJson(route('code16.sharp.api.show.command.instance', [
+            'filterKey' => 'root',
+            'entityKey' => 'single-person',
+            'commandKey' => 'cmd',
+        ]))
         ->assertOk()
         ->assertJson([
             'action' => 'info',

@@ -108,7 +108,11 @@ it('does not show an embed without entity permission', function () {
 
     $this
         ->postJson(
-            route('code16.sharp.api.embed.form.show', ['root', ApiEmbedsFormControllerTestEmbed::$key, 'person']),
+            route('code16.sharp.api.embed.form.show', [
+                'filterKey' => 'root',
+                'embedKey' => ApiEmbedsFormControllerTestEmbed::$key,
+                'entityKey' => 'person',
+            ]),
         )
         ->assertStatus(403);
 });
@@ -135,13 +139,22 @@ it('does not show an embed without view permission', function () {
 
     $this
         ->postJson(
-            route('code16.sharp.api.embed.instance.form.show', ['root', ApiEmbedsFormControllerTestEmbed::$key, 'person', 2]),
+            route('code16.sharp.api.embed.instance.form.show', [
+                'filterKey' => 'root',
+                'embedKey' => ApiEmbedsFormControllerTestEmbed::$key,
+                'entityKey' => 'person',
+                'instanceId' => 2,
+            ]),
         )
         ->assertOk();
 
     $this
         ->postJson(
-            route('code16.sharp.api.embed.form.show', ['root', ApiEmbedsFormControllerTestEmbed::$key, 'person']),
+            route('code16.sharp.api.embed.form.show', [
+                'filterKey' => 'root',
+                'embedKey' => ApiEmbedsFormControllerTestEmbed::$key,
+                'entityKey' => 'person',
+            ]),
         )
         ->assertOk();
 });
@@ -153,10 +166,10 @@ it('updates an embed and get transformed data', function () {
     $this
         ->postJson(
             route('code16.sharp.api.embed.instance.form.update', [
-                'root',
-                ApiEmbedsFormControllerTestEmbed::$key,
-                'person',
-                1,
+                'filterKey' => 'root',
+                'embedKey' => ApiEmbedsFormControllerTestEmbed::$key,
+                'entityKey' => 'person',
+                'instanceId' => 1,
             ]),
             [
                 'name' => $name,
@@ -175,10 +188,10 @@ it('validates data when updating an embed', function () {
     $this
         ->postJson(
             route('code16.sharp.api.embed.instance.form.update', [
-                'root',
-                ApiEmbedsFormControllerTestEmbed::$key,
-                'person',
-                1,
+                'filterKey' => 'root',
+                'embedKey' => ApiEmbedsFormControllerTestEmbed::$key,
+                'entityKey' => 'person',
+                'instanceId' => 1,
             ]),
             [
                 'name' => null,
