@@ -11,7 +11,7 @@ class ApiEntityListController extends ApiController
     /**
      * Reorder instances.
      */
-    public function update(string $entityKey)
+    public function update(string $filterKey, string $entityKey)
     {
         $this->authorizationManager->check('entity', $entityKey);
 
@@ -28,7 +28,7 @@ class ApiEntityListController extends ApiController
     /**
      * Delete an instance.
      */
-    public function delete(string $entityKey, string $instanceId)
+    public function delete(string $filterKey, string $entityKey, string $instanceId)
     {
         $this->authorizationManager->check('delete', $entityKey, $instanceId);
 

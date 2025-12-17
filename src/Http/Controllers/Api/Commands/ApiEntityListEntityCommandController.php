@@ -18,7 +18,7 @@ class ApiEntityListEntityCommandController extends ApiController
         parent::__construct();
     }
 
-    public function show(string $entityKey, string $commandKey)
+    public function show(string $filterKey, string $entityKey, string $commandKey)
     {
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();
@@ -33,7 +33,7 @@ class ApiEntityListEntityCommandController extends ApiController
         );
     }
 
-    public function update(string $entityKey, string $commandKey)
+    public function update(string $filterKey, string $entityKey, string $commandKey)
     {
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();

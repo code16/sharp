@@ -10,7 +10,7 @@ class ApiEntityListEntityStateController extends ApiController
     use HandlesCommandResult;
     use HandlesInstanceCommand;
 
-    public function update(string $entityKey, mixed $instanceId)
+    public function update(string $filterKey, string $entityKey, mixed $instanceId)
     {
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();

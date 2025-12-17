@@ -8,14 +8,14 @@ use Code16\Sharp\Utils\Entities\ValueObjects\EntityKey;
 
 class ApiFilterAutocompleteController extends ApiController
 {
-    public function index(EntityKey $entityKey, string $filterKey): array
+    public function index(string $filterKey, EntityKey $entityKey, string $filterHandlerKey): array
     {
         $entity = $this->entityManager->entityFor($entityKey);
 
         if ($entity instanceof SharpDashboardEntity) {
-            $filter = $entity->getViewOrFail()->filterContainer()->findFilterHandler($filterKey);
+            $filter = $entity->getViewOrFail()->filterContainer()->findFilterHandler($filterHandlerKey);
         } else {
-            $filter = $entity->getListOrFail()->filterContainer()->findFilterHandler($filterKey);
+            $filter = $entity->getListOrFail()->filterContainer()->findFilterHandler($filterHandlerKey);
         }
 
         if (! $filter instanceof AutocompleteRemoteFilter) {

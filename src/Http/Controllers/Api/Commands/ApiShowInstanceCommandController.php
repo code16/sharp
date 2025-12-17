@@ -19,7 +19,7 @@ class ApiShowInstanceCommandController extends ApiController
         parent::__construct();
     }
 
-    public function show(string $entityKey, string $commandKey, mixed $instanceId = null)
+    public function show(string $filterKey, string $entityKey, string $commandKey, mixed $instanceId = null)
     {
         $showPage = $this->getShowPage($entityKey, $instanceId);
         $commandHandler = $this->getInstanceCommandHandler($showPage, $commandKey, $instanceId);
@@ -31,7 +31,7 @@ class ApiShowInstanceCommandController extends ApiController
         );
     }
 
-    public function update(string $entityKey, string $commandKey, mixed $instanceId = null)
+    public function update(string $filterKey, string $entityKey, string $commandKey, mixed $instanceId = null)
     {
         $showPage = $this->getShowPage($entityKey, $instanceId);
         $commandHandler = $this->getInstanceCommandHandler($showPage, $commandKey, $instanceId);

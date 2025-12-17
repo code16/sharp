@@ -19,7 +19,7 @@ class ApiDashboardCommandController extends ApiController
         parent::__construct();
     }
 
-    public function show(string $entityKey, string $commandKey)
+    public function show(string $filterKey, string $entityKey, string $commandKey)
     {
         $dashboard = $this->getDashboardInstance($entityKey);
         $dashboard->buildDashboardConfig();
@@ -35,7 +35,7 @@ class ApiDashboardCommandController extends ApiController
         );
     }
 
-    public function update(string $entityKey, string $commandKey)
+    public function update(string $filterKey, string $entityKey, string $commandKey)
     {
         $dashboard = $this->getDashboardInstance($entityKey);
         $dashboard->buildDashboardConfig();
