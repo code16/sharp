@@ -4,6 +4,7 @@ import { computed, reactive, toRefs } from "vue";
 import { XYComponentConfigInterface } from "@unovis/ts/core/xy-component/config";
 import { AxisConfigInterface, ColorAccessor, CrosshairConfigInterface, Scale } from "@unovis/ts";
 import { timeTickInterval } from 'd3-time';
+import { ChartConfig, ChartTooltip, ChartTooltipContent, componentToString } from "@/components/ui/chart";
 export type Datum = number[];
 
 export function useXYChart(props: DashboardWidgetProps<GraphWidgetData>) {
@@ -35,21 +36,46 @@ export function useXYChart(props: DashboardWidgetProps<GraphWidgetData>) {
     });
     const color = computed((): ColorAccessor<Datum | Datum[]> => props.value?.datasets.map((dataset, i) => dataset.color));
 
-    const tooltipTemplate = (d: Datum, x: number) => {
-        const formattedLabel = props.widget.dateLabels
-            ? new Intl.DateTimeFormat(undefined, { day: '2-digit', month: 'short' }).format(timeScale ? x : new Date(props.value.labels[Math.round(x as number)]))
-            : props.value.labels[Math.round(x as number)];
-        return `<div class="mb-1 text-sm">${formattedLabel}</div>
-        ${
-            props.value?.datasets.map((dataset, i) =>
-                `<div class="flex items-center gap-2 text-sm">
-                    <span class="size-2 rounded-full bg-(--color)" style="--color: ${dataset.color}"></span>
-                    ${dataset.label ? `<span class="text-sm">${dataset.label}:</span>` : ''}
-                    ${d[i]}
-                </div>`
-            ).join('')
-        }`;
+    // const tooltipTemplate = (d: Datum, x: number) => {
+    //     const formattedLabel = props.widget.dateLabels
+    //         ? new Intl.DateTimeFormat(undefined, { day: '2-digit', month: 'short' }).format(timeScale ? x : new Date(props.value.labels[Math.round(x as number)]))
+    //         : props.value.labels[Math.round(x as number)];
+    //     return `<div class="mb-1 text-sm">${formattedLabel}</div>
+    //     ${
+    //         props.value?.datasets.map((dataset, i) =>
+    //             `<div class="flex items-center gap-2 text-sm">
+    //                 <span class="size-2 rounded-full bg-(--color)" style="--color: ${dataset.color}"></span>
+    //                 ${dataset.label ? `<span class="text-sm">${dataset.label}:</span>` : ''}
+    //                 ${d[i]}
+    //             </div>`
+    //         ).join('')
+    //     }`;
+    // }
+
+    const chartConfig = computed((): ChartConfig =>
+        Object.fromEntries(props.value?.datasets.map((dataset, i) => [i, ({ label: dataset.label, color: dataset.color })]))
+    );
+
+    const tooltipTemplate = componentToString(chartConfig, ChartTooltipContent);
+
+    const tickFormat: AxisConfigInterface<number[]>['tickFormat'] = (tick, i) => {
+        if(props.widget.dateLabels) {
+            return new Intl.DateTimeFormat(undefined, { day: '2-digit', month: 'short' })
+                .format(timeScale ? tick : new Date(props.value.labels[tick as number]));
+        }
+        return props.value?.labels?.[tick as number];
     }
 
-    return { data, x, y, color, tooltipTemplate, timeScale, xScale, xTickValues, };
+    return {
+        data,
+        x,
+        y,
+        color,
+        tooltipTemplate,
+        timeScale,
+        xScale,
+        xTickValues,
+        chartConfig,
+        tickFormat,
+    };
 }

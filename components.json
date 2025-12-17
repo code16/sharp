@@ -1,14 +1,13 @@
 {
   "$schema": "https://shadcn-vue.com/schema.json",
-  "style": "default",
+  "style": "new-york",
   "typescript": true,
   "tailwind": {
-    "config": "tailwind.config.js",
+    "config": "",
     "css": "resources/css/shadcn.css",
     "baseColor": "slate",
     "cssVariables": true
   },
-  "framework": "laravel",
   "aliases": {
     "components": "@/components",
     "utils": "@/utils/cn"

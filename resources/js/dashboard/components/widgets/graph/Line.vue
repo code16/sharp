@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { GraphWidgetData } from "@/types";
     import { DashboardWidgetProps } from "@/dashboard/types";
-    import { VisXYContainer, VisAxis, VisLine, VisTooltip, VisBulletLegend, VisCrosshair, VisScatter } from "@unovis/vue";
+    import { VisXYContainer, VisAxis, VisLine, VisTooltip, VisCrosshair, VisScatter } from "@unovis/vue";
     import {
         AxisConfigInterface, BulletLegendConfigInterface,
         CrosshairConfigInterface,
@@ -10,25 +10,18 @@
         Scale, TextAlign, FitMode, Scatter,
     } from "@unovis/ts";
     import { Datum, useXYChart } from "@/dashboard/components/widgets/graph/useXYChart";
+    import { ChartContainer, ChartLegendContent, ChartTooltip, ChartCrosshair } from "@/components/ui/chart";
 
     const props = defineProps<DashboardWidgetProps<GraphWidgetData>>();
 
-    const { data, x, y, color, tooltipTemplate, timeScale, xScale, xTickValues } = useXYChart(props);
+    const { data, x, y, color, tooltipTemplate, xScale, xTickValues, tickFormat, chartConfig } = useXYChart(props);
 
-    const tickFormat: AxisConfigInterface<number[]>['tickFormat'] = (tick, i) => {
-        if(props.widget.dateLabels) {
-            return new Intl.DateTimeFormat(undefined, { day: '2-digit', month: 'short' })
-                .format(timeScale ? tick : new Date(props.value.labels[tick]));
-            // return Scale.scaleTime().tickFormat()(tick);// new Intl.DateTimeFormat().format(new Date(props.value.labels[tick]));
-        }
-        return props.value?.labels?.[tick as number];
-    }
     // const rotate = computed(() => props.value?.labels?.length >= 10);
 </script>
 
 <template>
-    <div class="mt-2">
-        <VisXYContainer v-bind="{
+    <ChartContainer class="flex flex-col" :config="chartConfig">
+        <VisXYContainer class="flex-1 min-h-0" v-bind="{
             xScale,
             components: props.value?.datasets.map(dataset => new Scatter({
                 size: 5, x: x, y: y, color: color
@@ -62,14 +55,14 @@
                 } as LineConfigInterface<Datum>"
             />
 
-            <VisCrosshair
+            <ChartCrosshair
                 v-bind="{
                     color: color,
                     template: tooltipTemplate,
                     hideWhenFarFromPointer: false,
                 } as CrosshairConfigInterface<Datum>"
             />
-            <VisTooltip />
+            <ChartTooltip />
 
             <template v-if="props.value?.labels.length < 40">
                 <template v-for="dataset in props.value?.datasets">
@@ -81,13 +74,7 @@
 
         </VisXYContainer>
         <template v-if="props.widget.showLegend && !props.widget.minimal">
-            <div class="mt-4 flex justify-center">
-                <VisBulletLegend
-                    v-bind="{
-                        items: props.value.datasets?.map(dataset => ({ name: dataset.label, color: dataset.color })),
-                    } as BulletLegendConfigInterface"
-                />
-            </div>
+            <ChartLegendContent />
         </template>
-    </div>
+    </ChartContainer>
 </template>
