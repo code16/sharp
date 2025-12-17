@@ -12,7 +12,7 @@ use Spatie\TypeScriptTransformer\Attributes\Optional;
     sort?: string,
     dir?: "asc" | "desc",
 } & {
-    [globalFilter: string]: string,
+    [filterKey: string]: string,
 }')]
 /**
  * @internal
