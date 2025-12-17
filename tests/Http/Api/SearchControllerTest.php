@@ -27,7 +27,7 @@ it('returns result on a valid search', function () {
     );
 
     $this
-        ->getJson('/sharp/api/search?q=some-search')
+        ->getJson('/sharp/api/root/search?q=some-search')
         ->assertJson([
             [
                 'label' => 'People',
@@ -59,7 +59,7 @@ it('allows to configure a custom empty state label', function () {
         }
     );
 
-    $this->getJson('/sharp/api/search?q=some-search')
+    $this->getJson('/sharp/api/root/search?q=some-search')
         ->assertJson(
             [
                 [
@@ -83,7 +83,7 @@ it('allows to configure hide when empty', function () {
         }
     );
 
-    $this->getJson('/sharp/api/search?q=some-search')
+    $this->getJson('/sharp/api/root/search?q=some-search')
         ->assertJson(
             [
                 [
@@ -112,7 +112,7 @@ it('raises validation errors', function () {
         }
     );
 
-    $this->getJson('/sharp/api/search?q=bb')
+    $this->getJson('/sharp/api/root/search?q=bb')
         ->assertJson(
             [
                 [
@@ -145,7 +145,7 @@ it('handles multiple result sets', function () {
         }
     );
 
-    $this->getJson('/sharp/api/search?q=some-search')
+    $this->getJson('/sharp/api/root/search?q=some-search')
         ->assertJson(
             [
                 [
@@ -194,7 +194,7 @@ it('allows multiple search terms', function () {
         }
     );
 
-    $this->getJson('/sharp/api/search?q=john+%20wayne%20')
+    $this->getJson('/sharp/api/root/search?q=john+%20wayne%20')
         ->assertJsonFragment([
             'label' => 'John Wayne',
         ]);
@@ -204,7 +204,7 @@ it('returns a 404 if not enabled', function () {
     sharp()->config()->disableGlobalSearch();
 
     $this
-        ->getJson('/sharp/api/search?q=some-search')
+        ->getJson('/sharp/api/root/search?q=some-search')
         ->assertNotFound();
 });
 
@@ -225,12 +225,12 @@ it('returns a 403 if not authorized', function () {
     );
 
     $this
-        ->getJson('/sharp/api/search?q=some-search')
+        ->getJson('/sharp/api/root/search?q=some-search')
         ->assertForbidden();
 
     $this
         ->actingAs(User::make(['email' => 'authorized-user@test.fr']))
-        ->getJson('/sharp/api/search?q=some-search')
+        ->getJson('/sharp/api/root/search?q=some-search')
         ->assertOk();
 });
 

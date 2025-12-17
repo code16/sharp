@@ -35,7 +35,7 @@ it('updates the state of an instance from a show and return a "refresh" action b
 
     $this
         ->postJson(
-            route('code16.sharp.api.show.state', ['person', 1]),
+            route('code16.sharp.api.show.state', ['root', 'person', 1]),
             [
                 'attribute' => 'state',
                 'value' => 'ok',
@@ -73,7 +73,7 @@ it('allows to update the state of an instance from a single show', function () {
 
     $this
         ->postJson(
-            route('code16.sharp.api.show.state', ['single-person']),
+            route('code16.sharp.api.show.state', ['root', 'single-person']),
             [
                 'attribute' => 'state',
                 'value' => 'ok',

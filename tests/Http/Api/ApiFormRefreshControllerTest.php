@@ -46,6 +46,7 @@ it('gets updated HTML fields with live refresh of a form', function () {
 
     $this->post(
         route('code16.sharp.api.form.refresh.update', [
+            'filterKey' => 'root',
             'entityKey' => 'person',
             'instance_id' => 1,
         ]),
@@ -96,6 +97,7 @@ it('gets updated HTML fields with live refresh of an entity list entity command 
 
     $this->post(
         route('code16.sharp.api.form.refresh.update', [
+            'filterKey' => 'root',
             'entityKey' => 'person',
             'entity_list_command_key' => 'cmd',
         ]),
@@ -146,6 +148,7 @@ it('gets updated HTML fields with live refresh of an entity list instance comman
 
     $this->post(
         route('code16.sharp.api.form.refresh.update', [
+            'filterKey' => 'root',
             'entityKey' => 'person',
             'entity_list_command_key' => 'cmd',
             'instance_id' => 1,
@@ -197,6 +200,7 @@ it('gets updated HTML fields with live refresh of a show instance command form',
 
     $this->post(
         route('code16.sharp.api.form.refresh.update', [
+            'filterKey' => 'root',
             'entityKey' => 'person',
             'show_command_key' => 'cmd',
             'instance_id' => 1,
@@ -226,6 +230,7 @@ it('gets updated HTML fields with live refresh of an embed form', function () {
     $this
         ->postJson(
             route('code16.sharp.api.form.refresh.update', [
+                'filterKey' => 'root',
                 'entityKey' => 'person',
                 'embed_key' => (new ApiFormRefreshControllerEmbed())->key(),
             ]),

@@ -37,7 +37,7 @@ it('allows to call an info instance command', function () {
         }
     });
 
-    $this->postJson(route('code16.sharp.api.list.command.instance', ['person', 'instance_info', 1]))
+    $this->postJson(route('code16.sharp.api.list.command.instance', ['root', 'person', 'instance_info', 1]))
         ->assertOk()
         ->assertJson([
             'action' => 'info',
@@ -68,7 +68,7 @@ it('allows to call a reload instance command', function () {
         }
     });
 
-    $this->postJson(route('code16.sharp.api.list.command.instance', ['person', 'instance_reload', 1]))
+    $this->postJson(route('code16.sharp.api.list.command.instance', ['root', 'person', 'instance_reload', 1]))
         ->assertOk()
         ->assertJson([
             'action' => 'reload',
@@ -97,7 +97,7 @@ it('allows to call an info + reload instance command', function () {
         }
     });
 
-    $this->postJson(route('code16.sharp.api.list.command.instance', ['person', 'instance_info', 1]))
+    $this->postJson(route('code16.sharp.api.list.command.instance', ['root', 'person', 'instance_info', 1]))
         ->assertOk()
         ->assertJson([
             'action' => 'info',
@@ -128,7 +128,7 @@ it('allows to call a view instance command', function () {
         }
     });
 
-    $this->postJson(route('code16.sharp.api.list.command.instance', ['person', 'instance_view', 1]))
+    $this->postJson(route('code16.sharp.api.list.command.instance', ['root', 'person', 'instance_view', 1]))
         ->assertOk()
         ->assertJson([
             'action' => 'view',
@@ -157,7 +157,7 @@ it('allows to call a html instance command', function () {
         }
     });
 
-    $this->postJson(route('code16.sharp.api.list.command.instance', ['person', 'instance_html', 1]))
+    $this->postJson(route('code16.sharp.api.list.command.instance', ['root', 'person', 'instance_html', 1]))
         ->assertOk()
         ->assertJson([
             'action' => 'view',
@@ -197,7 +197,7 @@ it('allows to call a refresh instance command', function () {
         }
     });
 
-    $this->postJson(route('code16.sharp.api.list.command.instance', ['person', 'instance_refresh', 1]))
+    $this->postJson(route('code16.sharp.api.list.command.instance', ['root', 'person', 'instance_refresh', 1]))
         ->assertOk()
         ->assertJson([
             'action' => 'refresh',
@@ -239,7 +239,7 @@ it('allows to call a form instance command and it handles 422', function () {
 
     $this
         ->postJson(
-            route('code16.sharp.api.list.command.instance', ['person', 'instance_form', 1]),
+            route('code16.sharp.api.list.command.instance', ['root', 'person', 'instance_form', 1]),
             ['data' => ['name' => 'Pierre']]
         )
         ->assertOk()
@@ -249,7 +249,7 @@ it('allows to call a form instance command and it handles 422', function () {
 
     $this
         ->postJson(
-            route('code16.sharp.api.list.command.instance', ['person', 'instance_form', 1]),
+            route('code16.sharp.api.list.command.instance', ['root', 'person', 'instance_form', 1]),
             ['data' => ['name' => '']]
         )
         ->assertJsonValidationErrors(['name']);
@@ -283,7 +283,7 @@ it('allows to call a download instance command', function () {
     });
 
     $response = $this
-        ->postJson(route('code16.sharp.api.list.command.instance', ['person', 'instance_download', 1]))
+        ->postJson(route('code16.sharp.api.list.command.instance', ['root', 'person', 'instance_download', 1]))
         ->assertOk();
 
     expect($response->headers->get('content-disposition'))
@@ -313,7 +313,7 @@ it('allows to call a streamDownload instance command', function () {
     });
 
     $response = $this
-        ->postJson(route('code16.sharp.api.list.command.instance', ['person', 'instance_streamDownload', 1]))
+        ->postJson(route('code16.sharp.api.list.command.instance', ['root', 'person', 'instance_streamDownload', 1]))
         ->assertOk()
         ->assertHeader('content-type', 'text/html; charset=utf-8');
 
@@ -344,7 +344,7 @@ it('returns an applicative exception as a 417 as always', function () {
     });
 
     $this
-        ->postJson(route('code16.sharp.api.list.command.instance', ['person', 'instance_417', 1]))
+        ->postJson(route('code16.sharp.api.list.command.instance', ['root', 'person', 'instance_417', 1]))
         ->assertStatus(417)
         ->assertJson([
             'message' => 'error',
@@ -379,11 +379,11 @@ it('disallows to call an unauthorized instance command', function () {
     });
 
     $this
-        ->postJson(route('code16.sharp.api.list.command.instance', ['person', 'instance_unauthorized', 1]))
+        ->postJson(route('code16.sharp.api.list.command.instance', ['root', 'person', 'instance_unauthorized', 1]))
         ->assertForbidden();
 
     $this
-        ->postJson(route('code16.sharp.api.list.command.instance', ['person', 'instance_unauthorized', 2]))
+        ->postJson(route('code16.sharp.api.list.command.instance', ['root', 'person', 'instance_unauthorized', 2]))
         ->assertOk();
 });
 
@@ -415,7 +415,7 @@ it('returns the form of the instance command', function () {
     });
 
     $this
-        ->getJson(route('code16.sharp.api.list.command.instance.form', ['person', 'instance_form', 1]))
+        ->getJson(route('code16.sharp.api.list.command.instance.form', ['root', 'person', 'instance_form', 1]))
         ->assertOk()
         ->assertJsonFragment([
             'fields' => [
@@ -482,7 +482,7 @@ it('allows to configure a page alert on an instance command', function () {
     });
 
     $this
-        ->getJson(route('code16.sharp.api.list.command.instance.form', ['person', 'cmd', 1]))
+        ->getJson(route('code16.sharp.api.list.command.instance.form', ['root', 'person', 'cmd', 1]))
         ->assertOk()
         ->assertJsonFragment([
             'pageAlert' => [
@@ -527,7 +527,7 @@ it('handles localized form of the instance command', function () {
     });
 
     $this
-        ->getJson(route('code16.sharp.api.list.command.instance.form', ['person', 'instance_form_localized', 1]))
+        ->getJson(route('code16.sharp.api.list.command.instance.form', ['root', 'person', 'instance_form_localized', 1]))
         ->assertOk()
         ->assertJsonFragment([
             'fields' => [
@@ -583,7 +583,7 @@ it('allows to initialize form data in an instance command', function () {
     });
 
     $this
-        ->getJson(route('code16.sharp.api.list.command.instance.form', ['person', 'instance_with_init_data', 1]))
+        ->getJson(route('code16.sharp.api.list.command.instance.form', ['root', 'person', 'instance_with_init_data', 1]))
         ->assertOk()
         ->assertJsonFragment([
             'data' => [
