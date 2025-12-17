@@ -1,8 +1,13 @@
 <?php
 
+use Code16\Sharp\EntityList\Commands\EntityCommand;
+use Code16\Sharp\Form\Fields\SharpFormTextField;
+use Code16\Sharp\Http\Context\SharpBreadcrumb;
 use Code16\Sharp\Tests\Fixtures\Entities\DashboardEntity;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Entities\SinglePersonEntity;
+use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 beforeEach(function () {
     sharp()->config()->declareEntity(PersonEntity::class);
@@ -75,4 +80,42 @@ it('sets the current multiple filterKeys according to the URL', function () {
 
     expect(sharp()->context()->globalFilterValue('test1'))->toEqual('one');
     expect(sharp()->context()->globalFilterValue('test2'))->toEqual('two');
+});
+
+it('sets the current filterKey according to the URL in an API case', function () {
+    fakeGlobalFilter();
+
+    fakeListFor('person', new class() extends PersonList
+    {
+        protected function getEntityCommands(): ?array
+        {
+            return [
+                'cmd' => new class() extends EntityCommand
+                {
+                    public function label(): ?string
+                    {
+                        return 'entity';
+                    }
+
+                    public function buildFormFields(FieldsContainer $formFields): void
+                    {
+                        $formFields->addField(SharpFormTextField::make('name'));
+                    }
+
+                    public function execute(array $data = []): array {}
+                },
+            ];
+        }
+    });
+
+    $this
+        ->getJson(
+            route('code16.sharp.api.list.command.entity.form', ['person', 'cmd']),
+            headers: [
+                SharpBreadcrumb::CURRENT_PAGE_URL_HEADER => url('/sharp/one/s-list/person'),
+            ]
+        )
+        ->assertOk();
+
+    expect(sharp()->context()->globalFilterValue('test'))->toEqual('one');
 });
