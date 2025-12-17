@@ -18,34 +18,6 @@ class EntityListFieldsContainer
         return $this;
     }
 
-    //    final public function addStateField(?Closure $callback = null): self
-    //    {
-    //        $field = tap(
-    //            new EntityListStateField(),
-    //            fn ($field) => $callback ? $callback($field) : null
-    //        );
-    //
-    //        $this->fields[] = $field;
-    //
-    //        return $this;
-    //    }
-    //
-    //    final public function addFilterField(string $filterKeyOrClassName, ?Closure $callback = null): self
-    //    {
-    //        $filterKey = class_exists($filterKeyOrClassName)
-    //            ? tap(app($filterKeyOrClassName), fn ($filter) => $filter->buildFilterConfig())->getKey()
-    //            : $filterKeyOrClassName;
-    //
-    //        $field = tap(
-    //            new EntityListFilterField($filterKey),
-    //            fn ($field) => $callback ? $callback($field) : null
-    //        );
-    //
-    //        $this->fields[] = $field;
-    //
-    //        return $this;
-    //    }
-
     public function setWidthOfField(string $fieldKey, ?int $width, int|bool|null $widthOnSmallScreens): self
     {
         if ($width !== null && ($field = collect($this->fields)->firstWhere('key', $fieldKey))) {

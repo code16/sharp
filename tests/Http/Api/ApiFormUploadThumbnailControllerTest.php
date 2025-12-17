@@ -13,7 +13,7 @@ it('returns thumbnail', function () {
         ->storeAs('data/Posts/1', 'image.jpg', ['disk' => 'local']);
 
     $this->postJson(route('code16.sharp.api.form.upload.thumbnail.show', [
-        'filterKey' => 'root',
+        'globalFilter' => 'root',
         'entityKey' => 'person',
         'instanceId' => '1',
         'path' => 'data/Posts/1/image.jpg',

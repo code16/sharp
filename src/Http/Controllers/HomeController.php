@@ -8,7 +8,7 @@ use Inertia\Inertia;
 
 class HomeController extends SharpProtectedController
 {
-    public function index(string $filterKey)
+    public function index(string $globalFilter)
     {
         if ($firstEntityUrl = $this->getFirstConfiguredEntityUrl()) {
             return redirect()->to($firstEntityUrl);

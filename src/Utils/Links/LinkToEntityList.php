@@ -55,7 +55,7 @@ class LinkToEntityList extends SharpLinkTo
         return route('code16.sharp.list',
             array_merge(
                 [
-                    'filterKey' => sharp()->context()->globalFilterUrlSegmentValue(),
+                    'globalFilter' => $this->globalFilter ?: sharp()->context()->globalFilterUrlSegmentValue(),
                     'entityKey' => $this->entityKey,
                 ],
                 $this->generateQuerystring(),

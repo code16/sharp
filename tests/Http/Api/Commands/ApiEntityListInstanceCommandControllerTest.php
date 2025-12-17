@@ -38,7 +38,7 @@ it('allows to call an info instance command', function () {
     });
 
     $this->postJson(route('code16.sharp.api.list.command.instance', [
-        'filterKey' => 'root',
+        'globalFilter' => 'root',
         'entityKey' => 'person',
         'commandKey' => 'instance_info',
         'instanceId' => 1,
@@ -74,7 +74,7 @@ it('allows to call a reload instance command', function () {
     });
 
     $this->postJson(route('code16.sharp.api.list.command.instance', [
-        'filterKey' => 'root',
+        'globalFilter' => 'root',
         'entityKey' => 'person',
         'commandKey' => 'instance_reload',
         'instanceId' => 1,
@@ -108,7 +108,7 @@ it('allows to call an info + reload instance command', function () {
     });
 
     $this->postJson(route('code16.sharp.api.list.command.instance', [
-        'filterKey' => 'root',
+        'globalFilter' => 'root',
         'entityKey' => 'person',
         'commandKey' => 'instance_info',
         'instanceId' => 1,
@@ -144,7 +144,7 @@ it('allows to call a view instance command', function () {
     });
 
     $this->postJson(route('code16.sharp.api.list.command.instance', [
-        'filterKey' => 'root',
+        'globalFilter' => 'root',
         'entityKey' => 'person',
         'commandKey' => 'instance_view',
         'instanceId' => 1,
@@ -178,7 +178,7 @@ it('allows to call a html instance command', function () {
     });
 
     $this->postJson(route('code16.sharp.api.list.command.instance', [
-        'filterKey' => 'root',
+        'globalFilter' => 'root',
         'entityKey' => 'person',
         'commandKey' => 'instance_html',
         'instanceId' => 1,
@@ -223,7 +223,7 @@ it('allows to call a refresh instance command', function () {
     });
 
     $this->postJson(route('code16.sharp.api.list.command.instance', [
-        'filterKey' => 'root',
+        'globalFilter' => 'root',
         'entityKey' => 'person',
         'commandKey' => 'instance_refresh',
         'instanceId' => 1,
@@ -270,7 +270,7 @@ it('allows to call a form instance command and it handles 422', function () {
     $this
         ->postJson(
             route('code16.sharp.api.list.command.instance', [
-                'filterKey' => 'root',
+                'globalFilter' => 'root',
                 'entityKey' => 'person',
                 'commandKey' => 'instance_form',
                 'instanceId' => 1,
@@ -285,7 +285,7 @@ it('allows to call a form instance command and it handles 422', function () {
     $this
         ->postJson(
             route('code16.sharp.api.list.command.instance', [
-                'filterKey' => 'root',
+                'globalFilter' => 'root',
                 'entityKey' => 'person',
                 'commandKey' => 'instance_form',
                 'instanceId' => 1,
@@ -324,7 +324,7 @@ it('allows to call a download instance command', function () {
 
     $response = $this
         ->postJson(route('code16.sharp.api.list.command.instance', [
-            'filterKey' => 'root',
+            'globalFilter' => 'root',
             'entityKey' => 'person',
             'commandKey' => 'instance_download',
             'instanceId' => 1,
@@ -359,7 +359,7 @@ it('allows to call a streamDownload instance command', function () {
 
     $response = $this
         ->postJson(route('code16.sharp.api.list.command.instance', [
-            'filterKey' => 'root',
+            'globalFilter' => 'root',
             'entityKey' => 'person',
             'commandKey' => 'instance_streamDownload',
             'instanceId' => 1,
@@ -395,7 +395,7 @@ it('returns an applicative exception as a 417 as always', function () {
 
     $this
         ->postJson(route('code16.sharp.api.list.command.instance', [
-            'filterKey' => 'root',
+            'globalFilter' => 'root',
             'entityKey' => 'person',
             'commandKey' => 'instance_417',
             'instanceId' => 1,
@@ -435,7 +435,7 @@ it('disallows to call an unauthorized instance command', function () {
 
     $this
         ->postJson(route('code16.sharp.api.list.command.instance', [
-            'filterKey' => 'root',
+            'globalFilter' => 'root',
             'entityKey' => 'person',
             'commandKey' => 'instance_unauthorized',
             'instanceId' => 1,
@@ -444,7 +444,7 @@ it('disallows to call an unauthorized instance command', function () {
 
     $this
         ->postJson(route('code16.sharp.api.list.command.instance', [
-            'filterKey' => 'root',
+            'globalFilter' => 'root',
             'entityKey' => 'person',
             'commandKey' => 'instance_unauthorized',
             'instanceId' => 2,
@@ -481,7 +481,7 @@ it('returns the form of the instance command', function () {
 
     $this
         ->getJson(route('code16.sharp.api.list.command.instance.form', [
-            'filterKey' => 'root',
+            'globalFilter' => 'root',
             'entityKey' => 'person',
             'commandKey' => 'instance_form',
             'instanceId' => 1,
@@ -553,7 +553,7 @@ it('allows to configure a page alert on an instance command', function () {
 
     $this
         ->getJson(route('code16.sharp.api.list.command.instance.form', [
-            'filterKey' => 'root',
+            'globalFilter' => 'root',
             'entityKey' => 'person',
             'commandKey' => 'cmd',
             'instanceId' => 1,
@@ -603,7 +603,7 @@ it('handles localized form of the instance command', function () {
 
     $this
         ->getJson(route('code16.sharp.api.list.command.instance.form', [
-            'filterKey' => 'root',
+            'globalFilter' => 'root',
             'entityKey' => 'person',
             'commandKey' => 'instance_form_localized',
             'instanceId' => 1,
@@ -664,7 +664,7 @@ it('allows to initialize form data in an instance command', function () {
 
     $this
         ->getJson(route('code16.sharp.api.list.command.instance.form', [
-            'filterKey' => 'root',
+            'globalFilter' => 'root',
             'entityKey' => 'person',
             'commandKey' => 'instance_with_init_data',
             'instanceId' => 1,

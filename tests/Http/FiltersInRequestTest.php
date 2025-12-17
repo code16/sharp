@@ -227,7 +227,7 @@ it('saves retained filters in the session when set', function () {
         ->withoutExceptionHandling()
         ->post(
             route('code16.sharp.list.filters.store', [
-                'filterKey' => 'root',
+                'globalFilter' => 'root',
                 'entityKey' => 'person',
             ]), [
                 'filterValues' => ['job' => 'physicist'],
@@ -323,7 +323,7 @@ it('handles retained multiple filter', function () {
     $this
         ->post(
             route('code16.sharp.list.filters.store', [
-                'filterKey' => 'root',
+                'globalFilter' => 'root',
                 'entityKey' => 'person',
             ]), [
                 'filterValues' => ['job' => ['physicist', 'physician']],
@@ -484,7 +484,7 @@ it('fakes request segments to fix the breadcrumb in case it is built', function 
     $this
         ->post(
             route('code16.sharp.list.filters.store', [
-                'filterKey' => 'root',
+                'globalFilter' => 'root',
                 'entityKey' => 'person',
             ]), [
                 'filterValues' => [

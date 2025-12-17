@@ -13,7 +13,7 @@ beforeEach(function () {
     login();
 });
 
-it('redirects to route with default filterKey when missing', function () {
+it('redirects to route with default globalFilter when missing', function () {
     sharp()->config()
         ->declareEntity(DashboardEntity::class)
         ->declareEntity(SinglePersonEntity::class);
@@ -37,14 +37,14 @@ it('redirects to route with default filterKey when missing', function () {
         ->assertRedirect('/sharp/root/s-show/single-person');
 });
 
-it('redirects to route with correct filterKey when missing and global filters are defined', function () {
+it('redirects to route with correct globalFilter when missing and global filters are defined', function () {
     fakeGlobalFilter();
 
     $this->get('/sharp/s-list/person')
         ->assertRedirect('/sharp/two/s-list/person');
 });
 
-it('sets the current filterKey according to the URL', function () {
+it('sets the current globalFilter according to the URL', function () {
     fakeGlobalFilter();
 
     $this->get('/sharp/one/s-list/person/s-show/person/1')
@@ -53,7 +53,7 @@ it('sets the current filterKey according to the URL', function () {
     expect(sharp()->context()->globalFilterValue('test'))->toEqual('one');
 });
 
-it('sets the current filterKey according to the URL for API routes', function () {
+it('sets the current globalFilter according to the URL for API routes', function () {
     fakeGlobalFilter();
     fakeListFor('person', new class() extends PersonList
     {
@@ -85,16 +85,16 @@ it('sets the current filterKey according to the URL for API routes', function ()
     expect(sharp()->context()->globalFilterValue('test'))->toEqual('one');
 });
 
-it('redirects to the homepage if an invalid filterKey is set in the URL', function () {
+it('redirects to the homepage if an invalid globalFilter is set in the URL', function () {
     fakeGlobalFilter();
 
     $this->get('/sharp/five/s-list/person/s-show/person/1')
-        ->assertRedirect(route('code16.sharp.home', ['filterKey' => 'two']));
+        ->assertRedirect(route('code16.sharp.home', ['globalFilter' => 'two']));
 
     expect(sharp()->context()->globalFilterValue('test'))->toEqual('two');
 });
 
-it('redirects to route with correct filterKeys when missing and multiple global filters are defined', function () {
+it('redirects to route with correct globalFilters when missing and multiple global filters are defined', function () {
     fakeGlobalFilter('test1');
     fakeGlobalFilter('test2');
 
@@ -102,7 +102,7 @@ it('redirects to route with correct filterKeys when missing and multiple global 
         ->assertRedirect('/sharp/two~two/s-list/person');
 });
 
-it('sets the current multiple filterKeys according to the URL', function () {
+it('sets the current multiple globalFilters according to the URL', function () {
     fakeGlobalFilter('test1');
     fakeGlobalFilter('test2');
 
