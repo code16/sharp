@@ -7,7 +7,7 @@ use Illuminate\Routing\Controller;
 
 class ApiFormEditorUploadFormController extends Controller
 {
-    public function update(string $filterKey, EditorUploadFormRequest $request, string $entityKey, ?string $instanceId = null)
+    public function update(string $globalFilter, EditorUploadFormRequest $request, string $entityKey, ?string $instanceId = null)
     {
         return response()->json($request->input('data'));
     }

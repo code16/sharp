@@ -315,12 +315,12 @@ class SharpBreadcrumb
 
             return collect(explode('/', parse_url($urlToParse)['path']))
                 ->filter(fn (string $segment) => strlen(trim($segment)))
-                // Have to skip /sharp/{filterKey}
+                // Have to skip /sharp/{globalFilter}
                 ->skip(2)
                 ->values();
         }
 
-        // Have to skip /sharp/{filterKey}
+        // Have to skip /sharp/{globalFilter}
         return collect(request()->segments())->skip(2)->values();
     }
 

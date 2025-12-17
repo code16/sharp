@@ -17,7 +17,7 @@ class ApiEntityListQuickCreationCommandController extends ApiController
         parent::__construct();
     }
 
-    public function create(string $filterKey, EntityKey $entityKey, EntityKey $formEntityKey)
+    public function create(string $globalFilter, EntityKey $entityKey, EntityKey $formEntityKey)
     {
         $entity = $this->entityManager->entityFor($entityKey);
 
@@ -48,7 +48,7 @@ class ApiEntityListQuickCreationCommandController extends ApiController
         );
     }
 
-    public function store(string $filterKey, EntityKey $entityKey, EntityKey $formEntityKey)
+    public function store(string $globalFilter, EntityKey $entityKey, EntityKey $formEntityKey)
     {
         $list = $this->entityManager->entityFor($entityKey)->getListOrFail();
         $list->buildListConfig();

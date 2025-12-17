@@ -11,7 +11,7 @@ class ApiShowEntityStateController extends ApiController
     use HandlesCommandResult;
     use HandlesInstanceCommand;
 
-    public function update(string $filterKey, string $entityKey, mixed $instanceId = null)
+    public function update(string $globalFilter, string $entityKey, mixed $instanceId = null)
     {
         $showPage = $this->getShowPage($entityKey, $instanceId);
         $stateHandler = $showPage->entityStateHandler();

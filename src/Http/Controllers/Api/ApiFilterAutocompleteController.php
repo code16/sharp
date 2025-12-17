@@ -8,7 +8,7 @@ use Code16\Sharp\Utils\Entities\ValueObjects\EntityKey;
 
 class ApiFilterAutocompleteController extends ApiController
 {
-    public function index(string $filterKey, EntityKey $entityKey, string $filterHandlerKey): array
+    public function index(string $globalFilter, EntityKey $entityKey, string $filterHandlerKey): array
     {
         $entity = $this->entityManager->entityFor($entityKey);
 

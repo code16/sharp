@@ -23,7 +23,7 @@ final class DashboardData extends Data
         public FilterValuesData $filterValues,
         public ?PageAlertData $pageAlert = null,
         #[LiteralTypeScriptType('{
-            [filterKey: string]: string,
+            [globalFilter: string]: string,
         }')]
         public ?array $query = null,
     ) {}
