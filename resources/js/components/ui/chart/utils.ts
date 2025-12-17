@@ -30,7 +30,8 @@ export function componentToString<P>(config: MaybeRef<ChartConfig>, component: C
   // https://unovis.dev/docs/auxiliary/Crosshair#component-props
   return (_data: any, x: number | Date) => {
     const data = "data" in _data ? _data.data : _data
-    const serializedKey = `${id}-${serializeKey(data)}`
+    const normalizedX = typeof x === "number" ? Math.round(x) : x.getTime()
+    const serializedKey = `${id}-${normalizedX}-${serializeKey(data)}`
     const cachedContent = cache.get(serializedKey)
     if (cachedContent)
       return cachedContent

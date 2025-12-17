@@ -35,12 +35,14 @@
                 <VisAxis
                     v-bind="{
                         type: props.widget.options?.horizontal ? 'x' : 'y',
+                        domainLine: false,
                     } as AxisConfigInterface<Datum>"
                 />
                 <VisAxis
                     v-bind="{
                         type: props.widget.options?.horizontal ? 'y' : 'x',
                          gridLine: false,
+                         domainLine: false,
                         // tickValues: props.value?.labels.map((_, i) => i),
                         numTicks: props.value?.labels.length - 1,
                         tickFormat: tickFormat,

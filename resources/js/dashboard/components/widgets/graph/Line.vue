@@ -1,48 +1,64 @@
 <script setup lang="ts">
     import { GraphWidgetData } from "@/types";
     import { DashboardWidgetProps } from "@/dashboard/types";
-    import { VisXYContainer, VisAxis, VisLine, VisTooltip, VisCrosshair, VisScatter } from "@unovis/vue";
+    import { VisXYContainer, VisAxis, VisLine, VisTooltip, VisCrosshair, VisScatter, VisArea } from "@unovis/vue";
     import {
         AxisConfigInterface, BulletLegendConfigInterface,
         CrosshairConfigInterface,
         CurveType,
         LineConfigInterface, ScatterConfigInterface, XYContainerConfigInterface,
-        Scale, TextAlign, FitMode, Scatter,
+        Scale, TextAlign, FitMode, Scatter, AreaConfigInterface,
     } from "@unovis/ts";
     import { Datum, useXYChart } from "@/dashboard/components/widgets/graph/useXYChart";
     import { ChartContainer, ChartLegendContent, ChartTooltip, ChartCrosshair } from "@/components/ui/chart";
+    import { computed } from "vue";
 
     const props = defineProps<DashboardWidgetProps<GraphWidgetData>>();
+
+    // props.value.datasets = props.value?.datasets.toReversed();
 
     const { data, x, y, color, tooltipTemplate, xScale, xTickValues, tickFormat, chartConfig } = useXYChart(props);
 
     // const rotate = computed(() => props.value?.labels?.length >= 10);
+    const svgDefs = computed(() => props.value?.datasets.map((dataset, i) => `
+        <linearGradient id="fill-${i}" x1="0" y1="0" x2="0" y2="1">
+            <stop
+                offset="5%"
+                stop-color="${dataset.color}"
+                stop-opacity="0.8"
+            />
+            <stop
+                offset="95%"
+                stop-color="${dataset.color}"
+                stop-opacity="0.1"
+            />
+        </linearGradient>
+    `).join(''));
 </script>
 
 <template>
     <ChartContainer class="flex flex-col" :config="chartConfig">
-        <VisXYContainer class="flex-1 min-h-0" v-bind="{
-            xScale,
-            components: props.value?.datasets.map(dataset => new Scatter({
-                size: 5, x: x, y: y, color: color
-            })),
-        } as XYContainerConfigInterface<Datum>" :data="data">
+        <VisXYContainer class="flex-1 min-h-0"
+            v-bind="{
+                xScale: xScale,
+                svgDefs: svgDefs,
+            } as XYContainerConfigInterface<Datum>"
+            :data="data"
+        >
             <template v-if="!props.widget.minimal">
                 <VisAxis
                     v-bind="{
                         type: 'x',
                         tickFormat: tickFormat,
                         tickValues: xTickValues,
-                        // minMaxTicksOnly: true
-                        // tickValues: props.value?.labels.length < 5 ? props.value?.labels.map((_, i) => x(null, i)) as number[] : undefined,
-                        // numTicks: props.value?.labels.length < 10 ? props.value?.labels.length - 1 : undefined,
-                        // tickTextAlign: rotate ? TextAlign.Left : TextAlign.Center,
-                        // tickTextFitMode: rotate ? FitMode.Wrap : FitMode.Trim,
-                        // tickTextAngle: rotate ? 45 : undefined,
-                        // tickTextWidth: rotate ? 100 : undefined,
+                        gridLine: false,
+                        domainLine: false,
                     } as AxisConfigInterface<Datum>"
                 />
-                <VisAxis v-bind="{ type: 'y' } as AxisConfigInterface<Datum>" />
+                <VisAxis v-bind="{
+                    type: 'y',
+                    domainLine: false,
+                } as AxisConfigInterface<Datum>" />
             </template>
 
             <VisLine
@@ -55,6 +71,20 @@
                 } as LineConfigInterface<Datum>"
             />
 
+            <template v-if="props.widget.options.filled">
+                <template v-for="(dataset, i) in props.value?.datasets.toReversed()">
+                    <VisArea
+                        v-bind="{
+                            x: x,
+                            y: (d) => d[i],
+                            color: () => `url(#fill-${i})`,
+                            opacity: 0.6,
+                            curveType: props.widget.options.curved ? CurveType.MonotoneX : CurveType.Linear,
+                        } as AreaConfigInterface<Datum>"
+                    />
+                </template>
+            </template>
+
             <ChartCrosshair
                 v-bind="{
                     color: color,
@@ -64,14 +94,13 @@
             />
             <ChartTooltip />
 
-            <template v-if="props.value?.labels.length < 40">
-                <template v-for="dataset in props.value?.datasets">
-                    <VisScatter
-                        v-bind="{ size: 4, x: x, y: y, strokeColor: color, color: 'var(--background)' } as ScatterConfigInterface<Datum>"
-                    />
-                </template>
-            </template>
-
+<!--            <template v-if="props.value?.labels.length < 40">-->
+<!--                <template v-for="dataset in props.value?.datasets">-->
+<!--                    <VisScatter-->
+<!--                        v-bind="{ size: 4, x: x, y: y, strokeColor: color, color: 'var(&#45;&#45;background)' } as ScatterConfigInterface<Datum>"-->
+<!--                    />-->
+<!--                </template>-->
+<!--            </template>-->
         </VisXYContainer>
         <template v-if="props.widget.showLegend && !props.widget.minimal">
             <ChartLegendContent />

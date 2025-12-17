@@ -6,6 +6,7 @@ class SharpLineGraphWidget extends SharpGraphWidget
 {
     protected bool $curvedLines = true;
     protected bool $displayHorizontalAxisAsTimeline = false;
+    protected bool $filled = false;
 
     public static function make(string $key): SharpLineGraphWidget
     {
@@ -18,6 +19,13 @@ class SharpLineGraphWidget extends SharpGraphWidget
     public function setCurvedLines(bool $curvedLines = true): self
     {
         $this->curvedLines = $curvedLines;
+
+        return $this;
+    }
+
+    public function setFilled(bool $filled = true): self
+    {
+        $this->filled = $filled;
 
         return $this;
     }
@@ -36,6 +44,7 @@ class SharpLineGraphWidget extends SharpGraphWidget
                 'dateLabels' => $this->displayHorizontalAxisAsTimeline,
                 'options' => [
                     'curved' => $this->curvedLines,
+                    'filled' => $this->filled,
                 ],
             ],
         );

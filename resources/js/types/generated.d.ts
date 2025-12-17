@@ -661,7 +661,7 @@ export type GraphWidgetData = {
   ratioY: number | null;
   height: number | null;
   dateLabels: boolean;
-  options: { curved: boolean; horizontal: boolean };
+  options: { curved: boolean; horizontal: boolean; filled: boolean };
 };
 export type GraphWidgetDisplay = "bar" | "line" | "pie";
 export type IconData = {

@@ -56,7 +56,13 @@ export function useXYChart(props: DashboardWidgetProps<GraphWidgetData>) {
         Object.fromEntries(props.value?.datasets.map((dataset, i) => [i, ({ label: dataset.label, color: dataset.color })]))
     );
 
-    const tooltipTemplate = componentToString(chartConfig, ChartTooltipContent);
+    const tooltipTemplate = componentToString(chartConfig, ChartTooltipContent, {
+        labelFormatter: (x) => {
+            return props.widget.dateLabels
+                ? new Intl.DateTimeFormat(undefined, { day: '2-digit', month: 'short' }).format(timeScale ? x : new Date(props.value.labels[Math.round(x as number)]))
+                : props.value.labels[Math.round(x as number)];
+        }
+    });
 
     const tickFormat: AxisConfigInterface<number[]>['tickFormat'] = (tick, i) => {
         if(props.widget.dateLabels) {

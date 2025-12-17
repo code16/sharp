@@ -37,6 +37,7 @@ final class GraphWidgetData extends Data
         #[TypeScriptType([
             'curved' => 'boolean',
             'horizontal' => 'boolean',
+            'filled' => 'boolean',
         ])]
         public ?array $options = null,
     ) {}

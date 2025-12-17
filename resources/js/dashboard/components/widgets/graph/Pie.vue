@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { computed, useTemplateRef } from "vue";
+    import { computed, useAttrs, useTemplateRef } from "vue";
     import { GraphWidgetData } from "@/types";
     import { DashboardWidgetProps } from "@/dashboard/types";
     import { VisSingleContainer, VisDonut, VisTooltip, VisBulletLegend } from "@unovis/vue";
@@ -30,6 +30,8 @@
         console.log(v, ...args);
         return v;
     }
+    const attrs = useAttrs();
+    console.log(attrs);
 </script>
 
 <template>
@@ -42,7 +44,8 @@
                     value: d => d.value,
                     color: d => d.color,
                     // arcWidth: 47,
-                    arcWidth: log(Math.round(Math.min(width, height) * .15), width, height),
+                    arcWidth: width ? log(Math.round(Math.min(width, height) * .15), width, height) : 20,
+                    showBackground: false,
                     attributes: {
                          // [Donut.selectors.segment]: {
                          //     'class'() {
