@@ -7,4 +7,5 @@ enum GraphWidgetDisplay: string
     case Bar = 'bar';
     case Line = 'line';
     case Pie = 'pie';
+    case Area = 'area';
 }

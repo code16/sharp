@@ -33,13 +33,14 @@ final class GraphWidgetData extends Data
         public ?int $ratioX = null,
         public ?int $ratioY = null,
         public ?int $height = null,
-        public bool $dateLabels = false,
-        public bool $showAllLabels = false,
+        public bool $displayHorizontalAxisAsTimeline = false,
+        public bool $enableHorizontalAxisLabelSampling = false,
         #[TypeScriptType([
             'curved' => 'boolean',
             'horizontal' => 'boolean',
-            'filled' => 'boolean',
             'showDots' => 'boolean',
+            'gradient' => 'boolean',
+            'opacity' => 'number',
         ])]
         public ?array $options = null,
     ) {}

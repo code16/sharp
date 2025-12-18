@@ -8,10 +8,10 @@ import {
     FitMode,
     Scale,
     TextAlign,
-    TrimMode
+    TrimMode,
+    getNearest,
 } from "@unovis/ts";
-import { timeTickInterval } from 'd3-time';
-import { ChartConfig, ChartTooltip, ChartTooltipContent, componentToString } from "@/components/ui/chart";
+import { ChartConfig, ChartTooltipContent, componentToString } from "@/components/ui/chart";
 export type Datum = number[];
 
 export function useXYChart(props: DashboardWidgetProps<GraphWidgetData>) {
@@ -24,14 +24,14 @@ export function useXYChart(props: DashboardWidgetProps<GraphWidgetData>) {
     }, []));
     const timeScale = true;
     const x: XYComponentConfigInterface<Datum>['x'] = (d, i) => {
-        return props.widget.dateLabels && !props.widget.showAllLabels && timeScale
+        return props.widget.displayHorizontalAxisAsTimeline
             ? new Date(props.value.labels[i]).getTime()
             : i;
     };
     const y = computed((): XYComponentConfigInterface<Datum>['y'] => props.value?.datasets.map((dataset, i) => (d) => d[i]));
     const xScale = computed((): XYComponentConfigInterface<Datum>['xScale'] => {
-        return props.widget.dateLabels && !props.widget.showAllLabels && timeScale
-            ? Scale.scaleUtc().domain([new Date(props.value.labels[0]), new Date(props.value.labels.at(-1))]) as any
+        return props.widget.displayHorizontalAxisAsTimeline
+            ? Scale.scaleUtc() as any
             : undefined
     });
     const color = computed((): ColorAccessor<Datum | Datum[]> => props.value?.datasets.map((dataset, i) => dataset.color));
@@ -42,36 +42,44 @@ export function useXYChart(props: DashboardWidgetProps<GraphWidgetData>) {
 
     const tooltipTemplate = componentToString(chartConfig, ChartTooltipContent, {
         labelFormatter: (x) => {
-            return props.widget.dateLabels
-                ? new Intl.DateTimeFormat(undefined, { day: '2-digit', month: 'short' })
-                    .format(x instanceof Date ? x : new Date(props.value.labels[Math.round(x as number)]))
-                : props.value.labels[Math.round(x as number)];
+            if(props.widget.displayHorizontalAxisAsTimeline) {
+                const nearestDate = new Date(
+                    getNearest(
+                        props.value.labels.map((label) => new Date(label).getTime()),
+                        (x as Date).getTime(),
+                        v => v
+                    )
+                );
+                return formatDate(nearestDate);
+            }
+            return props.value.labels[Math.round(x as number)];
         }
     });
 
     const rotate = computed(() =>
         !props.widget.options.horizontal
-        && props.widget.showAllLabels
+        && !props.widget.enableHorizontalAxisLabelSampling
+        && !props.widget.displayHorizontalAxisAsTimeline
         && props.value?.labels?.length >= 10
     );
 
+
     const xAxisConfig = computed((): AxisConfigInterface<Datum> => ({
         tickValues: (() => {
-            if(props.widget.showAllLabels) {
-                return props.value.labels.map((_, i) => i);
-            }
-            if(props.widget.dateLabels && timeScale) {
+            if(props.widget.displayHorizontalAxisAsTimeline) {
                 return props.value.labels.length < 10
-                    ? props.value.labels.map((l) => new Date(l))
-                    : xScale.value.ticks(10) as any;
+                    ? props.value.labels.map((label) => new Date(label))
+                    : undefined as any; // let unovis handle number of ticks
+            }
+            if(!props.widget.enableHorizontalAxisLabelSampling) {
+                return props.value.labels.map((_, i) => i);
             }
         })(),
         tickFormat: (tick, i) => {
-            if(props.widget.dateLabels) {
-                return new Intl.DateTimeFormat(undefined, { day: '2-digit', month: 'short' })
-                    .format(tick instanceof Date ? tick : new Date(props.value.labels[tick as number]));
+            if(props.widget.displayHorizontalAxisAsTimeline) {
+                return formatDate(tick as Date);
             }
-            return props.value?.labels?.[tick as number];
+            return props.value?.labels?.[tick as number] ?? '';
         },
         tickTextTrimType: TrimMode.End,
         // tickTextAlign: rotate.value ? TextAlign.Left : props.widget.options.horizontal ? TextAlign.Right : TextAlign.Center,
@@ -81,6 +89,21 @@ export function useXYChart(props: DashboardWidgetProps<GraphWidgetData>) {
         tickTextAngle: rotate.value ? -45 : undefined,
         tickTextWidth: rotate.value ? 100 : undefined,
     }));
+
+
+    const needsDecimals = computed(() =>
+        props.value?.datasets.every(dataset =>
+            dataset.data.every(value => Math.abs(value) > 0 && Math.abs(value) < 1)
+        )
+    );
+    const yAxisConfig = computed((): AxisConfigInterface<Datum> => ({
+        tickFormat: (tick) => {
+            if(!Number.isInteger(tick) && !needsDecimals.value) {
+                return '';
+            }
+        }
+    }));
+
 
     return {
         data,
@@ -92,5 +115,25 @@ export function useXYChart(props: DashboardWidgetProps<GraphWidgetData>) {
         xScale,
         chartConfig,
         xAxisConfig,
+        yAxisConfig,
     };
+}
+
+
+function utc(d: Date) {
+    const d2 = new Date(d);
+    d2.setMinutes(d2.getMinutes() + d2.getTimezoneOffset());
+    return d2;
+}
+
+function formatDate(date: Date) {
+    date = utc(date);
+    const hasHour = date.getHours() !== 0 || date.getMinutes() !== 0;
+    return new Intl.DateTimeFormat(undefined, {
+        day: '2-digit',
+        month: 'short',
+        hour: hasHour ? '2-digit' : undefined,
+        minute: hasHour ? '2-digit' : undefined,
+    })
+        .format(date);
 }

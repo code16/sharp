@@ -24,6 +24,7 @@ export default defineConfig(({ mode, command }) => {
                 'vue': 'vue/dist/vue.esm-bundler.js',
                 'ziggy-js': path.resolve(__dirname, 'vendor/tightenco/ziggy'),
                 // '@unovis/vue': path.resolve(__dirname, '../unovis/packages/vue/src'),
+                // '@unovis/ts': path.resolve(__dirname, '../unovis/packages/ts'),
                 // ...rekaAliases()
             },
             // preserveSymlinks: true,

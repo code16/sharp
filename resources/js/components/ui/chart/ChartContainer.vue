@@ -9,6 +9,9 @@ import ChartStyle from "./ChartStyle.vue"
 </script>
 
 <script setup lang="ts">
+    import { useElementVisibility, useIntersectionObserver } from "@vueuse/core";
+import { ref, useTemplateRef } from "vue";
+
 const props = defineProps<{
   id?: HTMLAttributes["id"]
   class?: HTMLAttributes["class"]
@@ -31,6 +34,16 @@ provideChartContext({
   id: uniqueId,
   config,
 })
+
+
+const el = useTemplateRef('el');
+const isIntersecting = ref(false);
+useIntersectionObserver(el, (entries, observer) => {
+    if(entries[0].isIntersecting) {
+        isIntersecting.value = true;
+        observer.disconnect();
+    }
+});
 </script>
 
 <template>
@@ -55,8 +68,12 @@ provideChartContext({
       '--vis-font-family': 'var(--font-sans)',
       '--vis-donut-background-color': 'var(--muted)'
     }"
+   ref="el"
   >
-    <slot :id="uniqueId" :config="config" />
+      <template v-if="isIntersecting">
+          <slot :id="uniqueId" :config="config" />
+      </template>
+
     <ChartStyle :id="chartId" />
   </div>
 </template>

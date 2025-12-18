@@ -1,11 +1,12 @@
 <script setup lang="ts">
-    import { GraphWidgetData } from "@/types";
-    import type { Component } from "vue";
-    import Bar from "./graph/Bar.vue";
-    import Line from "./graph/Line.vue";
-    import Pie from "./graph/Pie.vue";
-    import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-    import { DashboardWidgetProps } from "@/dashboard/types";
+    import { GraphWidgetData } from '@/types';
+    import type { Component } from 'vue';
+    import Bar from './graph/Bar.vue';
+    import Line from './graph/Line.vue';
+    import Pie from './graph/Pie.vue';
+    import Area from './graph/Area.vue';
+    import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+    import { DashboardWidgetProps } from '@/dashboard/types';
 
     const props = defineProps<DashboardWidgetProps<GraphWidgetData>>();
 
@@ -13,6 +14,7 @@
         'bar': Bar,
         'line': Line,
         'pie': Pie,
+        'area': Area,
     };
 </script>
 

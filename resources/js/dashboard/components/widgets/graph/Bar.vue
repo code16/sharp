@@ -19,7 +19,7 @@
 
     const props = defineProps<DashboardWidgetProps<GraphWidgetData>>();
 
-    const { data, x, y, color, tooltipTemplate, chartConfig, xAxisConfig, xScale } = useXYChart(props);
+    const { data, x, y, color, tooltipTemplate, chartConfig, xAxisConfig, xScale, yAxisConfig } = useXYChart(props);
 </script>
 
 <template>
@@ -43,6 +43,7 @@
                     v-bind="{
                         type: props.widget.options?.horizontal ? 'x' : 'y',
                         domainLine: false,
+                        ...yAxisConfig,
                     } as AxisConfigInterface<Datum>"
                 />
             </template>
