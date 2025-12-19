@@ -6,6 +6,7 @@ use Illuminate\Http\UploadedFile;
 beforeEach(function () {
     sharp()->config()->declareEntity(PersonEntity::class);
     login();
+    Storage::fake('public');
 });
 
 it('returns thumbnail', function () {
