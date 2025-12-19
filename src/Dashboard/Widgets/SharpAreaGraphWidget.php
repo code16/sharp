@@ -2,17 +2,18 @@
 
 namespace Code16\Sharp\Dashboard\Widgets;
 
-class SharpLineGraphWidget extends SharpGraphWidget
+class SharpAreaGraphWidget extends SharpGraphWidget
 {
     use IsXYChart;
 
     protected bool $curvedLines = true;
-    protected bool $showDots = false;
+    protected bool $gradient = false;
+    protected float $opacity = .4;
 
-    public static function make(string $key): SharpLineGraphWidget
+    public static function make(string $key): SharpAreaGraphWidget
     {
         $widget = new static($key, 'graph');
-        $widget->display = 'line';
+        $widget->display = 'area';
 
         return $widget;
     }
@@ -24,9 +25,16 @@ class SharpLineGraphWidget extends SharpGraphWidget
         return $this;
     }
 
-    public function setShowDots(bool $showDots = true): self
+    public function setOpacity(float $opacity): self
     {
-        $this->showDots = $showDots;
+        $this->opacity = $opacity;
+
+        return $this;
+    }
+
+    public function setShowGradient(bool $gradient = true): self
+    {
+        $this->gradient = $gradient;
 
         return $this;
     }
@@ -39,7 +47,8 @@ class SharpLineGraphWidget extends SharpGraphWidget
                 'enableHorizontalAxisLabelSampling' => $this->enableHorizontalAxisLabelSampling,
                 'options' => [
                     'curved' => $this->curvedLines,
-                    'showDots' => $this->showDots,
+                    'gradient' => $this->gradient,
+                    'opacity' => $this->opacity,
                 ],
             ],
         );

@@ -660,10 +660,17 @@ export type GraphWidgetData = {
   ratioX: number | null;
   ratioY: number | null;
   height: number | null;
-  dateLabels: boolean;
-  options: { curved: boolean; horizontal: boolean };
+  displayHorizontalAxisAsTimeline: boolean;
+  enableHorizontalAxisLabelSampling: boolean;
+  options: {
+    curved: boolean;
+    horizontal: boolean;
+    showDots: boolean;
+    gradient: boolean;
+    opacity: any;
+  };
 };
-export type GraphWidgetDisplay = "bar" | "line" | "pie";
+export type GraphWidgetDisplay = "bar" | "line" | "pie" | "area";
 export type IconData = {
   svg: string | null;
   name: string | null;

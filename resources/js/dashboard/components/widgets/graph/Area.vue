@@ -16,6 +16,21 @@
     const props = defineProps<DashboardWidgetProps<GraphWidgetData>>();
 
     const { data, x, y, color, tooltipTemplate, xScale, chartConfig, xAxisConfig, yAxisConfig } = useXYChart(props);
+
+    const svgDefs = computed(() => props.value?.datasets.map((dataset, i) => `
+        <linearGradient id="fill-${i}" x1="0" y1="0" x2="0" y2="1">
+            <stop
+                offset="5%"
+                stop-color="${dataset.color}"
+                stop-opacity="0.8"
+            />
+            <stop
+                offset="95%"
+                stop-color="${dataset.color}"
+                stop-opacity="0.1"
+            />
+        </linearGradient>
+    `).join(''));
 </script>
 
 <template>
@@ -23,6 +38,7 @@
         <VisXYContainer class="flex-1 min-h-0"
             v-bind="{
                 xScale: xScale,
+                svgDefs: svgDefs,
             } as XYContainerConfigInterface<Datum>"
             :data="data"
         >
@@ -47,10 +63,25 @@
                     x: x,
                     y: y,
                     color: color,
-                    lineWidth: 2,
+                    lineWidth: 1,
                     curveType: props.widget.options.curved ? CurveType.MonotoneX : CurveType.Linear,
+                    // stacked: true,
                 } as LineConfigInterface<Datum>"
             />
+
+            <template v-for="(dataset, i) in props.value?.datasets">
+                <VisArea
+                    v-bind="{
+                        x: x,
+                        // y: y,
+                        y: (d) => d[i],
+                        // color: props.value?.datasets.map((dataset, i) => props.widget.options.gradient ? `url(#fill-${i})` : dataset.color),
+                        color: props.widget.options.gradient ? `url(#fill-${i})` : dataset.color,
+                        opacity: props.widget.options.opacity,
+                        curveType: props.widget.options.curved ? CurveType.MonotoneX : CurveType.Linear,
+                    } as AreaConfigInterface<Datum>"
+                />
+            </template>
 
             <ChartCrosshair
                 v-bind="{
@@ -61,15 +92,8 @@
             />
 
             <ChartTooltip />
-
-            <template v-if="props.widget.options.showDots">
-                <template v-for="dataset in props.value?.datasets">
-                    <VisScatter
-                        v-bind="{ size: 6, x: x, y: y, color: color } as ScatterConfigInterface<Datum>"
-                    />
-                </template>
-            </template>
         </VisXYContainer>
+
         <template v-if="props.widget.showLegend && !props.widget.minimal">
             <ChartLegendContent />
         </template>
