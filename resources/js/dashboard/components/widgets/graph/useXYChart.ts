@@ -1,6 +1,6 @@
 import { DashboardWidgetProps } from "@/dashboard/types";
 import { GraphWidgetData } from "@/types";
-import { computed, reactive, toRefs } from "vue";
+import { computed } from "vue";
 import { XYComponentConfigInterface } from "@unovis/ts/core/xy-component/config";
 import {
     AxisConfigInterface,
@@ -10,8 +10,11 @@ import {
     TextAlign,
     TrimMode,
     getNearest,
+    XYContainerConfigInterface,
 } from "@unovis/ts";
+import { extent } from 'd3-array';
 import { ChartConfig, ChartTooltipContent, componentToString } from "@/components/ui/chart";
+import { useCurrentElement, useElementSize } from "@vueuse/core";
 export type Datum = number[];
 
 export function useXYChart(props: DashboardWidgetProps<GraphWidgetData>) {
@@ -22,17 +25,31 @@ export function useXYChart(props: DashboardWidgetProps<GraphWidgetData>) {
         });
         return res;
     }, []));
-    const timeScale = true;
     const x: XYComponentConfigInterface<Datum>['x'] = (d, i) => {
         return props.widget.displayHorizontalAxisAsTimeline
             ? new Date(props.value.labels[i]).getTime()
             : i;
     };
     const y = computed((): XYComponentConfigInterface<Datum>['y'] => props.value?.datasets.map((dataset, i) => (d) => d[i]));
-    const xScale = computed((): XYComponentConfigInterface<Datum>['xScale'] => {
-        return props.widget.displayHorizontalAxisAsTimeline
-            ? Scale.scaleUtc() as any
-            : undefined
+    const { width, height } = useElementSize(useCurrentElement());
+    const yNumTicks = computed(() => {
+        // taken from https://github.com/f5/unovis/blob/8b9eae7d9787c8414d5caa5970f13f67a02f6654/packages/ts/src/components/axis/index.ts#L407
+        // approximate the height by remove 75px to the container (bottom labels)
+        const yAxisHeight = height.value - 75;
+        return height.value ? Math.pow(yAxisHeight, 0.85) / 25 : 5;
+    })
+    const yExtent = computed(() => extent(props.value?.datasets?.flatMap((dataset) => dataset.data)));
+    const yScale = computed(() => {
+        return Scale.scaleLinear().domain(yExtent.value).nice(yNumTicks.value)
+    });
+    const containerConfig = computed((): XYContainerConfigInterface<Datum> => {
+        return {
+            xScale: props.widget.displayHorizontalAxisAsTimeline
+                ? Scale.scaleUtc() as any
+                : undefined,
+            yScale: yScale.value,
+            yDomain: yScale.value.domain() as [number, number],
+        }
     });
     const color = computed((): ColorAccessor<Datum | Datum[]> => props.value?.datasets.map((dataset, i) => dataset.color));
 
@@ -101,9 +118,9 @@ export function useXYChart(props: DashboardWidgetProps<GraphWidgetData>) {
             if(!Number.isInteger(tick) && !needsDecimals.value) {
                 return '';
             }
-        }
+        },
+        tickValues: yScale.value.ticks(yNumTicks.value),
     }));
-
 
     return {
         data,
@@ -111,8 +128,7 @@ export function useXYChart(props: DashboardWidgetProps<GraphWidgetData>) {
         y,
         color,
         tooltipTemplate,
-        timeScale,
-        xScale,
+        containerConfig,
         chartConfig,
         xAxisConfig,
         yAxisConfig,

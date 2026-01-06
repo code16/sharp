@@ -19,14 +19,14 @@
 
     const props = defineProps<DashboardWidgetProps<GraphWidgetData>>();
 
-    const { data, x, y, color, tooltipTemplate, chartConfig, xAxisConfig, xScale, yAxisConfig } = useXYChart(props);
+    const { data, x, y, color, tooltipTemplate, chartConfig, xAxisConfig, containerConfig, yAxisConfig } = useXYChart(props);
 </script>
 
 <template>
     <ChartContainer :config="chartConfig" class="flex flex-col" cursor>
         <VisXYContainer class="flex-1 min-h-0"
             v-bind="{
-                xScale: xScale,
+                ...containerConfig,
             } as XYContainerConfigInterface<Datum>"
             :data="data"
         >
