@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { GraphWidgetData } from "@/types";
+    import { GraphWidgetData, LineGraphWidgetData } from "@/types";
     import { DashboardWidgetProps } from "@/dashboard/types";
     import { VisXYContainer, VisAxis, VisLine, VisTooltip, VisCrosshair, VisScatter, VisArea } from "@unovis/vue";
     import {
@@ -7,13 +7,11 @@
         CrosshairConfigInterface,
         CurveType,
         LineConfigInterface, ScatterConfigInterface, XYContainerConfigInterface,
-        Scale, TextAlign, FitMode, Scatter, AreaConfigInterface,
     } from "@unovis/ts";
     import { Datum, useXYChart } from "@/dashboard/components/widgets/graph/useXYChart";
     import { ChartContainer, ChartLegendContent, ChartTooltip, ChartCrosshair } from "@/components/ui/chart";
-    import { computed } from "vue";
 
-    const props = defineProps<DashboardWidgetProps<GraphWidgetData>>();
+    const props = defineProps<DashboardWidgetProps<LineGraphWidgetData>>();
 
     const { data, x, y, color, tooltipTemplate, containerConfig, chartConfig, xAxisConfig, yAxisConfig } = useXYChart(props);
 </script>
@@ -23,7 +21,7 @@
         <VisXYContainer class="flex-1 min-h-0"
             v-bind="{
                 ...containerConfig,
-            } as XYContainerConfigInterface<Datum>"
+            } satisfies XYContainerConfigInterface<Datum>"
             :data="data"
         >
             <template v-if="!props.widget.minimal">
@@ -33,14 +31,14 @@
                         gridLine: false,
                         domainLine: false,
                         ...xAxisConfig,
-                    } as AxisConfigInterface<Datum>"
+                    } satisfies AxisConfigInterface<Datum>"
                 />
                 <VisAxis
                     v-bind="{
                         type: 'y',
                         domainLine: false,
                         ...yAxisConfig,
-                    } as AxisConfigInterface<Datum>"
+                    } satisfies AxisConfigInterface<Datum>"
                 />
             </template>
 
@@ -50,8 +48,8 @@
                     y: y,
                     color: color,
                     lineWidth: 2,
-                    curveType: props.widget.options.curved ? CurveType.MonotoneX : CurveType.Linear,
-                } as LineConfigInterface<Datum>"
+                    curveType: props.widget.curved ? CurveType.MonotoneX : CurveType.Linear,
+                } satisfies LineConfigInterface<Datum>"
             />
 
             <ChartCrosshair
@@ -59,15 +57,15 @@
                     color: color,
                     template: tooltipTemplate,
                     hideWhenFarFromPointer: false,
-                } as CrosshairConfigInterface<Datum>"
+                } satisfies CrosshairConfigInterface<Datum>"
             />
 
             <ChartTooltip />
 
-            <template v-if="props.widget.options.showDots">
+            <template v-if="props.widget.showDots">
                 <template v-for="dataset in props.value?.datasets">
                     <VisScatter
-                        v-bind="{ size: 6, x: x, y: y, color: color } as ScatterConfigInterface<Datum>"
+                        v-bind="{ size: 6, x: x, y: y, color: color } satisfies ScatterConfigInterface<Datum>"
                     />
                 </template>
             </template>

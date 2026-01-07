@@ -21,7 +21,7 @@ const payload = computed(() => Object.entries(config.value).map(([key, value]) =
     key: props.nameKey || key,
     itemConfig: config.value[key],
   }
-}))
+}).filter(item => !item.itemConfig.tooltipOnly))
 
 const containerSelector = ref("")
 onMounted(() => {

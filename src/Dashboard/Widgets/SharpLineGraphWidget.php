@@ -33,15 +33,12 @@ class SharpLineGraphWidget extends SharpGraphWidget
 
     public function toArray(): array
     {
-        return array_merge(
-            parent::toArray(), [
-                'displayHorizontalAxisAsTimeline' => $this->displayHorizontalAxisAsTimeline,
-                'enableHorizontalAxisLabelSampling' => $this->enableHorizontalAxisLabelSampling,
-                'options' => [
-                    'curved' => $this->curvedLines,
-                    'showDots' => $this->showDots,
-                ],
-            ],
-        );
+        return [
+            ...parent::toArray(),
+            'displayHorizontalAxisAsTimeline' => $this->displayHorizontalAxisAsTimeline,
+            'enableHorizontalAxisLabelSampling' => $this->enableHorizontalAxisLabelSampling,
+            'curved' => $this->curvedLines,
+            'showDots' => $this->showDots,
+        ];
     }
 }

@@ -25,14 +25,11 @@ class SharpBarGraphWidget extends SharpGraphWidget
 
     public function toArray(): array
     {
-        return array_merge(
-            parent::toArray(), [
-                'displayHorizontalAxisAsTimeline' => $this->displayHorizontalAxisAsTimeline,
-                'enableHorizontalAxisLabelSampling' => $this->enableHorizontalAxisLabelSampling,
-                'options' => [
-                    'horizontal' => $this->horizontal,
-                ],
-            ],
-        );
+        return [
+            ...parent::toArray(),
+            'displayHorizontalAxisAsTimeline' => $this->displayHorizontalAxisAsTimeline,
+            'enableHorizontalAxisLabelSampling' => $this->enableHorizontalAxisLabelSampling,
+            'horizontal' => $this->horizontal,
+        ];
     }
 }

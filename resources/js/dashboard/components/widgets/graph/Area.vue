@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { GraphWidgetData } from "@/types";
+    import { AreaGraphWidgetData, GraphWidgetData } from "@/types";
     import { DashboardWidgetProps } from "@/dashboard/types";
     import { VisXYContainer, VisAxis, VisLine, VisTooltip, VisCrosshair, VisScatter, VisArea } from "@unovis/vue";
     import {
@@ -13,7 +13,7 @@
     import { ChartContainer, ChartLegendContent, ChartTooltip, ChartCrosshair } from "@/components/ui/chart";
     import { computed } from "vue";
 
-    const props = defineProps<DashboardWidgetProps<GraphWidgetData>>();
+    const props = defineProps<DashboardWidgetProps<AreaGraphWidgetData>>();
 
     const { data, x, y, color, tooltipTemplate, containerConfig, chartConfig, xAxisConfig, yAxisConfig } = useXYChart(props);
 
@@ -39,7 +39,7 @@
             v-bind="{
                 ...containerConfig,
                 svgDefs: svgDefs,
-            } as XYContainerConfigInterface<Datum>"
+            } satisfies XYContainerConfigInterface<Datum>"
             :data="data"
         >
             <template v-if="!props.widget.minimal">
@@ -49,48 +49,59 @@
                         gridLine: false,
                         domainLine: false,
                         ...xAxisConfig,
-                    } as AxisConfigInterface<Datum>"
+                    } satisfies AxisConfigInterface<Datum>"
                 />
                 <VisAxis
                     v-bind="{
                         type: 'y',
                         domainLine: false,
                         ...yAxisConfig,
-                    } as AxisConfigInterface<Datum>"
+                    } satisfies AxisConfigInterface<Datum>"
                 />
             </template>
 
-            <VisLine
-                v-bind="{
-                    x: x,
-                    y: y,
-                    color: color,
-                    lineWidth: 1,
-                    curveType: props.widget.options.curved ? CurveType.MonotoneX : CurveType.Linear,
-                    // stacked: true,
-                } as LineConfigInterface<Datum>"
-            />
 
-            <template v-for="(dataset, i) in props.value?.datasets">
+            <template v-if="props.widget.stacked">
                 <VisArea
                     v-bind="{
                         x: x,
-                        // y: y,
-                        y: (d) => d[i],
-                        // color: props.value?.datasets.map((dataset, i) => props.widget.options.gradient ? `url(#fill-${i})` : dataset.color),
-                        color: props.widget.options.gradient ? `url(#fill-${i})` : dataset.color,
-                        opacity: props.widget.options.opacity,
-                        curveType: props.widget.options.curved ? CurveType.MonotoneX : CurveType.Linear,
-                    } as AreaConfigInterface<Datum>"
+                        y: y,
+                        color: props.value?.datasets.map((dataset, i) => props.widget.gradient ? `url(#fill-${i})` : dataset.color),
+                        opacity: props.widget.opacity,
+                        curveType: props.widget.curved ? CurveType.MonotoneX : CurveType.Linear,
+                    } satisfies AreaConfigInterface<Datum>"
                 />
             </template>
+            <template v-else>
+                <VisLine
+                    v-bind="{
+                        x: x,
+                        y: y,
+                        color: color,
+                        lineWidth: 1,
+                        curveType: props.widget.curved ? CurveType.MonotoneX : CurveType.Linear,
+                    } satisfies LineConfigInterface<Datum>"
+                />
+                <template v-for="(dataset, i) in props.value?.datasets">
+                    <VisArea
+                        v-bind="{
+                            x: x,
+                            y: (d) => d[i],
+                            color: props.widget.gradient ? `url(#fill-${i})` : dataset.color,
+                            opacity: props.widget.opacity,
+                            curveType: props.widget.curved ? CurveType.MonotoneX : CurveType.Linear,
+                        } satisfies AreaConfigInterface<Datum>"
+                    />
+                </template>
+            </template>
+
 
             <ChartCrosshair
                 v-bind="{
                     color: color,
                     template: tooltipTemplate,
                     hideWhenFarFromPointer: false,
-                } as CrosshairConfigInterface<Datum>"
+                } satisfies CrosshairConfigInterface<Datum>"
             />
 
             <ChartTooltip />

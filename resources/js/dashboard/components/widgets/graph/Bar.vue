@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { GraphWidgetData } from "@/types";
+    import { BarGraphWidgetData, GraphWidgetData } from "@/types";
     import { DashboardWidgetProps } from "@/dashboard/types";
     import { VisAxis, VisBulletLegend, VisCrosshair, VisGroupedBar, VisTooltip, VisXYContainer } from "@unovis/vue";
     import {
@@ -17,7 +17,7 @@
     import { Datum, useXYChart } from "@/dashboard/components/widgets/graph/useXYChart";
     import { ChartContainer, ChartLegendContent, ChartTooltip, ChartCrosshair } from "@/components/ui/chart";
 
-    const props = defineProps<DashboardWidgetProps<GraphWidgetData>>();
+    const props = defineProps<DashboardWidgetProps<BarGraphWidgetData>>();
 
     const { data, x, y, color, tooltipTemplate, chartConfig, xAxisConfig, containerConfig, yAxisConfig } = useXYChart(props);
 </script>
@@ -27,34 +27,34 @@
         <VisXYContainer class="flex-1 min-h-0"
             v-bind="{
                 ...containerConfig,
-            } as XYContainerConfigInterface<Datum>"
+            } satisfies XYContainerConfigInterface<Datum>"
             :data="data"
         >
             <template v-if="!props.widget.minimal">
                 <VisAxis
                     v-bind="{
-                        type: props.widget.options?.horizontal ? 'y' : 'x',
+                        type: props.widget.horizontal ? 'y' : 'x',
                         gridLine: false,
                         domainLine: false,
                         ...xAxisConfig,
-                    } as AxisConfigInterface<Datum>"
+                    } satisfies AxisConfigInterface<Datum>"
                 />
                 <VisAxis
                     v-bind="{
-                        type: props.widget.options?.horizontal ? 'x' : 'y',
+                        type: props.widget.horizontal ? 'x' : 'y',
                         domainLine: false,
                         ...yAxisConfig,
-                    } as AxisConfigInterface<Datum>"
+                    } satisfies AxisConfigInterface<Datum>"
                 />
             </template>
 
-            <template v-if="!props.widget.options?.horizontal">
+            <template v-if="!props.widget.horizontal">
                 <ChartCrosshair
                     v-bind="{
                         color: color,
                         template: tooltipTemplate,
                         hideWhenFarFromPointer: false,
-                    } as CrosshairConfigInterface<Datum>"
+                    } satisfies CrosshairConfigInterface<Datum>"
                 />
             </template>
 
@@ -64,10 +64,10 @@
                 v-bind="{
                     x: x,
                     y: y,
-                    orientation: props.widget.options?.horizontal ? Orientation.Horizontal : Orientation.Vertical,
+                    orientation: props.widget.horizontal ? Orientation.Horizontal : Orientation.Vertical,
                     color: color,
                     barMinHeight: 5,
-                } as GroupedBarConfigInterface<Datum>"
+                } satisfies GroupedBarConfigInterface<Datum>"
             />
         </VisXYContainer>
 

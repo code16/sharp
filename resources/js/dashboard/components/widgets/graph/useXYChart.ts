@@ -1,5 +1,5 @@
 import { DashboardWidgetProps } from "@/dashboard/types";
-import { GraphWidgetData } from "@/types";
+import { AreaGraphWidgetData, BarGraphWidgetData, GraphWidgetData, LineGraphWidgetData } from "@/types";
 import { computed } from "vue";
 import { XYComponentConfigInterface } from "@unovis/ts/core/xy-component/config";
 import {
@@ -15,13 +15,17 @@ import {
 import { extent } from 'd3-array';
 import { ChartConfig, ChartTooltipContent, componentToString } from "@/components/ui/chart";
 import { useCurrentElement, useElementSize } from "@vueuse/core";
-export type Datum = number[];
+export type Datum = number[] & { total?: number };
 
-export function useXYChart(props: DashboardWidgetProps<GraphWidgetData>) {
+export function useXYChart(props: DashboardWidgetProps<LineGraphWidgetData | BarGraphWidgetData | AreaGraphWidgetData>) {
     const data = computed((): Datum[] => props.value?.datasets?.reduce((res, dataset, i) => {
         dataset.data.forEach((v, j) => {
             res[j] ??= [];
             res[j][i] = v;
+            if(props.widget.display === 'area' && props.widget.stacked) {
+                res[j].total ??= 0;
+                res[j].total += v;
+            }
         });
         return res;
     }, []));
@@ -38,7 +42,11 @@ export function useXYChart(props: DashboardWidgetProps<GraphWidgetData>) {
         const yAxisHeight = height.value - 75;
         return height.value ? Math.pow(yAxisHeight, 0.85) / 25 : 5;
     })
-    const yExtent = computed(() => extent(props.value?.datasets?.flatMap((dataset) => dataset.data)));
+    const yExtent = computed(() => extent(
+        props.widget.display === 'area' && props.widget.stacked
+            ? data.value.map(d => d.total)
+            : data.value.flatMap(d => d)
+    ));
     const yScale = computed(() => {
         return Scale.scaleLinear().domain(yExtent.value).nice(yNumTicks.value)
     });
@@ -53,9 +61,18 @@ export function useXYChart(props: DashboardWidgetProps<GraphWidgetData>) {
     });
     const color = computed((): ColorAccessor<Datum | Datum[]> => props.value?.datasets.map((dataset, i) => dataset.color));
 
-    const chartConfig = computed((): ChartConfig =>
-        Object.fromEntries(props.value?.datasets.map((dataset, i) => [i, ({ label: dataset.label, color: dataset.color })]))
-    );
+    const chartConfig = computed((): ChartConfig => ({
+        ...Object.fromEntries(props.value?.datasets.map((dataset, i) => [i, ({
+            label: dataset.label,
+            color: dataset.color,
+        })])),
+        ...props.widget.display === 'area' && props.widget.showStackTotal && {
+            total: {
+                label: props.widget.stackTotalLabel,
+                tooltipOnly: true,
+            },
+        },
+    }));
 
     const tooltipTemplate = componentToString(chartConfig, ChartTooltipContent, {
         labelFormatter: (x) => {
@@ -74,12 +91,11 @@ export function useXYChart(props: DashboardWidgetProps<GraphWidgetData>) {
     });
 
     const rotate = computed(() =>
-        !props.widget.options.horizontal
+        !('horizontal' in props.widget && props.widget.horizontal)
         && !props.widget.enableHorizontalAxisLabelSampling
         && !props.widget.displayHorizontalAxisAsTimeline
         && props.value?.labels?.length >= 10
     );
-
 
     const xAxisConfig = computed((): AxisConfigInterface<Datum> => ({
         tickValues: (() => {
@@ -100,7 +116,11 @@ export function useXYChart(props: DashboardWidgetProps<GraphWidgetData>) {
         },
         tickTextTrimType: TrimMode.End,
         // tickTextAlign: rotate.value ? TextAlign.Left : props.widget.options.horizontal ? TextAlign.Right : TextAlign.Center,
-        tickTextAlign: rotate.value ? TextAlign.Right : props.widget.options.horizontal ? TextAlign.Right : TextAlign.Center,
+        tickTextAlign: rotate.value
+            ? TextAlign.Right
+            : ('horizontal' in props.widget && props.widget.horizontal)
+                ? TextAlign.Right
+                : TextAlign.Center,
         tickTextFitMode: rotate.value ? FitMode.Wrap : FitMode.Trim,
         // tickTextAngle: rotate.value ? 45 : undefined,
         tickTextAngle: rotate.value ? -45 : undefined,

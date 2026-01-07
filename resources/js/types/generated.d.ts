@@ -1,3 +1,23 @@
+export type AreaGraphWidgetData = {
+  value?: GraphWidgetValueData;
+  key: string;
+  type: "graph";
+  display: "area";
+  title: string | null;
+  showLegend: boolean;
+  minimal: boolean;
+  ratioX: number | null;
+  ratioY: number | null;
+  height: number | null;
+  displayHorizontalAxisAsTimeline: boolean;
+  enableHorizontalAxisLabelSampling: boolean;
+  curved: boolean;
+  gradient: boolean;
+  stacked: boolean;
+  showStackTotal: boolean;
+  stackTotalLabel: string | null;
+  opacity: number | null;
+};
 export type AutocompleteRemoteFilterData = {
   value?: { id: string | number; label: string };
   key: string;
@@ -7,6 +27,21 @@ export type AutocompleteRemoteFilterData = {
   master: boolean;
   debounceDelay: number;
   searchMinChars: number;
+};
+export type BarGraphWidgetData = {
+  value?: GraphWidgetValueData;
+  key: string;
+  type: "graph";
+  display: "bar";
+  title: string | null;
+  showLegend: boolean;
+  minimal: boolean;
+  ratioX: number | null;
+  ratioY: number | null;
+  height: number | null;
+  displayHorizontalAxisAsTimeline: boolean;
+  enableHorizontalAxisLabelSampling: boolean;
+  horizontal: boolean;
 };
 export type BreadcrumbData = {
   items: Array<BreadcrumbItemData>;
@@ -645,32 +680,17 @@ export type GlobalFiltersData = {
 export type GlobalSearchData = {
   config: { placeholder: string };
 };
-export type GraphWidgetData = {
-  value?: {
-    key: string;
-    datasets: Array<{ label: string; data: number[]; color: string }>;
-    labels: string[];
-  };
-  key: string;
-  type: "graph";
-  title: string | null;
-  display: GraphWidgetDisplay;
-  showLegend: boolean;
-  minimal: boolean;
-  ratioX: number | null;
-  ratioY: number | null;
-  height: number | null;
-  displayHorizontalAxisAsTimeline: boolean;
-  enableHorizontalAxisLabelSampling: boolean;
-  options: {
-    curved: boolean;
-    horizontal: boolean;
-    showDots: boolean;
-    gradient: boolean;
-    opacity: any;
-  };
-};
+export type GraphWidgetData =
+  | AreaGraphWidgetData
+  | BarGraphWidgetData
+  | LineGraphWidgetData
+  | PieGraphWidgetData;
 export type GraphWidgetDisplay = "bar" | "line" | "pie" | "area";
+export type GraphWidgetValueData = {
+  key: string;
+  datasets: Array<{ label: string; data: number[]; color: string }>;
+  labels: Array<string>;
+};
 export type IconData = {
   svg: string | null;
   name: string | null;
@@ -686,6 +706,22 @@ export type LayoutFieldData = {
   key: string;
   size: number;
   item: Array<Array<LayoutFieldData>> | null;
+};
+export type LineGraphWidgetData = {
+  value?: GraphWidgetValueData;
+  key: string;
+  type: "graph";
+  display: "line";
+  title: string | null;
+  showLegend: boolean;
+  minimal: boolean;
+  ratioX: number | null;
+  ratioY: number | null;
+  height: number | null;
+  displayHorizontalAxisAsTimeline: boolean;
+  enableHorizontalAxisLabelSampling: boolean;
+  curved: boolean;
+  showDots: boolean;
 };
 export type LogoData = {
   svg: string | null;
@@ -761,6 +797,18 @@ export type PanelWidgetData = {
   type: "panel";
   title: string | null;
   link: string | null;
+};
+export type PieGraphWidgetData = {
+  value?: GraphWidgetValueData;
+  key: string;
+  type: "graph";
+  display: "pie";
+  title: string | null;
+  showLegend: boolean;
+  minimal: boolean;
+  ratioX: number | null;
+  ratioY: number | null;
+  height: number | null;
 };
 export type SearchResultLinkData = {
   link: string;

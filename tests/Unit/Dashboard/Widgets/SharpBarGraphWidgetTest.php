@@ -55,5 +55,5 @@ it('allows to define horizontal option attribute', function () {
     $widget = SharpBarGraphWidget::make('name')
         ->setHorizontal();
 
-    expect($widget->toArray()['options']['horizontal'])->toBeTrue();
+    expect($widget->toArray()['horizontal'])->toBeTrue();
 });

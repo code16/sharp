@@ -85,16 +85,18 @@ const tooltipLabel = computed(() => {
             />
           </template>
 
-          <div :class="cn('flex flex-1 justify-between gap-2 leading-none', nestLabel ? 'items-end' : 'items-center')">
-            <div class="grid gap-1.5">
-              <div v-if="nestLabel" class="font-medium">
-                {{ tooltipLabel }}
-              </div>
-              <span class="text-muted-foreground">
-                {{ itemConfig?.label || value }}
-              </span>
-            </div>
-            <span v-if="value" class="text-foreground font-mono font-medium tabular-nums">
+          <div :class="cn('flex flex-1 gap-2 leading-none', nestLabel ? 'items-end' : 'items-center')">
+              <template v-if="itemConfig?.label">
+                  <div class="grid gap-1.5 mr-auto">
+                      <div v-if="nestLabel" class="font-medium">
+                          {{ tooltipLabel }}
+                      </div>
+                      <span class="text-muted-foreground">
+                          {{ itemConfig?.label || value }}
+                      </span>
+                  </div>
+              </template>
+            <span v-if="value != null" class="text-foreground font-mono font-medium tabular-nums">
               {{ value.toLocaleString() }}
             </span>
           </div>

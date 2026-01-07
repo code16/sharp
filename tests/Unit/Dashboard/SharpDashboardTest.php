@@ -35,9 +35,7 @@ it('returns widgets', function () {
             'showLegend' => true,
             'displayHorizontalAxisAsTimeline' => false,
             'enableHorizontalAxisLabelSampling' => false,
-            'options' => [
-                'horizontal' => false,
-            ],
+            'horizontal' => false,
         ],
     ]);
 });

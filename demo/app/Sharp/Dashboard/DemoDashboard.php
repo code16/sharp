@@ -16,10 +16,10 @@ use Code16\Sharp\Dashboard\Layout\DashboardLayout;
 use Code16\Sharp\Dashboard\Layout\DashboardLayoutRow;
 use Code16\Sharp\Dashboard\Layout\DashboardLayoutSection;
 use Code16\Sharp\Dashboard\SharpDashboard;
+use Code16\Sharp\Dashboard\Widgets\SharpAreaGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpBarGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpFigureWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
-use Code16\Sharp\Dashboard\Widgets\SharpLineGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpOrderedListWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpPanelWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpPieGraphWidget;
@@ -53,16 +53,16 @@ class DemoDashboard extends SharpDashboard
                     ->setTitle('Posts by category'),
             )
             ->addWidget(
-                SharpLineGraphWidget::make('visits_line')
+                SharpAreaGraphWidget::make('visits_line')
                     ->setTitle('Visits')
                     ->setHeight(200)
+                    // ->setStacked()
+                    // ->setShowStackTotal(label: 'Total visits')
                     // ->setShowLegend()
                     ->setDisplayHorizontalAxisAsTimeline()
                 // ->setEnableHorizontalAxisLabelSampling()
                 // ->setShowGradient()
-                // ->setShowAllLabels()
                 // ->setShowDots()
-                // ->setFilled()
                 // ->setMinimal()
 
             )

@@ -33,6 +33,10 @@ Along with the [common configuration](#common-configuration), the following meth
 
 Display lines with curved angles. Default is `true`.
 
+### `setOpacity(float $opacity)`
+
+Change the opacity of the filled areas. Default is `0.4`.
+
 ## Bar
 ```php
 $widgetsContainer->addWidget(
