@@ -37,6 +37,18 @@ Display lines with curved angles. Default is `true`.
 
 Change the opacity of the filled areas. Default is `0.4`.
 
+### `setShowGradient(bool $showGradient = true)`
+
+Display a gradient on top of the filled areas.
+
+### `setStacked(bool $stacked = true)`
+
+Stack areas on top of each other. Useful for comparing two or more series. The order of `->addGraphDataSet()` calls defines the stacking order.
+
+### `setShowStackTotal(bool $showStackTotal = true, ?string $label = null)`
+
+Show the total of all stacked areas in the tooltip. The label can be customized.
+
 ## Bar
 ```php
 $widgetsContainer->addWidget(
