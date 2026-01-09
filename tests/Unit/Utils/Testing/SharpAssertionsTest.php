@@ -1,8 +1,54 @@
 <?php
 
+use Code16\Sharp\Filters\SelectFilter;
+use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
+use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
 use Code16\Sharp\Utils\Testing\SharpAssertions;
+use Illuminate\Support\Traits\Tappable;
 
 uses(SharpAssertions::class);
+
+beforeEach(function () {
+    sharp()->config()->declareEntity(PersonEntity::class);
+});
+
+it('allows to test entity list', function () {
+    fakeListFor(PersonEntity::class, new class() extends PersonList
+    {
+        public function getFilters(): ?array
+        {
+            return [
+                new class() extends SelectFilter
+                {
+                    public function buildFilterConfig(): void
+                    {
+                        $this->configureKey('job');
+                    }
+
+                    public function values(): array
+                    {
+                        return [
+                            'physicist' => 'Physicist',
+                            'physician' => 'Physician',
+                        ];
+                    }
+                },
+            ];
+        }
+    });
+
+    $response = fakeResponse();
+    $response->sharpList('person')
+        ->withFilter('job', 'physicist')
+        ->get();
+
+    expect($response->uri)->toEqual(
+        route('code16.sharp.list', [
+            'entityKey' => 'person',
+            'filter_job' => 'physicist',
+        ])
+    );
+});
 
 it('allows to test getSharpShow', function () {
     $response = fakeResponse()->getSharpShow('leaves', 6);
@@ -249,9 +295,10 @@ function fakeResponse()
     return new class('fake') extends Orchestra\Testbench\TestCase
     {
         use SharpAssertions;
+        use Tappable;
 
-        public $uri;
-        public $postedData;
+        public string $uri;
+        public mixed $postedData;
 
         public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
         {
@@ -265,7 +312,13 @@ function fakeResponse()
                 $this->postedData = null;
             }
 
-            return $this;
+            return new class($this->uri, $this->postedData) extends \Illuminate\Testing\TestResponse
+            {
+                public function __construct(public $uri, public $postedData)
+                {
+                    parent::__construct(new \Illuminate\Http\Response());
+                }
+            };
         }
     };
 }
