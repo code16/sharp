@@ -57,6 +57,7 @@
     import GlobalSearch from "@/components/GlobalSearch.vue";
     import Content from "@/components/Content.vue";
     import MenuItem from "@/components/MenuItem.vue";
+    import { Separator } from "@/components/ui/separator";
 
     const dialogs = useDialogs();
     const menu = useMenu();
@@ -91,7 +92,7 @@
 
 <template>
     <ConfigProvider>
-        <SidebarProvider>
+        <SidebarProvider persist>
             <template v-if="auth()?.user">
                 <Sidebar>
                     <SidebarHeader class="p-4 h-14 items-start justify-center">
@@ -252,6 +253,10 @@
                     <template v-if="auth()?.user">
                         <SidebarTrigger class="-ml-1 shrink-0" />
                     </template>
+                    <Separator
+                        orientation="vertical"
+                        class="mr-2 data-[orientation=vertical]:h-4"
+                    />
                     <div class="min-w-0 flex-1 lg:flex-initial">
                         <slot name="breadcrumb" />
                     </div>

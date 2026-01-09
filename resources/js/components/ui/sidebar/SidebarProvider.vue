@@ -9,6 +9,7 @@ const props = withDefaults(defineProps<{
   defaultOpen?: boolean
   open?: boolean
   class?: HTMLAttributes['class']
+  persist?: boolean,
 }>(), {
   defaultOpen: true,
   open: undefined,
@@ -20,17 +21,19 @@ const emits = defineEmits<{
 
 const isMobile = useMediaQuery('(max-width: 768px)')
 const openMobile = ref(false)
+const defaultOpen = props.persist ? localStorage.getItem('sidebar-open') !== 'false' : props.defaultOpen
 
 const open = useVModel(props, 'open', emits, {
-  defaultValue: props.defaultOpen ?? false,
+  defaultValue: defaultOpen,
   passive: (props.open === undefined) as false,
 }) as Ref<boolean>
 
 function setOpen(value: boolean) {
   open.value = value // emits('update:open', value)
 
+  localStorage.setItem('sidebar-open', value.toString());
   // This sets the cookie to keep the sidebar state.
-  document.cookie = `${SIDEBAR_COOKIE_NAME}=${open.value}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
+  // document.cookie = `${SIDEBAR_COOKIE_NAME}=${open.value}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
 }
 
 function setOpenMobile(value: boolean) {
