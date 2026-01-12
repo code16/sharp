@@ -49,7 +49,7 @@ class Sharp2faEloquentDefaultTotpHandler extends Sharp2faTotpHandler
 
     protected function findUser($userId): Model
     {
-        $userClass = class_exists("App\Models\User") ? "App\Models\User" : "App\User";
+        $userClass = class_exists('App\Models\User') ? 'App\Models\User' : 'App\User';
 
         return app($userClass)->find($userId);
     }
