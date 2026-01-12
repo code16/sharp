@@ -6,41 +6,38 @@ class SharpLegacyConfigBuilder extends SharpConfigBuilder
 {
     public function get(string $key): mixed
     {
-        if ($key == 'entity_resolver') {
-            return is_string(config('sharp.entities'))
+        return match ($key) {
+            'entity_resolver' => is_string(config('sharp.entities'))
                 ? config('sharp.entities')
-                : null;
+                : null,
+            'theme.logo_url' => config('sharp.theme.logo_url', config('sharp.theme.logo_urls.menu')),
+            'auth.impersonate.handler' => value(config('sharp.auth.impersonate.handler')),
+            'auth.forgotten_password.password_broker' => value(config('sharp.auth.forgotten_password.password_broker')),
+            'auth.2fa.handler' => $this->get2faHandler(),
+            'auth.message_blade_path' => $this->getMessageBladePath(),
+            default => config('sharp.'.$key),
+        };
+    }
+
+    private function get2faHandler(): mixed
+    {
+        $handler = config('sharp.auth.2fa.handler');
+
+        if (in_array($handler, ['notification', 'totp'])) {
+            return app($handler);
         }
 
-        if ($key == 'theme.logo_url') {
-            return config('sharp.theme.logo_url', config('sharp.theme.logo_urls.menu'));
+        return value($handler);
+    }
+
+    private function getMessageBladePath(): ?string
+    {
+        $blade = config('sharp.auth.message_blade_path');
+
+        if ($blade && view()->exists($blade)) {
+            return view($blade)->render();
         }
 
-        if ($key == 'auth.impersonate.handler') {
-            return value(config('sharp.auth.impersonate.handler'));
-        }
-
-        if ($key == 'auth.forgotten_password.password_broker') {
-            return value(config('sharp.auth.forgotten_password.password_broker'));
-        }
-
-        if ($key == 'auth.2fa.handler') {
-            if (in_array(config('sharp.auth.2fa.handler'), ['notification', 'totp'])) {
-                return app(config('sharp.auth.2fa.handler'));
-            }
-
-            return value(config('sharp.auth.2fa.handler'));
-        }
-
-        if ($key == 'auth.message_blade_path') {
-            $blade = config('sharp.auth.message_blade_path');
-            if ($blade && view()->exists($blade)) {
-                return view($blade)->render();
-            }
-
-            return null;
-        }
-
-        return config('sharp.'.$key);
+        return null;
     }
 }

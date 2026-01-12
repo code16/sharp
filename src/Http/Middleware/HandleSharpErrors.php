@@ -34,30 +34,25 @@ class HandleSharpErrors
 
     protected function mapException(Response|JsonResponse|RedirectResponse $response): SharpException
     {
-        if ($response->exception instanceof SharpException) {
-            return $response->exception;
-        }
+        $exception = $response->exception;
 
-        if ($response->exception instanceof HttpExceptionInterface) {
-            return new SharpException(
-                $response->exception->getMessage(),
+        return match (true) {
+            $exception instanceof SharpException => $exception,
+            $exception instanceof HttpExceptionInterface => new SharpException(
+                $exception->getMessage(),
                 $response->getStatusCode(),
-                $response->exception
-            );
-        }
-
-        if ($response->exception instanceof ModelNotFoundException) {
-            return new SharpException(
-                $response->exception->getMessage(),
+                $exception
+            ),
+            $exception instanceof ModelNotFoundException => new SharpException(
+                $exception->getMessage(),
                 404,
-                $response->exception
-            );
-        }
-
-        return new SharpException(
-            __('Server error'),
-            500,
-            $response->exception
-        );
+                $exception
+            ),
+            default => new SharpException(
+                __('Server error'),
+                500,
+                $exception
+            ),
+        };
     }
 }
