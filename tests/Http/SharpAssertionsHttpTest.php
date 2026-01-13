@@ -5,6 +5,7 @@ use Code16\Sharp\EntityList\Commands\Wizards\EntityWizardCommand;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
+use Code16\Sharp\Tests\Fixtures\Sharp\PersonShow;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Testing\SharpAssertions;
 use Illuminate\Http\UploadedFile;
@@ -149,4 +150,41 @@ it('call & assert an entity list entity wiard command', function () {
         ->assertReturnsStep('second-step')
         ->callNextStep(['age' => 30])
         ->assertReturnsReload();
+});
+
+test('get & assert show', function () {
+    fakeShowFor('person', new class() extends PersonShow
+    {
+        public function find($id): array
+        {
+            return ['name' => 'John Doe', 'age' => 31];
+        }
+    });
+
+    $this->sharpShow(PersonEntity::class, 1)
+        ->get()
+        ->assertOk()
+        ->assertShowData(['name' => 'John Doe']);
+});
+
+test('get & assert show EEL', function () {
+    fakeShowFor('person', new class() extends PersonShow
+    {
+        public function find($id): array
+        {
+            return ['name' => 'John Doe', 'age' => 31];
+        }
+    });
+
+    $this->sharpShow(PersonEntity::class, 1)
+        ->sharpListField(PersonEntity::class)
+        ->get()
+        ->assertOk()
+        ->assertShowData(['name' => 'John Doe']);
+});
+
+test('get & assert form', function () {
+    $this->sharpForm(PersonEntity::class, 1)
+        ->get()
+        ->assertOk();
 });

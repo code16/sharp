@@ -2,18 +2,34 @@
 
 namespace Code16\Sharp\Utils\Testing;
 
+use Closure;
 use Code16\Sharp\Http\Context\SharpBreadcrumb;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Links\BreadcrumbBuilder;
 use Code16\Sharp\Utils\Testing\EntityList\PendingEntityList;
+use Code16\Sharp\Utils\Testing\Form\PendingForm;
+use Code16\Sharp\Utils\Testing\Show\PendingShow;
 
 trait SharpAssertions
 {
-    use GeneratesSharpUrl;
+    use GeneratesCurrentPageUrl;
+    use GeneratesGlobalFilterUrl;
+
+    private BreadcrumbBuilder $breadcrumbBuilder;
 
     public function sharpList(string $entityClassNameOrKey): PendingEntityList
     {
         return new PendingEntityList($this, $entityClassNameOrKey);
+    }
+
+    public function sharpShow(string $entityClassNameOrKey, int|string|null $instanceId = null): PendingShow
+    {
+        return new PendingShow($this, $entityClassNameOrKey, $instanceId);
+    }
+
+    public function sharpForm(string $entityClassNameOrKey, int|string|null $instanceId = null): PendingForm
+    {
+        return new PendingForm($this, $entityClassNameOrKey, $instanceId);
     }
 
     /**
@@ -30,6 +46,17 @@ trait SharpAssertions
                     ? $this->breadcrumbBuilder->appendSingleShowPage($segment[1])
                     : $this->breadcrumbBuilder->appendShowPage($segment[1], $segment[2]),
             });
+
+        return $this;
+    }
+
+    /**
+     * @param  (\Closure(BreadcrumbBuilder): BreadcrumbBuilder)  $callback
+     * @return $this
+     */
+    public function withSharpBreadcrumb(Closure $callback): self
+    {
+        $this->breadcrumbBuilder = $callback(new BreadcrumbBuilder());
 
         return $this;
     }
@@ -292,6 +319,17 @@ trait SharpAssertions
     public function loginAsSharpUser($user): self
     {
         return $this->actingAs($user, sharp()->config()->get('auth.guard') ?: config('auth.defaults.guard'));
+    }
+
+    private function breadcrumbBuilder(string $entityKey, ?string $instanceId = null): BreadcrumbBuilder
+    {
+        if (isset($this->breadcrumbBuilder)) {
+            return $this->breadcrumbBuilder;
+        }
+
+        return (new BreadcrumbBuilder())
+            ->appendEntityList($entityKey)
+            ->when($instanceId, fn ($builder) => $builder->appendShowPage($entityKey, $instanceId));
     }
 
     private function resolveEntityKey(string $entityClassNameOrKey): string
