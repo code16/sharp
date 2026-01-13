@@ -14,6 +14,17 @@
                     "parameters": [
                         1
                     ]
+                },
+                {
+                    "classFqn": [
+                        "Code16\\Sharp\\Utils\\Testing\\Commands\\AssertableCommand"
+                    ],
+                    "methodNames": [
+                        "assertReturnsView"
+                    ],
+                    "parameters": [
+                        1
+                    ]
                 }
             ]
         },

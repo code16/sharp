@@ -7,6 +7,7 @@ use Code16\Sharp\Http\Context\SharpBreadcrumb;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Testing\Commands\AssertableCommand;
 use Code16\Sharp\Utils\Testing\GeneratesSharpUrl;
+use Code16\Sharp\Utils\Testing\Show\PendingShow;
 use Illuminate\Foundation\Testing\TestCase;
 
 class PendingEntityList
@@ -14,8 +15,8 @@ class PendingEntityList
     use GeneratesSharpUrl;
 
     protected SharpEntityList $entityList;
-    protected array $filterValues = [];
     protected string $entityKey;
+    protected array $filterValues = [];
 
     public function __construct(
         /** @var TestCase $test */
@@ -24,6 +25,11 @@ class PendingEntityList
     ) {
         $this->entityKey = app(SharpEntityManager::class)->entityKeyFor($entityKey);
         $this->entityList = app(SharpEntityManager::class)->entityFor($this->entityKey)->getListOrFail();
+    }
+
+    public function sharpShow(string $entityKey, string|int $instanceId): PendingShow
+    {
+        return new PendingShow($this->test, $entityKey, $instanceId, parent: $this);
     }
 
     public function withFilter(string $filterKey, mixed $value): static
@@ -60,7 +66,7 @@ class PendingEntityList
             : $commandKeyOrClassName;
 
         return new AssertableCommand(
-            $this
+            fn ($data, $step) => $this
                 ->test
                 ->withHeader(
                     SharpBreadcrumb::CURRENT_PAGE_URL_HEADER,
@@ -76,9 +82,12 @@ class PendingEntityList
                     [
                         'data' => $data,
                         'query' => $this->entityListQueryParams(),
-                        'command_step' => $commandStep,
+                        'command_step' => $step,
                     ],
-                )
+                ),
+            commandContainer: $this->entityList,
+            data: $data,
+            step: $commandStep
         );
     }
 
@@ -95,7 +104,7 @@ class PendingEntityList
             : $commandKeyOrClassName;
 
         return new AssertableCommand(
-            $this
+            fn ($data, $step) => $this
                 ->test
                 ->withHeader(
                     SharpBreadcrumb::CURRENT_PAGE_URL_HEADER,
@@ -111,9 +120,12 @@ class PendingEntityList
                     [
                         'data' => $data,
                         'query' => $this->entityListQueryParams(),
-                        'command_step' => $commandStep,
+                        'command_step' => $step,
                     ],
-                )
+                ),
+            commandContainer: $this->entityList,
+            data: $data,
+            step: $commandStep,
         );
     }
 
