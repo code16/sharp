@@ -1,12 +1,8 @@
 # Graph widget
 
-This widget intends to display a graph visualization of any data.
+This widget intends to display a graph visualization of any data. There are four graph types, and they mostly share the same API. To choose one or the other, use its dedicated class:
 
-## Types
-
-There are three graph types, and they mostly share the same API. To choose one or the other, use its dedicated class:
-
-### Line graph
+## Line
 
 ```php
 $widgetsContainer->addWidget(
@@ -14,15 +10,60 @@ $widgetsContainer->addWidget(
 );
 ```
 
-### Bar graph
+Along with the [common configuration](#common-configuration), the following methods are available:
 
+### `setShowDots(bool $showDots = true)`
+
+Display dots on the graph lines.
+
+### `setCurvedLines(bool $curvedLines = true)`
+
+Display lines with curved angles. Default is `true`.
+
+## Area
+```php
+$widgetsContainer->addWidget(
+    SharpAreaGraphWidget::make('sales')
+);
+```
+
+Along with the [common configuration](#common-configuration), the following methods are available:
+
+### `setCurvedLines(bool $curvedLines = true)`
+
+Display lines with curved angles. Default is `true`.
+
+### `setOpacity(float $opacity)`
+
+Change the opacity of the filled areas. Default is `0.4`.
+
+### `setShowGradient(bool $showGradient = true)`
+
+Display a gradient on top of the filled areas.
+
+### `setStacked(bool $stacked = true)`
+
+Stack areas on top of each other. Useful for comparing two or more series. The order of `->addGraphDataSet()` calls defines the stacking order.
+
+### `setShowStackTotal(bool $showStackTotal = true, ?string $label = null)`
+
+Show the total of all stacked areas in the tooltip. The label can be customized.
+
+## Bar
 ```php
 $widgetsContainer->addWidget(
     SharpBarGraphWidget::make('sales')
 );
 ```
 
-### Pie graph
+Along with the [common configuration](#common-configuration), the following methods are available:
+
+### `setHorizontal(bool $horizontal = true)`
+
+Display horizontal bars instead of vertical ones. Default is `false`.
+
+
+## Pie
 
 ```php
 $widgetsContainer->addWidget(
@@ -30,7 +71,7 @@ $widgetsContainer->addWidget(
 );
 ```
 
-## Attributes (setters)
+## Common configuration
 
 ### `setRatio(string $ratio)`
 
@@ -50,15 +91,11 @@ If true, legend and axis are hidden. Default is `false`.
 
 ### `setDisplayHorizontalAxisAsTimeline(bool $displayAsTimeline = true)`
 
-**(Line and Bar)** If true, and if X axis values are valid dates, the graph will create a timeline repartition of dates, creating visual gaps between dates. Default is `false`. 
+**(Line, Area, Bar)** If true, and if X axis values are valid dates, the graph will create a timeline repartition of dates, creating visual gaps between dates. Default is `false`. 
 
-### `setCurvedLines(bool $curvedLines = true)`
+### `setEnableHorizontalAxisLabelSampling(bool $enableLabelSampling = true)`
 
-**(Line only)** Display lines with curved angles. Default is `true`. 
-
-### `setHorizontal(bool $horizontal = true)`
-
-**(Bar only)** Display horizontal bars instead of vertical ones. Default is `false`.
+**(Line, Area, Bar)** If true, only some labels will be displayed depending on available space. It prevents label rotation. This method has no impact when `setDisplayHorizontalAxisAsTimeline()` is called. Default is `false`.
 
 ## Data valuation
 

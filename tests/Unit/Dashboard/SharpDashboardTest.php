@@ -33,10 +33,9 @@ it('returns widgets', function () {
             'ratioY' => 9,
             'minimal' => false,
             'showLegend' => true,
-            'dateLabels' => false,
-            'options' => [
-                'horizontal' => false,
-            ],
+            'displayHorizontalAxisAsTimeline' => false,
+            'enableHorizontalAxisLabelSampling' => false,
+            'horizontal' => false,
         ],
     ]);
 });

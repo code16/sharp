@@ -36,11 +36,16 @@ class SharpGraphWidgetDataSet
         return $this;
     }
 
+    protected function formatValues(array $values): array
+    {
+        return array_map(fn ($value) => (float) $value, array_values($values));
+    }
+
     public function toArray(): array
     {
         return collect()
             ->merge([
-                'data' => array_values($this->values),
+                'data' => $this->formatValues($this->values),
                 'labels' => array_keys($this->values),
             ])
             ->when(

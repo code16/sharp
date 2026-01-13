@@ -48,12 +48,12 @@ it('allows to define displayHorizontalAxisAsTimeline attribute', function () {
     $widget = SharpBarGraphWidget::make('name')
         ->setDisplayHorizontalAxisAsTimeline();
 
-    expect($widget->toArray()['dateLabels'])->toBeTrue();
+    expect($widget->toArray()['displayHorizontalAxisAsTimeline'])->toBeTrue();
 });
 
 it('allows to define horizontal option attribute', function () {
     $widget = SharpBarGraphWidget::make('name')
         ->setHorizontal();
 
-    expect($widget->toArray()['options']['horizontal'])->toBeTrue();
+    expect($widget->toArray()['horizontal'])->toBeTrue();
 });

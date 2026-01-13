@@ -4,8 +4,10 @@ namespace Code16\Sharp\Dashboard\Widgets;
 
 class SharpLineGraphWidget extends SharpGraphWidget
 {
+    use IsXYChart;
+
     protected bool $curvedLines = true;
-    protected bool $displayHorizontalAxisAsTimeline = false;
+    protected bool $showDots = false;
 
     public static function make(string $key): SharpLineGraphWidget
     {
@@ -22,22 +24,21 @@ class SharpLineGraphWidget extends SharpGraphWidget
         return $this;
     }
 
-    public function setDisplayHorizontalAxisAsTimeline(bool $displayAsTimeline = true): self
+    public function setShowDots(bool $showDots = true): self
     {
-        $this->displayHorizontalAxisAsTimeline = $displayAsTimeline;
+        $this->showDots = $showDots;
 
         return $this;
     }
 
     public function toArray(): array
     {
-        return array_merge(
-            parent::toArray(), [
-                'dateLabels' => $this->displayHorizontalAxisAsTimeline,
-                'options' => [
-                    'curved' => $this->curvedLines,
-                ],
-            ],
-        );
+        return [
+            ...parent::toArray(),
+            'displayHorizontalAxisAsTimeline' => $this->displayHorizontalAxisAsTimeline,
+            'enableHorizontalAxisLabelSampling' => $this->enableHorizontalAxisLabelSampling,
+            'curved' => $this->curvedLines,
+            'showDots' => $this->showDots,
+        ];
     }
 }

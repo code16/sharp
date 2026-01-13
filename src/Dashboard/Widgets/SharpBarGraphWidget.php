@@ -4,8 +4,9 @@ namespace Code16\Sharp\Dashboard\Widgets;
 
 class SharpBarGraphWidget extends SharpGraphWidget
 {
+    use IsXYChart;
+
     protected bool $horizontal = false;
-    protected bool $displayHorizontalAxisAsTimeline = false;
 
     public static function make(string $key): SharpBarGraphWidget
     {
@@ -22,22 +23,13 @@ class SharpBarGraphWidget extends SharpGraphWidget
         return $this;
     }
 
-    public function setDisplayHorizontalAxisAsTimeline(bool $displayAsTimeline = true): self
-    {
-        $this->displayHorizontalAxisAsTimeline = $displayAsTimeline;
-
-        return $this;
-    }
-
     public function toArray(): array
     {
-        return array_merge(
-            parent::toArray(), [
-                'dateLabels' => $this->displayHorizontalAxisAsTimeline,
-                'options' => [
-                    'horizontal' => $this->horizontal,
-                ],
-            ],
-        );
+        return [
+            ...parent::toArray(),
+            'displayHorizontalAxisAsTimeline' => $this->displayHorizontalAxisAsTimeline,
+            'enableHorizontalAxisLabelSampling' => $this->enableHorizontalAxisLabelSampling,
+            'horizontal' => $this->horizontal,
+        ];
     }
 }
