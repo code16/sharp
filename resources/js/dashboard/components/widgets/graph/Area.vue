@@ -69,19 +69,13 @@
                         color: props.value?.datasets.map((dataset, i) => props.widget.gradient ? `url(#fill-${i})` : dataset.color),
                         opacity: props.widget.opacity,
                         curveType: props.widget.curved ? CurveType.MonotoneX : CurveType.Linear,
+                        line: true,
+                        lineWidth: 1,
+                        lineColor: color,
                     } satisfies AreaConfigInterface<Datum>"
                 />
             </template>
             <template v-else>
-                <VisLine
-                    v-bind="{
-                        x: x,
-                        y: y,
-                        color: color,
-                        lineWidth: 1,
-                        curveType: props.widget.curved ? CurveType.MonotoneX : CurveType.Linear,
-                    } satisfies LineConfigInterface<Datum>"
-                />
                 <template v-for="(dataset, i) in props.value?.datasets">
                     <VisArea
                         v-bind="{
@@ -90,6 +84,9 @@
                             color: props.widget.gradient ? `url(#fill-${i})` : dataset.color,
                             opacity: props.widget.opacity,
                             curveType: props.widget.curved ? CurveType.MonotoneX : CurveType.Linear,
+                            line: true,
+                            lineWidth: 1,
+                            lineColor: dataset.color,
                         } satisfies AreaConfigInterface<Datum>"
                     />
                 </template>
