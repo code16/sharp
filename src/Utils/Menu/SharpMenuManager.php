@@ -26,33 +26,27 @@ class SharpMenuManager
     {
         return $this->menu()
             ?->items()
-            ->filter(function (SharpMenuItem $item) {
-                if ($item->isSection()) {
-                    return count($this->resolveSectionItems($item)) > 0;
-                }
-
-                return $item->isAllowed();
-            }) ?? collect();
+            ->filter(fn (SharpMenuItem $item) => $item->isSection()
+                ? count($this->resolveSectionItems($item)) > 0
+                : $item->isAllowed()
+            ) ?? collect();
     }
 
     public function getFlattenedItems(): Collection
     {
         return $this->getItems()
-            ->map(function (SharpMenuItem $item) {
-                return $item->isSection()
-                    ? $this->resolveSectionItems($item)
-                    : $item;
-            })
+            ->map(fn (SharpMenuItem $item) => $item->isSection()
+                ? $this->resolveSectionItems($item)
+                : $item
+            )
+            ->merge($this->userMenu()?->getItems() ?? collect())
             ->flatten();
     }
 
     public function getEntityMenuItem(string $entityKey): ?SharpMenuItemLink
     {
         return $this->getFlattenedItems()
-            ->first(function (SharpMenuItem $item) use ($entityKey) {
-                return $item->isEntity()
-                    && $item->getEntityKey() === $entityKey;
-            });
+            ->first(fn (SharpMenuItem $item) => $item->isEntity() && $item->getEntityKey() === $entityKey);
     }
 
     public function resolveSectionItems(SharpMenuItemSection $section): Collection
