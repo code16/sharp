@@ -24,4 +24,12 @@ class SharpUtil
     {
         return $this->context;
     }
+
+    /**
+     * @internal
+     */
+    public function reset()
+    {
+        $this->context = app(SharpContext::class);
+    }
 }

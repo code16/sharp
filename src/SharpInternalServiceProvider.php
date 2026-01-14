@@ -132,6 +132,10 @@ class SharpInternalServiceProvider extends ServiceProvider
         });
 
         $this->app->register(InertiaServiceProvider::class);
+
+        $this->app->rebinding('request', function ($app, $request) {
+            $this->app->get(SharpUtil::class)->reset();
+        });
     }
 
     protected function declareMiddleware(): void
@@ -244,7 +248,7 @@ class SharpInternalServiceProvider extends ServiceProvider
         $this->app->get(SharpMenuManager::class)->reset();
         $this->app->get(SharpAuthorizationManager::class)->reset();
         $this->app->get(SharpUploadManager::class)->reset();
-        $this->app->get(SharpUtil::class)->__construct();
+        $this->app->get(SharpUtil::class)->reset();
         $this->app->get(SharpImageManager::class)->__construct();
         $this->app->get(AddLinkHeadersForPreloadedRequests::class)->reset();
     }
