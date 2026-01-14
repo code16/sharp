@@ -3,6 +3,7 @@
 use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\EntityList\Commands\Wizards\EntityWizardCommand;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
+use Code16\Sharp\Show\Fields\SharpShowEntityListField;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonShow;
@@ -30,7 +31,6 @@ it('get & assert an entity list', function () {
 
     $this->sharpList(PersonEntity::class)
         ->get()
-        // ->getListData()
         ->assertOk()
         ->assertListCount(1)
         ->assertListContains(['name' => 'Marie Curie']);
@@ -170,9 +170,27 @@ test('get & assert show', function () {
 test('get & assert show EEL', function () {
     fakeShowFor('person', new class() extends PersonShow
     {
+        public function buildShowFields(FieldsContainer $showFields): void
+        {
+            $showFields->addField(
+                SharpShowEntityListField::make(PersonEntity::class)
+            );
+        }
+
         public function find($id): array
         {
             return ['name' => 'John Doe', 'age' => 31];
+        }
+    });
+
+    fakeListFor(PersonEntity::class, new class() extends PersonList
+    {
+        public function getListData(): array
+        {
+            return [
+                ['id' => 1, 'name' => 'Marie Curie'],
+                ['id' => 2, 'name' => 'Albert Einstein'],
+            ];
         }
     });
 
@@ -180,7 +198,8 @@ test('get & assert show EEL', function () {
         ->sharpListField(PersonEntity::class)
         ->get()
         ->assertOk()
-        ->assertShowData(['name' => 'John Doe']);
+        ->assertListCount(2)
+        ->assertListContains(['name' => 'Marie Curie']);
 });
 
 test('get & assert form', function () {

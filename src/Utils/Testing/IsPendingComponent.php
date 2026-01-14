@@ -43,7 +43,7 @@ trait IsPendingComponent
         }
 
         foreach ($components as $component) {
-            if ($component instanceof PendingEntityList) {
+            if ($component instanceof PendingEntityList && ! $component->parent) {
                 $breadcrumb->appendEntityList($component->entityKey);
             } elseif ($component instanceof PendingShow) {
                 if ($component->instanceId) {

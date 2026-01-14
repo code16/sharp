@@ -4,11 +4,15 @@ namespace Code16\Sharp\Utils\Testing\EntityList;
 
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Http\Context\SharpBreadcrumb;
+use Code16\Sharp\Show\Fields\SharpShowEntityListField;
+use Code16\Sharp\Show\Fields\SharpShowField;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Testing\Commands\AssertableCommand;
+use Code16\Sharp\Utils\Testing\Form\PendingForm;
 use Code16\Sharp\Utils\Testing\IsPendingComponent;
 use Code16\Sharp\Utils\Testing\Show\PendingShow;
 use Illuminate\Foundation\Testing\TestCase;
+use PHPUnit\Framework\Assert as PHPUnit;
 
 class PendingEntityList
 {
@@ -26,16 +30,20 @@ class PendingEntityList
     ) {
         $this->entityKey = app(SharpEntityManager::class)->entityKeyFor($entityKey);
         $this->entityList = app(SharpEntityManager::class)->entityFor($this->entityKey)->getListOrFail();
+
+        if ($this->parent instanceof PendingShow) {
+            PHPUnit::assertNotNull($this->entityListShowField(), sprintf('Unknown entity list show field "%s"', $this->entityKey));
+        }
     }
 
-    public function sharpShow(string $entityKey, string|int $instanceId): PendingShow
+    public function sharpShow(string $entityClassNameOrKey, string|int $instanceId): PendingShow
     {
-        return new PendingShow(
-            $this->test,
-            $entityKey,
-            $instanceId,
-            parent: $this->parent instanceof PendingShow ? $this->parent : $this
-        );
+        return new PendingShow($this->test, $entityClassNameOrKey, $instanceId, parent: $this);
+    }
+
+    public function sharpForm(string $entityClassNameOrKey, string|int $instanceId): PendingForm
+    {
+        return new PendingForm($this->test, $entityClassNameOrKey, $instanceId, parent: $this);
     }
 
     public function withFilter(string $filterKey, mixed $value): static
@@ -51,12 +59,26 @@ class PendingEntityList
         $this->setGlobalFilterUrlDefault();
 
         return new AssertableEntityList(
-            $this->test->get(
-                route('code16.sharp.list', [
-                    'entityKey' => $this->entityKey,
-                    ...$this->entityListQueryParams(),
-                ])
-            )
+            $this->parent instanceof PendingShow
+                ? $this->test
+                    ->withHeader(
+                        SharpBreadcrumb::CURRENT_PAGE_URL_HEADER,
+                        $this->getCurrentPageUrlFromParents(),
+                    )
+                    ->get(
+                        route('code16.sharp.api.list', [
+                            'entityKey' => $this->entityKey,
+                            ...$this->entityList
+                                ->filterContainer()
+                                ->getQueryParamsFromFilterValues($this->entityListShowField()->toArray()['hiddenFilters'] ?? []),
+                            ...$this->entityListQueryParams(),
+                        ])
+                    )
+                : $this->test->get(route('code16.sharp.list', [
+                        'entityKey' => $this->entityKey,
+                        ...$this->entityListQueryParams(),
+                    ])),
+            $this,
         );
     }
 
@@ -129,6 +151,17 @@ class PendingEntityList
             data: $data,
             step: $commandStep,
         );
+    }
+
+    protected function entityListShowField(): ?SharpShowEntityListField
+    {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        return $this->parent instanceof PendingShow
+            ? $this->parent->show->getBuiltFields()
+                ->first(fn (SharpShowField $field) => $field instanceof SharpShowEntityListField
+                    && $field->toArray()['entityListKey'] === $this->entityKey
+                )
+            : null;
     }
 
     protected function entityListQueryParams(): array

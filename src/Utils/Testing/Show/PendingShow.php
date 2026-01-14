@@ -18,14 +18,14 @@ class PendingShow
     use GeneratesGlobalFilterUrl;
     use IsPendingComponent;
 
-    protected SharpShow $show;
+    public SharpShow $show;
     public string $entityKey;
 
     public function __construct(
         /** @var TestCase $test */
         protected object $test,
         string $entityKey,
-        protected string|int|null $instanceId = null,
+        public string|int|null $instanceId = null,
         public PendingEntityList|PendingShow|null $parent = null,
     ) {
         $this->entityKey = app(SharpEntityManager::class)->entityKeyFor($entityKey);
@@ -37,7 +37,7 @@ class PendingShow
         return new PendingForm($this->test, $entityClassNameOrKey, $this->instanceId, parent: $this);
     }
 
-    public function sharpListField(string $entityClassNameOrKey, ?string $entityListKey = null): PendingEntityList
+    public function sharpListField(string $entityClassNameOrKey): PendingEntityList
     {
         return new PendingEntityList($this->test, $entityClassNameOrKey, parent: $this);
     }

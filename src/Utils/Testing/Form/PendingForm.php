@@ -23,7 +23,7 @@ class PendingForm
         /** @var TestCase $test */
         protected object $test,
         string $entityKey,
-        protected string|int|null $instanceId = null,
+        public string|int|null $instanceId = null,
         public PendingEntityList|PendingShow|null $parent = null,
     ) {
         $this->entityKey = app(SharpEntityManager::class)->entityKeyFor($entityKey);
