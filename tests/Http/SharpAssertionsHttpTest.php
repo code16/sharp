@@ -2,9 +2,11 @@
 
 use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\EntityList\Commands\Wizards\EntityWizardCommand;
+use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Show\Fields\SharpShowEntityListField;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
+use Code16\Sharp\Tests\Fixtures\Sharp\PersonForm;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonShow;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
@@ -202,8 +204,129 @@ test('get & assert show EEL', function () {
         ->assertListContains(['name' => 'Marie Curie']);
 });
 
-test('get & assert form', function () {
+test('nested form', function () {
+    $this->sharpForm(PersonEntity::class)->create();
+    expect(sharp()->context()->breadcrumb()->getCurrentPath())->toEqual('s-list/person/s-form/person');
+    $this->sharpForm(PersonEntity::class, 1)->update([]);
+    expect(sharp()->context()->breadcrumb()->getCurrentPath())->toEqual('s-list/person/s-show/person/1/s-form/person/1');
+});
+
+test('create & store form', function () {
+    fakeFormFor('person', new class() extends PersonForm
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields
+                ->addField(SharpFormEditorField::make('name'))
+                ->addField(SharpFormEditorField::make('job'));
+        }
+
+        public function find($id): array
+        {
+            return ['name' => 'John Wayne', 'job' => 'actor'];
+        }
+
+        public function update($id, array $data)
+        {
+            expect($data)->toEqual(['name' => 'John Doe', 'job' => null]);
+
+            return 1;
+        }
+    });
+
+    $this->sharpForm(PersonEntity::class)
+        ->create()
+        ->assertOk()
+        ->store(['name' => 'John Doe'])
+        ->assertValid()
+        ->assertRedirect();
+});
+
+test('store form', function () {
+    fakeFormFor('person', new class() extends PersonForm
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields
+                ->addField(SharpFormEditorField::make('name'))
+                ->addField(SharpFormEditorField::make('job'));
+        }
+
+        public function find($id): array
+        {
+            return ['name' => 'John Wayne', 'job' => 'actor'];
+        }
+
+        public function update($id, array $data)
+        {
+            expect($data)->toEqual(['name' => 'John Doe', 'job' => null]);
+
+            return 1;
+        }
+    });
+
+    $this->sharpForm(PersonEntity::class)
+        ->store(['name' => 'John Doe'])
+        ->assertValid()
+        ->assertRedirect();
+});
+
+test('edit & update form', function () {
+    fakeFormFor('person', new class() extends PersonForm
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields
+                ->addField(SharpFormEditorField::make('name'))
+                ->addField(SharpFormEditorField::make('job'));
+        }
+
+        public function find($id): array
+        {
+            return ['name' => 'John Wayne', 'job' => 'actor'];
+        }
+
+        public function update($id, array $data)
+        {
+            expect($data)->toEqual(['name' => 'John Doe', 'job' => 'actor']);
+
+            return 1;
+        }
+    });
+
     $this->sharpForm(PersonEntity::class, 1)
-        ->get()
-        ->assertOk();
+        ->edit()
+        ->assertOk()
+        ->update(['name' => 'John Doe'])
+        ->assertValid()
+        ->assertRedirect();
+});
+
+test('update form', function () {
+    fakeFormFor('person', new class() extends PersonForm
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields
+                ->addField(SharpFormEditorField::make('name'))
+                ->addField(SharpFormEditorField::make('job'));
+        }
+
+        public function find($id): array
+        {
+            return ['name' => 'John Wayne', 'job' => 'actor'];
+        }
+
+        public function update($id, array $data)
+        {
+            expect($data)->toEqual(['name' => 'John Doe', 'job' => null]);
+
+            return 1;
+        }
+    });
+
+    $this->sharpForm(PersonEntity::class, 1)
+        ->update(['name' => 'John Doe'])
+        ->assertValid()
+        ->assertRedirect();
 });

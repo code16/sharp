@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Utils\Testing;
 
+use Code16\Sharp\Form\SharpSingleForm;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Links\BreadcrumbBuilder;
 use Code16\Sharp\Utils\Testing\EntityList\PendingEntityList;
@@ -32,13 +33,13 @@ trait IsPendingComponent
         if ($first instanceof PendingShow && $first->instanceId) {
             $breadcrumb->appendEntityList($first->entityKey);
         } elseif ($first instanceof PendingForm) {
-            if ($first->instanceId) {
+            if ($first->form instanceof SharpSingleForm) {
+                $breadcrumb->appendSingleShowPage($first->entityKey);
+            } else {
                 $breadcrumb->appendEntityList($first->entityKey);
-                if (app(SharpEntityManager::class)->entityFor($first->entityKey)->hasShow()) {
+                if (app(SharpEntityManager::class)->entityFor($first->entityKey)->hasShow() && $first->instanceId) {
                     $breadcrumb->appendShowPage($first->entityKey, $first->instanceId);
                 }
-            } else {
-                $breadcrumb->appendSingleShowPage($first->entityKey);
             }
         }
 

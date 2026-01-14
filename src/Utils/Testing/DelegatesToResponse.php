@@ -19,4 +19,9 @@ trait DelegatesToResponse
 
         return $this;
     }
+
+    public function __get(string $name)
+    {
+        return $this->response->{$name};
+    }
 }
