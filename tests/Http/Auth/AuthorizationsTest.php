@@ -2,6 +2,7 @@
 
 use Code16\Sharp\Auth\SharpAuthenticationCheckHandler;
 use Code16\Sharp\Auth\SharpEntityPolicy;
+use Code16\Sharp\Http\Context\SharpBreadcrumb;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Entities\SinglePersonEntity;
 use Code16\Sharp\Tests\Fixtures\User;
@@ -208,7 +209,9 @@ it('allow access by default', function () {
 
     // EEL (json)
     $this
-        ->getJson('/sharp/api/root/list/person')
+        ->getJson('/sharp/api/root/list/person', headers: [
+            SharpBreadcrumb::CURRENT_PAGE_URL_HEADER => url('/sharp/root/s-list/person/s-show/person/1'),
+        ])
         ->assertJson(fn (AssertableJson $json) => $json
             ->where('authorizations.reorder', true)
             ->where('authorizations.create', true)
