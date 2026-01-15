@@ -50,7 +50,6 @@ class PendingShow
             $this->test
                 ->get($this->show instanceof SharpSingleShow
                     ? route('code16.sharp.single-show', [
-                        'parentUri' => $this->getParentUri(),
                         'entityKey' => $this->entityKey,
                     ])
                     : route('code16.sharp.show.show', [

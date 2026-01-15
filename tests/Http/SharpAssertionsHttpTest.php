@@ -1,14 +1,17 @@
 <?php
 
 use Code16\Sharp\EntityList\Commands\EntityCommand;
+use Code16\Sharp\EntityList\Commands\InstanceCommand;
 use Code16\Sharp\EntityList\Commands\Wizards\EntityWizardCommand;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Show\Fields\SharpShowEntityListField;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
+use Code16\Sharp\Tests\Fixtures\Entities\SinglePersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonForm;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonShow;
+use Code16\Sharp\Tests\Fixtures\Sharp\SinglePersonShow;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Testing\SharpAssertions;
 use Illuminate\Http\UploadedFile;
@@ -18,6 +21,7 @@ pest()->use(SharpAssertions::class);
 beforeEach(function () {
     login();
     sharp()->config()->declareEntity(PersonEntity::class);
+    sharp()->config()->declareEntity(SinglePersonEntity::class);
 });
 
 it('get & assert an entity list', function () {
@@ -39,7 +43,7 @@ it('get & assert an entity list', function () {
 });
 
 it('call & assert an entity list entity command', function () {
-    fakeListFor('person', new class() extends PersonList
+    fakeListFor(PersonEntity::class, new class() extends PersonList
     {
         protected function getEntityCommands(): ?array
         {
@@ -106,8 +110,8 @@ it('call & assert an entity list entity command', function () {
         ->assertReturnsRefresh([1, 2]);
 });
 
-it('call & assert an entity list entity wiard command', function () {
-    fakeListFor('person', new class() extends PersonList
+it('call & assert an entity list entity wizard command', function () {
+    fakeListFor(PersonEntity::class, new class() extends PersonList
     {
         protected function getEntityCommands(): ?array
         {
@@ -154,8 +158,71 @@ it('call & assert an entity list entity wiard command', function () {
         ->assertReturnsReload();
 });
 
-test('get & assert show', function () {
-    fakeShowFor('person', new class() extends PersonShow
+it('call & assert a show instance command', function () {
+    fakeShowFor(PersonEntity::class, new class() extends PersonShow
+    {
+        public function getInstanceCommands(): ?array
+        {
+            return [
+                'cmd' => new class() extends InstanceCommand
+                {
+                    public function label(): ?string
+                    {
+                        return 'entity';
+                    }
+
+                    public function buildFormFields(FieldsContainer $formFields): void
+                    {
+                        $formFields->addField(SharpFormTextField::make('action'));
+                    }
+
+                    public function execute($instanceId, array $data = []): array
+                    {
+                        if ($data['action'] === 'download') {
+                            Storage::fake('files');
+                            UploadedFile::fake()
+                                ->create('account.pdf', 100, 'application/pdf')
+                                ->storeAs('pdf', 'account.pdf', ['disk' => 'files']);
+                        }
+
+                        return match ($data['action']) {
+                            'info' => $this->info('ok'),
+                            'link' => $this->link('https://example.org'),
+                            'view' => $this->view('fixtures::test', ['text' => 'text']),
+                            'reload' => $this->reload(),
+                            'download' => $this->download('pdf/account.pdf', 'account.pdf', 'files'),
+                        };
+                    }
+                },
+            ];
+        }
+    });
+
+    $this->sharpShow(PersonEntity::class, 1)
+        ->callInstanceCommand('cmd', ['action' => 'info'])
+        ->assertReturnsInfo('ok');
+
+    $this->sharpShow(PersonEntity::class, 1)
+        ->callInstanceCommand('cmd', ['action' => 'link'])
+        ->assertReturnsLink('https://example.org');
+
+    $this->sharpShow(PersonEntity::class, 1)
+        ->callInstanceCommand('cmd', ['action' => 'view'])
+        ->assertReturnsView('fixtures::test', [
+            'text' => 'text',
+        ]);
+
+    $this->sharpShow(PersonEntity::class, 1)
+        ->callInstanceCommand('cmd', ['action' => 'reload'])
+        ->assertReturnsReload();
+
+    $this->sharpShow(PersonEntity::class, 1)
+        ->callInstanceCommand('cmd', ['action' => 'download'])
+        ->assertReturnsDownload('account.pdf');
+});
+
+test('get show', function () {
+    fakeShowFor(PersonEntity::class, new class() extends PersonShow
     {
         public function find($id): array
         {
@@ -167,10 +234,30 @@ test('get & assert show', function () {
         ->get()
         ->assertOk()
         ->assertShowData(['name' => 'John Doe']);
+
+    expect(sharp()->context()->breadcrumb()->getCurrentPath())->toEqual('s-list/person/s-show/person/1');
 });
 
-test('get & assert show EEL', function () {
-    fakeShowFor('person', new class() extends PersonShow
+test('get single show', function () {
+
+    fakeShowFor(SinglePersonEntity::class, new class() extends SinglePersonShow
+    {
+        public function findSingle(): array
+        {
+            return ['name' => 'John Doe', 'age' => 31];
+        }
+    });
+
+    $this->sharpShow(SinglePersonEntity::class)
+        ->get()
+        ->assertOk()
+        ->assertShowData(['name' => 'John Doe']);
+
+    expect(sharp()->context()->breadcrumb()->getCurrentPath())->toEqual('s-show/single-person');
+});
+
+test('get show EEL', function () {
+    fakeShowFor(PersonEntity::class, new class() extends PersonShow
     {
         public function buildShowFields(FieldsContainer $showFields): void
         {
@@ -204,15 +291,44 @@ test('get & assert show EEL', function () {
         ->assertListContains(['name' => 'Marie Curie']);
 });
 
-test('nested form', function () {
-    $this->sharpForm(PersonEntity::class)->create();
-    expect(sharp()->context()->breadcrumb()->getCurrentPath())->toEqual('s-list/person/s-form/person');
-    $this->sharpForm(PersonEntity::class, 1)->update([]);
-    expect(sharp()->context()->breadcrumb()->getCurrentPath())->toEqual('s-list/person/s-show/person/1/s-form/person/1');
+test('get nested show', function () {
+    fakeShowFor(PersonEntity::class, new class() extends PersonShow
+    {
+        public function buildShowFields(FieldsContainer $showFields): void
+        {
+            $showFields->addField(
+                SharpShowEntityListField::make(PersonEntity::class)
+            );
+        }
+
+        public function find($id): array
+        {
+            return ['name' => 'John Doe', 'age' => 31];
+        }
+    });
+
+    fakeListFor(PersonEntity::class, new class() extends PersonList
+    {
+        public function getListData(): array
+        {
+            return [
+                ['id' => 1, 'name' => 'Marie Curie'],
+                ['id' => 2, 'name' => 'Albert Einstein'],
+            ];
+        }
+    });
+
+    $this->sharpShow(PersonEntity::class, 1)
+        ->sharpListField(PersonEntity::class)
+        ->sharpShow(PersonEntity::class, 2)
+        ->get()
+        ->assertOk();
+
+    expect(sharp()->context()->breadcrumb()->getCurrentPath())->toEqual('s-list/person/s-show/person/1/s-show/person/2');
 });
 
 test('create & store form', function () {
-    fakeFormFor('person', new class() extends PersonForm
+    fakeFormFor(PersonEntity::class, new class() extends PersonForm
     {
         public function buildFormFields(FieldsContainer $formFields): void
         {
@@ -221,14 +337,14 @@ test('create & store form', function () {
                 ->addField(SharpFormEditorField::make('job'));
         }
 
-        public function find($id): array
+        public function create(): array
         {
             return ['name' => 'John Wayne', 'job' => 'actor'];
         }
 
         public function update($id, array $data)
         {
-            expect($data)->toEqual(['name' => 'John Doe', 'job' => null]);
+            expect($data)->toEqual(['name' => 'John Doe', 'job' => 'actor']);
 
             return 1;
         }
@@ -240,21 +356,18 @@ test('create & store form', function () {
         ->store(['name' => 'John Doe'])
         ->assertValid()
         ->assertRedirect();
+
+    expect(sharp()->context()->breadcrumb()->getCurrentPath())->toEqual('s-list/person/s-form/person');
 });
 
 test('store form', function () {
-    fakeFormFor('person', new class() extends PersonForm
+    fakeFormFor(PersonEntity::class, new class() extends PersonForm
     {
         public function buildFormFields(FieldsContainer $formFields): void
         {
             $formFields
                 ->addField(SharpFormEditorField::make('name'))
                 ->addField(SharpFormEditorField::make('job'));
-        }
-
-        public function find($id): array
-        {
-            return ['name' => 'John Wayne', 'job' => 'actor'];
         }
 
         public function update($id, array $data)
@@ -269,10 +382,12 @@ test('store form', function () {
         ->store(['name' => 'John Doe'])
         ->assertValid()
         ->assertRedirect();
+
+    expect(sharp()->context()->breadcrumb()->getCurrentPath())->toEqual('s-list/person/s-form/person');
 });
 
 test('edit & update form', function () {
-    fakeFormFor('person', new class() extends PersonForm
+    fakeFormFor(PersonEntity::class, new class() extends PersonForm
     {
         public function buildFormFields(FieldsContainer $formFields): void
         {
@@ -300,10 +415,12 @@ test('edit & update form', function () {
         ->update(['name' => 'John Doe'])
         ->assertValid()
         ->assertRedirect();
+
+    expect(sharp()->context()->breadcrumb()->getCurrentPath())->toEqual('s-list/person/s-show/person/1/s-form/person/1');
 });
 
 test('update form', function () {
-    fakeFormFor('person', new class() extends PersonForm
+    fakeFormFor(PersonEntity::class, new class() extends PersonForm
     {
         public function buildFormFields(FieldsContainer $formFields): void
         {
@@ -329,4 +446,15 @@ test('update form', function () {
         ->update(['name' => 'John Doe'])
         ->assertValid()
         ->assertRedirect();
+
+    expect(sharp()->context()->breadcrumb()->getCurrentPath())->toEqual('s-list/person/s-show/person/1/s-form/person/1');
+});
+
+test('update single form', function () {
+    $this->sharpForm(SinglePersonEntity::class)
+        ->update(['name' => 'John Doe'])
+        ->assertValid()
+        ->assertRedirect();
+
+    expect(sharp()->context()->breadcrumb()->getCurrentPath())->toEqual('s-show/single-person/s-form/single-person');
 });

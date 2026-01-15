@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Utils\Testing\Form;
 
 use Code16\Sharp\Form\SharpForm;
+use Code16\Sharp\Form\SharpSingleForm;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Testing\EntityList\PendingEntityList;
 use Code16\Sharp\Utils\Testing\GeneratesGlobalFilterUrl;
@@ -10,6 +11,7 @@ use Code16\Sharp\Utils\Testing\IsPendingComponent;
 use Code16\Sharp\Utils\Testing\Show\PendingShow;
 use Illuminate\Foundation\Testing\TestCase;
 use Illuminate\Testing\TestResponse;
+use PHPUnit\Framework\Assert as PHPUnit;
 
 class PendingForm
 {
@@ -36,6 +38,8 @@ class PendingForm
     {
         $this->setGlobalFilterUrlDefault();
 
+        PHPUnit::assertNotInstanceOf(SharpSingleForm::class, $this->form);
+
         return new AssertableForm(
             $this->test
                 ->get(route('code16.sharp.form.create', [
@@ -49,6 +53,10 @@ class PendingForm
     public function edit(): AssertableForm
     {
         $this->setGlobalFilterUrlDefault();
+
+        if (! $this->form instanceof SharpSingleForm) {
+            PHPUnit::assertNotNull($this->instanceId, 'You can’t edit a form without an instance ID.');
+        }
 
         return new AssertableForm(
             $this->test
@@ -65,6 +73,8 @@ class PendingForm
     {
         $this->setGlobalFilterUrlDefault();
 
+        PHPUnit::assertNotInstanceOf(SharpSingleForm::class, $this->form);
+
         return $this->test
             ->post(
                 route('code16.sharp.form.store', [
@@ -78,6 +88,10 @@ class PendingForm
     public function update(array $data): TestResponse
     {
         $this->setGlobalFilterUrlDefault();
+
+        if (! $this->form instanceof SharpSingleForm) {
+            PHPUnit::assertNotNull($this->instanceId, 'You can’t update a form without an instance ID.');
+        }
 
         return $this->test
             ->post(
