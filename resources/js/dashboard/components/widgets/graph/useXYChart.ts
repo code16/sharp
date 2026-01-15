@@ -80,7 +80,7 @@ export function useXYChart(props: DashboardWidgetProps<LineGraphWidgetData | Bar
                 const nearestDate = new Date(
                     getNearest(
                         props.value.labels.map((label) => new Date(label).getTime()),
-                        (x as Date).getTime(),
+                        x as number, // timestamp
                         v => v
                     )
                 );
