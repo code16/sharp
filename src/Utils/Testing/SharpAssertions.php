@@ -6,6 +6,7 @@ use Closure;
 use Code16\Sharp\Http\Context\SharpBreadcrumb;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Links\BreadcrumbBuilder;
+use Code16\Sharp\Utils\Testing\Dashboard\PendingDashboard;
 use Code16\Sharp\Utils\Testing\EntityList\PendingEntityList;
 use Code16\Sharp\Utils\Testing\Form\PendingForm;
 use Code16\Sharp\Utils\Testing\Show\PendingShow;
@@ -30,6 +31,11 @@ trait SharpAssertions
     public function sharpForm(string $entityClassNameOrKey, int|string|null $instanceId = null): PendingForm
     {
         return new PendingForm($this, $entityClassNameOrKey, $instanceId);
+    }
+
+    public function sharpDashboard(string $entityClassNameOrKey): PendingDashboard
+    {
+        return new PendingDashboard($this, $entityClassNameOrKey);
     }
 
     /**

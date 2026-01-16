@@ -7,7 +7,8 @@ use Code16\Sharp\Http\Context\SharpBreadcrumb;
 use Code16\Sharp\Show\Fields\SharpShowEntityListField;
 use Code16\Sharp\Show\Fields\SharpShowField;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
-use Code16\Sharp\Utils\Testing\Commands\AssertableCommand;
+use Code16\Sharp\Utils\Testing\Commands\FormatsDataForCommand;
+use Code16\Sharp\Utils\Testing\Commands\PendingCommand;
 use Code16\Sharp\Utils\Testing\Form\PendingForm;
 use Code16\Sharp\Utils\Testing\IsPendingComponent;
 use Code16\Sharp\Utils\Testing\Show\PendingShow;
@@ -16,6 +17,7 @@ use PHPUnit\Framework\Assert as PHPUnit;
 
 class PendingEntityList
 {
+    use FormatsDataForCommand;
     use IsPendingComponent;
 
     protected SharpEntityList $entityList;
@@ -61,95 +63,122 @@ class PendingEntityList
         return new AssertableEntityList(
             $this->parent instanceof PendingShow
                 ? $this->test
-                    ->withHeader(
-                        SharpBreadcrumb::CURRENT_PAGE_URL_HEADER,
-                        $this->getCurrentPageUrlFromParents(),
-                    )
-                    ->get(
+                    ->getJson(
                         route('code16.sharp.api.list', [
                             'entityKey' => $this->entityKey,
                             ...$this->entityList
                                 ->filterContainer()
                                 ->getQueryParamsFromFilterValues($this->entityListShowField()->toArray()['hiddenFilters'] ?? []),
                             ...$this->entityListQueryParams(),
-                        ])
+                        ]),
+                        headers: [
+                            SharpBreadcrumb::CURRENT_PAGE_URL_HEADER => $this->getCurrentPageUrlFromParents(),
+                        ]
                     )
                 : $this->test->get(route('code16.sharp.list', [
-                        'entityKey' => $this->entityKey,
-                        ...$this->entityListQueryParams(),
-                    ])),
+                    'entityKey' => $this->entityKey,
+                    ...$this->entityListQueryParams(),
+                ])),
             $this,
         );
     }
 
-    public function callEntityCommand(
-        string $commandKeyOrClassName,
-        array $data = [],
-        ?string $commandStep = null
-    ): AssertableCommand {
+    public function entityCommand(string $commandKeyOrClassName): PendingCommand
+    {
         $this->setGlobalFilterUrlDefault();
 
         $commandKey = class_exists($commandKeyOrClassName)
             ? class_basename($commandKeyOrClassName)
             : $commandKeyOrClassName;
 
-        return new AssertableCommand(
-            fn ($data, $step) => $this
+        return new PendingCommand(
+            getForm: fn (?string $step = null) => $this
                 ->test
-                ->withHeader(
-                    SharpBreadcrumb::CURRENT_PAGE_URL_HEADER,
-                    $this->getCurrentPageUrlFromParents(),
-                )
+                ->getJson(
+                    route(
+                        'code16.sharp.api.list.command.entity.form',
+                        [
+                            'entityKey' => $this->entityKey,
+                            'commandKey' => $commandKey,
+                            'command_step' => $step,
+                            ...$this->entityListQueryParams(),
+                        ]
+                    ),
+                    headers: [
+                        SharpBreadcrumb::CURRENT_PAGE_URL_HEADER => $this->getCurrentPageUrlFromParents(),
+                    ]
+                ),
+            post: fn (array $data, ?string $step = null, ?array $baseData = null) => $this
+                ->test
                 ->postJson(
                     route(
                         'code16.sharp.api.list.command.entity',
                         ['entityKey' => $this->entityKey, 'commandKey' => $commandKey]
                     ),
                     [
-                        'data' => $data,
+                        'data' => $this->formatDataForCommand(
+                            $this->entityList->findEntityCommandHandler($commandKey),
+                            $data,
+                            $baseData
+                        ),
                         'query' => $this->entityListQueryParams(),
                         'command_step' => $step,
                     ],
+                    headers: [
+                        SharpBreadcrumb::CURRENT_PAGE_URL_HEADER => $this->getCurrentPageUrlFromParents(),
+                    ]
                 ),
             commandContainer: $this->entityList,
-            data: $data,
-            step: $commandStep
         );
     }
 
-    public function callInstanceCommand(
-        int|string $instanceId,
-        string $commandKeyOrClassName,
-        array $data = [],
-        ?string $commandStep = null
-    ): AssertableCommand {
+    public function instanceCommand(string $commandKeyOrClassName, int|string $instanceId): PendingCommand
+    {
         $this->setGlobalFilterUrlDefault();
 
         $commandKey = class_exists($commandKeyOrClassName)
             ? class_basename($commandKeyOrClassName)
             : $commandKeyOrClassName;
 
-        return new AssertableCommand(
-            fn ($data, $step) => $this
+        return new PendingCommand(
+            getForm: fn (?string $step = null) => $this
                 ->test
-                ->withHeader(
-                    SharpBreadcrumb::CURRENT_PAGE_URL_HEADER,
-                    $this->getCurrentPageUrlFromParents(),
-                )
+                ->getJson(
+                    route(
+                        'code16.sharp.api.list.command.instance.form',
+                        [
+                            'entityKey' => $this->entityKey,
+                            'instanceId' => $instanceId,
+                            'commandKey' => $commandKey,
+                            'command_step' => $step,
+                            ...$this->entityListQueryParams(),
+                        ]
+                    ),
+                    headers: [
+                        SharpBreadcrumb::CURRENT_PAGE_URL_HEADER => $this->getCurrentPageUrlFromParents(),
+                    ]
+                ),
+            post: fn (array $data, ?string $step = null, ?array $baseData = null) => $this
+                ->test
                 ->postJson(
                     route(
                         'code16.sharp.api.list.command.instance',
                         ['entityKey' => $this->entityKey, 'instanceId' => $instanceId, 'commandKey' => $commandKey]
                     ),
                     [
-                        'data' => $data,
+                        'data' => $this->formatDataForCommand(
+                            $this->entityList->findInstanceCommandHandler($commandKey),
+                            $data,
+                            $baseData
+                        ),
                         'query' => $this->entityListQueryParams(),
                         'command_step' => $step,
                     ],
+                    headers: [
+                        SharpBreadcrumb::CURRENT_PAGE_URL_HEADER => $this->getCurrentPageUrlFromParents(),
+                    ]
                 ),
             commandContainer: $this->entityList,
-            data: $data,
-            step: $commandStep,
         );
     }
 

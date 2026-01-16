@@ -23,6 +23,8 @@ class AssertableCommand
     public function __construct(
         /** @var Closure(array,string): TestResponse */
         protected Closure $postCommand,
+        /** @var Closure(?string): TestResponse */
+        protected Closure $getForm,
         protected SharpEntityList|SharpShow|SharpDashboard $commandContainer,
         protected array $data = [],
         protected ?string $step = null,
@@ -56,7 +58,7 @@ class AssertableCommand
 
     public function assertReturnsView(?string $view = null, ?array $data = null): static
     {
-        $this->response->assertJson(fn (AssertableJson $json) => $json
+        $this->response->assertOk()->assertJson(fn (AssertableJson $json) => $json
             ->where('action', 'view')
             ->etc()
         );
@@ -74,7 +76,7 @@ class AssertableCommand
 
     public function assertReturnsInfo(string $message = ''): static
     {
-        $this->response->assertJson(fn (AssertableJson $json) => $json
+        $this->response->assertOk()->assertJson(fn (AssertableJson $json) => $json
             ->where('action', 'info')
             ->when($message)->where('message', $message)
             ->etc()
@@ -85,7 +87,7 @@ class AssertableCommand
 
     public function assertReturnsLink(string $url = ''): static
     {
-        $this->response->assertJson(fn (AssertableJson $json) => $json
+        $this->response->assertOk()->assertJson(fn (AssertableJson $json) => $json
             ->where('action', 'link')
             ->when($url)->where('link', $url)
             ->etc()
@@ -96,7 +98,7 @@ class AssertableCommand
 
     public function assertReturnsReload(): static
     {
-        $this->response->assertJson(fn (AssertableJson $json) => $json
+        $this->response->assertOk()->assertJson(fn (AssertableJson $json) => $json
             ->where('action', 'reload')
             ->etc()
         );
@@ -106,7 +108,7 @@ class AssertableCommand
 
     public function assertReturnsRefresh(array $ids): static
     {
-        $this->response->assertJson(fn (AssertableJson $json) => $json
+        $this->response->assertOk()->assertJson(fn (AssertableJson $json) => $json
             ->where('action', 'refresh')
             ->etc()
         );
@@ -121,7 +123,7 @@ class AssertableCommand
 
     public function assertReturnsStep(?string $step = null): static
     {
-        $this->response->assertJson(fn (AssertableJson $json) => $json
+        $this->response->assertOk()->assertJson(fn (AssertableJson $json) => $json
             ->where('action', 'step')
             ->etc()
         );
@@ -135,7 +137,7 @@ class AssertableCommand
 
     public function assertReturnsDownload(?string $filename = null): static
     {
-        $this->response->assertStreamed();
+        $this->response->assertOk()->assertStreamed();
 
         if ($filename) {
             preg_match('/filename="?([^";]+)"?/', $this->response->headers->get('Content-Disposition'), $matches);
@@ -145,14 +147,14 @@ class AssertableCommand
         return $this;
     }
 
-    public function callNextStep(array $data = []): static
+    public function getNextStepForm(): AssertableCommandForm
     {
         $this->assertReturnsStep();
 
-        return new AssertableCommand(
-            $this->postCommand,
+        return new AssertableCommandForm(
+            post: $this->postCommand,
+            getForm: $this->getForm,
             commandContainer: $this->commandContainer,
-            data: $data,
             step: $this->response->json('step'),
         );
     }
