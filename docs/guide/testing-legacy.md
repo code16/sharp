@@ -1,4 +1,8 @@
-# Testing with Sharp
+# Testing with Sharp (legacy API)
+
+::: warning
+This page documents the old Testing API, we recommend using the new [Testing API](/guide/testing).
+:::
 
 Sharp provides a few assertions and helpers to help you test your Sharp code.
 

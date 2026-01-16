@@ -101,7 +101,8 @@ export function sidebar(): DefaultTheme.SidebarItem[] {
                 { text: 'Sharp Context', link: '/guide/context.md' },
                 { text: 'Sharp built-in solution for uploads', link: '/guide/sharp-uploads.md' },
                 { text: 'Data localization in Form and Show Page', link: '/guide/data-localization.md' },
-                { text: 'Testing with Sharp', link: '/guide/testing-with-sharp.md' },
+                { text: 'Testing', link: '/guide/testing.md' },
+                { text: 'Testing (legacy API)', link: '/guide/testing-legacy.md' },
                 { text: 'Artisan Generators', link: '/guide/artisan-generators.md' },
                 { text: 'Style & Visual Theme', link: '/guide/style-visual-theme.md' }
             ]

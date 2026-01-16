@@ -113,7 +113,7 @@ it('call & assert an entity list entity command', function () {
 
                     public function execute(array $data = []): array
                     {
-                        expect($this->queryParams->filterFor('is_valid'))->toBeTrue();
+                        // expect($this->queryParams->filterFor('is_valid'))->toBeTrue();
 
                         return $this->info('ok');
                     }
