@@ -5,6 +5,8 @@ use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
 use Code16\Sharp\EntityList\Commands\Wizards\EntityWizardCommand;
 use Code16\Sharp\Filters\CheckFilter;
+use Code16\Sharp\Filters\DateRange\DateRangeFilterValue;
+use Code16\Sharp\Filters\DateRangeFilter;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Show\Fields\SharpShowDashboardField;
@@ -622,17 +624,45 @@ test('update single form', function () {
 });
 
 test('get dashboard', function () {
-    fakeDashboardFor(DashboardEntity::class, new class() extends TestDashboard
+    /** @var array{'period':DateRangeFilterValue} $filterValues */
+    $filterValues = [];
+
+    fakeDashboardFor(DashboardEntity::class, new class($filterValues) extends TestDashboard
     {
+        public function __construct(public &$filterValues) {}
+
+        public function getFilters(): ?array
+        {
+            return [
+                new class() extends DateRangeFilter
+                {
+                    public function label(): string
+                    {
+                        return 'Period';
+                    }
+
+                    public function buildFilterConfig(): void
+                    {
+                        $this->configureKey('period');
+                    }
+                },
+            ];
+        }
+
         protected function buildWidgetsData(): void
         {
+            $this->filterValues = ['period' => $this->queryParams->filterFor('period')];
             $this->setPanelData('panel', ['name' => 'Marie Curie']);
         }
     });
 
     $this->sharpDashboard(DashboardEntity::class)
+        ->withFilter('period', ['start' => '2021-01-01', 'end' => '2021-01-31'])
         ->get()
         ->assertOk();
+
+    expect($filterValues['period']->getStart()->format('Y-m-d'))->toEqual('2021-01-01')
+        ->and($filterValues['period']->getEnd()->format('Y-m-d'))->toEqual('2021-01-31');
 });
 
 test('get show dashboard field', function () {

@@ -67,7 +67,7 @@ You can use `withFilter()` to apply filters to the list before calling `get()` o
 
 ```php
 $this->sharpList(Post::class)
-    ->withFilter('category', 1)
+    ->withFilter(CategoryFilter::class, 1)
     ->get()
     ->assertOk();
 ```
@@ -210,7 +210,7 @@ $this->sharpDashboard(MyDashboard::class)
 
 ```php
 $this->sharpDashboard(MyDashboard::class)
-    ->withFilter('period', '2023')
+    ->withFilter(PeriodFilter::class, ['start' => '2023-01-01', 'end' => '2023-01-31'])
     ->get()
     ->assertOk();
 ```
