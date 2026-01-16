@@ -57,17 +57,17 @@ class PersonEntity extends SharpEntity
 
     public function getForm(): ?SharpForm
     {
-        return $this->fakeForm ?? parent::getForm();
+        return isset($this->fakeForm) ? clone $this->fakeForm : parent::getForm();
     }
 
     protected function getShow(): ?SharpShow
     {
-        return $this->fakeShow ?? parent::getShow();
+        return isset($this->fakeShow) ? clone $this->fakeShow : parent::getShow();
     }
 
     protected function getList(): ?SharpEntityList
     {
-        return $this->fakeList ?? parent::getList();
+        return isset($this->fakeList) ? clone $this->fakeList : parent::getList();
     }
 
     public function setValidator(string $validatorClass, ?string $subentity = null): self

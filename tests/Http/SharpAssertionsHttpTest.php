@@ -1,8 +1,10 @@
 <?php
 
+use Code16\Sharp\Dashboard\Commands\DashboardCommand;
 use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
 use Code16\Sharp\EntityList\Commands\Wizards\EntityWizardCommand;
+use Code16\Sharp\Filters\CheckFilter;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Show\Fields\SharpShowDashboardField;
@@ -25,33 +27,20 @@ beforeEach(function () {
     login();
     sharp()->config()->declareEntity(PersonEntity::class);
     sharp()->config()->declareEntity(SinglePersonEntity::class);
+    sharp()->config()->declareEntity(DashboardEntity::class);
 });
 
 it('get & assert an entity list', function () {
-    fakeListFor(PersonEntity::class, new class() extends PersonList
-    {
-        public function getListData(): array
-        {
-            return [
-                ['id' => 1, 'name' => 'Marie Curie'],
-            ];
-        }
-    });
+    $filterValues = [];
 
-    $this->sharpList(PersonEntity::class)
-        ->get()
-        ->assertOk()
-        ->assertListCount(1)
-        ->assertListContains(['name' => 'Marie Curie']);
-});
-
-it('call & assert an entity list entity command', function () {
-    fakeListFor(PersonEntity::class, new class() extends PersonList
+    fakeListFor(PersonEntity::class, new class($filterValues) extends PersonList
     {
+        public function __construct(public &$filterValues) {}
+
         protected function getFilters(): ?array
         {
             return [
-                new class() extends \Code16\Sharp\Filters\CheckFilter
+                new class() extends CheckFilter
                 {
                     public function buildFilterConfig(): void
                     {
@@ -61,11 +50,40 @@ it('call & assert an entity list entity command', function () {
             ];
         }
 
+        public function getListData(): array
+        {
+            $this->filterValues = ['is_valid' => $this->queryParams->filterFor('is_valid')];
+
+            return [
+                ['id' => 1, 'name' => 'Marie Curie'],
+            ];
+        }
+    });
+
+    $this->sharpList(PersonEntity::class)
+        ->withFilter('is_valid', true)
+        ->get()
+        ->assertOk()
+        ->assertListCount(1)
+        ->assertListContains(['name' => 'Marie Curie']);
+
+    expect($filterValues)->toEqual(['is_valid' => true]);
+});
+
+it('call & assert an entity list entity command form', function () {
+    $postedData = [];
+
+    fakeListFor(PersonEntity::class, new class($postedData) extends PersonList
+    {
+        public function __construct(public array &$postedData) {}
+
         protected function getEntityCommands(): ?array
         {
             return [
-                'cmd-form' => new class() extends EntityCommand
+                'cmd-form' => new class($this->postedData) extends EntityCommand
                 {
+                    public function __construct(public array &$postedData) {}
+
                     public function label(): ?string
                     {
                         return 'entity';
@@ -85,7 +103,7 @@ it('call & assert an entity list entity command', function () {
 
                     public function execute(array $data = []): array
                     {
-                        expect($data)->toMatchArray(['field_with_initial_value' => 'test']);
+                        $this->postedData = $data;
 
                         if ($data['action'] === 'download') {
                             Storage::fake('files');
@@ -104,34 +122,15 @@ it('call & assert an entity list entity command', function () {
                         };
                     }
                 },
-                'cmd' => new class() extends EntityCommand
-                {
-                    public function label(): ?string
-                    {
-                        return 'entity';
-                    }
-
-                    public function execute(array $data = []): array
-                    {
-                        // expect($this->queryParams->filterFor('is_valid'))->toBeTrue();
-
-                        return $this->info('ok');
-                    }
-                },
             ];
         }
     });
 
-    $this->withoutExceptionHandling();
-
-    $this->sharpList(PersonEntity::class)
-        ->withFilter('is_valid', true)
-        ->entityCommand('cmd')->post()
-        ->assertReturnsInfo('ok');
-
     $this->sharpList(PersonEntity::class)
         ->entityCommand('cmd-form')->getForm()->post(['action' => 'info'])
         ->assertReturnsInfo('ok');
+
+    expect($postedData)->toEqual(['action' => 'info', 'field_with_initial_value' => 'test']);
 
     $this->sharpList(PersonEntity::class)
         ->entityCommand('cmd-form')->getForm()->post(['action' => 'link'])
@@ -156,14 +155,73 @@ it('call & assert an entity list entity command', function () {
         ->assertReturnsRefresh([1, 2]);
 });
 
-it('call & assert an entity list entity wizard command', function () {
-    fakeListFor(PersonEntity::class, new class() extends PersonList
+it('call & assert an entity list entity command with filters', function () {
+    $filterValues = [];
+
+    fakeListFor(PersonEntity::class, new class($filterValues) extends PersonList
     {
+        public function __construct(public &$filterValues) {}
+
+        protected function getFilters(): ?array
+        {
+            return [
+                new class() extends CheckFilter
+                {
+                    public function buildFilterConfig(): void
+                    {
+                        $this->configureKey('is_valid');
+                    }
+                },
+            ];
+        }
+
         protected function getEntityCommands(): ?array
         {
             return [
-                'wizard' => new class() extends EntityWizardCommand
+                'cmd' => new class($this->filterValues) extends EntityCommand
                 {
+                    public function __construct(public &$filterValues) {}
+
+                    public function label(): ?string
+                    {
+                        return 'entity';
+                    }
+
+                    public function execute(array $data = []): array
+                    {
+                        $this->filterValues = ['is_valid' => $this->queryParams->filterFor('is_valid')];
+
+                        return $this->info('ok');
+                    }
+                },
+            ];
+        }
+    });
+
+    $this->withoutExceptionHandling();
+
+    $this->sharpList(PersonEntity::class)
+        ->withFilter('is_valid', true)
+        ->entityCommand('cmd')->post()
+        ->assertReturnsInfo('ok');
+
+    expect($filterValues)->toEqual(['is_valid' => true]);
+});
+
+it('call & assert an entity list entity wizard command', function () {
+    $postedData = [];
+
+    fakeListFor(PersonEntity::class, new class($postedData) extends PersonList
+    {
+        public function __construct(public &$postedData) {}
+
+        protected function getEntityCommands(): ?array
+        {
+            return [
+                'wizard' => new class($this->postedData) extends EntityWizardCommand
+                {
+                    public function __construct(public &$postedData) {}
+
                     public function label(): ?string
                     {
                         return 'my command';
@@ -183,7 +241,7 @@ it('call & assert an entity list entity wizard command', function () {
 
                     protected function executeFirstStep(array $data): array
                     {
-                        expect($data)->toEqual(['name' => 'John', 'field_with_initial_value' => 'test']);
+                        $this->postedData = $data;
 
                         $this->validate($data, ['name' => 'required']);
 
@@ -204,7 +262,7 @@ it('call & assert an entity list entity wizard command', function () {
 
                     protected function executeStepSecondStep(array $data): array
                     {
-                        expect($data)->toEqual(['field_with_initial_value' => 'test', 'age' => 30]);
+                        $this->postedData = $data;
 
                         return $this->reload();
                     }
@@ -219,8 +277,10 @@ it('call & assert an entity list entity wizard command', function () {
         ->entityCommand('wizard')
         ->getForm()->post(['name' => 'John'])
         ->assertReturnsStep('second-step')
+        ->tap(fn () => expect($postedData)->toEqual(['name' => 'John', 'field_with_initial_value' => 'test']))
         ->getNextStepForm()->post(['age' => 30])
-        ->assertReturnsReload();
+        ->assertReturnsReload()
+        ->tap(fn () => expect($postedData)->toEqual(['age' => 30, 'field_with_initial_value' => 'test']));
 });
 
 it('call & assert a entity list instance command', function () {
@@ -562,9 +622,6 @@ test('update single form', function () {
 });
 
 test('get dashboard', function () {
-
-    sharp()->config()->declareEntity(DashboardEntity::class);
-
     fakeDashboardFor(DashboardEntity::class, new class() extends TestDashboard
     {
         protected function buildWidgetsData(): void
@@ -608,4 +665,54 @@ test('get show dashboard field', function () {
         ->sharpDashboardField(DashboardEntity::class)
         ->get()
         ->assertOk();
+});
+
+it('call & assert a dashboard command', function () {
+    fakeDashboardFor(DashboardEntity::class, new class() extends TestDashboard
+    {
+        public function getDashboardCommands(): ?array
+        {
+            return [
+                'cmd-form' => new class() extends DashboardCommand
+                {
+                    public function label(): ?string
+                    {
+                        return 'dashboard';
+                    }
+
+                    public function buildFormFields(FieldsContainer $formFields): void
+                    {
+                        $formFields->addField(SharpFormTextField::make('action'));
+                    }
+
+                    public function execute(array $data = []): array
+                    {
+                        return match ($data['action']) {
+                            'info' => $this->info('dashboard'),
+                        };
+                    }
+                },
+                'cmd' => new class() extends DashboardCommand
+                {
+                    public function label(): ?string
+                    {
+                        return 'dashboard';
+                    }
+
+                    public function execute(array $data = []): array
+                    {
+                        return $this->info('dashboard');
+                    }
+                },
+            ];
+        }
+    });
+
+    $this->sharpDashboard(DashboardEntity::class)
+        ->dashboardCommand('cmd')->post()
+        ->assertReturnsInfo('dashboard');
+
+    $this->sharpDashboard(DashboardEntity::class)
+        ->dashboardCommand('cmd-form')->getForm()->post(['action' => 'info'])
+        ->assertReturnsInfo('dashboard');
 });

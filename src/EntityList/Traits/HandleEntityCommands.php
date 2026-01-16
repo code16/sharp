@@ -45,8 +45,6 @@ trait HandleEntityCommands
 
     final public function getEntityCommandsHandlers(): Collection
     {
-        ray($this->entityCommandHandlers);
-        ray()->trace();
         if ($this->entityCommandHandlers === null) {
             $groupIndex = 0;
             $this->entityCommandHandlers = collect($this->getEntityCommands())
@@ -75,7 +73,6 @@ trait HandleEntityCommands
                         $commandHandler->setCommandKey($commandKey);
                     }
 
-                    // ray($this->queryParams ?? null, $commandHandler)->trace();
                     if (isset($this->queryParams)) {
                         // We have to init query params of the command
                         $commandHandler->initQueryParams($this->queryParams);

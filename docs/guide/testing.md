@@ -4,17 +4,27 @@ Sharp provides a fluent testing API to help you test your Sharp code. These asse
 
 ## The `SharpAssertions` trait
 
-To use Sharp's testing helpers, include the `Code16\Sharp\Utils\Testing\SharpAssertions` trait in your test class:
+To use Sharp's testing helpers, include the `Code16\Sharp\Utils\Testing\SharpAssertions` trait in your TestCase class:
 
 ```php
 use Code16\Sharp\Utils\Testing\SharpAssertions;
 
-class PostFormTest extends TestCase
+abstract class TestCase extends BaseTestCase
 {
     use SharpAssertions;
     
     // ...
 }
+```
+
+or in `Pest.php`:
+
+```php
+use Code16\Sharp\Utils\Testing\SharpAssertions;
+
+pest()
+    ->extend(\Tests\TestCase::class)
+    ->use(SharpAssertions::class)
 ```
 
 ## Authentication
@@ -68,9 +78,20 @@ You can call an Entity Command directly from the list:
 
 ```php
 $this->sharpList(Post::class)
-    ->callEntityCommand(ExportPosts::class, ['format' => 'csv'])
+    ->entityCommand(ExportPosts::class)
+    ->post()
     ->assertOk()
     ->assertReturnsDownload('posts.csv');
+```
+
+If the command has a form, you can test it:
+
+```php
+$this->sharpList(Post::class)
+    ->entityCommand(ExportPosts::class)
+    ->getForm()
+    ->post(['format' => 'csv'])
+    ->assertOk();
 ```
 
 ### Instance Commands
@@ -79,20 +100,24 @@ Similarly, you can call an Instance Command:
 
 ```php
 $this->sharpList(Post::class)
-    ->callInstanceCommand(1, PublishPost::class)
+    ->instanceCommand(PublishPost::class, 1)
+    ->post()
     ->assertOk()
     ->assertReturnsReload();
 ```
 
 ### Multi-step Commands (Wizards)
 
-For commands that have multiple steps, you can use `callNextStep()`:
+For commands that have multiple steps, you can use `getNextStepForm()`:
 
 ```php
 $this->sharpList(Post::class)
-    ->callEntityCommand(MyWizardCommand::class, ['step1_data' => 'value'])
+    ->entityCommand(MyWizardCommand::class)
+    ->getForm()
+    ->post(['step1_data' => 'value'])
     ->assertReturnsStep('step2')
-    ->callNextStep(['step2_data' => 'value'])
+    ->getNextStepForm()
+    ->post(['step2_data' => 'value'])
     ->assertOk();
 ```
 
@@ -118,7 +143,8 @@ $this->sharpShow(Post::class, 1)
 
 ```php
 $this->sharpShow(Post::class, 1)
-    ->callInstanceCommand(PublishPost::class)
+    ->instanceCommand(PublishPost::class)
+    ->post()
     ->assertOk();
 ```
 
@@ -193,7 +219,8 @@ $this->sharpDashboard(MyDashboard::class)
 
 ```php
 $this->sharpDashboard(MyDashboard::class)
-    ->callDashboardCommand(RefreshStats::class)
+    ->dashboardCommand(RefreshStats::class)
+    ->post()
     ->assertOk();
 ```
 
@@ -216,25 +243,6 @@ $this->sharpShow(Post::class, 1)
 ```php
 $this->sharpShow(User::class, 1)
     ->sharpDashboardField(UserStatsDashboard::class)
-    ->get()
-    ->assertOk();
-```
-
-## Advanced: Breadcrumbs and Context
-
-Most of the time, Sharp handles the breadcrumb automatically. However, you might need to simulate a specific breadcrumb context.
-
-### `withSharpBreadcrumb(Closure $callback)`
-
-```php
-use Code16\Sharp\Utils\Links\BreadcrumbBuilder;
-
-$this->withSharpBreadcrumb(function (BreadcrumbBuilder $builder) {
-    return $builder
-        ->appendEntityList(Category::class)
-        ->appendShowPage(Category::class, 1);
-})
-    ->sharpShow(Post::class, 1)
     ->get()
     ->assertOk();
 ```

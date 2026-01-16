@@ -26,8 +26,6 @@ class AssertableCommandForm
 
     public function post(array $data = []): AssertableCommand
     {
-        ray($this->formData());
-
         return new AssertableCommand(
             postCommand: fn ($data, $step) => ($this->post)($data, $step, $this->formData()),
             getForm: $this->getForm,

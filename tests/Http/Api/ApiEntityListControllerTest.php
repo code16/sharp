@@ -20,29 +20,27 @@ beforeEach(function () {
 });
 
 it('allows to reorder instances', function () {
-    $this->withoutExceptionHandling();
+    $ids = null;
 
-    $list = new class() extends PersonList
+    fakeListFor('person', new class($ids) extends PersonList
     {
-        public array $reorderedInstances = [];
+        public function __construct(public &$ids) {}
 
         public function buildListConfig(): void
         {
             $this->configureReorderable(
-                new class($this->reorderedInstances) implements ReorderHandler
+                new class($this->ids) implements ReorderHandler
                 {
-                    public function __construct(public array &$reorderedInstances) {}
+                    public function __construct(public &$ids) {}
 
                     public function reorder(array $ids): void
                     {
-                        $this->reorderedInstances = $ids;
+                        $this->ids = $ids;
                     }
                 }
             );
         }
-    };
-
-    fakeListFor('person', $list);
+    });
 
     $this
         ->postJson(
@@ -51,52 +49,45 @@ it('allows to reorder instances', function () {
         )
         ->assertOk();
 
-    expect($list->reorderedInstances)->toEqual([3, 2, 1]);
+    expect($ids)->toEqual([3, 2, 1]);
 });
 
 it('allows to delete an instance in the entity list if delete method is implemented', function () {
-    $list = new class() extends PersonList
+    $deletedId = null;
+
+    fakeListFor('person', new class($deletedId) extends PersonList
     {
-        public ?int $deletedInstance = null;
+        public function __construct(public &$deletedId) {}
 
         public function delete($id): void
         {
-            $this->deletedInstance = $id;
+            $this->deletedId = $id;
         }
-    };
+    });
 
-    fakeListFor('person', $list);
-
-    $idToDelete = rand(1, 10);
-
-    $this->deleteJson(route('code16.sharp.api.list.delete', ['root', 'person', $idToDelete]))
+    $this->deleteJson(route('code16.sharp.api.list.delete', ['root', 'person', 1]))
         ->assertOk();
 
-    expect($list->deletedInstance)->toEqual($idToDelete);
+    expect($deletedId)->toEqual(1);
 });
 
 it('delegates deletion to the show page if it exists', function () {
-    $this->withoutExceptionHandling();
+    $deletedId = null;
 
-    fakeListFor('person', new PersonList());
-
-    $show = new class() extends PersonShow
+    fakeShowFor('person', new class($deletedId) extends PersonShow
     {
-        public ?int $deletedInstance = null;
+        public function __construct(public &$deletedId) {}
 
         public function delete($id): void
         {
-            $this->deletedInstance = $id;
+            $this->deletedId = $id;
         }
-    };
-    fakeShowFor('person', $show);
+    });
 
-    $idToDelete = rand(1, 10);
-
-    $this->deleteJson(route('code16.sharp.api.list.delete', ['root', 'person', $idToDelete]))
+    $this->deleteJson(route('code16.sharp.api.list.delete', ['root', 'person', 1]))
         ->assertOk();
 
-    expect($show->deletedInstance)->toEqual($idToDelete);
+    expect($deletedId)->toEqual(1);
 });
 
 it('checks if the entity list allows deletion', function () {

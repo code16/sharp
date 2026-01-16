@@ -82,7 +82,7 @@ class PendingDashboard
                     route(
                         'code16.sharp.api.dashboard.command.form',
                         [
-                            'entityKey' => $this->entityKey,
+                            'dashboardKey' => $this->entityKey,
                             'commandKey' => $commandKey,
                             'command_step' => $step,
                             ...$this->dashboardQueryParams(),
@@ -97,7 +97,7 @@ class PendingDashboard
                 ->postJson(
                     route(
                         'code16.sharp.api.dashboard.command',
-                        ['entityKey' => $this->entityKey, 'commandKey' => $commandKey]
+                        ['dashboardKey' => $this->entityKey, 'commandKey' => $commandKey]
                     ),
                     [
                         'data' => $this->formatDataForCommand(

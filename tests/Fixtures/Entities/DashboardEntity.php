@@ -23,7 +23,7 @@ class DashboardEntity extends SharpDashboardEntity
 
     protected function getView(): SharpDashboard
     {
-        return $this->fakeView ?? parent::getView();
+        return isset($this->fakeView) ? clone $this->fakeView : parent::getView();
     }
 
     public function setPolicy(SharpEntityPolicy $policy): self
