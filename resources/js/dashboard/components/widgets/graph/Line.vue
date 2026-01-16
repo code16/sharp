@@ -1,65 +1,77 @@
 <script setup lang="ts">
-    import { useApexCharts } from "@/dashboard/components/widgets/graph/useApexCharts";
-    import { normalizeColor } from "@/dashboard/utils/chart";
-    import { GraphWidgetData } from "@/types";
-    import ApexChart from "vue3-apexcharts";
+    import { GraphWidgetData, LineGraphWidgetData } from "@/types";
     import { DashboardWidgetProps } from "@/dashboard/types";
+    import { VisXYContainer, VisAxis, VisLine, VisTooltip, VisCrosshair, VisScatter, VisArea } from "@unovis/vue";
+    import {
+        AxisConfigInterface, BulletLegendConfigInterface,
+        CrosshairConfigInterface,
+        CurveType,
+        LineConfigInterface, ScatterConfigInterface, XYContainerConfigInterface,
+    } from "@unovis/ts";
+    import { Datum, useXYChart } from "@/dashboard/components/widgets/graph/useXYChart";
+    import { ChartContainer, ChartLegendContent, ChartTooltip, ChartCrosshair } from "@/components/ui/chart";
 
-    const props = defineProps<DashboardWidgetProps<GraphWidgetData>>();
+    const props = defineProps<DashboardWidgetProps<LineGraphWidgetData>>();
 
-    const { apexChartsComponent, options } = useApexCharts(props, () => {
-        const { widget, value } = props;
-        return {
-            grid: {
-                padding: {
-                    top: 0,
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                },
-            },
-            chart: {
-                type: 'line',
-                sparkline: {
-                    enabled: widget.minimal,
-                },
-            },
-            colors: value?.datasets?.map(dataset => normalizeColor(dataset.color)),
-            dataLabels: {
-                enabled: false,
-            },
-            labels: value?.labels,
-            legend: {
-                position: 'bottom',
-            },
-            series: value?.datasets?.map(dataset => ({
-                data: dataset.data,
-                name: dataset.label,
-            })),
-            stroke: {
-                width: 2,
-                curve: widget.options?.curved ?? true ? 'smooth' : 'straight',
-            },
-            xaxis: {
-                type: widget.dateLabels ? 'datetime' : 'category',
-            },
-            yaxis: {
-                show: !widget.minimal,
-                labels: {
-                    offsetX: -10,
-                }
-            }
-        }
-    })
+    const { data, x, y, color, tooltipTemplate, containerConfig, chartConfig, xAxisConfig, yAxisConfig } = useXYChart(props);
 </script>
 
 <template>
-    <div class="mt-2" :class="{ 'mb-2': options.legend.show }" ref="el">
-        <ApexChart
-            :options="options"
-            :series="options.series"
-            :height="options.chart.height"
-            ref="apexChartsComponent"
-        />
-    </div>
+    <ChartContainer class="flex flex-col" :config="chartConfig" cursor>
+        <VisXYContainer class="flex-1 min-h-0"
+            v-bind="{
+                ...containerConfig,
+            } satisfies XYContainerConfigInterface<Datum>"
+            :data="data"
+        >
+            <template v-if="!props.widget.minimal">
+                <VisAxis
+                    v-bind="{
+                        type: 'x',
+                        gridLine: false,
+                        domainLine: false,
+                        ...xAxisConfig,
+                    } satisfies AxisConfigInterface<Datum>"
+                />
+                <VisAxis
+                    v-bind="{
+                        type: 'y',
+                        domainLine: false,
+                        ...yAxisConfig,
+                    } satisfies AxisConfigInterface<Datum>"
+                />
+            </template>
+
+            <VisLine
+                v-bind="{
+                    x: x,
+                    y: y,
+                    color: color,
+                    lineWidth: 2,
+                    curveType: props.widget.curved ? CurveType.MonotoneX : CurveType.Linear,
+                } satisfies LineConfigInterface<Datum>"
+            />
+
+            <ChartCrosshair
+                v-bind="{
+                    color: color,
+                    template: tooltipTemplate,
+                    hideWhenFarFromPointer: false,
+                } satisfies CrosshairConfigInterface<Datum>"
+            />
+
+            <ChartTooltip />
+
+            <template v-if="props.widget.showDots">
+                <template v-for="dataset in props.value?.datasets">
+                    <VisScatter
+                        v-bind="{ size: 6, x: x, y: y, color: color } satisfies ScatterConfigInterface<Datum>"
+                    />
+                </template>
+            </template>
+        </VisXYContainer>
+        <template v-if="props.widget.showLegend && !props.widget.minimal">
+            <ChartLegendContent />
+        </template>
+    </ChartContainer>
 </template>

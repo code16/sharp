@@ -273,8 +273,6 @@ it('returns a link action on a quick creation command with a form with configure
         }
     });
 
-    $this->get(route('code16.sharp.list', ['root', 'person']));
-
     $this
         ->postJson(
             route('code16.sharp.api.list.command.quick-creation-form.create', [
@@ -283,6 +281,9 @@ it('returns a link action on a quick creation command with a form with configure
                 'formEntityKey' => 'person',
             ]),
             ['data' => ['name' => 'Marie Curie']],
+            headers: [
+                SharpBreadcrumb::CURRENT_PAGE_URL_HEADER => url('/sharp/root/s-list/person'),
+            ]
         )
         ->assertOk()
         ->assertJson([
@@ -315,23 +316,18 @@ it('returns a link action on a quick creation in an EEL case command with a form
         }
     });
 
-    // Simulate a get of the person show page
-    $this
-        ->get(
-            route('code16.sharp.show.show', [
-                'globalFilter' => 'root',
-                'parentUri' => 's-list/person/',
-                'person',
-                1,
-            ])
-        )
-        ->assertOk();
-
     // Simulate a post of the colleague quick creation command from an EEL
     $this
         ->postJson(
-            route('code16.sharp.api.list.command.quick-creation-form.create', ['colleague', 'colleague']),
+            route('code16.sharp.api.list.command.quick-creation-form.create', [
+                'globalFilter' => 'root',
+                'entityKey' => 'colleague',
+                'formEntityKey' => 'colleague',
+            ]),
             ['data' => ['name' => 'Marie Curie']],
+            headers: [
+                SharpBreadcrumb::CURRENT_PAGE_URL_HEADER => url('/sharp/root/s-list/person/s-show/person/1'),
+            ]
         )
         ->assertOk()
         ->assertJson([

@@ -16,10 +16,10 @@ use Code16\Sharp\Dashboard\Layout\DashboardLayout;
 use Code16\Sharp\Dashboard\Layout\DashboardLayoutRow;
 use Code16\Sharp\Dashboard\Layout\DashboardLayoutSection;
 use Code16\Sharp\Dashboard\SharpDashboard;
+use Code16\Sharp\Dashboard\Widgets\SharpAreaGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpBarGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpFigureWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
-use Code16\Sharp\Dashboard\Widgets\SharpLineGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpOrderedListWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpPanelWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpPieGraphWidget;
@@ -31,19 +31,13 @@ use Illuminate\Support\Facades\DB;
 
 class DemoDashboard extends SharpDashboard
 {
-    private static array $colors = [
-        '#2a9d90',
-        '#e76e50',
-        '#274754',
-        '#e8c468',
-        '#f4a462',
-        //        '#3B82F6',
-        //        '#064E3B',
-        //        '#EC4899',
-        //        '#78350F',
-        //        '#9CA3AF',
+    const array COLORS = [
+        'oklch(0.809 0.105 251.813)',
+        'oklch(0.623 0.214 259.815)',
+        'oklch(0.546 0.245 262.881)',
+        'oklch(0.488 0.243 264.376)',
+        'oklch(0.424 0.199 265.638)',
     ];
-    private static int $colorsIndex = 0;
 
     protected function buildWidgets(WidgetsContainer $widgetsContainer): void
     {
@@ -52,19 +46,25 @@ class DemoDashboard extends SharpDashboard
                 SharpBarGraphWidget::make('authors_bar')
                     ->setTitle('Posts by author')
                     ->setShowLegend(false)
-                    ->setHorizontal(),
+                // ->setHorizontal(),
             )
             ->addWidget(
                 SharpPieGraphWidget::make('categories_pie')
                     ->setTitle('Posts by category'),
             )
             ->addWidget(
-                SharpLineGraphWidget::make('visits_line')
+                SharpAreaGraphWidget::make('visits_line')
                     ->setTitle('Visits')
                     ->setHeight(200)
-                    ->setShowLegend()
-                    ->setMinimal()
-                    ->setCurvedLines(),
+                    // ->setStacked()
+                    // ->setShowStackTotal(label: 'Total visits')
+                    // ->setShowLegend()
+                    ->setDisplayHorizontalAxisAsTimeline()
+                // ->setEnableHorizontalAxisLabelSampling()
+                // ->setShowGradient()
+                // ->setShowDots()
+                // ->setMinimal()
+
             )
             ->addWidget(
                 SharpFigureWidget::make('draft_panel')
@@ -176,7 +176,7 @@ class DemoDashboard extends SharpDashboard
     {
         $visits = collect(CarbonPeriod::create($this->getStartDate(), $this->getEndDate()))
             ->mapWithKeys(function (Carbon $day, $k) {
-                return [$day->isoFormat('L') => (int) (rand(10000, 20000) * 1.02)];
+                return [$day->format('Y-m-d') => (int) (rand(10000, 20000) * 1.02)];
             });
 
         $this
@@ -184,13 +184,13 @@ class DemoDashboard extends SharpDashboard
                 'visits_line',
                 SharpGraphWidgetDataSet::make($visits)
                     ->setLabel('Visits')
-                    ->setColor(static::nextColor()),
+                    ->setColor(static::COLORS[0]),
             )
             ->addGraphDataSet(
                 'visits_line',
                 SharpGraphWidgetDataSet::make($visits->map(fn ($value) => (int) ($value / (rand(20, 40) / 10))))
                     ->setLabel('New')
-                    ->setColor(static::nextColor()),
+                    ->setColor(static::COLORS[1]),
             );
     }
 
@@ -205,14 +205,14 @@ class DemoDashboard extends SharpDashboard
                     )]
             )
             ->orderBy('posts_count', 'desc')
-            ->limit(8)
+            ->limit(15)
             ->get()
             ->pluck('posts_count', 'name');
 
         $this->addGraphDataSet(
             'authors_bar',
             SharpGraphWidgetDataSet::make($data)
-                ->setColor(static::nextColor()),
+                ->setColor(static::COLORS[1]),
         );
     }
 
@@ -229,12 +229,12 @@ class DemoDashboard extends SharpDashboard
             ->limit(5)
             ->orderBy('posts_count', 'desc')
             ->get()
-            ->each(function (Category $category) {
+            ->each(function (Category $category, $i) {
                 $this->addGraphDataSet(
                     'categories_pie',
                     SharpGraphWidgetDataSet::make([$category->posts_count])
                         ->setLabel($category->name)
-                        ->setColor(static::nextColor()),
+                        ->setColor(static::COLORS[$i % count(static::COLORS)]),
                 );
             });
     }
@@ -282,15 +282,6 @@ class DemoDashboard extends SharpDashboard
                 'post' => $author->posts->first(),
             ]);
         }
-    }
-
-    private static function nextColor(): string
-    {
-        if (static::$colorsIndex >= count(static::$colors)) {
-            static::$colorsIndex = 0;
-        }
-
-        return static::$colors[static::$colorsIndex++];
     }
 
     protected function getStartDate(): Carbon

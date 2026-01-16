@@ -13,7 +13,7 @@ use Spatie\TypeScriptTransformer\Attributes\Optional;
  */
 final class FormEditorFieldData extends Data
 {
-    const VALUE_TS_TYPE = '{
+    public const string VALUE_TS_TYPE = '{
         text: string | { [locale:string]: string|null } | null,
         uploads?: { [id:string]: { file:FormUploadFieldValueData, legend?: string|null } },
         embeds?: { [embedKey:string]: { [id:string]: EmbedData["value"] } },

@@ -1,62 +1,78 @@
 <script setup lang="ts">
-    import { useApexCharts } from "@/dashboard/components/widgets/graph/useApexCharts";
-    import { normalizeColor } from "@/dashboard/utils/chart";
-    import { GraphWidgetData } from "@/types";
-    import ApexChart from "vue3-apexcharts";
+    import { BarGraphWidgetData, GraphWidgetData } from "@/types";
     import { DashboardWidgetProps } from "@/dashboard/types";
+    import { VisAxis, VisBulletLegend, VisCrosshair, VisGroupedBar, VisTooltip, VisXYContainer } from "@unovis/vue";
+    import {
+        AxisConfigInterface,
+        BulletLegendConfigInterface,
+        CrosshairConfigInterface,
+        FitMode,
+        GroupedBar,
+        GroupedBarConfigInterface,
+        Orientation,
+        TextAlign,
+        TrimMode,
+        XYContainerConfigInterface,
+    } from '@unovis/ts'
+    import { Datum, useXYChart } from "@/dashboard/components/widgets/graph/useXYChart";
+    import { ChartContainer, ChartLegendContent, ChartTooltip, ChartCrosshair } from "@/components/ui/chart";
 
-    const props = defineProps<DashboardWidgetProps<GraphWidgetData>>();
+    const props = defineProps<DashboardWidgetProps<BarGraphWidgetData>>();
 
-    const { apexChartsComponent, options } = useApexCharts(props, () => {
-        const { widget, value } = props;
-        return {
-            chart: {
-                type: 'bar'
-            },
-            colors: value?.datasets?.map(dataset => normalizeColor(dataset.color)),
-            grid: {
-                show: false,
-                padding: {
-                    left: 0,
-                }
-            },
-            labels: value?.labels,
-            legend: {
-                position: 'bottom',
-            },
-            plotOptions: {
-                bar: {
-                    horizontal: !!widget.options?.horizontal,
-                }
-            },
-            series: value?.datasets?.map(dataset => ({
-                data: dataset.data,
-                name: dataset.label,
-            })),
-            xaxis: {
-                type: !widget.options?.horizontal && widget.dateLabels
-                    ? 'datetime'
-                    : 'category',
-                axisBorder: {
-                    show: false,
-                }
-            },
-            yaxis: {
-                axisBorder: {
-                    show: false,
-                }
-            },
-        }
-    })
+    const { data, x, y, color, tooltipTemplate, chartConfig, xAxisConfig, containerConfig, yAxisConfig } = useXYChart(props);
 </script>
 
 <template>
-    <div :class="{ 'mb-2': options.legend.show }" ref="el">
-        <ApexChart
-            :options="options"
-            :series="options.series"
-            :height="options.chart.height"
-            ref="apexChartsComponent"
-        />
-    </div>
+    <ChartContainer :config="chartConfig" class="flex flex-col" cursor>
+        <VisXYContainer class="flex-1 min-h-0"
+            v-bind="{
+                ...containerConfig,
+            } satisfies XYContainerConfigInterface<Datum>"
+            :data="data"
+        >
+            <template v-if="!props.widget.minimal">
+                <VisAxis
+                    v-bind="{
+                        type: props.widget.horizontal ? 'y' : 'x',
+                        gridLine: false,
+                        domainLine: false,
+                        ...xAxisConfig,
+                    } satisfies AxisConfigInterface<Datum>"
+                />
+                <VisAxis
+                    v-bind="{
+                        type: props.widget.horizontal ? 'x' : 'y',
+                        domainLine: false,
+                        ...yAxisConfig,
+                    } satisfies AxisConfigInterface<Datum>"
+                />
+            </template>
+
+            <template v-if="!props.widget.horizontal">
+                <ChartCrosshair
+                    v-bind="{
+                        color: color,
+                        template: tooltipTemplate,
+                        hideWhenFarFromPointer: false,
+                    } satisfies CrosshairConfigInterface<Datum>"
+                />
+            </template>
+
+            <ChartTooltip :triggers="{ [GroupedBar.selectors.barGroup]: tooltipTemplate }" />
+
+            <VisGroupedBar
+                v-bind="{
+                    x: x,
+                    y: y,
+                    orientation: props.widget.horizontal ? Orientation.Horizontal : Orientation.Vertical,
+                    color: color,
+                    barMinHeight: 5,
+                } satisfies GroupedBarConfigInterface<Datum>"
+            />
+        </VisXYContainer>
+
+        <template v-if="props.widget.showLegend && !props.widget.minimal">
+            <ChartLegendContent />
+        </template>
+    </ChartContainer>
 </template>
