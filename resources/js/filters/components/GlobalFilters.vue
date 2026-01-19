@@ -21,7 +21,7 @@
         <input name="_token" :value="getCsrfToken()" type="hidden">
         <div class="grid gap-2">
             <template v-for="filter in filters.rootFilters" :key="filter.key">
-                <template v-if="filter.type === 'select' && filter.values.length">
+                <template v-if="filter.type === 'select'">
                     <Select
                         :name="`filterValues[${filter.key}]`"
                         v-model="filters.currentValues[filter.key]"

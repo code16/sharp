@@ -12,6 +12,7 @@ trait SelectFilterTrait
     private bool $isMaster = false;
     private bool $isSearchable = false;
     private array $searchKeys = ['label'];
+    private ?array $cachedValues = null;
 
     final public function isMaster(): bool
     {
@@ -72,9 +73,9 @@ trait SelectFilterTrait
         ]);
     }
 
-    protected function formattedValues(): array
+    public function formattedValues(): array
     {
-        $values = $this->values();
+        $values = $this->cachedValues();
 
         if (! is_array(collect($values)->first())) {
             return collect($values)
@@ -84,6 +85,11 @@ trait SelectFilterTrait
         }
 
         return $values;
+    }
+
+    public function cachedValues(): array
+    {
+        return $this->cachedValues ??= $this->values();
     }
 
     abstract public function values(): array;
