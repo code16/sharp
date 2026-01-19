@@ -1,7 +1,7 @@
 # Testing
 
 ::: tip INFO
-This page documents the new Testing API. If you use the legacy one, please refer to [Testing (legacy)](../legacy/testing.md).
+This page documents the new Testing API. If you use the legacy one, please refer to [Testing (legacy)](testing-legacy.md).
 :::
 
 Sharp provides a fluent testing API to help you test your Sharp code. These assertions and helpers are designed to be used in Feature tests.
