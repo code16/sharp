@@ -2,8 +2,6 @@
 
 use Code16\Sharp\Utils\Testing\SharpAssertions;
 
-uses(SharpAssertions::class);
-
 it('allows to test getSharpShow', function () {
     $response = fakeResponse()->getSharpShow('leaves', 6);
 

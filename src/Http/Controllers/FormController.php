@@ -37,6 +37,10 @@ class FormController extends SharpProtectedController
         $form->buildFormConfig();
         $formData = $form->newInstance();
 
+        if (app()->environment('testing')) {
+            Inertia::share('_rawData', $formData);
+        }
+
         return Inertia::render('Form/Form', [
             'form' => FormData::from([
                 ...$this->buildFormData($form, $formData, $entityKey),
@@ -89,6 +93,10 @@ class FormController extends SharpProtectedController
             ->context()
             ->breadcrumb()
             ->getParentShowCachedBreadcrumbLabel() ?: $entity->getLabelOrFail($entityKey->multiformKey());
+
+        if (app()->environment('testing')) {
+            Inertia::share('_rawData', $formData);
+        }
 
         return Inertia::render('Form/Form', [
             'form' => FormData::from([

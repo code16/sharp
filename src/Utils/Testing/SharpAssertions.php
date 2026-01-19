@@ -3,16 +3,40 @@
 namespace Code16\Sharp\Utils\Testing;
 
 use Closure;
-use Code16\Sharp\Filters\GlobalFilters\GlobalFilters;
 use Code16\Sharp\Http\Context\SharpBreadcrumb;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Links\BreadcrumbBuilder;
-use Illuminate\Support\Facades\URL;
+use Code16\Sharp\Utils\Testing\Dashboard\PendingDashboard;
+use Code16\Sharp\Utils\Testing\EntityList\PendingEntityList;
+use Code16\Sharp\Utils\Testing\Form\PendingForm;
+use Code16\Sharp\Utils\Testing\Show\PendingShow;
 
 trait SharpAssertions
 {
+    use GeneratesCurrentPageUrl;
+    use GeneratesGlobalFilterUrl;
+
     private BreadcrumbBuilder $breadcrumbBuilder;
-    private ?string $globalFilter = null;
+
+    public function sharpList(string $entityClassNameOrKey): PendingEntityList
+    {
+        return new PendingEntityList($this, $entityClassNameOrKey);
+    }
+
+    public function sharpShow(string $entityClassNameOrKey, int|string|null $instanceId = null): PendingShow
+    {
+        return new PendingShow($this, $entityClassNameOrKey, $instanceId);
+    }
+
+    public function sharpForm(string $entityClassNameOrKey, int|string|null $instanceId = null): PendingForm
+    {
+        return new PendingForm($this, $entityClassNameOrKey, $instanceId);
+    }
+
+    public function sharpDashboard(string $entityClassNameOrKey): PendingDashboard
+    {
+        return new PendingDashboard($this, $entityClassNameOrKey);
+    }
 
     /**
      * @deprecated use withSharpBreadcrumb() instead
@@ -43,17 +67,9 @@ trait SharpAssertions
         return $this;
     }
 
-    public function withSharpGlobalFilterValues(array|string $globalFilterValues): self
-    {
-        $this->globalFilter = collect((array) $globalFilterValues)
-            ->implode(GlobalFilters::$valuesUrlSeparator);
-
-        return $this;
-    }
-
     public function deleteFromSharpShow(string $entityClassNameOrKey, mixed $instanceId)
     {
-        URL::defaults(['globalFilter' => $this->globalFilter ?: GlobalFilters::$defaultKey]);
+        $this->setGlobalFilterUrlDefault();
 
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
 
@@ -72,7 +88,7 @@ trait SharpAssertions
 
     public function deleteFromSharpList(string $entityClassNameOrKey, mixed $instanceId)
     {
-        URL::defaults(['globalFilter' => $this->globalFilter ?: GlobalFilters::$defaultKey]);
+        $this->setGlobalFilterUrlDefault();
 
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
 
@@ -94,7 +110,7 @@ trait SharpAssertions
 
     public function getSharpForm(string $entityClassNameOrKey, mixed $instanceId = null)
     {
-        URL::defaults(['globalFilter' => $this->globalFilter ?: GlobalFilters::$defaultKey]);
+        $this->setGlobalFilterUrlDefault();
 
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
 
@@ -123,7 +139,7 @@ trait SharpAssertions
 
     public function getSharpSingleForm(string $entityClassNameOrKey)
     {
-        URL::defaults(['globalFilter' => $this->globalFilter ?: GlobalFilters::$defaultKey]);
+        $this->setGlobalFilterUrlDefault();
 
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
 
@@ -142,7 +158,7 @@ trait SharpAssertions
 
     public function updateSharpForm(string $entityClassNameOrKey, $instanceId, array $data)
     {
-        URL::defaults(['globalFilter' => $this->globalFilter ?: GlobalFilters::$defaultKey]);
+        $this->setGlobalFilterUrlDefault();
 
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
 
@@ -162,7 +178,7 @@ trait SharpAssertions
 
     public function updateSharpSingleForm(string $entityClassNameOrKey, array $data)
     {
-        URL::defaults(['globalFilter' => $this->globalFilter ?: GlobalFilters::$defaultKey]);
+        $this->setGlobalFilterUrlDefault();
 
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
 
@@ -181,7 +197,7 @@ trait SharpAssertions
 
     public function getSharpShow(string $entityClassNameOrKey, $instanceId)
     {
-        URL::defaults(['globalFilter' => $this->globalFilter ?: GlobalFilters::$defaultKey]);
+        $this->setGlobalFilterUrlDefault();
 
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
 
@@ -201,7 +217,7 @@ trait SharpAssertions
 
     public function storeSharpForm(string $entityClassNameOrKey, array $data)
     {
-        URL::defaults(['globalFilter' => $this->globalFilter ?: GlobalFilters::$defaultKey]);
+        $this->setGlobalFilterUrlDefault();
 
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
 
@@ -226,7 +242,7 @@ trait SharpAssertions
         array $data = [],
         ?string $commandStep = null
     ) {
-        URL::defaults(['globalFilter' => $this->globalFilter ?: GlobalFilters::$defaultKey]);
+        $this->setGlobalFilterUrlDefault();
 
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
 
@@ -257,7 +273,7 @@ trait SharpAssertions
         array $data = [],
         ?string $commandStep = null
     ) {
-        URL::defaults(['globalFilter' => $this->globalFilter ?: GlobalFilters::$defaultKey]);
+        $this->setGlobalFilterUrlDefault();
 
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
 
@@ -287,7 +303,7 @@ trait SharpAssertions
         array $data = [],
         ?string $commandStep = null
     ) {
-        URL::defaults(['globalFilter' => $this->globalFilter ?: GlobalFilters::$defaultKey]);
+        $this->setGlobalFilterUrlDefault();
 
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
 
@@ -320,18 +336,6 @@ trait SharpAssertions
         return (new BreadcrumbBuilder())
             ->appendEntityList($entityKey)
             ->when($instanceId, fn ($builder) => $builder->appendShowPage($entityKey, $instanceId));
-    }
-
-    private function buildCurrentPageUrl(BreadcrumbBuilder $builder): string
-    {
-        return url(
-            sprintf(
-                '/%s/%s/%s',
-                sharp()->config()->get('custom_url_segment'),
-                sharp()->context()->globalFilterUrlSegmentValue(),
-                $builder->generateUri()
-            )
-        );
     }
 
     private function resolveEntityKey(string $entityClassNameOrKey): string

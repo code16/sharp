@@ -219,22 +219,22 @@ it('gets show data for an instance in a single show case', function () {
 });
 
 it('allows instance deletion from the show', function () {
-    $personShow = new class() extends PersonShow
+    $deletedId = null;
+
+    fakeShowFor('person', new class($deletedId) extends PersonShow
     {
-        public bool $wasDeleted = false;
+        public function __construct(public &$deletedId) {}
 
         public function delete($id): void
         {
-            $this->wasDeleted = true;
+            $this->deletedId = $id;
         }
-    };
-
-    fakeShowFor('person', $personShow);
+    });
 
     $this->delete('/sharp/root/s-list/person/s-show/person/1')
         ->assertRedirect('/sharp/root/s-list/person');
 
-    expect($personShow->wasDeleted)->toBeTrue();
+    expect($deletedId)->toEqual(1);
 });
 
 it('disallows instance deletion without authorization', function () {

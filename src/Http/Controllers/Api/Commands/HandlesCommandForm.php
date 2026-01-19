@@ -33,6 +33,9 @@ trait HandlesCommandForm
             'locales' => $commandHandler->hasDataLocalizations()
                 ? $commandHandler->getDataLocalizations()
                 : null,
+            ...app()->environment('testing') ? [
+                '_rawData' => $formData,
+            ] : [],
         ];
     }
 }

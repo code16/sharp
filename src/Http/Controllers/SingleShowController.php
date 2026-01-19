@@ -53,6 +53,10 @@ class SingleShowController extends SharpProtectedController
 
         $this->addPreloadHeadersForShowEntityLists($payload);
 
+        if (app()->environment('testing')) {
+            Inertia::share('_rawData', $showData);
+        }
+
         return Inertia::render('Show/Show', [
             'show' => $payload,
             'breadcrumb' => BreadcrumbData::from([
