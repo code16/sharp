@@ -20,7 +20,7 @@ final class GlobalFilters implements Arrayable
     {
         if ($this->globalFilters === null) {
             $this->globalFilters = collect(sharp()->config()->get('global_filters'))
-                ->filter(fn (GlobalRequiredFilter $filter) => $filter->authorize())
+                ->filter(fn (GlobalRequiredFilter $filter) => $filter->authorize() && count($filter->cachedValues()))
                 ->values();
         }
 
