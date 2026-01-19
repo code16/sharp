@@ -73,7 +73,7 @@ trait SelectFilterTrait
         ]);
     }
 
-    public function formattedValues(): array
+    protected function formattedValues(): array
     {
         $values = $this->cachedValues();
 

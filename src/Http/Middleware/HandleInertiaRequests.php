@@ -113,10 +113,11 @@ class HandleInertiaRequests extends Middleware
                             ],
                         ])
                         : null,
-                    'globalFilters' => transform(app(GlobalFilters::class), fn (GlobalFilters $globalFilters) => $globalFilters->isEnabled()
+                    'globalFilters' => transform(app(GlobalFilters::class), function (GlobalFilters $globalFilters) {
+                        return $globalFilters->isEnabled()
                             ? GlobalFiltersData::from($globalFilters->toArray())
-                            : null
-                    ),
+                            : null;
+                    }),
                     'menu' => fn () => MenuData::from(app(SharpMenuManager::class)),
                     'auth' => fn () => [
                         'user' => UserData::from(auth()->user()),
