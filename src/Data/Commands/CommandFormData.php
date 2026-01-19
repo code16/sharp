@@ -23,6 +23,7 @@ final class CommandFormData extends Data
         /** @var array<string> */
         public ?array $locales = null,
         public ?PageAlertData $pageAlert = null,
+        public ?array $_rawData = null,
     ) {}
 
     public static function from(array $form): self
@@ -36,6 +37,7 @@ final class CommandFormData extends Data
             layout: FormLayoutData::optional($form['layout'] ?? null),
             locales: $form['locales'] ?? null,
             pageAlert: PageAlertData::optional($form['pageAlert']),
+            _rawData: $form['_rawData'] ?? null,
         );
     }
 }

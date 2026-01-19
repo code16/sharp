@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Utils\Testing\Show;
 
+use Closure;
 use Code16\Sharp\Utils\Testing\DelegatesToResponse;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Illuminate\Testing\TestResponse;
@@ -15,15 +16,14 @@ class AssertableShow
         protected TestResponse $response,
     ) {}
 
-    public function showData(): array
-    {
-        return $this->response->inertiaProps('_rawData');
-    }
-
-    public function assertShowData(array $expectedData): self
+    /**
+     * @param  Closure(AssertableJson): mixed  $callback
+     */
+    public function assertShowData(Closure $callback): static
     {
         $this->response->assertInertia(fn (AssertableInertia $page) => $page
-            ->has('_rawData', fn (AssertableJson $json) => $json->whereAll($expectedData)->etc())
+            ->has('_rawData', fn (AssertableJson $json) => $callback($json))
+            ->etc()
         );
 
         return $this;

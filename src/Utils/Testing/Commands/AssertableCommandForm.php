@@ -7,6 +7,7 @@ use Code16\Sharp\Dashboard\SharpDashboard;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Show\SharpShow;
 use Code16\Sharp\Utils\Testing\DelegatesToResponse;
+use Illuminate\Testing\Fluent\AssertableJson;
 use Illuminate\Testing\TestResponse;
 
 class AssertableCommandForm
@@ -35,7 +36,20 @@ class AssertableCommandForm
         );
     }
 
-    public function formData(): ?array
+    /**
+     * @param  Closure(AssertableJson): mixed  $callback
+     */
+    public function assertFormData(Closure $callback): static
+    {
+        $this->response->assertJson(fn (AssertableJson $json) => $json
+            ->has('_rawData', $callback)
+            ->etc()
+        );
+
+        return $this;
+    }
+
+    protected function formData(): ?array
     {
         return $this->response->json('data');
     }

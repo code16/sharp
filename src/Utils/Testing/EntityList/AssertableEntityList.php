@@ -2,10 +2,12 @@
 
 namespace Code16\Sharp\Utils\Testing\EntityList;
 
+use Closure;
 use Code16\Sharp\Utils\Testing\DelegatesToResponse;
 use Code16\Sharp\Utils\Testing\Show\PendingShow;
+use Illuminate\Testing\Fluent\AssertableJson;
 use Illuminate\Testing\TestResponse;
-use PHPUnit\Framework\Assert as PHPUnit;
+use Inertia\Testing\AssertableInertia;
 
 class AssertableEntityList
 {
@@ -16,33 +18,23 @@ class AssertableEntityList
         protected PendingEntityList $pendingEntityList,
     ) {}
 
-    public function assertListCount(int $count): self
+    /**
+     * @param  Closure(AssertableJson): mixed  $callback
+     */
+    public function assertListData(Closure $closure): static
     {
-        PHPUnit::assertCount($count, $this->listData());
+        if ($this->pendingEntityList->parent instanceof PendingShow) {
+            $this->response->assertJson(fn (AssertableJson $json) => $json
+                ->has('data', $closure)
+                ->etc()
+            );
+        } else {
+            $this->response->assertInertia(fn (AssertableInertia $page) => $page
+                ->has('entityList.data', $closure)
+                ->etc()
+            );
+        }
 
         return $this;
-    }
-
-    public function assertListContains(array $attributes): self
-    {
-        PHPUnit::assertTrue(
-            collect($this->listData())
-                ->contains(fn ($item) => collect($attributes)
-                    ->every(fn ($value, $key) => isset($item[$key]) && $item[$key] === $value)
-                ),
-            sprintf(
-                'Failed asserting that data contains an item with attributes: %s',
-                json_encode($attributes)
-            )
-        );
-
-        return $this;
-    }
-
-    protected function listData(): array
-    {
-        return $this->pendingEntityList->parent instanceof PendingShow
-            ? $this->response->json('data')
-            : $this->response->inertiaProps('entityList.data');
     }
 }

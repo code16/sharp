@@ -1,5 +1,9 @@
 # Testing
 
+::: tip INFO
+This page documents the new Testing API. If you use the legacy one, please refer to [Testing (legacy)](../legacy/testing.md).
+:::
+
 Sharp provides a fluent testing API to help you test your Sharp code. These assertions and helpers are designed to be used in Feature tests.
 
 ## The `SharpAssertions` trait
@@ -24,7 +28,7 @@ use Code16\Sharp\Utils\Testing\SharpAssertions;
 
 pest()
     ->extend(\Tests\TestCase::class)
-    ->use(SharpAssertions::class)
+    ->use(SharpAssertions::class);
 ```
 
 ## Authentication
@@ -57,8 +61,11 @@ Starts a fluent interaction with an Entity List.
 $this->sharpList(Post::class)
     ->get()
     ->assertOk()
-    ->assertListCount(3)
-    ->assertListContains(['title' => 'My first post']);
+    ->assertListData(fn (AssertableJson $data) => $data
+        ->count(3)
+        ->has('0.title', 'My first post')
+        ->etc()
+    );
 ```
 
 ### Filtering the list
@@ -85,11 +92,15 @@ $this->sharpList(Post::class)
 ```
 
 If the command has a form, you can test it:
-
+    
 ```php
 $this->sharpList(Post::class)
     ->entityCommand(ExportPosts::class)
     ->getForm()
+    ->assertFormData(fn (AssertableJson $data) => $data
+        ->where('format', 'xls')
+        ->etc()
+    )
     ->post(['format' => 'csv'])
     ->assertOk();
 ```
@@ -117,6 +128,10 @@ $this->sharpList(Post::class)
     ->post(['step1_data' => 'value'])
     ->assertReturnsStep('step2')
     ->getNextStepForm()
+    ->assertFormData(fn (AssertableJson $data) => $data
+        ->where('step2_field', 'default')
+        ->etc()
+    )
     ->post(['step2_data' => 'value'])
     ->assertOk();
 ```
@@ -133,10 +148,11 @@ Starts a fluent interaction with a Show Page.
 $this->sharpShow(Post::class, 1)
     ->get()
     ->assertOk()
-    ->assertShowData([
-        'title' => 'My first post',
-        'author' => 'John Doe'
-    ]);
+    ->assertShowData(fn (AssertableJson $data) => $data
+        ->where('title', 'My first post')
+        ->where('author', 'John Doe')
+        ->etc()
+    );
 ```
 
 ### Instance Commands from Show
@@ -145,6 +161,43 @@ $this->sharpShow(Post::class, 1)
 $this->sharpShow(Post::class, 1)
     ->instanceCommand(PublishPost::class)
     ->post()
+    ->assertOk();
+```
+
+### List & dashboard fields
+
+Show Pages can contain embedded Entity Lists or Dashboards. You can test them using `sharpListField()` and `sharpDashboardField()`.
+
+#### `sharpListField(string $entityKey)`
+
+```php
+$this->sharpShow(Post::class, 1)
+    ->sharpListField(Comment::class)
+    ->get()
+    ->assertOk()
+    ->assertListData(fn (AssertableJson $data) => $data
+        ->count(5)
+    );
+```
+
+#### `sharpDashboardField(string $entityKey)`
+
+```php
+$this->sharpShow(User::class, 1)
+    ->sharpDashboardField(UserStatsDashboard::class)
+    ->get()
+    ->assertOk();
+```
+
+### Nested shows
+
+There are some cases where you have nested shows by navigating through Show List fields. You can chain `sharpShow()` calls to simulate the correct breadcrumb :
+
+```php
+$this->sharpList(Post::class)
+    ->sharpShow(Post::class, 1)
+    ->sharpListField(Comment::class)
+    ->sharpShow(Comment::class, 1)
     ->assertOk();
 ```
 
@@ -180,7 +233,10 @@ If you want to test that the form displays correctly:
 $this->sharpForm(Post::class, 1)
     ->edit()
     ->assertOk()
-    ->assertFormData(['title' => 'Existing Post']);
+    ->assertFormData(fn (AssertableJson $data) => $data
+        ->where('title', 'Existing Post')
+        ->etc()
+    );
 ```
 
 From an `AssertableForm` (the result of `edit()` or `create()`), you can also call `update()` or `store()`:
@@ -221,28 +277,5 @@ $this->sharpDashboard(MyDashboard::class)
 $this->sharpDashboard(MyDashboard::class)
     ->dashboardCommand(RefreshStats::class)
     ->post()
-    ->assertOk();
-```
-
-## Testing Embedded Components
-
-Show Pages can contain embedded Entity Lists or Dashboards. You can test them using `sharpListField()` and `sharpDashboardField()`.
-
-### `sharpListField(string $entityKey)`
-
-```php
-$this->sharpShow(Post::class, 1)
-    ->sharpListField(Comment::class)
-    ->get()
-    ->assertOk()
-    ->assertListCount(5);
-```
-
-### `sharpDashboardField(string $entityKey)`
-
-```php
-$this->sharpShow(User::class, 1)
-    ->sharpDashboardField(UserStatsDashboard::class)
-    ->get()
     ->assertOk();
 ```
