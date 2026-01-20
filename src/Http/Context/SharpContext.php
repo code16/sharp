@@ -27,7 +27,7 @@ class SharpContext
             }
         }
 
-        return $handler?->currentValue();
+        return $handler->currentValue();
     }
 
     public function globalFilterUrlSegmentValue(): string
