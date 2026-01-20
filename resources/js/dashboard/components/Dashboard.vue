@@ -75,7 +75,7 @@
 
         <component :is="inline ? RootCard : 'div'">
             <component :is="inline ? RootCardHeader : 'div'" :collapsed="collapsed || !dashboard">
-                <template v-if="inline || dashboard?.visibleFilters?.length > 0 || dashboard?.visibleCommands?.dashboard?.length">
+                <template v-if="inline || dashboard?.visibleFilters?.length > 0 || dashboard?.visibleCommands?.dashboard?.flat().length">
                     <div class="flex gap-x-3" :class="inline ? 'flex-wrap gap-y-7' : 'mb-8'">
                         <slot name="title" />
                         <template v-if="dashboard">
@@ -147,7 +147,7 @@
                                         </div>
                                     </div>
                                 </template>
-                                <template v-if="dashboard.visibleCommands?.dashboard?.length">
+                                <template v-if="dashboard.visibleCommands?.dashboard?.flat().length">
                                     <DropdownMenu>
                                         <DropdownMenuTrigger as-child>
                                             <Button class="ml-auto h-8" :class="inline ? '-my-1' : ''" variant="outline" size="sm">
