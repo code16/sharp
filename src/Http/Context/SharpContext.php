@@ -19,12 +19,15 @@ class SharpContext
     {
         $handler = $this->globalFiltersHandler->findFilter($handlerClassOrKey);
 
-        throw_if(
-            ! $handler instanceof GlobalRequiredFilter,
-            new SharpInvalidGlobalFilterKeyException('Filter ['.$handlerClassOrKey.'] is not a global required filter.')
-        );
+        if (! $handler instanceof GlobalRequiredFilter) {
+            if ($this->globalFiltersHandler->isDeclared($handlerClassOrKey)) {
+                return null;
+            } else {
+                throw new SharpInvalidGlobalFilterKeyException('Filter ['.$handlerClassOrKey.'] is not a global required filter.');
+            }
+        }
 
-        return $handler->currentValue();
+        return $handler?->currentValue();
     }
 
     public function globalFilterUrlSegmentValue(): string

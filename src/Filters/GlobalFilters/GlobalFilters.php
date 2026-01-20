@@ -52,6 +52,20 @@ final class GlobalFilters implements Arrayable
         ];
     }
 
+    public function isDeclared(string $key): bool
+    {
+        return collect(sharp()->config()->get('global_filters'))
+            ->contains(function (GlobalRequiredFilter $filter) use ($key) {
+                $filter->buildFilterConfig();
+
+                if (class_exists($key)) {
+                    return $filter instanceof $key;
+                }
+
+                return $filter->getKey() === $key;
+            });
+    }
+
     public function findFilter(string $key): ?Filter
     {
         return $this->filterContainer()->findFilterHandler($key);
