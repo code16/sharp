@@ -197,7 +197,6 @@ it('allow to retrieve retained filters value in the context', function () {
         ->withoutExceptionHandling()
         ->post(
             route('code16.sharp.list.filters.store', [
-                'globalFilter' => 'root',
                 'entityKey' => 'person',
             ]), [
                 'filterValues' => [

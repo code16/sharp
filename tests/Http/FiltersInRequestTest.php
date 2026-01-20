@@ -50,7 +50,7 @@ it('filters instances of an entity list', function () {
     });
 
     $this
-        ->get('/sharp/root/s-list/person?filter_job=physicist')
+        ->get(route('code16.sharp.list', ['entityKey' => 'person', 'filter_job' => 'physicist']))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->has('entityList.data.0', fn (Assert $json) => $json
@@ -103,7 +103,7 @@ it('uses the default value of a required filter if no value was sent', function 
     });
 
     $this
-        ->get('/sharp/root/s-list/person')
+        ->get(route('code16.sharp.list', 'person'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->has('entityList.data.0', fn (Assert $json) => $json
@@ -154,7 +154,7 @@ it('handles multiple filter values', function () {
     });
 
     $this
-        ->get('/sharp/root/s-list/person?filter_job=physicist,physician')
+        ->get(route('code16.sharp.list', ['entityKey' => 'person', 'filter_job' => 'physicist,physician']))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->has('entityList.data.0', fn (Assert $json) => $json
@@ -171,7 +171,7 @@ it('handles multiple filter values', function () {
         );
 
     $this
-        ->get('/sharp/root/s-list/person?filter_job=0')
+        ->get(route('code16.sharp.list', ['entityKey' => 'person', 'filter_job' => '0']))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->has('entityList.data.0', fn (Assert $json) => $json
@@ -227,20 +227,19 @@ it('saves retained filters in the session when set', function () {
         ->withoutExceptionHandling()
         ->post(
             route('code16.sharp.list.filters.store', [
-                'globalFilter' => 'root',
                 'entityKey' => 'person',
             ]), [
                 'filterValues' => ['job' => 'physicist'],
             ]
         )
         ->assertSessionHasNoErrors()
-        ->assertRedirect('/sharp/root/s-list/person?filter_job=physicist');
+        ->assertRedirect(route('code16.sharp.list', ['entityKey' => 'person', 'filter_job' => 'physicist']));
 
     expect(session('_sharp_retained_filter_job'))->toBe('physicist');
 
     // Second call: filter should be valued
     $this
-        ->get('/sharp/root/s-list/person')
+        ->get(route('code16.sharp.list', 'person'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->has('entityList.data.0', fn (Assert $json) => $json
@@ -253,7 +252,7 @@ it('saves retained filters in the session when set', function () {
 
     // Third call: should use QS instead of session
     $this
-        ->get('/sharp/root/s-list/person?filter_job=physician')
+        ->get(route('code16.sharp.list', ['entityKey' => 'person', 'filter_job' => 'physician']))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->has('entityList.data.0', fn (Assert $json) => $json
@@ -272,10 +271,10 @@ it('saves retained filters in the session when set', function () {
             ],
         ])
         ->assertSessionHasNoErrors()
-        ->assertRedirect('/sharp/root/s-list/person');
+        ->assertRedirect(route('code16.sharp.list', 'person'));
 
     $this
-        ->get('/sharp/root/s-list/person')
+        ->get(route('code16.sharp.list', 'person'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->has('entityList.data.0', fn (Assert $json) => $json
@@ -323,18 +322,17 @@ it('handles retained multiple filter', function () {
     $this
         ->post(
             route('code16.sharp.list.filters.store', [
-                'globalFilter' => 'root',
                 'entityKey' => 'person',
             ]), [
                 'filterValues' => ['job' => ['physicist', 'physician']],
             ]
         )
         ->assertSessionHasNoErrors()
-        ->assertRedirect('/sharp/root/s-list/person?filter_job='.urlencode('physicist,physician'));
+        ->assertRedirect(route('code16.sharp.list', ['entityKey' => 'person', 'filter_job' => 'physicist,physician']));
 
     // Call to retain the filter on session
     $this
-        ->get('/sharp/root/s-list/person?filter_job=physicist,physician')
+        ->get(route('code16.sharp.list', ['entityKey' => 'person', 'filter_job' => 'physicist,physician']))
         ->assertOk();
 
     expect(session('_sharp_retained_filter_job'))->toBe('physicist,physician');
@@ -385,7 +383,7 @@ it('handles retained required filter', function () {
 
     // First call: use default value
     $this
-        ->get('/sharp/root/s-list/person')
+        ->get(route('code16.sharp.list', 'person'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->has('entityList.data.0', fn (Assert $json) => $json
@@ -403,11 +401,11 @@ it('handles retained required filter', function () {
             ],
         ])
         ->assertSessionHasNoErrors()
-        ->assertRedirect('/sharp/root/s-list/person?filter_job=physician');
+        ->assertRedirect(route('code16.sharp.list', ['entityKey' => 'person', 'filter_job' => 'physician']));
 
     // Second call: use filter value
     $this
-        ->get('/sharp/root/s-list/person?filter_job=physician')
+        ->get(route('code16.sharp.list', ['entityKey' => 'person', 'filter_job' => 'physician']))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->has('entityList.data.0', fn (Assert $json) => $json
@@ -420,7 +418,7 @@ it('handles retained required filter', function () {
 
     // Third call: no filter, use retained value
     $this
-        ->get('/sharp/root/s-list/person')
+        ->get(route('code16.sharp.list', 'person'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->has('entityList.data.0', fn (Assert $json) => $json
@@ -438,11 +436,11 @@ it('handles retained required filter', function () {
             ],
         ])
         ->assertSessionHasNoErrors()
-        ->assertRedirect('/sharp/root/s-list/person');
+        ->assertRedirect(route('code16.sharp.list', 'person'));
 
     // Fourth call: reset retained value
     $this
-        ->get('/sharp/root/s-list/person')
+        ->get(route('code16.sharp.list', 'person'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->has('entityList.data.0', fn (Assert $json) => $json
@@ -484,7 +482,6 @@ it('fakes request segments to fix the breadcrumb in case it is built', function 
     $this
         ->post(
             route('code16.sharp.list.filters.store', [
-                'globalFilter' => 'root',
                 'entityKey' => 'person',
             ]), [
                 'filterValues' => [
@@ -493,5 +490,5 @@ it('fakes request segments to fix the breadcrumb in case it is built', function 
             ]
         )
         ->assertSessionHasNoErrors()
-        ->assertRedirect('/sharp/root/s-list/person?filter_job=physicist');
+        ->assertRedirect(route('code16.sharp.list', ['entityKey' => 'person', 'filter_job' => 'physicist']));
 });

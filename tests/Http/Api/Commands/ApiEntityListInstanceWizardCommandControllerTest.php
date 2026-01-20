@@ -40,7 +40,6 @@ it('displays first step form on the first call of a wizard instance command', fu
 
     $this
         ->getJson(route('code16.sharp.api.list.command.instance.form', [
-            'globalFilter' => 'root',
             'entityKey' => 'person',
             'commandKey' => 'wizard',
             'instanceId' => 1]))
@@ -110,7 +109,6 @@ it('allows to post first step of a wizard instance command', function () {
 
     $this
         ->postJson(route('code16.sharp.api.list.command.instance', [
-            'globalFilter' => 'root',
             'entityKey' => 'person',
             'commandKey' => 'wizard',
             'instanceId' => 1]))
@@ -119,7 +117,6 @@ it('allows to post first step of a wizard instance command', function () {
     $this
         ->postJson(
             route('code16.sharp.api.list.command.instance', [
-                'globalFilter' => 'root',
                 'entityKey' => 'person',
                 'commandKey' => 'wizard',
                 'instanceId' => 1,
@@ -187,7 +184,6 @@ it('allows to check if context is valid', function () {
     $this
         ->getJson(
             route('code16.sharp.api.list.command.instance.form', [
-                'globalFilter' => 'root',
                 'entityKey' => 'person',
                 'commandKey' => 'wizard',
                 'instanceId' => 1,
@@ -200,7 +196,6 @@ it('allows to check if context is valid', function () {
     $this
         ->postJson(
             route('code16.sharp.api.list.command.instance', [
-                'globalFilter' => 'root',
                 'entityKey' => 'person',
                 'commandKey' => 'wizard',
                 'instanceId' => 1,
@@ -212,7 +207,6 @@ it('allows to check if context is valid', function () {
     $this
         ->getJson(
             route('code16.sharp.api.list.command.instance.form', [
-                'globalFilter' => 'root',
                 'entityKey' => 'person',
                 'commandKey' => 'wizard',
                 'instanceId' => 1,
@@ -284,7 +278,6 @@ it('allows to post second step of a wizard instance command', function () {
     $this
         ->postJson(
             route('code16.sharp.api.list.command.instance', [
-                'globalFilter' => 'root',
                 'entityKey' => 'person',
                 'commandKey' => 'wizard',
                 'instanceId' => 1]),
@@ -358,7 +351,6 @@ it('allows to define a global method for step execution', function () {
     // First post step 1...
     $this
         ->postJson(route('code16.sharp.api.list.command.instance', [
-            'globalFilter' => 'root',
             'entityKey' => 'person',
             'commandKey' => 'wizard',
             'instanceId' => 1]))
@@ -368,7 +360,6 @@ it('allows to define a global method for step execution', function () {
     $this
         ->getJson(
             route('code16.sharp.api.list.command.instance.form', [
-                'globalFilter' => 'root',
                 'entityKey' => 'person',
                 'commandKey' => 'wizard',
                 'instanceId' => 1,

@@ -44,7 +44,7 @@ it('allows to reorder instances', function () {
 
     $this
         ->postJson(
-            route('code16.sharp.api.list.reorder', ['root', 'person']),
+            route('code16.sharp.api.list.reorder', ['person']),
             ['instances' => [3, 2, 1]]
         )
         ->assertOk();
@@ -65,7 +65,7 @@ it('allows to delete an instance in the entity list if delete method is implemen
         }
     });
 
-    $this->deleteJson(route('code16.sharp.api.list.delete', ['root', 'person', 1]))
+    $this->deleteJson(route('code16.sharp.api.list.delete', ['person', 1]))
         ->assertOk();
 
     expect($deletedId)->toEqual(1);
@@ -84,7 +84,7 @@ it('delegates deletion to the show page if it exists', function () {
         }
     });
 
-    $this->deleteJson(route('code16.sharp.api.list.delete', ['root', 'person', 1]))
+    $this->deleteJson(route('code16.sharp.api.list.delete', ['person', 1]))
         ->assertOk();
 
     expect($deletedId)->toEqual(1);
@@ -107,14 +107,14 @@ it('checks if the entity list allows deletion', function () {
         }
     });
 
-    $this->deleteJson(route('code16.sharp.api.list.delete', ['root', 'person', 1]))
+    $this->deleteJson(route('code16.sharp.api.list.delete', ['person', 1]))
         ->assertForbidden();
 });
 
 it('throws an exception if delete is not implemented and there is no show', function () {
     fakeShowFor('person', null);
 
-    $this->deleteJson(route('code16.sharp.api.list.delete', ['root', 'person', 1]))
+    $this->deleteJson(route('code16.sharp.api.list.delete', ['person', 1]))
         ->assertStatus(500);
 });
 

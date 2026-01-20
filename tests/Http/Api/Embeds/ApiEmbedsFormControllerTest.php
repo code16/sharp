@@ -18,7 +18,6 @@ it('returns fields and layout of an embed', function () {
     $this
         ->postJson(
             route('code16.sharp.api.embed.instance.form.show', [
-                'globalFilter' => 'root',
                 'embedKey' => ApiEmbedsFormControllerTestEmbed::$key,
                 'entityKey' => 'person',
                 'instanceId' => 1,
@@ -64,7 +63,6 @@ it('returns transformed and formatted data of an embed', function () {
     $this
         ->postJson(
             route('code16.sharp.api.embed.instance.form.show', [
-                'globalFilter' => 'root',
                 'embedKey' => ApiEmbedsFormControllerTestEmbed::$key,
                 'entityKey' => 'person',
                 'instanceId' => 1,
@@ -98,7 +96,6 @@ it('does not show an embed without entity permission', function () {
     $this
         ->postJson(
             route('code16.sharp.api.embed.instance.form.show', [
-                'globalFilter' => 'root',
                 'embedKey' => ApiEmbedsFormControllerTestEmbed::$key,
                 'entityKey' => 'person',
                 'instanceId' => 1,
@@ -109,7 +106,6 @@ it('does not show an embed without entity permission', function () {
     $this
         ->postJson(
             route('code16.sharp.api.embed.form.show', [
-                'globalFilter' => 'root',
                 'embedKey' => ApiEmbedsFormControllerTestEmbed::$key,
                 'entityKey' => 'person',
             ]),
@@ -129,7 +125,6 @@ it('does not show an embed without view permission', function () {
     $this
         ->postJson(
             route('code16.sharp.api.embed.instance.form.show', [
-                'globalFilter' => 'root',
                 'embedKey' => ApiEmbedsFormControllerTestEmbed::$key,
                 'entityKey' => 'person',
                 'instanceId' => 1,
@@ -140,7 +135,6 @@ it('does not show an embed without view permission', function () {
     $this
         ->postJson(
             route('code16.sharp.api.embed.instance.form.show', [
-                'globalFilter' => 'root',
                 'embedKey' => ApiEmbedsFormControllerTestEmbed::$key,
                 'entityKey' => 'person',
                 'instanceId' => 2,
@@ -151,7 +145,6 @@ it('does not show an embed without view permission', function () {
     $this
         ->postJson(
             route('code16.sharp.api.embed.form.show', [
-                'globalFilter' => 'root',
                 'embedKey' => ApiEmbedsFormControllerTestEmbed::$key,
                 'entityKey' => 'person',
             ]),
@@ -166,7 +159,6 @@ it('updates an embed and get transformed data', function () {
     $this
         ->postJson(
             route('code16.sharp.api.embed.instance.form.update', [
-                'globalFilter' => 'root',
                 'embedKey' => ApiEmbedsFormControllerTestEmbed::$key,
                 'entityKey' => 'person',
                 'instanceId' => 1,
@@ -188,7 +180,6 @@ it('validates data when updating an embed', function () {
     $this
         ->postJson(
             route('code16.sharp.api.embed.instance.form.update', [
-                'globalFilter' => 'root',
                 'embedKey' => ApiEmbedsFormControllerTestEmbed::$key,
                 'entityKey' => 'person',
                 'instanceId' => 1,

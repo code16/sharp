@@ -27,7 +27,7 @@ it('returns result on a valid search', function () {
     );
 
     $this
-        ->getJson('/sharp/api/root/search?q=some-search')
+        ->getJson(route('code16.sharp.api.search.index', ['q' => 'some-search']))
         ->assertJson([
             [
                 'label' => 'People',
@@ -59,7 +59,8 @@ it('allows to configure a custom empty state label', function () {
         }
     );
 
-    $this->getJson('/sharp/api/root/search?q=some-search')
+    $this
+        ->getJson(route('code16.sharp.api.search.index', ['q' => 'some-search']))
         ->assertJson(
             [
                 [
@@ -83,7 +84,8 @@ it('allows to configure hide when empty', function () {
         }
     );
 
-    $this->getJson('/sharp/api/root/search?q=some-search')
+    $this
+        ->getJson(route('code16.sharp.api.search.index', ['q' => 'some-search']))
         ->assertJson(
             [
                 [
@@ -112,7 +114,8 @@ it('raises validation errors', function () {
         }
     );
 
-    $this->getJson('/sharp/api/root/search?q=bb')
+    $this
+        ->getJson(route('code16.sharp.api.search.index', ['q' => 'bb']))
         ->assertJson(
             [
                 [
@@ -145,7 +148,8 @@ it('handles multiple result sets', function () {
         }
     );
 
-    $this->getJson('/sharp/api/root/search?q=some-search')
+    $this
+        ->getJson(route('code16.sharp.api.search.index', ['q' => 'some-search']))
         ->assertJson(
             [
                 [
@@ -194,7 +198,7 @@ it('allows multiple search terms', function () {
         }
     );
 
-    $this->getJson('/sharp/api/root/search?q=john+%20wayne%20')
+    $this->getJson(route('code16.sharp.api.search.index', ['q' => 'john wayne']))
         ->assertJsonFragment([
             'label' => 'John Wayne',
         ]);
@@ -204,7 +208,7 @@ it('returns a 404 if not enabled', function () {
     sharp()->config()->disableGlobalSearch();
 
     $this
-        ->getJson('/sharp/api/root/search?q=some-search')
+        ->getJson(route('code16.sharp.api.search.index', ['q' => 'some-search']))
         ->assertNotFound();
 });
 
@@ -225,12 +229,12 @@ it('returns a 403 if not authorized', function () {
     );
 
     $this
-        ->getJson('/sharp/api/root/search?q=some-search')
+        ->getJson(route('code16.sharp.api.search.index', ['q' => 'some-search']))
         ->assertForbidden();
 
     $this
         ->actingAs(User::make(['email' => 'authorized-user@test.fr']))
-        ->getJson('/sharp/api/root/search?q=some-search')
+        ->getJson(route('code16.sharp.api.search.index', ['q' => 'some-search']))
         ->assertOk();
 });
 
@@ -238,7 +242,7 @@ it('the global search is sent with every inertia request, if enabled and authori
     sharp()->config()->declareEntity(PersonEntity::class);
 
     $this
-        ->get('/sharp/root/s-list/person')
+        ->get(route('code16.sharp.list', 'person'))
         ->assertInertia(fn (Assert $page) => $page
             ->where('globalSearch', null)
         );
@@ -256,14 +260,14 @@ it('the global search is sent with every inertia request, if enabled and authori
     );
 
     $this
-        ->get('/sharp/root/s-list/person')
+        ->get(route('code16.sharp.list', 'person'))
         ->assertInertia(fn (Assert $page) => $page
             ->where('globalSearch', null)
         );
 
     $this
         ->actingAs(User::make(['email' => 'authorized-user@test.fr']))
-        ->get('/sharp/root/s-list/person')
+        ->get(route('code16.sharp.list', 'person'))
         ->assertInertia(fn (Assert $page) => $page
             ->where('globalSearch', [
                 'config' => [

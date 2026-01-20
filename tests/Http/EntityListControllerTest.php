@@ -38,7 +38,7 @@ it('gets list data for an entity', function () {
         }
     });
 
-    $this->get('/sharp/root/s-list/person')
+    $this->get(route('code16.sharp.list', 'person'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->has('entityList.data.0', fn (Assert $json) => $json
@@ -67,7 +67,7 @@ it('sets appropriate `_meta` for each items linking to a show', function () {
         }
     });
 
-    $this->get('/sharp/root/s-list/person')
+    $this->get(route('code16.sharp.list', 'person'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->has('entityList.data.0', fn (Assert $json) => $json
@@ -108,7 +108,7 @@ it('sets appropriate `_meta` for each items linking to a form', function () {
 
     fakeShowFor('person', null);
 
-    $this->get('/sharp/root/s-list/person')
+    $this->get(route('code16.sharp.list', 'person'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->has('entityList.data.0', fn (Assert $json) => $json
@@ -163,7 +163,7 @@ it('sets appropriate `_meta` for with entities map', function () {
         }
     });
 
-    $this->get('/sharp/root/s-list/person')
+    $this->get(route('code16.sharp.list', 'person'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->has('entityList.data.0', fn (Assert $json) => $json
@@ -203,7 +203,7 @@ it('gets paginated data if wanted', function () {
         }
     });
 
-    $this->get('/sharp/root/s-list/person')
+    $this->get(route('code16.sharp.list', 'person'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->has('entityList.data.0', fn (Assert $json) => $json
@@ -258,7 +258,7 @@ it('allows to search for items', function () {
         }
     });
 
-    $this->get('/sharp/root/s-list/person?search=Curie')
+    $this->get(route('code16.sharp.list', ['entityKey' => 'person', 'search' => 'Curie']))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->has('entityList.data.0', fn (Assert $json) => $json
@@ -286,7 +286,7 @@ it('filters out data which is not displayed', function () {
         }
     });
 
-    $this->get('/sharp/root/s-list/person')
+    $this->get(route('code16.sharp.list', 'person'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->missing('entityList.data.list.items.0.job')
@@ -318,7 +318,7 @@ it('gets containers and layout', function () {
         }
     });
 
-    $this->get('/sharp/root/s-list/person')
+    $this->get(route('code16.sharp.list', 'person'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->has('entityList.fields', 3)
@@ -360,7 +360,7 @@ it('gets config', function () {
         }
     });
 
-    $this->get('/sharp/root/s-list/person')
+    $this->get(route('code16.sharp.list', 'person'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->has('entityList.config', fn (Assert $config) => $config
@@ -398,7 +398,7 @@ it('gets authorizations of each instance', function () {
         }
     });
 
-    $this->get('/sharp/root/s-list/person')
+    $this->get(route('code16.sharp.list', 'person'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('entityList.authorizations', [
@@ -441,7 +441,7 @@ it('gets multiforms if configured', function () {
             'nope' => [PersonForm::class, 'No Nobel prize'],
         ]);
 
-    $this->get('/sharp/root/s-list/person')
+    $this->get(route('code16.sharp.list', 'person'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->has('entityList.entities', 2)
@@ -495,7 +495,7 @@ it('gets multiform form url if configured', function () {
             'nope' => [PersonForm::class, 'No Nobel prize'],
         ]);
 
-    $this->get('/sharp/root/s-list/person')
+    $this->get(route('code16.sharp.list', 'person'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->has('entityList.data.0', fn (Assert $json) => $json
@@ -512,7 +512,7 @@ it('gets multiform form url if configured', function () {
         ->entityFor('person')
         ->setForm(null);
 
-    $this->get('/sharp/root/s-list/person')
+    $this->get(route('code16.sharp.list', 'person'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->has('entityList.data.0', fn (Assert $json) => $json
@@ -556,7 +556,7 @@ it('get entities if configured', function () {
         }
     });
 
-    $this->get('/sharp/root/s-list/person')
+    $this->get(route('code16.sharp.list', 'person'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->has('entityList.entities', 3)
@@ -593,7 +593,7 @@ it('handles notifications', function () {
 
     $this->withoutExceptionHandling();
 
-    $this->get('/sharp/root/s-list/person')
+    $this->get(route('code16.sharp.list', 'person'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->has('notifications', 1)
@@ -605,7 +605,7 @@ it('handles notifications', function () {
             )
         );
 
-    $this->get('/sharp/root/s-list/person')
+    $this->get(route('code16.sharp.list', 'person'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->has('notifications', 0)
@@ -614,7 +614,7 @@ it('handles notifications', function () {
     (new PersonForm())->notify('title1');
     (new PersonForm())->notify('title2');
 
-    $this->get('/sharp/root/s-list/person')
+    $this->get(route('code16.sharp.list', 'person'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->has('notifications', 2)
@@ -629,7 +629,7 @@ it('returns a 404 with invalid entity key', function () {
 it('handles hasShowPage in config', function () {
     fakeShowFor('person', new PersonShow());
 
-    $this->get('/sharp/root/s-list/person')
+    $this->get(route('code16.sharp.list', 'person'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->has('entityList.config', fn (Assert $config) => $config
@@ -640,7 +640,7 @@ it('handles hasShowPage in config', function () {
 
     fakeShowFor('person', null);
 
-    $this->get('/sharp/root/s-list/person')
+    $this->get(route('code16.sharp.list', 'person'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->has('entityList.config', fn (Assert $config) => $config
@@ -664,7 +664,7 @@ it('allows to configure a page alert', function () {
         }
     });
 
-    $this->get('/sharp/root/s-list/person')
+    $this->get(route('code16.sharp.list', 'person'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('entityList.pageAlert', [
@@ -698,7 +698,7 @@ it('allows to configure a page alert with a closure as content', function () {
         }
     });
 
-    $this->get('/sharp/root/s-list/person')
+    $this->get(route('code16.sharp.list', 'person'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('entityList.pageAlert', [

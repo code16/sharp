@@ -39,7 +39,7 @@ it('allows to configure prohibited actions on entities', function () {
     $this->delete('/sharp/root/s-list/person/s-show/person/1')->assertForbidden();
 
     // We can still view the list
-    $this->get('/sharp/root/s-list/person')
+    $this->get(route('code16.sharp.list', 'person'))
         ->assertOk()
         ->assertInertia(fn (AssertableJson $json) => $json
             ->where('entityList.authorizations.create', false)
@@ -68,7 +68,7 @@ it('handles default prohibited actions on entity', function () {
         ->entityFor('person')
         ->setProhibitedActions(['delete', 'update']);
 
-    $this->get('/sharp/root/s-list/person')->assertOk();
+    $this->get(route('code16.sharp.list', 'person'))->assertOk();
     $this->get('/sharp/root/s-list/person/s-show/person/50')->assertOk();
     $this->get('/sharp/root/s-list/person/s-form/person')->assertOk();
     $this->get('/sharp/root/s-list/person/s-form/person/50')->assertForbidden();
@@ -148,7 +148,7 @@ it('returns prohibited actions with a list get request', function () {
         ->setProhibitedActions(['delete']);
 
     $this
-        ->get('/sharp/root/s-list/person')
+        ->get(route('code16.sharp.list', 'person'))
         ->assertInertia(fn (AssertableJson $json) => $json
             ->where('entityList.authorizations.reorder', true)
             ->where('entityList.authorizations.create', true)
@@ -197,7 +197,7 @@ it('allow access by default', function () {
 
     // EL (inertia)
     $this
-        ->get('/sharp/root/s-list/person')
+        ->get(route('code16.sharp.list', 'person'))
         ->assertInertia(fn (AssertableJson $json) => $json
             ->where('entityList.authorizations.reorder', true)
             ->where('entityList.authorizations.create', true)
@@ -236,7 +236,7 @@ it('checks the main entity prohibited actions in case of a sub entity', function
     $this->get('/sharp/root/s-list/person/s-form/person:big/50')->assertOk();
     $this->post('/sharp/root/s-list/person/s-form/person:big/50')->assertRedirect();
     $this->delete('/sharp/root/s-list/person/s-show/person:big/50')->assertForbidden();
-    $this->get('/sharp/root/s-list/person')->assertOk();
+    $this->get(route('code16.sharp.list', 'person'))->assertOk();
 });
 
 it('handles custom auth check', function () {
@@ -252,11 +252,11 @@ it('handles custom auth check', function () {
     );
 
     login(new User(['name' => 'ok']));
-    $this->get('/sharp/root/s-list/person')
+    $this->get(route('code16.sharp.list', 'person'))
         ->assertOk();
 
     login(new User(['name' => 'ko']));
-    $this->get('/sharp/root/s-list/person')
+    $this->get(route('code16.sharp.list', 'person'))
         ->assertRedirect(route('code16.sharp.login'));
 });
 
@@ -264,10 +264,10 @@ it('checks useSharp Gate', function () {
     Gate::define('viewSharp', fn ($user) => $user->name === 'ok');
 
     login(new User(['name' => 'ok']));
-    $this->get('/sharp/root/s-list/person')
+    $this->get(route('code16.sharp.list', 'person'))
         ->assertOk();
 
     login(new User(['name' => 'ko']));
-    $this->get('/sharp/root/s-list/person')
+    $this->get(route('code16.sharp.list', 'person'))
         ->assertRedirect(route('code16.sharp.login'));
 });

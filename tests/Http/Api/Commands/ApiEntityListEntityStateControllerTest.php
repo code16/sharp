@@ -42,7 +42,7 @@ it('updates the state of an instance from a list and return a "refresh" action b
 
     $this
         ->postJson(
-            route('code16.sharp.api.list.state', ['root', 'person', 1]),
+            route('code16.sharp.api.list.state', ['person', 1]),
             [
                 'attribute' => 'state',
                 'value' => 'ok',
@@ -82,7 +82,7 @@ it('allow to return a "reload" action', function () {
 
     $this
         ->postJson(
-            route('code16.sharp.api.list.state', ['root', 'person', 1]),
+            route('code16.sharp.api.list.state', ['person', 1]),
             [
                 'attribute' => 'state',
                 'value' => 'ok',
@@ -117,7 +117,7 @@ it('disallows to update the state of an entity with a wrong state', function () 
     });
     $this
         ->postJson(
-            route('code16.sharp.api.list.state', ['root', 'person', 1]),
+            route('code16.sharp.api.list.state', ['person', 1]),
             [
                 'attribute' => 'state',
                 'value' => 'invalid',
@@ -149,7 +149,7 @@ it('returns a 417 on an applicative exception', function () {
 
     $this
         ->postJson(
-            route('code16.sharp.api.list.state', ['root', 'person', 1]),
+            route('code16.sharp.api.list.state', ['person', 1]),
             [
                 'attribute' => 'state',
                 'value' => 'ok',
@@ -182,7 +182,7 @@ it('disallows to update the state if unauthorized', function () {
 
     $this
         ->postJson(
-            route('code16.sharp.api.list.state', ['root', 'person', 1]),
+            route('code16.sharp.api.list.state', ['person', 1]),
             [
                 'attribute' => 'state',
                 'value' => 'ok',

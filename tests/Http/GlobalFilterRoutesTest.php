@@ -10,6 +10,7 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 beforeEach(function () {
     sharp()->config()->declareEntity(PersonEntity::class);
+    URL::defaults(['globalFilter' => null]);
     login();
 });
 

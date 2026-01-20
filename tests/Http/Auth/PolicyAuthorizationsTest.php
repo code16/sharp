@@ -271,7 +271,7 @@ it('allows to set dashboard view policy to handle whole dashboard visibility', f
 
     login(new User(['name' => 'unauthorized-user']));
 
-    $this->get('/sharp/root/s-dashboard/'.DashboardEntity::$entityKey)->assertForbidden();
+    $this->get(route('code16.sharp.dashboard', DashboardEntity::$entityKey))->assertForbidden();
 });
 
 it('does not check view, update and delete policies on create case', function () {

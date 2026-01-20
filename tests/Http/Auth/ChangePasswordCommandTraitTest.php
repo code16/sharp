@@ -41,7 +41,6 @@ it('exposes proper form fields and label (without confirmation) for change passw
     // Fetch the command form (single show variant)
     $this
         ->getJson(route('code16.sharp.api.show.command.singleInstance.form', [
-            'globalFilter' => 'root',
             'entityKey' => 'single-person',
             'commandKey' => 'change_password',
         ]))
@@ -85,7 +84,6 @@ it('shows confirmation field when enabled and enforces custom password rule and 
     // Form contains the confirmation field
     $this
         ->getJson(route('code16.sharp.api.show.command.singleInstance.form', [
-            'globalFilter' => 'root',
             'entityKey' => 'single-person',
             'commandKey' => 'change_password_confirm',
         ]))
@@ -101,7 +99,6 @@ it('shows confirmation field when enabled and enforces custom password rule and 
     // Fails when confirmation is missing/mismatch
     $this
         ->postJson(route('code16.sharp.api.show.command.instance', [
-            'globalFilter' => 'root',
             'entityKey' => 'single-person',
             'commandKey' => 'change_password_confirm',
         ]), [
@@ -116,7 +113,6 @@ it('shows confirmation field when enabled and enforces custom password rule and 
     // Fails when password rule is not satisfied (requires number)
     $this
         ->postJson(route('code16.sharp.api.show.command.instance', [
-            'globalFilter' => 'root',
             'entityKey' => 'single-person',
             'commandKey' => 'change_password_confirm',
         ]), [
@@ -132,7 +128,6 @@ it('shows confirmation field when enabled and enforces custom password rule and 
     // Succeeds with valid data
     $this
         ->postJson(route('code16.sharp.api.show.command.instance', [
-            'globalFilter' => 'root',
             'entityKey' => 'single-person',
             'commandKey' => 'change_password_confirm',
         ]), [
@@ -172,7 +167,6 @@ it('allows to hide the current password field', function () {
     // Form does not contain the current password field
     $this
         ->getJson(route('code16.sharp.api.show.command.singleInstance.form', [
-            'globalFilter' => 'root',
             'entityKey' => 'single-person',
             'commandKey' => 'change_password_confirm',
         ]))
@@ -187,7 +181,6 @@ it('allows to hide the current password field', function () {
     // Succeeds with valid data
     $this
         ->postJson(route('code16.sharp.api.show.command.instance', [
-            'globalFilter' => 'root',
             'entityKey' => 'single-person',
             'commandKey' => 'change_password_confirm',
         ]), [
@@ -221,7 +214,6 @@ it('rate limits after too many attempts and returns a helpful message', function
     for ($i = 0; $i < 3; $i++) {
         $this
             ->postJson(route('code16.sharp.api.show.command.instance', [
-                'globalFilter' => 'root',
                 'entityKey' => 'single-person',
                 'commandKey' => 'change_password_rl',
             ]), [
@@ -235,7 +227,6 @@ it('rate limits after too many attempts and returns a helpful message', function
     // 4th attempt should be blocked by rate limiter with SharpApplicativeException (417)
     $this
         ->postJson(route('code16.sharp.api.show.command.instance', [
-            'globalFilter' => 'root',
             'entityKey' => 'single-person',
             'commandKey' => 'change_password_rl',
         ]), [

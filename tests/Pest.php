@@ -17,7 +17,7 @@ uses()
         // it's handled by middleware in a real request, but we don't want to test that here.
         \Illuminate\Support\Facades\URL::defaults(['globalFilter' => \Code16\Sharp\Filters\GlobalFilters\GlobalFilters::$defaultKey]);
     })
-    ->in(__DIR__.'/Unit');
+    ->in(__DIR__);
 
 uses()
     ->group('eloquent')

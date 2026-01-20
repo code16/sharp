@@ -49,7 +49,6 @@ it('allows to call an autocomplete remote filter endpoint for entity list', func
 
     $this
         ->postJson(route('code16.sharp.api.filters.autocomplete.index', [
-            'globalFilter' => 'root',
             'entityKey' => 'person',
             'filterHandlerKey' => 'test',
         ]), [
@@ -100,7 +99,6 @@ it('allows to call an autocomplete remote filter endpoint with empty query', fun
 
     $this
         ->postJson(route('code16.sharp.api.filters.autocomplete.index', [
-            'globalFilter' => 'root',
             'entityKey' => 'person',
             'filterHandlerKey' => 'test',
         ]), [
@@ -152,7 +150,6 @@ it('allows to call an autocomplete remote filter endpoint for dashboard', functi
 
     $this
         ->postJson(route('code16.sharp.api.filters.autocomplete.index', [
-            'globalFilter' => 'root',
             'entityKey' => 'dashboard',
             'filterHandlerKey' => 'test',
         ]), [
