@@ -34,7 +34,7 @@
 </template>
 
 <script>
-    import { lang } from "sharp";
+    import { lang, sanitize } from "sharp";
 
     export default {
         props: {
@@ -55,9 +55,9 @@
                 }
             },
             text() {
-                return this.getText({
+                return sanitize(this.getText({
                     link: '<a href="#" class="text-reset" tabindex="-1">$1</a>',
-                });
+                }));
             },
             label() {
                 return this.getText();

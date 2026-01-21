@@ -108,7 +108,7 @@
 
 <script>
     import { mapGetters } from 'vuex';
-    import { formUrl, getBackUrl, lang, showAlert, handleNotifications, withLoadingOverlay, showDeleteConfirm } from 'sharp';
+    import { formUrl, getBackUrl, lang, showAlert, handleNotifications, withLoadingOverlay, showDeleteConfirm, sanitize } from 'sharp';
     import { CommandFormModal, CommandViewPanel } from 'sharp-commands';
     import { Grid, GlobalMessage } from 'sharp-ui';
     import { LocaleSelect } from "sharp-form";
@@ -203,10 +203,13 @@
                 if(!this.ready || !this.config.titleAttribute) {
                     return null;
                 }
+                let title;
                 if(this.fields[this.config.titleAttribute]?.localized) {
-                    return this.data[this.config.titleAttribute]?.[this.locale];
+                    title = this.data[this.config.titleAttribute]?.[this.locale];
+                } else {
+                    title = this.data[this.config.titleAttribute];
                 }
-                return this.data[this.config.titleAttribute];
+                return sanitize(title);
             },
             isReordering() {
                 return Object.values(this.reorderingLists).some(reordering => reordering);

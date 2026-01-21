@@ -72,7 +72,7 @@
 
 <script>
     import { Modal, Loading } from "sharp-ui";
-    import { lang } from "sharp";
+    import { lang, sanitize } from "sharp";
     import debounce from "lodash/debounce";
     import { getSearchResults } from "../api";
 
@@ -127,12 +127,16 @@
                 this.debouncedGetResults(this.query);
             },
             highlight(text) {
+                // Sanitize input text first to prevent XSS
+                const safeText = sanitize(text) || '';
                 if(this.query?.length) {
-                    return text.replace(new RegExp(this.query, 'gi'), match => {
+                    // Escape regex special characters in query
+                    const escapedQuery = this.query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                    return safeText.replace(new RegExp(escapedQuery, 'gi'), match => {
                         return `<mark class="px-0">${match}</mark>`;
                     });
                 }
-                return text;
+                return safeText;
             },
             handleWindowKeydown(event) {
                 const isContentEditable = event.target.isContentEditable || /^(?:input|textarea|select)$/i.test(event.target.tagName);
