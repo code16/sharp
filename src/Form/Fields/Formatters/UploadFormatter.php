@@ -8,6 +8,7 @@ use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithUpload;
 use Code16\Sharp\Utils\FileUtil;
+use enshrined\svgSanitize\Sanitizer;
 use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Support\Arr;
 use Intervention\Image\Image;
@@ -79,6 +80,11 @@ class UploadFormatter extends SharpFieldFormatter
             }
 
             $storage->put($storedFilePath, $fileContent);
+
+            // Sanitize SVG files to prevent XSS attacks
+            if ($field->isShouldSanitizeSvg() && $storage->mimeType($storedFilePath) === 'image/svg+xml') {
+                $this->sanitizeSvg($storage, $storedFilePath);
+            }
 
             return [
                 'file_name' => $storedFilePath,
@@ -183,5 +189,18 @@ class UploadFormatter extends SharpFieldFormatter
         return $this->alwaysReturnFullObject
             ? $data
             : ($data === null ? null : []);
+    }
+
+    protected function sanitizeSvg($storage, string $filePath): void
+    {
+        $sanitizer = new Sanitizer();
+        $sanitizer->minify(true);
+        $sanitizer->removeXMLTag(true);
+
+        $sanitizedSvg = $sanitizer->sanitize($storage->get($filePath));
+
+        if ($sanitizedSvg !== false) {
+            $storage->put($filePath, $sanitizedSvg);
+        }
     }
 }

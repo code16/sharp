@@ -355,4 +355,56 @@ class UploadFormatterTest extends SharpTestCase
                 ),
         );
     }
+
+    /** @test */
+    public function we_sanitize_svg_files_by_default()
+    {
+        $maliciousSvg = '<svg xmlns="http://www.w3.org/2000/svg"><script>alert("XSS")</script><rect width="100" height="100"/></svg>';
+
+        Storage::disk('local')->put('/tmp/malicious.svg', $maliciousSvg);
+
+        $field = SharpFormUploadField::make('upload')
+            ->setStorageBasePath('data')
+            ->setStorageDisk('local');
+
+        (new UploadFormatter())
+            ->fromFront(
+                $field,
+                'attribute',
+                [
+                    'name' => 'malicious.svg',
+                    'uploaded' => true,
+                ],
+            );
+
+        $sanitizedContent = Storage::disk('local')->get('data/malicious.svg');
+        $this->assertStringNotContainsString('<script>', $sanitizedContent);
+        $this->assertStringNotContainsString('alert', $sanitizedContent);
+    }
+
+    /** @test */
+    public function we_can_disable_svg_sanitization()
+    {
+        $svgWithScript = '<svg xmlns="http://www.w3.org/2000/svg"><script>alert("XSS")</script></svg>';
+
+        Storage::disk('local')->put('/tmp/test.svg', $svgWithScript);
+
+        $field = SharpFormUploadField::make('upload')
+            ->setStorageBasePath('data')
+            ->setStorageDisk('local')
+            ->setSanitizeSvg(false);
+
+        (new UploadFormatter())
+            ->fromFront(
+                $field,
+                'attribute',
+                [
+                    'name' => 'test.svg',
+                    'uploaded' => true,
+                ],
+            );
+
+        $content = Storage::disk('local')->get('data/test.svg');
+        $this->assertStringContainsString('<script>', $content);
+    }
 }

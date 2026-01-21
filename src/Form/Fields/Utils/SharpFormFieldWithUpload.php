@@ -15,6 +15,7 @@ trait SharpFormFieldWithUpload
     protected ?bool $transformKeepOriginal = null;
     protected bool $compactThumbnail = false;
     protected bool $shouldOptimizeImage = false;
+    protected bool $shouldSanitizeSvg = true;
     protected string|array|null $fileFilter = null;
 
     public function setMaxFileSize(float $maxFileSizeInMB): self
@@ -50,6 +51,18 @@ trait SharpFormFieldWithUpload
     public function isShouldOptimizeImage(): bool
     {
         return $this->shouldOptimizeImage;
+    }
+
+    public function setSanitizeSvg(bool $shouldSanitizeSvg = true): self
+    {
+        $this->shouldSanitizeSvg = $shouldSanitizeSvg;
+
+        return $this;
+    }
+
+    public function isShouldSanitizeSvg(): bool
+    {
+        return $this->shouldSanitizeSvg;
     }
 
     public function setCompactThumbnail(bool $compactThumbnail = true): self
