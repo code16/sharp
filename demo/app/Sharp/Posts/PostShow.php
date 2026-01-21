@@ -109,7 +109,10 @@ class PostShow extends SharpShow
             ->configureEntityState('state', PostStateHandler::class)
             ->configureBreadcrumbCustomLabelAttribute('breadcrumb')
             ->configurePageTitleAttribute('title', localized: true)
-            ->configureDeleteConfirmationText('Are you sure you want to delete this post (this will permanently delete its data)?');
+            ->configureDeleteConfirmationText('Are you sure you want to delete this post (this will permanently delete its data)?')
+            ->configurePrimaryInstanceCommands([
+                PreviewPostCommand::class,
+            ]);
     }
 
     protected function buildPageAlert(PageAlert $pageAlert): void
@@ -132,7 +135,6 @@ class PostShow extends SharpShow
                 PreviewPostCommand::class,
             ],
             EvaluateDraftPostWizardCommand::class,
-            PreviewPostCommand::class,
         ];
     }
 

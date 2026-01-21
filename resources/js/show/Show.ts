@@ -40,9 +40,42 @@ export class Show implements ShowData {
         return this.config.state?.values.find(item => item.value === this.instanceState);
     }
 
-    get allowedInstanceCommands(): Array<Array<CommandData>> | undefined {
+    get allowedInstanceCommands(): CommandData[][] {
         return this.config.commands?.instance
             ?.map(group => group.filter(command => command.authorization));
+    }
+
+    get dropdownInstanceCommands(): CommandData[][] {
+        return this.allowedInstanceCommands
+            ?.map(group => group.filter(command => !command.primary));
+    }
+
+    get primaryInstanceCommands(): CommandData[] | undefined {
+        return this.allowedInstanceCommands
+            ?.flat()
+            .filter(command => command.primary);
+    }
+
+    sectionAllowedCommands(section: ShowLayoutSectionData): CommandData[][] | null {
+        if(!section.key) {
+            return null;
+        }
+        return (this.config.commands?.[section.key] ?? [])
+            .map(group => group.filter(command => command.authorization));
+    }
+
+    sectionDropdownCommands(section: ShowLayoutSectionData): CommandData[][] | null {
+        if(!section.key) {
+            return null;
+        }
+        return this.sectionAllowedCommands(section).map(group => group.filter(command => !command.primary));
+    }
+
+    sectionPrimaryCommands(section: ShowLayoutSectionData): CommandData[] | null {
+        if(!section.key) {
+            return null;
+        }
+        return this.sectionAllowedCommands(section).flat().filter(command => command.primary);
     }
 
     getTitle(locale: string): string | null {
@@ -63,14 +96,6 @@ export class Show implements ShowData {
 
     sectionHasField(section: ShowLayoutSectionData, type: ShowFieldType): boolean {
         return this.sectionFields(section).some(field => field.type === type);
-    }
-
-    sectionCommands(section: ShowLayoutSectionData): Array<Array<CommandData>> | null {
-        if(!section.key) {
-            return null;
-        }
-        return (this.config.commands[section.key] ?? [])
-            .map(group => group.filter(command => command.authorization));
     }
 
     sectionShouldBeVisible(section: ShowLayoutSectionData, locale: string): boolean {

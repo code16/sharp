@@ -27,20 +27,11 @@ trait HandleEntityCommands
     protected function appendEntityCommandsToConfig(array &$config): void
     {
         $this->appendCommandsToConfig(
-            $this->getEntityCommandsHandlers(),
-            $config,
-            'entity'
+            commandHandlers: $this->getEntityCommandsHandlers(),
+            config: $config,
+            positionKey: 'entity',
+            primaryCommands: $this->primaryEntityCommandKey ? [$this->primaryEntityCommandKey] : [],
         );
-
-        // If a command is defined as [primary], we have to update its config for the front:
-        if ($this->primaryEntityCommandKey && $handler = $this->findEntityCommandHandler($this->primaryEntityCommandKey)) {
-            foreach ($config['commands']['entity'][$handler->groupIndex()] as $index => $commandConfig) {
-                if ($commandConfig['key'] === $this->primaryEntityCommandKey) {
-                    $config['commands']['entity'][$handler->groupIndex()][$index]['primary'] = true;
-                    break;
-                }
-            }
-        }
     }
 
     final public function getEntityCommandsHandlers(): Collection

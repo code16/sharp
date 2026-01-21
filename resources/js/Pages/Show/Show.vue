@@ -65,7 +65,7 @@
         if(show.layout.sections[0] && (
                 show.sectionHasField(show.layout.sections[0], 'entityList')
                 || show.layout.sections[0].title
-                || show.sectionCommands(show.layout.sections[0])?.flat().length
+                || show.sectionAllowedCommands(show.layout.sections[0])?.flat().length
             )
             || !show.layout.sections.length) {
             return [
@@ -207,7 +207,7 @@
                                 </template>
                                 <template v-else>
                                     <RootCard>
-                                        <template v-if="section.title || i == 0 || section.collapsable || show.sectionCommands(section)?.flat().length">
+                                        <template v-if="section.title || i == 0 || section.collapsable || show.sectionAllowedCommands(section)?.flat().length">
                                             <RootCardHeader class="data-overflowing-viewport:sticky" :collapsed="collapsed">
                                                 <div class="flex flex-wrap gap-4">
                                                     <div class="flex gap-4">
@@ -225,27 +225,6 @@
                                                             </Button>
                                                         </template>
                                                     </div>
-                                                    <template v-if="show.sectionCommands(section)?.flat().length">
-                                                        <div class="ml-auto flex -my-1 justify-end" :class="{ 'invisible': collapsed }"
-                                                            role="group"
-                                                            :aria-label="__('sharp::show.section_menu.aria_label', { title: section.title })"
-                                                        >
-                                                            <DropdownMenu>
-                                                                <DropdownMenuTrigger as-child>
-                                                                    <Button class="h-8" size="sm" variant="outline">
-                                                                        {{ __('sharp::entity_list.commands.instance.label') }}
-                                                                        <DropdownChevronDown />
-                                                                    </Button>
-                                                                </DropdownMenuTrigger>
-                                                                <DropdownMenuContent>
-                                                                    <CommandDropdownItems
-                                                                        :commands="show.sectionCommands(section)"
-                                                                        @select="onCommand"
-                                                                    />
-                                                                </DropdownMenuContent>
-                                                            </DropdownMenu>
-                                                        </div>
-                                                    </template>
                                                     <template v-if="i == 0">
                                                         <div class="ml-auto flex flex-wrap -my-1 justify-end gap-2"
                                                             :class="{ 'invisible': collapsed }"
@@ -324,11 +303,12 @@
                                                                                 </template>
 
                                                                                 <CommandDropdownItems
-                                                                                    :commands="show.allowedInstanceCommands"
+                                                                                    :commands="show.dropdownInstanceCommands"
                                                                                     @select="onCommand"
                                                                                 />
+
                                                                                 <template v-if="show.authorizations.delete">
-                                                                                    <template v-if="show.allowedInstanceCommands?.flat().length">
+                                                                                    <template v-if="show.dropdownInstanceCommands?.flat().length">
                                                                                         <DropdownMenuSeparator />
                                                                                     </template>
                                                                                     <DropdownMenuItem class="text-destructive" @click="onDelete">
@@ -337,6 +317,11 @@
                                                                                 </template>
                                                                             </DropdownMenuContent>
                                                                         </DropdownMenu>
+                                                                    </template>
+                                                                    <template v-for="command in show.primaryInstanceCommands">
+                                                                        <Button class="h-8" size="sm" @click="onCommand(command)">
+                                                                            {{ command.label }}
+                                                                        </Button>
                                                                     </template>
                                                                     <template v-if="show.authorizations.update">
                                                                         <Button class="h-8 pointer-events-auto" size="sm" :disabled="isReordering" as-child>
@@ -348,6 +333,36 @@
                                                                 </div>
                                                             </template>
                                                         </div>
+                                                    </template>
+                                                    <template v-else>
+                                                        <template v-if="show.sectionAllowedCommands(section)?.flat().length">
+                                                            <div class="ml-auto flex -my-1 justify-end gap-2" :class="{ 'invisible': collapsed }"
+                                                                role="group"
+                                                                :aria-label="__('sharp::show.section_menu.aria_label', { title: section.title })"
+                                                            >
+                                                                <template v-if="show.sectionDropdownCommands(section)?.flat().length">
+                                                                    <DropdownMenu>
+                                                                        <DropdownMenuTrigger as-child>
+                                                                            <Button class="h-8" size="sm" variant="outline">
+                                                                                {{ __('sharp::entity_list.commands.instance.label') }}
+                                                                                <DropdownChevronDown />
+                                                                            </Button>
+                                                                        </DropdownMenuTrigger>
+                                                                        <DropdownMenuContent>
+                                                                            <CommandDropdownItems
+                                                                                :commands="show.sectionDropdownCommands(section)"
+                                                                                @select="onCommand"
+                                                                            />
+                                                                        </DropdownMenuContent>
+                                                                    </DropdownMenu>
+                                                                </template>
+                                                                <template v-for="command in show.sectionPrimaryCommands(section)">
+                                                                    <Button class="h-8" size="sm" @click="onCommand(command)">
+                                                                        {{ command.label }}
+                                                                    </Button>
+                                                                </template>
+                                                            </div>
+                                                        </template>
                                                     </template>
                                                 </div>
                                             </RootCardHeader>

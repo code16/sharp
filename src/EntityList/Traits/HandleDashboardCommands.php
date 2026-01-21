@@ -22,9 +22,10 @@ trait HandleDashboardCommands
         $this->getDashboardCommandHandlers()
             ->each(function ($handlers, $positionKey) use (&$config) {
                 $this->appendCommandsToConfig(
-                    $handlers,
-                    $config,
-                    $positionKey,
+                    commandHandlers: $handlers,
+                    config: $config,
+                    positionKey: $positionKey,
+                    primaryCommands: [],
                 );
             });
     }
