@@ -7,13 +7,14 @@
     >
         <slot>
             <template v-if="data.slot">
-                <div v-html="data.slot"></div>
+                <div v-html="sanitizedSlot"></div>
             </template>
         </slot>
     </TemplateRenderer>
 </template>
 
 <script>
+    import { sanitize } from "sharp";
     import { TemplateRenderer } from "sharp/components";
 
     export default {
@@ -32,6 +33,9 @@
             templateProps() {
                 return this.options.attributes
                     .filter(attr => attr !== 'slot');
+            },
+            sanitizedSlot() {
+                return sanitize(this.data.slot);
             },
         },
     }

@@ -27,6 +27,7 @@
 
 <script>
     import { Localization } from 'sharp/mixins';
+    import { sanitize } from 'sharp';
     import clip from 'text-clipper';
     import { syncVisibility } from "../../../util/fields/visiblity";
     import { truncateToWords, stripTags } from "../../../util/fields/text";
@@ -70,12 +71,12 @@
                     return null;
                 }
                 if(this.hasCollapsed && !this.expanded) {
-                    return this.collapsedContent;
+                    return this.html ? sanitize(this.collapsedContent) : this.collapsedContent;
                 }
                 if(!this.html) {
                     return stripTags(this.resolvedValue).trim();
                 }
-                return this.resolvedValue;
+                return sanitize(this.resolvedValue);
             },
             hasCollapsed() {
                 return !!this.collapsedContent;

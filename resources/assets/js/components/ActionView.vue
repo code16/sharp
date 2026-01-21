@@ -32,7 +32,7 @@
                             <button type="button" class="btn-close" data-test="close-notification" aria-label="Close" @click="close"></button>
                         </div>
                         <template v-if="item.text">
-                            <div class="toast-body" v-html="item.text">
+                            <div class="toast-body" v-html="sanitize(item.text)">
                             </div>
                         </template>
                     </div>
@@ -46,7 +46,7 @@
                     @hidden="dialog.hiddenCallback"
                     :key="dialog.id"
                 >
-                    <div v-html="dialog.text"></div>
+                    <div v-html="sanitize(dialog.text)"></div>
                 </Modal>
             </template>
         </template>
@@ -61,6 +61,7 @@
 
 <script>
     import { createApi } from "../api";
+    import { sanitize } from "../util/sanitize";
     import { Modal, LoadingOverlay, TopBar } from 'sharp-ui';
 
     export default {
@@ -102,6 +103,7 @@
                     }
                 }
             },
+            sanitize,
         },
     }
 </script>

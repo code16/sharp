@@ -23,7 +23,7 @@
                             ]" style="min-width: 0">
                                 <slot name="cell" :row="row" :column="column">
                                     <template v-if="column.html">
-                                        <div v-html="row[column.key]" class="SharpDataList__td-html-container"></div>
+                                        <div v-html="sanitizedHtml(row[column.key])" class="SharpDataList__td-html-container"></div>
                                     </template>
                                     <template v-else>
                                         {{ row[column.key] }}
@@ -52,6 +52,8 @@
 </template>
 
 <script>
+    import { sanitize } from 'sharp';
+
     export default {
         props: {
             columns: Array,
@@ -102,6 +104,9 @@
             },
             toggleHighlight(highlight) {
                 this.isHighlighted = highlight;
+            },
+            sanitizedHtml(html) {
+                return sanitize(html);
             }
         }
     }
