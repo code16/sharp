@@ -6,8 +6,8 @@ use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Form\SharpSingleForm;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Testing\EntityList\PendingEntityList;
-use Code16\Sharp\Utils\Testing\GeneratesGlobalFilterUrl;
 use Code16\Sharp\Utils\Testing\IsPendingComponent;
+use Code16\Sharp\Utils\Testing\SharpAssertions;
 use Code16\Sharp\Utils\Testing\Show\PendingShow;
 use Illuminate\Foundation\Testing\TestCase;
 use Illuminate\Testing\TestResponse;
@@ -16,7 +16,6 @@ use PHPUnit\Framework\Assert as PHPUnit;
 class PendingForm
 {
     use FormatsDataForUpdate;
-    use GeneratesGlobalFilterUrl;
     use IsPendingComponent;
 
     public SharpForm $form;
@@ -24,7 +23,7 @@ class PendingForm
     protected bool $isSubsequentRequest = false;
 
     public function __construct(
-        /** @var TestCase $test */
+        /** @var TestCase&SharpAssertions $test */
         protected object $test,
         string $entityKey,
         public string|int|null $instanceId = null,
@@ -36,8 +35,6 @@ class PendingForm
 
     public function create(): AssertableForm
     {
-        $this->setGlobalFilterUrlDefault();
-
         PHPUnit::assertNotInstanceOf(SharpSingleForm::class, $this->form);
 
         return new AssertableForm(
@@ -52,8 +49,6 @@ class PendingForm
 
     public function edit(): AssertableForm
     {
-        $this->setGlobalFilterUrlDefault();
-
         if (! $this->form instanceof SharpSingleForm) {
             PHPUnit::assertNotNull($this->instanceId, 'You can’t edit a form without an instance ID.');
         }
@@ -71,8 +66,6 @@ class PendingForm
 
     public function store(array $data): TestResponse
     {
-        $this->setGlobalFilterUrlDefault();
-
         PHPUnit::assertNotInstanceOf(SharpSingleForm::class, $this->form);
 
         return $this->test
@@ -87,8 +80,6 @@ class PendingForm
 
     public function update(array $data): TestResponse
     {
-        $this->setGlobalFilterUrlDefault();
-
         if (! $this->form instanceof SharpSingleForm) {
             PHPUnit::assertNotNull($this->instanceId, 'You can’t update a form without an instance ID.');
         }

@@ -19,12 +19,15 @@ use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonShow;
 use Code16\Sharp\Tests\Fixtures\Sharp\SinglePersonShow;
 use Code16\Sharp\Tests\Fixtures\Sharp\TestDashboard;
+use Code16\Sharp\Tests\ResetUrlDefaults;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Testing\SharpAssertions;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Testing\Fluent\AssertableJson;
 
-pest()->use(SharpAssertions::class);
+pest()
+    ->use(ResetUrlDefaults::class)
+    ->use(SharpAssertions::class);
 
 beforeEach(function () {
     login();

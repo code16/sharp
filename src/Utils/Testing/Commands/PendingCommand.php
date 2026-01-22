@@ -21,8 +21,6 @@ class PendingCommand
 
     public function getForm(): AssertableCommandForm
     {
-        $this->setGlobalFilterUrlDefault();
-
         return new AssertableCommandForm(
             post: $this->post,
             getForm: $this->getForm,
@@ -33,8 +31,6 @@ class PendingCommand
 
     public function post(): AssertableCommand
     {
-        $this->setGlobalFilterUrlDefault();
-
         return new AssertableCommand(
             postCommand: $this->post,
             getForm: $this->getForm,
