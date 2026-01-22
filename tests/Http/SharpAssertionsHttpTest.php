@@ -24,6 +24,7 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Testing\SharpAssertions;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Testing\Fluent\AssertableJson;
+use Illuminate\Testing\TestResponse;
 
 pest()
     ->use(ResetUrlDefaults::class)
@@ -793,4 +794,60 @@ it('call & assert a dashboard command', function () {
     $this->sharpDashboard(DashboardEntity::class)
         ->dashboardCommand('cmd-form')->getForm()->post(['action' => 'info'])
         ->assertReturnsInfo('dashboard');
+});
+
+it('set default global filter', function () {
+    fakeGlobalFilter();
+
+    $this
+        ->sharpList(PersonEntity::class)
+        ->get()
+        ->assertOk()
+        ->tap(fn (TestResponse $response) => expect($response->baseRequest->route('globalFilter'))->toEqual('two')
+        );
+
+    $this
+        ->sharpShow(PersonEntity::class, 1)
+        ->get()
+        ->assertOk()
+        ->tap(fn (TestResponse $response) => expect($response->baseRequest->route('globalFilter'))->toEqual('two')
+        );
+
+    $this
+        ->sharpForm(PersonEntity::class)
+        ->create()
+        ->assertOk()
+        ->tap(fn (TestResponse $response) => expect($response->baseRequest->route('globalFilter'))->toEqual('two')
+        );
+});
+
+it('set specified global filter', function () {
+    fakeGlobalFilter('test');
+
+    $this->withSharpGlobalFilter('test', 'one');
+
+    $this
+        ->sharpList(PersonEntity::class)
+        ->get()
+        ->assertOk()
+        ->tap(fn (TestResponse $response) => expect($response->baseRequest->route('globalFilter'))->toEqual('one')
+        );
+
+    $this->withSharpGlobalFilter('test', 'two');
+
+    $this
+        ->sharpShow(PersonEntity::class, 1)
+        ->get()
+        ->assertOk()
+        ->tap(fn (TestResponse $response) => expect($response->baseRequest->route('globalFilter'))->toEqual('two')
+        );
+
+    $this->withSharpGlobalFilter('test', 'one');
+
+    $this
+        ->sharpForm(PersonEntity::class)
+        ->create()
+        ->assertOk()
+        ->tap(fn (TestResponse $response) => expect($response->baseRequest->route('globalFilter'))->toEqual('one')
+        );
 });

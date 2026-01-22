@@ -51,8 +51,11 @@ class PendingEntityList
 
     public function withFilter(string $filterKey, mixed $value): static
     {
-        $key = $this->entityList->filterContainer()->findFilterHandler($filterKey)->getKey();
-        $this->filterValues[$key] = $value;
+        $filter = $this->entityList->filterContainer()->findFilterHandler($filterKey);
+
+        PHPUnit::assertNotNull($filter, sprintf('Unknown entity list filter [%s]', $filterKey));
+
+        $this->filterValues[$filter->getKey()] = $value;
 
         return $this;
     }
