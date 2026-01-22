@@ -28,6 +28,7 @@ final class MenuItemData extends Data
         /** @var MenuItemData[]|null */
         public ?array $children = null,
         public bool $isCollapsible = false,
+        public bool $openInNewTab = false,
     ) {}
 
     public static function from(SharpMenuItem $item)
@@ -63,6 +64,7 @@ final class MenuItemData extends Data
                 isExternalLink: $item->isExternalLink(),
                 entityKey: $item->isEntity() ? $item->getEntityKey() : null,
                 current: $item->isEntity() && $item->isCurrent(),
+                openInNewTab: $item->isOpenInNewTab(),
             );
         }
 

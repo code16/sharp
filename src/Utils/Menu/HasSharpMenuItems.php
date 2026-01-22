@@ -36,8 +36,9 @@ trait HasSharpMenuItems
         ?Closure $badge = null,
         ?string $badgeTooltip = null,
         string|SharpLinkTo|null $badgeLink = null,
+        bool $openInNewTab = false,
     ): self {
-        $this->items[] = (new SharpMenuItemLink($label, $icon, $badge, $badgeTooltip, $badgeLink))
+        $this->items[] = (new SharpMenuItemLink($label, $icon, $badge, $badgeTooltip, $badgeLink, $openInNewTab))
             ->setUrl($url);
 
         return $this;

@@ -745,6 +745,7 @@ export type MenuItemData = {
   current: boolean;
   children: Array<MenuItemData> | null;
   isCollapsible: boolean;
+  openInNewTab: boolean;
 };
 export type NotificationData = {
   title: string;
