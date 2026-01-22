@@ -285,7 +285,7 @@ $this->sharpDashboard(MyDashboard::class)
 If your app contains global filters, you should be able to test normally, but it will be set to its default value. If you need, you can set a specific value using `withGlobalFilter()`:
 
 ```php
-$this->withGlobalFilter(CompanyFilter::class, 'apple')
+$this->withSharpGlobalFilter(CompanyFilter::class, 'apple')
     ->sharpList(Post::class)
     //...
 ```
