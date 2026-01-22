@@ -64,6 +64,7 @@
     const sectionsWithAlwaysFirst = computed<typeof show.layout.sections>(() => {
         if(show.layout.sections[0] && (
                 show.sectionHasField(show.layout.sections[0], 'entityList')
+                || show.sectionHasField(show.layout.sections[0], 'dashboard')
                 || show.layout.sections[0].title
                 || show.sectionCommands(show.layout.sections[0])?.flat().length
             )
