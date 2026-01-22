@@ -72,6 +72,18 @@ class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
 }
 ```
 
+You can open the link in a new tab using the `openInNewTab` parameter:
+
+```php
+class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
+{
+    public function build(): self
+    {
+        return $this->addExternalLink('https://google.com', 'Some external link', openInNewTab: true);
+    }
+}
+```
+
 ### Define icons
 
 Yon can specify a [blade-icons](https://blade-ui-kit.com/blade-icons) name for each link. It can be an icon set coming from a [package](https://github.com/blade-ui-kit/blade-icons?tab=readme-ov-file#icon-packages) or defined in the project config.

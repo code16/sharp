@@ -21,6 +21,7 @@ class SharpMenuItemLink extends SharpMenuItem
         protected ?Closure $badge,
         protected ?string $badgeTooltip = null,
         protected string|SharpLinkTo|null $badgeLink = null,
+        protected bool $openInNewTab = false,
     ) {}
 
     public function setEntity(string $entityKey): self
@@ -120,5 +121,10 @@ class SharpMenuItemLink extends SharpMenuItem
         $rootEntityKey = sharp()->context()->breadcrumb()->breadcrumbItems()->first()?->entityKey();
 
         return $this->isEntity() && $rootEntityKey === $this->getEntityKey();
+    }
+
+    public function isOpenInNewTab(): bool
+    {
+        return $this->openInNewTab;
     }
 }

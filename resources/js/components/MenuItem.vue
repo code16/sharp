@@ -26,7 +26,7 @@
                     <Icon :icon="item.icon" class="size-4" />
                 </template>
                 <span class="flex-1">
-                    <component :is="item.isExternalLink ? 'a' : Link" :href="item.url">
+                    <component :is="item.isExternalLink ? 'a' : Link" :href="item.url" :target="item.openInNewTab ? '_blank' : '_self'">
                         <span class="absolute inset-0 z-1"></span>
                         {{ item.label }}
                     </component>

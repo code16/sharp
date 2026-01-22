@@ -205,7 +205,7 @@
                                                         <DropdownMenuSeparator />
                                                     </template>
                                                     <template v-else>
-                                                        <DropdownMenuItem :as="item.isExternalLink ? 'a' : Link" :href="item.url">
+                                                        <DropdownMenuItem :as="item.isExternalLink ? 'a' : Link" :href="item.url" :target="item.openInNewTab ? '_blank' : '_self'">
                                                             <template v-if="item.icon">
                                                                 <Icon class="size-4" :icon="item.icon" />
                                                             </template>
