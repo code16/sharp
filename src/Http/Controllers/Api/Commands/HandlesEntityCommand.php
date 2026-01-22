@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Http\Controllers\Api\Commands;
 
 use Code16\Sharp\EntityList\Commands\EntityCommand;
+use Code16\Sharp\EntityList\Commands\Wizards\EntityWizardCommand;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
 
@@ -13,7 +14,11 @@ trait HandlesEntityCommand
         $commandHandler = $list->findEntityCommandHandler($commandKey);
         $commandHandler->buildCommandConfig();
 
-        if (! $commandHandler->authorize()) {
+        $authorized = $commandHandler instanceof EntityWizardCommand && ($step = $commandHandler->extractStepFromRequest())
+            ? $commandHandler->authorizeForStep($step)
+            : $commandHandler->authorize();
+
+        if (! $authorized) {
             throw new SharpAuthorizationException();
         }
 

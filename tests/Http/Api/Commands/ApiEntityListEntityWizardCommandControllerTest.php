@@ -297,6 +297,104 @@ it('allows to post second step of a wizard entity command', function () {
         ]);
 });
 
+it('authorize() is only called for firstStep', function () {
+    $authorizeForStep = true;
+
+    fakeListFor('person', new class($authorizeForStep) extends PersonList
+    {
+        public function __construct(public bool &$authorizeForStep) {}
+
+        protected function getEntityCommands(): ?array
+        {
+            return [
+                'wizard' => new class($this->authorizeForStep) extends EntityWizardCommand
+                {
+                    public function __construct(public bool &$authorizeForStep) {}
+
+                    protected function getKey(): string
+                    {
+                        return 'test-key';
+                    }
+
+                    public function label(): ?string
+                    {
+                        return 'my command';
+                    }
+
+                    public function authorize(): bool
+                    {
+                        return false;
+                    }
+
+                    public function authorizeForStep(string $step): bool
+                    {
+                        return $this->authorizeForStep;
+                    }
+
+                    public function buildFormFieldsForFirstStep(FieldsContainer $formFields): void
+                    {
+                        $formFields->addField(SharpFormTextField::make('name'));
+                    }
+
+                    protected function executeFirstStep(array $data): array
+                    {
+                        $this->validate($data, ['name' => 'required']);
+
+                        return $this->toStep('next-step');
+                    }
+
+                    public function buildFormFieldsForStepNextStep(FieldsContainer $formFields): void
+                    {
+                        $formFields->addField(SharpFormTextField::make('age'));
+                    }
+
+                    protected function executeStepNextStep(array $data): array
+                    {
+                        return $this->reload();
+                    }
+                },
+            ];
+        }
+    });
+
+    // First post step 1...
+    $this
+        ->postJson(
+            route('code16.sharp.api.list.command.entity', [
+                'globalFilter' => 'root',
+                'entityKey' => 'person',
+                'commandKey' => 'wizard',
+            ]),
+            ['data' => ['name' => 'test']],
+        )
+        ->assertForbidden();
+
+    // Then post step 2 but authorized (default)
+    $this
+        ->postJson(
+            route('code16.sharp.api.list.command.entity', [
+                'entityKey' => 'person',
+                'commandKey' => 'wizard',
+                'command_step' => 'next-step:test-key',
+            ]),
+            ['data' => ['age' => '22']],
+        )
+        ->assertOk();
+
+    // Post 2 but disallowed
+    $authorizeForStep = false;
+    $this
+        ->postJson(
+            route('code16.sharp.api.list.command.entity', [
+                'entityKey' => 'person',
+                'commandKey' => 'wizard',
+                'command_step' => 'next-step:test-key',
+            ]),
+            ['data' => ['age' => '22']],
+        )
+        ->assertForbidden();
+});
+
 it('allows to define a global method for step execution', function () {
     fakeListFor('person', new class() extends PersonList
     {

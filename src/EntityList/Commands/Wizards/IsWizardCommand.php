@@ -38,9 +38,9 @@ trait IsWizardCommand
         ];
     }
 
-    protected function extractStepFromRequest(): ?string
+    public function extractStepFromRequest(): ?string
     {
-        if ($step = request()->get('command_step')) {
+        if ($step = request()->input('command_step')) {
             [$step, $this->key] = explode(':', $step);
 
             return $step;

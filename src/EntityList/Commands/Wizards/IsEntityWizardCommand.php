@@ -54,4 +54,9 @@ trait IsEntityWizardCommand
     {
         return [];
     }
+
+    public function authorizeForStep(string $step): bool
+    {
+        return true;
+    }
 }

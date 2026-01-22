@@ -57,6 +57,11 @@ abstract class InstanceWizardCommand extends InstanceCommand
         return [];
     }
 
+    public function authorizeForStep(string $step, mixed $instanceId): bool
+    {
+        return true;
+    }
+
     abstract protected function executeFirstStep(mixed $instanceId, array $data): array;
 
     abstract protected function buildFormFieldsForFirstStep(FieldsContainer $formFields): void;
