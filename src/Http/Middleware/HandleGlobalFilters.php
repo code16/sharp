@@ -6,6 +6,7 @@ use Closure;
 use Code16\Sharp\Filters\GlobalFilters\GlobalFilters;
 use Code16\Sharp\Filters\GlobalRequiredFilter;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\URL;
 
 class HandleGlobalFilters
@@ -20,9 +21,7 @@ class HandleGlobalFilters
             if ($this->globalFiltersHandler->isEnabled()) {
                 $globalFilters = $this->globalFiltersHandler->getFilters();
                 if (count($globalFilterValues) !== count($globalFilters)) {
-                    return redirect()->route('code16.sharp.home', [
-                        'globalFilter' => sharp()->context()->globalFilterUrlSegmentValue(),
-                    ]);
+                    return $this->redirectTo($request);
                 }
 
                 collect($globalFilters)
@@ -34,9 +33,7 @@ class HandleGlobalFilters
                     && ! $request->wantsJson()
                     && $request->isMethod('GET')
                 ) {
-                    return redirect()->route('code16.sharp.home', [
-                        'globalFilter' => sharp()->context()->globalFilterUrlSegmentValue(),
-                    ]);
+                    return $this->redirectTo($request);
                 }
             }
         }
@@ -44,5 +41,18 @@ class HandleGlobalFilters
         URL::defaults(['globalFilter' => sharp()->context()->globalFilterUrlSegmentValue()]);
 
         return $next($request);
+    }
+
+    protected function redirectTo(Request $request)
+    {
+        return $request->route()?->hasParameter('globalFilter')
+            ? redirect()->route($request->route()->getName(), [
+                'globalFilter' => sharp()->context()->globalFilterUrlSegmentValue(),
+                ...Arr::except($request->route()->parameters(), 'globalFilter'),
+                ...$request->query(),
+            ])
+            : redirect()->route('code16.sharp.home', [
+                'globalFilter' => sharp()->context()->globalFilterUrlSegmentValue(),
+            ]);
     }
 }

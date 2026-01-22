@@ -86,13 +86,21 @@ it('sets the current globalFilter according to the URL for API routes', function
     expect(sharp()->context()->globalFilterValue('test'))->toEqual('one');
 });
 
-it('redirects to the homepage if an invalid globalFilter is set in the URL', function () {
+it('redirects to the corresponding route with valid globalFilter if an invalid globalFilter is set in the URL', function () {
     fakeGlobalFilter();
 
-    $this->get('/sharp/five/s-list/person/s-show/person/1')
-        ->assertRedirect(route('code16.sharp.home', ['globalFilter' => 'two']));
+    $this->get('/sharp/five/s-list/person/s-show/person/1?highlight=1')
+        ->assertRedirect('/sharp/two/s-list/person/s-show/person/1?highlight=1');
 
     expect(sharp()->context()->globalFilterValue('test'))->toEqual('two');
+});
+
+it('redirects to the corresponding route with valid globalFilter if a different number of filters is sent', function () {
+    fakeGlobalFilter('test1');
+    fakeGlobalFilter('test2');
+
+    $this->get('/sharp/two/s-list/person/s-show/person/1?highlight=1')
+        ->assertRedirect('/sharp/two~two/s-list/person/s-show/person/1?highlight=1');
 });
 
 it('redirects to route with correct globalFilters when missing and multiple global filters are defined', function () {
