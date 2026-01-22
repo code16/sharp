@@ -184,7 +184,7 @@ class PostForm extends SharpForm
                         return $users->get();
                     })
                     ->setListItemTemplate('<div>{{ $name }}</div><div><small>{{ $email }}</small></div>')
-                    ->setHelpMessage('This field is only editable by admins.'),
+                    ->setHelpMessage('This field is only editable by <strong>admins</strong>.'),
             ));
     }
 

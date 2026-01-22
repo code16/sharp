@@ -141,14 +141,14 @@
                     <template v-if="field.helpMessage || $slots['help-message']">
                         <div :id="`${id}-help-message`" class="grid grid-cols-1 gap-y-2">
                             <template v-if="field.helpMessage || $slots['help-message']">
-                                <p class="text-xs text-muted-foreground leading-4">
+                                <div class="text-xs text-muted-foreground leading-4">
                                     <template v-if="field.helpMessage">
-                                        {{ field.helpMessage }}
+                                        <div class="content" v-html="field.helpMessage"></div>
                                     </template>
                                     <template v-else>
                                         <slot name="help-message"></slot>
                                     </template>
-                                </p>
+                                </div>
                             </template>
                         </div>
                     </template>
