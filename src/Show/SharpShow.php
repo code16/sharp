@@ -4,6 +4,7 @@ namespace Code16\Sharp\Show;
 
 use Code16\Sharp\EntityList\Traits\HandleEntityState;
 use Code16\Sharp\EntityList\Traits\HandleInstanceCommands;
+use Code16\Sharp\EntityList\Traits\HandleInstancePrimaryCommands;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
 use Code16\Sharp\Show\Layout\ShowLayout;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
@@ -19,6 +20,7 @@ abstract class SharpShow
     use HandleEntityState;
     use HandleFields;
     use HandleInstanceCommands;
+    use HandleInstancePrimaryCommands;
     use HandleLocalizedFields;
     use HandlePageAlertMessage;
     use WithCustomTransformers;

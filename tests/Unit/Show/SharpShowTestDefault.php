@@ -297,3 +297,50 @@ it('allows to configure show instance command in sections', function () {
     expect($show->showConfig(1)['commands']['instance'][0][0]['key'])->toEqual('cmd1')
         ->and($show->showConfig(1)['commands']['my-section'][0][0]['key'])->toEqual('cmd2');
 });
+
+it('allows to configure primary instance commands', function () {
+    $show = new class() extends FakeSharpShow
+    {
+        public function buildShowConfig(): void
+        {
+            $this->configurePrimaryInstanceCommands(['cmd1', 'cmd-section']);
+        }
+
+        public function getInstanceCommands(): ?array
+        {
+            return [
+                'cmd1' => new class() extends InstanceCommand
+                {
+                    public function label(): ?string
+                    {
+                        return 'test';
+                    }
+
+                    public function execute(mixed $instanceId, array $data = []): array
+                    {
+                        return [];
+                    }
+                },
+                'my-section' => [
+                    'cmd-section' => new class() extends InstanceCommand
+                    {
+                        public function label(): ?string
+                        {
+                            return 'test-2';
+                        }
+
+                        public function execute(mixed $instanceId, array $data = []): array
+                        {
+                            return [];
+                        }
+                    },
+                ],
+            ];
+        }
+    };
+
+    $show->buildShowConfig();
+
+    expect($show->showConfig(1)['commands']['instance'][0][0]['primary'])->toEqual(true)
+        ->and($show->showConfig(1)['commands']['my-section'][0][0]['primary'])->toEqual(true);
+});

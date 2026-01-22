@@ -23,10 +23,11 @@ trait HandleInstanceCommands
         $this->getInstanceCommandsHandlers()
             ->each(function ($handlers, $positionKey) use (&$config, $instanceId) {
                 $this->appendCommandsToConfig(
-                    $handlers,
-                    $config,
-                    $positionKey,
-                    $instanceId,
+                    commandHandlers: $handlers,
+                    config: $config,
+                    positionKey: $positionKey,
+                    primaryCommands: $this->primaryInstanceCommandKeys ?? [],
+                    instanceId: $instanceId,
                 );
             });
     }
