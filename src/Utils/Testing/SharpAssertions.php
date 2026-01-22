@@ -14,34 +14,47 @@ use Code16\Sharp\Utils\Testing\Show\PendingShow;
 trait SharpAssertions
 {
     use GeneratesCurrentPageUrl;
-    use GeneratesGlobalFilterUrl;
+    use HasGlobalFilters;
 
     private BreadcrumbBuilder $breadcrumbBuilder;
 
+    public function setUpSharpAssertions(): void
+    {
+        $this->setGlobalFilterUrlDefault();
+    }
+
     public function sharpList(string $entityClassNameOrKey): PendingEntityList
     {
+        $this->setGlobalFilterUrlDefault();
+
         return new PendingEntityList($this, $entityClassNameOrKey);
     }
 
     public function sharpShow(string $entityClassNameOrKey, int|string|null $instanceId = null): PendingShow
     {
+        $this->setGlobalFilterUrlDefault();
+
         return new PendingShow($this, $entityClassNameOrKey, $instanceId);
     }
 
     public function sharpForm(string $entityClassNameOrKey, int|string|null $instanceId = null): PendingForm
     {
+        $this->setGlobalFilterUrlDefault();
+
         return new PendingForm($this, $entityClassNameOrKey, $instanceId);
     }
 
     public function sharpDashboard(string $entityClassNameOrKey): PendingDashboard
     {
+        $this->setGlobalFilterUrlDefault();
+
         return new PendingDashboard($this, $entityClassNameOrKey);
     }
 
     /**
      * @deprecated use withSharpBreadcrumb() instead
      */
-    public function withSharpCurrentBreadcrumb(...$breadcrumb): self
+    public function withSharpCurrentBreadcrumb(...$breadcrumb): static
     {
         $this->breadcrumbBuilder = new BreadcrumbBuilder();
 
@@ -60,7 +73,7 @@ trait SharpAssertions
      * @param  (\Closure(BreadcrumbBuilder): BreadcrumbBuilder)  $callback
      * @return $this
      */
-    public function withSharpBreadcrumb(Closure $callback): self
+    public function withSharpBreadcrumb(Closure $callback): static
     {
         $this->breadcrumbBuilder = $callback(new BreadcrumbBuilder());
 
@@ -69,15 +82,12 @@ trait SharpAssertions
 
     public function deleteFromSharpShow(string $entityClassNameOrKey, mixed $instanceId)
     {
-        $this->setGlobalFilterUrlDefault();
-
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
 
         return $this
             ->delete(
                 route(
                     'code16.sharp.show.delete', [
-                        'globalFilter' => $this->globalFilter,
                         'parentUri' => $this->breadcrumbBuilder($entityKey)->generateUri(),
                         'entityKey' => $entityKey,
                         'instanceId' => $instanceId,
@@ -88,8 +98,6 @@ trait SharpAssertions
 
     public function deleteFromSharpList(string $entityClassNameOrKey, mixed $instanceId)
     {
-        $this->setGlobalFilterUrlDefault();
-
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
 
         return $this
@@ -101,7 +109,6 @@ trait SharpAssertions
             )
             ->delete(
                 route('code16.sharp.api.list.delete', [
-                    'globalFilter' => $this->globalFilter,
                     'entityKey' => $entityKey,
                     'instanceId' => $instanceId,
                 ])
@@ -110,8 +117,6 @@ trait SharpAssertions
 
     public function getSharpForm(string $entityClassNameOrKey, mixed $instanceId = null)
     {
-        $this->setGlobalFilterUrlDefault();
-
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
 
         return $this
@@ -120,7 +125,6 @@ trait SharpAssertions
                     ? route(
                         'code16.sharp.form.edit',
                         [
-                            'globalFilter' => $this->globalFilter,
                             'parentUri' => $this->breadcrumbBuilder($entityKey)->generateUri(),
                             'entityKey' => $entityKey,
                             'instanceId' => $instanceId,
@@ -129,7 +133,6 @@ trait SharpAssertions
                     : route(
                         'code16.sharp.form.create',
                         [
-                            'globalFilter' => $this->globalFilter,
                             'parentUri' => $this->breadcrumbBuilder($entityKey)->generateUri(),
                             'entityKey' => $entityKey,
                         ]
@@ -139,8 +142,6 @@ trait SharpAssertions
 
     public function getSharpSingleForm(string $entityClassNameOrKey)
     {
-        $this->setGlobalFilterUrlDefault();
-
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
 
         return $this
@@ -148,7 +149,6 @@ trait SharpAssertions
                 route(
                     'code16.sharp.form.edit',
                     [
-                        'globalFilter' => $this->globalFilter,
                         'parentUri' => $this->breadcrumbBuilder($entityKey)->generateUri(),
                         'entityKey' => $entityKey,
                     ]
@@ -158,15 +158,12 @@ trait SharpAssertions
 
     public function updateSharpForm(string $entityClassNameOrKey, $instanceId, array $data)
     {
-        $this->setGlobalFilterUrlDefault();
-
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
 
         return $this
             ->post(
                 route(
                     'code16.sharp.form.update', [
-                        'globalFilter' => $this->globalFilter,
                         'parentUri' => $this->breadcrumbBuilder($entityKey)->generateUri(),
                         'entityKey' => $entityKey,
                         'instanceId' => $instanceId,
@@ -178,15 +175,12 @@ trait SharpAssertions
 
     public function updateSharpSingleForm(string $entityClassNameOrKey, array $data)
     {
-        $this->setGlobalFilterUrlDefault();
-
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
 
         return $this
             ->post(
                 route(
                     'code16.sharp.form.update', [
-                        'globalFilter' => $this->globalFilter,
                         'parentUri' => $this->breadcrumbBuilder($entityKey)->generateUri(),
                         'entityKey' => $entityKey,
                     ]
@@ -197,8 +191,6 @@ trait SharpAssertions
 
     public function getSharpShow(string $entityClassNameOrKey, $instanceId)
     {
-        $this->setGlobalFilterUrlDefault();
-
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
 
         return $this
@@ -206,7 +198,6 @@ trait SharpAssertions
                 route(
                     'code16.sharp.show.show',
                     [
-                        'globalFilter' => $this->globalFilter,
                         'parentUri' => $this->breadcrumbBuilder($entityKey)->generateUri(),
                         'entityKey' => $entityKey,
                         'instanceId' => $instanceId,
@@ -217,8 +208,6 @@ trait SharpAssertions
 
     public function storeSharpForm(string $entityClassNameOrKey, array $data)
     {
-        $this->setGlobalFilterUrlDefault();
-
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
 
         return $this
@@ -226,7 +215,6 @@ trait SharpAssertions
                 route(
                     'code16.sharp.form.store',
                     [
-                        'globalFilter' => $this->globalFilter,
                         'parentUri' => $this->breadcrumbBuilder($entityKey)->generateUri(),
                         'entityKey' => $entityKey,
                     ]
@@ -242,8 +230,6 @@ trait SharpAssertions
         array $data = [],
         ?string $commandStep = null
     ) {
-        $this->setGlobalFilterUrlDefault();
-
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
 
         $commandKey = class_exists($commandKeyOrClassName)
@@ -273,8 +259,6 @@ trait SharpAssertions
         array $data = [],
         ?string $commandStep = null
     ) {
-        $this->setGlobalFilterUrlDefault();
-
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
 
         $commandKey = class_exists($commandKeyOrClassName)
@@ -303,8 +287,6 @@ trait SharpAssertions
         array $data = [],
         ?string $commandStep = null
     ) {
-        $this->setGlobalFilterUrlDefault();
-
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
 
         $commandKey = class_exists($commandKeyOrClassName)
@@ -322,7 +304,7 @@ trait SharpAssertions
             );
     }
 
-    public function loginAsSharpUser($user): self
+    public function loginAsSharpUser($user): static
     {
         return $this->actingAs($user, sharp()->config()->get('auth.guard') ?: config('auth.defaults.guard'));
     }

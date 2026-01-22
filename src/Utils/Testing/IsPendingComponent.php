@@ -12,7 +12,6 @@ use Code16\Sharp\Utils\Testing\Show\PendingShow;
 trait IsPendingComponent
 {
     use GeneratesCurrentPageUrl;
-    use GeneratesGlobalFilterUrl;
 
     protected function getParentUri(): string
     {

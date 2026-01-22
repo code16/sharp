@@ -11,21 +11,20 @@ use Code16\Sharp\Utils\Testing\Commands\PendingCommand;
 use Code16\Sharp\Utils\Testing\Dashboard\PendingDashboard;
 use Code16\Sharp\Utils\Testing\EntityList\PendingEntityList;
 use Code16\Sharp\Utils\Testing\Form\PendingForm;
-use Code16\Sharp\Utils\Testing\GeneratesGlobalFilterUrl;
 use Code16\Sharp\Utils\Testing\IsPendingComponent;
+use Code16\Sharp\Utils\Testing\SharpAssertions;
 use Illuminate\Foundation\Testing\TestCase;
 
 class PendingShow
 {
     use FormatsDataForCommand;
-    use GeneratesGlobalFilterUrl;
     use IsPendingComponent;
 
     public SharpShow $show;
     public string $entityKey;
 
     public function __construct(
-        /** @var TestCase $test */
+        /** @var TestCase&SharpAssertions $test */
         protected object $test,
         string $entityKey,
         public string|int|null $instanceId = null,
@@ -52,8 +51,6 @@ class PendingShow
 
     public function get(): AssertableShow
     {
-        $this->setGlobalFilterUrlDefault();
-
         return new AssertableShow(
             $this->test
                 ->get($this->show instanceof SharpSingleShow
@@ -71,8 +68,6 @@ class PendingShow
 
     public function instanceCommand(string $commandKeyOrClassName): PendingCommand
     {
-        $this->setGlobalFilterUrlDefault();
-
         $commandKey = class_exists($commandKeyOrClassName)
             ? class_basename($commandKeyOrClassName)
             : $commandKeyOrClassName;

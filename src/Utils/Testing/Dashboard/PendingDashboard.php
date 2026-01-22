@@ -10,6 +10,7 @@ use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Testing\Commands\FormatsDataForCommand;
 use Code16\Sharp\Utils\Testing\Commands\PendingCommand;
 use Code16\Sharp\Utils\Testing\IsPendingComponent;
+use Code16\Sharp\Utils\Testing\SharpAssertions;
 use Code16\Sharp\Utils\Testing\Show\PendingShow;
 use Illuminate\Foundation\Testing\TestCase;
 
@@ -23,7 +24,7 @@ class PendingDashboard
     protected array $filterValues = [];
 
     public function __construct(
-        /** @var TestCase $test */
+        /** @var TestCase&SharpAssertions $test */
         protected object $test,
         string $entityKey,
         public ?PendingShow $parent = null,
@@ -42,8 +43,6 @@ class PendingDashboard
 
     public function get(): AssertableDashboard
     {
-        $this->setGlobalFilterUrlDefault();
-
         return new AssertableDashboard(
             $this->parent instanceof PendingShow
                 ? $this->test
@@ -69,8 +68,6 @@ class PendingDashboard
 
     public function dashboardCommand(string $commandKeyOrClassName): PendingCommand
     {
-        $this->setGlobalFilterUrlDefault();
-
         $commandKey = class_exists($commandKeyOrClassName)
             ? class_basename($commandKeyOrClassName)
             : $commandKeyOrClassName;

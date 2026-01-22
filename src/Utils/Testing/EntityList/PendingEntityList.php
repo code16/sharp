@@ -11,6 +11,7 @@ use Code16\Sharp\Utils\Testing\Commands\FormatsDataForCommand;
 use Code16\Sharp\Utils\Testing\Commands\PendingCommand;
 use Code16\Sharp\Utils\Testing\Form\PendingForm;
 use Code16\Sharp\Utils\Testing\IsPendingComponent;
+use Code16\Sharp\Utils\Testing\SharpAssertions;
 use Code16\Sharp\Utils\Testing\Show\PendingShow;
 use Illuminate\Foundation\Testing\TestCase;
 use PHPUnit\Framework\Assert as PHPUnit;
@@ -25,7 +26,7 @@ class PendingEntityList
     protected array $filterValues = [];
 
     public function __construct(
-        /** @var TestCase $test */
+        /** @var TestCase&SharpAssertions $test */
         protected object $test,
         string $entityKey,
         public ?PendingShow $parent = null,
@@ -50,16 +51,17 @@ class PendingEntityList
 
     public function withFilter(string $filterKey, mixed $value): static
     {
-        $key = $this->entityList->filterContainer()->findFilterHandler($filterKey)->getKey();
-        $this->filterValues[$key] = $value;
+        $filter = $this->entityList->filterContainer()->findFilterHandler($filterKey);
+
+        PHPUnit::assertNotNull($filter, sprintf('Unknown entity list filter [%s]', $filterKey));
+
+        $this->filterValues[$filter->getKey()] = $value;
 
         return $this;
     }
 
     public function get(): AssertableEntityList
     {
-        $this->setGlobalFilterUrlDefault();
-
         return new AssertableEntityList(
             $this->parent instanceof PendingShow
                 ? $this->test
@@ -85,8 +87,6 @@ class PendingEntityList
 
     public function entityCommand(string $commandKeyOrClassName): PendingCommand
     {
-        $this->setGlobalFilterUrlDefault();
-
         $commandKey = class_exists($commandKeyOrClassName)
             ? class_basename($commandKeyOrClassName)
             : $commandKeyOrClassName;
@@ -134,8 +134,6 @@ class PendingEntityList
 
     public function instanceCommand(string $commandKeyOrClassName, int|string $instanceId): PendingCommand
     {
-        $this->setGlobalFilterUrlDefault();
-
         $commandKey = class_exists($commandKeyOrClassName)
             ? class_basename($commandKeyOrClassName)
             : $commandKeyOrClassName;
