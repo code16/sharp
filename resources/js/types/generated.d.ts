@@ -98,6 +98,7 @@ export type CommandFormData = {
   layout: FormLayoutData | null;
   locales: Array<string> | null;
   pageAlert: PageAlertData | null;
+  _rawData: Array<any> | null;
 };
 export type CommandResponseData =
   | { action: "link"; link: string; openInNewTab: boolean }
