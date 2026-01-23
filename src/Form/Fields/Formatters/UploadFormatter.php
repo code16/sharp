@@ -65,9 +65,9 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
                     );
                 }
 
-                if ($size = $this->getImageSize($uploadedFieldRelativePath, $formatted['mime_type'])) {
-                    $formatted['width'] = $size['width'];
-                    $formatted['height'] = $size['height'];
+                if ($dimensions = $this->getImageDimensions($uploadedFieldRelativePath, $formatted['mime_type'])) {
+                    $formatted['width'] = $dimensions['width'];
+                    $formatted['height'] = $dimensions['height'];
                 }
             });
         }
@@ -115,7 +115,7 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
         ])->whereNotNull()->toArray();
     }
 
-    protected function getImageSize(string $filePath, string $mimeType): ?array
+    protected function getImageDimensions(string $tmpFilePath, string $mimeType): ?array
     {
         // image size only available if tmp is stored locally
         if (! Storage::disk(sharp()->config()->get('uploads.tmp_disk')) instanceof LocalFilesystemAdapter) {
@@ -126,7 +126,7 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
             return null;
         }
 
-        $realPath = Storage::disk(sharp()->config()->get('uploads.tmp_disk'))->path($filePath);
+        $realPath = Storage::disk(sharp()->config()->get('uploads.tmp_disk'))->path($tmpFilePath);
 
         if ($size = @getimagesize($realPath)) {
             return [
