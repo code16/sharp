@@ -203,7 +203,7 @@ it('allows to test getSharpForm for edit with global filter keys', function () {
 
     $this->assertEquals(
         route('code16.sharp.form.edit', [
-            'globalFilter' => 'root',
+            'globalFilter' => 'two',
             'parentUri' => 's-list/leaves',
             'entityKey' => 'leaves',
             'instanceId' => 6,
