@@ -127,7 +127,7 @@ it('format temporary upload from front', function () {
     $formatter = app(UploadFormatter::class);
 
     UploadedFile::fake()
-        ->image('image.jpg')
+        ->image('image.jpg', width: 10, height: 10)
         ->storeAs('/tmp', 'image.jpg', ['disk' => 'local']);
 
     $field = SharpFormUploadField::make('upload')->setStorageTemporary();
@@ -144,5 +144,7 @@ it('format temporary upload from front', function () {
             'disk' => 'local',
             'mime_type' => 'image/jpeg',
             'size' => 695,
+            'width' => 10,
+            'height' => 10,
         ]);
 });

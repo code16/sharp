@@ -6,6 +6,7 @@ use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Utils\FileUtil;
 use Code16\Sharp\Utils\Uploads\SharpUploadManager;
+use Illuminate\Filesystem\LocalFilesystemAdapter;
 use Illuminate\Support\Facades\Storage;
 
 class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
@@ -50,7 +51,7 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
                 'filters' => $field->isImageTransformOriginal()
                     ? null
                     : $value['filters'] ?? null,
-            ]), function ($formatted) use ($field, $value) {
+            ]), function (&$formatted) use ($field, $value, $uploadedFieldRelativePath) {
                 if ($field->storageDisk()) {
                     app(SharpUploadManager::class)->queueHandleUploadedFile(
                         uploadedFileName: $value['name'],
@@ -62,6 +63,11 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
                             ? ($value['filters'] ?? null)
                             : null,
                     );
+                }
+
+                if ($dimensions = $this->getImageDimensions($uploadedFieldRelativePath, $formatted['mime_type'])) {
+                    $formatted['width'] = $dimensions['width'];
+                    $formatted['height'] = $dimensions['height'];
                 }
             });
         }
@@ -107,5 +113,28 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
             'disk' => $formatted['disk'] ?? $value['disk'] ?? null,
             'filters' => $formatted['filters'] ?? $value['filters'] ?? null,
         ])->whereNotNull()->toArray();
+    }
+
+    protected function getImageDimensions(string $tmpFilePath, string $mimeType): ?array
+    {
+        // image size only available if tmp is stored locally
+        if (! Storage::disk(sharp()->config()->get('uploads.tmp_disk')) instanceof LocalFilesystemAdapter) {
+            return null;
+        }
+
+        if (! str_starts_with($mimeType, 'image/')) {
+            return null;
+        }
+
+        $realPath = Storage::disk(sharp()->config()->get('uploads.tmp_disk'))->path($tmpFilePath);
+
+        if ($size = @getimagesize($realPath)) {
+            return [
+                'width' => $size[0],
+                'height' => $size[1],
+            ];
+        }
+
+        return null;
     }
 }
