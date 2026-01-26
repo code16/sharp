@@ -21,6 +21,7 @@ class LinkToForm extends LinkToShowPage
 
         if ($this->instanceId) {
             return route('code16.sharp.form.edit', [
+                'globalFilter' => $this->globalFilter ?: sharp()->context()->globalFilterUrlSegmentValue(),
                 'parentUri' => sprintf(
                     's-list/%s%s',
                     $this->listEntityKey ?: $this->entityKey,
@@ -32,6 +33,7 @@ class LinkToForm extends LinkToShowPage
         }
 
         return route('code16.sharp.form.create', [
+            'globalFilter' => $this->globalFilter ?: sharp()->context()->globalFilterUrlSegmentValue(),
             'parentUri' => sprintf('s-list/%s', $this->listEntityKey ?: $this->entityKey),
             'entityKey' => $this->entityKey,
         ]);
