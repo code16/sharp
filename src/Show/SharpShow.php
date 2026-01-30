@@ -72,7 +72,6 @@ abstract class SharpShow
             ->all();
 
         return tap($config, function (&$config) use ($instanceId) {
-            $this->appendBreadcrumbCustomLabelAttribute($config);
             $this->appendEntityStateToConfig($config, $instanceId);
             $this->appendInstanceCommandsToConfig($config, $instanceId);
         });

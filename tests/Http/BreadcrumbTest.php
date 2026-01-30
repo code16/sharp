@@ -1,6 +1,7 @@
 <?php
 
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
+use Code16\Sharp\Show\Fields\SharpShowTextField;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Entities\SinglePersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonForm;
@@ -106,7 +107,7 @@ it('uses labels defined for entities in the config', function () {
         );
 });
 
-it('uses custom labels on show leaf if configured, based on unformatted data', function () {
+it('uses custom labels on show leaf if configured', function () {
     fakeShowFor('person', new class() extends PersonShow
     {
         public function buildShowConfig(): void
@@ -139,7 +140,83 @@ it('uses custom labels on show leaf if configured, based on unformatted data', f
         );
 });
 
-it('uses custom labels on form leaf if configured, based on unformatted data', function () {
+it('uses custom labels limit on show leaf if configured', function () {
+    fakeShowFor('person', new class() extends PersonShow
+    {
+        public function buildShowConfig(): void
+        {
+            $this->configureBreadcrumbCustomLabelAttribute('name', limit: 20);
+        }
+
+        public function find($id): array
+        {
+            return $this->transform([
+                'id' => 1,
+                'name' => 'A very long name that should be limited',
+            ]);
+        }
+    });
+
+    $this
+        ->get(
+            route('code16.sharp.show.show', [
+                'parentUri' => 's-list/person/',
+                'person',
+                1,
+            ])
+        )
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('breadcrumb.items.0.label', 'List')
+            // Data is not formatted for breadcrumb:
+            ->where('breadcrumb.items.1.label', 'A very long name tha...')
+        );
+});
+
+it('uses localized custom labels on show leaf if configured', function () {
+    fakeShowFor('person', new class() extends PersonShow
+    {
+        public function buildShowFields(FieldsContainer $showFields): void
+        {
+            $showFields->addField(SharpShowTextField::make('name')->setLocalized());
+        }
+
+        public function buildShowConfig(): void
+        {
+            $this->configureBreadcrumbCustomLabelAttribute('name', localized: true);
+        }
+
+        public function find($id): array
+        {
+            return $this->transform([
+                'id' => 1,
+                'name' => ['fr' => 'Marie Curie', 'en' => 'Mary Curry'],
+            ]);
+        }
+
+        public function getDataLocalizations(): array
+        {
+            return ['fr', 'en'];
+        }
+    });
+
+    $this
+        ->get(
+            route('code16.sharp.show.show', [
+                'parentUri' => 's-list/person/',
+                'person',
+                1,
+            ])
+        )
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('breadcrumb.items.0.label', 'List')
+            // Data is not formatted for breadcrumb:
+            ->where('breadcrumb.items.1.label', 'Marie Curie')
+        );
+});
+
+it('uses custom labels on form leaf if configured', function () {
     fakeFormFor('person', new class() extends PersonForm
     {
         public function buildFormFields(FieldsContainer $formFields): void
@@ -158,6 +235,49 @@ it('uses custom labels on form leaf if configured, based on unformatted data', f
                 'id' => 1,
                 'name' => 'Marie Curie',
             ]);
+        }
+    });
+
+    $this
+        ->get(
+            route('code16.sharp.form.edit', [
+                'parentUri' => 's-list/person',
+                'person',
+                1,
+            ])
+        )
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('breadcrumb.items.0.label', 'List')
+            // Data is not formatted for breadcrumb:
+            ->where('breadcrumb.items.1.label', 'Edit “Marie Curie”')
+        );
+});
+
+it('uses localized custom labels on form leaf if configured', function () {
+    fakeFormFor('person', new class() extends PersonForm
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(SharpFormEditorField::make('name')->setLocalized());
+        }
+
+        public function buildFormConfig(): void
+        {
+            $this->configureBreadcrumbCustomLabelAttribute('name', localized: true);
+        }
+
+        public function find($id): array
+        {
+            return $this->transform([
+                'id' => 1,
+                'name' => ['fr' => 'Marie Curie', 'en' => 'Mary Curry'],
+            ]);
+        }
+
+        public function getDataLocalizations(): array
+        {
+            return ['fr', 'en'];
         }
     });
 

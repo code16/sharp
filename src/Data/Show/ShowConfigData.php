@@ -17,7 +17,6 @@ final class ShowConfigData extends Data
         public bool $isSingle = false,
         public ?ConfigCommandsData $commands = null,
         public ?string $titleAttribute = null,
-        public ?string $breadcrumbAttribute = null,
         public ?string $editButtonLabel = null,
         public ?EntityStateData $state = null,
     ) {}

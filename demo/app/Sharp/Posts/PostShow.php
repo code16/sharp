@@ -107,7 +107,7 @@ class PostShow extends SharpShow
     {
         $this
             ->configureEntityState('state', PostStateHandler::class)
-            ->configureBreadcrumbCustomLabelAttribute('breadcrumb')
+            ->configureBreadcrumbCustomLabelAttribute('title', limit: 30, localized: true)
             ->configurePageTitleAttribute('title', localized: true)
             ->configureDeleteConfirmationText('Are you sure you want to delete this post (this will permanently delete its data)?')
             ->configurePrimaryInstanceCommands([
@@ -143,10 +143,6 @@ class PostShow extends SharpShow
         $post = Post::with('attachments', 'attachments.document')->findOrFail($id);
 
         return $this
-            ->setCustomTransformer('breadcrumb', fn ($value, $instance) => str()
-                ->of($instance->getTranslation('title', 'en'))
-                ->limit(30)
-            )
             ->setCustomTransformer('publication', fn ($value, Post $instance) => [
                 'is_planned' => $instance->isOnline() && $instance->published_at->isFuture(),
                 'published_at' => $instance->published_at->isoFormat('LLL'),
