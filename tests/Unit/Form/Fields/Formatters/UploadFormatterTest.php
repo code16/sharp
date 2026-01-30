@@ -127,7 +127,7 @@ it('format temporary upload from front', function () {
     $formatter = app(UploadFormatter::class);
 
     UploadedFile::fake()
-        ->image('image.jpg')
+        ->image('image.jpg', width: 100, height: 100)
         ->storeAs('/tmp', 'image.jpg', ['disk' => 'local']);
 
     $field = SharpFormUploadField::make('upload')->setStorageTemporary();
@@ -143,6 +143,34 @@ it('format temporary upload from front', function () {
             'file_name' => 'tmp/image.jpg',
             'disk' => 'local',
             'mime_type' => 'image/jpeg',
-            'size' => 695,
+            'size' => 887,
+            'width' => 100,
+            'height' => 100,
+        ]);
+});
+
+it('format image from front with width and height', function () {
+    $formatter = app(UploadFormatter::class);
+
+    UploadedFile::fake()
+        ->image('image.jpg', width: 100, height: 100)
+        ->storeAs('/tmp', 'image.jpg', ['disk' => 'local']);
+
+    $field = SharpFormUploadField::make('upload');
+
+    expect(
+        $formatter
+            ->fromFront($field, 'attr', [
+                'name' => 'image.jpg',
+                'uploaded' => true,
+            ])
+    )
+        ->toEqual([
+            'file_name' => 'data/image.jpg',
+            'disk' => 'local',
+            'mime_type' => 'image/jpeg',
+            'size' => 887,
+            'width' => 100,
+            'height' => 100,
         ]);
 });

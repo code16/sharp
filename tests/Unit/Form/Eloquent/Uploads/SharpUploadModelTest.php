@@ -15,6 +15,34 @@ beforeEach(function () {
     Storage::fake('public');
 });
 
+it('get correct attributes including custom properties', function () {
+    $upload = SharpUploadModel::create([
+        'file_name' => 'test/test.png',
+        'size' => 120,
+        'mime_type' => 'image/png',
+        'disk' => 'local',
+        'model_type' => Person::class,
+        'model_id' => 1,
+        'model_key' => 'test',
+        'custom_properties' => [
+            'filters' => ['rotate' => ['angle' => 10]],
+            'width' => 100,
+            'height' => 100,
+        ],
+    ]);
+    expect($upload->file_name)->toBe('test/test.png')
+        ->and($upload->mime_type)->toBe('image/png')
+        ->and($upload->size)->toBe(120)
+        ->and($upload->disk)->toBe('local')
+        ->and($upload->model_type)->toBe(Person::class)
+        ->and($upload->model_id)->toBe(1)
+        ->and($upload->model_key)->toBe('test')
+        ->and($upload->custom_properties)->toEqual(['filters' => ['rotate' => ['angle' => 10]], 'width' => 100, 'height' => 100])
+        ->and($upload->filters)->toBe(['rotate' => ['angle' => 10]])
+        ->and($upload->width)->toBe(100)
+        ->and($upload->height)->toBe(100);
+});
+
 it('fills several attributes at once at save with the magic "file" attribute', function () {
     $file = createImage();
     $upload = createSharpUploadModel($file);

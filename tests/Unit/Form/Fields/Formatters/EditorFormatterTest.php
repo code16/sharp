@@ -236,6 +236,8 @@ it('allows to format text with uploads from front', function () {
             'size' => 6467,
             'mime_type' => 'image/jpeg',
             'disk' => 'local',
+            'width' => 600,
+            'height' => 600,
         ])),
         e(json_encode([
             'file_name' => 'data/Posts/1/transformed.jpg',
