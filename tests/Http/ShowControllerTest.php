@@ -182,22 +182,6 @@ it('returns configured show layout', function () {
         );
 });
 
-it('returns show configuration', function () {
-    fakeShowFor('person', new class() extends PersonShow
-    {
-        public function buildShowConfig(): void
-        {
-            $this->configureBreadcrumbCustomLabelAttribute('name');
-        }
-    });
-
-    $this->get('/sharp/root/s-list/person/s-show/person/1')
-        ->assertOk()
-        ->assertInertia(fn (Assert $page) => $page
-            ->where('show.config.breadcrumbAttribute', 'name')
-        );
-});
-
 it('gets show data for an instance in a single show case', function () {
     sharp()->config()->declareEntity(SinglePersonEntity::class);
 

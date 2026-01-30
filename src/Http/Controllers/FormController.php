@@ -84,7 +84,7 @@ class FormController extends SharpProtectedController
             ? $form->instance($instanceId)
             : $form->newInstance();
 
-        if ($breadcrumbLabel = $formData[$form->getBreadcrumbCustomLabelAttribute()] ?? false) {
+        if ($breadcrumbLabel = $form->getBreadcrumbCustomLabel($formData)) {
             sharp()->context()->breadcrumb()->setCurrentInstanceLabel($breadcrumbLabel);
             $titleEntityLabel = $breadcrumbLabel;
         }
