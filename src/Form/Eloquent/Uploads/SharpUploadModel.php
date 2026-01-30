@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * @property array{crop:array{x:float,y:float,width:float,height:float},rotate:array{angle:int}} $filters
+ * @property ?int $width
+ * @property ?int $height
+ */
 class SharpUploadModel extends Model
 {
     use FillsWithFileAttribute;

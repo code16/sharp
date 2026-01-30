@@ -98,6 +98,8 @@ it('can post a newly uploaded file in editor, create case', function () {
                 'size' => 1367,
                 'mime_type' => 'image/jpeg',
                 'disk' => 'local',
+                'width' => 200,
+                'height' => 200,
             ]))
         )
     );
@@ -187,6 +189,8 @@ it('can post a newly uploaded file in editor, update case', function () {
                 'size' => 1367,
                 'mime_type' => 'image/jpeg',
                 'disk' => 'local',
+                'width' => 200,
+                'height' => 200,
             ]))
         )
     );
