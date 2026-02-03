@@ -152,43 +152,7 @@ class SharpBreadcrumb
 
     private function getBreadcrumbLabelFor(BreadcrumbItem $item, bool $isLeaf): string
     {
-        switch ($item->type) {
-            case 's-list':
-                return app(SharpMenuManager::class)
-                    ->getEntityMenuItem($item->key)
-                    ?->getLabel() ?: trans('sharp::breadcrumb.entityList');
-            case 's-dashboard':
-                return app(SharpMenuManager::class)
-                    ->getEntityMenuItem($item->key)
-                    ?->getLabel() ?: trans('sharp::breadcrumb.dashboard');
-            case 's-show':
-                return trans('sharp::breadcrumb.show', [
-                    'entity' => $this->getEntityLabelForInstance($item, $isLeaf),
-                ]);
-            case 's-form':
-                // A Form is always a leaf
-                $previousItem = $this->breadcrumbItems()[$item->depth - 1];
-
-                if (
-                    ($previousItem->isShow() && ! $this->isSameEntityKeys($previousItem->key, $item->key, true))
-                    || ($item->isForm() && $this->currentInstanceLabel)
-                ) {
-                    // The form entityKey is different from the previous entityKey in the breadcrumb: we are in a EEL case.
-                    return isset($item->instance)
-                        ? trans('sharp::breadcrumb.form.edit_entity', [
-                            'entity' => $this->getEntityLabelForInstance($item, true),
-                        ])
-                        : trans('sharp::breadcrumb.form.create_entity', [
-                            'entity' => $this->getEntityLabelForInstance($item, true),
-                        ]);
-                }
-
-                return isset($item->instance) || ($previousItem->type === 's-show' && ! isset($previousItem->instance))
-                    ? trans('sharp::breadcrumb.form.edit')
-                    : trans('sharp::breadcrumb.form.create');
-        }
-
-        return $item->key;
+        return $this->resolveLabelForItem($item, $isLeaf, false) ?? $item->key;
     }
 
     /**
@@ -197,25 +161,7 @@ class SharpBreadcrumb
      */
     private function getDocumentTitleLabelFor(BreadcrumbItem $item, bool $isLeaf): ?string
     {
-        if (! $isLeaf) {
-            return null;
-        }
-
-        $previousItem = $this->breadcrumbItems()[$item->depth - 1] ?? null;
-
-        return match ($item->type) {
-            's-show' => trans('sharp::breadcrumb.show', [
-                'entity' => $this->getEntityLabelForInstance($item, $isLeaf),
-            ]),
-            's-form' => isset($item->instance) || ($previousItem->type === 's-show' && ! isset($previousItem->instance))
-                ? trans('sharp::breadcrumb.form.edit_entity', [
-                    'entity' => $this->getEntityLabelForInstance($item, $isLeaf),
-                ])
-                : trans('sharp::breadcrumb.form.create_entity', [
-                    'entity' => $this->getEntityLabelForInstance($item, $isLeaf),
-                ]),
-            default => null
-        };
+        return $this->resolveLabelForItem($item, $isLeaf, true);
     }
 
     public function getParentShowCachedBreadcrumbLabel(): ?string
@@ -266,40 +212,106 @@ class SharpBreadcrumb
 
     private function buildBreadcrumbFromRequest(): void
     {
-        $this->breadcrumbItems = new Collection();
         $segments = $this->getSegmentsFromRequest();
+        $this->breadcrumbItems = $this->buildItemsFromSegments($segments);
+    }
+
+    private function resolveLabelForItem(BreadcrumbItem $item, bool $isLeaf, bool $forDocumentTitle): ?string
+    {
+        if ($forDocumentTitle && ! $isLeaf) {
+            return null;
+        }
+
+        return match ($item->type) {
+            's-list' => $forDocumentTitle ? null : (app(SharpMenuManager::class)
+                ->getEntityMenuItem($item->key)
+                ?->getLabel() ?: trans('sharp::breadcrumb.entityList')),
+            's-dashboard' => $forDocumentTitle ? null : (app(SharpMenuManager::class)
+                ->getEntityMenuItem($item->key)
+                ?->getLabel() ?: trans('sharp::breadcrumb.dashboard')),
+            's-show' => trans('sharp::breadcrumb.show', [
+                'entity' => $this->getEntityLabelForInstance($item, $isLeaf),
+            ]),
+            's-form' => $this->resolveFormLabel($item, $isLeaf, $forDocumentTitle),
+            default => $forDocumentTitle ? null : $item->key,
+        };
+    }
+
+    private function resolveFormLabel(BreadcrumbItem $item, bool $isLeaf, bool $forDocumentTitle): string
+    {
+        if ($forDocumentTitle) {
+            $previousItem = $this->breadcrumbItems()[$item->depth - 1] ?? null;
+
+            return isset($item->instance) || ($previousItem->type === 's-show' && ! isset($previousItem->instance))
+                ? trans('sharp::breadcrumb.form.edit_entity', [
+                    'entity' => $this->getEntityLabelForInstance($item, $isLeaf),
+                ])
+                : trans('sharp::breadcrumb.form.create_entity', [
+                    'entity' => $this->getEntityLabelForInstance($item, $isLeaf),
+                ]);
+        }
+
+        // A Form is always a leaf
+        $previousItem = $this->breadcrumbItems()[$item->depth - 1];
+
+        if (
+            ($previousItem->isShow() && ! $this->isSameEntityKeys($previousItem->key, $item->key, true))
+            || ($item->isForm() && $this->currentInstanceLabel)
+        ) {
+            // The form entityKey is different from the previous entityKey in the breadcrumb: we are in a EEL case.
+            return isset($item->instance)
+                ? trans('sharp::breadcrumb.form.edit_entity', [
+                    'entity' => $this->getEntityLabelForInstance($item, true),
+                ])
+                : trans('sharp::breadcrumb.form.create_entity', [
+                    'entity' => $this->getEntityLabelForInstance($item, true),
+                ]);
+        }
+
+        return isset($item->instance) || ($previousItem->type === 's-show' && ! isset($previousItem->instance))
+            ? trans('sharp::breadcrumb.form.edit')
+            : trans('sharp::breadcrumb.form.create');
+    }
+
+    private function buildItemsFromSegments(Collection $segments): Collection
+    {
+        $items = new Collection();
         $depth = 0;
 
-        if (count($segments) !== 0) {
-            $this->breadcrumbItems()->add(
-                (new BreadcrumbItem($segments[0], $segments[1]))->setDepth($depth++),
-            );
-
-            $segments = $segments->slice(2)->values();
-
-            while ($segments->count() > 0) {
-                $type = $segments->shift();
-                $key = $instance = null;
-                $segments
-                    ->takeWhile(fn (string $segment) => ! in_array($segment, ['s-show', 's-form']))
-                    ->values()
-                    ->each(function (string $segment, $index) use (&$key, &$instance) {
-                        if ($index === 0) {
-                            $key = $segment;
-                        } elseif ($index === 1) {
-                            $instance = $segment;
-                        }
-                    });
-
-                $segments = $segments->slice($instance !== null ? 2 : 1)->values();
-
-                $this->breadcrumbItems()->add(
-                    (new BreadcrumbItem($type, $key))
-                        ->setDepth($depth++)
-                        ->setInstance($instance),
-                );
-            }
+        if (count($segments) === 0) {
+            return $items;
         }
+
+        $items->add(
+            (new BreadcrumbItem($segments[0], $segments[1]))->setDepth($depth++),
+        );
+
+        $segments = $segments->slice(2)->values();
+
+        while ($segments->count() > 0) {
+            $type = $segments->shift();
+            $key = $instance = null;
+            $segments
+                ->takeWhile(fn (string $segment) => ! in_array($segment, ['s-show', 's-form']))
+                ->values()
+                ->each(function (string $segment, $index) use (&$key, &$instance) {
+                    if ($index === 0) {
+                        $key = $segment;
+                    } elseif ($index === 1) {
+                        $instance = $segment;
+                    }
+                });
+
+            $segments = $segments->slice($instance !== null ? 2 : 1)->values();
+
+            $items->add(
+                (new BreadcrumbItem($type, $key))
+                    ->setDepth($depth++)
+                    ->setInstance($instance),
+            );
+        }
+
+        return $items;
     }
 
     protected function getSegmentsFromRequest(): Collection
