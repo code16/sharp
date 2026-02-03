@@ -103,7 +103,7 @@ trait SharpAssertions
             ->withHeader(
                 SharpBreadcrumb::CURRENT_PAGE_URL_HEADER,
                 $this->buildCurrentPageUrl(
-                    $this->breadcrumbBuilder($entityKey)
+                    $this->breadcrumbBuilder($entityKey)->generateUri()
                 ),
             )
             ->delete(
@@ -253,7 +253,7 @@ trait SharpAssertions
             ->withHeader(
                 SharpBreadcrumb::CURRENT_PAGE_URL_HEADER,
                 $this->buildCurrentPageUrl(
-                    $this->breadcrumbBuilder($entityKey)
+                    $this->breadcrumbBuilder($entityKey)->generateUri()
                 ),
             )
             ->postJson(
@@ -284,7 +284,7 @@ trait SharpAssertions
             ->withHeader(
                 SharpBreadcrumb::CURRENT_PAGE_URL_HEADER,
                 $this->buildCurrentPageUrl(
-                    $this->breadcrumbBuilder($entityKey, $instanceId)
+                    $this->breadcrumbBuilder($entityKey, $instanceId)->generateUri()
                 ),
             )
             ->postJson(
@@ -313,7 +313,7 @@ trait SharpAssertions
         return $this
             ->withHeader(
                 SharpBreadcrumb::CURRENT_PAGE_URL_HEADER,
-                $this->buildCurrentPageUrl($this->breadcrumbBuilder($entityKey))
+                $this->buildCurrentPageUrl($this->breadcrumbBuilder($entityKey)->generateUri())
             )
             ->postJson(
                 route('code16.sharp.api.list.command.entity', compact('entityKey', 'commandKey')),
