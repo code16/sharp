@@ -64,8 +64,7 @@
         "test": "vendor/bin/pest --parallel",
         "typescript:generate": "php demo/artisan sharp:typescript-generate",
         "post-autoload-dump": [
-            "git config core.hooksPath scripts/hooks",
-            "@php artisan boost:update --ansi"
+            "git config core.hooksPath scripts/hooks"
         ]
     },
     "extra": {
