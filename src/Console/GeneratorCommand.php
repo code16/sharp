@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Console;
 
 use Code16\Sharp\Config\SharpConfigBuilder;
+use Code16\Sharp\Console\Utils\GeneratorFileEditor;
 use Code16\Sharp\Utils\Links\LinkToDashboard;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\Links\LinkToSingleShowPage;
@@ -102,13 +103,7 @@ class GeneratorCommand extends Command
 
         $this->components->twoColumnDetail('Entity state', $this->getSharpRootNamespace().'\\'.$entityStatePath.'\\'.$name.'EntityState.php');
 
-        $listClass = $this->getSharpRootNamespace().'\\'.Str::plural($entityName).'\\'.$entityName.'EntityList';
-
-        if (! class_exists($listClass)) {
-            $listClass = $this->getSharpRootNamespace().'\\'.Str::plural($entityName).'\\'.$entityName.'List';
-        }
-
-        if (class_exists($listClass)) {
+        if ($listClass = $this->resolveEntityListClass($entityName)) {
             $this->addNewEntityStateToListOrShowPage(
                 'List',
                 $name.'EntityState',
@@ -119,9 +114,7 @@ class GeneratorCommand extends Command
             $this->components->info(sprintf('The Entity State was successfully added to the related Entity List (%s).', $entityName.'EntityList'));
         }
 
-        $showClass = $this->getSharpRootNamespace().'\\'.Str::plural($entityName).'\\'.$entityName.'Show';
-
-        if (class_exists($showClass)) {
+        if ($showClass = $this->resolveEntityShowClass($entityName)) {
             $this->addNewEntityStateToListOrShowPage(
                 'Show',
                 $name.'EntityState',
@@ -189,13 +182,7 @@ class GeneratorCommand extends Command
 
         $this->components->info('Your Filter has been created.');
 
-        $listClass = $this->getSharpRootNamespace().'\\'.Str::plural($entityName).'\\'.$entityName.'EntityList';
-
-        if (! class_exists($listClass)) {
-            $listClass = $this->getSharpRootNamespace().'\\'.Str::plural($entityName).'\\'.$entityName.'List';
-        }
-
-        if (class_exists($listClass)) {
+        if ($listClass = $this->resolveEntityListClass($entityName)) {
             $this->addNewItemToAListOfFilters(
                 $name.'Filter',
                 $this->getSharpRootNamespace().'\\'.$filterPath.'\\',
@@ -255,13 +242,7 @@ class GeneratorCommand extends Command
 
         $this->components->info('Your Command has been created.');
 
-        $listClass = $this->getSharpRootNamespace().'\\'.Str::plural($entityName).'\\'.$entityName.'EntityList';
-
-        if (! class_exists($listClass)) {
-            $listClass = $this->getSharpRootNamespace().'\\'.Str::plural($entityName).'\\'.$entityName.'List';
-        }
-
-        if (class_exists($listClass)) {
+        if ($listClass = $this->resolveEntityListClass($entityName)) {
             $this->addNewItemToAListOfCommands(
                 $commandType,
                 $name.'Command',
@@ -272,9 +253,9 @@ class GeneratorCommand extends Command
             $this->components->info(sprintf('The Command has been successfully added to the related Entity List (%s).', $entityName.'EntityList'));
         }
 
-        $showClass = $this->getSharpRootNamespace().'\\'.Str::plural($entityName).'\\'.$entityName.'Show';
+        $showClass = $this->resolveEntityShowClass($entityName);
 
-        if ($commandType === 'Instance' && class_exists($showClass)) {
+        if ($commandType === 'Instance' && $showClass) {
             $this->addNewItemToAListOfCommands(
                 $commandType,
                 $name.'Command',
@@ -349,11 +330,7 @@ class GeneratorCommand extends Command
         );
         $model = $modelNamespace.'\\'.$modelName;
 
-        $listClass = $this->getSharpRootNamespace().'\\'.Str::plural($entityName).'\\'.$entityName.'EntityList';
-
-        if (! class_exists($listClass)) {
-            $listClass = $this->getSharpRootNamespace().'\\'.Str::plural($entityName).'\\'.$entityName.'List';
-        }
+        $listClass = $this->resolveEntityListClass($entityName);
 
         $isSimple = confirm(
             label: 'Use the simple Eloquent implementation based on a reorder attribute?',
@@ -366,7 +343,7 @@ class GeneratorCommand extends Command
                 required: true,
             );
 
-            if (class_exists($listClass)) {
+            if ($listClass) {
                 $this->addNewSimpleEloquentReorderHandlerToList(
                     $reorderAttribute,
                     $modelName,
@@ -397,7 +374,7 @@ class GeneratorCommand extends Command
 
         $this->components->info('Your Reorder Handler has been created.');
 
-        if (class_exists($listClass)) {
+        if ($listClass) {
             $this->addNewReorderHandlerToList(
                 $name.'Reorder',
                 $this->getSharpRootNamespace().'\\'.$reorderPath.'\\',
@@ -718,34 +695,18 @@ class GeneratorCommand extends Command
         $classMethodName = sprintf('get%sCommands', $commandType);
         $reflector = new ReflectionClass($targetClass);
 
-        $this->replaceFileContent(
-            $reflector->getFileName(),
-            PHP_EOL.'class ',
-            'use '.$commandPath.$commandClass.';'.PHP_EOL.PHP_EOL.'class ',
-        );
-
-        $this->replaceFileContent(
-            $reflector->getFileName(),
-            "$classMethodName(): ?array".PHP_EOL.'    {'.PHP_EOL.'        return ['.PHP_EOL,
-            "$classMethodName(): ?array".PHP_EOL.'    {'.PHP_EOL.'        return ['.PHP_EOL.'            '.$commandClass.'::class,'.PHP_EOL,
-        );
+        $editor = new GeneratorFileEditor($reflector->getFileName());
+        $editor->ensureUseStatement($commandPath.$commandClass);
+        $editor->ensureMethodArrayContains("$classMethodName(): ?array", $commandClass);
     }
 
     private function addNewItemToAListOfFilters(string $filterClass, string $filterPath, string $targetClass): void
     {
         $reflector = new ReflectionClass($targetClass);
 
-        $this->replaceFileContent(
-            $reflector->getFileName(),
-            PHP_EOL.'class ',
-            'use '.$filterPath.$filterClass.';'.PHP_EOL.PHP_EOL.'class ',
-        );
-
-        $this->replaceFileContent(
-            $reflector->getFileName(),
-            'getFilters(): ?array'.PHP_EOL.'    {'.PHP_EOL.'        return ['.PHP_EOL,
-            'getFilters(): ?array'.PHP_EOL.'    {'.PHP_EOL.'        return ['.PHP_EOL.'            '.$filterClass.'::class,'.PHP_EOL,
-        );
+        $editor = new GeneratorFileEditor($reflector->getFileName());
+        $editor->ensureUseStatement($filterPath.$filterClass);
+        $editor->ensureMethodArrayContains('getFilters(): ?array', $filterClass);
     }
 
     private function addNewEntityStateToListOrShowPage(string $targetType, string $entityStateClass, string $entityStatePath, string $targetClass): void
@@ -753,16 +714,11 @@ class GeneratorCommand extends Command
         $classMethodName = sprintf('build%sConfig', $targetType);
         $reflector = new ReflectionClass($targetClass);
 
-        $this->replaceFileContent(
-            $reflector->getFileName(),
-            PHP_EOL.'class ',
-            'use '.$entityStatePath.$entityStateClass.';'.PHP_EOL.PHP_EOL.'class ',
-        );
-
-        $this->replaceFileContent(
-            $reflector->getFileName(),
-            "$classMethodName(): void".PHP_EOL.'    {'.PHP_EOL.'        $this'.PHP_EOL,
-            "$classMethodName(): void".PHP_EOL.'    {'.PHP_EOL.'        $this'.PHP_EOL."            ->configureEntityState('state',".$entityStateClass.'::class)'.PHP_EOL,
+        $editor = new GeneratorFileEditor($reflector->getFileName());
+        $editor->ensureUseStatement($entityStatePath.$entityStateClass);
+        $editor->ensureMethodChainContains(
+            "$classMethodName(): void",
+            "->configureEntityState('state',".$entityStateClass.'::class)'
         );
     }
 
@@ -770,16 +726,11 @@ class GeneratorCommand extends Command
     {
         $reflector = new ReflectionClass($targetClass);
 
-        $this->replaceFileContent(
-            $reflector->getFileName(),
-            PHP_EOL.'class ',
-            'use '.$reorderHandlerPath.$reorderHandlerClass.';'.PHP_EOL.PHP_EOL.'class ',
-        );
-
-        $this->replaceFileContent(
-            $reflector->getFileName(),
-            'buildListConfig(): void'.PHP_EOL.'    {'.PHP_EOL.'        $this'.PHP_EOL,
-            'buildListConfig(): void'.PHP_EOL.'    {'.PHP_EOL.'        $this'.PHP_EOL.'            ->configureReorderable('.$reorderHandlerClass.'::class)'.PHP_EOL,
+        $editor = new GeneratorFileEditor($reflector->getFileName());
+        $editor->ensureUseStatement($reorderHandlerPath.$reorderHandlerClass);
+        $editor->ensureMethodChainContains(
+            'buildListConfig(): void',
+            '->configureReorderable('.$reorderHandlerClass.'::class)'
         );
     }
 
@@ -787,16 +738,15 @@ class GeneratorCommand extends Command
     {
         $reflector = new ReflectionClass($targetClass);
 
-        $this->replaceFileContent(
-            $reflector->getFileName(),
-            PHP_EOL.'class ',
-            'use '.$modelPath.$modelClass.';'.PHP_EOL.'use Code16\Sharp\EntityList\Eloquent\SimpleEloquentReorderHandler;'.PHP_EOL.PHP_EOL.'class ',
-        );
-
-        $this->replaceFileContent(
-            $reflector->getFileName(),
-            'buildListConfig(): void'.PHP_EOL.'    {'.PHP_EOL.'        $this'.PHP_EOL,
-            'buildListConfig(): void'.PHP_EOL.'    {'.PHP_EOL.'        $this'.PHP_EOL.'            ->configureReorderable('.PHP_EOL.'                (new SimpleEloquentReorderHandler('.$modelClass.'::class))'.PHP_EOL."                    ->setOrderAttribute('".$reorderAttribute."')".PHP_EOL.'            )'.PHP_EOL,
+        $editor = new GeneratorFileEditor($reflector->getFileName());
+        $editor->ensureUseStatement($modelPath.$modelClass);
+        $editor->ensureUseStatement('Code16\\Sharp\\EntityList\\Eloquent\\SimpleEloquentReorderHandler');
+        $editor->ensureMethodChainContains(
+            'buildListConfig(): void',
+            '->configureReorderable('.PHP_EOL
+                .'                (new SimpleEloquentReorderHandler('.$modelClass.'::class))'.PHP_EOL
+                ."                    ->setOrderAttribute('".$reorderAttribute."')".PHP_EOL
+                .'            )'
         );
     }
 
@@ -813,5 +763,24 @@ class GeneratorCommand extends Command
     private function namespaceToPath(string $namespace): string
     {
         return Str::lcfirst(str_replace('\\', '/', $namespace));
+    }
+
+    private function resolveEntityListClass(string $entityName): ?string
+    {
+        $base = $this->getSharpRootNamespace().'\\'.Str::plural($entityName).'\\'.$entityName;
+        $listClass = $base.'EntityList';
+
+        if (! class_exists($listClass)) {
+            $listClass = $base.'List';
+        }
+
+        return class_exists($listClass) ? $listClass : null;
+    }
+
+    private function resolveEntityShowClass(string $entityName): ?string
+    {
+        $showClass = $this->getSharpRootNamespace().'\\'.Str::plural($entityName).'\\'.$entityName.'Show';
+
+        return class_exists($showClass) ? $showClass : null;
     }
 }
