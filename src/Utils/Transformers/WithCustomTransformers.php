@@ -53,13 +53,15 @@ trait WithCustomTransformers
 
         // SharpEntityList case: collection of models (potentially paginated)
 
-        $this->cacheEntityListInstances(
-            match (true) {
-                $models instanceof AbstractPaginator => $models->items(),
-                $models instanceof Arrayable => $models->all(),
-                default => $models,
-            }
-        );
+        if ($this instanceof CachesEntityListInstances) {
+            $this->cacheEntityListInstances(
+                match (true) {
+                    $models instanceof AbstractPaginator => $models->items(),
+                    $models instanceof Arrayable => $models->all(),
+                    default => $models,
+                }
+            );
+        }
 
         if ($models instanceof AbstractPaginator) {
             return $models->setCollection(
@@ -103,56 +105,8 @@ trait WithCustomTransformers
             $attributes = $this->handleAutoRelatedAttributes($attributes, $model);
         }
 
-        // Apply transformers
-        foreach ($this->transformers as $attribute => $transformer) {
-            if (str_contains($attribute, '[')) {
-                // List item case: apply transformer to each item
-                $listAttribute = substr($attribute, 0, strpos($attribute, '['));
-                $itemAttribute = substr($attribute, strpos($attribute, '[') + 1, -1);
-
-                if (! array_key_exists($listAttribute, $attributes)) {
-                    continue;
-                }
-
-                $listModel = $model;
-                if (($sep = strpos($listAttribute, ':')) !== false) {
-                    $listModel = $model[substr($listAttribute, 0, $sep)];
-                    $listAttribute = substr($listAttribute, $sep + 1);
-                }
-
-                foreach ($listModel[$listAttribute] as $k => $itemModel) {
-                    $attributes[$listAttribute][$k][$itemAttribute] = $transformer->apply(
-                        $attributes[$listAttribute][$k][$itemAttribute] ?? null, $itemModel, $itemAttribute,
-                    );
-                }
-            } else {
-                if (! isset($attributes[$attribute])) {
-                    if (method_exists($transformer, 'applyIfAttributeIsMissing')
-                        && ! $transformer->applyIfAttributeIsMissing()) {
-                        // The attribute is missing and the transformer code declared to be ignored in this case
-                        continue;
-                    }
-                }
-
-                if (($sep = strpos($attribute, ':')) !== false) {
-                    $attributes[$attribute] = $transformer->apply(
-                        $attributes[$attribute] ?? null,
-                        $model[substr($attribute, 0, $sep)] ?? null,
-                        substr($attribute, $sep + 1),
-                    );
-
-                    continue;
-                }
-
-                $attributes[$attribute] = $transformer->apply(
-                    $attributes[$attribute] ?? null,
-                    $model,
-                    $attribute,
-                );
-            }
-        }
-
-        return $attributes;
+        return (new TransformerPipeline($this->transformers))
+            ->apply($attributes, $model);
     }
 
     /**
@@ -173,16 +127,4 @@ trait WithCustomTransformers
         return $attributes;
     }
 
-    private function cacheEntityListInstances(array $instances): void
-    {
-        $idAttr = $this->instanceIdAttribute;
-
-        sharp()->context()->cacheListInstances(
-            collect($instances)
-                ->filter(fn ($instance) => (((object) $instance)->$idAttr ?? null) !== null)
-                ->mapWithKeys(fn ($instance) => [
-                    ((object) $instance)->$idAttr => $instance,
-                ])
-        );
-    }
 }

@@ -10,12 +10,13 @@ use Code16\Sharp\EntityList\Traits\HandleEntityState;
 use Code16\Sharp\EntityList\Traits\HandleInstanceCommands;
 use Code16\Sharp\Filters\Concerns\HasFilters;
 use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
+use Code16\Sharp\Utils\Transformers\CachesEntityListInstances;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Pagination\AbstractPaginator;
 use Illuminate\Support\Arr;
 
-abstract class SharpEntityList
+abstract class SharpEntityList implements CachesEntityListInstances
 {
     use HandleEntityCommands;
     use HandleEntityState;
@@ -134,6 +135,22 @@ abstract class SharpEntityList
         $this->instanceIdAttribute = $instanceIdAttribute;
 
         return $this;
+    }
+
+    /**
+     * @internal
+     */
+    final public function cacheEntityListInstances(array $instances): void
+    {
+        $idAttr = $this->instanceIdAttribute;
+
+        sharp()->context()->cacheListInstances(
+            collect($instances)
+                ->filter(fn ($instance) => (((object) $instance)->$idAttr ?? null) !== null)
+                ->mapWithKeys(fn ($instance) => [
+                    ((object) $instance)->$idAttr => $instance,
+                ])
+        );
     }
 
     /**
