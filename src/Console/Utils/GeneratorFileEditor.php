@@ -48,16 +48,33 @@ final class GeneratorFileEditor
 
     private function read(): string
     {
-        return file_get_contents($this->filePath);
+        if (!is_file($this->filePath) || !is_readable($this->filePath)) {
+            return '';
+        }
+
+        $content = file_get_contents($this->filePath);
+
+        return $content === false ? '' : $content;
     }
 
     private function replace(string $search, string $replace): void
     {
+        if (!is_file($this->filePath) || !is_writable($this->filePath)) {
+            return;
+        }
+
         $content = $this->read();
 
-        file_put_contents(
-            $this->filePath,
-            str_replace($search, $replace, $content)
-        );
+        if ($content === '' || !str_contains($content, $search)) {
+            return;
+        }
+
+        $updatedContent = str_replace($search, $replace, $content);
+
+        if ($updatedContent === $content) {
+            return;
+        }
+
+        file_put_contents($this->filePath, $updatedContent);
     }
 }
