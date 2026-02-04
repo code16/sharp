@@ -3,6 +3,7 @@
 use Code16\Sharp\Config\SharpConfigBuilder;
 use Code16\Sharp\Tests\Fixtures\UnitTestModel;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\File;
 
 beforeEach(function () {
     login();
