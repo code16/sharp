@@ -753,7 +753,7 @@ class GeneratorCommand extends Command
         $editor->ensureUseStatement($entityStatePath.$entityStateClass);
         $editor->ensureMethodChainContains(
             "$classMethodName(): void",
-            "->configureEntityState('state',".$entityStateClass.'::class)'
+            "->configureEntityState('state', ".$entityStateClass.'::class)'
         );
     }
 
