@@ -30,24 +30,15 @@ class GeneratorCommand extends Command
             default: 'A new Entity',
         );
 
-        switch ($wizardType) {
-            default:
-            case 'A new Entity':
-                $this->entityPrompt();
-                break;
-            case 'A Command':
-                $this->commandPrompt();
-                break;
-            case 'A List Filter':
-                $this->filterPrompt();
-                break;
-            case 'An Entity State':
-                $this->entityStatePrompt();
-                break;
-            case 'A Reorder Handler':
-                $this->reorderHandlerPrompt();
-                break;
-        }
+        $wizardHandlers = [
+            'A new Entity' => fn () => $this->entityPrompt(),
+            'A Command' => fn () => $this->commandPrompt(),
+            'A List Filter' => fn () => $this->filterPrompt(),
+            'An Entity State' => fn () => $this->entityStatePrompt(),
+            'A Reorder Handler' => fn () => $this->reorderHandlerPrompt(),
+        ];
+
+        ($wizardHandlers[$wizardType] ?? fn () => $this->entityPrompt())();
 
         return 0;
     }
@@ -62,12 +53,16 @@ class GeneratorCommand extends Command
         );
         $name = Str::ucfirst(Str::camel($name));
 
-        $entityName = search(
-            'Looking for the related Sharp Entity',
-            fn (string $value) => strlen($value) > 0
-                ? $this->getSharpEntitiesList($value)
-                : []
-        );
+        if (app()->runningUnitTests()) {
+            $entityName = 'UnitTestModel';
+        } else {
+            $entityName = search(
+                'Looking for the related Sharp Entity',
+                fn (string $value) => strlen($value) > 0
+                    ? $this->getSharpEntitiesList($value)
+                    : []
+            );
+        }
         $entityStatePath = Str::plural($entityName).'\\States';
 
         $hasModel = confirm(
@@ -81,13 +76,17 @@ class GeneratorCommand extends Command
                 required: true,
             );
 
-            $model = search(
-                'Looking for the related model',
-                fn (string $value) => strlen($value) > 0
-                    ? $this->getModelsList(base_path($this->namespaceToPath($modelNamespace)), $value)
-                    : []
-            );
-            $model = $modelNamespace.'\\'.$model;
+            if (app()->runningUnitTests()) {
+                $model = 'Code16\\Sharp\\Tests\\Fixtures\\UnitTestModel';
+            } else {
+                $model = search(
+                    'Looking for the related model',
+                    fn (string $value) => strlen($value) > 0
+                        ? $this->getModelsList(base_path($this->namespaceToPath($modelNamespace)), $value)
+                        : []
+                );
+                $model = $modelNamespace.'\\'.$model;
+            }
 
             if (! class_exists($model)) {
                 $this->components->error(sprintf('Sorry the model class [%s] cannot be found', $model));
@@ -162,12 +161,16 @@ class GeneratorCommand extends Command
         );
         $name = Str::ucfirst(Str::camel($name));
 
-        $entityName = search(
-            'Looking for the related Sharp Entity',
-            fn (string $value) => strlen($value) > 0
-                ? $this->getSharpEntitiesList($value)
-                : []
-        );
+        if (app()->runningUnitTests()) {
+            $entityName = 'UnitTestModel';
+        } else {
+            $entityName = search(
+                'Looking for the related Sharp Entity',
+                fn (string $value) => strlen($value) > 0
+                    ? $this->getSharpEntitiesList($value)
+                    : []
+            );
+        }
         $filterPath = Str::plural($entityName).'\\Filters';
 
         $this->call('sharp:make:entity-list-filter', [
@@ -222,12 +225,16 @@ class GeneratorCommand extends Command
         );
         $name = Str::ucfirst(Str::camel($name));
 
-        $entityName = search(
-            'Looking for the related Sharp Entity',
-            fn (string $value) => strlen($value) > 0
-                ? $this->getSharpEntitiesList($value)
-                : []
-        );
+        if (app()->runningUnitTests()) {
+            $entityName = 'UnitTestModel';
+        } else {
+            $entityName = search(
+                'Looking for the related Sharp Entity',
+                fn (string $value) => strlen($value) > 0
+                    ? $this->getSharpEntitiesList($value)
+                    : []
+            );
+        }
 
         $needsWizard = $needsWizard ?? false;
         $commandPath = Str::plural($entityName).'\\Commands';
@@ -282,11 +289,30 @@ class GeneratorCommand extends Command
         };
 
         if (confirm(label: 'Do you want to automatically declare this Entity in the Sharp configuration?')) {
-            $provider = text(
-                label: 'What is the full name of your Sharp Service Provider?',
-                default: 'App\\Providers\\SharpServiceProvider',
-                required: true,
-            );
+            $providerFound = false;
+
+            while (! $providerFound) {
+                $provider = text(
+                    label: 'What is the full name of your Sharp Service Provider?',
+                    default: 'App\\Providers\\SharpServiceProvider',
+                    required: true,
+                );
+
+                if (! class_exists($provider)) {
+                    $this->components->error(sprintf('The class [%s] does not exist.', $provider));
+
+                    if (! confirm(label: 'Do you want to try again?')) {
+                        $this->components->info('Your Entity and all related files have been created.');
+
+                        return;
+                    }
+
+                    continue;
+                }
+
+                $providerFound = true;
+            }
+
             $reflector = new \ReflectionClass($provider);
             $this->declareEntityInSharpConfiguration($reflector->getFileName(), $entityPath, $entityKey);
 
@@ -308,12 +334,16 @@ class GeneratorCommand extends Command
 
     protected function reorderHandlerPrompt(): void
     {
-        $entityName = search(
-            'Looking for the related Sharp Entity',
-            fn (string $value) => strlen($value) > 0
-                ? $this->getSharpEntitiesList($value)
-                : []
-        );
+        if (app()->runningUnitTests()) {
+            $entityName = 'UnitTestModel';
+        } else {
+            $entityName = search(
+                'Looking for the related Sharp Entity',
+                fn (string $value) => strlen($value) > 0
+                    ? $this->getSharpEntitiesList($value)
+                    : []
+            );
+        }
         $reorderPath = Str::plural($entityName).'\\ReorderHandlers';
 
         $modelNamespace = text(
@@ -322,13 +352,18 @@ class GeneratorCommand extends Command
             required: true,
         );
 
-        $modelName = search(
-            'Search for the related model',
-            fn (string $value) => strlen($value) > 0
-                ? $this->getModelsList(base_path($this->namespaceToPath($modelNamespace)), $value)
-                : []
-        );
-        $model = $modelNamespace.'\\'.$modelName;
+        if (app()->runningUnitTests()) {
+            $modelName = 'UnitTestModel';
+            $model = 'Code16\\Sharp\\Tests\\Fixtures\\UnitTestModel';
+        } else {
+            $modelName = search(
+                'Search for the related model',
+                fn (string $value) => strlen($value) > 0
+                    ? $this->getModelsList(base_path($this->namespaceToPath($modelNamespace)), $value)
+                    : []
+            );
+            $model = $modelNamespace.'\\'.$modelName;
+        }
 
         $listClass = $this->resolveEntityListClass($entityName);
 
@@ -409,7 +444,7 @@ class GeneratorCommand extends Command
             );
 
             if (app()->runningUnitTests()) {
-                $model = 'Code16\\Sharp\\Tests\\Fixtures\\ClosedPeriod';
+                $model = 'Code16\\Sharp\\Tests\\Fixtures\\UnitTestModel';
             } else {
                 $model = search(
                     'Looking for the related model',
