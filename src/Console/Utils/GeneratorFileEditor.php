@@ -48,7 +48,7 @@ final class GeneratorFileEditor
 
     private function read(): string
     {
-        if (!is_file($this->filePath) || !is_readable($this->filePath)) {
+        if (! is_file($this->filePath) || ! is_readable($this->filePath)) {
             return '';
         }
 
@@ -59,13 +59,13 @@ final class GeneratorFileEditor
 
     private function replace(string $search, string $replace): void
     {
-        if (!is_file($this->filePath) || !is_writable($this->filePath)) {
+        if (! is_file($this->filePath) || ! is_writable($this->filePath)) {
             return;
         }
 
         $content = $this->read();
 
-        if ($content === '' || !str_contains($content, $search)) {
+        if ($content === '' || ! str_contains($content, $search)) {
             return;
         }
 
