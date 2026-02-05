@@ -29,7 +29,7 @@ For **products**, we decide that we don't need to build a `Show Page`:
 
 The product `Entity List` may have filters, sorting columns and search, and an `Entity state` to manage the published state of each product.
 
-Finally, **orders**, must be listed, detailed and updatable, and we also need to manage the **product** list of each order. That's an `Entity List` linking to a `Show Page` which contains another `Entity List`:
+Finally, **orders** must be listed, detailed and updated, and we also need to manage the **product** list for each order. That's an `Entity List` linking to a `Show Page` which contains another `Entity List`:
 
 <div style="text-align:center">
 <img src="./img/schema-order.png" style="max-width:700px; width:100%">
@@ -37,7 +37,7 @@ Finally, **orders**, must be listed, detailed and updatable, and we also need to
 
 Maybe we can add an `Entity Command` to export orders in a CSV file in the `Entity List`, and an `Instance command` on the order `Show Page` to declare the order as shipped.
 
-This is a simple example to illustrate the main concepts of Sharp: we'll see in this guide how to build such structures but also more complexe ones, and how to manage states, commands, dashboards, authorizations, errors, validation... in the process.
+This is a simple example to illustrate the main concepts of Sharp: we'll see in this guide how to build such structures but also more complex ones, and how to manage states, commands, dashboards, authorizations, errors, validation... in the process.
 
 ## Installation
 
@@ -46,7 +46,7 @@ Sharp 9 needs Laravel 11+ and PHP 8.3+.
 - Add the package with composer: `composer require code16/sharp`
 - Then run: `php artisan sharp:install`
 
-This last script will publish required assets, create a `SharpServiceProvider` in the `App\Providers` namespace, and a `SharpMenu` class in the `App\Sharp` namespace.
+This last script will publish required assets, create a `SharpServiceProvider` in the `App\Providers` namespace and a `SharpMenu` class in the `App\Sharp` namespace.
 
 ## Configuration via a new Service Provider
 
@@ -71,7 +71,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
 ```
 
 ::: tip
-As shown in the [Entity class](entity-class.md) documentation, you can also let Sharp autodiscover your entities.
+As shown in the [Entity class](entity-class.md) documentation, you can also let Sharp auto-discover your entities.
 :::
 
 This `ProductEntity` class could be written like this:
@@ -91,10 +91,10 @@ We chose to define:
 
 - a `list` class, responsible for the `Entity List`,
 - a `show` class, responsible for displaying an `instance` in a `Show Page`,
-- a `form` class, responsible for the create and edit `Form`,
+- a `form` class, responsible for the creation and edit `Form`,
 - and a `policy` class, for authorizations.
 
-Almost each one is optional, in fact: we could skip the `show` and go straight to the `form` from the `list`, for instance. 
+Almost each one is optional: we could skip the `show` and go straight to the `form` from the `list`, for instance. 
 
 We'll get into all those classes in this guide. The important thing to notice is that Sharp provides base classes to handle all the wiring (and more), but as we'll see, the applicative code is totally up to you.
 
