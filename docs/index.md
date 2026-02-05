@@ -28,13 +28,13 @@ Sharp for Laravel is actively maintained and developed and is used in all kinds 
 ## Streamlined Lists
 
 ### Customizable columns
-Choose and format the data to display, and allow sorting.
+Choose and format the data to display and allow sorting.
 
 ### Search and filters
 Define filters for your lists, with various types and options.
 
 ### State management
-If your entities have some state, you can manage it easily form here.
+If your entities have some state, you can manage it easily from here.
 
 <figure>
 
@@ -56,7 +56,7 @@ Create commands to act on a single instance or on a selection (filtered list or 
 Easily attach forms to commands, with validation and confirmation.
 
 ### Wizards
-Create multi-steps commands with dynamic paths.
+Create multistep commands with dynamic paths.
 
 <figure>
 
@@ -72,10 +72,10 @@ Create multi-steps commands with dynamic paths.
 ## Comprehensive Forms
 
 ### Fields and layout
-Use one of the many fields available, and organize them in a layout that fits your needs.
+Use one of the many fields available and organize them in a layout that fits your needs.
 
 ### Powerful editor with embeds
-Sharp's custom editor really allows to create rich content, and includes a clever system to develop custom embeds.
+Sharp's custom editor really allows creating rich content and includes a clever system to develop custom embeds.
 
 ### Uploads
 Manage files with bulk uploads, image transformation, disk and path configuration and precise validation.
@@ -193,9 +193,9 @@ With a clean and documented API.
 
 # About Sharp
 
-Sharp is a long term project developed by [Code 16](https://code16.fr), a web agency based in France, since 2017. We use it in almost all our projects, and we are committed to maintaining and improving it over time.
+Sharp is a long-term project developed by [Code 16](https://code16.fr), a web agency based in France, since 2017. We use it in almost all our projects, and we are committed to maintaining and improving it over time.
 
-Sharp 9 relies on Laravel 11, Tailwind CSS, Inertia, Vue and Alpine.JS. 
+Sharp 9 relies on Laravel, Tailwind CSS, Inertia, Vue and Alpine.JS. 
 
 So far we have not implemented any kind of sponsorship system, but we are open to discussing it in the future.
 
