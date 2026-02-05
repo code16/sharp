@@ -38,3 +38,11 @@ it('allows to discover entities automatically', function () {
         ->toHaveKey('person')
         ->toHaveKey('single-person');
 });
+
+it('allows to configure breadcrumb options', function () {
+    sharp()->config()->configureBreadcrumb(queryShows: false, cache: false, cacheDuration: 42);
+
+    expect(sharp()->config()->get('breadcrumb.query_shows'))->toBeFalse()
+        ->and(sharp()->config()->get('breadcrumb.cache'))->toBeFalse()
+        ->and(sharp()->config()->get('breadcrumb.cache_duration'))->toBe(42);
+});

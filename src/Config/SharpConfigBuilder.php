@@ -34,6 +34,11 @@ class SharpConfigBuilder
         'custom_url_segment' => 'sharp',
         'display_sharp_version_in_title' => true,
         'display_breadcrumb' => true,
+        'breadcrumb' => [
+            'query_shows' => true,
+            'cache' => true,
+            'cache_duration' => 30,
+        ],
         'entities' => [],
         'entity_resolver' => null,
         'global_filters' => [],
@@ -133,6 +138,20 @@ class SharpConfigBuilder
     public function displayBreadcrumb(bool $displayBreadcrumb = true): self
     {
         $this->config['display_breadcrumb'] = $displayBreadcrumb;
+
+        return $this;
+    }
+
+    public function configureBreadcrumb(
+        bool $queryShows = true,
+        bool $cache = true,
+        int $cacheDuration = 30,
+    ): self {
+        $this->config['breadcrumb'] = [
+            'query_shows' => $queryShows,
+            'cache' => $cache,
+            'cache_duration' => $cacheDuration,
+        ];
 
         return $this;
     }

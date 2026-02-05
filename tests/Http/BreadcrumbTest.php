@@ -8,6 +8,7 @@ use Code16\Sharp\Tests\Fixtures\Sharp\PersonForm;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonShow;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
@@ -105,6 +106,96 @@ it('uses labels defined for entities in the config', function () {
             ->where('breadcrumb.items.0.label', 'List')
             ->where('breadcrumb.items.1.label', 'Scientist')
         );
+});
+
+it('queries parent show labels when not cached', function () {
+    Cache::flush();
+
+    $show = new class() extends PersonShow
+    {
+        public static array $requestedIds = [];
+
+        public function buildShowConfig(): void
+        {
+            $this->configureBreadcrumbCustomLabelAttribute('name');
+        }
+
+        public function find($id): array
+        {
+            $id = (int) $id;
+            self::$requestedIds[] = $id;
+
+            return $this->transform([
+                'id' => $id,
+                'name' => $id === 1 ? 'Marie Curie' : 'Albert Einstein',
+            ]);
+        }
+    };
+
+    fakeShowFor('person', $show);
+
+    $this
+        ->get(
+            route('code16.sharp.show.show', [
+                'parentUri' => 's-list/person/s-show/person/1',
+                'person',
+                2,
+            ])
+        )
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('breadcrumb.items.1.label', 'Marie Curie')
+            ->where('breadcrumb.items.2.label', 'Albert Einstein')
+        );
+
+    expect($show::$requestedIds)->toContain(1);
+});
+
+it('does not query parent show labels when disabled', function () {
+    Cache::flush();
+    sharp()->config()->configureBreadcrumb(queryShows: false);
+
+    app(SharpEntityManager::class)
+        ->entityFor('person')
+        ->setLabel('Scientist');
+
+    $show = new class() extends PersonShow
+    {
+        public static array $requestedIds = [];
+
+        public function buildShowConfig(): void
+        {
+            $this->configureBreadcrumbCustomLabelAttribute('name');
+        }
+
+        public function find($id): array
+        {
+            $id = (int) $id;
+            self::$requestedIds[] = $id;
+
+            return $this->transform([
+                'id' => $id,
+                'name' => $id === 1 ? 'Marie Curie' : 'Albert Einstein',
+            ]);
+        }
+    };
+
+    fakeShowFor('person', $show);
+
+    $this
+        ->get(
+            route('code16.sharp.show.show', [
+                'parentUri' => 's-list/person/s-show/person/1',
+                'person',
+                2,
+            ])
+        )
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('breadcrumb.items.1.label', 'Scientist')
+        );
+
+    expect($show::$requestedIds)->not->toContain(1);
 });
 
 it('uses custom labels on show leaf if configured', function () {
