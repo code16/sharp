@@ -254,6 +254,44 @@ it('uses custom labels on form leaf if configured', function () {
         );
 });
 
+it('uses custom labels limit on form leaf if configured', function () {
+    fakeFormFor('person', new class() extends PersonForm
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(SharpFormEditorField::make('name'));
+        }
+
+        public function buildFormConfig(): void
+        {
+            $this->configureBreadcrumbCustomLabelAttribute('name', limit: 20);
+        }
+
+        public function find($id): array
+        {
+            return $this->transform([
+                'id' => 1,
+                'name' => 'A very long name that should be limited',
+            ]);
+        }
+    });
+
+    $this
+        ->get(
+            route('code16.sharp.form.edit', [
+                'parentUri' => 's-list/person',
+                'person',
+                1,
+            ])
+        )
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('breadcrumb.items.0.label', 'List')
+            // Data is not formatted for breadcrumb:
+            ->where('breadcrumb.items.1.label', 'Edit “A very long name tha...”')
+        );
+});
+
 it('uses localized custom labels on form leaf if configured', function () {
     fakeFormFor('person', new class() extends PersonForm
     {
