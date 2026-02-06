@@ -24,6 +24,7 @@
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
         "itsgoingd/clockwork": "^5.1",
+        "laravel/boost": "^1.8",
         "laravel/sail": "^1.0.1",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^8.6",
@@ -52,7 +53,8 @@
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi",
-            "@php artisan vendor:publish --tag=sharp-assets --force"
+            "@php artisan vendor:publish --tag=sharp-assets --force",
+            "@php artisan boost:update --ansi"
         ],
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
