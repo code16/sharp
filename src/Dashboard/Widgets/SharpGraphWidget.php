@@ -2,6 +2,8 @@
 
 namespace Code16\Sharp\Dashboard\Widgets;
 
+use Code16\Sharp\Dashboard\Widgets\Graph\NumberFormatOptions;
+
 abstract class SharpGraphWidget extends SharpWidget
 {
     protected ?string $display = null;
@@ -9,6 +11,7 @@ abstract class SharpGraphWidget extends SharpWidget
     protected ?int $height = null;
     protected bool $showLegend = true;
     protected bool $minimal = false;
+    protected ?NumberFormatOptions $formatOptions = null;
 
     public function setRatio(string $ratio): self
     {
@@ -38,6 +41,13 @@ abstract class SharpGraphWidget extends SharpWidget
         return $this;
     }
 
+    public function setTooltipValueFormat(NumberFormatOptions $formatOptions): self
+    {
+        $this->formatOptions = $formatOptions;
+
+        return $this;
+    }
+
     public function toArray(): array
     {
         return parent::buildArray([
@@ -47,6 +57,7 @@ abstract class SharpGraphWidget extends SharpWidget
             'height' => $this->height,
             'minimal' => $this->minimal,
             'showLegend' => $this->showLegend,
+            'formatOptions' => $this->formatOptions,
         ]);
     }
 
