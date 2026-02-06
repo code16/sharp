@@ -56,7 +56,7 @@
         <Title :entity-key="dashboardKey" />
 
         <template #breadcrumb>
-            <template v-if="config('sharp.display_breadcrumb')">
+            <template v-if="config('sharp.breadcrumb.display')">
                 <PageBreadcrumb :breadcrumb="breadcrumb" />
             </template>
         </template>

@@ -40,9 +40,17 @@ it('allows to discover entities automatically', function () {
 });
 
 it('allows to configure breadcrumb options', function () {
-    sharp()->config()->configureBreadcrumb(queryShows: false, cache: false, cacheDuration: 42);
+    expect(sharp()->config()->get('breadcrumb.labels.lazy_loading'))->toBeFalse()
+        ->and(sharp()->config()->get('breadcrumb.labels.cache'))->toBeTrue()
+        ->and(sharp()->config()->get('breadcrumb.labels.cache_duration'))->toBe(30);
 
-    expect(sharp()->config()->get('breadcrumb.query_shows'))->toBeFalse()
-        ->and(sharp()->config()->get('breadcrumb.cache'))->toBeFalse()
-        ->and(sharp()->config()->get('breadcrumb.cache_duration'))->toBe(42);
+    sharp()->config()->enableBreadcrumbLabelsLazyLoading();
+    sharp()->config()->configureBreadcrumbLabelsCache(false);
+
+    expect(sharp()->config()->get('breadcrumb.labels.lazy_loading'))->toBeTrue()
+        ->and(sharp()->config()->get('breadcrumb.labels.cache'))->toBeFalse();
+
+    sharp()->config()->configureBreadcrumbLabelsCache(duration: 40);
+
+    expect(sharp()->config()->get('breadcrumb.labels.cache_duration'))->toBe(40);
 });

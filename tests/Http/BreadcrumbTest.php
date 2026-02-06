@@ -108,7 +108,7 @@ it('uses labels defined for entities in the config', function () {
         );
 });
 
-it('queries parent show labels when not cached', function () {
+it('load parent show labels when not cached', function () {
     Cache::flush();
 
     $show = new class() extends PersonShow
@@ -151,9 +151,65 @@ it('queries parent show labels when not cached', function () {
     expect($show::$requestedIds)->toContain(1);
 });
 
-it('does not query parent show labels when disabled', function () {
+it('set correct segment for loaded parent shows', function () {
     Cache::flush();
-    sharp()->config()->configureBreadcrumb(queryShows: false);
+
+    $show = new class() extends PersonShow
+    {
+        public static array $breadcrumbPaths = [];
+
+        public function buildShowConfig(): void
+        {
+            $this->configureBreadcrumbCustomLabelAttribute('name');
+        }
+
+        public function find($id): array
+        {
+            $id = (int) $id;
+            self::$breadcrumbPaths[$id] = sharp()->context()->breadcrumb()->getCurrentPath();
+
+            return $this->transform([
+                'id' => $id,
+                'name' => $id === 1 ? 'Marie Curie' : 'Albert Einstein',
+            ]);
+        }
+    };
+
+    fakeShowFor('person', $show);
+
+    $this
+        ->get(
+            route('code16.sharp.show.show', [
+                'parentUri' => 's-list/person/s-show/person/1',
+                'person',
+                2,
+            ])
+        )
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('breadcrumb.items.1.entityKey', 'person')
+            ->where('breadcrumb.items.1.url', route('code16.sharp.show.show', [
+                'parentUri' => 's-list/person',
+                'person',
+                1,
+            ]))
+            ->where('breadcrumb.items.2.entityKey', 'person')
+            ->where('breadcrumb.items.2.url', route('code16.sharp.show.show', [
+                'parentUri' => 's-list/person/s-show/person/1',
+                'person',
+                2,
+            ]))
+        );
+
+    expect($show::$breadcrumbPaths)->toEqual([
+        1 => 's-list/person/s-show/person/1',
+        2 => 's-list/person/s-show/person/1/s-show/person/2',
+    ]);
+});
+
+it('does not load parent show labels when lazy loading', function () {
+    Cache::flush();
+    sharp()->config()->enableBreadcrumbLabelsLazyLoading();
 
     app(SharpEntityManager::class)
         ->entityFor('person')

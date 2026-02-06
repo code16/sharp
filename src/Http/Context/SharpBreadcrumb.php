@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Http\Context;
 
+use Closure;
 use Code16\Sharp\Http\Context\Util\BreadcrumbItem;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Entities\ValueObjects\EntityKey;
@@ -37,7 +38,7 @@ class SharpBreadcrumb
                 $isLeaf = $index === $lastIndex;
 
                 return [
-                    'label' => sharp()->config()->get('display_breadcrumb')
+                    'label' => sharp()->config()->get('breadcrumb.display')
                         ? $this->getBreadcrumbLabelFor($item, $isLeaf)
                         : '',
                     'documentTitleLabel' => $this->getDocumentTitleLabelFor($item, $isLeaf),
@@ -251,8 +252,8 @@ class SharpBreadcrumb
             }
         }
 
-        if ($item->isShow() && ! $isLeaf && sharp()->config()->get('breadcrumb.query_shows')) {
-            if ($label = $this->queryShowBreadcrumbLabel($item)) {
+        if ($item->isShow() && ! $isLeaf && ! sharp()->config()->get('breadcrumb.labels.lazy_loading')) {
+            if ($label = $this->loadShowBreadcrumbLabel($item)) {
                 $this->storeCachedLabel($item, $label);
 
                 return $label;
@@ -278,7 +279,7 @@ class SharpBreadcrumb
             return $label;
         }
 
-        if (! sharp()->config()->get('breadcrumb.query_shows')) {
+        if (sharp()->config()->get('breadcrumb.labels.lazy_loading')) {
             return null;
         }
 
@@ -289,7 +290,7 @@ class SharpBreadcrumb
             return null;
         }
 
-        $parentShow = $items
+        $parentShowItem = $items
             ->slice(0, $formIndex)
             ->reverse()
             ->first(fn (BreadcrumbItem $item) => $item->isShow()
@@ -297,38 +298,50 @@ class SharpBreadcrumb
                 && $item->instanceId() === $formItem->instanceId()
             );
 
-        if (! $parentShow || ! $this->canQueryShowLabel($parentShow)) {
+        if (! $parentShowItem || ! $this->canLoadShowLabel($parentShowItem)) {
             return null;
         }
 
-        $label = $this->queryShowBreadcrumbLabel($parentShow);
+        $label = $this->loadShowBreadcrumbLabel($parentShowItem);
 
         if (! $label) {
             return null;
         }
 
-        $this->storeCachedLabel($parentShow, $label);
+        $this->storeCachedLabel($parentShowItem, $label);
 
         return $label;
     }
 
-    private function queryShowBreadcrumbLabel(BreadcrumbItem $showItem): ?string
+    private function loadShowBreadcrumbLabel(BreadcrumbItem $showItem): ?string
     {
-        if (! $this->canQueryShowLabel($showItem)) {
+        if (! $this->canLoadShowLabel($showItem)) {
             return null;
         }
 
         $show = app(SharpEntityManager::class)
             ->entityFor($showItem->key)
             ->getShowOrFail();
+
         $show->buildShowConfig();
 
-        $data = $show->instance($showItem->instanceId());
+        if (! $show->getBreadcrumbAttribute()) {
+            return null;
+        }
+
+        $data = [];
+
+        $this->forceRequestSegments(
+            $this->getFakeRequestSegmentsFor($showItem),
+            function () use ($show, $showItem, &$data) {
+                $data = $show->instance($showItem->instanceId());
+            }
+        );
 
         return $show->getBreadcrumbCustomLabel($data);
     }
 
-    private function canQueryShowLabel(BreadcrumbItem $showItem): bool
+    private function canLoadShowLabel(BreadcrumbItem $showItem): bool
     {
         if (! $showItem->isShow()) {
             return false;
@@ -350,7 +363,7 @@ class SharpBreadcrumb
 
     private function getCachedLabel(BreadcrumbItem $item, ?string $type = null): ?string
     {
-        if (! sharp()->config()->get('breadcrumb.cache')) {
+        if (! sharp()->config()->get('breadcrumb.labels.cache')) {
             return null;
         }
 
@@ -359,14 +372,14 @@ class SharpBreadcrumb
 
     private function storeCachedLabel(BreadcrumbItem $item, string $label, ?string $type = null): void
     {
-        if (! sharp()->config()->get('breadcrumb.cache')) {
+        if (! sharp()->config()->get('breadcrumb.labels.cache')) {
             return;
         }
 
         Cache::put(
             $this->breadcrumbCacheKey($item, $type),
             $label,
-            now()->addMinutes((int) sharp()->config()->get('breadcrumb.cache_duration')),
+            now()->addMinutes((int) sharp()->config()->get('breadcrumb.labels.cache_duration')),
         );
     }
 
@@ -418,6 +431,10 @@ class SharpBreadcrumb
         $depth = 0;
 
         if (count($segments) !== 0) {
+            if (! in_array($segments[0], ['s-list', 's-show', 's-dashboard'])) {
+                return;
+            }
+
             $this->breadcrumbItems->add(
                 (new BreadcrumbItem($segments[0], $segments[1]))->setDepth($depth++),
             );
@@ -449,6 +466,14 @@ class SharpBreadcrumb
         }
     }
 
+    private function getFakeRequestSegmentsFor(BreadcrumbItem $item): Collection
+    {
+        return $this->breadcrumbItems()
+            ->slice(0, $item->depth + 1)
+            ->values()
+            ->flatMap(fn (BreadcrumbItem $item) => explode('/', $item->toUri()));
+    }
+
     protected function getSegmentsFromRequest(): Collection
     {
         if ($this->forcedSegments) {
@@ -471,9 +496,16 @@ class SharpBreadcrumb
         return collect(request()->segments())->skip(2)->values();
     }
 
-    public function forceRequestSegments(array|Collection $segments): void
+    public function forceRequestSegments(array|Collection $segments, ?Closure $callback = null): void
     {
         $this->breadcrumbItems = null;
         $this->forcedSegments = collect($segments)->values();
+
+        if ($callback) {
+            $callback();
+
+            $this->breadcrumbItems = null;
+            $this->forcedSegments = null;
+        }
     }
 }

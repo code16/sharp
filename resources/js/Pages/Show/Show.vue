@@ -128,7 +128,7 @@
         <Title :breadcrumb="breadcrumb" />
 
         <template #breadcrumb>
-            <template v-if="config('sharp.display_breadcrumb')">
+            <template v-if="config('sharp.breadcrumb.display')">
                 <PageBreadcrumb :breadcrumb="breadcrumb" />
             </template>
         </template>
