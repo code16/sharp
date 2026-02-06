@@ -4,6 +4,7 @@ namespace Code16\Sharp\Http\Context\Util;
 
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Entities\ValueObjects\EntityKey;
+use InvalidArgumentException;
 
 class BreadcrumbItem
 {
@@ -16,6 +17,10 @@ class BreadcrumbItem
     {
         $this->type = $type;
         $this->key = $key;
+
+        if (! in_array($type, ['s-list', 's-show', 's-form', 's-dashboard'])) {
+            throw new InvalidArgumentException("Invalid type [$type] for BreadcrumbItem");
+        }
     }
 
     public function setDepth(int $depth): self

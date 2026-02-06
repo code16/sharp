@@ -8,6 +8,7 @@ use Code16\Sharp\Tests\Fixtures\Sharp\PersonForm;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonShow;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
@@ -105,6 +106,152 @@ it('uses labels defined for entities in the config', function () {
             ->where('breadcrumb.items.0.label', 'List')
             ->where('breadcrumb.items.1.label', 'Scientist')
         );
+});
+
+it('load parent show labels when not cached', function () {
+    Cache::flush();
+
+    $show = new class() extends PersonShow
+    {
+        public static array $requestedIds = [];
+
+        public function buildShowConfig(): void
+        {
+            $this->configureBreadcrumbCustomLabelAttribute('name');
+        }
+
+        public function find($id): array
+        {
+            $id = (int) $id;
+            self::$requestedIds[] = $id;
+
+            return $this->transform([
+                'id' => $id,
+                'name' => $id === 1 ? 'Marie Curie' : 'Albert Einstein',
+            ]);
+        }
+    };
+
+    fakeShowFor('person', $show);
+
+    $this
+        ->get(
+            route('code16.sharp.show.show', [
+                'parentUri' => 's-list/person/s-show/person/1',
+                'person',
+                2,
+            ])
+        )
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('breadcrumb.items.1.label', 'Marie Curie')
+            ->where('breadcrumb.items.2.label', 'Albert Einstein')
+        );
+
+    expect($show::$requestedIds)->toContain(1);
+});
+
+it('set correct segment for loaded parent shows', function () {
+    Cache::flush();
+
+    $show = new class() extends PersonShow
+    {
+        public static array $breadcrumbPaths = [];
+
+        public function buildShowConfig(): void
+        {
+            $this->configureBreadcrumbCustomLabelAttribute('name');
+        }
+
+        public function find($id): array
+        {
+            $id = (int) $id;
+            self::$breadcrumbPaths[$id] = sharp()->context()->breadcrumb()->getCurrentPath();
+
+            return $this->transform([
+                'id' => $id,
+                'name' => $id === 1 ? 'Marie Curie' : 'Albert Einstein',
+            ]);
+        }
+    };
+
+    fakeShowFor('person', $show);
+
+    $this
+        ->get(
+            route('code16.sharp.show.show', [
+                'parentUri' => 's-list/person/s-show/person/1',
+                'person',
+                2,
+            ])
+        )
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('breadcrumb.items.1.entityKey', 'person')
+            ->where('breadcrumb.items.1.url', route('code16.sharp.show.show', [
+                'parentUri' => 's-list/person',
+                'person',
+                1,
+            ]))
+            ->where('breadcrumb.items.2.entityKey', 'person')
+            ->where('breadcrumb.items.2.url', route('code16.sharp.show.show', [
+                'parentUri' => 's-list/person/s-show/person/1',
+                'person',
+                2,
+            ]))
+        );
+
+    expect($show::$breadcrumbPaths)->toEqual([
+        1 => 's-list/person/s-show/person/1',
+        2 => 's-list/person/s-show/person/1/s-show/person/2',
+    ]);
+});
+
+it('does not load parent show labels when lazy loading', function () {
+    Cache::flush();
+    sharp()->config()->enableBreadcrumbLabelsLazyLoading();
+
+    app(SharpEntityManager::class)
+        ->entityFor('person')
+        ->setLabel('Scientist');
+
+    $show = new class() extends PersonShow
+    {
+        public static array $requestedIds = [];
+
+        public function buildShowConfig(): void
+        {
+            $this->configureBreadcrumbCustomLabelAttribute('name');
+        }
+
+        public function find($id): array
+        {
+            $id = (int) $id;
+            self::$requestedIds[] = $id;
+
+            return $this->transform([
+                'id' => $id,
+                'name' => $id === 1 ? 'Marie Curie' : 'Albert Einstein',
+            ]);
+        }
+    };
+
+    fakeShowFor('person', $show);
+
+    $this
+        ->get(
+            route('code16.sharp.show.show', [
+                'parentUri' => 's-list/person/s-show/person/1',
+                'person',
+                2,
+            ])
+        )
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('breadcrumb.items.1.label', 'Scientist')
+        );
+
+    expect($show::$requestedIds)->not->toContain(1);
 });
 
 it('uses custom labels on show leaf if configured', function () {
@@ -251,6 +398,44 @@ it('uses custom labels on form leaf if configured', function () {
             ->where('breadcrumb.items.0.label', 'List')
             // Data is not formatted for breadcrumb:
             ->where('breadcrumb.items.1.label', 'Edit “Marie Curie”')
+        );
+});
+
+it('uses custom labels limit on form leaf if configured', function () {
+    fakeFormFor('person', new class() extends PersonForm
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(SharpFormEditorField::make('name'));
+        }
+
+        public function buildFormConfig(): void
+        {
+            $this->configureBreadcrumbCustomLabelAttribute('name', limit: 20);
+        }
+
+        public function find($id): array
+        {
+            return $this->transform([
+                'id' => 1,
+                'name' => 'A very long name that should be limited',
+            ]);
+        }
+    });
+
+    $this
+        ->get(
+            route('code16.sharp.form.edit', [
+                'parentUri' => 's-list/person',
+                'person',
+                1,
+            ])
+        )
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('breadcrumb.items.0.label', 'List')
+            // Data is not formatted for breadcrumb:
+            ->where('breadcrumb.items.1.label', 'Edit “A very long name tha...”')
         );
 });
 

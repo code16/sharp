@@ -21,6 +21,7 @@ use Code16\Sharp\Tests\Fixtures\Sharp\PersonSingleForm;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\PageAlerts\PageAlert;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Exceptions;
 use Inertia\Testing\AssertableInertia as Assert;
 
@@ -542,6 +543,42 @@ it('formats form title based on parent show breadcrumb', function () {
         ->assertInertia(fn (Assert $page) => $page
             ->where('form.title', 'Edit “Marie Curie”')
         );
+});
+
+it('formats form title based on queried parent show breadcrumb', function () {
+    Cache::flush();
+
+    $show = new class() extends PersonShow
+    {
+        public static array $requestedIds = [];
+
+        public function buildShowConfig(): void
+        {
+            $this->configureBreadcrumbCustomLabelAttribute('name');
+        }
+
+        public function find($id): array
+        {
+            $id = (int) $id;
+            self::$requestedIds[] = $id;
+
+            return $this->transform([
+                'id' => $id,
+                'name' => 'Marie Curie',
+            ]);
+        }
+    };
+
+    fakeShowFor('person', $show);
+    fakeFormFor('person', new PersonForm());
+
+    $this->get('/sharp/root/s-list/person/s-show/person/1/s-form/person/1')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('form.title', 'Edit “Marie Curie”')
+        );
+
+    expect($show::$requestedIds)->toContain(1);
 });
 
 it('formats form title based on configured breadcrumb attribute', function () {

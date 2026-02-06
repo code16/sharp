@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Http\Context;
 
+use Closure;
 use Code16\Sharp\Http\Context\Util\BreadcrumbItem;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Entities\ValueObjects\EntityKey;
@@ -27,22 +28,17 @@ class SharpBreadcrumb
 
     public function allSegments(): array
     {
-        $url = sharp()->config()->get('custom_url_segment')
-            .'/'.sharp()->context()->globalFilterUrlSegmentValue();
+        $segments = $this->breadcrumbItems();
+        $url = $this->baseUrlPrefix();
+        $lastIndex = $segments->count() - 1;
 
-        return $this
-            ->breadcrumbItems()
-            ->map(function ($item, $index) use (&$url) {
-                $url = sprintf('%s/%s/%s',
-                    $url,
-                    $item->type,
-                    isset($item->instance) ? "{$item->key}/{$item->instance}" : $item->key,
-                );
-                $isLeaf = $index === count($this->breadcrumbItems()) - 1;
+        return $segments
+            ->map(function (BreadcrumbItem $item, int $index) use (&$url, $lastIndex) {
+                $url = $this->appendSegmentToUrl($url, $item);
+                $isLeaf = $index === $lastIndex;
 
                 return [
-                    'type' => $this->getFrontTypeNameFor($item->type),
-                    'label' => sharp()->config()->get('display_breadcrumb')
+                    'label' => sharp()->config()->get('breadcrumb.display')
                         ? $this->getBreadcrumbLabelFor($item, $isLeaf)
                         : '',
                     'documentTitleLabel' => $this->getDocumentTitleLabelFor($item, $isLeaf),
@@ -77,9 +73,8 @@ class SharpBreadcrumb
     {
         return url(
             sprintf(
-                '%s/%s/%s',
-                sharp()->config()->get('custom_url_segment'),
-                sharp()->context()->globalFilterUrlSegmentValue(),
+                '%s/%s',
+                $this->baseUrlPrefix(),
                 $this->getCurrentPath()
             )
         );
@@ -87,22 +82,16 @@ class SharpBreadcrumb
 
     public function getCurrentPath(): ?string
     {
-        return $this->breadcrumbItems()
-            ->map(fn (BreadcrumbItem $item) => $item->toUri())
-            ->implode('/');
+        return $this->breadcrumbPathFor($this->breadcrumbItems());
     }
 
     public function getPreviousSegmentUrl(): string
     {
         return url(
             sprintf(
-                '%s/%s/%s',
-                sharp()->config()->get('custom_url_segment'),
-                sharp()->context()->globalFilterUrlSegmentValue(),
-                $this->breadcrumbItems()
-                    ->slice(0, -1)
-                    ->map(fn (BreadcrumbItem $item) => $item->toUri())
-                    ->implode('/')
+                '%s/%s',
+                $this->baseUrlPrefix(),
+                $this->breadcrumbPathFor($this->breadcrumbItems()->slice(0, -1))
             )
         );
     }
@@ -139,56 +128,15 @@ class SharpBreadcrumb
             ->first();
     }
 
-    private function getFrontTypeNameFor(string $type): string
-    {
-        return match ($type) {
-            's-list' => 'list',
-            's-form' => 'form',
-            's-show' => 'show',
-            's-dashboard' => 'dashboard',
-            default => '',
-        };
-    }
-
     private function getBreadcrumbLabelFor(BreadcrumbItem $item, bool $isLeaf): string
     {
-        switch ($item->type) {
-            case 's-list':
-                return app(SharpMenuManager::class)
-                    ->getEntityMenuItem($item->key)
-                    ?->getLabel() ?: trans('sharp::breadcrumb.entityList');
-            case 's-dashboard':
-                return app(SharpMenuManager::class)
-                    ->getEntityMenuItem($item->key)
-                    ?->getLabel() ?: trans('sharp::breadcrumb.dashboard');
-            case 's-show':
-                return trans('sharp::breadcrumb.show', [
-                    'entity' => $this->getEntityLabelForInstance($item, $isLeaf),
-                ]);
-            case 's-form':
-                // A Form is always a leaf
-                $previousItem = $this->breadcrumbItems()[$item->depth - 1];
-
-                if (
-                    ($previousItem->isShow() && ! $this->isSameEntityKeys($previousItem->key, $item->key, true))
-                    || ($item->isForm() && $this->currentInstanceLabel)
-                ) {
-                    // The form entityKey is different from the previous entityKey in the breadcrumb: we are in a EEL case.
-                    return isset($item->instance)
-                        ? trans('sharp::breadcrumb.form.edit_entity', [
-                            'entity' => $this->getEntityLabelForInstance($item, true),
-                        ])
-                        : trans('sharp::breadcrumb.form.create_entity', [
-                            'entity' => $this->getEntityLabelForInstance($item, true),
-                        ]);
-                }
-
-                return isset($item->instance) || ($previousItem->type === 's-show' && ! isset($previousItem->instance))
-                    ? trans('sharp::breadcrumb.form.edit')
-                    : trans('sharp::breadcrumb.form.create');
-        }
-
-        return $item->key;
+        return match ($item->type) {
+            's-list' => $this->labelForList($item),
+            's-dashboard' => $this->labelForDashboard($item),
+            's-show' => $this->labelForShow($item, $isLeaf),
+            's-form' => $this->labelForForm($item),
+            default => $item->key,
+        };
     }
 
     /**
@@ -201,57 +149,269 @@ class SharpBreadcrumb
             return null;
         }
 
-        $previousItem = $this->breadcrumbItems()[$item->depth - 1] ?? null;
+        $previousItem = $this->previousItemFor($item);
 
         return match ($item->type) {
-            's-show' => trans('sharp::breadcrumb.show', [
-                'entity' => $this->getEntityLabelForInstance($item, $isLeaf),
-            ]),
-            's-form' => isset($item->instance) || ($previousItem->type === 's-show' && ! isset($previousItem->instance))
+            's-show' => $this->labelForShow($item, $isLeaf),
+            's-form' => $this->shouldUseEditLabelForForm($item, $previousItem)
                 ? trans('sharp::breadcrumb.form.edit_entity', [
-                    'entity' => $this->getEntityLabelForInstance($item, $isLeaf),
+                    'entity' => $this->resolveEntityLabelForItem($item, true),
                 ])
                 : trans('sharp::breadcrumb.form.create_entity', [
-                    'entity' => $this->getEntityLabelForInstance($item, $isLeaf),
+                    'entity' => $this->resolveEntityLabelForItem($item, true),
                 ]),
             default => null
         };
+    }
+
+    private function labelForList(BreadcrumbItem $item): string
+    {
+        return app(SharpMenuManager::class)
+            ->getEntityMenuItem($item->key)
+            ?->getLabel() ?: trans('sharp::breadcrumb.entityList');
+    }
+
+    private function labelForDashboard(BreadcrumbItem $item): string
+    {
+        return app(SharpMenuManager::class)
+            ->getEntityMenuItem($item->key)
+            ?->getLabel() ?: trans('sharp::breadcrumb.dashboard');
+    }
+
+    private function labelForShow(BreadcrumbItem $item, bool $isLeaf): string
+    {
+        return trans('sharp::breadcrumb.show', [
+            'entity' => $this->resolveEntityLabelForItem($item, $isLeaf),
+        ]);
+    }
+
+    private function labelForForm(BreadcrumbItem $item): string
+    {
+        // A Form is always a leaf
+        $previousItem = $this->previousItemFor($item);
+
+        if ($this->shouldUseEntityLabelForForm($item, $previousItem)) {
+            // The form entityKey is different from the previous entityKey in the breadcrumb: we are in a EEL case.
+            return isset($item->instance)
+                ? trans('sharp::breadcrumb.form.edit_entity', [
+                    'entity' => $this->resolveEntityLabelForItem($item, true),
+                ])
+                : trans('sharp::breadcrumb.form.create_entity', [
+                    'entity' => $this->resolveEntityLabelForItem($item, true),
+                ]);
+        }
+
+        return $this->shouldUseEditLabelForForm($item, $previousItem)
+            ? trans('sharp::breadcrumb.form.edit')
+            : trans('sharp::breadcrumb.form.create');
+    }
+
+    private function shouldUseEntityLabelForForm(BreadcrumbItem $item, ?BreadcrumbItem $previousItem): bool
+    {
+        return ($previousItem->isShow() && ! $this->isSameEntityKeys($previousItem->key, $item->key, true))
+            || ($item->isForm() && $this->currentInstanceLabel);
+    }
+
+    private function shouldUseEditLabelForForm(BreadcrumbItem $item, ?BreadcrumbItem $previousItem): bool
+    {
+        return isset($item->instance)
+            || ($previousItem->type === 's-show' && ! isset($previousItem->instance));
     }
 
     public function getParentShowCachedBreadcrumbLabel(): ?string
     {
         $item = $this->breadcrumbItems()->last();
 
-        return Cache::get("sharp.breadcrumb.{$item->key}.s-show.{$item->instance}");
+        if (! $item || ! $item->isForm()) {
+            return null;
+        }
+
+        return $this->resolveParentShowLabel($item);
     }
 
     /**
      * Only for Shows and Forms.
      */
-    private function getEntityLabelForInstance(BreadcrumbItem $item, bool $isLeaf): string
+    private function resolveEntityLabelForItem(BreadcrumbItem $item, bool $isLeaf): string
     {
-        $cacheKey = "sharp.breadcrumb.{$item->key}.{$item->type}.{$item->instance}";
-
         if ($isLeaf && $this->currentInstanceLabel) {
-            Cache::put($cacheKey, $this->currentInstanceLabel, now()->addMinutes(30));
+            $this->storeCachedLabel($item, $this->currentInstanceLabel);
 
             return $this->currentInstanceLabel;
         }
 
-        if ($item->isForm() && ($cached = $this->getParentShowCachedBreadcrumbLabel())) {
-            return $cached;
+        if ($item->isForm()) {
+            if ($label = $this->resolveParentShowLabel($item)) {
+                return $label;
+            }
         }
 
         if (! $isLeaf) {
-            // The breadcrumb custom label may have been cached on the way up
-            if ($value = Cache::get($cacheKey)) {
-                return $value;
+            if ($label = $this->getCachedLabel($item)) {
+                return $label;
+            }
+        }
+
+        if ($item->isShow() && ! $isLeaf && ! sharp()->config()->get('breadcrumb.labels.lazy_loading')) {
+            if ($label = $this->loadShowBreadcrumbLabel($item)) {
+                $this->storeCachedLabel($item, $label);
+
+                return $label;
             }
         }
 
         return app(SharpEntityManager::class)
             ->entityFor($item->key)
             ->getLabelOrFail((new EntityKey($item->key))->multiformKey());
+    }
+
+    private function resolveParentShowLabel(BreadcrumbItem $formItem): ?string
+    {
+        if (! $formItem->isForm()) {
+            return null;
+        }
+
+        if ($formItem->instanceId() === null && ! $formItem->isSingleForm()) {
+            return null;
+        }
+
+        if ($label = $this->getCachedLabel($formItem, 's-show')) {
+            return $label;
+        }
+
+        if (sharp()->config()->get('breadcrumb.labels.lazy_loading')) {
+            return null;
+        }
+
+        $items = $this->breadcrumbItems()->values();
+        $formIndex = $items->search(fn (BreadcrumbItem $item) => $item->is($formItem));
+
+        if ($formIndex === false) {
+            return null;
+        }
+
+        $parentShowItem = $items
+            ->slice(0, $formIndex)
+            ->reverse()
+            ->first(fn (BreadcrumbItem $item) => $item->isShow()
+                && $item->key === $formItem->key
+                && $item->instanceId() === $formItem->instanceId()
+            );
+
+        if (! $parentShowItem || ! $this->canLoadShowLabel($parentShowItem)) {
+            return null;
+        }
+
+        $label = $this->loadShowBreadcrumbLabel($parentShowItem);
+
+        if (! $label) {
+            return null;
+        }
+
+        $this->storeCachedLabel($parentShowItem, $label);
+
+        return $label;
+    }
+
+    private function loadShowBreadcrumbLabel(BreadcrumbItem $showItem): ?string
+    {
+        if (! $this->canLoadShowLabel($showItem)) {
+            return null;
+        }
+
+        $show = app(SharpEntityManager::class)
+            ->entityFor($showItem->key)
+            ->getShowOrFail();
+
+        $show->buildShowConfig();
+
+        if (! $show->getBreadcrumbAttribute()) {
+            return null;
+        }
+
+        $data = [];
+
+        $this->forceRequestSegments(
+            $this->getFakeRequestSegmentsFor($showItem),
+            function () use ($show, $showItem, &$data) {
+                $data = $show->instance($showItem->instanceId());
+            }
+        );
+
+        return $show->getBreadcrumbCustomLabel($data);
+    }
+
+    private function canLoadShowLabel(BreadcrumbItem $showItem): bool
+    {
+        if (! $showItem->isShow()) {
+            return false;
+        }
+
+        if ($showItem->instanceId() !== null) {
+            return true;
+        }
+
+        return $showItem->isSingleShow();
+    }
+
+    private function breadcrumbCacheKey(BreadcrumbItem $item, ?string $type = null): string
+    {
+        $type = $type ?: $item->type;
+
+        return "sharp.breadcrumb.{$item->key}.{$type}.{$item->instance}";
+    }
+
+    private function getCachedLabel(BreadcrumbItem $item, ?string $type = null): ?string
+    {
+        if (! sharp()->config()->get('breadcrumb.labels.cache')) {
+            return null;
+        }
+
+        return Cache::get($this->breadcrumbCacheKey($item, $type));
+    }
+
+    private function storeCachedLabel(BreadcrumbItem $item, string $label, ?string $type = null): void
+    {
+        if (! sharp()->config()->get('breadcrumb.labels.cache')) {
+            return;
+        }
+
+        Cache::put(
+            $this->breadcrumbCacheKey($item, $type),
+            $label,
+            now()->addMinutes((int) sharp()->config()->get('breadcrumb.labels.cache_duration')),
+        );
+    }
+
+    private function baseUrlPrefix(): string
+    {
+        return sprintf(
+            '%s/%s',
+            sharp()->config()->get('custom_url_segment'),
+            sharp()->context()->globalFilterUrlSegmentValue(),
+        );
+    }
+
+    private function appendSegmentToUrl(string $url, BreadcrumbItem $item): string
+    {
+        return sprintf(
+            '%s/%s/%s',
+            $url,
+            $item->type,
+            isset($item->instance) ? "{$item->key}/{$item->instance}" : $item->key,
+        );
+    }
+
+    private function breadcrumbPathFor(Collection $items): string
+    {
+        return $items
+            ->map(fn (BreadcrumbItem $item) => $item->toUri())
+            ->implode('/');
+    }
+
+    private function previousItemFor(BreadcrumbItem $item): ?BreadcrumbItem
+    {
+        return $this->breadcrumbItems()[$item->depth - 1] ?? null;
     }
 
     private function isSameEntityKeys(string $key1, string $key2, bool $compareBaseEntities): bool
@@ -271,7 +431,11 @@ class SharpBreadcrumb
         $depth = 0;
 
         if (count($segments) !== 0) {
-            $this->breadcrumbItems()->add(
+            if (! in_array($segments[0], ['s-list', 's-show', 's-dashboard'])) {
+                return;
+            }
+
+            $this->breadcrumbItems->add(
                 (new BreadcrumbItem($segments[0], $segments[1]))->setDepth($depth++),
             );
 
@@ -293,13 +457,21 @@ class SharpBreadcrumb
 
                 $segments = $segments->slice($instance !== null ? 2 : 1)->values();
 
-                $this->breadcrumbItems()->add(
+                $this->breadcrumbItems->add(
                     (new BreadcrumbItem($type, $key))
                         ->setDepth($depth++)
                         ->setInstance($instance),
                 );
             }
         }
+    }
+
+    private function getFakeRequestSegmentsFor(BreadcrumbItem $item): Collection
+    {
+        return $this->breadcrumbItems()
+            ->slice(0, $item->depth + 1)
+            ->values()
+            ->flatMap(fn (BreadcrumbItem $item) => explode('/', $item->toUri()));
     }
 
     protected function getSegmentsFromRequest(): Collection
@@ -324,9 +496,16 @@ class SharpBreadcrumb
         return collect(request()->segments())->skip(2)->values();
     }
 
-    public function forceRequestSegments(array|Collection $segments): void
+    public function forceRequestSegments(array|Collection $segments, ?Closure $callback = null): void
     {
         $this->breadcrumbItems = null;
         $this->forcedSegments = collect($segments)->values();
+
+        if ($callback) {
+            $callback();
+
+            $this->breadcrumbItems = null;
+            $this->forcedSegments = null;
+        }
     }
 }
