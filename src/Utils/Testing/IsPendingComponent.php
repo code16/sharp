@@ -18,9 +18,14 @@ trait IsPendingComponent
         return $this->breadcrumbBuilder($this->parents())->generateUri();
     }
 
+    protected function getCurrentUri(): string
+    {
+        return $this->breadcrumbBuilder([...$this->parents(), $this])->generateUri();
+    }
+
     protected function getCurrentPageUrlFromParents(): string
     {
-        return $this->buildCurrentPageUrl($this->breadcrumbBuilder([...$this->parents(), $this]));
+        return $this->buildCurrentPageUrl($this->getCurrentUri());
     }
 
     protected function breadcrumbBuilder(array $components): BreadcrumbBuilder

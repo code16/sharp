@@ -182,13 +182,15 @@ class PendingEntityList
 
     protected function entityListShowField(): ?SharpShowEntityListField
     {
-        /** @noinspection PhpIncompatibleReturnTypeInspection */
-        return $this->parent instanceof PendingShow
-            ? $this->parent->show->getBuiltFields()
+        if ($this->parent instanceof PendingShow) {
+            /** @noinspection PhpIncompatibleReturnTypeInspection */
+            return $this->parent->show->getBuiltFields()
                 ->first(fn (SharpShowField $field) => $field instanceof SharpShowEntityListField
                     && $field->toArray()['entityListKey'] === $this->entityKey
-                )
-            : null;
+                );
+        }
+
+        return null;
     }
 
     protected function entityListQueryParams(): array

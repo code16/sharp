@@ -32,6 +32,9 @@ class PendingShow
     ) {
         $this->entityKey = app(SharpEntityManager::class)->entityKeyFor($entityKey);
         $this->show = app(SharpEntityManager::class)->entityFor($this->entityKey)->getShowOrFail();
+        sharp()->context()->breadcrumb()->forceRequestSegments(
+            explode('/', $this->getCurrentUri())
+        );
     }
 
     public function sharpForm(string $entityClassNameOrKey): PendingForm
