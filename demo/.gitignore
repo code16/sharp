@@ -10,3 +10,17 @@ node_modules
 .DS_Store
 .phpunit.result.cache
 .env
+
+# AI
+AGENTS.md
+boost.json
+.claude
+CLAUDE.md
+.cursor
+.gemini
+GEMINI.md
+.github
+.junie
+opencode.json
+.mcp.json
+.vscode
