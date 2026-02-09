@@ -41,6 +41,10 @@ class SharpLegacyConfigBuilder extends SharpConfigBuilder
             return null;
         }
 
+        if ($key == 'breadcrumb.display') {
+            return config('sharp.display_breadcrumb', true);
+        }
+
         return config('sharp.'.$key);
     }
 }
