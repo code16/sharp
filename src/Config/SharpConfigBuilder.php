@@ -33,7 +33,14 @@ class SharpConfigBuilder
         'name' => 'Sharp',
         'custom_url_segment' => 'sharp',
         'display_sharp_version_in_title' => true,
-        'display_breadcrumb' => true,
+        'breadcrumb' => [
+            'display' => true,
+            'labels' => [
+                'lazy_loading' => false,
+                'cache' => true,
+                'cache_duration' => 30,
+            ],
+        ],
         'entities' => [],
         'entity_resolver' => null,
         'global_filters' => [],
@@ -132,7 +139,22 @@ class SharpConfigBuilder
 
     public function displayBreadcrumb(bool $displayBreadcrumb = true): self
     {
-        $this->config['display_breadcrumb'] = $displayBreadcrumb;
+        $this->config['breadcrumb']['display'] = $displayBreadcrumb;
+
+        return $this;
+    }
+
+    public function enableBreadcrumbLabelsLazyLoading(bool $lazyLoading = true): self
+    {
+        $this->config['breadcrumb']['labels']['lazy_loading'] = $lazyLoading;
+
+        return $this;
+    }
+
+    public function configureBreadcrumbLabelsCache(bool $cache = true, int $duration = 30): self
+    {
+        $this->config['breadcrumb']['labels']['cache'] = $cache;
+        $this->config['breadcrumb']['labels']['cache_duration'] = $duration;
 
         return $this;
     }

@@ -91,7 +91,7 @@ class HandleInertiaRequests extends Middleware
                 'sharp.auth.suggest_remember_me' => sharp()->config()->get('auth.suggest_remember_me'),
                 'sharp.custom_url_segment' => sharp()->config()->get('custom_url_segment'),
                 'sharp.display_sharp_version_in_title' => sharp()->config()->get('display_sharp_version_in_title'),
-                'sharp.display_breadcrumb' => sharp()->config()->get('display_breadcrumb'),
+                'sharp.breadcrumb.display' => sharp()->config()->get('breadcrumb.display'),
                 'sharp.name' => sharp()->config()->get('name'),
                 'sharp.theme.logo_height' => sharp()->config()->get('theme.logo_height'),
             ],

@@ -38,3 +38,19 @@ it('allows to discover entities automatically', function () {
         ->toHaveKey('person')
         ->toHaveKey('single-person');
 });
+
+it('allows to configure breadcrumb options', function () {
+    expect(sharp()->config()->get('breadcrumb.labels.lazy_loading'))->toBeFalse()
+        ->and(sharp()->config()->get('breadcrumb.labels.cache'))->toBeTrue()
+        ->and(sharp()->config()->get('breadcrumb.labels.cache_duration'))->toBe(30);
+
+    sharp()->config()->enableBreadcrumbLabelsLazyLoading();
+    sharp()->config()->configureBreadcrumbLabelsCache(false);
+
+    expect(sharp()->config()->get('breadcrumb.labels.lazy_loading'))->toBeTrue()
+        ->and(sharp()->config()->get('breadcrumb.labels.cache'))->toBeFalse();
+
+    sharp()->config()->configureBreadcrumbLabelsCache(duration: 40);
+
+    expect(sharp()->config()->get('breadcrumb.labels.cache_duration'))->toBe(40);
+});
