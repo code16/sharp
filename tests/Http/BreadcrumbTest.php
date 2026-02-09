@@ -156,17 +156,21 @@ it('set correct segment for loaded parent shows', function () {
 
     $show = new class() extends PersonShow
     {
-        public static array $breadcrumbPaths = [];
+        public static array $breadcrumbPathsInConfig = [];
+        public static array $breadcrumbPathsInFind = [];
 
         public function buildShowConfig(): void
         {
             $this->configureBreadcrumbCustomLabelAttribute('name');
+
+            self::$breadcrumbPathsInConfig[sharp()->context()->instanceId()] = sharp()->context()->breadcrumb()->getCurrentPath();
         }
 
         public function find($id): array
         {
             $id = (int) $id;
-            self::$breadcrumbPaths[$id] = sharp()->context()->breadcrumb()->getCurrentPath();
+
+            self::$breadcrumbPathsInFind[$id] = sharp()->context()->breadcrumb()->getCurrentPath();
 
             return $this->transform([
                 'id' => $id,
@@ -201,7 +205,7 @@ it('set correct segment for loaded parent shows', function () {
             ]))
         );
 
-    expect($show::$breadcrumbPaths)->toEqual([
+    expect($show::$breadcrumbPathsInFind)->toEqual($show::$breadcrumbPathsInConfig)->toEqual([
         1 => 's-list/person/s-show/person/1',
         2 => 's-list/person/s-show/person/1/s-show/person/2',
     ]);

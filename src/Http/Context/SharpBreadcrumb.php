@@ -323,22 +323,22 @@ class SharpBreadcrumb
             ->entityFor($showItem->key)
             ->getShowOrFail();
 
-        $show->buildShowConfig();
-
-        if (! $show->getBreadcrumbAttribute()) {
-            return null;
-        }
-
-        $data = [];
+        $data = null;
 
         $this->forceRequestSegments(
             $this->getFakeRequestSegmentsFor($showItem),
             function () use ($show, $showItem, &$data) {
-                $data = $show->instance($showItem->instanceId());
+                $show->buildShowConfig();
+
+                if ($show->getBreadcrumbAttribute()) {
+                    $data = $show->instance($showItem->instanceId());
+                }
             }
         );
 
-        return $show->getBreadcrumbCustomLabel($data);
+        return $data
+            ? $show->getBreadcrumbCustomLabel($data)
+            : null;
     }
 
     private function canLoadShowLabel(BreadcrumbItem $showItem): bool
