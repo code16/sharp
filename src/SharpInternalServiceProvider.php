@@ -39,14 +39,17 @@ use Code16\Sharp\Utils\Menu\SharpMenuManager;
 use Code16\Sharp\Utils\SharpUtil;
 use Code16\Sharp\Utils\Uploads\SharpUploadManager;
 use Code16\Sharp\View\Components\Content;
-use Code16\Sharp\View\Components\File;
+use Code16\Sharp\View\Components\File as FileComponent;
 use Code16\Sharp\View\Components\Image;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Console\Events\CommandStarting;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
 use Inertia\ServiceProvider as InertiaServiceProvider;
 use Laravel\Octane\Events\RequestReceived;
@@ -77,10 +80,12 @@ class SharpInternalServiceProvider extends ServiceProvider
             'sharp-views'
         );
 
+        $this->clearAssetsPublicDirectoryOnPublish();
+
         Blade::componentNamespace('Code16\\Sharp\\View\\Components', 'sharp');
         Blade::componentNamespace('Code16\\Sharp\\View\\Components\\Content', 'sharp-content');
         Blade::component(Content::class, 'sharp-content');
-        Blade::component(File::class, 'sharp-file');
+        Blade::component(FileComponent::class, 'sharp-file');
         Blade::component(Image::class, 'sharp-image');
 
         $this->registerViewExceptionMapper();
@@ -197,6 +202,20 @@ class SharpInternalServiceProvider extends ServiceProvider
             }
 
             return $exception;
+        });
+    }
+
+    protected function clearAssetsPublicDirectoryOnPublish(): void
+    {
+        Event::listen(CommandStarting::class, function (CommandStarting $event) {
+            if ($event->command === 'vendor:publish'
+                && $event->input->getOption('tag')
+                && in_array('sharp-assets', $event->input->getOption('tag'))
+            ) {
+                if (File::exists(public_path('vendor/sharp'))) {
+                    File::deleteDirectory(public_path('vendor/sharp'));
+                }
+            }
         });
     }
 
