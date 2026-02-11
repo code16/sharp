@@ -36,6 +36,7 @@ export function initRouter() {
                 page.rememberedState = e.state.page.rememberedState;
                 return false;
             },
+            async: true,
             replace: true,
             method: 'get',
             // onPrefetching() {
@@ -54,8 +55,6 @@ export function initRouter() {
                 document.body.style.minHeight = '';
             },
         };
-
-        router.prefetch(url, params, { cacheFor: 0 });
 
         document.addEventListener('inertia:navigate', () => {
             state.hasPoppedState = false;
