@@ -47,10 +47,12 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
             $instance = (object) [
                 $attribute => static::getUploadModelClass()::make([
                     'file_name' => $value['file_name'] ?? $value['path'],
-                    'filters' => $value['filters'] ?? null,
                     'mime_type' => $value['mime_type'] ?? null,
                     'disk' => $value['disk'],
                     'size' => $value['size'] ?? null,
+                    'filters' => $value['filters'] ?? null,
+                    'width' => $value['width'] ?? null,
+                    'height' => $value['height'] ?? null,
                 ]),
             ];
 
@@ -78,8 +80,10 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
                         'thumbnail',
                         'playable_preview_url',
                         'size',
-                        'filters',
                         'mime_type',
+                        'filters',
+                        'width',
+                        'height',
                     ];
 
                     return array_merge(

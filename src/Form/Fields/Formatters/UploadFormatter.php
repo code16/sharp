@@ -112,6 +112,8 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
             'mime_type' => $formatted['mime_type'] ?? $value['mime_type'] ?? null,
             'disk' => $formatted['disk'] ?? $value['disk'] ?? null,
             'filters' => $formatted['filters'] ?? $value['filters'] ?? null,
+            'width' => $value['width'] ?? null,
+            'height' => $value['height'] ?? null,
         ])->whereNotNull()->toArray();
     }
 

@@ -31,6 +31,8 @@ class Image extends Component
                 'file_name' => $this->file['file_name'],
                 'disk' => $this->file['disk'] ?? null,
                 'filters' => $this->file['filters'] ?? null,
+                'width' => $this->file['width'] ?? null,
+                'height' => $this->file['height'] ?? null,
             ]);
             $this->disk = Storage::disk($this->fileModel->disk);
             $this->exists = $this->disk->exists($this->fileModel->file_name);

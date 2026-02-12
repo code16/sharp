@@ -268,6 +268,8 @@ describe('dynamicInstance', function () {
             'disk' => 'local',
             'filters' => [],
             'mime_type' => 'image/png',
+            'width' => 100,
+            'height' => 100,
         ];
 
         $transformer = (new SharpUploadModelFormAttributeTransformer())->dynamicInstance();
@@ -283,6 +285,8 @@ describe('dynamicInstance', function () {
                 'playable_preview_url' => null,
                 'filters' => [],
                 'mime_type' => 'image/png',
+                'width' => 100,
+                'height' => 100,
             ],
             $transformer->apply($uploadData, null, 'picture'),
         );
