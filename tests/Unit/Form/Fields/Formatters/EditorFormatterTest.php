@@ -134,6 +134,8 @@ it('allows to format a text with uploads to front', function () {
             'size' => 120,
             'mime_type' => 'image/jpeg',
             'disk' => 'local',
+            'width' => 600,
+            'height' => 600,
         ])),
         e(json_encode([
             'file_name' => 'data/Posts/1/doc.pdf',
@@ -160,6 +162,8 @@ it('allows to format a text with uploads to front', function () {
                     'mime_type' => 'image/jpeg',
                     'filters' => null,
                     'id' => null,
+                    'width' => 600,
+                    'height' => 600,
                 ],
                 'legend' => 'Legendary',
                 '_locale' => null,
@@ -175,6 +179,8 @@ it('allows to format a text with uploads to front', function () {
                     'mime_type' => 'application/pdf',
                     'filters' => null,
                     'id' => null,
+                    'width' => null,
+                    'height' => null,
                 ],
                 'legend' => null,
                 '_locale' => null,
@@ -271,6 +277,8 @@ it('allows to format embeds with uploads to front', function () {
             'size' => 120,
             'mime_type' => 'image/jpeg',
             'disk' => 'local',
+            'width' => 600,
+            'height' => 600,
         ]))
     );
 
@@ -298,6 +306,8 @@ it('allows to format embeds with uploads to front', function () {
                         'mime_type' => 'image/jpeg',
                         'filters' => null,
                         'id' => null,
+                        'width' => 600,
+                        'height' => 600,
                     ],
                     '_html' => sprintf('<img src="%s"> My <em>contentful</em> content',
                         $thumbnail,
