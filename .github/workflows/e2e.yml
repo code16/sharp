@@ -62,11 +62,9 @@ jobs:
             tests-e2e/playwright-report/
             tests-e2e/site/storage/logs/
           retention-days: 30
-      - uses: 8398a7/action-slack@v3
+      - name: Notify Slack on failure
+        uses: code16/.github/.github/actions/slack-notify-failure@main
         if: failure() && github.event_name == 'push'
         with:
-          status: ${{ job.status }}
-          fields: job, message, author, repo
-        env:
-          MATRIX_CONTEXT: ${{ toJson(matrix) }}
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
+          slack-channel-id: ${{ secrets.SLACK_CHANNEL_ID }}

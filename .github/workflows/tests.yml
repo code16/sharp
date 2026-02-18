@@ -66,10 +66,9 @@ jobs:
         run: composer audit
       - name: Execute tests via Pest
         run: ./vendor/bin/pest --parallel
-      - uses: 8398a7/action-slack@v2.4.0
+      - name: Notify Slack on failure
+        uses: code16/.github/.github/actions/slack-notify-failure@main
         if: failure() && github.event_name == 'push'
         with:
-          status: failure
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
+          slack-channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
