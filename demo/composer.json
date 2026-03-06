@@ -2,7 +2,7 @@
     "name": "code16/sharp-demo",
     "type": "project",
     "require": {
-        "php": "^8.4",
+        "php": "8.5.*",
         "bacon/bacon-qr-code": "~2.0",
         "blade-ui-kit/blade-icons": "^1.6",
         "code16/laravel-content-renderer": "^1.2",
@@ -24,7 +24,7 @@
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
         "itsgoingd/clockwork": "^5.1",
-        "laravel/boost": "^1.8",
+        "laravel/boost": "^2.0",
         "laravel/sail": "^1.0.1",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^8.6",
