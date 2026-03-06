@@ -80,7 +80,7 @@
         </template>
 
         <div class="@container">
-            <div :class="entityList.pageAlert ? 'pt-4' : 'pt-6 @3xl:pt-10'">
+            <div class="print:pt-0" :class="entityList.pageAlert ? 'pt-4' : 'pt-6 @3xl:pt-10'">
                 <EntityListComponent
                     :entity-key="entityKey"
                     :entity-list="entityList"

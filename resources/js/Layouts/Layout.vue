@@ -248,11 +248,14 @@
             </template>
             <SidebarInset class="min-w-0">
                 <header class="flex h-14 items-center gap-4 border-b backdrop-blur-sm bg-background/90 px-4 sticky top-0 z-40 lg:px-6
-                    transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12
+                    transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 print:relative print:px-0 print:h-auto print:pb-4
                 ">
                     <template v-if="auth()?.user">
-                        <SidebarTrigger class="-ml-1 shrink-0" />
+                        <SidebarTrigger class="-ml-1 shrink-0 print:hidden" />
                     </template>
+                    <div class="text-sm hidden print:block font-semibold">
+                        {{ config('sharp.name') }}
+                    </div>
                     <Separator
                         orientation="vertical"
                         class="mr-2 data-[orientation=vertical]:h-4"

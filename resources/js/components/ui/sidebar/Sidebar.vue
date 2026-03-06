@@ -49,7 +49,7 @@ const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
   </Sheet>
 
   <div
-    v-else class="group peer hidden md:block"
+    v-else class="group peer hidden md:block print:hidden"
     :data-state="state"
     :data-collapsible="state === 'collapsed' ? collapsible : ''"
     :data-variant="variant"
