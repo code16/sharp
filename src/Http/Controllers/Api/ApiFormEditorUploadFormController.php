@@ -3,9 +3,8 @@
 namespace Code16\Sharp\Http\Controllers\Api;
 
 use Code16\Sharp\Http\Controllers\Api\Requests\EditorUploadFormRequest;
-use Illuminate\Routing\Controller;
 
-class ApiFormEditorUploadFormController extends Controller
+class ApiFormEditorUploadFormController extends ApiController
 {
     public function update(string $globalFilter, EditorUploadFormRequest $request, string $entityKey, ?string $instanceId = null)
     {

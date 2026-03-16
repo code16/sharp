@@ -7,7 +7,10 @@ use Illuminate\Support\Facades\File;
 
 beforeEach(function () {
     login();
+    File::deleteDirectory(base_path('app/Sharp'));
+});
 
+afterEach(function () {
     File::deleteDirectory(base_path('app/Sharp'));
 });
 
