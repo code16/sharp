@@ -29,8 +29,8 @@
     import debounce from "lodash/debounce";
     import { api } from "@/api/api";
     import { route } from "@/utils/url";
-    import { useParentCommands } from "@/commands/useCommands";
     import merge from 'lodash/merge';
+    import { useFieldContainerData } from "@/form/useFieldContainerData";
 
     const props = defineProps<{
         form: Form
@@ -82,14 +82,11 @@
         props.form.setMeta(fieldKey, { uploading });
     }
 
-    const parentCommands = useParentCommands();
+    const fieldContainerData = useFieldContainerData(props.form);
     const refresh = debounce((data) => {
         api.post(route('code16.sharp.api.form.refresh.update', {
             entityKey: props.form.entityKey,
-            instance_id: props.form.instanceId,
-            embed_key: props.form.embedKey,
-            entity_list_command_key: parentCommands?.commandContainer === 'entityList' ? props.form.commandKey : null,
-            show_command_key: parentCommands?.commandContainer === 'show' ? props.form.commandKey : null,
+            ...fieldContainerData,
         }), data)
             .then(response => {
                 merge(props.form.data, response.data.form.data);

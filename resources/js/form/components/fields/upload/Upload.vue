@@ -100,7 +100,7 @@
                 uploadFieldKey: props.parentListField
                     ? `${props.parentListField.key}.${props.editorField?.key ?? props.field.key}`
                     : props.editorField?.key ?? props.field.key,
-                ...useFieldContainerData(),
+                ...useFieldContainerData(form),
             }),
             fieldName: 'file',
             headers: {

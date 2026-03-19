@@ -1,10 +1,9 @@
 import { RequestFieldContainerData } from "@/types";
-import { useParentForm } from "@/form/useParentForm";
 import { useParentCommands } from "@/commands/useCommands";
+import { Form } from "@/form/Form";
 
 
-export function useFieldContainerData(): RequestFieldContainerData {
-    const form = useParentForm();
+export function useFieldContainerData(form: Form): RequestFieldContainerData {
     const parentCommands = useParentCommands();
 
     return {

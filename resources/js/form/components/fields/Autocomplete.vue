@@ -21,9 +21,7 @@
     import { route } from "@/utils/url";
     import { api } from "@/api/api";
     import { useParentForm } from "@/form/useParentForm";
-    import { isCancel } from "axios";
     import { ComboboxItemIndicator } from "reka-ui";
-    import { useParentCommands } from "@/commands/useCommands";
     import { useIsInDialog } from "@/components/ui/dialog/Dialog.vue";
     import { useFullTextSearch } from "@/composables/useFullTextSearch";
     import { useRemoteAutocomplete } from "@/composables/useRemoteAutocomplete";
@@ -37,7 +35,6 @@
     const searchTerm = ref('');
     const results = ref<FormAutocompleteItemData[]>([]);
 
-    const parentCommands = useParentCommands();
     const isInDialog = useIsInDialog();
     const { fullTextSearch } = useFullTextSearch(
         () => props.field.mode === 'local' ? props.field.localValues : null,
@@ -46,7 +43,7 @@
             searchKeys: props.field.mode === 'local' ? props.field.searchKeys : [],
         }
     );
-    const fieldContainerData = useFieldContainerData();
+    const fieldContainerData = useFieldContainerData(form);
     const { loading, search: remoteSearch } = useRemoteAutocomplete(({ query, signal, onSuccess, onError }) => {
         const field = props.field as FormAutocompleteRemoteFieldData;
         return api.post(
