@@ -4,9 +4,8 @@ namespace Code16\Sharp\Http\Controllers\Api;
 
 use Code16\Sharp\Utils\FileUtil;
 use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Routing\Controller;
 
-class ApiFormUploadController extends Controller
+class ApiFormUploadController extends ApiController
 {
     use ValidatesRequests;
 
