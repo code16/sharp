@@ -1,8 +1,7 @@
 <script setup lang="ts">
-    import { FormUploadFieldData } from "@/types";
-    import Uppy, { MinimalRequiredUppyFile } from '@uppy/core';
+    import { FormEditorFieldData, FormUploadFieldData } from "@/types";
+    import Uppy from '@uppy/core';
     import type { UppyFile } from "@uppy/core";
-    import ThumbnailGenerator from '@uppy/thumbnail-generator';
     import XHRUpload from '@uppy/xhr-upload';
     import DropTarget from '@uppy/drop-target';
     import Cropper from 'cropperjs';
@@ -42,8 +41,10 @@
     } from "@/components/ui/dialog";
     import { rotate, rotateTo } from "@/form/components/fields/upload/util/rotate";
     import { createThumbnail } from "@/form/components/fields/upload/util/thumbnail";
+    import { useFieldContainerData } from "@/form/useFieldContainerData";
 
     const props = defineProps<FormFieldProps<FormUploadFieldData> & {
+        editorField?: FormEditorFieldData,
         asEditorEmbed?: boolean,
         legend?: string,
         dropdownEditLabel?: string,
@@ -92,12 +93,15 @@
             pluralize: () => 1,
         },
         autoProceed: true,
-        meta: {
-            'validation_rule[]': props.field.validationRule,
-        },
     })
         .use(XHRUpload, {
-            endpoint: route('code16.sharp.api.form.upload'),
+            endpoint: route('code16.sharp.api.form.upload', {
+                entityKey: form.entityKey,
+                uploadFieldKey: props.parentListField
+                    ? `${props.parentListField.key}.${props.editorField?.key ?? props.field.key}`
+                    : props.editorField?.key ?? props.field.key,
+                ...useFieldContainerData(),
+            }),
             fieldName: 'file',
             headers: {
                 'Accept': 'application/json',

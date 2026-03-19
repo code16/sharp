@@ -4,7 +4,7 @@
     import {
         FormAutocompleteItemData,
         FormAutocompleteLocalFieldData,
-        FormAutocompleteRemoteFieldData,
+        FormAutocompleteRemoteFieldData
     } from "@/types";
     import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
     import { computed, ref } from "vue";
@@ -27,6 +27,7 @@
     import { useIsInDialog } from "@/components/ui/dialog/Dialog.vue";
     import { useFullTextSearch } from "@/composables/useFullTextSearch";
     import { useRemoteAutocomplete } from "@/composables/useRemoteAutocomplete";
+    import { useFieldContainerData } from "@/form/useFieldContainerData";
 
     const props = defineProps<FormFieldProps<FormAutocompleteLocalFieldData | FormAutocompleteRemoteFieldData>>();
     const emit = defineEmits<FormFieldEmits<FormAutocompleteLocalFieldData | FormAutocompleteRemoteFieldData>>();
@@ -45,19 +46,16 @@
             searchKeys: props.field.mode === 'local' ? props.field.searchKeys : [],
         }
     );
+    const fieldContainerData = useFieldContainerData();
     const { loading, search: remoteSearch } = useRemoteAutocomplete(({ query, signal, onSuccess, onError }) => {
         const field = props.field as FormAutocompleteRemoteFieldData;
         return api.post(
             route('code16.sharp.api.form.autocomplete.index', {
                 entityKey: form.entityKey,
-                autocompleteFieldKey: props.parentField ? `${props.parentField.key}.${field.key}` : field.key,
-                embed_key: form.embedKey,
-                entity_list_command_key: parentCommands?.commandContainer === 'entityList' ? form.commandKey : null,
-                show_command_key: parentCommands?.commandContainer === 'show' ? form.commandKey : null,
-                dashboard_command_key: parentCommands?.commandContainer === 'dashboard' ? form.commandKey : null,
-                instance_id: form.instanceId,
+                autocompleteFieldKey: props.parentListField ? `${props.parentListField.key}.${field.key}` : field.key,
                 endpoint: field.remoteEndpoint,
                 search: query,
+                ...fieldContainerData,
             }), {
                 formData: field.callbackLinkedFields
                     ? Object.fromEntries(

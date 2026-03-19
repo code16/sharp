@@ -110,7 +110,7 @@ Route::group([
     Route::post('/{globalFilter}/upload/thumbnail/{entityKey}/{instanceId?}', [ApiFormUploadThumbnailController::class, 'show'])
         ->name('code16.sharp.api.form.upload.thumbnail.show');
 
-    Route::post('/upload', [ApiFormUploadController::class, 'store'])
+    Route::post('/{globalFilter}/upload/{entityKey}/{uploadFieldKey}', [ApiFormUploadController::class, 'store'])
         ->name('code16.sharp.api.form.upload');
 
     Route::post('/{globalFilter}/form/autocomplete/{entityKey}/{autocompleteFieldKey}', [ApiFormAutocompleteController::class, 'index'])

@@ -226,7 +226,7 @@
                                                             :field="form.getField(itemFieldLayout.key, field.itemFields, item, props.field.readOnly)"
                                                             :field-layout="itemFieldLayout"
                                                             :field-error-key="`${field.key}.${item[errorIndex] ?? item[itemKey]}.${itemFieldLayout.key}`"
-                                                            :parent-field="field"
+                                                            :parent-list-field="field"
                                                             :value="item[itemFieldLayout.key]"
                                                             :locale="(form.getMeta(`${field.key}.${item[itemKey]}.${itemFieldLayout.key}`) as FieldMeta)?.locale ?? form.defaultLocale"
                                                             :parent-data="item"
