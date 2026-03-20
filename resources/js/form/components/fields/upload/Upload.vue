@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { FormEditorFieldData, FormUploadFieldData } from "@/types";
+    import { FormUploadFieldData } from "@/types";
     import Uppy from '@uppy/core';
     import type { UppyFile } from "@uppy/core";
     import XHRUpload from '@uppy/xhr-upload';

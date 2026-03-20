@@ -76,7 +76,6 @@
                 readOnly: parentEditor.props.field.readOnly,
             }"
             :field-error-key="`${parentEditor.props.fieldErrorKey}-upload-${props.node.attrs['data-key']}`"
-            :editor-field="parentEditor.props.field"
             :value="upload?.file"
             as-editor-embed
             persist-thumbnail-url
