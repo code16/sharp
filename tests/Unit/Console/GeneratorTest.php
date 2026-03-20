@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\File;
 
 beforeEach(function () {
     login();
+    File::deleteDirectory(base_path('app/Sharp'));
 });
 
 it('can generate a new full sharp entity from console and we can create, display, update and delete an item', function () {
