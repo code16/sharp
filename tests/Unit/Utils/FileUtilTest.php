@@ -47,3 +47,12 @@ it('normalizes file name', function () {
         $fileUtil->findAvailableName('ôéàtest*.txt', 'tmp', 'local'),
     );
 });
+
+it('doesn’t care about relative path', function () {
+    $fileUtil = new FileUtil();
+
+    $this->assertEquals(
+        'test.txt',
+        $fileUtil->findAvailableName('../../../test.txt', 'tmp', 'local'),
+    );
+});
