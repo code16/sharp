@@ -16,28 +16,28 @@ jobs:
         include:
           - php: 8.3
             env:
-              LARAVEL: 11.*
-              TESTBENCH: 9.*
+              LARAVEL: 12.*
+              TESTBENCH: 10.*
           - php: 8.4
             env:
-              LARAVEL: 11.*
-              TESTBENCH: 9.*
+              LARAVEL: 12.*
+              TESTBENCH: 10.*
           - php: 8.5
             env:
-              LARAVEL: 11.*
-              TESTBENCH: 9.*
+              LARAVEL: 12.*
+              TESTBENCH: 10.*
           - php: 8.3
             env:
-              LARAVEL: 12.*
-              TESTBENCH: 10.*
+              LARAVEL: 13.*
+              TESTBENCH: 11.*
           - php: 8.4
             env:
-              LARAVEL: 12.*
-              TESTBENCH: 10.*
+              LARAVEL: 13.*
+              TESTBENCH: 11.*
           - php: 8.5
             env:
-              LARAVEL: 12.*
-              TESTBENCH: 10.*
+              LARAVEL: 13.*
+              TESTBENCH: 11.*
 
     env: ${{ matrix.env }}
     steps:
