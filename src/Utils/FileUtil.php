@@ -23,12 +23,12 @@ class FileUtil
 
     public function explodeExtension(string $fileName): array
     {
-        if (($pos = strrpos($fileName, '.')) !== false) {
-            $ext = substr($fileName, $pos);
-            $fileName = substr($fileName, 0, $pos);
-        }
+        $pathinfo = pathinfo($fileName);
 
-        return [$fileName, $ext ?? ''];
+        return [
+            $pathinfo['filename'] ?? '',
+            isset($pathinfo['extension']) ? '.'.$pathinfo['extension'] : '',
+        ];
     }
 
     private function normalizeName(string $fileName): array|string|null
