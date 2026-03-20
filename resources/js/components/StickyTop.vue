@@ -43,7 +43,8 @@
 </script>
 
 <template>
-    <div :style="{
+    <div class="print:!relative print:!top-0"
+        :style="{
             '--stacked-top': `${stackedTop}px`
         }"
         :data-stuck="stuck ? true : null"

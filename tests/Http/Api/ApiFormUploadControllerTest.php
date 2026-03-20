@@ -4,6 +4,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 beforeEach(function () {
+    login();
     Storage::fake('local');
 });
 
@@ -101,4 +102,14 @@ it('does not permit to send insecure validation rules', function () {
         ])
         ->assertStatus(422)
         ->assertJsonValidationErrorFor('validation_rule.1');
+});
+
+it('does not allow to use a path traversal exploit', function () {
+    $this
+        ->postJson(route('code16.sharp.api.form.upload'), [
+            'file' => UploadedFile::fake()->create('../../../etc/passwd.txt'),
+        ])
+        ->assertOk();
+
+    $this->assertTrue(Storage::disk('local')->exists('tmp/passwd.txt'));
 });

@@ -2,15 +2,11 @@
 
 namespace Code16\Sharp\Http\Controllers\Api;
 
-use Code16\Sharp\Auth\SharpAuthorizationManager;
 use Code16\Sharp\Form\Eloquent\Uploads\Traits\UsesSharpUploadModel;
-use Illuminate\Routing\Controller;
 
-class ApiFormUploadThumbnailController extends Controller
+class ApiFormUploadThumbnailController extends ApiController
 {
     use UsesSharpUploadModel;
-
-    public function __construct(private readonly SharpAuthorizationManager $authorizationManager) {}
 
     // Used to generate large thumbnail for upload crop modal
     public function show(string $globalFilter, string $entityKey, ?string $instanceId = null)

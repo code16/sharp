@@ -135,7 +135,7 @@
 
         <WithCommands :commands="commands">
             <div class="@container">
-                <div :class="show.pageAlert && !show.pageAlert.sectionKey ? 'pt-4' : 'pt-6 @3xl:pt-10'">
+                <div class="print:pt-0" :class="show.pageAlert && !show.pageAlert.sectionKey ? 'pt-4' : 'pt-6 @3xl:pt-10'">
                     <template v-if="show.pageAlert && !show.pageAlert.sectionKey">
                         <div class="container">
                             <PageAlert
@@ -145,7 +145,7 @@
                         </div>
                     </template>
 
-                    <div class="grid gap-6 @3xl:gap-10">
+                    <div class="grid gap-6 @3xl:gap-10 print:gap-0">
                         <template v-for="(section, i) in sectionsWithAlwaysFirst">
                             <Section
                                 class="min-w-0"
@@ -227,7 +227,7 @@
                                                         </template>
                                                     </div>
                                                     <template v-if="i == 0">
-                                                        <div class="ml-auto flex flex-wrap -my-1 justify-end gap-2"
+                                                        <div class="ml-auto flex flex-wrap -my-1 justify-end gap-2 print:hidden"
                                                             :class="{ 'invisible': collapsed }"
                                                             role="group"
                                                             :aria-label="__('sharp::show.section_menu.aria_label', { title: show.getTitle(locale) })"

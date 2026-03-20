@@ -2,10 +2,7 @@
 
 namespace Code16\Sharp\Http\Controllers\Api\Commands;
 
-use Code16\Sharp\Dashboard\Commands\DashboardWizardCommand;
-use Code16\Sharp\Dashboard\SharpDashboard;
 use Code16\Sharp\Data\Commands\CommandFormData;
-use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
 use Code16\Sharp\Http\Controllers\Api\ApiController;
 use Code16\Sharp\Utils\Uploads\SharpUploadManager;
 
@@ -13,6 +10,7 @@ class ApiDashboardCommandController extends ApiController
 {
     use HandlesCommandForm;
     use HandlesCommandResult;
+    use HandlesDashboardCommand;
 
     public function __construct(
         private readonly SharpUploadManager $uploadManager,
@@ -48,21 +46,5 @@ class ApiDashboardCommandController extends ApiController
         $this->uploadManager->dispatchJobs();
 
         return $result;
-    }
-
-    protected function getDashboardCommandHandler(SharpDashboard $dashboard, string $commandKey)
-    {
-        $commandHandler = $dashboard->findDashboardCommandHandler($commandKey);
-        $commandHandler->buildCommandConfig();
-
-        $authorized = $commandHandler instanceof DashboardWizardCommand && ($step = $commandHandler->extractStepFromRequest())
-            ? $commandHandler->authorizeForStep($step)
-            : $commandHandler->authorize();
-
-        if (! $authorized) {
-            throw new SharpAuthorizationException();
-        }
-
-        return $commandHandler;
     }
 }
