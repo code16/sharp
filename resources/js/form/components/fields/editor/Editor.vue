@@ -86,7 +86,8 @@
         uploadModal,
         embedManager,
         embedModal,
-    } satisfies ParentEditor);
+        form,
+    });
 
     watch(() => [embedManager.contentEmbeds, uploadManager.contentUploads], () => {
         emit('input', {

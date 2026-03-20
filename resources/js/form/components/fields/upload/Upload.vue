@@ -42,9 +42,10 @@
     import { rotate, rotateTo } from "@/form/components/fields/upload/util/rotate";
     import { createThumbnail } from "@/form/components/fields/upload/util/thumbnail";
     import { useFieldContainerData } from "@/form/useFieldContainerData";
+    import { useParentEditor } from "@/form/components/fields/editor/useParentEditor";
+    import { useParentListField } from "@/form/components/fields/list/useParentListField";
 
     const props = defineProps<FormFieldProps<FormUploadFieldData> & {
-        editorField?: FormEditorFieldData,
         asEditorEmbed?: boolean,
         legend?: string,
         dropdownEditLabel?: string,
@@ -68,6 +69,8 @@
         (e: 'edit', event: CustomEvent): void
     }>();
     const form = useParentForm();
+    const parentEditor = useParentEditor();
+    const parentListField = useParentListField();
     const transformedImg = ref<string>();
     const persistedEditableImg = ref<string>();
     const playablePreviewUrl = ref<string>();
@@ -75,6 +78,22 @@
     const isEditable = computed(() => {
         return props.value && canTransform(props.value.name, props.value.mime_type) && !props.hasError
             || !!props.dropdownEditLabel;
+    });
+    const fieldContainerData = useFieldContainerData(form);
+    const uploadEndpoint = computed(() => {
+        // we check form equality because the field may be in an editor embed
+        // so parentEditor can be the embed parent editor and not an embed form field
+        let uploadFieldKey = parentEditor && parentEditor.form === form
+            ? parentEditor.props.field.key
+            : props.field.key;
+        if(parentListField && parentListField.form === form) {
+            uploadFieldKey = `${parentListField.props.field.key}.${uploadFieldKey}`;
+        }
+        return route('code16.sharp.api.form.upload', {
+            entityKey: form.entityKey,
+            uploadFieldKey,
+            ...fieldContainerData,
+        });
     });
     const uppy = new Uppy({
         id: props.fieldErrorKey,
@@ -95,13 +114,7 @@
         autoProceed: true,
     })
         .use(XHRUpload, {
-            endpoint: route('code16.sharp.api.form.upload', {
-                entityKey: form.entityKey,
-                uploadFieldKey: props.parentListField
-                    ? `${props.parentListField.key}.${props.editorField?.key ?? props.field.key}`
-                    : props.editorField?.key ?? props.field.key,
-                ...useFieldContainerData(form),
-            }),
+            endpoint: uploadEndpoint.value,
             fieldName: 'file',
             headers: {
                 'Accept': 'application/json',

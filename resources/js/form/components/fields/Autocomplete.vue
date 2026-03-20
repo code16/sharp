@@ -26,6 +26,7 @@
     import { useFullTextSearch } from "@/composables/useFullTextSearch";
     import { useRemoteAutocomplete } from "@/composables/useRemoteAutocomplete";
     import { useFieldContainerData } from "@/form/useFieldContainerData";
+    import { useParentListField } from "@/form/components/fields/list/useParentListField";
 
     const props = defineProps<FormFieldProps<FormAutocompleteLocalFieldData | FormAutocompleteRemoteFieldData>>();
     const emit = defineEmits<FormFieldEmits<FormAutocompleteLocalFieldData | FormAutocompleteRemoteFieldData>>();
@@ -43,13 +44,16 @@
             searchKeys: props.field.mode === 'local' ? props.field.searchKeys : [],
         }
     );
+    const parentListField = useParentListField();
     const fieldContainerData = useFieldContainerData(form);
     const { loading, search: remoteSearch } = useRemoteAutocomplete(({ query, signal, onSuccess, onError }) => {
         const field = props.field as FormAutocompleteRemoteFieldData;
         return api.post(
             route('code16.sharp.api.form.autocomplete.index', {
                 entityKey: form.entityKey,
-                autocompleteFieldKey: props.parentListField ? `${props.parentListField.key}.${field.key}` : field.key,
+                autocompleteFieldKey: parentListField && parentListField.form === form
+                    ? `${parentListField.props.field.key}.${field.key}`
+                    : field.key,
                 endpoint: field.remoteEndpoint,
                 search: query,
                 ...fieldContainerData,

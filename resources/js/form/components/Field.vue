@@ -8,7 +8,7 @@
     import Editor from "./fields/editor/Editor.vue";
     import Geolocation from "./fields/geolocation/Geolocation.vue";
     import Html from "./fields/Html.vue";
-    import List from "./fields/List.vue";
+    import List from "./fields/list/List.vue";
     import Number from "./fields/Number.vue";
     import Select from "./fields/select/Select.vue";
     import Tags from "./fields/Tags.vue";
