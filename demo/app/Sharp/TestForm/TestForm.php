@@ -3,6 +3,7 @@
 namespace App\Sharp\TestForm;
 
 use App\Models\User;
+use App\Sharp\TestForm\Embeds\TestEmbed;
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteListField;
@@ -140,7 +141,7 @@ class TestForm extends SharpSingleForm
                     ->setSortable()
 //                    ->setReadOnly()
                     ->setRemovable()
-                    ->setItemIdAttribute('id')
+                    ->setItemIdAttribute('select')
                     ->addItemField(
                         SharpFormDateField::make('date')
                             ->setLabel('Date')
@@ -174,12 +175,24 @@ class TestForm extends SharpSingleForm
                                 return $users->limit(10)->get();
                             }, linkedFields: ['select']),
                     )
-                    ->addItemField(SharpFormEditorField::make('markdown2')
-                        ->setLocalized()
-                        ->setLabel('Markdown')
-                        ->setToolbar([
-                            SharpFormEditorField::B, SharpFormEditorField::I, SharpFormEditorField::A,
-                        ]),
+                    ->addItemField(
+                        SharpFormEditorField::make('markdown2')
+                            ->setLocalized()
+                            ->setLabel('Markdown')
+                            ->setToolbar([
+                                SharpFormEditorField::B,
+                                SharpFormEditorField::I,
+                                SharpFormEditorField::A,
+                                SharpFormEditorField::UPLOAD,
+                            ])
+                            ->allowUploads(
+                                SharpFormEditorUpload::make()
+                                    ->setImageOnly()
+                                    ->setImageCropRatio('1:1')
+                                    ->setStorageDisk('local')
+                                    ->setStorageBasePath('data')
+                            )
+                            ->allowEmbeds([TestEmbed::class]),
                     )
                     ->addItemField(
                         SharpFormHtmlField::make('document_infos')

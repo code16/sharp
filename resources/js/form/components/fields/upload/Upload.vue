@@ -83,10 +83,10 @@
     const uploadEndpoint = computed(() => {
         // we check form equality because the field may be in an editor embed
         // so parentEditor can be the embed parent editor and not an embed form field
-        let uploadFieldKey = parentEditor && parentEditor.form === form
+        let uploadFieldKey = parentEditor && (!form.embedKey || parentEditor.form === form)
             ? parentEditor.props.field.key
             : props.field.key;
-        if(parentListField && parentListField.form === form) {
+        if(parentListField && (!form.embedKey || parentListField.form === form)) {
             uploadFieldKey = `${parentListField.props.field.key}.${uploadFieldKey}`;
         }
         return route('code16.sharp.api.form.upload', {
