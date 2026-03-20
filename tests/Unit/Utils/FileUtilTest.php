@@ -48,7 +48,7 @@ it('normalizes file name', function () {
     );
 });
 
-it('don’t care about relative path', function () {
+it('doesn’t care about relative path', function () {
     $fileUtil = new FileUtil();
 
     $this->assertEquals(
