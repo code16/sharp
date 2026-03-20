@@ -3,7 +3,7 @@
     import { useParentForm } from "@/form/useParentForm";
     import { FormFieldData, FormListFieldData, FormUploadFieldData, FormUploadFieldValueData } from "@/types";
     import { getDependantFieldsResetData } from "@/form/util";
-    import { computed, nextTick, ref, watch, watchEffect } from "vue";
+    import { computed, nextTick, provide, ref, watch, watchEffect } from "vue";
     import { Button, buttonVariants } from '@/components/ui/button';
     import { showAlert } from "@/utils/dialogs";
     import { FieldMeta, FieldsMeta, FormFieldEmitInputOptions, FormFieldEmits, FormFieldProps } from "@/form/types";
@@ -22,11 +22,18 @@
     import { useSortable } from "@vueuse/integrations/useSortable";
     import { useEventListener, watchArray } from "@vueuse/core";
     import { FormEvents } from "@/form/Form";
+    import { ParentListField } from "@/form/components/fields/list/useParentListField";
 
     const props = defineProps<FormFieldProps<FormListFieldData>>();
     const emit = defineEmits<FormFieldEmits<FormListFieldData>>();
 
     const form = useParentForm();
+
+    provide<ParentListField>('listField', {
+        props,
+        form,
+    });
+
     const canAddItem = computed(() => {
         const { field, value } = props;
         return field.addable &&
@@ -226,7 +233,6 @@
                                                             :field="form.getField(itemFieldLayout.key, field.itemFields, item, props.field.readOnly)"
                                                             :field-layout="itemFieldLayout"
                                                             :field-error-key="`${field.key}.${item[errorIndex] ?? item[itemKey]}.${itemFieldLayout.key}`"
-                                                            :parent-field="field"
                                                             :value="item[itemFieldLayout.key]"
                                                             :locale="(form.getMeta(`${field.key}.${item[itemKey]}.${itemFieldLayout.key}`) as FieldMeta)?.locale ?? form.defaultLocale"
                                                             :parent-data="item"

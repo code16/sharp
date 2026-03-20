@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Http\Controllers\Api;
 
+use Code16\Sharp\Data\RequestFieldContainerData;
 use Code16\Sharp\EntityList\Commands\Command;
 use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
 use Code16\Sharp\Form\SharpForm;
@@ -20,18 +21,20 @@ trait HandlesFieldContainer
 
     private function getFieldContainer(EntityKey $entityKey): SharpFormEditorEmbed|Command|SharpForm
     {
-        if (request()->input('embed_key')) {
-            return $this->getEmbedFromKey(request()->input('embed_key'));
+        $requestFieldContainerData = RequestFieldContainerData::from(request()->query());
+
+        if ($requestFieldContainerData->embed_key) {
+            return $this->getEmbedFromKey($requestFieldContainerData->embed_key);
         }
 
         $entity = $this->entityManager->entityFor($entityKey);
 
-        if ($commandKey = request()->input('entity_list_command_key')) {
-            if (request()->input('instance_id')) {
+        if ($commandKey = $requestFieldContainerData->entity_list_command_key) {
+            if ($requestFieldContainerData->instance_id) {
                 return $this->getInstanceCommandHandler(
                     $entity->getListOrFail(),
                     $commandKey,
-                    request()->input('instance_id')
+                    $requestFieldContainerData->instance_id
                 );
             }
 
@@ -41,15 +44,15 @@ trait HandlesFieldContainer
             );
         }
 
-        if ($commandKey = request()->input('show_command_key')) {
+        if ($commandKey = $requestFieldContainerData->show_command_key) {
             return $this->getInstanceCommandHandler(
                 $entity->getShowOrFail(),
                 $commandKey,
-                request()->input('instance_id')
+                $requestFieldContainerData->instance_id
             );
         }
 
-        if ($commandKey = request()->input('dashboard_command_key')) {
+        if ($commandKey = $requestFieldContainerData->dashboard_command_key) {
             return $this->getDashboardCommandHandler(
                 $entity->getViewOrFail(),
                 $commandKey

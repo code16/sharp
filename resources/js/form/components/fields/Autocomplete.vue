@@ -4,7 +4,7 @@
     import {
         FormAutocompleteItemData,
         FormAutocompleteLocalFieldData,
-        FormAutocompleteRemoteFieldData,
+        FormAutocompleteRemoteFieldData
     } from "@/types";
     import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
     import { computed, ref } from "vue";
@@ -21,12 +21,12 @@
     import { route } from "@/utils/url";
     import { api } from "@/api/api";
     import { useParentForm } from "@/form/useParentForm";
-    import { isCancel } from "axios";
     import { ComboboxItemIndicator } from "reka-ui";
-    import { useParentCommands } from "@/commands/useCommands";
     import { useIsInDialog } from "@/components/ui/dialog/Dialog.vue";
     import { useFullTextSearch } from "@/composables/useFullTextSearch";
     import { useRemoteAutocomplete } from "@/composables/useRemoteAutocomplete";
+    import { useFieldContainerData } from "@/form/useFieldContainerData";
+    import { useParentListField } from "@/form/components/fields/list/useParentListField";
 
     const props = defineProps<FormFieldProps<FormAutocompleteLocalFieldData | FormAutocompleteRemoteFieldData>>();
     const emit = defineEmits<FormFieldEmits<FormAutocompleteLocalFieldData | FormAutocompleteRemoteFieldData>>();
@@ -36,7 +36,6 @@
     const searchTerm = ref('');
     const results = ref<FormAutocompleteItemData[]>([]);
 
-    const parentCommands = useParentCommands();
     const isInDialog = useIsInDialog();
     const { fullTextSearch } = useFullTextSearch(
         () => props.field.mode === 'local' ? props.field.localValues : null,
@@ -45,19 +44,19 @@
             searchKeys: props.field.mode === 'local' ? props.field.searchKeys : [],
         }
     );
+    const parentListField = useParentListField();
+    const fieldContainerData = useFieldContainerData(form);
     const { loading, search: remoteSearch } = useRemoteAutocomplete(({ query, signal, onSuccess, onError }) => {
         const field = props.field as FormAutocompleteRemoteFieldData;
         return api.post(
             route('code16.sharp.api.form.autocomplete.index', {
                 entityKey: form.entityKey,
-                autocompleteFieldKey: props.parentField ? `${props.parentField.key}.${field.key}` : field.key,
-                embed_key: form.embedKey,
-                entity_list_command_key: parentCommands?.commandContainer === 'entityList' ? form.commandKey : null,
-                show_command_key: parentCommands?.commandContainer === 'show' ? form.commandKey : null,
-                dashboard_command_key: parentCommands?.commandContainer === 'dashboard' ? form.commandKey : null,
-                instance_id: form.instanceId,
+                autocompleteFieldKey: parentListField && parentListField.form === form
+                    ? `${parentListField.props.field.key}.${field.key}`
+                    : field.key,
                 endpoint: field.remoteEndpoint,
                 search: query,
+                ...fieldContainerData,
             }), {
                 formData: field.callbackLinkedFields
                     ? Object.fromEntries(

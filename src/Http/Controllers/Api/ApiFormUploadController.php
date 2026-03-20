@@ -2,27 +2,34 @@
 
 namespace Code16\Sharp\Http\Controllers\Api;
 
+use Code16\Sharp\Exceptions\SharpInvalidConfigException;
+use Code16\Sharp\Form\Fields\SharpFormEditorField;
+use Code16\Sharp\Utils\Entities\ValueObjects\EntityKey;
 use Code16\Sharp\Utils\FileUtil;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 
 class ApiFormUploadController extends ApiController
 {
+    use HandlesFieldContainer;
     use ValidatesRequests;
 
-    public function store(FileUtil $fileUtil)
+    public function store(string $globalFilter, EntityKey $entityKey, string $uploadFieldKey, FileUtil $fileUtil)
     {
-        $this->validate(request(), [
-            'validation_rule' => ['nullable', 'array'],
-            'validation_rule.*' => [
-                'string',
-                'regex:/^(file$|image:?|mimes:|mimetypes:|extensions:|dimensions:|size:|between:|min:|max:)/',
-            ],
-        ]);
+        $field = $this->getFieldContainer($entityKey)
+            ->findFieldByKey($uploadFieldKey);
+
+        if ($field instanceof SharpFormEditorField) {
+            $field = $field->uploadsConfig();
+        }
+
+        if (! $field) {
+            throw new SharpInvalidConfigException('Upload field '.$uploadFieldKey.' was not found in form.');
+        }
 
         $this->validate(request(), [
             'file' => [
                 'required',
-                ...request()->input('validation_rule') ?? ['file'],
+                ...$field->toArray()['validationRule'],
             ],
         ]);
 

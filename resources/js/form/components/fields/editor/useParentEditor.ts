@@ -8,7 +8,7 @@ import EditorUploadModal from "@/form/components/fields/editor/extensions/upload
 import EditorEmbedModal from "@/form/components/fields/editor/extensions/embed/EditorEmbedModal.vue";
 
 /**
- * @see import('./Editor.vue') -> provide('editor')
+ * @see import('./Editor.vue')
  */
 export type ParentEditor = {
     props: FormFieldProps<FormEditorFieldData>,
@@ -16,8 +16,9 @@ export type ParentEditor = {
     embedModal: Ref<InstanceType<typeof EditorEmbedModal>>
     uploadManager: ContentUploadManager<Form>,
     uploadModal: Ref<InstanceType<typeof EditorUploadModal>>,
+    form: Form,
 };
 
 export function useParentEditor() {
-    return inject<ParentEditor>('editor');
+    return inject<ParentEditor>('editor', null);
 }

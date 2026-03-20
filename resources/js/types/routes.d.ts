@@ -512,7 +512,20 @@ declare module 'ziggy-js' {
             "required": false
         }
     ],
-    "code16.sharp.api.form.upload": [],
+    "code16.sharp.api.form.upload": [
+        {
+            "name": "globalFilter"
+        },
+        {
+            "name": "entityKey",
+            "required": true,
+            "binding": "key"
+        },
+        {
+            "name": "uploadFieldKey",
+            "required": true
+        }
+    ],
     "code16.sharp.api.form.autocomplete.index": [
         {
             "name": "globalFilter"

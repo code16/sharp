@@ -47,7 +47,6 @@ export type BreadcrumbData = {
   items: Array<BreadcrumbItemData>;
 };
 export type BreadcrumbItemData = {
-  type: string;
   label: string;
   documentTitleLabel: string | null;
   entityKey: string;
@@ -812,6 +811,13 @@ export type PieGraphWidgetData = {
   ratioY: number | null;
   height: number | null;
 };
+export type RequestFieldContainerData = {
+  embed_key: string | null;
+  entity_list_command_key: string | null;
+  show_command_key: string | null;
+  dashboard_command_key: string | null;
+  instance_id: string | number | null;
+};
 export type SearchResultLinkData = {
   link: string;
   label: string;
@@ -850,7 +856,6 @@ export type ShowConfigData = {
   isSingle: boolean;
   commands: ConfigCommandsData | null;
   titleAttribute: string | null;
-  breadcrumbAttribute: string | null;
   editButtonLabel: string | null;
   state: EntityStateData | null;
 };

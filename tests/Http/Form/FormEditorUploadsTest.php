@@ -46,7 +46,10 @@ it('can post a newly uploaded file in editor, create case', function () {
     });
 
     $uploadedFileData = $this
-        ->postJson(route('code16.sharp.api.form.upload'), ['file' => UploadedFile::fake()->create('file.pdf')])
+        ->postJson(route('code16.sharp.api.form.upload', [
+            'entityKey' => 'person',
+            'uploadFieldKey' => 'bio',
+        ]), ['file' => UploadedFile::fake()->create('file.pdf')])
         ->json();
 
     $editorXSharpFileData = $this
@@ -58,7 +61,10 @@ it('can post a newly uploaded file in editor, create case', function () {
         ->json();
 
     $uploadedImageData = $this
-        ->postJson(route('code16.sharp.api.form.upload'), ['file' => UploadedFile::fake()->image('image.jpg', 200, 200)])
+        ->postJson(route('code16.sharp.api.form.upload', [
+            'entityKey' => 'person',
+            'uploadFieldKey' => 'bio',
+        ]), ['file' => UploadedFile::fake()->image('image.jpg', 200, 200)])
         ->json();
 
     $editorXSharpImageData = $this
@@ -135,7 +141,10 @@ it('can post a newly uploaded file in editor, update case', function () {
     });
 
     $uploadedFileData = $this
-        ->postJson(route('code16.sharp.api.form.upload'), ['file' => UploadedFile::fake()->create('file.pdf')])
+        ->postJson(route('code16.sharp.api.form.upload', [
+            'entityKey' => 'person',
+            'uploadFieldKey' => 'bio',
+        ]), ['file' => UploadedFile::fake()->create('file.pdf')])
         ->json();
 
     $editorXSharpFileData = $this
@@ -148,7 +157,10 @@ it('can post a newly uploaded file in editor, update case', function () {
         ->json();
 
     $uploadedImageData = $this
-        ->postJson(route('code16.sharp.api.form.upload'), ['file' => UploadedFile::fake()->image('image.jpg', 200, 200)])
+        ->postJson(route('code16.sharp.api.form.upload', [
+            'entityKey' => 'person',
+            'uploadFieldKey' => 'bio',
+        ]), ['file' => UploadedFile::fake()->image('image.jpg', 200, 200)])
         ->json();
 
     $editorXSharpImageData = $this
@@ -224,7 +236,13 @@ it('can post an embed with upload, create case', function () {
     $uploadedFile = UploadedFile::fake()->create('file.pdf');
 
     $uploadedFileData = $this
-        ->postJson(route('code16.sharp.api.form.upload'), ['file' => $uploadedFile])
+        ->postJson(route('code16.sharp.api.form.upload', [
+            'entityKey' => 'person',
+            'uploadFieldKey' => 'file',
+            'embed_key' => (new FormEditorUploadsTestEmbed())->key(),
+        ]), [
+            'file' => $uploadedFile,
+        ])
         ->json();
 
     $editorXEmbedData = $this
