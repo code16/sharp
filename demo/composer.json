@@ -5,20 +5,20 @@
         "php": "8.5.*",
         "bacon/bacon-qr-code": "~2.0",
         "blade-ui-kit/blade-icons": "^1.6",
-        "code16/laravel-content-renderer": "^1.2",
+        "code16/laravel-content-renderer": "^1.5",
         "enshrined/svg-sanitize": "^0.22.0",
         "guzzlehttp/guzzle": "^7.2",
         "inertiajs/inertia-laravel": "^2.0",
         "intervention/image": "^3.4",
         "intervention/image-laravel": "^1.2",
-        "laravel/framework": "^12.0",
-        "laravel/tinker": "^2.9",
-        "masterminds/html5": "^2.8",
+        "laravel/framework": "^13.0",
+        "laravel/tinker": "^3.0",
+        "masterminds/html5": "^2.9",
         "pragmarx/google2fa": "^8.0",
-        "spatie/image-optimizer": "^1.6",
-        "spatie/laravel-translatable": "^6.0",
+        "spatie/image-optimizer": "^1.7",
+        "spatie/laravel-translatable": "^6.13",
         "symfony/html-sanitizer": "^7.3",
-        "technikermathe/blade-lucide-icons": "^3.98",
+        "technikermathe/blade-lucide-icons": "dev-l13-compatibility",
         "tightenco/ziggy": "^2.0"
     },
     "require-dev": {
@@ -27,9 +27,9 @@
         "laravel/boost": "^2.0",
         "laravel/sail": "^1.0.1",
         "mockery/mockery": "^1.4.4",
-        "nunomaduro/collision": "^8.6",
+        "nunomaduro/collision": "^8.9",
         "phpunit/phpunit": "^12.0",
-        "spatie/laravel-ignition": "^2.0",
+        "spatie/laravel-ignition": "^2.12",
         "spatie/laravel-ray": "^1.29",
         "spatie/laravel-typescript-transformer": "^2.3"
     },
@@ -44,6 +44,12 @@
             "Database\\Seeders\\": "database/seeders/"
         }
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/laravel-shift/blade-lucide-icons"
+        }
+    ],
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/"
