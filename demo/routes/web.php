@@ -1,15 +1,18 @@
 <?php
 
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+Route::passkeys();
+
 Route::get('/', function () {
     return redirect('/docs/index.html');
 });
 
-Route::get('/post/{post}', function (\App\Models\Post $post) {
+Route::get('/post/{post}', function (Post $post) {
     return view('pages.post', ['post' => $post]);
 });
 

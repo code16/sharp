@@ -39,6 +39,7 @@
   "dependencies": {
     "@googlemaps/js-api-loader": "^1.16.8",
     "@inertiajs/vue3": "^2.2.20",
+    "@simplewebauthn/browser": "^13.1.0",
     "@tiptap/core": "^3.3.0",
     "@tiptap/extension-character-count": "^3.3.0",
     "@tiptap/extension-code-block": "^3.3.0",

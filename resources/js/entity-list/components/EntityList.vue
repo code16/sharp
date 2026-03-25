@@ -248,7 +248,9 @@
         if(await showDeleteConfirm(entityList.config.deleteConfirmationText, {
             highlightElement: () => el.value?.querySelector(`[data-instance-row="${instanceId}"]`) as HTMLElement,
         })) {
-            await api.delete(route('code16.sharp.api.list.delete', { entityKey, instanceId }));
+            await api.delete(route('code16.sharp.api.list.delete', { entityKey, instanceId }), {
+                params: { ...props.entityList.query },
+            });
             commands.handleCommandResponse({ action: 'reload' });
         }
     }

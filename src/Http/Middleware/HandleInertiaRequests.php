@@ -76,10 +76,12 @@ class HandleInertiaRequests extends Middleware
                     'sharp::pages/auth/login',
                     'sharp::pages/auth/impersonate',
                     'sharp::pages/auth/reset-password',
+                    'sharp::pages/auth/passkeys',
                     'sharp::show',
                 ])
                     ->map(fn ($group) => collect(__($group, [], app()->getFallbackLocale()))
                         ->mapWithKeys(fn ($value, $key) => ["$group.$key" => __("$group.$key")])
+                        ->dot()
                     )
                     ->collapse()
                     ->toArray();
@@ -89,6 +91,7 @@ class HandleInertiaRequests extends Middleware
                 'sharp.auth.forgotten_password.enabled' => sharp()->config()->get('auth.forgotten_password.enabled'),
                 'sharp.auth.forgotten_password.show_reset_link_in_login_form' => sharp()->config()->get('auth.forgotten_password.show_reset_link_in_login_form'),
                 'sharp.auth.suggest_remember_me' => sharp()->config()->get('auth.suggest_remember_me'),
+                'sharp.auth.passkeys.enabled' => sharp()->config()->get('auth.passkeys.enabled'),
                 'sharp.custom_url_segment' => sharp()->config()->get('custom_url_segment'),
                 'sharp.display_sharp_version_in_title' => sharp()->config()->get('display_sharp_version_in_title'),
                 'sharp.breadcrumb.display' => sharp()->config()->get('breadcrumb.display'),

@@ -8,5 +8,6 @@ return [
     'code_field' => 'Code',
     'remember' => 'Remember me',
     'button' => 'Login',
+    'passkey_button' => 'Use passkey',
     'forgot_password_link' => 'Forgot password?',
 ];

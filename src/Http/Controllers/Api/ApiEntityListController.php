@@ -32,18 +32,20 @@ class ApiEntityListController extends ApiController
     {
         $this->authorizationManager->check('delete', $entityKey, $instanceId);
 
-        $impl = $this->getListInstance($entityKey);
-        if (! self::isDeleteMethodImplementedInConcreteClass($impl)) {
-            // Try to delete from Show Page
+        $list = $this->getListInstance($entityKey);
+        $list->initQueryParams(request()->query());
+
+        if (self::isDeleteMethodImplementedInConcreteClass($list)) {
+            $list->delete($instanceId);
+        } else {
             try {
-                $impl = $this->getShowInstance($entityKey);
+                $show = $this->getShowInstance($entityKey);
+                $show->delete($instanceId);
             } catch (SharpInvalidEntityKeyException $ex) {
                 // No Show Page implementation was defined for this entity
                 throw new SharpMethodNotImplementedException('The delete() method is not implemented, neither in the Entity List nor in the Show Page');
             }
         }
-
-        $impl->delete($instanceId);
 
         return response()->json([
             'ok' => true,

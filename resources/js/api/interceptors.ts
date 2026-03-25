@@ -5,6 +5,7 @@ import { Axios, AxiosError, isCancel } from "axios";
 declare module 'axios' {
     interface AxiosRequestConfig {
         preloaded?: boolean;
+        ignoreContentType?: boolean;
     }
 }
 
@@ -31,6 +32,7 @@ export function installInterceptors(api: Axios) {
         response => {
             if(!response.headers['content-type']?.includes('application/json')
                 && !response.headers['content-disposition']?.includes('attachment')
+                && !response.config.ignoreContentType
             ) {
                 throw new Error(
                     `${response.config.method.toUpperCase()} ${response.config.url} :` +

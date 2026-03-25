@@ -15,6 +15,13 @@
     import { FormItem } from "@/components/ui/form";
     import { Check } from "lucide-vue-next";
     import TemplateRenderer from "@/components/TemplateRenderer.vue";
+    import { onMounted, ref } from "vue";
+    import {
+        startAuthentication,
+        browserSupportsWebAuthn,
+        browserSupportsWebAuthnAutofill
+    } from "@simplewebauthn/browser";
+    import { api } from "@/api/api";
 
     const props = defineProps<{
         loginIsEmail: boolean,
@@ -23,6 +30,7 @@
             login: string | null,
             password: string | null,
         },
+        passkeyError: string | null,
     }>();
 
 
@@ -30,6 +38,41 @@
         login: props.prefill?.login,
         password: props.prefill?.password,
         remember: false,
+        supports_passkeys: browserSupportsWebAuthn(),
+    });
+
+    const passkeyForm = useForm({
+        remember: false,
+        start_authentication_response: '',
+    });
+
+    async function loginWithPasskey(autofill = false) {
+        try {
+            const response = await api.get(route('passkeys.authentication_options'), {
+                ignoreContentType: true,
+            });
+
+            const authenticationOptions = response.data;
+            const authenticationResponse = await startAuthentication({
+                optionsJSON: authenticationOptions,
+                useBrowserAutofill: autofill,
+            });
+
+            console.log(authenticationResponse);
+
+            passkeyForm.remember = form.remember;
+            passkeyForm.start_authentication_response = JSON.stringify(authenticationResponse);
+
+            passkeyForm.post(route('passkeys.login'));
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    onMounted(async () => {
+        if(config('sharp.auth.passkeys.enabled') && await browserSupportsWebAuthnAutofill()) {
+            await loginWithPasskey(true);
+        }
     });
 </script>
 
@@ -39,10 +82,10 @@
             {{ __('sharp::pages/auth/login.title') }}
         </Title>
 
-        <template v-if="form.hasErrors">
+        <template v-if="form.hasErrors || passkeyError">
             <Alert class="mb-4" variant="destructive">
                 <AlertTitle class="mb-0">
-                    {{ Object.values(form.errors)[0] }}
+                    {{ Object.values(form.errors)[0] || passkeyError }}
                 </AlertTitle>
             </Alert>
         </template>
@@ -73,7 +116,7 @@
                         <Input
                             id="login"
                             :type="loginIsEmail ? 'email' : 'text'"
-                            :autocomplete="loginIsEmail ? 'email' : 'username'"
+                            :autocomplete="loginIsEmail ? 'email webauthn' : 'username webauthn'"
                             v-model="form.login"
                             autofocus
                         />
@@ -87,7 +130,7 @@
                                 </a>
                             </template>
                         </div>
-                        <Input id="password" type="password" v-model="form.password" autocomplete="current-password"/>
+                        <Input id="password" type="password" v-model="form.password" autocomplete="current-password webauthn" />
                     </FormItem>
                     <template v-if="config('sharp.auth.suggest_remember_me')">
                         <FormItem>
@@ -101,9 +144,21 @@
                     </template>
                 </div>
                 <template #footer>
-                    <Button type="submit" class="w-full">
-                        {{ __('sharp::pages/auth/login.button') }}
-                    </Button>
+                    <div class="grid gap-2 w-full">
+                        <Button type="submit" class="w-full">
+                            {{ __('sharp::pages/auth/login.button') }}
+                        </Button>
+                        <template v-if="config('sharp.auth.passkeys.enabled') && form.supports_passkeys">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                class="w-full"
+                                @click="loginWithPasskey()"
+                            >
+                                {{ __('sharp::pages/auth/login.passkey_button') }}
+                            </Button>
+                        </template>
+                    </div>
                 </template>
             </AuthCard>
         </form>

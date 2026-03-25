@@ -239,6 +239,10 @@ class SharpInternalServiceProvider extends ServiceProvider
         if (sharp()->config()->get('auth.impersonate.enabled')) {
             $this->loadRoutesFrom(__DIR__.'/routes/auth/impersonate.php');
         }
+
+        if (sharp()->config()->get('auth.passkeys.enabled')) {
+            $this->loadRoutesFrom(__DIR__.'/routes/auth/passkeys.php');
+        }
     }
 
     private function configureOctane(): void

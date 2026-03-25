@@ -5,10 +5,17 @@ namespace Code16\Sharp\Config;
 use Closure;
 use Code16\Sharp\Auth\Impersonate\SharpDefaultEloquentImpersonationHandler;
 use Code16\Sharp\Auth\Impersonate\SharpImpersonationHandler;
+use Code16\Sharp\Auth\Passkeys\PasskeyEntity;
 use Code16\Sharp\Auth\TwoFactor\Sharp2faHandler;
 use Code16\Sharp\Exceptions\SharpInvalidConfigException;
 use Code16\Sharp\Exceptions\SharpInvalidEntityKeyException;
 use Code16\Sharp\Filters\GlobalRequiredFilter;
+use Code16\Sharp\Http\Middleware\AddLinkHeadersForPreloadedRequests;
+use Code16\Sharp\Http\Middleware\Api\HandleSharpApiErrors;
+use Code16\Sharp\Http\Middleware\HandleGlobalFilters;
+use Code16\Sharp\Http\Middleware\HandleInertiaRequests;
+use Code16\Sharp\Http\Middleware\HandleSharpErrors;
+use Code16\Sharp\Http\Middleware\InvalidateCache;
 use Code16\Sharp\Search\SharpSearchEngine;
 use Code16\Sharp\Utils\Entities\BaseSharpEntity;
 use Code16\Sharp\Utils\Entities\SharpDashboardEntity;
@@ -18,8 +25,16 @@ use Code16\Sharp\Utils\Menu\SharpMenu;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Contracts\View\View;
+use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
+use Illuminate\Cookie\Middleware\EncryptCookies;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Foundation\Vite;
+use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
+use Illuminate\Routing\Middleware\SubstituteBindings;
+use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Traits\Conditionable;
+use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Intervention\Image\Drivers\Gd\Driver;
 use ReflectionClass;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
@@ -46,23 +61,23 @@ class SharpConfigBuilder
         'global_filters' => [],
         'middleware' => [
             'common' => [
-                \Illuminate\Cookie\Middleware\EncryptCookies::class,
-                \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-                \Illuminate\Session\Middleware\StartSession::class,
-                \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-                \Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class,
-                \Code16\Sharp\Http\Middleware\HandleGlobalFilters::class,
-                \Illuminate\Routing\Middleware\SubstituteBindings::class,
+                EncryptCookies::class,
+                AddQueuedCookiesToResponse::class,
+                StartSession::class,
+                ShareErrorsFromSession::class,
+                VerifyCsrfToken::class,
+                HandleGlobalFilters::class,
+                SubstituteBindings::class,
             ],
             'web' => [
-                \Code16\Sharp\Http\Middleware\InvalidateCache::class,
-                \Code16\Sharp\Http\Middleware\HandleSharpErrors::class,
-                \Code16\Sharp\Http\Middleware\HandleInertiaRequests::class,
-                \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
-                \Code16\Sharp\Http\Middleware\AddLinkHeadersForPreloadedRequests::class,
+                InvalidateCache::class,
+                HandleSharpErrors::class,
+                HandleInertiaRequests::class,
+                AddLinkHeadersForPreloadedAssets::class,
+                AddLinkHeadersForPreloadedRequests::class,
             ],
             'api' => [
-                \Code16\Sharp\Http\Middleware\Api\HandleSharpApiErrors::class,
+                HandleSharpApiErrors::class,
             ],
         ],
         'auth' => [
@@ -97,7 +112,7 @@ class SharpConfigBuilder
             'transform_keep_original_image' => true,
             'max_file_size' => 5,
             'model_class' => null,
-            'image_driver' => \Intervention\Image\Drivers\Gd\Driver::class,
+            'image_driver' => Driver::class,
             'file_handling_queue' => 'default',
             'file_handling_queue_connection' => 'sync',
         ],
@@ -336,7 +351,7 @@ class SharpConfigBuilder
         string $thumbnailsDisk = 'public',
         string $thumbnailsDir = 'thumbnails',
         ?string $uploadModelClass = null,
-        string $imageDriverClass = \Intervention\Image\Drivers\Gd\Driver::class,
+        string $imageDriverClass = Driver::class,
     ): self {
         $this->config['uploads']['thumbnails_disk'] = $thumbnailsDisk;
         $this->config['uploads']['thumbnails_dir'] = $thumbnailsDir;
@@ -494,6 +509,18 @@ class SharpConfigBuilder
             'enabled' => true,
             'handler' => 'totp',
         ];
+
+        return $this;
+    }
+
+    public function enablePasskeys(bool $promptAfterLogin = true): self
+    {
+        $this->config['auth']['passkeys'] = [
+            'enabled' => true,
+            'prompt_after_login' => $promptAfterLogin,
+        ];
+
+        $this->declareEntity(PasskeyEntity::class);
 
         return $this;
     }
