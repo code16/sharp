@@ -777,7 +777,7 @@
                                                                                     <div class="size-2.5 bg-primary rounded-full"></div>
                                                                                 </template>
                                                                                 <template v-else>
-                                                                                    <Badge class="px-1.5 justify-center min-w-5.5">
+                                                                                    <Badge class="px-1.5 justify-center min-w-5.5 whitespace-nowrap">
                                                                                         {{ item[field.key] }}
                                                                                     </Badge>
                                                                                 </template>

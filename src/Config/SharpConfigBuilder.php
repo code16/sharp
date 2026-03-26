@@ -5,7 +5,7 @@ namespace Code16\Sharp\Config;
 use Closure;
 use Code16\Sharp\Auth\Impersonate\SharpDefaultEloquentImpersonationHandler;
 use Code16\Sharp\Auth\Impersonate\SharpImpersonationHandler;
-use Code16\Sharp\Auth\Passkeys\PasskeyEntity;
+use Code16\Sharp\Auth\Passkeys\Entity\PasskeyEntity;
 use Code16\Sharp\Auth\TwoFactor\Sharp2faHandler;
 use Code16\Sharp\Exceptions\SharpInvalidConfigException;
 use Code16\Sharp\Exceptions\SharpInvalidEntityKeyException;

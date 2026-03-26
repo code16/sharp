@@ -5,7 +5,7 @@ namespace App\Sharp\Profile;
 use App\Sharp\Profile\Commands\Activate2faCommand;
 use App\Sharp\Profile\Commands\ChangePasswordCommand;
 use App\Sharp\Profile\Commands\Deactivate2faCommand;
-use Code16\Sharp\Auth\Passkeys\PasskeyEntity;
+use Code16\Sharp\Auth\Passkeys\Entity\PasskeyEntity;
 use Code16\Sharp\Show\Fields\SharpShowEntityListField;
 use Code16\Sharp\Show\Fields\SharpShowPictureField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
@@ -28,9 +28,9 @@ class ProfileSingleShow extends SharpSingleShow
             ->addField(
                 SharpShowPictureField::make('avatar'),
             )
-            ->addField(
+            ->when(config('demo.enable_passkeys'), fn () => $showFields->addField(
                 SharpShowEntityListField::make(PasskeyEntity::class)
-            );
+            ));
     }
 
     protected function buildShowLayout(ShowLayout $showLayout): void
@@ -41,7 +41,7 @@ class ProfileSingleShow extends SharpSingleShow
                     ->addColumn(6, fn (ShowLayoutColumn $column) => $column->withField('email'))
                     ->addColumn(6, fn (ShowLayoutColumn $column) => $column->withField('avatar'));
             })
-            ->addEntityListSection(PasskeyEntity::class);
+            ->when(config('demo.enable_passkeys'))->addEntityListSection(PasskeyEntity::class);
     }
 
     public function buildShowConfig(): void

@@ -28,7 +28,7 @@ class DemoSharpServiceProvider extends SharpAppServiceProvider
             ->setAuthCustomGuard('web')
             ->enable2faCustom(Demo2faNotificationHandler::class)
             ->enableLoginRateLimiting(maxAttempts: 3)
-            ->enablePasskeys()
+            ->when(config('demo.enable_passkeys'))->enablePasskeys()
             ->setLoginAttributes('email', 'password')
             ->setUserDisplayAttribute('name')
             ->setUserAvatarAttribute(fn () => auth()->user()->avatar?->thumbnail(200))

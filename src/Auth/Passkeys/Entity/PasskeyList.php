@@ -1,15 +1,16 @@
 <?php
 
-namespace Code16\Sharp\Auth\Passkeys;
+namespace Code16\Sharp\Auth\Passkeys\Entity;
 
 use Code16\Sharp\Auth\Passkeys\Commands\UpdatePasskeyNameCommand;
 use Code16\Sharp\EntityList\Commands\EntityCommand;
+use Code16\Sharp\EntityList\Fields\EntityListBadgeField;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
-use Code16\Sharp\EntityList\Filters\HiddenFilter;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\LaravelPasskeys\Models\Concerns\HasPasskeys;
 
 class PasskeyList extends SharpEntityList
@@ -20,6 +21,10 @@ class PasskeyList extends SharpEntityList
             ->addField(
                 EntityListField::make('name')
                     ->setLabel('Name')
+            )
+            ->addField(
+                EntityListBadgeField::make('usage')
+                    ->setLabel('Usage')
             )
             ->addField(
                 EntityListField::make('created_at')
@@ -63,13 +68,6 @@ class PasskeyList extends SharpEntityList
         ];
     }
 
-    protected function getFilters(): ?array
-    {
-        return [
-            HiddenFilter::make('user_id'),
-        ];
-    }
-
     public function delete(mixed $id): void
     {
         $this->currentUser()->passKeys()->findOrFail($id)->delete();
@@ -77,18 +75,19 @@ class PasskeyList extends SharpEntityList
 
     public function getListData(): array|Arrayable
     {
-        return $this->transform(
-            $this->currentUser()->passkeys
-        );
+        return $this
+            ->setCustomTransformer('usage', function ($value, Model $passkey) {
+                return $passkey->getKey() == request()->cookie('sharp_last_used_passkey')
+                    ? 'Used in this browser'
+                    : null;
+            })
+            ->transform(
+                $this->currentUser()->passkeys
+            );
     }
 
     protected function currentUser(): Authenticatable&HasPasskeys
     {
-        // disabling for now (security concerns)
-        // if($this->queryParams->filterFor('user_id')) {
-        //     return Config::getAuthenticatableModel()::findOrFail($this->queryParams->filterFor('user_id'));
-        // }
-
         /** @var Authenticatable&HasPasskeys $user */
         $user = auth()->user();
 
