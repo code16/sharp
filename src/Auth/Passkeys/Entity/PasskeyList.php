@@ -20,19 +20,19 @@ class PasskeyList extends SharpEntityList
         $fields
             ->addField(
                 EntityListField::make('name')
-                    ->setLabel('Name')
+                    ->setLabel(trans('sharp::auth.passkeys.fields.name'))
             )
             ->addField(
                 EntityListBadgeField::make('usage')
-                    ->setLabel('Usage')
-            )
-            ->addField(
-                EntityListField::make('created_at')
-                    ->setLabel('Creation date')
+                    ->setLabel(trans('sharp::auth.passkeys.fields.usage'))
             )
             ->addField(
                 EntityListField::make('last_used_at')
-                    ->setLabel('Last used at')
+                    ->setLabel(trans('sharp::auth.passkeys.fields.last_used_at'))
+            )
+            ->addField(
+                EntityListField::make('created_at')
+                    ->setLabel(trans('sharp::auth.passkeys.fields.created_at'))
             );
     }
 
@@ -48,7 +48,7 @@ class PasskeyList extends SharpEntityList
             {
                 public function label(): string
                 {
-                    return 'Add a passkey';
+                    return trans('sharp::auth.passkeys.commands.add.command_label');
                 }
 
                 public function execute(array $data = []): array
@@ -78,11 +78,17 @@ class PasskeyList extends SharpEntityList
         return $this
             ->setCustomTransformer('usage', function ($value, Model $passkey) {
                 return $passkey->getKey() == request()->cookie('sharp_last_used_passkey')
-                    ? 'Used in this browser'
+                    ? trans('sharp::auth.passkeys.used_in_this_browser')
                     : null;
             })
+            ->setCustomTransformer('last_used_at', function ($value, Model $passkey) {
+                return $passkey->last_used_at?->diffForHumans();
+            })
+            ->setCustomTransformer('created_at', function ($value, Model $passkey) {
+                return $passkey->created_at?->isoFormat('LLL');
+            })
             ->transform(
-                $this->currentUser()->passkeys
+                $this->currentUser()->passkeys()->orderByDesc('created_at')->get()
             );
     }
 

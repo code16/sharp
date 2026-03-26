@@ -47,6 +47,14 @@
         "spatie/laravel-typescript-transformer": "^2.3",
         "spatie/typescript-transformer": "^2.2"
     },
+    "suggest": {
+        "spatie/laravel-passkeys": "Allows you to use passkey authentication (^1.0 is required).",
+        "pragmarx/google2fa-laravel": "Allows you to use 2FA default TOTP command",
+        "bacon/bacon-qr-code": "Allows you to use QR codes in default TOTP command"
+    },
+    "conflict": {
+        "spatie/laravel-passkeys": "<1.0 || >=2.0"
+    },
     "autoload": {
         "files": [
             "src/sharp_helper.php"

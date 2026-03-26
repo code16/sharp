@@ -28,6 +28,25 @@ return [
             ],
         ],
     ],
+    'passkeys' => [
+        'entity_label' => 'Clé d’accès',
+        'commands' => [
+            'rename' => [
+                'command_label' => 'Renommer la clé d’accès',
+                'name_field_label' => 'Nom',
+            ],
+            'add' => [
+                'command_label' => 'Ajouter une clé d’accès',
+            ],
+        ],
+        'fields' => [
+            'name' => 'Nom',
+            'usage' => 'Utilisation',
+            'created_at' => 'Date de création',
+            'last_used_at' => 'Dernière utilisation',
+        ],
+        'used_in_this_browser' => 'Utilisée dans ce navigateur',
+    ],
     'password_change' => [
         'command' => [
             'label' => 'Modifier le mot de passe...',

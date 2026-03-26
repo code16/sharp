@@ -11,14 +11,14 @@ class UpdatePasskeyNameCommand extends InstanceCommand
 {
     public function label(): string
     {
-        return 'Rename';
+        return trans('sharp::auth.passkeys.commands.rename.command_label');
     }
 
     public function buildFormFields(FieldsContainer $formFields): void
     {
         $formFields->addField(
             SharpFormTextField::make('name')
-                ->setLabel('Name')
+                ->setLabel(trans('sharp::auth.passkeys.commands.rename.name_field_label'))
         );
     }
 

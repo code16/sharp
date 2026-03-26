@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Tests;
 
 use BladeUI\Icons\BladeIconsServiceProvider;
+use BladeUI\Icons\Factory;
 use Code16\ContentRenderer\ContentRendererServiceProvider;
 use Code16\Sharp\SharpInternalServiceProvider;
 use Illuminate\Testing\Fluent\AssertableJson;
@@ -52,7 +53,7 @@ class TestCase extends Orchestra
     {
         config()->set('database.default', 'testing');
 
-        $app->make(\BladeUI\Icons\Factory::class)->add('testicon', [
+        $app->make(Factory::class)->add('testicon', [
             'path' => __DIR__.'/Fixtures/resources/svg',
             'prefix' => 'testicon',
         ]);
@@ -62,6 +63,7 @@ class TestCase extends Orchestra
         // We have to set these two because otherwise corresponding routes won't be loaded at all
         sharp()->config()
             ->enableForgottenPassword()
-            ->enableImpersonation();
+            ->enableImpersonation()
+            ->enablePasskeys();
     }
 }
