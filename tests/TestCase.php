@@ -7,11 +7,14 @@ use BladeUI\Icons\Factory;
 use Code16\ContentRenderer\ContentRendererServiceProvider;
 use Code16\Sharp\SharpInternalServiceProvider;
 use Illuminate\Testing\Fluent\AssertableJson;
+use Orchestra\Testbench\Pest\WithPest;
 use Orchestra\Testbench\TestCase as Orchestra;
 use PHPUnit\Framework\Assert as PHPUnit;
 
 class TestCase extends Orchestra
 {
+    use WithPest;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -63,7 +66,6 @@ class TestCase extends Orchestra
         // We have to set these two because otherwise corresponding routes won't be loaded at all
         sharp()->config()
             ->enableForgottenPassword()
-            ->enableImpersonation()
-            ->enablePasskeys();
+            ->enableImpersonation();
     }
 }

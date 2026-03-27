@@ -5,7 +5,6 @@ namespace Code16\Sharp\Tests\Http\Auth;
 use Code16\Sharp\Auth\Passkeys\Commands\UpdatePasskeyNameCommand;
 use Code16\Sharp\Auth\Passkeys\Entity\PasskeyEntity;
 use Code16\Sharp\Auth\Passkeys\Entity\PasskeyList;
-use Code16\Sharp\Auth\Passkeys\PasskeyEventSubscriber;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\User;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -26,7 +25,13 @@ use Spatie\LaravelPasskeys\Models\Concerns\InteractsWithPasskeys;
 use Spatie\LaravelPasskeys\Models\Passkey;
 use Webauthn\PublicKeyCredentialCreationOptions;
 
-uses(LazilyRefreshDatabase::class);
+use function Orchestra\Testbench\Pest\defineEnvironment;
+
+pest()->use(LazilyRefreshDatabase::class);
+
+defineEnvironment(function () {
+    sharp()->config()->enablePasskeys();
+});
 
 beforeEach(function () {
     Schema::create('users', function (Blueprint $table) {
@@ -53,8 +58,7 @@ beforeEach(function () {
     config()->set('passkeys.models.passkey', TestPasskey::class);
 
     sharp()->config()
-        ->declareEntity(PersonEntity::class)
-        ->enablePasskeys();
+        ->declareEntity(PersonEntity::class);
 });
 
 function createPasskeyTestUser(array $attributes = []): PasskeyTestUser
