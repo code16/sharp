@@ -213,6 +213,12 @@ class SharpConfigBuilder
                 ->toString();
         }
 
+        // prepend _internal to entities located in sharp's source (e.g. PasskeyEntity)
+        // to avoid conflicts with project entities
+        if (str($entityClass)->startsWith(str(static::class)->explode('\\')->take(2))) {
+            $entityKey = "_internal_$entityKey";
+        }
+
         $this->config['entities'][$entityKey] = $entityClass;
         $this->config['entity_resolver'] = null;
 

@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -29,6 +30,10 @@ class LoginController extends Controller
 
         if (sharp()->config()->get('auth.passkeys.enabled')) {
             session()->put('passkeys.redirect', route('code16.sharp.home'));
+
+            if (! Route::has('passkeys.login')) {
+                throw new \Exception('Passkeys routes are not defined. Add `Route::passkeys()` in your routes/web.php file.');
+            }
         }
 
         $message = sharp()->config()->get('auth.login_form_message');

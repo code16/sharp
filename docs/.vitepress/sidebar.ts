@@ -86,6 +86,8 @@ export function sidebar(): DefaultTheme.SidebarItem[] {
             collapsed: true,
             items: [
                 { text: 'Authentication', link: '/guide/authentication.md' },
+                { text: 'Two-factor authentication', link: '/guide/authentication-2fa.md' },
+                { text: 'Passkeys authentication', link: '/guide/authentication-passkeys.md' },
                 { text: 'Entity authorizations', link: '/guide/entity-authorizations.md' }
             ]
         },
