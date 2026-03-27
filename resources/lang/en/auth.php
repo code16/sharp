@@ -30,22 +30,24 @@ return [
     ],
     'passkeys' => [
         'entity_label' => 'Passkey',
-        'commands' => [
-            'rename' => [
-                'command_label' => 'Rename passkey',
-                'name_field_label' => 'Name',
+        'list' => [
+            'commands' => [
+                'rename' => [
+                    'command_label' => 'Rename passkey',
+                    'name_field_label' => 'Name',
+                ],
+                'add' => [
+                    'command_label' => 'New passkey...',
+                ],
             ],
-            'add' => [
-                'command_label' => 'Add a passkey',
+            'fields' => [
+                'name' => 'Name',
+                'usage' => 'Usage',
+                'created_at' => 'Created at',
+                'last_used_at' => 'Last used at',
             ],
+            'used_in_this_browser_badge' => 'Used in this browser',
         ],
-        'fields' => [
-            'name' => 'Name',
-            'usage' => 'Usage',
-            'created_at' => 'Creation date',
-            'last_used_at' => 'Last used at',
-        ],
-        'used_in_this_browser' => 'Used in this browser',
     ],
     'password_change' => [
         'command' => [

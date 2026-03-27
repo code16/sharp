@@ -8,10 +8,9 @@
     import { Label } from "@/components/ui/label";
     import { Input } from "@/components/ui/input";
     import AuthCard from "@/Layouts/Auth/AuthCard.vue";
-    import { FormItem } from "@/components/ui/form";
     import { startRegistration } from "@simplewebauthn/browser";
     import { api } from "@/api/api";
-    import { FieldError } from "@/components/ui/field";
+    import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 
     const props = defineProps<{
         prompt: boolean,
@@ -65,27 +64,27 @@
                     </div>
                 </template>
 
-                <div class="grid gap-4">
-
-
-                    <FormItem>
-                        <Label for="name">
+                <FieldGroup>
+                    <Field>
+                        <FieldLabel for="name">
                             {{ __('sharp::pages/auth/passkeys.name_field') }}
-                        </Label>
+                        </FieldLabel>
                         <Input
                             id="name"
                             type="text"
                             v-model="form.name"
                             autofocus
                         />
-                        <div class="mt-1 text-sm text-muted-foreground">{{ __('sharp::pages/auth/passkeys.name_help_text') }}</div>
+                        <FieldDescription>
+                            {{ __('sharp::pages/auth/passkeys.name_help_text') }}
+                        </FieldDescription>
                         <template v-if="form.errors.name">
-                            <FieldError class="mt-2">
+                            <FieldError>
                                 {{ form.errors.name }}
                             </FieldError>
                         </template>
-                    </FormItem>
-                </div>
+                    </Field>
+                </FieldGroup>
 
                 <template #footer>
                     <div class="grid gap-2 w-full">

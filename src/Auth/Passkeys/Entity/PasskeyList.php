@@ -20,19 +20,19 @@ class PasskeyList extends SharpEntityList
         $fields
             ->addField(
                 EntityListField::make('name')
-                    ->setLabel(trans('sharp::auth.passkeys.fields.name'))
+                    ->setLabel(trans('sharp::auth.passkeys.list.fields.name'))
             )
             ->addField(
                 EntityListBadgeField::make('usage')
-                    ->setLabel(trans('sharp::auth.passkeys.fields.usage'))
+                    ->setLabel(trans('sharp::auth.passkeys.list.fields.usage'))
             )
             ->addField(
                 EntityListField::make('last_used_at')
-                    ->setLabel(trans('sharp::auth.passkeys.fields.last_used_at'))
+                    ->setLabel(trans('sharp::auth.passkeys.list.fields.last_used_at'))
             )
             ->addField(
                 EntityListField::make('created_at')
-                    ->setLabel(trans('sharp::auth.passkeys.fields.created_at'))
+                    ->setLabel(trans('sharp::auth.passkeys.list.fields.created_at'))
             );
     }
 
@@ -48,7 +48,7 @@ class PasskeyList extends SharpEntityList
             {
                 public function label(): string
                 {
-                    return trans('sharp::auth.passkeys.commands.add.command_label');
+                    return trans('sharp::auth.passkeys.list.commands.add.command_label');
                 }
 
                 public function execute(array $data = []): array
@@ -78,7 +78,7 @@ class PasskeyList extends SharpEntityList
         return $this
             ->setCustomTransformer('usage', function ($value, Model $passkey) {
                 return $passkey->getKey() == request()->cookie('sharp_last_used_passkey')
-                    ? trans('sharp::auth.passkeys.used_in_this_browser')
+                    ? trans('sharp::auth.passkeys.list.used_in_this_browser_badge')
                     : null;
             })
             ->setCustomTransformer('last_used_at', function ($value, Model $passkey) {
