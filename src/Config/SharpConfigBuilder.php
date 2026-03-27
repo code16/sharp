@@ -215,7 +215,8 @@ class SharpConfigBuilder
 
         // prepend _internal to entities located in sharp's source (e.g. PasskeyEntity)
         // to avoid conflicts with project entities
-        if (str($entityClass)->startsWith(str(static::class)->explode('\\')->take(2))) {
+        if (str($entityClass)->startsWith('Code16\Sharp')
+            && ! str($entityClass)->startsWith('Code16\Sharp\Tests')) {
             $entityKey = "_internal_$entityKey";
         }
 
