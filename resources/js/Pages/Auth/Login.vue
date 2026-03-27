@@ -15,13 +15,14 @@
     import { FormItem } from "@/components/ui/form";
     import { Check } from "lucide-vue-next";
     import TemplateRenderer from "@/components/TemplateRenderer.vue";
-    import { onMounted, ref } from "vue";
+    import { onMounted } from "vue";
     import {
         startAuthentication,
         browserSupportsWebAuthn,
         browserSupportsWebAuthnAutofill
     } from "@simplewebauthn/browser";
     import { api } from "@/api/api";
+    import { Separator } from "@/components/ui/separator";
 
     const props = defineProps<{
         loginIsEmail: boolean,
@@ -149,6 +150,13 @@
                             {{ __('sharp::pages/auth/login.button') }}
                         </Button>
                         <template v-if="config('sharp.auth.passkeys.enabled') && form.supports_passkeys">
+                            <div class="my-3 flex items-center gap-x-6">
+                                <Separator class="flex-1" />
+                                <div class="text-center text-sm text-muted-foreground [text-box:trim-both_ex_alphabetic]">
+                                    {{ __('sharp::pages/auth/login.or_label') }}
+                                </div>
+                                <Separator class="flex-1" />
+                            </div>
                             <Button
                                 type="button"
                                 variant="outline"

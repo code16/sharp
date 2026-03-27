@@ -30,6 +30,7 @@ class ProfileSingleShow extends SharpSingleShow
             )
             ->when(config('demo.enable_passkeys'), fn () => $showFields->addField(
                 SharpShowEntityListField::make(PasskeyEntity::class)
+                    ->setLabel('Passkeys')
             ));
     }
 

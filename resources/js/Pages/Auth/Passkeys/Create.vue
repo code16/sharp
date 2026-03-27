@@ -60,12 +60,13 @@
                     {{ __('sharp::pages/auth/passkeys.title') }}
                 </template>
 
+                <template #description>
+                    <div class="grid grid-cols-1 gap-y-3" v-html="__('sharp::pages/auth/passkeys.description')">
+                    </div>
+                </template>
+
                 <div class="grid gap-4">
-                    <template v-if="prompt">
-                        <p class="text-sm text-muted-foreground">
-                            {{ __('sharp::pages/auth/passkeys.prompt_version.description') }}
-                        </p>
-                    </template>
+
 
                     <FormItem>
                         <Label for="name">
@@ -77,6 +78,7 @@
                             v-model="form.name"
                             autofocus
                         />
+                        <div class="mt-1 text-sm text-muted-foreground">{{ __('sharp::pages/auth/passkeys.name_help_text') }}</div>
                         <template v-if="form.errors.name">
                             <FieldError class="mt-2">
                                 {{ form.errors.name }}
@@ -94,7 +96,7 @@
                         <template v-if="prompt">
                             <Button
                                 type="button"
-                                variant="ghost"
+                                variant="outline"
                                 class="w-full"
                                 as="a"
                                 :href="route('code16.sharp.home')"
