@@ -4,8 +4,15 @@ use Code16\Sharp\Auth\Impersonate\SharpDefaultEloquentImpersonationHandler;
 use Code16\Sharp\Auth\Impersonate\SharpImpersonationHandler;
 use Code16\Sharp\Tests\Fixtures\User;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;
 use Inertia\Testing\AssertableInertia as Assert;
+
+use function Orchestra\Testbench\Pest\defineEnvironment;
+
+defineEnvironment(function () {
+    sharp()->config()->enableImpersonation();
+});
 
 function migrateUsersTable()
 {
@@ -38,7 +45,7 @@ it('redirects to impersonation page if enabled and guest', function () {
 
 it('redirects to impersonation page if authenticated as non admin user', function () {
     migrateUsersTable();
-    \Illuminate\Support\Facades\Gate::define('viewSharp', fn ($user) => false);
+    Gate::define('viewSharp', fn ($user) => false);
 
     sharp()->config()->enableImpersonation(new class() extends SharpImpersonationHandler
     {
@@ -137,6 +144,7 @@ it('does not display impersonatable users if impersonation is not enabled', func
     });
 
     sharp()->config()->disableImpersonation();
+
     $this->get(route('code16.sharp.impersonate'))
         ->assertInertia(fn (Assert $page) => $page
             ->where('impersonateUsers', null)

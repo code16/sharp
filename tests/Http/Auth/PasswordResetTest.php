@@ -4,7 +4,9 @@ namespace Tests\Feature\Auth;
 
 use Code16\Sharp\Tests\Fixtures\TestPasswordBroker;
 
-beforeEach(function () {
+use function Orchestra\Testbench\Pest\defineEnvironment;
+
+defineEnvironment(function () {
     sharp()->config()->enableForgottenPassword(broker: TestPasswordBroker::class);
 });
 

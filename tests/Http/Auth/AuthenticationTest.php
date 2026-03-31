@@ -3,10 +3,11 @@
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\TestAuthGuard;
 use Code16\Sharp\Tests\Fixtures\User;
+use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Contracts\Auth\Guard;
 
 beforeEach(function () {
     sharp()->config()->declareEntity(PersonEntity::class);
-    sharp()->config()->disableImpersonation();
 });
 
 function setTestAuthGuard(): void
@@ -117,7 +118,7 @@ it('allows users to logout', function () {
 
 it('allows custom auth guard', function () {
     auth()->extend('test', function () {
-        return new class() implements \Illuminate\Contracts\Auth\Guard
+        return new class() implements Guard
         {
             protected $user;
 
@@ -148,7 +149,7 @@ it('allows custom auth guard', function () {
                 return $this->user !== null;
             }
 
-            public function setUser(\Illuminate\Contracts\Auth\Authenticatable $user)
+            public function setUser(Authenticatable $user)
             {
                 $this->user = $user;
             }

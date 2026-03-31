@@ -9,7 +9,13 @@ use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Schema;
 
+use function Orchestra\Testbench\Pest\defineEnvironment;
+
 uses(LazilyRefreshDatabase::class);
+
+defineEnvironment(function () {
+    sharp()->config()->enableForgottenPassword();
+});
 
 beforeEach(function () {
     $this->withoutExceptionHandling();

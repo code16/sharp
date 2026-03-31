@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\File;
 
 beforeEach(function () {
     login();
+});
+
+afterEach(function () {
     File::deleteDirectory(base_path('app/Sharp'));
 });
 
@@ -112,7 +115,7 @@ it('can generate a new sharp single entity from console', function () {
         ->assertExitCode(0);
 
     // Manually add this new Entity to the Sharp config
-    app(\Code16\Sharp\Config\SharpConfigBuilder::class)
+    app(SharpConfigBuilder::class)
         ->addEntity('settings', '\App\Sharp\Entities\SettingsEntity');
 
     $this->get(

@@ -17,7 +17,6 @@ use Illuminate\Testing\Fluent\AssertableJson;
 beforeEach(function () {
     login();
     sharp()->config()->declareEntity(PersonEntity::class);
-    sharp()->config()->disableImpersonation();
 });
 
 it('allows to configure prohibited actions on entities', function () {
