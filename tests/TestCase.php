@@ -3,14 +3,18 @@
 namespace Code16\Sharp\Tests;
 
 use BladeUI\Icons\BladeIconsServiceProvider;
+use BladeUI\Icons\Factory;
 use Code16\ContentRenderer\ContentRendererServiceProvider;
 use Code16\Sharp\SharpInternalServiceProvider;
 use Illuminate\Testing\Fluent\AssertableJson;
+use Orchestra\Testbench\Pest\WithPest;
 use Orchestra\Testbench\TestCase as Orchestra;
 use PHPUnit\Framework\Assert as PHPUnit;
 
 class TestCase extends Orchestra
 {
+    use WithPest;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -52,7 +56,7 @@ class TestCase extends Orchestra
     {
         config()->set('database.default', 'testing');
 
-        $app->make(\BladeUI\Icons\Factory::class)->add('testicon', [
+        $app->make(Factory::class)->add('testicon', [
             'path' => __DIR__.'/Fixtures/resources/svg',
             'prefix' => 'testicon',
         ]);

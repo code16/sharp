@@ -8,5 +8,7 @@ return [
     'code_field' => 'Code',
     'remember' => 'Remember me',
     'button' => 'Login',
+    'passkey_button' => 'Use passkey',
+    'or_label' => 'or',
     'forgot_password_link' => 'Forgot password?',
 ];

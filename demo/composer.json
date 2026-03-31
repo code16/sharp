@@ -16,6 +16,7 @@
         "masterminds/html5": "^2.9",
         "pragmarx/google2fa": "^8.0",
         "spatie/image-optimizer": "^1.7",
+        "spatie/laravel-passkeys": "^1.6",
         "spatie/laravel-translatable": "^6.13",
         "symfony/html-sanitizer": "^7.3",
         "technikermathe/blade-lucide-icons": "dev-l13-compatibility",

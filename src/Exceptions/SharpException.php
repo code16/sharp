@@ -29,6 +29,10 @@ class SharpException extends \Exception
             return false;
         }
 
+        if (! app()->isBooted()) {
+            throw $this;
+        }
+
         return Inertia::render(
             'Error',
             [

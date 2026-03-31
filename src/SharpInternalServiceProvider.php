@@ -3,6 +3,7 @@
 namespace Code16\Sharp;
 
 use Code16\Sharp\Auth\Impersonate\SharpImpersonationHandler;
+use Code16\Sharp\Auth\Passkeys\PasskeyEventSubscriber;
 use Code16\Sharp\Auth\SharpAuthorizationManager;
 use Code16\Sharp\Auth\TwoFactor\Engines\GoogleTotpEngine;
 use Code16\Sharp\Auth\TwoFactor\Engines\Sharp2faTotpEngine;
@@ -96,6 +97,8 @@ class SharpInternalServiceProvider extends ServiceProvider
         }
 
         $this->configureOctane();
+
+        Event::subscribe(PasskeyEventSubscriber::class);
     }
 
     public function register()
@@ -238,6 +241,10 @@ class SharpInternalServiceProvider extends ServiceProvider
 
         if (sharp()->config()->get('auth.impersonate.enabled')) {
             $this->loadRoutesFrom(__DIR__.'/routes/auth/impersonate.php');
+        }
+
+        if (sharp()->config()->get('auth.passkeys.enabled')) {
+            $this->loadRoutesFrom(__DIR__.'/routes/auth/passkeys.php');
         }
     }
 

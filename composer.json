@@ -38,13 +38,23 @@
         "laravel/pint": "^1.27",
         "mockery/mockery": "^1.5.0",
         "nunomaduro/collision": "^8.0",
+        "orchestra/pest-plugin-testbench": "^4.1",
         "orchestra/testbench": "^9.0|^10.0|^11.0",
         "pestphp/pest": "^3.0|^4.0",
         "pestphp/pest-plugin-laravel": "^3.0|^4.0",
         "phpunit/phpunit": "^11.0|^12.0",
+        "spatie/laravel-passkeys": "^1.0",
         "spatie/laravel-ray": "^1.26",
         "spatie/laravel-typescript-transformer": "^2.3",
         "spatie/typescript-transformer": "^2.2"
+    },
+    "suggest": {
+        "spatie/laravel-passkeys": "Allows you to use passkey authentication (^1.0 is required).",
+        "pragmarx/google2fa-laravel": "Allows you to use 2FA default TOTP command",
+        "bacon/bacon-qr-code": "Allows you to use QR codes in default TOTP command"
+    },
+    "conflict": {
+        "spatie/laravel-passkeys": "<1.0 || >=2.0"
     },
     "autoload": {
         "files": [

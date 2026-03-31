@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -27,6 +28,14 @@ class LoginController extends Controller
             return redirect()->to($loginPageUrl);
         }
 
+        if (sharp()->config()->get('auth.passkeys.enabled')) {
+            session()->put('passkeys.redirect', route('code16.sharp.home'));
+
+            if (! Route::has('passkeys.login')) {
+                throw new \Exception('Passkeys routes are not defined. Add `Route::passkeys()` in your routes/web.php file.');
+            }
+        }
+
         $message = sharp()->config()->get('auth.login_form_message');
 
         return Inertia::render('Auth/Login', [
@@ -36,6 +45,7 @@ class LoginController extends Controller
                     ? $message->render()
                     : view('sharp::partials.login-form-message', ['message' => $message])->render()
                 : null,
+            'passkeyError' => session('authenticatePasskey::message'),
         ]);
     }
 
@@ -49,6 +59,16 @@ class LoginController extends Controller
         }
 
         $request->session()->regenerate();
+
+        if (sharp()->config()->get('auth.passkeys.enabled')
+            && sharp()->config()->get('auth.passkeys.prompt_after_login')
+            && ! $request->cookie('sharp_skip_passkey_prompt')
+            && $request->boolean('supports_passkeys')
+            && method_exists($request->user(), 'passkeys')
+            && $request->user()->passkeys()->count() === 0
+        ) {
+            return redirect()->route('code16.sharp.passkeys.create', ['prompt' => true]);
+        }
 
         return redirect()->intended(route('code16.sharp.home'));
     }
