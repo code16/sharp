@@ -8,6 +8,7 @@ return [
     'code_field' => 'Code',
     'remember' => 'Rester connecté',
     'button' => 'Connexion',
+    'or_label' => 'ou',
     'passkey_button' => 'Utiliser une clé d’accès',
     'forgot_password_link' => 'Mot de passe oublié ?',
 ];

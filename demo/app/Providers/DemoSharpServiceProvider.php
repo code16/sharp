@@ -23,12 +23,14 @@ class DemoSharpServiceProvider extends SharpAppServiceProvider
             ->setSharpMenu(SharpMenu::class)
             ->setThemeColor('#004c9b')
             ->setThemeLogo(logoUrl: '/img/sharp/logo.svg', logoHeight: '1rem', faviconUrl: '/img/sharp/favicon-32x32.png')
-            // ->enableImpersonation()
             ->enableForgottenPassword()
             ->setAuthCustomGuard('web')
             ->enable2faCustom(Demo2faNotificationHandler::class)
             ->enableLoginRateLimiting(maxAttempts: 3)
-            ->when(config('demo.enable_passkeys'))->enablePasskeys()
+            ->when(config('demo.enable_passkeys'),
+                fn () => $config->enablePasskeys(),
+                fn () => $config->enableImpersonation()
+            )
             ->setLoginAttributes('email', 'password')
             ->setUserDisplayAttribute('name')
             ->setUserAvatarAttribute(fn () => auth()->user()->avatar?->thumbnail(200))
