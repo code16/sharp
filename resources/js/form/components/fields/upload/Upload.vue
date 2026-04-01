@@ -44,6 +44,7 @@
     import { useFieldContainerData } from "@/form/useFieldContainerData";
     import { useParentEditor } from "@/form/components/fields/editor/useParentEditor";
     import { useParentListField } from "@/form/components/fields/list/useParentListField";
+    import { CURRENT_PAGE_URL } from "@/api/headers";
 
     const props = defineProps<FormFieldProps<FormUploadFieldData> & {
         asEditorEmbed?: boolean,
@@ -119,6 +120,7 @@
             headers: {
                 'Accept': 'application/json',
                 'X-CSRF-TOKEN': getCsrfToken(),
+                [CURRENT_PAGE_URL]: location.href,
             },
         })
         .on('file-added', async (file) => {

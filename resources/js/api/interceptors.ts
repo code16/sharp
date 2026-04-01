@@ -1,6 +1,7 @@
 import { parseBlobJSONContent } from "@/utils/request";
 import { handleErrorAlert } from "./errors";
 import { Axios, AxiosError, isCancel } from "axios";
+import { CURRENT_PAGE_URL } from "@/api/headers";
 
 declare module 'axios' {
     interface AxiosRequestConfig {
@@ -8,7 +9,6 @@ declare module 'axios' {
         ignoreContentType?: boolean;
     }
 }
-
 
 export function installInterceptors(api: Axios) {
     api.interceptors.request.use(request => {
@@ -23,7 +23,7 @@ export function installInterceptors(api: Axios) {
                 } as RequestInit;
             }
         } else {
-            request.headers['X-Current-Page-Url'] = location.href;
+            request.headers[CURRENT_PAGE_URL] = location.href;
         }
         return request;
     });
