@@ -53,6 +53,7 @@ it('returns a 404 for a missing file', function () {
             route('code16.sharp.download.show', [
                 'entityKey' => 'person',
                 'instanceId' => 1,
+                'disk' => 'local',
                 'path' => '/files/unknown.jpg',
             ]),
         )
