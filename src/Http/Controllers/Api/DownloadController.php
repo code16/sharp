@@ -25,12 +25,6 @@ class DownloadController extends ApiController
             trans('sharp::errors.file_not_found'),
         );
 
-        return response(
-            content: Storage::disk($disk)->get($path),
-            headers: [
-                'Content-Type' => Storage::disk($disk)->mimeType($path),
-                'Content-Disposition' => 'attachment',
-            ],
-        );
+        return Storage::disk($disk)->download($path);
     }
 }

@@ -15,7 +15,7 @@ it('allows to download a file from a form field', function () {
     $file = UploadedFile::fake()->image('test.jpg', 600, 600);
     $file->storeAs('/files', 'test.jpg', ['disk' => 'local']);
 
-    $response = $this
+    $this
         ->get(
             route('code16.sharp.download.show', [
                 'entityKey' => 'person',
@@ -24,17 +24,16 @@ it('allows to download a file from a form field', function () {
                 'path' => '/files/test.jpg',
             ]),
         )
-        ->assertOk();
-
-    expect($response->content())
-        ->toEqual(Storage::disk('local')->get('files/test.jpg'));
+        ->assertOk()
+        ->assertStreamedContent(Storage::disk('local')->get('files/test.jpg'))
+        ->assertHeader('Content-Disposition', 'attachment; filename=test.jpg');
 });
 
 it('allows to download a file from a show field', function () {
     $file = UploadedFile::fake()->image('test.jpg', 600, 600);
     $file->storeAs('/files', 'test.jpg', ['disk' => 'local']);
 
-    $response = $this
+    $this
         ->get(
             route('code16.sharp.download.show', [
                 'entityKey' => 'person',
@@ -43,10 +42,9 @@ it('allows to download a file from a show field', function () {
                 'path' => '/files/test.jpg',
             ]),
         )
-        ->assertOk();
-
-    expect($response->content())
-        ->toEqual(Storage::disk('local')->get('files/test.jpg'));
+        ->assertOk()
+        ->assertStreamedContent(Storage::disk('local')->get('files/test.jpg'))
+        ->assertHeader('Content-Disposition', 'attachment; filename=test.jpg');
 });
 
 it('returns a 404 for a missing file', function () {
@@ -55,7 +53,7 @@ it('returns a 404 for a missing file', function () {
             route('code16.sharp.download.show', [
                 'entityKey' => 'person',
                 'instanceId' => 1,
-                'fileName' => 'test.jpg',
+                'path' => '/files/unknown.jpg',
             ]),
         )
         ->assertNotFound();

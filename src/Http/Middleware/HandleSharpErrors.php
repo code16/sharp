@@ -20,8 +20,10 @@ class HandleSharpErrors
         /** @var Response $response */
         $response = $next($request);
 
-        if ($response->exception instanceof ValidationException
-            || $response->exception instanceof AuthenticationException) {
+        if (isset($response->exception) && (
+            $response->exception instanceof ValidationException
+            || $response->exception instanceof AuthenticationException
+        )) {
             return $response;
         }
 
