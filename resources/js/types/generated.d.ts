@@ -9,6 +9,7 @@ export type AreaGraphWidgetData = {
   ratioX: number | null;
   ratioY: number | null;
   height: number | null;
+  formatOptions: NumberFormatOptions | null;
   displayHorizontalAxisAsTimeline: boolean;
   enableHorizontalAxisLabelSampling: boolean;
   curved: boolean;
@@ -39,6 +40,7 @@ export type BarGraphWidgetData = {
   ratioX: number | null;
   ratioY: number | null;
   height: number | null;
+  formatOptions: NumberFormatOptions | null;
   displayHorizontalAxisAsTimeline: boolean;
   enableHorizontalAxisLabelSampling: boolean;
   horizontal: boolean;
@@ -718,6 +720,7 @@ export type LineGraphWidgetData = {
   ratioX: number | null;
   ratioY: number | null;
   height: number | null;
+  formatOptions: NumberFormatOptions | null;
   displayHorizontalAxisAsTimeline: boolean;
   enableHorizontalAxisLabelSampling: boolean;
   curved: boolean;
@@ -754,6 +757,27 @@ export type NotificationData = {
   autoHide: boolean;
 };
 export type NotificationLevel = "info" | "success" | "warning" | "danger";
+export type NumberFormatOptions = {
+  compactDisplay: string | null;
+  currency: string | null;
+  currencyDisplay: string | null;
+  currencySign: string | null;
+  maximumFractionDigits: number | null;
+  maximumSignificantDigits: number | null;
+  minimumFractionDigits: number | null;
+  minimumIntegerDigits: number | null;
+  minimumSignificantDigits: number | null;
+  notation: string | null;
+  roundingIncrement: number | null;
+  roundingMode: string | null;
+  roundingPriority: number | null;
+  signDisplay: string | null;
+  style: string | null;
+  trailingZeroDisplay: number | null;
+  unit: string | null;
+  unitDisplay: string | null;
+  useGrouping: boolean | null;
+};
 export type OrderedListWidgetData = {
   value?: {
     key: string;
@@ -810,6 +834,7 @@ export type PieGraphWidgetData = {
   ratioX: number | null;
   ratioY: number | null;
   height: number | null;
+  formatOptions: NumberFormatOptions | null;
 };
 export type RequestFieldContainerData = {
   embed_key: string | null;
