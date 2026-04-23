@@ -1,7 +1,6 @@
 import '../css/vendors.css';
 import '../css/app.css';
 
-import './polyfills';
 import { createApp, DefineComponent, h, nextTick } from 'vue';
 import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';

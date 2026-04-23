@@ -15,9 +15,6 @@ export default defineConfig(({ mode, command }) => {
         envDir: path.join(process.cwd(), '/demo'),
         build: {
             outDir: 'dist',
-            commonjsOptions: {
-                requireReturnsDefault: 'preferred'
-            },
         },
         resolve: {
             alias: {
