@@ -65,7 +65,7 @@ class PostDashboard extends SharpDashboard
                 'visits_line',
                 SharpGraphWidgetDataSet::make(collect(CarbonPeriod::create($this->getStartDate(), $this->getEndDate()))
                     ->mapWithKeys(fn (Carbon $day, $k) => [
-                        $day->isoFormat('L') => rand(10, 100),
+                        $day->format('Y-m-d') => rand(10, 100),
                     ]))
                     ->setLabel('Visits')
                     ->setColor('#274754'),
