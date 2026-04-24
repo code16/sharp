@@ -5,6 +5,7 @@ on:
   push:
     tags:
     - 'v9.*'
+    - 'v10.*'
 jobs:
   deploy:
     runs-on: ubuntu-latest
