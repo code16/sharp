@@ -6,6 +6,7 @@ use Code16\Sharp\Dashboard\Layout\DashboardLayout;
 use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
 use Code16\Sharp\Dashboard\Widgets\SharpWidget;
 use Code16\Sharp\Dashboard\Widgets\WidgetsContainer;
+use Code16\Sharp\Dashboard\Widgets\XYChartInterface;
 use Code16\Sharp\EntityList\Traits\HandleDashboardCommands;
 use Code16\Sharp\Filters\Concerns\HasFilters;
 use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
@@ -104,8 +105,10 @@ abstract class SharpDashboard
 
             // First, graph widgets dataSets
             ->map(function (array $dataSets, string $key) {
+                $widget = $this->findWidgetByKey($key);
+                $hasDateLabels = $widget instanceof XYChartInterface && $widget->hasDisplayHorizontalAxisAsTimeline();
                 $dataSetsValues = collect($dataSets)
-                    ->map(fn ($dataSet) => $dataSet->toArray());
+                    ->map(fn (SharpGraphWidgetDataSet $dataSet) => $dataSet->withDateLabels($hasDateLabels)->toArray());
 
                 return [
                     'key' => $key,
