@@ -20,6 +20,7 @@ final class ShowFileFieldData extends Data
         'path' => 'string',
         'thumbnail' => 'string',
         'playable_preview_url' => 'string',
+        'download_url' => 'string',
         'size' => 'int',
         'mime_type' => 'string',
     ])]

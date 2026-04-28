@@ -4,6 +4,7 @@ use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
 
 beforeEach(function () {
     Storage::fake('local');
@@ -17,7 +18,7 @@ it('allows to download a file from a form field', function () {
 
     $this
         ->get(
-            route('code16.sharp.download.show', [
+            URL::signedRoute('code16.sharp.download.show', [
                 'entityKey' => 'person',
                 'instanceId' => 1,
                 'disk' => 'local',
@@ -35,7 +36,7 @@ it('allows to download a file from a show field', function () {
 
     $this
         ->get(
-            route('code16.sharp.download.show', [
+            URL::signedRoute('code16.sharp.download.show', [
                 'entityKey' => 'person',
                 'instanceId' => 1,
                 'disk' => 'local',
@@ -50,7 +51,7 @@ it('allows to download a file from a show field', function () {
 it('returns a 404 for a missing file', function () {
     $this
         ->get(
-            route('code16.sharp.download.show', [
+            URL::signedRoute('code16.sharp.download.show', [
                 'entityKey' => 'person',
                 'instanceId' => 1,
                 'disk' => 'local',
@@ -60,6 +61,19 @@ it('returns a 404 for a missing file', function () {
         ->assertNotFound();
 });
 
+it('returns a 401 for an invalid signature', function () {
+    $this
+        ->get(
+            route('code16.sharp.download.show', [
+                'entityKey' => 'person',
+                'instanceId' => 1,
+                'disk' => 'local',
+                'path' => '/files/test.jpg',
+            ]),
+        )
+        ->assertStatus(401);
+});
+
 it('does not allow to download a file without authorization', function () {
     app(SharpEntityManager::class)
         ->entityFor('person')
@@ -67,7 +81,7 @@ it('does not allow to download a file without authorization', function () {
 
     $this
         ->get(
-            route('code16.sharp.download.show', [
+            URL::signedRoute('code16.sharp.download.show', [
                 'entityKey' => 'person',
                 'instanceId' => 1,
                 'disk' => 'local',
@@ -85,7 +99,7 @@ it('allows to download a file of an allowed disk', function () {
 
     $this
         ->get(
-            route('code16.sharp.download.show', [
+            URL::signedRoute('code16.sharp.download.show', [
                 'entityKey' => 'person',
                 'instanceId' => 1,
                 'disk' => 'local',
@@ -103,7 +117,7 @@ it('does not allow to download a file of a not allowed disk', function () {
 
     $this
         ->get(
-            route('code16.sharp.download.show', [
+            URL::signedRoute('code16.sharp.download.show', [
                 'entityKey' => 'person',
                 'instanceId' => 1,
                 'disk' => 'local',
