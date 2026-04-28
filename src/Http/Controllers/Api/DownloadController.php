@@ -8,6 +8,10 @@ class DownloadController extends ApiController
 {
     public function show(string $globalFilter, string $entityKey, ?string $instanceId = null)
     {
+        if (! request()->hasValidSignature()) {
+            abort(401);
+        }
+
         $this->authorizationManager->check('view', $entityKey, $instanceId);
 
         if (
