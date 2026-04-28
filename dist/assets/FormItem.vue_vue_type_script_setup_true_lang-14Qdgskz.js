@@ -1,1 +1,0 @@
-import{d as o,o as n,A as r,q as t,R as c,e as l,z as p}from"./sharp-D4K6ezdn.js";const d=o({__name:"FormItem",props:{class:{}},setup(s){const e=s;return(a,m)=>(n(),r("div",{class:c(l(p)("space-y-2",e.class))},[t(a.$slots,"default")],2))}});export{d as _};

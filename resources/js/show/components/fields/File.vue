@@ -51,27 +51,27 @@
                     </template>
                     <div class="flex flex-col flex-1 min-w-0">
                         <div class="truncate text-sm font-medium">
-                            <TooltipProvider>
-                                <Tooltip :delay-duration="0" disable-hoverable-content>
-                                    <TooltipTrigger as-child>
-                                        <a class="text-foreground underline underline-offset-4 decoration-foreground/20 hover:underline hover:decoration-foreground"
-                                            :href="route('code16.sharp.download.show', {
-                                            entityKey: show.entityKey,
-                                            instanceId: show.instanceId,
-                                            disk: value.disk,
-                                            path: value.path,
-                                        })"
-                                            :download="value.name ?? ''"
-                                        >
-                                            {{ value.name }}
-                                        </a>
-                                    </TooltipTrigger>
+                            <template v-if="value.download_url">
+                                <TooltipProvider>
+                                    <Tooltip :delay-duration="0" disable-hoverable-content>
+                                        <TooltipTrigger as-child>
+                                            <a class="text-foreground underline underline-offset-4 decoration-foreground/20 hover:underline hover:decoration-foreground"
+                                                :href="value.download_url"
+                                                :download="value.name ?? ''"
+                                            >
+                                                {{ value.name }}
+                                            </a>
+                                        </TooltipTrigger>
 
-                                    <TooltipContent class="pointer-events-none" :side-offset="10">
-                                        {{ __('sharp::form.upload.download_tooltip') }}
-                                    </TooltipContent>
-                                </Tooltip>
-                            </TooltipProvider>
+                                        <TooltipContent class="pointer-events-none" :side-offset="10">
+                                            {{ __('sharp::form.upload.download_tooltip') }}
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </TooltipProvider>
+                            </template>
+                            <template v-else>
+                                {{ value.name }}
+                            </template>
                         </div>
                         <template v-if="legend">
                             <div class="mt-2 text-muted-foreground text-sm">
@@ -87,27 +87,24 @@
                         </div>
                     </div>
                 </div>
-                <DropdownMenu :modal="false">
-                    <DropdownMenuTrigger as-child>
-                        <Button class="self-center" variant="ghost" size="icon">
-                            <MoreHorizontal class="size-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                        <DropdownMenuItem
-                            as="a"
-                            :download="value.name ?? ''"
-                            :href="route('code16.sharp.download.show', {
-                                entityKey: show.entityKey,
-                                instanceId: show.instanceId,
-                                disk: value.disk,
-                                path: value.path,
-                            })"
-                        >
-                            {{ __('sharp::show.file.download') }}
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <template v-if="value.download_url">
+                    <DropdownMenu :modal="false">
+                        <DropdownMenuTrigger as-child>
+                            <Button class="self-center" variant="ghost" size="icon">
+                                <MoreHorizontal class="size-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                            <DropdownMenuItem
+                                as="a"
+                                :download="value.name ?? ''"
+                                :href="value.download_url"
+                            >
+                                {{ __('sharp::show.file.download') }}
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </template>
             </template>
         </div>
     </ShowFieldLayout>

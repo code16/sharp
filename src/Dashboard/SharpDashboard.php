@@ -2,11 +2,14 @@
 
 namespace Code16\Sharp\Dashboard;
 
+use Carbon\Exceptions\InvalidFormatException;
 use Code16\Sharp\Dashboard\Layout\DashboardLayout;
 use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
 use Code16\Sharp\Dashboard\Widgets\SharpWidget;
 use Code16\Sharp\Dashboard\Widgets\WidgetsContainer;
+use Code16\Sharp\Dashboard\Widgets\XYChartInterface;
 use Code16\Sharp\EntityList\Traits\HandleDashboardCommands;
+use Code16\Sharp\Exceptions\Dashboard\SharpDashboardDataException;
 use Code16\Sharp\Filters\Concerns\HasFilters;
 use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
 use Illuminate\Support\Arr;
@@ -104,8 +107,9 @@ abstract class SharpDashboard
 
             // First, graph widgets dataSets
             ->map(function (array $dataSets, string $key) {
+                $widget = $this->findWidgetByKey($key);
                 $dataSetsValues = collect($dataSets)
-                    ->map(fn ($dataSet) => $dataSet->toArray());
+                    ->map(fn (SharpGraphWidgetDataSet $dataSet) => $this->dataSetToArray($widget, $dataSet));
 
                 return [
                     'key' => $key,
@@ -192,6 +196,20 @@ abstract class SharpDashboard
         $this->orderedListWidgetsData[$panelWidgetKey] = $data;
 
         return $this;
+    }
+
+    private function dataSetToArray(SharpWidget $widget, SharpGraphWidgetDataSet $dataSet): array
+    {
+        $hasDateLabels = $widget instanceof XYChartInterface && $widget->hasDisplayHorizontalAxisAsTimeline();
+
+        try {
+            return $dataSet->withDateLabels($hasDateLabels)->toArray();
+        } catch (InvalidFormatException $e) {
+            throw new SharpDashboardDataException(
+                'Invalid date format for ['.$widget->getKey().'] dataset: '.$e->getMessage(),
+                previous: $e
+            );
+        }
     }
 
     private function checkDashboardIsBuilt(): void

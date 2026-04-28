@@ -477,20 +477,15 @@
                             </template>
                             <div class="flex-1 min-w-0">
                                 <div class="text-sm truncate">
-                                    <template v-if="value?.path">
+                                    <template v-if="value?.download_url">
                                         <TooltipProvider>
                                             <Tooltip :delay-duration="0" disable-hoverable-content>
                                                 <TooltipTrigger as-child>
                                                     <a class="text-foreground underline underline-offset-4 decoration-foreground/20 hover:decoration-foreground"
-                                                        :href="route('code16.sharp.download.show', {
-                                                        entityKey: form.entityKey,
-                                                        instanceId: form.instanceId,
-                                                        disk: value.disk,
-                                                        path: value.path,
-                                                    })"
-                                                        :download="value?.name"
+                                                        :href="value.download_url"
+                                                        :download="value.name"
                                                     >
-                                                        {{ value?.name }}
+                                                        {{ value.name }}
                                                     </a>
                                                 </TooltipTrigger>
 
@@ -527,16 +522,11 @@
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
-                                <template v-if="value?.path">
+                                <template v-if="value?.download_url">
                                     <DropdownMenuItem
                                         as="a"
                                         :download="value.name ?? ''"
-                                        :href="route('code16.sharp.download.show', {
-                                            entityKey: form.entityKey,
-                                            instanceId: form.instanceId,
-                                            disk: value.disk,
-                                            path: value.path,
-                                        })"
+                                        :href="value.download_url"
                                     >
                                         {{ __('sharp::form.upload.download_link') }}
                                     </DropdownMenuItem>

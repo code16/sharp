@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Dashboard\Widgets;
 
-class SharpLineGraphWidget extends SharpGraphWidget
+class SharpLineGraphWidget extends SharpGraphWidget implements XYChartInterface
 {
     use IsXYChart;
 

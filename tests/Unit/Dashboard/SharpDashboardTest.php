@@ -177,6 +177,46 @@ it('handles graph widget data', function () {
         ]);
 });
 
+it('handles graph widget data with date labels', function () {
+    $dashboard = new class() extends FakeSharpDashboard
+    {
+        protected function buildWidgets(WidgetsContainer $widgetsContainer): void
+        {
+            $widgetsContainer->addWidget(SharpBarGraphWidget::make('widget')->setDisplayHorizontalAxisAsTimeline());
+        }
+
+        protected function buildWidgetsData(): void
+        {
+            $this->addGraphDataSet(
+                'widget',
+                SharpGraphWidgetDataSet::make([
+                    '2026-04-03' => 10,
+                    '2026-04-04 12:30:04' => 20,
+                    '2026-04-05' => 30,
+                ])->setLabel('test')->setColor('blue'));
+        }
+    };
+
+    expect($dashboard->data())
+        ->toEqual([
+            'widget' => [
+                'key' => 'widget',
+                'datasets' => [
+                    [
+                        'data' => [10, 20, 30],
+                        'label' => 'test',
+                        'color' => 'blue',
+                    ],
+                ],
+                'labels' => [
+                    '2026-04-03T00:00:00+00:00',
+                    '2026-04-04T12:30:04+00:00',
+                    '2026-04-05T00:00:00+00:00',
+                ],
+            ],
+        ]);
+});
+
 it('handles graph widget data with multiple datasets', function () {
     $dashboard = new class() extends FakeSharpDashboard
     {

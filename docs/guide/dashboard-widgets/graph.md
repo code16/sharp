@@ -125,3 +125,18 @@ We use an instance of `Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet` t
 - `setColor(string $color)` where $color can be an HTML constant or an hexadecimal value, to set the data color.
 
 You can chain calls to `addGraphDataSet()` to add multiple data sets, with different colors and labels.
+
+### Date labels
+
+When `setDisplayHorizontalAxisAsTimeline()` is used, dataset values should have a key parsable by Carbon (e.g `Y-m-d` or `Y-m-d H:i:s`), for example:
+
+```php
+$this->addGraphDataSet(
+    'daily_records',
+    SharpGraphWidgetDataSet::make(DailyRecord::get()->mapWithKeys(fn ($record) => [
+        $record->date->format('Y-m-d') => $record->fail_count
+    ]))
+        ->setLabel('Daily records')
+        ->setColor('blue')
+);
+```
