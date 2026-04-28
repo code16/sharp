@@ -18,7 +18,7 @@ it('allows to download a file from a form field', function () {
 
     $this
         ->get(
-            URL::signedRoute('code16.sharp.download.show', [
+            URL::temporarySignedRoute('code16.sharp.download.show', now()->addMinutes(120), [
                 'entityKey' => 'person',
                 'instanceId' => 1,
                 'disk' => 'local',
@@ -36,7 +36,7 @@ it('allows to download a file from a show field', function () {
 
     $this
         ->get(
-            URL::signedRoute('code16.sharp.download.show', [
+            URL::temporarySignedRoute('code16.sharp.download.show', now()->addMinutes(120), [
                 'entityKey' => 'person',
                 'instanceId' => 1,
                 'disk' => 'local',
@@ -51,7 +51,7 @@ it('allows to download a file from a show field', function () {
 it('returns a 404 for a missing file', function () {
     $this
         ->get(
-            URL::signedRoute('code16.sharp.download.show', [
+            URL::temporarySignedRoute('code16.sharp.download.show', now()->addMinutes(120), [
                 'entityKey' => 'person',
                 'instanceId' => 1,
                 'disk' => 'local',
@@ -81,7 +81,7 @@ it('does not allow to download a file without authorization', function () {
 
     $this
         ->get(
-            URL::signedRoute('code16.sharp.download.show', [
+            URL::temporarySignedRoute('code16.sharp.download.show', now()->addMinutes(120), [
                 'entityKey' => 'person',
                 'instanceId' => 1,
                 'disk' => 'local',
@@ -99,7 +99,7 @@ it('allows to download a file of an allowed disk', function () {
 
     $this
         ->get(
-            URL::signedRoute('code16.sharp.download.show', [
+            URL::temporarySignedRoute('code16.sharp.download.show', now()->addMinutes(120), [
                 'entityKey' => 'person',
                 'instanceId' => 1,
                 'disk' => 'local',
@@ -117,7 +117,7 @@ it('does not allow to download a file of a not allowed disk', function () {
 
     $this
         ->get(
-            URL::signedRoute('code16.sharp.download.show', [
+            URL::temporarySignedRoute('code16.sharp.download.show', now()->addMinutes(120), [
                 'entityKey' => 'person',
                 'instanceId' => 1,
                 'disk' => 'local',
