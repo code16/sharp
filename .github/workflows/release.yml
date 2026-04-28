@@ -21,16 +21,16 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.4
+          php-version: 8.5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: lts/*
+          node-version: 24
 
       - name: Remove optional "v" prefix
         id: version
@@ -49,7 +49,7 @@ jobs:
         run: npm run build
 
       - name: Commit assets
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: "Assets"
           file_pattern: dist
@@ -58,7 +58,7 @@ jobs:
         run: sed -i "s/const VERSION = '.*';/const VERSION = '${{ steps.version.outputs.version }}';/g" src/SharpInternalServiceProvider.php
 
       - name: Commit version change
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: "Update version to v${{ steps.version.outputs.version }}"
           file_pattern: src/SharpInternalServiceProvider.php
