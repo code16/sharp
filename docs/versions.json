@@ -1,0 +1,16 @@
+[
+    {
+        "name": "9.x",
+        "branch": "main",
+        "slug": "v9"
+    },
+    {
+        "name": "8.x",
+        "branch": "8.0",
+        "slug": "v8"
+    },
+    {
+        "name": "7.x",
+        "url": "https://sharp7.code16.fr/docs/guide"
+    }
+]
