@@ -51,7 +51,7 @@ export default async () => {
         themeConfig: {
             logo: { src: '/logo.svg', width: 100, height: 24, alt: version.title },
 
-            logoLink: `${APP_URL}/docs/${versions[0].slug}`,
+            logoLink: APP_URL,
 
             siteTitle: false,
 
