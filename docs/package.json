@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
     "dev": "vitepress dev",
-    "build": "vitepress build",
+    "build": "./update-docs.sh && npm run build:vitepress",
+    "build:vitepress": "VERSION=9.x vitepress build && VERSION=8.x vitepress build",
     "preview": "vitepress preview"
   },
   "type": "module",
@@ -11,13 +12,14 @@
     "@types/jsdom": "^21.1.5",
     "@types/prismjs": "^1.26.3",
     "autoprefixer": "^10.4.20",
+    "concurrently": "^9.2.1",
     "jsdom": "^22.1.0",
     "postcss": "^8.4.49",
     "postcss-nesting": "^12.0.1",
     "prismjs": "^1.29.0",
     "tailwindcss": "^3.4.16",
     "typescript": "^5.2.2",
-    "vitepress": "^1.5.0"
+    "vitepress": "^2.0.0-alpha.17"
   },
   "dependencies": {
     "medium-zoom": "^1.1.0"
