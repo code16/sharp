@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "vitepress dev",
     "build": "./update-docs.sh && npm run build:vitepress",
-    "build:vitepress": "concurrently 'VERSION=9.x vitepress build' 'VERSION=8.x vitepress build'",
+    "build:vitepress": "VERSION=9.x vitepress build && VERSION=8.x vitepress build",
     "preview": "vitepress preview"
   },
   "type": "module",
