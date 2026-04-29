@@ -1,13 +1,17 @@
 [
     {
         "name": "9.x",
+        "title": "Sharp 9.x",
         "branch": "main",
-        "slug": "v9"
+        "slug": "9.x",
+        "algoliaTag": "v9"
     },
     {
         "name": "8.x",
+        "title": "Sharp 8.x",
         "branch": "8.0",
-        "slug": "v8"
+        "slug": "8.x",
+        "algoliaTag": "v8"
     },
     {
         "name": "7.x",

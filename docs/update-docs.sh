@@ -4,7 +4,7 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$SCRIPT_DIR/.."
-VERSIONS_FILE="$SCRIPT_DIR/versions.json"
+VERSIONS_FILE="$SCRIPT_DIR/versions/config.json"
 VERSIONS_DIR="$SCRIPT_DIR/versions"
 WORKTREE_DIR="$(mktemp -d)"
 
