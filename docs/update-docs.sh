@@ -35,7 +35,7 @@ jq -c '.[]' "$VERSIONS_FILE" | while read -r version; do
     git -C "$REPO_DIR" fetch origin "$branch"
 
     rm -rf "$WORKTREE_DIR"
-    git -C "$REPO_DIR" worktree add --detach "$WORKTREE_DIR" "origin/$branch"
+    git -C "$REPO_DIR" worktree add --detach "$WORKTREE_DIR" FETCH_HEAD
 
     cp -r "$WORKTREE_DIR/docs/." "$target_dir/"
 
