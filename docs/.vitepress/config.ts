@@ -15,7 +15,6 @@ export default async () => {
     const version = process.env.VERSION
         ? versions.find(v => v.slug === process.env.VERSION)!
         : versions[0];
-    const isLastVersion = version.slug === versions[0].slug;
 
     return defineConfig({
         lang: 'en-US',
