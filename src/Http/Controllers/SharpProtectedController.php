@@ -15,8 +15,5 @@ class SharpProtectedController extends Controller
     {
         $this->entityManager = app(SharpEntityManager::class);
         $this->authorizationManager = app(SharpAuthorizationManager::class);
-
-        $guardSuffix = sharp()->config()->get('auth.guard') ? ':'.sharp()->config()->get('auth.guard') : '';
-        $this->middleware('sharp_auth'.$guardSuffix);
     }
 }

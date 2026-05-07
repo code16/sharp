@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::group([
     'prefix' => '/'.sharp()->config()->get('custom_url_segment').'/api',
-    'middleware' => ['sharp_common', 'sharp_api'],
+    'middleware' => ['sharp_common', 'sharp_api', 'sharp_auth'],
 ], function () {
     Route::get('/{globalFilter}/dashboard/{dashboardKey}/command/{commandKey}/form', [ApiDashboardCommandController::class, 'show'])
         ->name('code16.sharp.api.dashboard.command.form');

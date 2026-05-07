@@ -13,6 +13,10 @@ class SharpAuthenticate extends BaseAuthenticate
 {
     public function handle($request, Closure $next, ...$guards)
     {
+        $guards = empty($guards) && sharp()->config()->get('auth.guard')
+            ? [sharp()->config()->get('auth.guard')]
+            : $guards;
+
         $this->authenticate($request, $guards);
 
         if (Gate::has('viewSharp')) {
