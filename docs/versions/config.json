@@ -2,7 +2,7 @@
     {
         "name": "9.x",
         "title": "Sharp 9.x",
-        "branch": "main",
+        "branch": "9.x",
         "slug": "9.x",
         "algoliaTag": "v9"
     },
