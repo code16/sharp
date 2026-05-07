@@ -11,12 +11,6 @@ use Inertia\Response;
 
 class ImpersonateController extends Controller
 {
-    public function __construct()
-    {
-        $guardSuffix = sharp()->config()->get('auth.guard') ? ':'.sharp()->config()->get('auth.guard') : '';
-        $this->middleware('sharp_guest'.$guardSuffix);
-    }
-
     public function create(?SharpImpersonationHandler $impersonationHandler): RedirectResponse|Response
     {
         return Inertia::render('Auth/Impersonate', [

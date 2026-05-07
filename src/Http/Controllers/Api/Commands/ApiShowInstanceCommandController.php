@@ -3,11 +3,11 @@
 namespace Code16\Sharp\Http\Controllers\Api\Commands;
 
 use Code16\Sharp\Data\Commands\CommandFormData;
-use Code16\Sharp\Http\Controllers\Api\ApiController;
+use Code16\Sharp\Http\Controllers\Controller;
 use Code16\Sharp\Show\SharpSingleShow;
 use Code16\Sharp\Utils\Uploads\SharpUploadManager;
 
-class ApiShowInstanceCommandController extends ApiController
+class ApiShowInstanceCommandController extends Controller
 {
     use HandlesCommandForm;
     use HandlesCommandResult;
@@ -45,7 +45,7 @@ class ApiShowInstanceCommandController extends ApiController
 
     private function getShowPage(string $entityKey, mixed $instanceId = null)
     {
-        $showPage = $this->getShowInstance($entityKey);
+        $showPage = $this->entityManager->entityFor($entityKey)->getShowOrFail();
 
         abort_if(
             (! $instanceId && ! $showPage instanceof SharpSingleShow)

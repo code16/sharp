@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Http\Controllers;
 
-class DashboardFiltersController extends SharpProtectedController
+class DashboardFiltersController extends Controller
 {
     public function store(string $globalFilter, string $dashboardKey)
     {

@@ -7,7 +7,7 @@ use Code16\Sharp\Data\Dashboard\DashboardData;
 use Code16\Sharp\Utils\Entities\ValueObjects\EntityKey;
 use Inertia\Inertia;
 
-class DashboardController extends SharpProtectedController
+class DashboardController extends Controller
 {
     public function show(string $globalFilter, EntityKey $dashboardKey)
     {

@@ -3,10 +3,10 @@
 namespace Code16\Sharp\Http\Controllers\Api\Commands;
 
 use Code16\Sharp\Data\Commands\CommandFormData;
-use Code16\Sharp\Http\Controllers\Api\ApiController;
+use Code16\Sharp\Http\Controllers\Controller;
 use Code16\Sharp\Utils\Uploads\SharpUploadManager;
 
-class ApiEntityListInstanceCommandController extends ApiController
+class ApiEntityListInstanceCommandController extends Controller
 {
     use HandlesCommandForm;
     use HandlesCommandResult;
@@ -20,7 +20,7 @@ class ApiEntityListInstanceCommandController extends ApiController
 
     public function show(string $globalFilter, string $entityKey, string $commandKey, mixed $instanceId)
     {
-        $list = $this->getListInstance($entityKey);
+        $list = $this->entityManager->entityFor($entityKey)->getListOrFail();
         $list->buildListConfig();
         $list->initQueryParams(request()->query());
 
@@ -38,7 +38,7 @@ class ApiEntityListInstanceCommandController extends ApiController
      */
     public function update(string $globalFilter, string $entityKey, string $commandKey, mixed $instanceId)
     {
-        $list = $this->getListInstance($entityKey);
+        $list = $this->entityManager->entityFor($entityKey)->getListOrFail();
         $list->buildListConfig();
         $list->initQueryParams(request()->input('query'));
 

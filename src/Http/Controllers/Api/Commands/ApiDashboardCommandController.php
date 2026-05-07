@@ -3,10 +3,10 @@
 namespace Code16\Sharp\Http\Controllers\Api\Commands;
 
 use Code16\Sharp\Data\Commands\CommandFormData;
-use Code16\Sharp\Http\Controllers\Api\ApiController;
+use Code16\Sharp\Http\Controllers\Controller;
 use Code16\Sharp\Utils\Uploads\SharpUploadManager;
 
-class ApiDashboardCommandController extends ApiController
+class ApiDashboardCommandController extends Controller
 {
     use HandlesCommandForm;
     use HandlesCommandResult;
@@ -20,7 +20,7 @@ class ApiDashboardCommandController extends ApiController
 
     public function show(string $globalFilter, string $entityKey, string $commandKey)
     {
-        $dashboard = $this->getDashboardInstance($entityKey);
+        $dashboard = $this->entityManager->entityFor($entityKey)->getViewOrFail();
         $dashboard->buildDashboardConfig();
         $dashboard->initQueryParams(request()->query());
 
@@ -35,7 +35,7 @@ class ApiDashboardCommandController extends ApiController
 
     public function update(string $globalFilter, string $entityKey, string $commandKey)
     {
-        $dashboard = $this->getDashboardInstance($entityKey);
+        $dashboard = $this->entityManager->entityFor($entityKey)->getViewOrFail();
         $dashboard->buildDashboardConfig();
         $dashboard->initQueryParams(request()->input('query'));
 

@@ -5,7 +5,7 @@ namespace Code16\Sharp\Http\Controllers;
 use Code16\Sharp\Filters\GlobalFilters\GlobalFilters;
 use Illuminate\Http\RedirectResponse;
 
-class GlobalFilterController extends SharpProtectedController
+class GlobalFilterController extends Controller
 {
     public function update(string $globalFilter, GlobalFilters $globalFilters): RedirectResponse
     {

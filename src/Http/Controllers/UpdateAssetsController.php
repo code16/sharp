@@ -5,7 +5,7 @@ namespace Code16\Sharp\Http\Controllers;
 use Code16\Sharp\Utils\Traits\CanNotify;
 use Illuminate\Support\Facades\Artisan;
 
-class UpdateAssetsController extends SharpProtectedController
+class UpdateAssetsController extends Controller
 {
     use CanNotify;
 
