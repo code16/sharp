@@ -2,9 +2,10 @@
 
 namespace Code16\Sharp\Http\Controllers\Api;
 
+use Code16\Sharp\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 
-class DownloadController extends ApiController
+class DownloadController extends Controller
 {
     public function show(string $globalFilter, string $entityKey, ?string $instanceId = null)
     {

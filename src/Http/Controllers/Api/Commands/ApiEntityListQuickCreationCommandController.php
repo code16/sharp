@@ -3,17 +3,18 @@
 namespace Code16\Sharp\Http\Controllers\Api\Commands;
 
 use Code16\Sharp\Data\Commands\CommandFormData;
-use Code16\Sharp\Http\Controllers\Api\ApiController;
+use Code16\Sharp\Http\Controllers\Controller;
 use Code16\Sharp\Utils\Entities\ValueObjects\EntityKey;
 use Code16\Sharp\Utils\Uploads\SharpUploadManager;
 
-class ApiEntityListQuickCreationCommandController extends ApiController
+class ApiEntityListQuickCreationCommandController extends Controller
 {
     use HandlesCommandForm;
     use HandlesCommandResult;
 
-    public function __construct(private readonly SharpUploadManager $uploadManager)
-    {
+    public function __construct(
+        private readonly SharpUploadManager $uploadManager,
+    ) {
         parent::__construct();
     }
 

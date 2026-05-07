@@ -5,8 +5,9 @@ namespace Code16\Sharp\Http\Controllers\Api;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Exceptions\SharpInvalidEntityKeyException;
 use Code16\Sharp\Exceptions\SharpMethodNotImplementedException;
+use Code16\Sharp\Http\Controllers\Controller;
 
-class ApiEntityListController extends ApiController
+class ApiEntityListController extends Controller
 {
     /**
      * Reorder instances.
@@ -15,7 +16,7 @@ class ApiEntityListController extends ApiController
     {
         $this->authorizationManager->check('entity', $entityKey);
 
-        $list = $this->getListInstance($entityKey);
+        $list = $this->entityManager->entityFor($entityKey)->getListOrFail();
         $list->buildListConfig();
 
         $list->reorderHandler()->reorder(request('instances'));
@@ -32,14 +33,14 @@ class ApiEntityListController extends ApiController
     {
         $this->authorizationManager->check('delete', $entityKey, $instanceId);
 
-        $list = $this->getListInstance($entityKey);
+        $list = $this->entityManager->entityFor($entityKey)->getListOrFail();
         $list->initQueryParams(request()->query());
 
         if (self::isDeleteMethodImplementedInConcreteClass($list)) {
             $list->delete($instanceId);
         } else {
             try {
-                $show = $this->getShowInstance($entityKey);
+                $show = $this->entityManager->entityFor($entityKey)->getShowOrFail();
                 $show->delete($instanceId);
             } catch (SharpInvalidEntityKeyException $ex) {
                 // No Show Page implementation was defined for this entity

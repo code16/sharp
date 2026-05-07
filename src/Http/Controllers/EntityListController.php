@@ -13,7 +13,7 @@ use Code16\Sharp\Utils\Icons\IconManager;
 use Code16\Sharp\Utils\Menu\SharpMenuManager;
 use Inertia\Inertia;
 
-class EntityListController extends SharpProtectedController
+class EntityListController extends Controller
 {
     use HandlesEntityListItems;
     use HandlesSharpNotificationsInRequest;

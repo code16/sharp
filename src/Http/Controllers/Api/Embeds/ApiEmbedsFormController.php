@@ -2,15 +2,12 @@
 
 namespace Code16\Sharp\Http\Controllers\Api\Embeds;
 
-use Code16\Sharp\Auth\SharpAuthorizationManager;
 use Code16\Sharp\Data\Embeds\EmbedFormData;
-use Illuminate\Routing\Controller;
+use Code16\Sharp\Http\Controllers\Controller;
 
 class ApiEmbedsFormController extends Controller
 {
     use HandlesEmbed;
-
-    public function __construct(private readonly SharpAuthorizationManager $authorizationManager) {}
 
     public function show(string $globalFilter, string $embedKey, string $entityKey, ?string $instanceId = null)
     {

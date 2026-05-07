@@ -9,6 +9,8 @@ class SharpRedirectIfAuthenticated
 {
     public function handle($request, Closure $next, $guard = null)
     {
+        $guard = $guard ?: sharp()->config()->get('auth.guard');
+
         if ($this->checkSharpUserAuthenticated($guard)) {
             return redirect(route('code16.sharp.home'));
         }

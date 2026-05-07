@@ -4,11 +4,12 @@ namespace Code16\Sharp\Http\Controllers\Api;
 
 use Code16\Sharp\Exceptions\SharpInvalidConfigException;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
+use Code16\Sharp\Http\Controllers\Controller;
 use Code16\Sharp\Utils\Entities\ValueObjects\EntityKey;
 use Code16\Sharp\Utils\FileUtil;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 
-class ApiFormUploadController extends ApiController
+class ApiFormUploadController extends Controller
 {
     use HandlesFieldContainer;
     use ValidatesRequests;

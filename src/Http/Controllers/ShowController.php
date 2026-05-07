@@ -9,7 +9,7 @@ use Code16\Sharp\Show\SharpSingleShow;
 use Code16\Sharp\Utils\Entities\ValueObjects\EntityKey;
 use Inertia\Inertia;
 
-class ShowController extends SharpProtectedController
+class ShowController extends Controller
 {
     use HandlesSharpNotificationsInRequest;
     use PreloadsShowFields;

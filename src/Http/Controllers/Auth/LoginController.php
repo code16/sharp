@@ -15,13 +15,6 @@ use Inertia\Response;
 
 class LoginController extends Controller
 {
-    public function __construct()
-    {
-        $guardSuffix = sharp()->config()->get('auth.guard') ? ':'.sharp()->config()->get('auth.guard') : '';
-        $this->middleware('sharp_guest'.$guardSuffix)->only(['create', 'store']);
-        $this->middleware('sharp_auth'.$guardSuffix)->only('destroy');
-    }
-
     public function create(): RedirectResponse|Response
     {
         if ($loginPageUrl = sharp()->config()->get('auth.login_page_url')) {
