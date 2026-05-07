@@ -4,6 +4,7 @@ namespace Code16\Sharp\Http\Middleware;
 
 use Closure;
 use Code16\Sharp\Auth\Impersonate\SharpImpersonationHandler;
+use Code16\Sharp\Exceptions\SharpAuthenticationException;
 use Code16\Sharp\Exceptions\SharpTokenMismatchException;
 use Illuminate\Auth\Middleware\Authenticate as BaseAuthenticate;
 use Illuminate\Http\Request;
@@ -37,15 +38,15 @@ class SharpAuthenticate extends BaseAuthenticate
         /** reflash status flashed in @see SharpTokenMismatchException::render */
         session()->reflash();
 
-        parent::unauthenticated($request, $guards);
+        throw new SharpAuthenticationException(
+            'Unauthenticated.',
+            $guards,
+            $this->redirectTo($request)
+        );
     }
 
     protected function redirectTo(Request $request)
     {
-        if ($loginPageUrl = sharp()->config()->get('auth.login_page_url')) {
-            return $loginPageUrl;
-        }
-
         if (app(SharpImpersonationHandler::class)?->enabled()) {
             return route('code16.sharp.impersonate');
         }
