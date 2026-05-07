@@ -4,12 +4,13 @@ namespace Code16\Sharp\Http\Controllers\Api;
 
 use Code16\Sharp\Exceptions\SharpInvalidConfigException;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteRemoteField;
+use Code16\Sharp\Http\Controllers\Controller;
 use Code16\Sharp\Utils\Entities\ValueObjects\EntityKey;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
 
-class ApiFormAutocompleteController extends ApiController
+class ApiFormAutocompleteController extends Controller
 {
     use HandlesFieldContainer;
 

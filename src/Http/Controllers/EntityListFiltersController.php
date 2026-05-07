@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Http\Controllers;
 
-class EntityListFiltersController extends SharpProtectedController
+class EntityListFiltersController extends Controller
 {
     public function store(string $globalFilter, string $entityKey)
     {

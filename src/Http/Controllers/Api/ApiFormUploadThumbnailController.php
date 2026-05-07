@@ -3,8 +3,9 @@
 namespace Code16\Sharp\Http\Controllers\Api;
 
 use Code16\Sharp\Form\Eloquent\Uploads\Traits\UsesSharpUploadModel;
+use Code16\Sharp\Http\Controllers\Controller;
 
-class ApiFormUploadThumbnailController extends ApiController
+class ApiFormUploadThumbnailController extends Controller
 {
     use UsesSharpUploadModel;
 

@@ -3,10 +3,11 @@
 namespace Code16\Sharp\Http\Controllers\Api;
 
 use Code16\Sharp\Data\SearchResultSetData;
+use Code16\Sharp\Http\Controllers\Controller;
 use Code16\Sharp\Search\SearchResultSet;
 use Code16\Sharp\Utils\StringUtil;
 
-class ApiSearchController extends ApiController
+class ApiSearchController extends Controller
 {
     public function index(string $globalFilter)
     {
