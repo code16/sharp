@@ -65,9 +65,15 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
                     );
                 }
 
-                if ($dimensions = $this->getImageDimensions($uploadedFieldRelativePath, $formatted['mime_type'])) {
-                    $formatted['width'] = $dimensions['width'];
-                    $formatted['height'] = $dimensions['height'];
+                if (! $field->isImageTransformOriginal()) {
+                    if ($dimensions = $this->getImageDimensions($uploadedFieldRelativePath, $formatted['mime_type'])) {
+                        $formatted['width'] = $dimensions['width'];
+                        $formatted['height'] = $dimensions['height'];
+                    }
+
+                    if ($metadata = $this->getImageMetadata($uploadedFieldRelativePath, $formatted['mime_type'])) {
+                        $formatted['metadata'] = $metadata;
+                    }
                 }
             });
         }
@@ -117,9 +123,8 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
         ])->whereNotNull()->toArray();
     }
 
-    protected function getImageDimensions(string $tmpFilePath, string $mimeType): ?array
+    protected function getImageLocalPath(string $tmpFilePath, string $mimeType): ?string
     {
-        // image size only available if tmp is stored locally
         if (! Storage::disk(sharp()->config()->get('uploads.tmp_disk')) instanceof LocalFilesystemAdapter) {
             return null;
         }
@@ -128,13 +133,31 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
             return null;
         }
 
-        $realPath = Storage::disk(sharp()->config()->get('uploads.tmp_disk'))->path($tmpFilePath);
+        return Storage::disk(sharp()->config()->get('uploads.tmp_disk'))->path($tmpFilePath);
+    }
 
-        if ($size = @getimagesize($realPath)) {
-            return [
-                'width' => $size[0],
-                'height' => $size[1],
-            ];
+    protected function getImageDimensions(string $tmpFilePath, string $mimeType): ?array
+    {
+        if ($path = $this->getImageLocalPath($tmpFilePath, $mimeType)) {
+            if ($size = @getimagesize($path)) {
+                return [
+                    'width' => $size[0],
+                    'height' => $size[1],
+                ];
+            }
+        }
+
+        return null;
+    }
+
+    protected function getImageMetadata(string $tmpFilePath, string $mimeType): ?array
+    {
+        if ($path = $this->getImageLocalPath($tmpFilePath, $mimeType)) {
+            if (($metadata = @exif_read_data($path)) && isset($metadata['Orientation'])) {
+                return [
+                    'orientation' => $metadata['Orientation'],
+                ];
+            }
         }
 
         return null;
