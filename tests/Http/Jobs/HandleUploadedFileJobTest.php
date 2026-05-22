@@ -2,9 +2,10 @@
 
 use Code16\Sharp\Exceptions\Form\SharpFormUpdateException;
 use Code16\Sharp\Http\Jobs\HandleUploadedFileJob;
+use Code16\Sharp\Http\Jobs\OptimizeImageJob;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Storage;
-use Spatie\ImageOptimizer\OptimizerChainFactory;
 
 beforeEach(function () {
     Storage::fake('local');
@@ -56,32 +57,7 @@ it('throws if instance id null and {id} in segment', function () {
     ->throws(SharpFormUpdateException::class);
 
 it('optimizes uploaded images if configured', function () {
-    $optimizer = new class()
-    {
-        public bool $wasOptimized = false;
-
-        public function optimize(): bool
-        {
-            $this->wasOptimized = true;
-
-            return true;
-        }
-    };
-
-    app()->bind(OptimizerChainFactory::class, fn () => new class($optimizer)
-    {
-        private $optimizer;
-
-        public function __construct(&$optimizer)
-        {
-            $this->optimizer = $optimizer;
-        }
-
-        public function create()
-        {
-            return $this->optimizer;
-        }
-    });
+    Bus::fake([OptimizeImageJob::class]);
 
     UploadedFile::fake()
         ->image('image.jpg')
@@ -94,8 +70,9 @@ it('optimizes uploaded images if configured', function () {
         shouldOptimizeImage: true,
     );
 
-    Storage::disk('local')->assertExists('data/image.jpg');
-    expect($optimizer->wasOptimized)->toBeTrue();
+    Bus::assertDispatchedSync(function (OptimizeImageJob $job) {
+        return $job->disk === 'local' && $job->filePath === 'tmp/image.jpg';
+    });
 });
 
 it('handles image transformations on a newly uploaded file if isTransformOriginal is configured', function () {
