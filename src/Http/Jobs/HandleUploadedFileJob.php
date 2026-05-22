@@ -39,7 +39,7 @@ class HandleUploadedFileJob implements ShouldQueue
         if ($this->shouldOptimizeImage) {
             // We do not need to check for exception nor file format because
             // the package will not throw any errors and just operate silently.
-            $chain = app(OptimizerChainFactory::class)->create()->useLogger(app('log'));
+            $chain = app(OptimizerChainFactory::class)->create();
 
             if ($jpegOptim = collect($chain->getOptimizers())->whereInstanceOf(Jpegoptim::class)->first()) {
                 $jpegOptim->options[] = '--keep-exif';
