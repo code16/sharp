@@ -9,6 +9,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Storage;
 use Spatie\ImageOptimizer\OptimizerChainFactory;
+use Spatie\ImageOptimizer\Optimizers\Jpegoptim;
 
 class HandleUploadedFileJob implements ShouldQueue
 {
@@ -38,9 +39,13 @@ class HandleUploadedFileJob implements ShouldQueue
         if ($this->shouldOptimizeImage) {
             // We do not need to check for exception nor file format because
             // the package will not throw any errors and just operate silently.
-            app(OptimizerChainFactory::class)
-                ->create()
-                ->optimize(Storage::disk($tmpDisk)->path($tmpFilePath));
+            $chain = app(OptimizerChainFactory::class)->create()->useLogger(app('log'));
+
+            if ($jpegOptim = collect($chain->getOptimizers())->whereInstanceOf(Jpegoptim::class)->first()) {
+                $jpegOptim->options[] = '--keep-exif';
+            }
+
+            $chain->optimize(Storage::disk($tmpDisk)->path($tmpFilePath));
         }
 
         if ($this->transformFilters) {
