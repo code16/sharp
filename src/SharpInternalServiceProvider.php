@@ -30,7 +30,6 @@ use Code16\Sharp\Console\ServiceProviderMakeCommand;
 use Code16\Sharp\Console\ShowPageMakeCommand;
 use Code16\Sharp\Exceptions\SharpTokenMismatchException;
 use Code16\Sharp\Form\Eloquent\Uploads\Migration\CreateUploadsMigration;
-use Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\SharpImageManager;
 use Code16\Sharp\Http\Context\CurrentSharpRequest;
 use Code16\Sharp\Http\Middleware\AddLinkHeadersForPreloadedRequests;
 use Code16\Sharp\Http\Middleware\SharpAuthenticate;
@@ -112,7 +111,6 @@ class SharpInternalServiceProvider extends ServiceProvider
                 ? new SharpLegacyConfigBuilder()
                 : new SharpConfigBuilder()
         );
-        $this->app->singleton(SharpImageManager::class);
         $this->app->singleton(AddLinkHeadersForPreloadedRequests::class);
 
         if (class_exists('\PragmaRX\Google2FA\Google2FA')) {
@@ -261,7 +259,6 @@ class SharpInternalServiceProvider extends ServiceProvider
         $this->app->get(SharpAuthorizationManager::class)->reset();
         $this->app->get(SharpUploadManager::class)->reset();
         $this->app->get(SharpUtil::class)->reset();
-        $this->app->get(SharpImageManager::class)->__construct();
         $this->app->get(AddLinkHeadersForPreloadedRequests::class)->reset();
     }
 }

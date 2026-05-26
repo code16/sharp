@@ -19,11 +19,17 @@ class HandleTransformedFileJob implements ShouldQueue
     public function __construct(
         public string $disk,
         public string $filePath,
-        public array $transformFilters,
+        public array $transformFilters = [],
+        public bool $stripMetadata = false,
     ) {}
 
-    public function handle(SharpImageManager $imageManager): void
+    public function handle(): void
     {
+        $imageManager = app(SharpImageManager::class, [
+            'autoOrientation' => true,
+            'strip' => $this->stripMetadata,
+        ]);
+
         $img = $imageManager->read(Storage::disk($this->disk)->get($this->filePath));
 
         if ($rotate = Arr::get($this->transformFilters, 'rotate.angle')) {

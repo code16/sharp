@@ -110,6 +110,7 @@ class SharpConfigBuilder
             'thumbnails_disk' => 'public',
             'thumbnails_dir' => 'thumbnails',
             'transform_keep_original_image' => true,
+            'strip_image_metadata' => false,
             'max_file_size' => 5,
             'model_class' => null,
             'image_driver' => Driver::class,
@@ -343,6 +344,7 @@ class SharpConfigBuilder
         bool $keepOriginalImageOnTransform = true,
         string $fileHandingQueue = 'default',
         string $fileHandlingQueueConnection = 'sync',
+        bool $stripImageMetadata = false,
     ): self {
         $this->config['uploads']['tmp_disk'] = $uploadDisk;
         $this->config['uploads']['tmp_dir'] = $uploadDirectory;
@@ -350,6 +352,7 @@ class SharpConfigBuilder
         $this->config['uploads']['transform_keep_original_image'] = $keepOriginalImageOnTransform;
         $this->config['uploads']['file_handling_queue'] = $fileHandingQueue;
         $this->config['uploads']['file_handling_queue_connection'] = $fileHandlingQueueConnection;
+        $this->config['uploads']['strip_image_metadata'] = $stripImageMetadata;
 
         return $this;
     }

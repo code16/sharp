@@ -32,6 +32,7 @@ class SharpUploadManager
         bool $shouldOptimizeImage = true,
         bool $shouldSanitizeSvg = true,
         ?array $transformFilters = null,
+        bool $stripImageMetadata = false,
     ): void {
         $this->uploadedFileQueue[] = compact(
             'uploadedFileName',
@@ -40,6 +41,7 @@ class SharpUploadManager
             'shouldOptimizeImage',
             'shouldSanitizeSvg',
             'transformFilters',
+            'stripImageMetadata',
         );
     }
 
@@ -47,11 +49,13 @@ class SharpUploadManager
         string $disk,
         string $filePath,
         array $transformFilters,
+        bool $stripImageMetadata = false,
     ): void {
         $this->transformedFileQueue[] = compact(
             'disk',
             'filePath',
             'transformFilters',
+            'stripImageMetadata',
         );
     }
 

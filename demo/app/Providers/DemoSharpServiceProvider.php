@@ -10,6 +10,7 @@ use App\Sharp\DummyGlobalFilter;
 use App\Sharp\SharpMenu;
 use Code16\Sharp\Config\SharpConfigBuilder;
 use Code16\Sharp\SharpAppServiceProvider;
+use Intervention\Image\Drivers\Imagick\Driver;
 
 class DemoSharpServiceProvider extends SharpAppServiceProvider
 {
@@ -19,7 +20,7 @@ class DemoSharpServiceProvider extends SharpAppServiceProvider
             ->setName('Demo project')
             ->discoverEntities()
             ->addGlobalFilter(DummyGlobalFilter::class)
-            ->configureUploadsThumbnailCreation(uploadModelClass: Media::class)
+            ->configureUploadsThumbnailCreation(uploadModelClass: Media::class, imageDriverClass: Driver::class)
             ->setSharpMenu(SharpMenu::class)
             ->setThemeColor('#004c9b')
             ->setThemeLogo(logoUrl: '/img/sharp/logo.svg', logoHeight: '1rem', faviconUrl: '/img/sharp/favicon-32x32.png')

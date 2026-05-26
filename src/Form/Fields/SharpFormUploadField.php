@@ -6,6 +6,7 @@ use Closure;
 use Code16\Sharp\Form\Fields\Formatters\UploadFormatter;
 use Code16\Sharp\Utils\Fields\Validation\SharpFileValidation;
 use Code16\Sharp\Utils\Fields\Validation\SharpImageValidation;
+use Illuminate\Validation\Concerns\ValidatesAttributes;
 use Illuminate\Validation\Rules\Dimensions;
 
 class SharpFormUploadField extends SharpFormField
@@ -24,6 +25,7 @@ class SharpFormUploadField extends SharpFormField
     protected bool $imageCompactThumbnail = false;
     protected bool $imageOptimize = false;
     protected bool $imageSanitizeSvg = true;
+    protected ?bool $imageStripMetadata = null;
     protected ?array $imageCropRatio = null;
     protected ?array $imageTransformableFileTypes = null;
 
@@ -51,7 +53,7 @@ class SharpFormUploadField extends SharpFormField
         $this->isImageOnly = $imageOnly;
 
         if (! $this->allowedExtensions) {
-            /** @see \Illuminate\Validation\Concerns\ValidatesAttributes::validateImage() */
+            /** @see ValidatesAttributes::validateImage() */
             $this->setAllowedExtensions(['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.svg', '.webp']);
         }
 
@@ -104,6 +106,18 @@ class SharpFormUploadField extends SharpFormField
     public function isImageSanitizeSvg(): bool
     {
         return $this->imageSanitizeSvg;
+    }
+
+    public function setImageStripMetadata(bool $strip = true): self
+    {
+        $this->imageStripMetadata = $strip;
+
+        return $this;
+    }
+
+    public function isImageStripMetadata(): bool
+    {
+        return $this->imageStripMetadata ?? sharp()->config()->get('uploads.strip_image_metadata') ?? false;
     }
 
     public function setImageCompactThumbnail(bool $compactThumbnail = true): self

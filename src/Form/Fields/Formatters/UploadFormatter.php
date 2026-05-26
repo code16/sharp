@@ -62,6 +62,7 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
                         transformFilters: $field->isImageTransformOriginal()
                             ? ($value['filters'] ?? null)
                             : null,
+                        stripImageMetadata: $field->isImageStripMetadata(),
                     );
                 }
 
@@ -80,6 +81,7 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
                         disk: $field->storageDisk(),
                         filePath: $formatted['file_name'],
                         transformFilters: $formatted['filters'],
+                        stripImageMetadata: $field->isImageStripMetadata(),
                     );
                 }
             });

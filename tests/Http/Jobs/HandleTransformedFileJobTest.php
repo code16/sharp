@@ -1,5 +1,7 @@
 <?php
 
+use Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\SharpImageManager;
+use Code16\Sharp\Http\Jobs\HandleTransformedFileJob;
 use Code16\Sharp\Http\Jobs\HandleUploadedFileJob;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -33,4 +35,50 @@ it('handles image transformations on an existing file if isTransformOriginal is 
         $originalSize,
         Storage::disk('local')->size('data/image.jpg')
     );
+});
+
+it('instantiates SharpImageManager with stripMetadata: false', function () {
+    UploadedFile::fake()
+        ->image('image.jpg', 20, 10)
+        ->storeAs('data', 'image.jpg', ['disk' => 'local']);
+
+    $instance = null;
+    app()->bind(SharpImageManager::class, function ($app, $parameters) use (&$instance) {
+        return $instance = new SharpImageManager(...$parameters);
+    });
+
+    HandleTransformedFileJob::dispatchSync(
+        disk: 'local',
+        filePath: 'data/image.jpg',
+        transformFilters: [],
+        stripMetadata: false,
+    );
+
+    // The inner Intervention ImageManager driver should also have the config set.
+    $driverConfig = $instance->driver()->config();
+    expect($driverConfig->strip)->toBeFalse()
+        ->and($driverConfig->autoOrientation)->toBeTrue();
+});
+
+it('instantiates SharpImageManager with stripMetadata: true', function () {
+    UploadedFile::fake()
+        ->image('image.jpg', 20, 10)
+        ->storeAs('data', 'image.jpg', ['disk' => 'local']);
+
+    $instance = null;
+    app()->bind(SharpImageManager::class, function ($app, $parameters) use (&$instance) {
+        return $instance = new SharpImageManager(...$parameters);
+    });
+
+    HandleTransformedFileJob::dispatchSync(
+        disk: 'local',
+        filePath: 'data/image.jpg',
+        transformFilters: [],
+        stripMetadata: true,
+    );
+
+    // The inner Intervention ImageManager driver should also have the config set.
+    $driverConfig = $instance->driver()->config();
+    expect($driverConfig->strip)->toBeTrue()
+        ->and($driverConfig->autoOrientation)->toBeTrue();
 });

@@ -1,8 +1,10 @@
 <?php
 
 use Code16\Sharp\Exceptions\Form\SharpFormUpdateException;
+use Code16\Sharp\Http\Jobs\HandleTransformedFileJob;
 use Code16\Sharp\Http\Jobs\HandleUploadedFileJob;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Storage;
 use Spatie\ImageOptimizer\OptimizerChainFactory;
 
@@ -120,6 +122,45 @@ it('handles image transformations on a newly uploaded file if isTransformOrigina
     );
 
     expect(Storage::disk('local')->size('data/image.jpg'))->not->toEqual($originalSize);
+});
+
+it('dispatches HandleTransformedFileJob with stripImageMetadata=true when configured', function () {
+    UploadedFile::fake()
+        ->image('image.jpg')
+        ->storeAs('/tmp', 'image.jpg', ['disk' => 'local']);
+
+    Bus::fake([HandleTransformedFileJob::class]);
+
+    HandleUploadedFileJob::dispatch(
+        uploadedFileName: 'image.jpg',
+        disk: 'local',
+        filePath: 'data/image.jpg',
+        shouldOptimizeImage: false,
+        stripImageMetadata: true,
+    );
+
+    Bus::assertDispatchedSync(
+        HandleTransformedFileJob::class,
+        fn ($job) => $job->stripMetadata === true && $job->transformFilters === []
+    );
+});
+
+it('does not dispatch HandleTransformedFileJob when stripImageMetadata is false and no transform filters', function () {
+    UploadedFile::fake()
+        ->image('image.jpg')
+        ->storeAs('/tmp', 'image.jpg', ['disk' => 'local']);
+
+    Bus::fake([HandleTransformedFileJob::class]);
+
+    HandleUploadedFileJob::dispatch(
+        uploadedFileName: 'image.jpg',
+        disk: 'local',
+        filePath: 'data/image.jpg',
+        shouldOptimizeImage: false,
+        stripImageMetadata: false,
+    );
+
+    Bus::assertNotDispatchedSync(HandleTransformedFileJob::class);
 });
 
 it('sanitizes svg files', function () {

@@ -12,9 +12,15 @@ class SharpImageManager implements ImageManagerInterface
 {
     protected ImageManager $manager;
 
-    public function __construct()
-    {
-        $this->manager = new ImageManager(sharp()->config()->get('uploads.image_driver'));
+    public function __construct(
+        protected bool $autoOrientation = false,
+        protected bool $strip = false,
+    ) {
+        $this->manager = new ImageManager(
+            sharp()->config()->get('uploads.image_driver'),
+            autoOrientation: $this->autoOrientation,
+            strip: $this->strip,
+        );
     }
 
     public function create(int $width, int $height): ImageInterface

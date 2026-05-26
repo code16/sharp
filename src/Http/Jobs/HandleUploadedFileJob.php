@@ -23,6 +23,7 @@ class HandleUploadedFileJob implements ShouldQueue
         public bool $shouldOptimizeImage = true,
         public bool $shouldSanitizeSvg = true,
         public ?array $transformFilters = null,
+        public bool $stripImageMetadata = false,
         public ?string $instanceId = null,
     ) {}
 
@@ -43,12 +44,14 @@ class HandleUploadedFileJob implements ShouldQueue
                 ->optimize(Storage::disk($tmpDisk)->path($tmpFilePath));
         }
 
-        if ($this->transformFilters) {
-            // There are transformation and field was configured to handle transformation on the source image
+        if ($this->transformFilters || $this->stripImageMetadata) {
+            // There are transformations and field was configured to handle transformation on the source image,
+            // or stripImageMetadata is enabled (also handled by HandleTransformedFileJob).
             HandleTransformedFileJob::dispatchSync(
                 disk: $tmpDisk,
                 filePath: $tmpFilePath,
-                transformFilters: $this->transformFilters
+                transformFilters: $this->transformFilters ?? [],
+                stripMetadata: $this->stripImageMetadata,
             );
         }
 
