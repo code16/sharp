@@ -2,10 +2,12 @@
 
 namespace Code16\Sharp\Http\Jobs;
 
+use Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\SharpImageManager;
 use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Encoders\JpegEncoder;
 use Spatie\ImageOptimizer\OptimizerChain;
 use Spatie\ImageOptimizer\Optimizers\Avifenc;
 use Spatie\ImageOptimizer\Optimizers\Jpegoptim;
@@ -24,6 +26,10 @@ class OptimizeImageJob
 
     public function handle(): void
     {
+        if ($this->optimizeWithIntervention()) {
+            return;
+        }
+
         // We do not need to check for exception nor file format because
         // the package will not throw any errors and just operate silently.
         $chain = app(OptimizerChain::class);
@@ -52,5 +58,25 @@ class OptimizeImageJob
         }
 
         $chain->optimize(Storage::disk($this->disk)->path($this->filePath));
+    }
+
+    protected function optimizeWithIntervention(): bool
+    {
+        $imageManager = app(SharpImageManager::class);
+        $localPath = Storage::disk($this->disk)->path($this->filePath);
+
+        if (Storage::disk($this->disk)->mimeType($this->filePath) === 'image/jpeg'
+            && ($exif = @exif_read_data($localPath))
+            && ($exif['Orientation'] ?? 1) !== 1
+        ) {
+            Storage::disk($this->disk)->put(
+                $this->filePath,
+                $imageManager->read($localPath)->orient()->encode(new JpegEncoder(quality: 85, progressive: true, strip: true)),
+            );
+
+            return true;
+        }
+
+        return false;
     }
 }
