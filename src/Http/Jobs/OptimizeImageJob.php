@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Encoders\JpegEncoder;
 use Spatie\ImageOptimizer\OptimizerChain;
 use Spatie\ImageOptimizer\Optimizers\Avifenc;
-use Spatie\ImageOptimizer\Optimizers\Jpegoptim;
 use Spatie\ImageOptimizer\Optimizers\Pngquant;
 
 class OptimizeImageJob
@@ -33,10 +32,6 @@ class OptimizeImageJob
         // We do not need to check for exception nor file format because
         // the package will not throw any errors and just operate silently.
         $chain = app(OptimizerChain::class);
-
-        if ($jpegOptim = collect($chain->getOptimizers())->whereInstanceOf(Jpegoptim::class)->first()) {
-            $jpegOptim->options[] = '--keep-exif';
-        }
 
         if ($pngquant = collect($chain->getOptimizers())->whereInstanceOf(Pngquant::class)->first()) {
             if (! collect($pngquant->options)->some(fn ($option) => str_starts_with($option, '--quality'))) {
@@ -66,7 +61,7 @@ class OptimizeImageJob
         $localPath = Storage::disk($this->disk)->path($this->filePath);
 
         if (Storage::disk($this->disk)->mimeType($this->filePath) === 'image/jpeg'
-            && ($exif = @exif_read_data($localPath))
+            && ($exif = $this->getExifData($localPath))
             && ($exif['Orientation'] ?? 1) !== 1
         ) {
             Storage::disk($this->disk)->put(
@@ -78,5 +73,10 @@ class OptimizeImageJob
         }
 
         return false;
+    }
+
+    protected function getExifData(string $path): ?array
+    {
+        return @exif_read_data($path) ?: null;
     }
 }
