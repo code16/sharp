@@ -10,7 +10,7 @@ on:
       - 9.x
       - 10.x
 jobs:
-  test:
+  e2e-test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
@@ -18,7 +18,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php }}
+          php-version: 8.5
           extensions: mbstring, dom, fileinfo, mysql
       - uses: actions/setup-node@v4
         with:
@@ -29,7 +29,7 @@ jobs:
         run: composer install --prefer-dist --no-interaction --no-progress
       - name: Build assets
         run: npm run build
-      - name: Install dependencies
+      - name: Install E2E dependencies
         run: npm ci
         working-directory: tests-e2e
       - name: Install Playwright Browsers
