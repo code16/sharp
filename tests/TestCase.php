@@ -8,6 +8,7 @@ use Code16\ContentRenderer\ContentRendererServiceProvider;
 use Code16\Sharp\SharpInternalServiceProvider;
 use Orchestra\Testbench\Pest\WithPest;
 use Orchestra\Testbench\TestCase as Orchestra;
+use Spatie\LaravelImageOptimizer\ImageOptimizerServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -26,6 +27,7 @@ class TestCase extends Orchestra
             SharpInternalServiceProvider::class,
             ContentRendererServiceProvider::class,
             BladeIconsServiceProvider::class,
+            ImageOptimizerServiceProvider::class,
         ];
     }
 
