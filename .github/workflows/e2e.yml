@@ -29,8 +29,6 @@ jobs:
         run: composer install --prefer-dist --no-interaction --no-progress
       - name: Build assets
         run: npm run build
-      - name: Install dependencies
-        run: npm ci
         working-directory: tests-e2e
       - name: Install Playwright Browsers
         run: npx playwright install chromium --with-deps
