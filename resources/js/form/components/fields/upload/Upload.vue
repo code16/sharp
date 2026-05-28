@@ -144,6 +144,7 @@
                         return new Cropper(image, {
                             aspectRatio: props.field.imageCropRatio[0] / props.field.imageCropRatio[1],
                             autoCropArea: 1,
+                            checkOrientation: false,
                             ready: (e) => {
                                 resolve(e.currentTarget.cropper);
                             },
@@ -335,6 +336,7 @@
                 : null,
             autoCropArea: 1,
             guides: false,
+            checkOrientation: false,
             background: true,
             rotatable: true,
             restore: false, // reset crop area on resize because it's buggy
