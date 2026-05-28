@@ -2,7 +2,7 @@ import { UppyFile } from "@uppy/core";
 import Compressor from 'compressorjs';
 
 export function createThumbnail(file: UppyFile<any, any>, { width, height }: { width: number, height: number }) {
-    return new Promise((resolve, reject) => {
+    return new Promise<string>((resolve, reject) => {
         new Compressor(file.data as File, {
             checkOrientation: true,
             maxWidth: width,
