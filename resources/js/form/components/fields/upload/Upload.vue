@@ -6,7 +6,8 @@
     import DropTarget from '@uppy/drop-target';
     import Cropper from 'cropperjs';
     import {
-        computed, nextTick,
+        computed,
+        nextTick,
         onMounted,
         onUnmounted,
         ref, useTemplateRef,
@@ -63,7 +64,7 @@
         (e: 'error', message: string, file: Blob | File): void
         (e: 'success', file: typeof props['value']): void
         (e: 'clear'): void
-        (e: 'thumbnail', preview: string): void
+        (e: 'thumbnail', preview: typeof props['value']): void
         (e: 'uploading', uploading: boolean): void
         (e: 'remove'): void
         (e: 'transform', value: typeof props['value']): void
@@ -129,8 +130,8 @@
             if(file.type === 'image/svg+xml') {
                 transformedImg.value = URL.createObjectURL(file.data);
             } else if(file.type?.startsWith('image/')) {
-                const preview = await createThumbnail(file, { width: 300, height: 300 });
-                emit('thumbnail', preview);
+                const preview = await createThumbnail(file, { width: 600, height: 600 });
+                emit('thumbnail', { ...props.value, thumbnail: preview });
                 uppy.setFileState(file.id, { preview });
                 uppyFile.value = uppy.getFile(file.id);
                 console.log('thumbnail:generated', JSON.parse(JSON.stringify(uppyFile.value)));
@@ -144,6 +145,7 @@
                         return new Cropper(image, {
                             aspectRatio: props.field.imageCropRatio[0] / props.field.imageCropRatio[1],
                             autoCropArea: 1,
+                            checkOrientation: false,
                             ready: (e) => {
                                 resolve(e.currentTarget.cropper);
                             },
@@ -161,6 +163,10 @@
                     const response = await fetch(await createThumbnail(uppyFile.value, { width: 1200, height: 1000 }));
                     const blob = await response.blob();
                     persistedEditableImg.value = URL.createObjectURL(blob);
+                    emit('thumbnail', { ...props.value, editable_thumbnail: persistedEditableImg.value });
+                    if(props.value) {
+                        emit('input', { ...props.value, editable_thumbnail: persistedEditableImg.value });
+                    }
                 }
             } else if(file.type?.startsWith('video/') || file.type?.startsWith('audio/')) {
                 playablePreviewUrl.value = URL.createObjectURL(file.data);
@@ -335,6 +341,7 @@
                 : null,
             autoCropArea: 1,
             guides: false,
+            checkOrientation: false,
             background: true,
             rotatable: true,
             restore: false, // reset crop area on resize because it's buggy

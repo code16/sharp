@@ -19,12 +19,9 @@
     const uploadComponent = ref<InstanceType<typeof Upload>>();
     const upload = computed(() => uploadManager.getUpload(props.node.attrs['data-key']));
 
-    function onThumbnailGenerated(preview: string) {
+    function onThumbnailGenerated(value: FormUploadFieldData['value']) {
         uploadManager.updateUpload(props.node.attrs['data-key'], {
-            file: {
-                ...upload.value.file,
-                thumbnail: preview,
-            }
+            file: value,
         });
     }
 
