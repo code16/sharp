@@ -12,14 +12,14 @@ class ApiEntityListQuickCreationCommandController extends Controller
     use HandlesCommandForm;
     use HandlesCommandResult;
 
-    public function __construct(
-        private readonly SharpUploadManager $uploadManager,
-    ) {
+    public function __construct(private readonly SharpUploadManager $uploadManager)
+    {
         parent::__construct();
     }
 
     public function create(string $globalFilter, EntityKey $entityKey, EntityKey $formEntityKey)
     {
+        $this->authorizationManager->check('create', $entityKey);
         $entity = $this->entityManager->entityFor($entityKey);
 
         $list = $entity->getListOrFail();
@@ -51,6 +51,7 @@ class ApiEntityListQuickCreationCommandController extends Controller
 
     public function store(string $globalFilter, EntityKey $entityKey, EntityKey $formEntityKey)
     {
+        $this->authorizationManager->check('create', $entityKey);
         $list = $this->entityManager->entityFor($entityKey)->getListOrFail();
         $list->buildListConfig();
 

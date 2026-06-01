@@ -6,6 +6,7 @@ use Code16\Sharp\Http\Context\SharpBreadcrumb;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonForm;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
+use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Illuminate\Support\Facades\Exceptions;
 
@@ -325,4 +326,36 @@ it('returns a link action on a quick creation in an EEL case command with a form
             'action' => 'link',
             'link' => url('/sharp/root/s-list/person/s-show/person/1/s-show/colleague/4'),
         ]);
+});
+
+it('checks for entity authorizations when using a quick creation command', function () {
+    fakeListFor('person', new class() extends PersonList
+    {
+        public function buildListConfig(): void
+        {
+            $this->configureQuickCreationForm();
+        }
+    });
+
+    app(SharpEntityManager::class)
+        ->entityFor('person')
+        ->setProhibitedActions(['create']);
+
+    $this
+        ->getJson(
+            route('code16.sharp.api.list.command.quick-creation-form.create', [
+                'entityKey' => 'person',
+                'formEntityKey' => 'person',
+            ]),
+        )
+        ->assertForbidden();
+
+    $this
+        ->postJson(
+            route('code16.sharp.api.list.command.quick-creation-form.create', [
+                'entityKey' => 'person',
+                'formEntityKey' => 'person',
+            ]),
+        )
+        ->assertForbidden();
 });
