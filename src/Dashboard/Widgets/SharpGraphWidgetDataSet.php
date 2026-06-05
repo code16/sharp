@@ -56,9 +56,10 @@ class SharpGraphWidgetDataSet
     protected function formatLabels(array $values): array
     {
         if ($this->hasDateLabels) {
-            return array_map(function ($value) {
-                return (new Carbon($value))->setTimezone(config('app.timezone'))->toAtomString();
-            }, array_keys($values));
+            return array_map(
+                fn ($value) => Carbon::createFromFormat('!Y-m-d', $value, 'UTC')->toAtomString(),
+                array_keys($values)
+            );
         }
 
         return array_keys($values);
