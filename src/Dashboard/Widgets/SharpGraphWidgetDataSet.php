@@ -57,7 +57,7 @@ class SharpGraphWidgetDataSet
     {
         if ($this->hasDateLabels) {
             return array_map(
-                fn ($value) => Carbon::createFromFormat('!Y-m-d', $value, 'UTC')->toAtomString(),
+                fn ($value) => (new Carbon($value))->shiftTimezone('UTC')->toAtomString(),
                 array_keys($values)
             );
         }
