@@ -23,6 +23,7 @@
     } from "@simplewebauthn/browser";
     import { api } from "@/api/api";
     import { Separator } from "@/components/ui/separator";
+    import { usePasskeyLogin } from "@/Pages/Auth/usePasskeyLogin";
 
     const props = defineProps<{
         loginIsEmail: boolean,
@@ -42,37 +43,11 @@
         supports_passkeys: browserSupportsWebAuthn(),
     });
 
-    const passkeyForm = useForm({
-        remember: false,
-        start_authentication_response: '',
-    });
-
-    async function loginWithPasskey(autofill = false) {
-        try {
-            const response = await api.get(route('passkeys.authentication_options'), {
-                ignoreContentType: true,
-            });
-
-            const authenticationOptions = response.data;
-            const authenticationResponse = await startAuthentication({
-                optionsJSON: authenticationOptions,
-                useBrowserAutofill: autofill,
-            });
-
-            console.log(authenticationResponse);
-
-            passkeyForm.remember = form.remember;
-            passkeyForm.start_authentication_response = JSON.stringify(authenticationResponse);
-
-            passkeyForm.post(route('passkeys.login'));
-        } catch (error) {
-            console.error(error);
-        }
-    }
+    const { loginWithPasskey } = usePasskeyLogin();
 
     onMounted(async () => {
         if(config('sharp.auth.passkeys.enabled') && await browserSupportsWebAuthnAutofill()) {
-            await loginWithPasskey(true);
+            await loginWithPasskey({ autofill: true });
         }
     });
 </script>
@@ -161,7 +136,7 @@
                                 type="button"
                                 variant="outline"
                                 class="w-full"
-                                @click="loginWithPasskey()"
+                                @click="loginWithPasskey({ remember: form.remember })"
                             >
                                 {{ __('sharp::pages/auth/login.passkey_button') }}
                             </Button>

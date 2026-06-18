@@ -10,6 +10,7 @@ use Code16\Sharp\Auth\TwoFactor\Engines\Sharp2faTotpEngine;
 use Code16\Sharp\Auth\TwoFactor\Sharp2faEloquentDefaultTotpHandler;
 use Code16\Sharp\Auth\TwoFactor\Sharp2faHandler;
 use Code16\Sharp\Auth\TwoFactor\Sharp2faNotificationHandler;
+use Code16\Sharp\Auth\TwoFactor\Sharp2faPasskeyHandler;
 use Code16\Sharp\Config\SharpConfigBuilder;
 use Code16\Sharp\Config\SharpLegacyConfigBuilder;
 use Code16\Sharp\Console\DashboardMakeCommand;
@@ -127,6 +128,7 @@ class SharpInternalServiceProvider extends ServiceProvider
             fn () => match (sharp()->config()->get('auth.2fa.handler')) {
                 'notification' => app(Sharp2faNotificationHandler::class),
                 'totp' => app(Sharp2faEloquentDefaultTotpHandler::class),
+                'passkey' => app(Sharp2faPasskeyHandler::class),
                 default => sharp()->config()->get('auth.2fa.handler'),
             }
         );
