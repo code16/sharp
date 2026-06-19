@@ -1,8 +1,9 @@
 import { type DefaultTheme, defineConfig, loadEnv } from 'vitepress'
-import * as path from "path";
+import * as path from 'node:path';
 import { transformContent } from "./transform-content";
 import versions from '../versions/config.json';
 import { sidebar } from "./sidebar";
+import llmstxt from "vitepress-plugin-llms";
 
 const env = loadEnv('', path.resolve(__dirname, '../../demo'), ['APP', 'DOCS']);
 
@@ -28,13 +29,13 @@ export default async () => {
         cleanUrls: true,
 
         head: [
-            ['link', { rel: 'icon', type: 'image/svg+xml', href: '/docs/favicon.svg' }],
-            ['link', { rel: 'icon', type: 'image/png', href: '/docs/favicon.png' }],
+            ['link', { rel: 'icon', type: 'image/svg+xml', href: `/docs/${version.slug}/favicon.svg` }],
+            ['link', { rel: 'icon', type: 'image/png', href: `/docs/${version.slug}/favicon.png` }],
             ['meta', { name: 'theme-color', content: '#007bff' }],
             ['meta', { name: 'og:type', content: 'website' }],
             ['meta', { name: 'og:locale', content: 'en' }],
             ['meta', { name: 'og:site_name', content: version.title! }],
-            ['meta', { name: 'og:image', content: `${APP_URL}/og-image.png` }],
+            ['meta', { name: 'og:image', content: `/docs/${version.slug}/og-image.png` }],
             ['script', { src: 'https://cdn.usefathom.com/script.js', 'data-site': 'EELMENOG', 'data-spa': 'auto', defer: '' }]
         ],
 
@@ -92,6 +93,14 @@ export default async () => {
                     },
                 }
             },
+        },
+
+        sitemap: {
+            hostname: `https://sharp.code16.fr/docs/${version.slug}/`,
+        },
+
+        vite: {
+            plugins: [llmstxt()],
         },
     });
 
