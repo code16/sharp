@@ -30,9 +30,11 @@ final class EntityListConfigData extends Data
         public ?EntityStateData $state = null,
     ) {}
 
+    /**
+     * @param  array{instanceIdAttribute: string, searchable: bool, reorderable: bool, defaultSort: string|null, defaultSortDir: string|null, hasShowPage: bool, deleteConfirmationText: string, deleteHidden: bool, formCreateUrl: string, entityAttribute: string|null, createButtonLabel?: string|null, quickCreationForm?: bool, filters?: array|null, commands?: array|null, state?: array|null}  $config
+     */
     public static function from(array $config)
     {
-        /** @var array{instanceIdAttribute: string, searchable: bool, reorderable: bool, defaultSort: string|null, defaultSortDir: string|null, hasShowPage: bool, deleteConfirmationText: string, deleteHidden: bool, formCreateUrl: string, entityAttribute: string|null, createButtonLabel?: string|null, quickCreationForm?: bool, filters?: ConfigFiltersData|null, commands?: ConfigCommandsData|null, state?: EntityStateData|null} $config */
         $config = [
             ...$config,
             'state' => EntityStateData::optional($config['state'] ?? null),

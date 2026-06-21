@@ -28,9 +28,11 @@ final class CommandData extends Data
         public ?bool $primary = null,
     ) {}
 
+    /**
+     * @param  array{key: string, label: string|null, description: string|null, type: int|string, confirmation: array|null, hasForm: bool, icon: array|null, authorization: array<string|int>|bool, instanceSelection?: int|string|null, primary?: bool|null}  $command
+     */
     public static function from(array $command): self
     {
-        /** @var array{key: string, label: string|null, description: string|null, type: CommandType, confirmation: array|null, hasForm: bool, icon: IconData|null, authorization: array<string|int>|bool, instanceSelection?: InstanceSelectionMode|null, primary?: bool|null} $command */
         $command = [
             ...$command,
             'type' => CommandType::from($command['type']),

@@ -31,6 +31,9 @@
 
     <issueHandlers>
         <ClassMustBeFinal errorLevel="info"/>
+        <!-- Data factories rebuild with intentional `[...$data, 'key' => override]` spreads; the
+             override key is deliberate, not an accidental duplicate. -->
+        <DuplicateArrayKey errorLevel="info"/>
         <ImplicitToStringCast errorLevel="info"/>
         <MissingAbstractPureAnnotation errorLevel="info"/>
         <MissingClosureReturnType errorLevel="info"/>

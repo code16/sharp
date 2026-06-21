@@ -161,12 +161,6 @@
       <code><![CDATA[new self(...$section)]]></code>
     </TooFewArguments>
   </file>
-  <file src="src/Form/Fields/Formatters/EditorFormatter.php">
-    <DuplicateArrayKey>
-      <code><![CDATA['text' => $text]]></code>
-      <code><![CDATA['text' => $text]]></code>
-    </DuplicateArrayKey>
-  </file>
   <file src="src/Http/Controllers/Auth/LoginController.php">
     <UndefinedClass>
       <code><![CDATA[$request->user()]]></code>
