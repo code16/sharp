@@ -14,12 +14,6 @@
       <code><![CDATA[$blade]]></code>
     </NoValue>
   </file>
-  <file src="src/Data/Commands/CommandFormData.php">
-    <InvalidParamDefault>
-      <code><![CDATA[public]]></code>
-      <code><![CDATA[public]]></code>
-    </InvalidParamDefault>
-  </file>
   <file src="src/Data/Dashboard/DashboardLayoutSectionData.php">
     <TooFewArguments>
       <code><![CDATA[new self(...$section)]]></code>
@@ -50,11 +44,6 @@
       <code><![CDATA[new PieGraphWidgetData(...$widget)]]></code>
     </TooFewArguments>
   </file>
-  <file src="src/Data/Data.php">
-    <MissingTemplateParam>
-      <code><![CDATA[Arrayable]]></code>
-    </MissingTemplateParam>
-  </file>
   <file src="src/Data/Embeds/EmbedData.php">
     <TooFewArguments>
       <code><![CDATA[new self(...$embed)]]></code>
@@ -73,15 +62,7 @@
       <code><![CDATA[new self(...$listEntity)]]></code>
     </TooFewArguments>
   </file>
-  <file src="src/Data/Form/Fields/Common/FormDynamicAttributeData.php">
-    <InvalidParamDefault>
-      <code><![CDATA[public]]></code>
-    </InvalidParamDefault>
-  </file>
   <file src="src/Data/Form/Fields/FormAutocompleteLocalFieldData.php">
-    <InvalidParamDefault>
-      <code><![CDATA[public]]></code>
-    </InvalidParamDefault>
     <TooFewArguments>
       <code><![CDATA[new self(...$field)]]></code>
       <code><![CDATA[new self(...$field)]]></code>
@@ -100,18 +81,6 @@
       <code><![CDATA[new self(...$field)]]></code>
     </TooFewArguments>
   </file>
-  <file src="src/Data/Form/Fields/FormDateFieldData.php">
-    <UndefinedAttributeClass>
-      <code><![CDATA[Optional]]></code>
-    </UndefinedAttributeClass>
-  </file>
-  <file src="src/Data/Form/Fields/FormUploadFieldData.php">
-    <InvalidParamDefault>
-      <code><![CDATA[public]]></code>
-      <code><![CDATA[public]]></code>
-      <code><![CDATA[public]]></code>
-    </InvalidParamDefault>
-  </file>
   <file src="src/Data/Form/FormLayoutColumnData.php">
     <TooFewArguments>
       <code><![CDATA[new self(...$column)]]></code>
@@ -123,9 +92,6 @@
     </TooFewArguments>
   </file>
   <file src="src/Data/LayoutFieldData.php">
-    <InvalidParamDefault>
-      <code><![CDATA[public]]></code>
-    </InvalidParamDefault>
     <TooFewArguments>
       <code><![CDATA[new self(...$field)]]></code>
       <code><![CDATA[new self(...$field)]]></code>
@@ -137,9 +103,6 @@
     </TooFewArguments>
   </file>
   <file src="src/Data/Show/Fields/ShowDashboardFieldData.php">
-    <InvalidParamDefault>
-      <code><![CDATA[public]]></code>
-    </InvalidParamDefault>
     <TooFewArguments>
       <code><![CDATA[new self(...$field)]]></code>
       <code><![CDATA[new self(...$field)]]></code>
@@ -150,9 +113,6 @@
     </TooFewArguments>
   </file>
   <file src="src/Data/Show/Fields/ShowEntityListFieldData.php">
-    <InvalidParamDefault>
-      <code><![CDATA[public]]></code>
-    </InvalidParamDefault>
     <TooFewArguments>
       <code><![CDATA[new self(...$field)]]></code>
       <code><![CDATA[new self(...$field)]]></code>
@@ -175,9 +135,6 @@
     </TooFewArguments>
   </file>
   <file src="src/Data/Show/Fields/ShowTextFieldData.php">
-    <InvalidParamDefault>
-      <code><![CDATA[public]]></code>
-    </InvalidParamDefault>
     <TooFewArguments>
       <code><![CDATA[new self(...$field)]]></code>
       <code><![CDATA[new self(...$field)]]></code>
@@ -203,46 +160,6 @@
       <code><![CDATA[new self(...$section)]]></code>
       <code><![CDATA[new self(...$section)]]></code>
     </TooFewArguments>
-  </file>
-  <file src="src/EntityList/Fields/EntityListBadgeField.php">
-    <MissingTemplateParam>
-      <code><![CDATA[Arrayable]]></code>
-    </MissingTemplateParam>
-  </file>
-  <file src="src/EntityList/Fields/EntityListField.php">
-    <MissingTemplateParam>
-      <code><![CDATA[Arrayable]]></code>
-    </MissingTemplateParam>
-  </file>
-  <file src="src/EntityList/Fields/EntityListStateField.php">
-    <MissingTemplateParam>
-      <code><![CDATA[Arrayable]]></code>
-    </MissingTemplateParam>
-  </file>
-  <file src="src/Filters/DateRange/DateRangeFilterValue.php">
-    <MissingTemplateParam>
-      <code><![CDATA[ArrayAccess]]></code>
-    </MissingTemplateParam>
-  </file>
-  <file src="src/Filters/DateRange/DateRangePreset.php">
-    <MissingTemplateParam>
-      <code><![CDATA[Arrayable]]></code>
-    </MissingTemplateParam>
-  </file>
-  <file src="src/Filters/GlobalFilters/GlobalFilters.php">
-    <MissingTemplateParam>
-      <code><![CDATA[Arrayable]]></code>
-    </MissingTemplateParam>
-  </file>
-  <file src="src/Form/Fields/Editor/TextInputReplacement/EditorTextInputReplacement.php">
-    <MissingTemplateParam>
-      <code><![CDATA[Arrayable]]></code>
-    </MissingTemplateParam>
-  </file>
-  <file src="src/Form/Fields/Editor/TextInputReplacement/EditorTextInputReplacementPreset.php">
-    <MissingTemplateParam>
-      <code><![CDATA[Arrayable]]></code>
-    </MissingTemplateParam>
   </file>
   <file src="src/Form/Fields/Formatters/EditorFormatter.php">
     <DuplicateArrayKey>

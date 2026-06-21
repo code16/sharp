@@ -10,7 +10,7 @@ final class LayoutFieldData extends Data
     public function __construct(
         public string $key,
         public int $size,
-        /** @var array<array<LayoutFieldData>> */
+        /** @var array<array<LayoutFieldData>>|null */
         public ?array $item = null,
     ) {}
 

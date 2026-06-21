@@ -5,6 +5,9 @@ namespace Code16\Sharp\Filters\DateRange;
 use Carbon\Carbon;
 use Illuminate\Contracts\Support\Arrayable;
 
+/**
+ * @implements Arrayable<array-key, mixed>
+ */
 class DateRangePreset implements Arrayable
 {
     public function __construct(
