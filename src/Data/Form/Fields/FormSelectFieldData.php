@@ -42,6 +42,7 @@ final class FormSelectFieldData extends Data
 
     public static function from(array $field): self
     {
+        /** @var array{key: string, type: FormFieldType, options: array, multiple: bool, showSelectAll: bool, clearable: bool, display: string, inline: bool, dynamicAttributes?: array<FormDynamicAttributeData>|null, maxSelected?: int|null, label?: string|null, readOnly?: bool|null, conditionalDisplay?: FormConditionalDisplayData|null, helpMessage?: string|null, extraStyle?: string|null} $field */
         $field = [
             ...$field,
             'dynamicAttributes' => isset($field['dynamicAttributes'])

@@ -14,16 +14,6 @@
       <code><![CDATA[$blade]]></code>
     </NoValue>
   </file>
-  <file src="src/Data/Commands/CommandData.php">
-    <TooFewArguments>
-      <code><![CDATA[new self(...$command)]]></code>
-      <code><![CDATA[new self(...$command)]]></code>
-      <code><![CDATA[new self(...$command)]]></code>
-      <code><![CDATA[new self(...$command)]]></code>
-      <code><![CDATA[new self(...$command)]]></code>
-      <code><![CDATA[new self(...$command)]]></code>
-    </TooFewArguments>
-  </file>
   <file src="src/Data/Commands/CommandFormData.php">
     <InvalidParamDefault>
       <code><![CDATA[public]]></code>
@@ -75,20 +65,6 @@
       <code><![CDATA[new self(...$embed)]]></code>
     </TooFewArguments>
   </file>
-  <file src="src/Data/EntityList/EntityListConfigData.php">
-    <TooFewArguments>
-      <code><![CDATA[new self(...$config)]]></code>
-      <code><![CDATA[new self(...$config)]]></code>
-      <code><![CDATA[new self(...$config)]]></code>
-      <code><![CDATA[new self(...$config)]]></code>
-      <code><![CDATA[new self(...$config)]]></code>
-      <code><![CDATA[new self(...$config)]]></code>
-      <code><![CDATA[new self(...$config)]]></code>
-      <code><![CDATA[new self(...$config)]]></code>
-      <code><![CDATA[new self(...$config)]]></code>
-      <code><![CDATA[new self(...$config)]]></code>
-    </TooFewArguments>
-  </file>
   <file src="src/Data/EntityList/EntityListEntityData.php">
     <TooFewArguments>
       <code><![CDATA[new self(...$listEntity)]]></code>
@@ -128,18 +104,6 @@
     <UndefinedAttributeClass>
       <code><![CDATA[Optional]]></code>
     </UndefinedAttributeClass>
-  </file>
-  <file src="src/Data/Form/Fields/FormSelectFieldData.php">
-    <TooFewArguments>
-      <code><![CDATA[new self(...$field)]]></code>
-      <code><![CDATA[new self(...$field)]]></code>
-      <code><![CDATA[new self(...$field)]]></code>
-      <code><![CDATA[new self(...$field)]]></code>
-      <code><![CDATA[new self(...$field)]]></code>
-      <code><![CDATA[new self(...$field)]]></code>
-      <code><![CDATA[new self(...$field)]]></code>
-      <code><![CDATA[new self(...$field)]]></code>
-    </TooFewArguments>
   </file>
   <file src="src/Data/Form/Fields/FormUploadFieldData.php">
     <InvalidParamDefault>
