@@ -416,11 +416,13 @@ it('sanitizes HTML content from front by default', function () {
         <script>alert('XSS')</script>
         <img src="javascript:alert('XSS')" onload="alert('XSS')">
         <iframe src="javascript:alert('XSS')" onerror="alert('XSS')"></iframe>
+        <iframe srcdoc="<script>alert('XSS')</script>"></iframe>
         HTML;
 
     $expected = <<<'HTML'
 
         <img>
+        <iframe></iframe>
         <iframe></iframe>
         HTML;
 
@@ -465,6 +467,7 @@ it('sanitizes HTML content from front by default, keeps wanted elements', functi
     expect(
         (new EditorFormatter())->fromFront(
             SharpFormEditorField::make('md')
+                ->setToolbar([SharpFormEditorField::RAW_HTML])
                 ->allowEmbeds([EditorFormatterTestEmbed::class])
                 ->allowUploads(SharpFormEditorUpload::make()),
             'attribute',
@@ -480,6 +483,26 @@ it('sanitizes HTML content from front by default, keeps wanted elements', functi
                         'file' => [],
                     ],
                 ],
+            ],
+        )
+    )->toEqual($expected);
+});
+
+it('sanitizes data-html-content in RAW_HTML button not present', function () {
+    $value = <<<'HTML'
+        <div data-html-content="true"><script></script></div>
+        HTML;
+
+    $expected = <<<'HTML'
+        <div></div>
+        HTML;
+
+    expect(
+        (new EditorFormatter())->fromFront(
+            SharpFormEditorField::make('md'),
+            'attribute',
+            [
+                'text' => $value,
             ],
         )
     )->toEqual($expected);

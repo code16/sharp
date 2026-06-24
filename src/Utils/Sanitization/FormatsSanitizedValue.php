@@ -49,7 +49,6 @@ trait FormatsSanitizedValue
                 'referrerpolicy',
                 'sandbox',
                 'src',
-                'srcdoc',
                 'width',
                 'height',
                 'id',
@@ -76,8 +75,11 @@ trait FormatsSanitizedValue
             ...$field->embeds()->map(fn (SharpFormEditorEmbed $embed) => '<'.$embed->tagName())->all(),
             '<x-sharp-image',
             '<x-sharp-file',
-            'data-html-content',
+            in_array(SharpFormEditorField::RAW_HTML, $field->getToolbar())
+                ? 'data-html-content'
+                : null,
         ])
+            ->filter()
             ->contains(fn (string $needle) => str_contains($value, $needle));
     }
 
