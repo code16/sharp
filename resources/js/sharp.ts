@@ -17,7 +17,11 @@ lucideIconsDefaultAttributes['aria-hidden'] = 'true'
 initRouter();
 
 createInertiaApp({
-    resolve: name => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob<DefineComponent>('./Pages/**/*.vue')),
+    pages: {
+        path: './Pages',
+        extension: '.vue',
+        lazy: true,
+    },
     setup({ el, App, props, plugin }) {
         const app = createApp({
             render: () => h(App, props),
