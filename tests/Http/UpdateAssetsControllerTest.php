@@ -24,7 +24,8 @@ it('allows to update assets', function () {
 
     expect($commandFinishedEvent)
         ->toBeInstanceOf(CommandFinished::class)
-        ->and($commandFinishedEvent->command)->toBe('vendor:publish');
+        ->and($commandFinishedEvent->command)->toBe('vendor:publish')
+        ->and($commandFinishedEvent->exitCode)->toBe(0);
 
     $notifications = session('sharp_notifications');
     $notification = collect($notifications)->first();
