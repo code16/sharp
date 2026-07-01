@@ -350,6 +350,8 @@ it('allows to format embeds with uploads to front', function () {
                             'width' => 600,
                             'height' => 600,
                         ],
+                        'check' => null,
+                        'nullable' => null,
                         '_html' => sprintf('<img src="%s"> My <em>contentful</em> content',
                             $thumbnail,
                         ),
@@ -373,6 +375,7 @@ it('allows to format embeds with uploads from front', function () {
             (new EditorFormatterTestEmbed())->key() => [
                 '0' => [
                     'slot' => 'My <em>contentful</em> content',
+                    'check' => true,
                     'visual' => [
                         'name' => 'image.jpg',
                         'path' => 'data/Posts/1/image.jpg',
@@ -386,7 +389,7 @@ it('allows to format embeds with uploads from front', function () {
                 ],
             ],
         ],
-    ]))->toEqual(sprintf('<x-embed visual="%s">My <em>contentful</em> content</x-embed>',
+    ]))->toEqual(sprintf('<x-embed check="1" visual="%s">My <em>contentful</em> content</x-embed>',
         e(json_encode([
             'file_name' => 'data/Posts/1/image.jpg',
             'size' => 120,
@@ -394,6 +397,26 @@ it('allows to format embeds with uploads from front', function () {
             'disk' => 'local',
         ]))
     ));
+});
+
+it('allows to format embeds with false/null values from front', function () {
+    $formatter = (new EditorFormatter())->setInstanceId(1);
+    $field = SharpFormEditorField::make('md')
+        ->allowEmbeds([EditorFormatterTestEmbed::class]);
+
+    expect($formatter->fromFront($field, 'attribute', [
+        'text' => <<<'HTML'
+            <x-embed data-key="0"></x-embed>
+            HTML,
+        'embeds' => [
+            (new EditorFormatterTestEmbed())->key() => [
+                '0' => [
+                    'check' => false,
+                    'nullable' => null,
+                ],
+            ],
+        ],
+    ]))->toEqual('<x-embed></x-embed>');
 });
 
 it('allows to format a unicode text value from front', function () {

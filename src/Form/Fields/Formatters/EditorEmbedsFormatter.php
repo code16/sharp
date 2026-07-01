@@ -7,6 +7,7 @@ use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Utils\Fields\Formatters\FormatsEditorEmbeds;
 use Code16\Sharp\Utils\Fields\Formatters\FormatsHtmlContent;
+use DOMElement;
 use Illuminate\Support\Str;
 
 class EditorEmbedsFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
@@ -66,10 +67,7 @@ class EditorEmbedsFormatter extends SharpFieldFormatter implements FormatsAfterU
                                 if ($fieldKey === 'slot') {
                                     $this->setInnerHtml($element, $fieldValue);
                                 } else {
-                                    $element->setAttribute(
-                                        Str::kebab($fieldKey),
-                                        is_array($fieldValue) ? json_encode($fieldValue) : $fieldValue
-                                    );
+                                    $this->setAttribute($element, $fieldKey, $fieldValue);
                                 }
                             }
                         }
@@ -113,10 +111,7 @@ class EditorEmbedsFormatter extends SharpFieldFormatter implements FormatsAfterU
                                         $this->tryJsonDecode($element->getAttribute(Str::kebab($fieldKey)))
                                     );
 
-                                $element->setAttribute(
-                                    Str::kebab($fieldKey),
-                                    is_array($formatted) ? json_encode($formatted) : $formatted
-                                );
+                                $this->setAttribute($element, $fieldKey, $formatted);
                             }
                         }
                     }
@@ -125,5 +120,16 @@ class EditorEmbedsFormatter extends SharpFieldFormatter implements FormatsAfterU
                 return $this->toHtml($domDocument);
             }
         );
+    }
+
+    protected function setAttribute(DOMElement $element, string $fieldKey, mixed $value): void
+    {
+        $attribute = Str::kebab($fieldKey);
+
+        if ($value === false || $value === null) {
+            $element->removeAttribute($attribute);
+        } else {
+            $element->setAttribute($attribute, is_array($value) ? json_encode($value) : $value);
+        }
     }
 }

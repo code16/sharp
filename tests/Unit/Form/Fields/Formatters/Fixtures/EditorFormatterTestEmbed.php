@@ -4,6 +4,7 @@ namespace Code16\Sharp\Tests\Unit\Form\Fields\Formatters\Fixtures;
 
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
+use Code16\Sharp\Form\Fields\SharpFormCheckField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
@@ -23,6 +24,8 @@ class EditorFormatterTestEmbed extends SharpFormEditorEmbed
     {
         $formFields
             ->addField(SharpFormTextField::make('slot'))
+            ->addField(SharpFormCheckField::make('check', 'Check'))
+            ->addField(SharpFormTextField::make('nullable'))
             ->addField(SharpFormUploadField::make('visual')->setImageOnly());
     }
 
