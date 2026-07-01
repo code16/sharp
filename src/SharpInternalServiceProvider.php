@@ -28,7 +28,6 @@ use Code16\Sharp\Console\PolicyMakeCommand;
 use Code16\Sharp\Console\ReorderHandlerMakeCommand;
 use Code16\Sharp\Console\ServiceProviderMakeCommand;
 use Code16\Sharp\Console\ShowPageMakeCommand;
-use Code16\Sharp\Exceptions\SharpAuthenticationException;
 use Code16\Sharp\Exceptions\SharpTokenMismatchException;
 use Code16\Sharp\Form\Eloquent\Uploads\Migration\CreateUploadsMigration;
 use Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\SharpImageManager;
@@ -42,7 +41,6 @@ use Code16\Sharp\Utils\Uploads\SharpUploadManager;
 use Code16\Sharp\View\Components\Content;
 use Code16\Sharp\View\Components\File as FileComponent;
 use Code16\Sharp\View\Components\Image;
-use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Console\Events\CommandStarting;
 use Illuminate\Contracts\Debug\ExceptionHandler;
@@ -60,7 +58,7 @@ use Laravel\Octane\Events\TickReceived;
 
 class SharpInternalServiceProvider extends ServiceProvider
 {
-    const VERSION = '9.21.1';
+    const VERSION = '9.22.4';
 
     public function boot()
     {
@@ -190,18 +188,6 @@ class SharpInternalServiceProvider extends ServiceProvider
         $handler->map(function (TokenMismatchException $exception) {
             if (request()->routeIs('code16.sharp.*')) {
                 return new SharpTokenMismatchException($exception);
-            }
-
-            return $exception;
-        });
-
-        $handler->map(function (AuthenticationException $exception) {
-            if (request()->routeIs('code16.sharp.*')) {
-                return new SharpAuthenticationException(
-                    $exception->getMessage(),
-                    $exception->guards(),
-                    $exception->redirectTo(request())
-                );
             }
 
             return $exception;

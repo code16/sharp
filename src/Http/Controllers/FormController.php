@@ -12,7 +12,7 @@ use Code16\Sharp\Utils\Uploads\SharpUploadManager;
 use Illuminate\Support\Uri;
 use Inertia\Inertia;
 
-class FormController extends SharpProtectedController
+class FormController extends Controller
 {
     use HandlesSharpNotificationsInRequest;
 

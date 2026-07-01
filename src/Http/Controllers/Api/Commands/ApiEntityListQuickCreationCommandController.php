@@ -3,11 +3,11 @@
 namespace Code16\Sharp\Http\Controllers\Api\Commands;
 
 use Code16\Sharp\Data\Commands\CommandFormData;
-use Code16\Sharp\Http\Controllers\Api\ApiController;
+use Code16\Sharp\Http\Controllers\Controller;
 use Code16\Sharp\Utils\Entities\ValueObjects\EntityKey;
 use Code16\Sharp\Utils\Uploads\SharpUploadManager;
 
-class ApiEntityListQuickCreationCommandController extends ApiController
+class ApiEntityListQuickCreationCommandController extends Controller
 {
     use HandlesCommandForm;
     use HandlesCommandResult;
@@ -19,6 +19,7 @@ class ApiEntityListQuickCreationCommandController extends ApiController
 
     public function create(string $globalFilter, EntityKey $entityKey, EntityKey $formEntityKey)
     {
+        $this->authorizationManager->check('create', $entityKey);
         $entity = $this->entityManager->entityFor($entityKey);
 
         $list = $entity->getListOrFail();
@@ -50,6 +51,7 @@ class ApiEntityListQuickCreationCommandController extends ApiController
 
     public function store(string $globalFilter, EntityKey $entityKey, EntityKey $formEntityKey)
     {
+        $this->authorizationManager->check('create', $entityKey);
         $list = $this->entityManager->entityFor($entityKey)->getListOrFail();
         $list->buildListConfig();
 

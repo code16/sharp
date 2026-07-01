@@ -7,6 +7,11 @@ trait IsXYChart
     protected bool $displayHorizontalAxisAsTimeline = false;
     protected bool $enableHorizontalAxisLabelSampling = false;
 
+    public function hasDisplayHorizontalAxisAsTimeline(): bool
+    {
+        return $this->displayHorizontalAxisAsTimeline;
+    }
+
     public function setDisplayHorizontalAxisAsTimeline(bool $displayAsTimeline = true): self
     {
         $this->displayHorizontalAxisAsTimeline = $displayAsTimeline;

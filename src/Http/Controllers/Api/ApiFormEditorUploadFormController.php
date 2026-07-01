@@ -3,8 +3,9 @@
 namespace Code16\Sharp\Http\Controllers\Api;
 
 use Code16\Sharp\Http\Controllers\Api\Requests\EditorUploadFormRequest;
+use Code16\Sharp\Http\Controllers\Controller;
 
-class ApiFormEditorUploadFormController extends ApiController
+class ApiFormEditorUploadFormController extends Controller
 {
     public function update(string $globalFilter, EditorUploadFormRequest $request, string $entityKey, ?string $instanceId = null)
     {

@@ -663,6 +663,7 @@ export type FormUploadFieldValueData = {
   thumbnail: string | null;
   editable_thumbnail: string | null;
   playable_preview_url: string | null;
+  download_url: string | null;
   uploaded: boolean | null;
   transformed: boolean | null;
   not_found: boolean | null;
@@ -929,6 +930,7 @@ export type ShowFileFieldData = {
     path: string;
     thumbnail: string;
     playable_preview_url: string;
+    download_url: string;
     size: number;
     mime_type: string;
   };

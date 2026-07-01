@@ -3,9 +3,13 @@
 use Code16\Sharp\Show\Fields\Formatters\TextFormatter;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
 use Code16\Sharp\Tests\Unit\Form\Fields\Formatters\Fixtures\EditorFormatterTestEmbed;
+use Code16\Sharp\Tests\Unit\Utils\FakesBreadcrumb;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+
+uses(FakesBreadcrumb::class);
 
 beforeEach(function () {
     Storage::fake('local');
@@ -26,73 +30,97 @@ it('allows to format a text value to front', function () {
 });
 
 it('allows to format a text with uploads to front', function () {
-    $formatter = new TextFormatter();
-    $field = SharpShowTextField::make('md');
+    $this->freezeTime(function (Carbon $time) {
+        $formatter = new TextFormatter();
+        $field = SharpShowTextField::make('md');
 
-    $image = UploadedFile::fake()->image('test.jpg', 600, 600);
-    $image->storeAs('data/Posts/1', 'image.jpg', ['disk' => 'local']);
-    $file = UploadedFile::fake()->create('doc.pdf');
-    $file->storeAs('data/Posts/1', 'doc.pdf', ['disk' => 'local']);
+        $image = UploadedFile::fake()->image('test.jpg', 600, 600);
+        $image->storeAs('data/Posts/1', 'image.jpg', ['disk' => 'local']);
+        $file = UploadedFile::fake()->create('doc.pdf');
+        $file->storeAs('data/Posts/1', 'doc.pdf', ['disk' => 'local']);
 
-    $value = sprintf('<x-sharp-image file="%s" legend="Legendary"></x-sharp-image><x-sharp-file file="%s"></x-sharp-file>',
-        e(json_encode([
-            'file_name' => 'data/Posts/1/image.jpg',
-            'size' => 120,
-            'mime_type' => 'image/jpeg',
-            'disk' => 'local',
-            'width' => 600,
-            'height' => 600,
-        ])),
-        e(json_encode([
-            'file_name' => 'data/Posts/1/doc.pdf',
-            'size' => 120,
-            'mime_type' => 'application/pdf',
-            'disk' => 'local',
-        ]))
-    );
+        $value = sprintf('<x-sharp-image file="%s" legend="Legendary"></x-sharp-image><x-sharp-file file="%s"></x-sharp-file>',
+            e(json_encode([
+                'file_name' => 'data/Posts/1/image.jpg',
+                'size' => 120,
+                'mime_type' => 'image/jpeg',
+                'disk' => 'local',
+                'width' => 600,
+                'height' => 600,
+            ])),
+            e(json_encode([
+                'file_name' => 'data/Posts/1/doc.pdf',
+                'size' => 120,
+                'mime_type' => 'application/pdf',
+                'disk' => 'local',
+            ]))
+        );
 
-    expect($formatter->toFront($field, $value))->toEqual([
-        'text' => '<x-sharp-image data-key="0"></x-sharp-image><x-sharp-file data-key="1"></x-sharp-file>',
-        'uploads' => (object) [
-            '0' => [
-                'file' => [
-                    'name' => 'image.jpg',
-                    'path' => 'data/Posts/1/image.jpg',
-                    'disk' => 'local',
-                    'thumbnail' => sprintf(
-                        '/storage/thumbnails/data/Posts/1/200-200_q-90/image.jpg?%s',
-                        Storage::disk('public')->lastModified('/thumbnails/data/Posts/1/200-200_q-90/image.jpg')
-                    ),
-                    'playable_preview_url' => null,
-                    'size' => 120,
-                    'mime_type' => 'image/jpeg',
-                    'filters' => null,
-                    'id' => null,
-                    'width' => 600,
-                    'height' => 600,
+        $this->fakeBreadcrumbWithUrl('/sharp/root/s-list/person/s-show/person/1');
+
+        expect($formatter->toFront($field, $value))->toEqual([
+            'text' => '<x-sharp-image data-key="0"></x-sharp-image><x-sharp-file data-key="1"></x-sharp-file>',
+            'uploads' => (object) [
+                '0' => [
+                    'file' => [
+                        'name' => 'image.jpg',
+                        'path' => 'data/Posts/1/image.jpg',
+                        'disk' => 'local',
+                        'thumbnail' => sprintf(
+                            '/storage/thumbnails/data/Posts/1/200-200_q-90/image.jpg?%s',
+                            Storage::disk('public')->lastModified('/thumbnails/data/Posts/1/200-200_q-90/image.jpg')
+                        ),
+                        'playable_preview_url' => null,
+                        'download_url' => URL::temporarySignedRoute(
+                            'code16.sharp.download.show',
+                            $time->copy()->addMinutes(config('session.lifetime')),
+                            [
+                                'entityKey' => 'person',
+                                'instanceId' => '1',
+                                'disk' => 'local',
+                                'path' => 'data/Posts/1/image.jpg',
+                            ]
+                        ),
+                        'size' => 120,
+                        'mime_type' => 'image/jpeg',
+                        'filters' => null,
+                        'id' => null,
+                        'width' => 600,
+                        'height' => 600,
+                    ],
+                    'legend' => 'Legendary',
+                    '_locale' => null,
                 ],
-                'legend' => 'Legendary',
-                '_locale' => null,
-            ],
-            '1' => [
-                'file' => [
-                    'name' => 'doc.pdf',
-                    'path' => 'data/Posts/1/doc.pdf',
-                    'disk' => 'local',
-                    'thumbnail' => null,
-                    'playable_preview_url' => null,
-                    'size' => 120,
-                    'mime_type' => 'application/pdf',
-                    'filters' => null,
-                    'id' => null,
-                    'width' => null,
-                    'height' => null,
+                '1' => [
+                    'file' => [
+                        'name' => 'doc.pdf',
+                        'path' => 'data/Posts/1/doc.pdf',
+                        'disk' => 'local',
+                        'thumbnail' => null,
+                        'playable_preview_url' => null,
+                        'download_url' => URL::temporarySignedRoute(
+                            'code16.sharp.download.show',
+                            $time->copy()->addMinutes(config('session.lifetime')),
+                            [
+                                'entityKey' => 'person',
+                                'instanceId' => '1',
+                                'disk' => 'local',
+                                'path' => 'data/Posts/1/doc.pdf',
+                            ]
+                        ),
+                        'size' => 120,
+                        'mime_type' => 'application/pdf',
+                        'filters' => null,
+                        'id' => null,
+                        'width' => null,
+                        'height' => null,
+                    ],
+                    'legend' => null,
+                    '_locale' => null,
                 ],
-                'legend' => null,
-                '_locale' => null,
             ],
-        ],
-    ]);
+        ]);
+    });
 });
 
 it('allows to format embeds with uploads to front', function () {

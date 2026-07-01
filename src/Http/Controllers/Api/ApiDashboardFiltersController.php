@@ -2,13 +2,15 @@
 
 namespace Code16\Sharp\Http\Controllers\Api;
 
-class ApiDashboardFiltersController extends ApiController
+use Code16\Sharp\Http\Controllers\Controller;
+
+class ApiDashboardFiltersController extends Controller
 {
     public function store(string $globalFilter, string $dashboardKey)
     {
         $this->authorizationManager->check('entity', $dashboardKey);
 
-        $dashboard = $this->getDashboardInstance($dashboardKey);
+        $dashboard = $this->entityManager->entityFor($dashboardKey)->getViewOrFail();
         $dashboard->buildDashboardConfig();
 
         $dashboard->filterContainer()

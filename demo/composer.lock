@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7b8290f45348c3d8c87042672fe1a9cc",
+    "content-hash": "b7d5c71c9fed55cf367da4f828439458",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -1397,23 +1397,23 @@
         },
         {
             "name": "inertiajs/inertia-laravel",
-            "version": "v3.0.6",
+            "version": "v2.0.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/inertiajs/inertia-laravel.git",
-                "reference": "c255b1ea050cf563b240542a76f7f756ccdb2d67"
+                "reference": "4d5849328d4c64231f886d1422fdc945882f9094"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/inertiajs/inertia-laravel/zipball/c255b1ea050cf563b240542a76f7f756ccdb2d67",
-                "reference": "c255b1ea050cf563b240542a76f7f756ccdb2d67",
+                "url": "https://api.github.com/repos/inertiajs/inertia-laravel/zipball/4d5849328d4c64231f886d1422fdc945882f9094",
+                "reference": "4d5849328d4c64231f886d1422fdc945882f9094",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "laravel/framework": "^11.0|^12.0|^13.0",
-                "php": "^8.2.0",
-                "symfony/console": "^7.0|^8.0"
+                "laravel/framework": "^10.0|^11.0|^12.0|^13.0",
+                "php": "^8.1.0",
+                "symfony/console": "^6.2|^7.0|^8.0"
             },
             "conflict": {
                 "laravel/boost": "<2.2.0"
@@ -1423,8 +1423,8 @@
                 "larastan/larastan": "^3.0",
                 "laravel/pint": "^1.16",
                 "mockery/mockery": "^1.3.3",
-                "orchestra/testbench": "^9.2|^10.0|^11.0",
-                "phpunit/phpunit": "^11.5|^12.0",
+                "orchestra/testbench": "^8.0|^9.2|^10.0|^11.0",
+                "phpunit/phpunit": "^10.4|^11.5|^12.0",
                 "roave/security-advisories": "dev-master"
             },
             "suggest": {
@@ -1464,9 +1464,9 @@
             ],
             "support": {
                 "issues": "https://github.com/inertiajs/inertia-laravel/issues",
-                "source": "https://github.com/inertiajs/inertia-laravel/tree/v3.0.6"
+                "source": "https://github.com/inertiajs/inertia-laravel/tree/v2.0.22"
             },
-            "time": "2026-04-10T14:29:45+00:00"
+            "time": "2026-03-11T15:51:16+00:00"
         },
         {
             "name": "intervention/gif",
@@ -4406,6 +4406,74 @@
             "time": "2025-11-26T10:57:19+00:00"
         },
         {
+            "name": "spatie/laravel-image-optimizer",
+            "version": "1.8.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/laravel-image-optimizer.git",
+                "reference": "abc476add8b41d10185a07377ce7f64657b3ed91"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/laravel-image-optimizer/zipball/abc476add8b41d10185a07377ce7f64657b3ed91",
+                "reference": "abc476add8b41d10185a07377ce7f64657b3ed91",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "^8.0|^9.0|^10.0|^11.0|^12.0|^13.0",
+                "php": "^8.0",
+                "spatie/image-optimizer": "^1.2.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^6.23|^7.0|^8.0|^9.0|^10.0|^11.0",
+                "phpunit/phpunit": "^9.4|^10.5|^11.5.3|^12.5.12"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "ImageOptimizer": "Spatie\\LaravelImageOptimizer\\Facades\\ImageOptimizer"
+                    },
+                    "providers": [
+                        "Spatie\\LaravelImageOptimizer\\ImageOptimizerServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\LaravelImageOptimizer\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Optimize images in your Laravel app",
+            "homepage": "https://github.com/spatie/laravel-image-optimizer",
+            "keywords": [
+                "laravel-image-optimizer",
+                "spatie"
+            ],
+            "support": {
+                "source": "https://github.com/spatie/laravel-image-optimizer/tree/1.8.3"
+            },
+            "funding": [
+                {
+                    "url": "https://spatie.be/open-source/support-us",
+                    "type": "custom"
+                }
+            ],
+            "time": "2026-02-21T21:35:45+00:00"
+        },
+        {
             "name": "spatie/laravel-package-tools",
             "version": "1.93.0",
             "source": {
@@ -6269,16 +6337,16 @@
         },
         {
             "name": "symfony/polyfill-php80",
-            "version": "v1.33.0",
+            "version": "v1.37.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php80.git",
-                "reference": "0cc9dd0f17f61d8131e7df6b84bd344899fe2608"
+                "reference": "dfb55726c3a76ea3b6459fcfda1ec2d80a682411"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php80/zipball/0cc9dd0f17f61d8131e7df6b84bd344899fe2608",
-                "reference": "0cc9dd0f17f61d8131e7df6b84bd344899fe2608",
+                "url": "https://api.github.com/repos/symfony/polyfill-php80/zipball/dfb55726c3a76ea3b6459fcfda1ec2d80a682411",
+                "reference": "dfb55726c3a76ea3b6459fcfda1ec2d80a682411",
                 "shasum": ""
             },
             "require": {
@@ -6329,7 +6397,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-php80/tree/v1.33.0"
+                "source": "https://github.com/symfony/polyfill-php80/tree/v1.37.0"
             },
             "funding": [
                 {
@@ -6349,7 +6417,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-01-02T08:10:11+00:00"
+            "time": "2026-04-10T16:19:22+00:00"
         },
         {
             "name": "symfony/polyfill-php84",
@@ -6596,16 +6664,16 @@
         },
         {
             "name": "symfony/process",
-            "version": "v8.0.5",
+            "version": "v8.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "b5f3aa6762e33fd95efbaa2ec4f4bc9fdd16d674"
+                "reference": "26d89e459f037d2873300605d0a07e7a8ef84db0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/b5f3aa6762e33fd95efbaa2ec4f4bc9fdd16d674",
-                "reference": "b5f3aa6762e33fd95efbaa2ec4f4bc9fdd16d674",
+                "url": "https://api.github.com/repos/symfony/process/zipball/26d89e459f037d2873300605d0a07e7a8ef84db0",
+                "reference": "26d89e459f037d2873300605d0a07e7a8ef84db0",
                 "shasum": ""
             },
             "require": {
@@ -6637,7 +6705,7 @@
             "description": "Executes commands in sub-processes",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/process/tree/v8.0.5"
+                "source": "https://github.com/symfony/process/tree/v8.0.11"
             },
             "funding": [
                 {
@@ -6657,7 +6725,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-01-26T15:08:38+00:00"
+            "time": "2026-05-11T16:56:32+00:00"
         },
         {
             "name": "symfony/property-access",

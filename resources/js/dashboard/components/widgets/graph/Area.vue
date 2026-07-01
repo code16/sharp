@@ -15,7 +15,17 @@
 
     const props = defineProps<DashboardWidgetProps<AreaGraphWidgetData>>();
 
-    const { data, x, y, color, tooltipTemplate, containerConfig, chartConfig, xAxisConfig, yAxisConfig } = useXYChart(props);
+    const {
+        data,
+        x,
+        y,
+        color,
+        tooltipTemplate,
+        containerConfig,
+        chartConfig,
+        xAxisConfig,
+        yAxisConfig
+    } = useXYChart(props);
 
     const svgDefs = computed(() => props.value?.datasets.map((dataset, i) => `
         <linearGradient id="fill-${i}" x1="0" y1="0" x2="0" y2="1">
@@ -101,11 +111,11 @@
                 } satisfies CrosshairConfigInterface<Datum>"
             />
 
-            <ChartTooltip />
+            <ChartTooltip/>
         </VisXYContainer>
 
         <template v-if="props.widget.showLegend && !props.widget.minimal">
-            <ChartLegendContent />
+            <ChartLegendContent/>
         </template>
     </ChartContainer>
 </template>

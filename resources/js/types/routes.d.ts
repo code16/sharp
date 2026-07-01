@@ -578,8 +578,10 @@ declare module 'ziggy-js' {
         }
     ],
     "code16.sharp.password.reset.post": [],
-    "code16.sharp.impersonate": [],
-    "code16.sharp.impersonate.post": []
+    "code16.sharp.passkeys.create": [],
+    "code16.sharp.passkeys.validate": [],
+    "code16.sharp.passkeys.store": [],
+    "code16.sharp.passkeys.skip-prompt": []
 }
 }
 export {};

@@ -2,13 +2,15 @@
 
 namespace Code16\Sharp\Http\Controllers\Api;
 
-class ApiEntityListFiltersController extends ApiController
+use Code16\Sharp\Http\Controllers\Controller;
+
+class ApiEntityListFiltersController extends Controller
 {
     public function store(string $globalFilter, string $entityKey)
     {
         $this->authorizationManager->check('entity', $entityKey);
 
-        $list = $this->getListInstance($entityKey);
+        $list = $this->entityManager->entityFor($entityKey)->getListOrFail();
         $list->buildListConfig();
 
         $list->filterContainer()

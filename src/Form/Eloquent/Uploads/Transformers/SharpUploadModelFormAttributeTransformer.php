@@ -8,6 +8,7 @@ use Code16\Sharp\Utils\Transformers\SharpAttributeTransformer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 use Intervention\Image\Exceptions\DecoderException;
 
@@ -79,6 +80,7 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
                         'disk',
                         'thumbnail',
                         'playable_preview_url',
+                        'download_url',
                         'size',
                         'mime_type',
                         'filters',
@@ -108,6 +110,15 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
                     'mime_type' => $upload->mime_type,
                     'thumbnail' => $this->getThumbnailUrl($upload),
                     'playable_preview_url' => $this->getPlayableMediaUrl($upload),
+                    'download_url' => URL::temporarySignedRoute(
+                        'code16.sharp.download.show',
+                        now()->plus(minutes: config('session.lifetime')),
+                        [
+                            'entityKey' => sharp()->context()->entityKey(),
+                            'instanceId' => sharp()->context()->instanceId(),
+                            'disk' => $upload->disk,
+                            'path' => $upload->file_name,
+                        ]),
                     'size' => $upload->size,
                 ]
                 : [],

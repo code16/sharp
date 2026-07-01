@@ -1,23 +1,26 @@
 name: E2E Tests (playwright)
 on:
+  workflow_dispatch:
   push:
     branches:
-      - main
+      - 9.x
+      - 10.x
   pull_request:
     branches:
-      - main
+      - 9.x
+      - 10.x
 jobs:
-  test:
+  e2e-test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
       - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
         with:
-          php-version: ${{ matrix.php }}
+          php-version: 8.5
           extensions: mbstring, dom, fileinfo, mysql
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
           node-version: lts/*
       - name: Install dependencies
@@ -26,7 +29,7 @@ jobs:
         run: composer install --prefer-dist --no-interaction --no-progress
       - name: Build assets
         run: npm run build
-      - name: Install dependencies
+      - name: Install E2E dependencies
         run: npm ci
         working-directory: tests-e2e
       - name: Install Playwright Browsers
@@ -54,7 +57,7 @@ jobs:
         working-directory: tests-e2e
         env:
           CI: true
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         if: ${{ !cancelled() }}
         with:
           name: report

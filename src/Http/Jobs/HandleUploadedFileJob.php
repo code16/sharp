@@ -8,7 +8,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Storage;
-use Spatie\ImageOptimizer\OptimizerChainFactory;
 
 class HandleUploadedFileJob implements ShouldQueue
 {
@@ -36,11 +35,10 @@ class HandleUploadedFileJob implements ShouldQueue
         );
 
         if ($this->shouldOptimizeImage) {
-            // We do not need to check for exception nor file format because
-            // the package will not throw any errors and just operate silently.
-            app(OptimizerChainFactory::class)
-                ->create()
-                ->optimize(Storage::disk($tmpDisk)->path($tmpFilePath));
+            OptimizeImageJob::dispatchSync(
+                disk: $tmpDisk,
+                filePath: $tmpFilePath,
+            );
         }
 
         if ($this->transformFilters) {
@@ -48,14 +46,14 @@ class HandleUploadedFileJob implements ShouldQueue
             HandleTransformedFileJob::dispatchSync(
                 disk: $tmpDisk,
                 filePath: $tmpFilePath,
-                transformFilters: $this->transformFilters
+                transformFilters: $this->transformFilters,
             );
         }
 
         if ($this->shouldSanitizeSvg && Storage::disk($tmpDisk)->mimeType($tmpFilePath) === 'image/svg+xml') {
             SanitizeSvgJob::dispatchSync(
                 disk: $tmpDisk,
-                filePath: $tmpFilePath
+                filePath: $tmpFilePath,
             );
         }
 

@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Dashboard\Widgets;
 
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
 class SharpGraphWidgetDataSet
@@ -9,6 +10,7 @@ class SharpGraphWidgetDataSet
     protected array $values;
     protected ?string $label = null;
     protected ?string $color = null;
+    protected bool $hasDateLabels = false;
 
     protected function __construct(array|Collection $values)
     {
@@ -36,9 +38,31 @@ class SharpGraphWidgetDataSet
         return $this;
     }
 
+    /**
+     * @internal
+     */
+    public function withDateLabels(bool $hasDateLabels = true): self
+    {
+        $this->hasDateLabels = $hasDateLabels;
+
+        return $this;
+    }
+
     protected function formatValues(array $values): array
     {
         return array_map(fn ($value) => (float) $value, array_values($values));
+    }
+
+    protected function formatLabels(array $values): array
+    {
+        if ($this->hasDateLabels) {
+            return array_map(
+                fn ($value) => (new Carbon($value))->shiftTimezone('UTC')->toAtomString(),
+                array_keys($values)
+            );
+        }
+
+        return array_keys($values);
     }
 
     public function toArray(): array
@@ -46,7 +70,7 @@ class SharpGraphWidgetDataSet
         return collect()
             ->merge([
                 'data' => $this->formatValues($this->values),
-                'labels' => array_keys($this->values),
+                'labels' => $this->formatLabels($this->values),
             ])
             ->when(
                 $this->label,

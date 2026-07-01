@@ -13,7 +13,17 @@
 
     const props = defineProps<DashboardWidgetProps<LineGraphWidgetData>>();
 
-    const { data, x, y, color, tooltipTemplate, containerConfig, chartConfig, xAxisConfig, yAxisConfig } = useXYChart(props);
+    const {
+        data,
+        x,
+        y,
+        color,
+        tooltipTemplate,
+        containerConfig,
+        chartConfig,
+        xAxisConfig,
+        yAxisConfig
+    } = useXYChart(props);
 </script>
 
 <template>

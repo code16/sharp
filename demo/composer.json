@@ -15,7 +15,7 @@
         "laravel/tinker": "^3.0",
         "masterminds/html5": "^2.9",
         "pragmarx/google2fa": "^8.0",
-        "spatie/image-optimizer": "^1.7",
+        "spatie/laravel-image-optimizer": "^1.8",
         "spatie/laravel-passkeys": "^1.6",
         "spatie/laravel-translatable": "^6.13",
         "symfony/html-sanitizer": "^7.3",

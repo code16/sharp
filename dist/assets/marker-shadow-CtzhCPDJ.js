@@ -1,0 +1,1 @@
+import{n as e}from"./chunk-CilyBKbf.js";var t=e({default:()=>n}),n=`/vendor/sharp/assets/marker-shadow-f7SaPCxT.png`;export{t as n,n as t};

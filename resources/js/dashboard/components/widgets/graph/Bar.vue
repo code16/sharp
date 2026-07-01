@@ -19,7 +19,17 @@
 
     const props = defineProps<DashboardWidgetProps<BarGraphWidgetData>>();
 
-    const { data, x, y, color, tooltipTemplate, chartConfig, xAxisConfig, containerConfig, yAxisConfig } = useXYChart(props);
+    const {
+        data,
+        x,
+        y,
+        color,
+        tooltipTemplate,
+        chartConfig,
+        xAxisConfig,
+        containerConfig,
+        yAxisConfig
+    } = useXYChart(props);
 </script>
 
 <template>
@@ -58,7 +68,7 @@
                 />
             </template>
 
-            <ChartTooltip :triggers="{ [GroupedBar.selectors.barGroup]: tooltipTemplate }" />
+            <ChartTooltip :triggers="{ [GroupedBar.selectors.barGroup]: tooltipTemplate }"/>
 
             <VisGroupedBar
                 v-bind="{
@@ -72,7 +82,7 @@
         </VisXYContainer>
 
         <template v-if="props.widget.showLegend && !props.widget.minimal">
-            <ChartLegendContent />
+            <ChartLegendContent/>
         </template>
     </ChartContainer>
 </template>

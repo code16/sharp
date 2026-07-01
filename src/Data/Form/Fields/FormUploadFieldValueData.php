@@ -21,6 +21,7 @@ final class FormUploadFieldValueData extends Data
         public ?string $thumbnail,
         public ?string $editable_thumbnail,
         public ?string $playable_preview_url,
+        public ?string $download_url,
         public ?bool $uploaded,
         public ?bool $transformed,
         public ?bool $not_found,

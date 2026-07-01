@@ -3,16 +3,16 @@
 namespace Code16\Sharp\Http\Controllers\Api\Commands;
 
 use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
-use Code16\Sharp\Http\Controllers\Api\ApiController;
+use Code16\Sharp\Http\Controllers\Controller;
 
-class ApiEntityListEntityStateController extends ApiController
+class ApiEntityListEntityStateController extends Controller
 {
     use HandlesCommandResult;
     use HandlesInstanceCommand;
 
     public function update(string $globalFilter, string $entityKey, mixed $instanceId)
     {
-        $list = $this->getListInstance($entityKey);
+        $list = $this->entityManager->entityFor($entityKey)->getListOrFail();
         $list->buildListConfig();
         $list->initQueryParams(request()->input('query'));
 

@@ -3,10 +3,11 @@
 namespace Code16\Sharp\Http\Controllers\Api;
 
 use Code16\Sharp\Filters\AutocompleteRemoteFilter;
+use Code16\Sharp\Http\Controllers\Controller;
 use Code16\Sharp\Utils\Entities\SharpDashboardEntity;
 use Code16\Sharp\Utils\Entities\ValueObjects\EntityKey;
 
-class ApiFilterAutocompleteController extends ApiController
+class ApiFilterAutocompleteController extends Controller
 {
     public function index(string $globalFilter, EntityKey $entityKey, string $filterHandlerKey): array
     {

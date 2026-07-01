@@ -6,7 +6,7 @@ use Code16\Sharp\Utils\Menu\SharpMenuItem;
 use Code16\Sharp\Utils\Menu\SharpMenuManager;
 use Inertia\Inertia;
 
-class HomeController extends SharpProtectedController
+class HomeController extends Controller
 {
     public function index(string $globalFilter)
     {
