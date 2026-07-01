@@ -6,6 +6,7 @@ export function sidebar(): DefaultTheme.SidebarItem[] {
             text: 'Introduction',
             items: [
                 { text: 'Getting started and installation', link: '/guide/index.md' },
+                { text: 'Upgrade guide', link: '/guide/upgrade.md' },
                 { text: 'The entity class', link: '/guide/entity-class.md' },
                 { text: 'The Menu', link: '/guide/building-menu.md' }
             ]
@@ -109,19 +110,5 @@ export function sidebar(): DefaultTheme.SidebarItem[] {
                 { text: 'Style & Visual Theme', link: '/guide/style-visual-theme.md' }
             ]
         },
-        {
-            text: 'Migrations guide',
-            collapsed: true,
-            items: [
-                { text: 'Upgrading from 8.x to 9.x', link: '/guide/upgrading/9.0.md' },
-                { text: 'Upgrading from 7.x to 8.x', link: '/guide/upgrading/8.0.md' },
-                { text: 'Upgrading from 6.x to 7.x', link: '/guide/upgrading/7.0.md' },
-                { text: 'Upgrading from 5.x to 6.x', link: '/guide/upgrading/6.0.md' },
-                { text: 'Upgrading from 4.2.x to 5.x', link: '/guide/upgrading/5.0.md' },
-                { text: 'Upgrading from 4.1.x to 4.2', link: '/guide/upgrading/4.2.md' },
-                { text: 'Upgrading from 4.1 to 4.1.3', link: '/guide/upgrading/4.1.3.md' },
-                { text: 'Upgrading from 4.0 to 4.1', link: '/guide/upgrading/4.1.md' }
-            ]
-        }
     ];
 }
