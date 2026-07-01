@@ -21,7 +21,7 @@ export function initRouter() {
     // force reload on previous navigation to invalidate outdated data / state
     window.addEventListener('popstate', (e) => {
         // debugger;
-        console.time('popstate');
+        // console.time('popstate');
         // console.time('prefetching');
         // console.time('prefetched');
         const url = new URL(location.href);
@@ -51,7 +51,7 @@ export function initRouter() {
                 //     preserveState: true,
                 //     preserveScroll: true,
                 // });
-                console.timeEnd('popstate');
+                // console.timeEnd('popstate');
                 document.body.style.minHeight = '';
             },
         };
