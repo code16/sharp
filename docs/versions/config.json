@@ -12,7 +12,8 @@
         "title": "Sharp 9.x",
         "branch": "9.x",
         "slug": "9.x",
-        "algoliaTag": "v9"
+        "algoliaTag": "v9",
+        "latest": true
     },
     {
         "name": "8.x",
