@@ -350,6 +350,8 @@ it('allows to format embeds with uploads to front', function () {
                             'width' => 600,
                             'height' => 600,
                         ],
+                        'check' => null,
+                        'nullable' => null,
                         '_html' => sprintf('<img src="%s"> My <em>contentful</em> content',
                             $thumbnail,
                         ),
