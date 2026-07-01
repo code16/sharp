@@ -198,8 +198,8 @@ class SharpInternalServiceProvider extends ServiceProvider
     {
         Event::listen(CommandStarting::class, function (CommandStarting $event) {
             if ($event->command === 'vendor:publish'
-                && $event->input->getOption('tag')
-                && in_array('sharp-assets', $event->input->getOption('tag'))
+                && $event->input->hasOption('tag')
+                && collect($event->input->getOption('tag'))->contains('sharp-assets')
             ) {
                 if (File::exists(public_path('vendor/sharp'))) {
                     File::deleteDirectory(public_path('vendor/sharp'));
