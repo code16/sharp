@@ -34,7 +34,7 @@ Several features and methods that were deprecated in Sharp 9.0 have been removed
 - The legacy `$formValidatorClass` property handling in `SharpForm` was removed. Implement the `SharpForm::rules()` and `SharpForm::messages()` methods instead (cf. [Building form](building-form#input-validation)). Along with this removal, the following classes have been removed:
   - `\Code16\Sharp\Form\Validator\SharpFormRequest`
   - `\Code16\Sharp\Form\Validator\SharpValidator`
-  - `\Code16\Sharp\Http\Middleware\Api\BindSharpValidationResolver`
+  - `\Code16\Sharp\Http\Middleware\Api\BindSharpValidationResolver` (remove this from config)
 - In `SharpFormUploadField`, the following deprecated methods were removed:
 ```php
 \Code16\Sharp\Form\Fields\SharpFormUploadField::make('upload')
