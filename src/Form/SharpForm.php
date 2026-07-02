@@ -150,15 +150,6 @@ abstract class SharpForm
         return new SharpNotification($title);
     }
 
-    /**
-     * @deprecated use ->validate() or rules() methods instead; will be removed in 10.x
-     */
-    protected function getFormValidatorClass(): ?string
-    {
-        return property_exists($this, 'formValidatorClass')
-            ? $this->formValidatorClass
-            : null;
-    }
 
     /**
      * Retrieve a Model for the form and pack all its data as JSON.

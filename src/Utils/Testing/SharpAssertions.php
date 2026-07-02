@@ -46,23 +46,6 @@ trait SharpAssertions
         return new PendingDashboard($this, $entityClassNameOrKey);
     }
 
-    /**
-     * @deprecated use withSharpBreadcrumb() instead
-     */
-    public function withSharpCurrentBreadcrumb(...$breadcrumb): static
-    {
-        $this->breadcrumbBuilder = new BreadcrumbBuilder();
-
-        collect($breadcrumb)
-            ->each(fn (array $segment) => match ($segment[0]) {
-                'list' => $this->breadcrumbBuilder->appendEntityList($segment[1]),
-                'show' => (count($segment) == 2)
-                    ? $this->breadcrumbBuilder->appendSingleShowPage($segment[1])
-                    : $this->breadcrumbBuilder->appendShowPage($segment[1], $segment[2]),
-            });
-
-        return $this;
-    }
 
     /**
      * @param  (\Closure(BreadcrumbBuilder): BreadcrumbBuilder)  $callback

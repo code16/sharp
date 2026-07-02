@@ -24,7 +24,7 @@ class SingleShowController extends Controller
         $showData = $show->instance(null);
 
         $payload = ShowData::from([
-            'title' => $showData[$show->titleAttribute()] ?? $entity->getLabelOrFail($entityKey->multiformKey()),
+            'title' => $showData[$show->titleAttribute()] ?? $entity->getLabelOrFail(),
             'config' => [
                 ...$show->showConfig(null),
                 'formEditUrl' => route('code16.sharp.form.edit', [

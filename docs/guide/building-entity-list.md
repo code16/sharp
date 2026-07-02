@@ -229,8 +229,6 @@ Here is the full list of available methods:
 
 - `configureDefaultSort(string $sortBy, string $sortDir = "asc")`: `EntityListQueryParams $queryParams` will be filled with this default value (see above)
 
-- `configureMultiformAttribute(string $attribute)`: :warning: This feature has been deprecated in version 9.6.0 and was replaced by the [Entity Map](#entity-map) feature. You can still access to the [documentation](multiforms.md) for legacy usage. 
-
 - `configureEntityMap(string $attribute, EntityListEntities $entities)`: configure an Entity Map to display multiple entities in a single Entity List; [see detailed section](#entity-map) above.
 
 - `configurePageAlert(string $template, string $alertLevel = null, string $fieldKey = null, bool $declareTemplateAsPath = false)`: display a dynamic message above the list; [see detailed doc](page-alerts.md)

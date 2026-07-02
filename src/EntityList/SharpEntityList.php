@@ -189,16 +189,6 @@ abstract class SharpEntityList
         return $this;
     }
 
-    /**
-     * @deprecated
-     * @see self::configureEntityMap()
-     */
-    final protected function configureMultiformAttribute(?string $attribute): self
-    {
-        $this->entityAttribute = $attribute;
-
-        return $this;
-    }
 
     final protected function configureEntityMap(string $attribute, EntityListEntities $entities): self
     {
@@ -300,12 +290,4 @@ abstract class SharpEntityList
      * Retrieve all rows data as an array.
      */
     abstract public function getListData(): array|Arrayable;
-
-    /**
-     * @deprecated no more in use, will be removed in v10.x
-     */
-    final public function configurePaginated(bool $paginated = true): self
-    {
-        return $this;
-    }
 }

@@ -41,10 +41,6 @@ trait HandlesEntityListItems
             : null;
 
         if ($itemEntityAttributeValue) {
-            if (count($entity->getMultiforms()) > 0) {
-                return EntityKey::multiform(baseKey: $entityKey, multiformKey: $itemEntityAttributeValue);
-            }
-
             if (! $listEntity = ($list->getEntities()->find($itemEntityAttributeValue))) {
                 throw new SharpInvalidEntityKeyException(
                     sprintf('The sub-entity [%s] for the entity-list [%s] was not found.', $itemEntityAttributeValue, get_class($list))
@@ -78,9 +74,7 @@ trait HandlesEntityListItems
                     'instanceId' => $item[$list->getInstanceIdAttribute()],
                 ]);
             }
-            if ($itemEntity->hasForm()
-                || $itemEntityKey->multiformKey() && isset($entity->getMultiforms()[$itemEntityKey->multiformKey()])
-            ) {
+            if ($itemEntity->hasForm()) {
                 return route('code16.sharp.form.edit', [
                     'parentUri' => $breadcrumb->getCurrentPath(),
                     'entityKey' => $itemEntityKey,

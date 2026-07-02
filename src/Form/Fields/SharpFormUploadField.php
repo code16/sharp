@@ -255,39 +255,4 @@ class SharpFormUploadField extends SharpFormField
         return $validationRule->toArray();
     }
 
-    /** @deprecated use setImageCropRatio()  */
-    public function setCropRatio(?string $ratio = null, ?array $transformableFileTypes = null): self
-    {
-        return $this->setImageCropRatio($ratio, $transformableFileTypes);
-    }
-
-    /** @deprecated use setImageOptimize() */
-    public function shouldOptimizeImage(bool $shouldOptimizeImage = true): self
-    {
-        return $this->setImageOptimize($shouldOptimizeImage);
-    }
-
-    /** @deprecated use setImageCompactThumbnail() */
-    public function setCompactThumbnail(bool $compactThumbnail = true): self
-    {
-        return $this->setImageCompactThumbnail($compactThumbnail);
-    }
-
-    /** @deprecated use setImageTransformable()  */
-    public function setTransformable(bool $transformable = true, ?bool $transformKeepOriginal = null): self
-    {
-        return $this->setImageTransformable($transformable, $transformKeepOriginal);
-    }
-
-    /** @deprecated use setImageOnly() */
-    public function setFileFilterImages(): self
-    {
-        return $this->setImageOnly();
-    }
-
-    /** @deprecated use setAllowExtensions() */
-    public function setFileFilter(string|array $fileFilter): self
-    {
-        return $this->setAllowedExtensions($fileFilter);
-    }
 }

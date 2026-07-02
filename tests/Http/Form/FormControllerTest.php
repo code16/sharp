@@ -391,52 +391,6 @@ it('updates an instance on a single form case', function () {
         ->assertRedirect('/sharp/root/s-show/single-person');
 });
 
-it('gets form data for an instance of a sub entity (multiforms case)', function () {
-    app(SharpEntityManager::class)
-        ->entityFor('person')
-        ->setMultiforms([
-            'nobelized' => [
-                new class() extends PersonForm
-                {
-                    public function find($id): array
-                    {
-                        return [
-                            'id' => 1,
-                            'name' => 'Marie Curie',
-                            'nobel' => 'nobelized',
-                        ];
-                    }
-                },
-                'With Nobel prize',
-            ],
-            'nope' => [
-                new class() extends PersonForm
-                {
-                    public function find($id): array
-                    {
-                        return [
-                            'id' => 2,
-                            'name' => 'Rosalind Franklin',
-                            'nobel' => 'nope',
-                        ];
-                    }
-                },
-                'No Nobel prize',
-            ],
-        ]);
-
-    $this->get('/sharp/root/s-list/person/s-form/person:nobelized/1')
-        ->assertOk()
-        ->assertInertia(fn (Assert $page) => $page
-            ->where('form.data.name', 'Marie Curie')
-        );
-
-    $this->get('/sharp/root/s-list/person/s-form/person:nope/1')
-        ->assertOk()
-        ->assertInertia(fn (Assert $page) => $page
-            ->where('form.data.name', 'Rosalind Franklin')
-        );
-});
 
 it('allows to configure a page alert', function () {
     $this->withoutExceptionHandling();

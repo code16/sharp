@@ -33,24 +33,24 @@ it('can generate a new full sharp entity from console and we can create, display
         ->assertExitCode(0);
 
     // Manually add this new Entity to the Sharp config
-    app(SharpConfigBuilder::class)
-        ->addEntity('unit_test_models', '\App\Sharp\Entities\UnitTestModelEntity');
+    sharp()->config()
+        ->declareEntity('\App\Sharp\Entities\UnitTestModelEntity');
 
     $this
-        ->get(route('code16.sharp.list', ['entityKey' => 'unit_test_models']))
+        ->get(route('code16.sharp.list', ['entityKey' => 'unit-test-model']))
         ->assertOk();
 
     $this
         ->get(route('code16.sharp.form.create', [
-            'parentUri' => 's-list/unit_test_models',
-            'entityKey' => 'unit_test_models',
+            'parentUri' => 's-list/unit-test-model',
+            'entityKey' => 'unit-test-model',
         ]))
         ->assertOk();
 
     $this
         ->post(route('code16.sharp.form.store', [
-            'parentUri' => 's-list/unit_test_models',
-            'entityKey' => 'unit_test_models',
+            'parentUri' => 's-list/unit-test-model',
+            'entityKey' => 'unit-test-model',
         ]), [
             'my_field' => 'Arnaud',
         ])
@@ -58,7 +58,7 @@ it('can generate a new full sharp entity from console and we can create, display
 
     $this->assertDatabaseHas('unit_test_models', ['my_field' => 'Arnaud']);
 
-    $this->get(route('code16.sharp.list', ['unit_test_models']))
+    $this->get(route('code16.sharp.list', ['entityKey' => 'unit-test-model']))
         ->assertOk()
         ->assertSee('Arnaud');
 
@@ -66,8 +66,8 @@ it('can generate a new full sharp entity from console and we can create, display
 
     $this
         ->get(route('code16.sharp.show.show', [
-            'parentUri' => 's-list/unit_test_models',
-            'entityKey' => 'unit_test_models',
+            'parentUri' => 's-list/unit-test-model',
+            'entityKey' => 'unit-test-model',
             'instanceId' => $unitTestModel->id,
         ]))
         ->assertOk()
@@ -75,16 +75,16 @@ it('can generate a new full sharp entity from console and we can create, display
 
     $this
         ->get(route('code16.sharp.form.edit', [
-            'parentUri' => 's-list/unit_test_models',
-            'entityKey' => 'unit_test_models',
+            'parentUri' => 's-list/unit-test-model',
+            'entityKey' => 'unit-test-model',
             'instanceId' => $unitTestModel->id,
         ]))
         ->assertOk();
 
     $this
         ->post(route('code16.sharp.form.update', [
-            'parentUri' => 's-list/unit_test_models',
-            'entityKey' => 'unit_test_models',
+            'parentUri' => 's-list/unit-test-model',
+            'entityKey' => 'unit-test-model',
             'instanceId' => $unitTestModel->id,
         ]), [
             'my_field' => 'Benoit',
@@ -95,8 +95,8 @@ it('can generate a new full sharp entity from console and we can create, display
 
     $this
         ->delete(route('code16.sharp.show.delete', [
-            'parentUri' => 's-list/unit_test_models',
-            'entityKey' => 'unit_test_models',
+            'parentUri' => 's-list/unit-test-model',
+            'entityKey' => 'unit-test-model',
             'instanceId' => $unitTestModel->id,
         ]))
         ->assertStatus(302);
@@ -115,8 +115,8 @@ it('can generate a new sharp single entity from console', function () {
         ->assertExitCode(0);
 
     // Manually add this new Entity to the Sharp config
-    app(SharpConfigBuilder::class)
-        ->addEntity('settings', '\App\Sharp\Entities\SettingsEntity');
+    sharp()->config()
+        ->declareEntity('\App\Sharp\Entities\SettingsEntity');
 
     $this->get(
         route('code16.sharp.single-show', [
@@ -151,8 +151,8 @@ it('can generate a new sharp dashboard from console', function () {
         ->assertExitCode(0);
 
     // Manually add this new Entity to the Sharp config
-    app(SharpConfigBuilder::class)
-        ->addEntity('financial', '\App\Sharp\Entities\FinancialEntity');
+    sharp()->config()
+        ->declareEntity('\App\Sharp\Entities\FinancialEntity');
 
     $this->get(
         route('code16.sharp.dashboard', [
@@ -183,8 +183,8 @@ it('can generate a new command from console', function () {
         ->expectsConfirmation('Do you want to automatically declare this Entity in the Sharp configuration?', 'no')
         ->assertExitCode(0);
 
-    app(SharpConfigBuilder::class)
-        ->addEntity('unit_test_models', '\App\Sharp\Entities\UnitTestModelEntity');
+    sharp()->config()
+        ->declareEntity('\App\Sharp\Entities\UnitTestModelEntity');
 
     // Now generate a command
     $this->artisan('sharp:generator')
@@ -217,8 +217,8 @@ it('can generate a new list filter from console', function () {
         ->expectsConfirmation('Do you want to automatically declare this Entity in the Sharp configuration?', 'no')
         ->assertExitCode(0);
 
-    app(SharpConfigBuilder::class)
-        ->addEntity('unit_test_models', '\App\Sharp\Entities\UnitTestModelEntity');
+    sharp()->config()
+        ->declareEntity('\App\Sharp\Entities\UnitTestModelEntity');
 
     // Now generate a filter
     $this->artisan('sharp:generator')
@@ -252,8 +252,8 @@ it('can generate a new entity state from console', function () {
         ->expectsConfirmation('Do you want to automatically declare this Entity in the Sharp configuration?', 'no')
         ->assertExitCode(0);
 
-    app(SharpConfigBuilder::class)
-        ->addEntity('unit_test_models', '\App\Sharp\Entities\UnitTestModelEntity');
+    sharp()->config()
+        ->declareEntity('\App\Sharp\Entities\UnitTestModelEntity');
 
     // Now generate an entity state
     $this->artisan('sharp:generator')
@@ -287,8 +287,8 @@ it('can generate a new reorder handler from console', function () {
         ->expectsConfirmation('Do you want to automatically declare this Entity in the Sharp configuration?', 'no')
         ->assertExitCode(0);
 
-    app(SharpConfigBuilder::class)
-        ->addEntity('unit_test_models', '\App\Sharp\Entities\UnitTestModelEntity');
+    sharp()->config()
+        ->declareEntity('\App\Sharp\Entities\UnitTestModelEntity');
 
     // Now generate a reorder handler
     $this->artisan('sharp:generator')
