@@ -1,21 +1,31 @@
 # Upgrading from 9.x to 10.x
 
+## The upgrade command
+
+Sharp 10 comes with an upgrade command that replaces and notifies for deprecated and removed code. You can run it with
+
+```bash
+php artisan sharp:upgrade app/Sharp
+```
+
+Where `app/Sharp` is the path of your sharp code.
+
 ## Updating Dependencies
 
 You should update the following dependencies in your `composer.json` file:
 - `inertiajs/inertia-laravel` to `^3.0` (cf. https://inertiajs.com/docs/v3/getting-started/upgrade-guide)
 
-## Deprecated methods 
+## Deprecated methods
 
 ### Forms
 
-#### Upload `setImageCompactThumbnail()` has not impact and can be removed
+#### Upload `setImageCompactThumbnail()` has no impact and can be removed
 ```php
 \Code16\Sharp\Form\Fields\SharpFormUploadField::make('upload')
   ->setImageCompactThumbnail() // [!code --]
 ```
 
-## Removed methods
+## Removed classes and methods
 
 Several features and methods that were deprecated in Sharp 9.0 have been removed to clean up the codebase.
 
@@ -66,7 +76,7 @@ Several features and methods that were deprecated in Sharp 9.0 have been removed
 ### Show
 - The `configureMultiformAttribute()` method in `SharpShow` was removed. It's not used by sharp.
 
-### Renamed classes
+### Filters
 
 The following classes have been renamed / moved:
 
