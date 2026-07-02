@@ -6,6 +6,7 @@ use Closure;
 use Code16\Sharp\Form\Fields\Formatters\UploadFormatter;
 use Code16\Sharp\Utils\Fields\Validation\SharpFileValidation;
 use Code16\Sharp\Utils\Fields\Validation\SharpImageValidation;
+use Illuminate\Validation\Concerns\ValidatesAttributes;
 use Illuminate\Validation\Rules\Dimensions;
 
 class SharpFormUploadField extends SharpFormField
@@ -21,7 +22,6 @@ class SharpFormUploadField extends SharpFormField
     protected ?bool $imageTransformKeepOriginal = null;
     protected bool $isImageOnly = false;
     protected ?Dimensions $imageDimensionConstraints = null;
-    protected bool $imageCompactThumbnail = false;
     protected bool $imageOptimize = false;
     protected bool $imageSanitizeSvg = true;
     protected ?array $imageCropRatio = null;
@@ -51,7 +51,7 @@ class SharpFormUploadField extends SharpFormField
         $this->isImageOnly = $imageOnly;
 
         if (! $this->allowedExtensions) {
-            /** @see \Illuminate\Validation\Concerns\ValidatesAttributes::validateImage() */
+            /** @see ValidatesAttributes::validateImage() */
             $this->setAllowedExtensions(['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.svg', '.webp']);
         }
 
@@ -106,10 +106,11 @@ class SharpFormUploadField extends SharpFormField
         return $this->imageSanitizeSvg;
     }
 
+    /**
+     * @deprecated This method can be removed as it doesn't change anything on the UI
+     */
     public function setImageCompactThumbnail(bool $compactThumbnail = true): self
     {
-        $this->imageCompactThumbnail = $compactThumbnail;
-
         return $this;
     }
 
@@ -210,7 +211,6 @@ class SharpFormUploadField extends SharpFormField
             'imageTransformable' => 'boolean',
             'imageTransformableFileTypes' => 'array',
             'imageTransformKeepOriginal' => 'boolean',
-            'imageCompactThumbnail' => 'boolean',
             'validationRule' => 'array',
         ];
     }
@@ -222,7 +222,6 @@ class SharpFormUploadField extends SharpFormField
             'imageTransformable' => $this->imageTransformable,
             'imageTransformableFileTypes' => $this->imageTransformableFileTypes,
             'imageTransformKeepOriginal' => $this->isImageTransformKeepOriginal(),
-            'imageCompactThumbnail' => $this->imageCompactThumbnail,
             'maxFileSize' => $this->maxFileSize ?: sharp()->config()->get('uploads.max_file_size'),
             'allowedExtensions' => $this->allowedExtensions,
             'validationRule' => $this->buildValidationRule(),
