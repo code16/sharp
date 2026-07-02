@@ -13,7 +13,7 @@ Several features and methods that were deprecated in Sharp 9.0 have been removed
 - The `currentSharpRequest()` helper and its associated `CurrentSharpRequest` class were removed. Use `sharp()->context()` instead.
 - The `SharpAuthenticationCheckHandler` interface was removed. Use the `viewSharp` Gate instead.
 - The `withSharpCurrentBreadcrumb()` method in `SharpAssertions` was removed. Use `withSharpBreadcrumb()` instead.
-- Removal of "multi-forms". Replace all `SharpEntity::getMultiforms()` implementations to `SharpEntityList::configureEntityMap()` instead.
+- Removal of "multi-forms". Replace all `SharpEntity::getMultiforms()` implementations to `SharpEntityList::configureEntityMap()`  instead (cf. [Building entity list](building-entity-list#entity-map)).
 - Smart handling of legacy fontaweome icons class has been removed. Tou must convert all `fa-` occurences to `fas-*`, `far-*`, `fab-*`.
 
 ### Configuration

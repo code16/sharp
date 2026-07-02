@@ -253,10 +253,6 @@ To go ahead and learn how to add a link in the Sharp side menu, [look here](buil
 
 ## Entity Map
 
-::: info
-This feature replaces the deprecated Multiforms functionality, which remains available for legacy use in version 9.x but will be removed in 10.x.
-:::
-
 The Entity Map lets you display multiple entities within a single Entity List. This makes it possible to link different Show Pages or Forms based on a discriminating attribute.
 
 To set it up, declare the Entity Map in the `buildListConfig()` method by using `configureEntityMap()`:
