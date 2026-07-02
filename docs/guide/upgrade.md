@@ -33,7 +33,7 @@ Several features and methods that were deprecated in Sharp 9.0 have been removed
   - `setTransformable()` (use `setImageTransformable()`)
   - `setFileFilterImages()` (use `setImageOnly()`)
   - `setFileFilter()` (use `setAllowedExtensions()`)
-- In `HasFieldRows` (used in Form and Show layouts), the `withSingleField()` method was removed. Use `withField()` or `withListField()` instead.
+- The `FormLayoutColum::withSingleField()` & `ShowLayoutColum::withSingleField()`  method was removed. Use `withField()` or `withListField()` instead.
 - `SharpFormDateField::setDisplayFormat()` has been removed
 - `SharpFormAutocompleteField` was removed. Migrate to the following
     - `SharpFormAutocompleteField::make('key', 'local')` to `SharpFormAutocompleteLocalField::make('key')`

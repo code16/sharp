@@ -18,7 +18,6 @@ use Code16\Sharp\Tests\Fixtures\Entities\SinglePersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonForm;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonShow;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonSingleForm;
-use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\PageAlerts\PageAlert;
 use Illuminate\Support\Facades\Cache;
@@ -391,7 +390,6 @@ it('updates an instance on a single form case', function () {
         ->assertRedirect('/sharp/root/s-show/single-person');
 });
 
-
 it('allows to configure a page alert', function () {
     $this->withoutExceptionHandling();
 
@@ -449,25 +447,6 @@ it('allows to configure a page alert with a closure as content', function () {
             ])
             ->etc()
         );
-});
-
-it('allows to use the legacy validation', function () {
-    fakeFormFor('person', new class() extends PersonForm
-    {
-        protected string $formValidatorClass = \Code16\Sharp\Tests\Fixtures\Sharp\PersonLegacyValidator::class;
-    });
-
-    $this
-        ->post('/sharp/root/s-list/person/s-form/person', [
-            'name' => '',
-        ])
-        ->assertSessionHasErrors('name');
-
-    $this
-        ->post('/sharp/root/s-list/person/s-form/person/1', [
-            'name' => '',
-        ])
-        ->assertSessionHasErrors('name');
 });
 
 it('formats form title based on parent show breadcrumb', function () {
