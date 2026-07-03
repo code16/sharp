@@ -43,7 +43,8 @@ class UpgradeCommand extends Command
             'getMultiforms()' => '/getMultiforms\s*\(/',
         ];
 
-        $changedFilesCount = 0;
+        $updatedFiles = [];
+        $detectedFiles = [];
         $isDryRun = $this->option('dry-run');
 
         foreach ($directories as $directory) {
@@ -68,30 +69,39 @@ class UpgradeCommand extends Command
 
                 foreach ($detections as $label => $pattern) {
                     if (preg_match($pattern, $content)) {
-                        $this->line("The removed symbol <comment>{$label}</comment> has been detected in {$filePath}");
+                        $detectedFiles[$filePath][] = $label;
                     }
                 }
 
                 if ($content !== $originalContent) {
                     $relativePath = $file->getRelativePathname();
-                    $changedFilesCount++;
+                    $updatedFiles[] = $relativePath;
 
-                    if ($isDryRun) {
-                        $this->line("<comment>[Dry Run]</comment> Would update: {$relativePath}");
-                    } else {
+                    if (! $isDryRun) {
                         File::put($filePath, $content);
-                        $this->info("Updated: {$relativePath}");
                     }
                 }
             }
         }
 
+        foreach ($updatedFiles as $filePath) {
+            if ($isDryRun) {
+                $this->line("<comment>[Dry Run]</comment> Would update: {$filePath}");
+            } else {
+                $this->info("Updated: {$filePath}");
+            }
+        }
+
+        foreach ($detectedFiles as $filePath => $labels) {
+            $this->line('The removed symbol(s) <comment>'.implode(', ', $labels)."</comment> have been detected in {$filePath}");
+        }
+
         $this->newLine();
 
         if ($isDryRun) {
-            $this->info("Dry run complete. {$changedFilesCount} files would be updated.");
+            $this->info(sprintf('Dry run complete. %d files would be updated.', count($updatedFiles)));
         } else {
-            $this->info("Finished! {$changedFilesCount} files were successfully updated.");
+            $this->info(sprintf('Finished! %d files were successfully updated.', count($updatedFiles)));
         }
     }
 }
