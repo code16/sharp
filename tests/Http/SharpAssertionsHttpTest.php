@@ -405,6 +405,28 @@ it('call & assert a show instance command', function () {
         ->assertReturnsInfo('instance 1');
 });
 
+it('delete an entity list instance', function () {
+    $deletedInstanceId = null;
+
+    fakeListFor(PersonEntity::class, new class($deletedInstanceId) extends PersonList
+    {
+        public function __construct(
+            public &$deletedInstanceId
+        ) {}
+
+        public function delete(mixed $id): void
+        {
+            $this->deletedInstanceId = $id;
+        }
+    });
+
+    $this->sharpList(PersonEntity::class)
+        ->delete(1)
+        ->assertOk();
+
+    expect($deletedInstanceId)->toEqual(1);
+});
+
 test('get show', function () {
     fakeShowFor(PersonEntity::class, new class() extends PersonShow
     {
@@ -514,6 +536,28 @@ test('get nested show', function () {
         ->assertOk();
 
     expect(sharp()->context()->breadcrumb()->getCurrentPath())->toEqual('s-list/person/s-show/person/1/s-show/person/2');
+});
+
+test('delete show', function () {
+    $deletedInstanceId = null;
+
+    fakeShowFor(PersonEntity::class, new class($deletedInstanceId) extends PersonShow
+    {
+        public function __construct(
+            public &$deletedInstanceId
+        ) {}
+
+        public function delete($id): void
+        {
+            $this->deletedInstanceId = $id;
+        }
+    });
+
+    $this->sharpShow(PersonEntity::class, 1)
+        ->delete()
+        ->assertRedirect();
+
+    expect($deletedInstanceId)->toEqual(1);
 });
 
 test('create & store form', function () {

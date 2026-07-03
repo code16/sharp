@@ -136,6 +136,16 @@ $this->sharpList(Post::class)
     ->assertOk();
 ```
 
+### Delete an instance
+
+To test the deletion of an instance, you can use `delete()`;
+
+```php
+$this->sharpList(Post::class)
+    ->delete(1)
+    ->assertOk();
+```
+
 ## Testing Show Pages
 
 Use `sharpShow()` to test your Show Pages.
@@ -200,6 +210,16 @@ $this->sharpList(Post::class)
     ->sharpShow(Comment::class, 1)
     ->get()
     ->assertOk();
+```
+
+### Delete the instance
+
+To test the deletion of the show instance, you can use `delete()`;
+
+```php
+$this->sharpShow(Post::class, 1)
+    ->delete()
+    ->assertRedirect();
 ```
 
 ## Testing Forms

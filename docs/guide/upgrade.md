@@ -19,10 +19,51 @@ If you depend on them, you should update the following dependencies in your `com
 
 ### Forms
 
-#### Upload `setImageCompactThumbnail()` has no impact and can be removed
+Upload `setImageCompactThumbnail()` has no impact and can be removed:
 ```php
 \Code16\Sharp\Form\Fields\SharpFormUploadField::make('upload')
   ->setImageCompactThumbnail() // [!code --]
+```
+
+### Testing
+The legacy testing API is deprecated and will be removed in 11.x. Please refer to (cf. [Testing](testing)). Here are replacement examples:
+
+```php
+uses(\Code16\Sharp\Utils\Testing\SharpAssertions::class)
+
+it('test', function () {
+    $this->callSharpEntityCommandFromList(PersonEntity::class, MyCommand::class, ['attr' => 'some_value']) // [!code --]
+    $this->sharpList(PersonEntity::class)->entityCommand(MyCommand::class)->post(['attr' => 'some_value']) // [!code ++]
+    
+    $this->callSharpInstanceCommandFromList(PersonEntity::class, 1, MyCommand::class, ['attr' => 'some_value']) // [!code --]
+    $this->sharpList(PersonEntity::class)->instanceCommand(MyCommand::class, 1)->post(['attr' => 'some_value']) // [!code ++]
+    
+    $this->callSharpInstanceCommandFromShow(PersonEntity::class, 1, MyCommand::class, ['attr' => 'some_value']) // [!code --]
+    $this->sharpShow(PersonEntity::class, 1)->instanceCommand(MyCommand::class)->post(['attr' => 'some_value']) // [!code ++]
+    
+    $this->getSharpShow(PersonEntity::class, 1) // [!code --]
+    $this->sharpShow(PersonEntity::class, 1)->get() // [!code ++]
+    
+    $this->getSharpForm(PersonEntity::class, 1) // [!code --]
+    $this->sharpForm(PersonEntity::class, 1)->get() // [!code ++]
+    
+    $this->getSingleSharpForm(PersonEntity::class) // [!code --]
+    $this->sharpForm(PersonEntity::class)->get() // [!code ++]
+    
+    $this->updateSharpForm(PersonEntity::class, 1, []) // [!code --]
+    $this->sharpForm(PersonEntity::class, 1)->update([]) // [!code ++]
+    
+    $this->storeSharpForm(PersonEntity::class, 1, []) // [!code --]
+    $this->sharpForm(PersonEntity::class, 1)->store([]) // [!code ++]
+    
+    $this->updateSingleSharpForm(PersonEntity::class, []) // [!code --]
+    $this->sharpForm(PersonEntity::class)->update([]) // [!code ++] 
+    
+    $this->withSharpBreadcrumb(function (\Code16\Sharp\Utils\Links\BreadcrumbBuilder $builder) { // [!code --]
+        $builder->appendEntityList(PersonEntity::class)->appendShowPage(PersonEntity::class, 1) // [!code --]
+    })->getSharpForm(PersonEntity::class, 1) // [!code --]
+    $this->sharpList(PersonEntity::class)->sharpShow(PersonEntity::class, 1)->sharpForm(PersonEntity::class)->get() // [!code ++] 
+})
 ```
 
 ## Removed classes and methods

@@ -47,7 +47,9 @@ trait SharpAssertions
     }
 
     /**
-     * @param  (\Closure(BreadcrumbBuilder): BreadcrumbBuilder)  $callback
+     * @deprecated Chain $this->sharpList()->sharpShow()->sharpForm() instead
+     *
+     * @param  (Closure(BreadcrumbBuilder): BreadcrumbBuilder)  $callback
      * @return $this
      */
     public function withSharpBreadcrumb(Closure $callback): static
@@ -57,6 +59,9 @@ trait SharpAssertions
         return $this;
     }
 
+    /**
+     * @deprecated Use $this->sharpShow()->delete() instead
+     */
     public function deleteFromSharpShow(string $entityClassNameOrKey, mixed $instanceId)
     {
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
@@ -75,6 +80,9 @@ trait SharpAssertions
             );
     }
 
+    /**
+     * @deprecated Use $this->sharpList()->delete() instead
+     */
     public function deleteFromSharpList(string $entityClassNameOrKey, mixed $instanceId)
     {
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
@@ -96,6 +104,9 @@ trait SharpAssertions
             );
     }
 
+    /**
+     * @deprecated Use $this->sharpForm()->get() instead
+     */
     public function getSharpForm(string $entityClassNameOrKey, mixed $instanceId = null)
     {
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
@@ -123,6 +134,9 @@ trait SharpAssertions
             );
     }
 
+    /**
+     * @deprecated Use $this->sharpForm()->get() instead
+     */
     public function getSharpSingleForm(string $entityClassNameOrKey)
     {
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
@@ -141,6 +155,9 @@ trait SharpAssertions
             );
     }
 
+    /**
+     * @deprecated Use $this->sharpForm()->update() instead
+     */
     public function updateSharpForm(string $entityClassNameOrKey, $instanceId, array $data)
     {
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
@@ -160,6 +177,9 @@ trait SharpAssertions
             );
     }
 
+    /**
+     * @deprecated Use $this->sharpForm()->update() instead
+     */
     public function updateSharpSingleForm(string $entityClassNameOrKey, array $data)
     {
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
@@ -178,6 +198,9 @@ trait SharpAssertions
             );
     }
 
+    /**
+     * @deprecated Use $this->sharpShow()->get() instead
+     */
     public function getSharpShow(string $entityClassNameOrKey, $instanceId)
     {
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
@@ -197,6 +220,9 @@ trait SharpAssertions
             );
     }
 
+    /**
+     * @deprecated Use $this->sharpForm()->store() instead
+     */
     public function storeSharpForm(string $entityClassNameOrKey, array $data)
     {
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
@@ -216,6 +242,9 @@ trait SharpAssertions
             );
     }
 
+    /**
+     * @deprecated Use $this->sharpList()->instanceCommand()->post()
+     */
     public function callSharpInstanceCommandFromList(
         string $entityClassNameOrKey,
         $instanceId,
@@ -247,6 +276,9 @@ trait SharpAssertions
             );
     }
 
+    /**
+     * @deprecated Use $this->sharpShow()->instanceCommand()->post()
+     */
     public function callSharpInstanceCommandFromShow(
         string $entityClassNameOrKey,
         $instanceId,
@@ -278,6 +310,9 @@ trait SharpAssertions
             );
     }
 
+    /**
+     * @deprecated Use $this->sharpList()->entityCommand()->post()
+     */
     public function callSharpEntityCommandFromList(
         string $entityClassNameOrKey,
         string $commandKeyOrClassName,
