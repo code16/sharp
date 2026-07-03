@@ -41,8 +41,7 @@ class HandleInertiaRequests extends Middleware
             'query' => (object) $request->query(),
         ]);
 
-        config()->set('inertia.pages.ensure_pages_exist', true);
-        config()->set('inertia.pages.paths', [__DIR__.'/../../../resources/js/Pages']);
+        config()->set('inertia.pages.ensure_pages_exist', false);
 
         $inertiaRequest = SharpInertiaRequest::createFrom($request);
 
