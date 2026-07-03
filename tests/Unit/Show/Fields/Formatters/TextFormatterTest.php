@@ -140,6 +140,8 @@ it('allows to format embeds with uploads to front', function () {
                 '0' => [
                     'slot' => 'My <em>contentful</em> content',
                     'visual' => null,
+                    'check' => null,
+                    'nullable' => null,
                     '_html' => '<img src=""> My <em>contentful</em> content',
                 ],
             ],

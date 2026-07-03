@@ -1,5 +1,6 @@
 [
     {
+        "__IMPORTANT__": "For new version, add sitemap in /demo/public/robots.txt, update /demo/public/llms.txt symlinks",
         "name": "9.x",
         "title": "Sharp 9.x",
         "branch": "9.x",
