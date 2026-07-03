@@ -18,7 +18,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
                 globalMaxFileSize: 5,
                 keepOriginalImageOnTransform: true
             )
-            // [...]
+            // ...
     }
 }
 ```
@@ -261,7 +261,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
                 fileHandingQueue: 'default',
                 fileHandlingQueueConnection: 'sync',
             )
-            // [...]
+            // ...
     }
 }
 ```

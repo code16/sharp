@@ -116,7 +116,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
     {
         $config
             ->setName('My new project')
-            ->discoverEntities([__DIR__ . '../Domain/OtherEntities']);
+            ->discoverEntities([__DIR__ . '/../Domain/OtherEntities']);
             // ...
     }
 }

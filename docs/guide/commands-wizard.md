@@ -32,7 +32,7 @@ Instead of `execute()`, you must implement `executeFirstStep(array $data): array
 ```php
 class SendEmailWithPostsWizardCommand extends EntityWizardCommand
 {
-    // [...]
+    // ...
     
     public function executeFirstStep(array $data): array
     {
@@ -50,7 +50,7 @@ Wizard Commands needs forms, one for each step. To build the forms, we use the s
 ```php
 class SendEmailWithPostsWizardCommand extends EntityWizardCommand
 {
-    // [...]
+    // ...
     
     public function buildFormFieldsForFirstStep(FieldsContainer $formFields): void
     {
@@ -109,7 +109,7 @@ If your Wizard is small, this could be the right way to proceed. Simply extend t
 ```php
 class SendEmailWithPostsWizardCommand extends EntityWizardCommand
 {
-    // [...]
+    // ...
     
     protected function buildFormFieldsForStep(string $step, FieldsContainer $formFields): void
     {
@@ -133,7 +133,7 @@ This should be a better option in many cases, to clarify things in the Wizard cl
 ```php
 class SendEmailWithPostsWizardCommand extends EntityWizardCommand
 {
-    // [...]
+    // ...
     
     public function buildFormFieldsForStepComposeMessage(FieldsContainer $formFields): void
     {
@@ -200,7 +200,7 @@ Entity and Dashboard case:
 ```php
 class SendEmailWithPostsWizardCommand extends EntityWizardCommand
 {
-    // [...]
+    // ...
     
     public function executeStep(string $step, array $data = []): array
     {
@@ -277,7 +277,7 @@ Consider the following example; first we build and execute the first step; in th
 ```php
 class SendEmailWithPostsWizardCommand extends EntityWizardCommand
 {
-    // [...]
+    // ...
     
     public function buildFormFieldsForFirstStep(FieldsContainer $formFields): void
     {
@@ -303,7 +303,7 @@ For the `compose_message` step, we initialize data based on what is in the conte
 ```php
 class SendEmailWithPostsWizardCommand extends EntityWizardCommand
 {
-    // [...]
+    // ...
     
     protected function initialDataForStepComposeMessage(): array
     {
@@ -328,7 +328,7 @@ We build the form, and store a result useful for the next step in the context (a
 ```php
 class SendEmailWithPostsWizardCommand extends EntityWizardCommand
 {
-    // [...]
+    // ...
     
     public function buildFormFieldsForStepComposeMessage(FieldsContainer $formFields): void
     {

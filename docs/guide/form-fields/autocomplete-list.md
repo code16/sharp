@@ -14,7 +14,7 @@ SharpFormAutocompleteListField::make('winners')
         ->setItemField(
             SharpFormAutocompleteRemoteField::make('item')
                 ->setRemoteEndpoint('/players')
-                // [...]
+                // ...
         )
 );
 ```

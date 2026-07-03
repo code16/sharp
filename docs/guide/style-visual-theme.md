@@ -11,7 +11,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
     {
         $config
             ->setThemeColor('#004D40')
-            // [...]
+            // ...
     }
 }
 ```
@@ -32,7 +32,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
                 logoHeight: '1.5rem',
                 faviconUrl: '/my-sharp-assets/favicon.png'
             )
-            // [...]
+            // ...
     }
 }
 ```
@@ -56,7 +56,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
             ->appendMessageOnLoginForm('sharp.login-page-message')
             // or a direct message
             // ->appendMessageOnLoginForm('Display a custom message to your users')
-            // [...]
+            // ...
     }
 }
 ```
@@ -84,7 +84,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
             ->setThemeLogo(
                 faviconUrl: '/my-sharp-assets/favicon.png'
             )
-            // [...]
+            // ...
     }
 }
 ```

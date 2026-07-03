@@ -9,7 +9,7 @@ In Entity classes, you can define how an entity should be labeled in the breadcr
 ```php
 class PostEntity extends \Code16\Sharp\Utils\Entities\SharpEntity
 {
-    // [...]
+    // ...
     
     protected string $label = = 'Post';
 }
@@ -22,7 +22,7 @@ In the Form and in the Show Page, you can define which attribute should be used 
 ```php
 class PostShow extends \Code16\Sharp\Show\SharpShow
 {
-    // [...]
+    // ...
     
     function buildShowConfig(): void
     {
@@ -36,7 +36,7 @@ As any attribute, you can use a dedicated custom transformer to valuate it as yo
 ```php
 class PostShow extends \Code16\Sharp\Show\SharpShow
 {
-    // [...]
+    // ...
     
     function buildShowConfig(): void
     {
@@ -119,7 +119,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
     {
         $config
             ->displayBreadcrumb(false)
-            // [...]
+            // ...
     }
 }
 ```
