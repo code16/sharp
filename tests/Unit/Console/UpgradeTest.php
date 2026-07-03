@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\File;
 
 beforeEach(function () {
-    // 1. Define a relative path we can pass to the command's --path option
+    // 1. Define a relative path we can pass to the command's path argument
     $this->testPath = 'storage/framework/testing/fake_sharp_app';
 
     // 2. Resolve the absolute path to create our test files
@@ -47,9 +47,7 @@ afterEach(function () {
 });
 
 it('updates sharp configuration syntax correctly', function () {
-    $this->artisan('sharp:upgrade', [
-        '--path' => $this->testPath,
-    ])
+    $this->artisan('sharp:upgrade '.$this->testPath)
         ->expectsOutputToContain('Updated: AuthorFilter.php')
         ->expectsOutputToContain('1 files were successfully updated.')
         ->assertSuccessful();
@@ -90,9 +88,7 @@ PHP;
     File::put($this->dummyFilePath, $modernContent);
 
     // Command should report 0 files updated
-    $this->artisan('sharp:upgrade', [
-        '--path' => $this->testPath,
-    ])
+    $this->artisan('sharp:upgrade '.$this->testPath)
         ->expectsOutputToContain('0 files were successfully updated.')
         ->assertSuccessful();
 
