@@ -15,7 +15,7 @@ Instead of extending `SharpShow`, our SingleShow implementation should extend `C
 ```php
 class ProfileSingleShow extends SharpSingleShow
 {
-   // [...]
+   // ...
 
     public function findSingle(): array
     {

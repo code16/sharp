@@ -198,6 +198,7 @@ $this->sharpList(Post::class)
     ->sharpShow(Post::class, 1)
     ->sharpListField(Comment::class)
     ->sharpShow(Comment::class, 1)
+    ->get()
     ->assertOk();
 ```
 

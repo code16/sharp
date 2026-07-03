@@ -15,7 +15,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
             ->setLoginAttributes('login', 'pwd')
             ->setUserDisplayAttribute('last_name')
             ->setUserAvatarAttribute('avatar_url')
-            // [...]
+            // ...
     }
 }
 ```
@@ -37,7 +37,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
         $config
             ->suggestRememberMeOnLoginForm()
             ->enableLoginRateLimiting(maxAttemps: 3)
-            // [...]
+            // ...
     }
 }
 ```
@@ -53,7 +53,7 @@ A simple way to restrict access to Sharp is to define the `viewSharp` global Gat
 ```php
 class SharpServiceProvider extends SharpAppServiceProvider
 {
-    // [...]
+    // ...
 
     public function declareAccessGate(): void
     {
@@ -75,7 +75,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
     {
         $config
             ->setAuthCustomGuard('sharp')
-            // [...]
+            // ...
     }
 }
 ```
@@ -93,7 +93,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
     {
         $config
             ->enableForgottenPassword()
-            // [...]
+            // ...
     }
 }
 ```
@@ -112,7 +112,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
             ->enableForgottenPassword(resetCallback: function ($user, $password) {
                 $user->updatePasswordAfterReset($password);
             })
-            // [...]
+            // ...
     }
 }
 ```
@@ -126,7 +126,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
     {
         $config
             ->enableForgottenPassword(broker: MyPasswordBroker::class)
-            // [...]
+            // ...
     }
 }
 ```
@@ -140,7 +140,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
     {
         $config
             ->enableForgottenPassword(showResetLinkInLoginForm: false)
-            // [...]
+            // ...
     }
 }
 ```
@@ -215,7 +215,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
     {
         $config
             ->enableImpersonation()
-            // [...]
+            // ...
     }
 }
 ```
@@ -286,7 +286,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
         $config
             ->redirectLoginToUrl('/my_login')
             ->redirectLogoutToUrl('/my_logout')
-            // [...]
+            // ...
     }
 }
 ```

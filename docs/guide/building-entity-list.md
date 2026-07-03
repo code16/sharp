@@ -22,7 +22,7 @@ First let's write the applicative class, and make it extend `Code16\Sharp\Entity
 - `buildList(EntityListFieldsContainer $fields)` for the structure,
 - and `getListData()` for the actual data of the list.
 
-There are a two more optional methods, for the list config and instance deletion. 
+There are two more optional methods, for the list config and instance deletion. 
 Each one is detailed here:
 
 ### `buildList(EntityListFieldsContainer $fields)`
@@ -44,7 +44,7 @@ class ProductList extends SharpEntityList
             )
             ->addField(/* ... */);
     }
-    // [...]
+    // ...
 }
 ```
 
@@ -103,7 +103,7 @@ class ProductList extends SharpEntityList
             ]
         ];
     }
-    // [...]
+    // ...
 }
 ```
 
@@ -229,7 +229,7 @@ Here is the full list of available methods:
 
 - `configureDefaultSort(string $sortBy, string $sortDir = "asc")`: `EntityListQueryParams $queryParams` will be filled with this default value (see above)
 
-- `configureEntityMap(string $attribute, EntityListEntities $entities)`: configure an Entity Map to display multiple entities in a single Entity List; [see detailed section](#entity-map) above.
+- `configureEntityMap(string $attribute, EntityListEntities $entities)`: configure an Entity Map to display multiple entities in a single Entity List; [see detailed section](#entity-map) below.
 
 - `configurePageAlert(string $template, string $alertLevel = null, string $fieldKey = null, bool $declareTemplateAsPath = false)`: display a dynamic message above the list; [see detailed doc](page-alerts.md)
 
@@ -239,7 +239,7 @@ Here is the full list of available methods:
 
 - `configureQuickCreationForm(?array $fields = null)`: show the creation form in a modal instead of a full page ([see detailed doc](quick-creation-form.md))
 
-- `configureDelete(bool $hide = false, ?string $onfirmationText = null)`: the first argument is to show / hide the delete command on each instance (shown by default); this is only useful to hide the link if you want to only display the delete action in the Show Page (if you have defined one), this is NOT to be used for authorization purpose (see [dedicated documentation on this topic](entity-authorizations.md)). The second argument is the message to display in the confirmation dialog (a sensible default will be used).
+- `configureDelete(bool $hide = false, ?string $confirmationText = null)`: the first argument is to show / hide the delete command on each instance (shown by default); this is only useful to hide the link if you want to only display the delete action in the Show Page (if you have defined one), this is NOT to be used for authorization purpose (see [dedicated documentation on this topic](entity-authorizations.md)). The second argument is the message to display in the confirmation dialog (a sensible default will be used).
 
 - `configureCreateButtonLabel(string $label)` to set a custom "New..." button label.
 

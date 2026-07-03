@@ -18,7 +18,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
     {
         $config
             ->enablePasskeys()
-            // [...]
+            // ...
     }
 }
 ```
@@ -45,7 +45,7 @@ class ProfileSingleShow extends SharpSingleShow
     protected function buildShowFields(FieldsContainer $showFields): void
     {
         $showFields
-            // [...]
+            // ...
             ->addField(
                 SharpShowEntityListField::make(PasskeyEntity::class)
                     ->setLabel('Passkeys')
@@ -56,7 +56,7 @@ class ProfileSingleShow extends SharpSingleShow
     {
         $showLayout
             ->addSection('', function (ShowLayoutSection $section) {
-                // [...]
+                // ...
             })
             ->addEntityListSection(PasskeyEntity::class);
     }
