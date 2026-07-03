@@ -4,11 +4,8 @@ use Code16\Sharp\Config\SharpConfigBuilder;
 use Code16\Sharp\Filters\SelectFilter;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Entities\SinglePersonEntity;
-use Code16\Sharp\Tests\Fixtures\Sharp\PersonForm;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
 use Code16\Sharp\Tests\Unit\Utils\FakesBreadcrumb;
-use Code16\Sharp\Utils\Entities\SharpEntity;
-use Code16\Sharp\Utils\Entities\SharpEntityManager;
 
 uses(FakesBreadcrumb::class);
 
@@ -24,11 +21,9 @@ it('allows to get form update state from request', function () {
 });
 
 it('allows to get form creation state from request', function () {
-    // We have to define "child" as a non-single form
-    app()->bind('child_entity', fn () => new class() extends SharpEntity {});
-    sharp()->config()->addEntity('child', 'child_entity');
+    sharp()->config()->declareEntity(PersonEntity::class);
 
-    $this->fakeBreadcrumbWithUrl('/sharp/root/s-list/person/s-show/person/1/s-form/child');
+    $this->fakeBreadcrumbWithUrl('/sharp/root/s-list/person/s-show/person/1/s-form/person');
 
     expect(sharp()->context())
         ->isForm()->toBeTrue()
@@ -99,22 +94,6 @@ it('allows to get previous show of a given entity class name from request', func
         ->previousShowSegment(PersonEntity::class)->instanceId()->toEqual(42);
 });
 
-it('allows to get previous show of a given entity class name & subentity from request', function () {
-    app(SharpConfigBuilder::class)->declareEntity(PersonEntity::class);
-    app(SharpEntityManager::class)->entityFor('person')->setMultiforms([
-        'multiform' => [PersonForm::class, 'Multiform'],
-    ]);
-    $this->fakeBreadcrumbWithUrl('/sharp/root/s-list/person/s-show/person/31/s-show/person:multiform/42/s-show/child:multiform/84/s-form/child/84');
-
-    expect(sharp()->context()->breadcrumb())
-        ->previousShowSegment()->entityKey()->toBe('child:multiform')
-        ->previousShowSegment()->instanceId()->toEqual(84)
-        ->previousShowSegment(PersonEntity::class)->entityKey()->toBe('person:multiform')
-        ->previousShowSegment(PersonEntity::class)->instanceId()->toEqual(42)
-        ->previousShowSegment(PersonEntity::class, 'multiform')->entityKey()->toBe('person:multiform')
-        ->previousShowSegment(PersonEntity::class, 'multiform')->instanceId()->toEqual(42);
-});
-
 it('allows to check entity of a segment', function () {
     app(SharpConfigBuilder::class)->declareEntity(PersonEntity::class);
     app(SharpConfigBuilder::class)->declareEntity(SinglePersonEntity::class);
@@ -122,35 +101,9 @@ it('allows to check entity of a segment', function () {
 
     expect(sharp()->context()->breadcrumb()->currentSegment()->entityIs(PersonEntity::class))->toBeTrue();
     expect(sharp()->context()->breadcrumb()->currentSegment()->entityIs('person'))->toBeTrue();
-    expect(sharp()->context()->breadcrumb()->currentSegment()->entityIs(PersonEntity::class, 'multiform'))->toBeFalse();
     expect(sharp()->context()->breadcrumb()->currentSegment()->entityIs(SinglePersonEntity::class))->toBeFalse();
     expect(sharp()->context()->breadcrumb()->currentSegment()->entityIs('child'))->toBeFalse();
     expect(sharp()->context()->breadcrumb()->previousShowSegment()->entityIs(PersonEntity::class))->toBeTrue();
-    expect(sharp()->context()->breadcrumb()->previousShowSegment()->entityIs(PersonEntity::class, 'multiform'))->toBeFalse();
-    expect(sharp()->context()->breadcrumb()->previousShowSegment()->entityIs(SinglePersonEntity::class))->toBeFalse();
-    expect(sharp()->context()->breadcrumb()->previousShowSegment()->entityIs('child'))->toBeFalse();
-});
-
-it('allows to check entity with subentity of a segment', function () {
-    app(SharpConfigBuilder::class)->declareEntity(PersonEntity::class);
-    app(SharpConfigBuilder::class)->declareEntity(SinglePersonEntity::class);
-    app(SharpEntityManager::class)->entityFor('person')->setMultiforms([
-        'multiform' => [PersonForm::class, 'Multiform'],
-    ]);
-    $this->fakeBreadcrumbWithUrl('/sharp/root/s-list/person/s-show/person:multiform/1/s-form/person:multiform/1');
-
-    expect(sharp()->context()->breadcrumb()->currentSegment()->entityIs(PersonEntity::class))->toBeTrue();
-    expect(sharp()->context()->breadcrumb()->currentSegment()->entityIs('person'))->toBeTrue();
-    expect(sharp()->context()->breadcrumb()->currentSegment()->entityIs('person', 'multiform'))->toBeTrue();
-    expect(sharp()->context()->breadcrumb()->currentSegment()->entityIs(PersonEntity::class, 'multiform'))->toBeTrue();
-    expect(sharp()->context()->breadcrumb()->currentSegment()->entityIs(PersonEntity::class, 'other-multiform'))->toBeFalse();
-    expect(sharp()->context()->breadcrumb()->currentSegment()->entityIs(SinglePersonEntity::class))->toBeFalse();
-    expect(sharp()->context()->breadcrumb()->currentSegment()->entityIs('child'))->toBeFalse();
-    expect(sharp()->context()->breadcrumb()->previousShowSegment()->entityIs(PersonEntity::class))->toBeTrue();
-    expect(sharp()->context()->breadcrumb()->previousShowSegment()->entityIs('person'))->toBeTrue();
-    expect(sharp()->context()->breadcrumb()->previousShowSegment()->entityIs('person', 'multiform'))->toBeTrue();
-    expect(sharp()->context()->breadcrumb()->previousShowSegment()->entityIs(PersonEntity::class, 'multiform'))->toBeTrue();
-    expect(sharp()->context()->breadcrumb()->previousShowSegment()->entityIs(PersonEntity::class, 'other-multiform'))->toBeFalse();
     expect(sharp()->context()->breadcrumb()->previousShowSegment()->entityIs(SinglePersonEntity::class))->toBeFalse();
     expect(sharp()->context()->breadcrumb()->previousShowSegment()->entityIs('child'))->toBeFalse();
 });

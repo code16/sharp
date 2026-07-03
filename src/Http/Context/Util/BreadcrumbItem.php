@@ -73,13 +73,12 @@ class BreadcrumbItem
             && $this->instance === $item->instance;
     }
 
-    public function entityIs(string $entityKeyOrClassName, ?string $multiformKey = null): bool
+    public function entityIs(string $entityKeyOrClassName): bool
     {
         $selfKey = new EntityKey($this->key);
         $resolvedEntityKey = app(SharpEntityManager::class)->entityKeyFor($entityKeyOrClassName);
 
-        return $selfKey->baseKey() === $resolvedEntityKey
-            && (! $multiformKey || $selfKey->multiformKey() === $multiformKey);
+        return $selfKey->baseKey() === $resolvedEntityKey;
     }
 
     public function entityKey(): string

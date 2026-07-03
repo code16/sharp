@@ -29,10 +29,6 @@ class EntityListFieldsContainer
 
             if ($widthOnSmallScreens === false) {
                 $field->hideOnSmallScreens();
-            } elseif ($widthOnSmallScreens !== null) {
-                $field->setWidthOnSmallScreens($widthOnSmallScreens);
-            } else {
-                $field->setWidthOnSmallScreensFill();
             }
         }
 

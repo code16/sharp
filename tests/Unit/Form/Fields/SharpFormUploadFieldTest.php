@@ -10,20 +10,11 @@ it('sets only default values', function () {
         ->toEqual([
             'key' => 'file',
             'type' => 'upload',
-            'imageCompactThumbnail' => false,
             'imageTransformable' => true,
             'imageTransformKeepOriginal' => true,
             'maxFileSize' => sharp()->config()->get('uploads.max_file_size'),
             'validationRule' => ['file', 'max:'.sharp()->config()->get('uploads.max_file_size') * 1024],
         ]);
-});
-
-it('allows to define compactThumbnail', function () {
-    $formField = SharpFormUploadField::make('file')
-        ->setImageCompactThumbnail();
-
-    expect($formField->toArray())
-        ->toHaveKey('imageCompactThumbnail', true);
 });
 
 it('allows to define transformable', function () {

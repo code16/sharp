@@ -24,7 +24,7 @@ First we build a class dedicated to our Show Page extending `Code16\Sharp\Show\S
 
 - `buildShowFields(FieldsContainer $showFields)` and `buildShowLayout(ShowLayout $showLayout)` to declare the fields presenting the instance.
 - `find($id): array` to retrieve the instance.
-- `delete($id): void` to delete the instance.
+- [optional] `delete($id): void` to delete the instance.
 - `buildShowConfig()` (optional).
 
 In detail:
@@ -262,7 +262,8 @@ class MyShow extends SharpShow
             ->setCustomTransformer(
                 'picture', 
                 new SharpUploadModelThumbnailUrlTransformer(600)
-            );
+            )
+            ->transform(Product::findOrFail($id));
     }
 }
 ```

@@ -1,7 +1,7 @@
 # Testing with Sharp (legacy API)
 
 ::: warning
-This page documents the old Testing API, we recommend using the new [Testing API](/guide/testing).
+This page documents the old Testing API, it is deprecated in 10.x. We recommend using the new [Testing API](/guide/testing).
 :::
 
 Sharp provides a few assertions and helpers to help you test your Sharp code.

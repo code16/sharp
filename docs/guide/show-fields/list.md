@@ -9,7 +9,7 @@ Here's an example, for a list of pictures with a legend:
 ```php
 class MyShow extend SharpShow
 {
-    // [...]
+    // ...
     function buildShowLayout(ShowLayout $showLayout): void
     {
         $showLayout->addField(
@@ -48,7 +48,7 @@ Example:
 ```php
 class MyShow extend SharpShow
 {
-    // [...]
+    // ...
     function buildShowLayout(ShowLayout $showLayout): void
     {
         $showLayout->addColumn(6, function (ShowLayoutColumn $column) {

@@ -13,10 +13,10 @@ class SharpInertiaRequest extends Request
     {
         parent::initialize($query, $request, $attributes, $cookies, $files, $server, $content);
 
-        $this->cleanFlashQueryParameters();
+        $this->cleanTemporaryQueryParameters();
     }
 
-    protected function cleanFlashQueryParameters(): void
+    protected function cleanTemporaryQueryParameters(): void
     {
         $this->query->remove('highlighted_entity_key');
         $this->query->remove('highlighted_instance_id');

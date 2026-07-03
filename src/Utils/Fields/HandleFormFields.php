@@ -15,23 +15,14 @@ trait HandleFormFields
      */
     final public function formatAndValidateRequestData(array $data, ?string $instanceId = null): array
     {
-        $legacyValidation = property_exists($this, 'formValidatorClass');
-
-        if ($legacyValidation) {
-            // Legacy support (v8 and below): first validate, then format
-            app($this->formValidatorClass);
-        }
-
         $formattedData = $this->formatRequestData($data, $instanceId);
 
-        if (! $legacyValidation) {
-            if (method_exists($this, 'rules')) {
-                $this->validate(
-                    $formattedData,
-                    $this->rules($formattedData),
-                    method_exists($this, 'messages') ? $this->messages($formattedData) : []
-                );
-            }
+        if (method_exists($this, 'rules')) {
+            $this->validate(
+                $formattedData,
+                $this->rules($formattedData),
+                method_exists($this, 'messages') ? $this->messages($formattedData) : []
+            );
         }
 
         return $formattedData;

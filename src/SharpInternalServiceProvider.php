@@ -12,7 +12,6 @@ use Code16\Sharp\Auth\TwoFactor\Sharp2faHandler;
 use Code16\Sharp\Auth\TwoFactor\Sharp2faNotificationHandler;
 use Code16\Sharp\Auth\TwoFactor\Sharp2faPasskeyHandler;
 use Code16\Sharp\Config\SharpConfigBuilder;
-use Code16\Sharp\Config\SharpLegacyConfigBuilder;
 use Code16\Sharp\Console\DashboardMakeCommand;
 use Code16\Sharp\Console\EntityCommandMakeCommand;
 use Code16\Sharp\Console\EntityListFilterMakeCommand;
@@ -29,10 +28,10 @@ use Code16\Sharp\Console\PolicyMakeCommand;
 use Code16\Sharp\Console\ReorderHandlerMakeCommand;
 use Code16\Sharp\Console\ServiceProviderMakeCommand;
 use Code16\Sharp\Console\ShowPageMakeCommand;
+use Code16\Sharp\Console\UpgradeCommand;
 use Code16\Sharp\Exceptions\SharpTokenMismatchException;
 use Code16\Sharp\Form\Eloquent\Uploads\Migration\CreateUploadsMigration;
 use Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\SharpImageManager;
-use Code16\Sharp\Http\Context\CurrentSharpRequest;
 use Code16\Sharp\Http\Middleware\AddLinkHeadersForPreloadedRequests;
 use Code16\Sharp\Http\Middleware\SharpAuthenticate;
 use Code16\Sharp\Http\Middleware\SharpRedirectIfAuthenticated;
@@ -46,7 +45,6 @@ use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Console\Events\CommandStarting;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Session\TokenMismatchException;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\File;
@@ -59,7 +57,7 @@ use Laravel\Octane\Events\TickReceived;
 
 class SharpInternalServiceProvider extends ServiceProvider
 {
-    const VERSION = '9.22.5';
+    const VERSION = '10.0.0-beta.3';
 
     public function boot()
     {
@@ -90,11 +88,6 @@ class SharpInternalServiceProvider extends ServiceProvider
 
         $this->registerViewExceptionMapper();
 
-        if (config('sharp.locale')) {
-            setlocale(LC_ALL, config('sharp.locale'));
-            Carbon::setLocale(config('sharp.locale'));
-        }
-
         $this->configureOctane();
 
         Event::subscribe(PasskeyEventSubscriber::class);
@@ -103,16 +96,10 @@ class SharpInternalServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(SharpAuthorizationManager::class);
-        $this->app->singleton(CurrentSharpRequest::class);
         $this->app->singleton(SharpMenuManager::class);
         $this->app->singleton(SharpUploadManager::class);
         $this->app->singleton(SharpUtil::class);
-        $this->app->singleton(
-            SharpConfigBuilder::class,
-            fn () => file_exists(config_path('sharp.php'))
-                ? new SharpLegacyConfigBuilder()
-                : new SharpConfigBuilder()
-        );
+        $this->app->singleton(SharpConfigBuilder::class, fn () => new SharpConfigBuilder());
         $this->app->singleton(SharpImageManager::class);
         $this->app->singleton(AddLinkHeadersForPreloadedRequests::class);
 
@@ -176,6 +163,7 @@ class SharpInternalServiceProvider extends ServiceProvider
             EntityListFilterMakeCommand::class,
             ReorderHandlerMakeCommand::class,
             MenuMakeCommand::class,
+            UpgradeCommand::class,
         ]);
     }
 

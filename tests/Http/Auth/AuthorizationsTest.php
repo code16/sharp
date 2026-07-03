@@ -1,13 +1,11 @@
 <?php
 
-use Code16\Sharp\Auth\SharpAuthenticationCheckHandler;
 use Code16\Sharp\Auth\SharpEntityPolicy;
 use Code16\Sharp\Http\Context\SharpBreadcrumb;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Entities\SinglePersonEntity;
 use Code16\Sharp\Tests\Fixtures\User;
 use Code16\Sharp\Tests\Unit\EntityList\Fakes\FakeSharpEntityList;
-use Code16\Sharp\Tests\Unit\Form\Fakes\FakeSharpForm;
 use Code16\Sharp\Tests\Unit\Show\Fakes\FakeSharpSingleShow;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Illuminate\Contracts\Support\Arrayable;
@@ -104,21 +102,23 @@ it('returns prohibited actions with a show or form get request', function () {
 });
 
 it('always disallow create and delete actions for a single show', function () {
-    sharp()->config()->addEntity('single_person', SinglePersonEntity::class);
+    sharp()->config()->declareEntity(SinglePersonEntity::class);
+
     app(SharpEntityManager::class)
-        ->entityFor('single_person')
+        ->entityFor('single-person')
         ->setProhibitedActions([]);
-    fakeShowFor('single_person', new class() extends FakeSharpSingleShow
+
+    fakeShowFor(SinglePersonEntity::class, new class() extends FakeSharpSingleShow
     {
         public function findSingle(): array
         {
             return [];
         }
     });
-    fakePolicyFor('single_person', new class() extends SharpEntityPolicy {});
+    fakePolicyFor(SinglePersonEntity::class, new class() extends SharpEntityPolicy {});
 
     $this
-        ->get('/sharp/root/s-show/single_person')
+        ->get('/sharp/root/s-show/single-person')
         ->assertOk()
         ->assertInertia(fn (AssertableJson $json) => $json
             ->where('show.authorizations', [
@@ -220,43 +220,6 @@ it('allow access by default', function () {
             ->where('data.1._meta.authorizations.delete', true)
             ->etc()
         );
-});
-
-it('checks the main entity prohibited actions in case of a sub entity', function () {
-    app(SharpEntityManager::class)
-        ->entityFor('person')
-        ->setMultiforms([
-            'big' => [FakeSharpForm::class, 'Big'],
-        ])
-        ->setProhibitedActions(['delete']);
-
-    $this->get('/sharp/root/s-list/person/s-form/person:big')->assertOk();
-    $this->post('/sharp/root/s-list/person/s-form/person:big')->assertRedirect();
-    $this->get('/sharp/root/s-list/person/s-form/person:big/50')->assertOk();
-    $this->post('/sharp/root/s-list/person/s-form/person:big/50')->assertRedirect();
-    $this->delete('/sharp/root/s-list/person/s-show/person:big/50')->assertForbidden();
-    $this->get(route('code16.sharp.list', 'person'))->assertOk();
-});
-
-it('handles custom auth check', function () {
-    $this->app['config']->set(
-        'sharp.auth.check_handler',
-        fn () => new class() implements SharpAuthenticationCheckHandler
-        {
-            public function check($user): bool
-            {
-                return $user->name == 'ok';
-            }
-        }
-    );
-
-    login(new User(['name' => 'ok']));
-    $this->get(route('code16.sharp.list', 'person'))
-        ->assertOk();
-
-    login(new User(['name' => 'ko']));
-    $this->get(route('code16.sharp.list', 'person'))
-        ->assertRedirect(route('code16.sharp.login'));
 });
 
 it('checks useSharp Gate', function () {

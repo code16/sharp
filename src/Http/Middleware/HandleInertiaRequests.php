@@ -41,6 +41,8 @@ class HandleInertiaRequests extends Middleware
             'query' => (object) $request->query(),
         ]);
 
+        config()->set('inertia.pages.ensure_pages_exist', false);
+
         $inertiaRequest = SharpInertiaRequest::createFrom($request);
 
         app()->instance('request', $inertiaRequest);

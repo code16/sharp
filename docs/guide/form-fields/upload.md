@@ -18,7 +18,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
                 globalMaxFileSize: 5,
                 keepOriginalImageOnTransform: true
             )
-            // [...]
+            // ...
     }
 }
 ```
@@ -88,10 +88,6 @@ Set a ratio constraint to uploaded images, formatted like this: `width:height`. 
 When a crop ratio is set, any uploaded picture will be auto-cropped (centered).
 
 The second argument, `$croppableFileTypes`, provide a way to limit the crop configuration to a list of image files extensions. For instance, it can be useful to define a crop for jpg and png, but not for gif because it will destroy animation.
-
-### `setImageCompactThumbnail(bool $compactThumbnail = true)`
-
-If true and if the upload has a thumbnail, it is limited to 60px high (to compact in a list item, for instance).
 
 ### `setImageOptimize(bool $imageOptimize = true)`
 
@@ -265,7 +261,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
                 fileHandingQueue: 'default',
                 fileHandlingQueueConnection: 'sync',
             )
-            // [...]
+            // ...
     }
 }
 ```

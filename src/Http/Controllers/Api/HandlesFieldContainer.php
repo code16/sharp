@@ -59,6 +59,6 @@ trait HandlesFieldContainer
             );
         }
 
-        return $entity->getFormOrFail($entityKey->multiformKey());
+        return $entity->getFormOrFail();
     }
 }

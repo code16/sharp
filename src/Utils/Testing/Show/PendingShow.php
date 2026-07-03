@@ -14,6 +14,7 @@ use Code16\Sharp\Utils\Testing\Form\PendingForm;
 use Code16\Sharp\Utils\Testing\IsPendingComponent;
 use Code16\Sharp\Utils\Testing\SharpAssertions;
 use Illuminate\Foundation\Testing\TestCase;
+use Illuminate\Testing\TestResponse;
 
 class PendingShow
 {
@@ -37,9 +38,9 @@ class PendingShow
         );
     }
 
-    public function sharpForm(string $entityClassNameOrKey): PendingForm
+    public function sharpForm(string $entityClassNameOrKey, string|int|null $instanceId = null): PendingForm
     {
-        return new PendingForm($this->test, $entityClassNameOrKey, $this->instanceId, parent: $this);
+        return new PendingForm($this->test, $entityClassNameOrKey, $instanceId ?: $this->instanceId, parent: $this);
     }
 
     public function sharpListField(string $entityClassNameOrKey): PendingEntityList
@@ -67,6 +68,21 @@ class PendingShow
                     ])
                 )
         );
+    }
+
+    public function delete(): TestResponse
+    {
+        return $this->test
+            ->delete(
+                route('code16.sharp.show.delete', [
+                    'parentUri' => $this->getParentUri(),
+                    'entityKey' => $this->entityKey,
+                    'instanceId' => $this->instanceId,
+                ]),
+                headers: [
+                    SharpBreadcrumb::CURRENT_PAGE_URL_HEADER => $this->getCurrentPageUrlFromParents(),
+                ]
+            );
     }
 
     public function instanceCommand(string $commandKeyOrClassName): PendingCommand

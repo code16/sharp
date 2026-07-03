@@ -10,3 +10,10 @@ node_modules
 /saturn
 /dist/hot
 /resources/assets/dist
+.mcp.json
+.claude
+.gemini
+AGENTS.md
+GEMINI.md
+opencode.jsonc
+.codegraph

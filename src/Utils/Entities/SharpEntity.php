@@ -47,20 +47,8 @@ abstract class SharpEntity extends BaseSharpEntity
         return $this->getForm() !== null;
     }
 
-    final public function getFormOrFail(?string $multiformKey = null): SharpForm
+    final public function getFormOrFail(): SharpForm
     {
-        if ($multiformKey) {
-            if (count($this->getMultiforms())) {
-                if (! $form = ($this->getMultiforms()[$multiformKey][0] ?? null)) {
-                    throw new SharpInvalidEntityKeyException(
-                        sprintf('The subform for the entity [%s:%s] was not found.', get_class($this), $multiformKey)
-                    );
-                }
-
-                return instanciate($form);
-            }
-        }
-
         if (! $form = $this->getForm()) {
             throw new SharpInvalidEntityKeyException(
                 sprintf('The form for the entity [%s] was not found.', get_class($this))
@@ -70,19 +58,9 @@ abstract class SharpEntity extends BaseSharpEntity
         return instanciate($form);
     }
 
-    final public function getLabelOrFail(?string $multiformKey = null): string
+    final public function getLabelOrFail(): string
     {
-        $label = $multiformKey
-            ? $this->getMultiforms()[$multiformKey][1] ?? null
-            : $this->getLabel();
-
-        if ($label === null) {
-            throw new SharpInvalidEntityKeyException(
-                sprintf('The label of the subform for the entity [%s:%s] was not found.', get_class($this), $multiformKey)
-            );
-        }
-
-        return $label;
+        return $this->getLabel();
     }
 
     final public function isActionProhibited(string $action): bool
@@ -119,14 +97,5 @@ abstract class SharpEntity extends BaseSharpEntity
     protected function getForm(): ?SharpForm
     {
         return $this->form ? app($this->form) : null;
-    }
-
-    /**
-     * @deprecated
-     * @see SharpEntityList::configureEntityMap()
-     */
-    public function getMultiforms(): array
-    {
-        return [];
     }
 }

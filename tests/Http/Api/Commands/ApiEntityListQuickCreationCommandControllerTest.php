@@ -286,9 +286,9 @@ it('returns a link action on a quick creation command with a form with configure
 });
 
 it('returns a link action on a quick creation in an EEL case command with a form with configureDisplayShowPageAfterCreation', function () {
-    sharp()->config()->addEntity('colleague', PersonEntity::class);
+    sharp()->config()->declareEntity(PersonEntity::class);
 
-    fakeListFor('colleague', new class() extends PersonList
+    fakeListFor(PersonEntity::class, new class() extends PersonList
     {
         public function buildListConfig(): void
         {
@@ -296,7 +296,7 @@ it('returns a link action on a quick creation in an EEL case command with a form
         }
     });
 
-    fakeFormFor('colleague', new class() extends PersonForm
+    fakeFormFor(PersonEntity::class, new class() extends PersonForm
     {
         public function buildFormConfig(): void
         {
@@ -313,8 +313,8 @@ it('returns a link action on a quick creation in an EEL case command with a form
     $this
         ->postJson(
             route('code16.sharp.api.list.command.quick-creation-form.create', [
-                'entityKey' => 'colleague',
-                'formEntityKey' => 'colleague',
+                'entityKey' => 'person',
+                'formEntityKey' => 'person',
             ]),
             ['data' => ['name' => 'Marie Curie']],
             headers: [
@@ -324,7 +324,7 @@ it('returns a link action on a quick creation in an EEL case command with a form
         ->assertOk()
         ->assertJson([
             'action' => 'link',
-            'link' => url('/sharp/root/s-list/person/s-show/person/1/s-show/colleague/4'),
+            'link' => url('/sharp/root/s-list/person/s-show/person/1/s-show/person/4'),
         ]);
 });
 

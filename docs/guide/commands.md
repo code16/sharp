@@ -186,7 +186,8 @@ Finally, let's review the return possibilities: after a Command has been execute
 class OrderList extends SharpEntityList
 {
     // ...
-    function getListData(): array|Arrayble
+    
+    function getListData(): array|Arrayable
     {
         return Order::query()
             ->when($this->queryParams->specificIds(), fn ($query, $ids) => $query->whereIn('id', $ids))

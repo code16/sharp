@@ -150,21 +150,6 @@ it('allows to define a custom key to a section', function () {
     expect($sharpShow->showLayout()['sections'][0]['key'])->toEqual('my-section');
 });
 
-it('allows to declare a multiformAttribute', function () {
-    $sharpShow = new class() extends FakeSharpShow
-    {
-        public function buildShowConfig(): void
-        {
-            $this->configureMultiformAttribute('role');
-        }
-    };
-
-    $sharpShow->buildShowConfig();
-
-    expect($sharpShow->showConfig(1))
-        ->toHaveKey('multiformAttribute', 'role');
-});
-
 it('allows to set an edit button label', function () {
     $sharpShow = new class() extends FakeSharpShow
     {

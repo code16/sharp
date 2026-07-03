@@ -94,7 +94,7 @@ Here's an example for the Museum List defined above:
 ```php
 class MyForm extends SharpForm
 {
-    // [...]
+    // ...
     
     function buildFormLayout(FormLayout $formLayout)
     {
