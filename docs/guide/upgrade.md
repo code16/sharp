@@ -12,7 +12,7 @@ Where `app/Sharp` is the path of your sharp code.
 
 ## Updating Dependencies
 
-You should update the following dependencies in your `composer.json` file:
+If you depend on them, you should update the following dependencies in your `composer.json` file :
 - `inertiajs/inertia-laravel` to `^3.0` (cf. https://inertiajs.com/docs/v3/getting-started/upgrade-guide)
 
 ## Deprecated methods
