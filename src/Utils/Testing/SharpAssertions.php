@@ -47,7 +47,7 @@ trait SharpAssertions
     }
 
     /**
-     * @param  (\Closure(BreadcrumbBuilder): BreadcrumbBuilder)  $callback
+     * @param  (Closure(BreadcrumbBuilder): BreadcrumbBuilder)  $callback
      * @return $this
      */
     public function withSharpBreadcrumb(Closure $callback): static
@@ -57,6 +57,9 @@ trait SharpAssertions
         return $this;
     }
 
+    /**
+     * @deprecated Use $this->>sharpShow()->delete() instead
+     */
     public function deleteFromSharpShow(string $entityClassNameOrKey, mixed $instanceId)
     {
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
@@ -75,6 +78,9 @@ trait SharpAssertions
             );
     }
 
+    /**
+     * @deprecated Use $this->sharpList()->delete() instead
+     */
     public function deleteFromSharpList(string $entityClassNameOrKey, mixed $instanceId)
     {
         $entityKey = $this->resolveEntityKey($entityClassNameOrKey);
