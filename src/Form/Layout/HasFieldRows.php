@@ -14,7 +14,6 @@ trait HasFieldRows
 
     protected array $rows = [];
 
-
     public function withField(string $fieldKey): static
     {
         $this->addRowLayout([

@@ -14,7 +14,6 @@ use Code16\Sharp\Tests\Fixtures\Entities\PersonUnknownEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonForm;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonShow;
-use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\PageAlerts\PageAlert;
 use Illuminate\Contracts\Support\Arrayable;
@@ -415,7 +414,6 @@ it('gets authorizations of each instance', function () {
             ])
         );
 });
-
 
 it('get entities if configured', function () {
     $this->withoutExceptionHandling();

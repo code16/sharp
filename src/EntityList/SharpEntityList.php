@@ -189,7 +189,6 @@ abstract class SharpEntityList
         return $this;
     }
 
-
     final protected function configureEntityMap(string $attribute, EntityListEntities $entities): self
     {
         $this->entityAttribute = $attribute;

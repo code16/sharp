@@ -46,7 +46,6 @@ trait SharpAssertions
         return new PendingDashboard($this, $entityClassNameOrKey);
     }
 
-
     /**
      * @param  (\Closure(BreadcrumbBuilder): BreadcrumbBuilder)  $callback
      * @return $this

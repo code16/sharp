@@ -31,8 +31,6 @@ class EntityListField implements Arrayable, IsEntityListField, IsSharpFieldWithH
         return $this;
     }
 
-
-
     public function toArray(): array
     {
         return [

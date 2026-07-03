@@ -4,11 +4,8 @@ use Code16\Sharp\Config\SharpConfigBuilder;
 use Code16\Sharp\Filters\SelectFilter;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Entities\SinglePersonEntity;
-use Code16\Sharp\Tests\Fixtures\Sharp\PersonForm;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
 use Code16\Sharp\Tests\Unit\Utils\FakesBreadcrumb;
-use Code16\Sharp\Utils\Entities\SharpEntity;
-use Code16\Sharp\Utils\Entities\SharpEntityManager;
 
 uses(FakesBreadcrumb::class);
 
@@ -96,7 +93,6 @@ it('allows to get previous show of a given entity class name from request', func
         ->previousShowSegment(PersonEntity::class)->entityKey()->toBe('person')
         ->previousShowSegment(PersonEntity::class)->instanceId()->toEqual(42);
 });
-
 
 it('allows to check entity of a segment', function () {
     app(SharpConfigBuilder::class)->declareEntity(PersonEntity::class);

@@ -150,7 +150,6 @@ it('allows to define a custom key to a section', function () {
     expect($sharpShow->showLayout()['sections'][0]['key'])->toEqual('my-section');
 });
 
-
 it('allows to set an edit button label', function () {
     $sharpShow = new class() extends FakeSharpShow
     {

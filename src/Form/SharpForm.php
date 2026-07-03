@@ -150,7 +150,6 @@ abstract class SharpForm
         return new SharpNotification($title);
     }
 
-
     /**
      * Retrieve a Model for the form and pack all its data as JSON.
      */
