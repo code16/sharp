@@ -31,21 +31,7 @@ class EntityListField implements Arrayable, IsEntityListField, IsSharpFieldWithH
         return $this;
     }
 
-    /**
-     * @deprecated
-     */
-    public function setWidthOnSmallScreens(int $widthOnSmallScreens): self
-    {
-        return $this;
-    }
 
-    /**
-     * @deprecated
-     */
-    public function setWidthOnSmallScreensFill(): self
-    {
-        return $this;
-    }
 
     public function toArray(): array
     {

@@ -30,7 +30,7 @@ trait HasModalFormLayout
                                 ? $column->withListField($field->key, fn ($layout) => $field
                                     ->itemFields()
                                     ->each(fn (SharpFormField $itemField) => $layout
-                                        ->withSingleField($itemField->key())
+                                        ->withField($itemField->key())
                                     )
                                 )
                                 : $column->withField($field->key)

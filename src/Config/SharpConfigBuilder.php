@@ -174,15 +174,6 @@ class SharpConfigBuilder
         return $this;
     }
 
-    /** @deprecated use declareEntity instead, and set the entityKey in the SharpEntity class */
-    public function addEntity(string $key, string $entityClass): self
-    {
-        $this->config['entities'][$key] = $entityClass;
-        $this->config['entity_resolver'] = null;
-
-        return $this;
-    }
-
     public function declareEntity(string $entityClass): self
     {
         if (! is_subclass_of($entityClass, BaseSharpEntity::class)) {

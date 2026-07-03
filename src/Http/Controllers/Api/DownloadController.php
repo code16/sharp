@@ -16,7 +16,7 @@ class DownloadController extends Controller
         $this->authorizationManager->check('view', $entityKey, $instanceId);
 
         if (
-            ($allowedDisks = sharp()->config()->get('downloads.allowed_disks')) !== null // Legacy config
+            ($allowedDisks = sharp()->config()->get('downloads.allowed_disks')) !== null
             && $allowedDisks != '*'
         ) {
             abort_if(! in_array(request()->get('disk'), $allowedDisks), 403);

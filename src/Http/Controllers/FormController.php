@@ -26,7 +26,7 @@ class FormController extends Controller
     {
         $entity = $this->entityManager->entityFor($entityKey);
 
-        $form = $entity->getFormOrFail($entityKey->multiformKey());
+        $form = $entity->getFormOrFail();
 
         if ($form instanceof SharpSingleForm) {
             // There is no creation in SingleForms
@@ -45,7 +45,7 @@ class FormController extends Controller
             'form' => FormData::from([
                 ...$this->buildFormData($form, $formData, $entityKey),
                 'title' => $form->getCreateTitle() ?: trans('sharp::breadcrumb.form.create_entity', [
-                    'entity' => $entity->getLabelOrFail($entityKey->multiformKey()),
+                    'entity' => $entity->getLabelOrFail(),
                 ]),
             ]),
             'breadcrumb' => BreadcrumbData::from([
@@ -70,7 +70,7 @@ class FormController extends Controller
             $instanceId
         );
 
-        $form = $entity->getFormOrFail($entityKey->multiformKey());
+        $form = $entity->getFormOrFail();
 
         abort_if(
             (! $instanceId && ! $form instanceof SharpSingleForm)
@@ -92,7 +92,7 @@ class FormController extends Controller
         $titleEntityLabel ??= sharp()
             ->context()
             ->breadcrumb()
-            ->getParentShowCachedBreadcrumbLabel() ?: $entity->getLabelOrFail($entityKey->multiformKey());
+            ->getParentShowCachedBreadcrumbLabel() ?: $entity->getLabelOrFail();
 
         if (app()->environment('testing')) {
             Inertia::share('_rawData', $formData);
@@ -128,7 +128,7 @@ class FormController extends Controller
 
         $form = $this->entityManager
             ->entityFor($entityKey)
-            ->getFormOrFail($entityKey->multiformKey());
+            ->getFormOrFail();
 
         abort_if(
             (! $instanceId && ! $form instanceof SharpSingleForm)
@@ -154,7 +154,7 @@ class FormController extends Controller
     {
         $form = $this->entityManager
             ->entityFor($entityKey)
-            ->getFormOrFail($entityKey->multiformKey());
+            ->getFormOrFail();
 
         if ($form instanceof SharpSingleForm) {
             // There is no creation in SingleForms

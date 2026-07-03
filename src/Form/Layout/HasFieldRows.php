@@ -14,15 +14,6 @@ trait HasFieldRows
 
     protected array $rows = [];
 
-    /** @deprecated use withField() or withListField() instead */
-    public function withSingleField(string $fieldKey, ?\Closure $subLayoutCallback = null): static
-    {
-        if ($subLayoutCallback) {
-            return $this->withListField($fieldKey, $subLayoutCallback);
-        }
-
-        return $this->withField($fieldKey);
-    }
 
     public function withField(string $fieldKey): static
     {

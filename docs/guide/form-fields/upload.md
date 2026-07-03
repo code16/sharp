@@ -89,10 +89,6 @@ When a crop ratio is set, any uploaded picture will be auto-cropped (centered).
 
 The second argument, `$croppableFileTypes`, provide a way to limit the crop configuration to a list of image files extensions. For instance, it can be useful to define a crop for jpg and png, but not for gif because it will destroy animation.
 
-### `setImageCompactThumbnail(bool $compactThumbnail = true)`
-
-If true and if the upload has a thumbnail, it is limited to 60px high (to compact in a list item, for instance).
-
 ### `setImageOptimize(bool $imageOptimize = true)`
 
 If true, some optimization will be applied on the uploaded images (in order to reduce files weight). It relies on spatie's [laravel-image-optimizer](https://github.com/spatie/laravel-image-optimizer). Please note that you will need some of these packages on your system:

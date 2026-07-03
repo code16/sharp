@@ -34,7 +34,7 @@ class PasswordResetController extends Controller
         $defaultResetCallback = function ($user, $password) {
             $user
                 ->forceFill([
-                    config('sharp.auth.password_attribute', 'password') => Hash::make($password),
+                    sharp()->config()->get('auth.password_attribute') => Hash::make($password),
                     'remember_token' => Str::random(60),
                 ])
                 ->save();

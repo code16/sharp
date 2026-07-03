@@ -229,8 +229,6 @@ Here is the full list of available methods:
 
 - `configureDefaultSort(string $sortBy, string $sortDir = "asc")`: `EntityListQueryParams $queryParams` will be filled with this default value (see above)
 
-- `configureMultiformAttribute(string $attribute)`: :warning: This feature has been deprecated in version 9.6.0 and was replaced by the [Entity Map](#entity-map) feature. You can still access to the [documentation](multiforms.md) for legacy usage. 
-
 - `configureEntityMap(string $attribute, EntityListEntities $entities)`: configure an Entity Map to display multiple entities in a single Entity List; [see detailed section](#entity-map) above.
 
 - `configurePageAlert(string $template, string $alertLevel = null, string $fieldKey = null, bool $declareTemplateAsPath = false)`: display a dynamic message above the list; [see detailed doc](page-alerts.md)
@@ -254,10 +252,6 @@ After this we can access the Entity List at the following URL: **/sharp/s-list/p
 To go ahead and learn how to add a link in the Sharp side menu, [look here](building-menu.md).
 
 ## Entity Map
-
-::: info
-This feature replaces the deprecated Multiforms functionality, which remains available for legacy use in version 9.x but will be removed in 10.x.
-:::
 
 The Entity Map lets you display multiple entities within a single Entity List. This makes it possible to link different Show Pages or Forms based on a discriminating attribute.
 

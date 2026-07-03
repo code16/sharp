@@ -14,9 +14,6 @@ use Code16\Sharp\Utils\Entities\SharpEntity;
 class PersonEntity extends SharpEntity
 {
     public static string $entityKey = 'person';
-    public ?string $validatorForTest = null;
-    public array $multiformValidatorsForTest = [];
-    public ?array $fakeMultiforms = null;
     protected string $label = 'person';
     protected ?string $list = PersonList::class;
     protected ?SharpEntityList $fakeList;
@@ -70,34 +67,11 @@ class PersonEntity extends SharpEntity
         return isset($this->fakeList) ? clone $this->fakeList : parent::getList();
     }
 
-    public function setValidator(string $validatorClass, ?string $subentity = null): self
-    {
-        if (! $subentity) {
-            $this->validatorForTest = $validatorClass;
-        } else {
-            $this->multiformValidatorsForTest[$subentity] = $validatorClass;
-        }
-
-        return $this;
-    }
-
-    public function setMultiforms(array $multiform): self
-    {
-        $this->fakeMultiforms = $multiform;
-
-        return $this;
-    }
-
     public function setLabel(string $label): self
     {
         $this->label = $label;
 
         return $this;
-    }
-
-    public function getMultiforms(): array
-    {
-        return $this->fakeMultiforms ?? parent::getMultiforms();
     }
 
     public function setPolicy(SharpEntityPolicy $policy): self

@@ -44,7 +44,6 @@ export function sidebar(): DefaultTheme.SidebarItem[] {
                 { text: 'List', link: '/guide/form-fields/list.md' },
                 { text: 'AutocompleteList', link: '/guide/form-fields/autocomplete-list.md' },
                 { text: 'Geolocation', link: '/guide/form-fields/geolocation.md' },
-                { text: 'Multi-Forms (deprecated)', link: '/guide/multiforms.md' },
                 // { text: 'Custom form field', link: '/guide/custom-form-fields.md' }
             ]
         },
