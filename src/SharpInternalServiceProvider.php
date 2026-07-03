@@ -27,6 +27,7 @@ use Code16\Sharp\Console\PolicyMakeCommand;
 use Code16\Sharp\Console\ReorderHandlerMakeCommand;
 use Code16\Sharp\Console\ServiceProviderMakeCommand;
 use Code16\Sharp\Console\ShowPageMakeCommand;
+use Code16\Sharp\Console\UpgradeCommand;
 use Code16\Sharp\Exceptions\SharpTokenMismatchException;
 use Code16\Sharp\Form\Eloquent\Uploads\Migration\CreateUploadsMigration;
 use Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\SharpImageManager;
@@ -43,7 +44,6 @@ use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Console\Events\CommandStarting;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Session\TokenMismatchException;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\File;
@@ -161,6 +161,7 @@ class SharpInternalServiceProvider extends ServiceProvider
             EntityListFilterMakeCommand::class,
             ReorderHandlerMakeCommand::class,
             MenuMakeCommand::class,
+            UpgradeCommand::class,
         ]);
     }
 
