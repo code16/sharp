@@ -174,7 +174,6 @@ class SharpConfigBuilder
         return $this;
     }
 
-
     public function declareEntity(string $entityClass): self
     {
         if (! is_subclass_of($entityClass, BaseSharpEntity::class)) {
