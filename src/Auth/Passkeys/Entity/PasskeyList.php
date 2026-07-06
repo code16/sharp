@@ -3,15 +3,14 @@
 namespace Code16\Sharp\Auth\Passkeys\Entity;
 
 use Code16\Sharp\Auth\Passkeys\Commands\UpdatePasskeyNameCommand;
+use Code16\Sharp\Auth\Passkeys\PasskeyManager;
 use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\EntityList\Fields\EntityListBadgeField;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\SharpEntityList;
-use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\LaravelPasskeys\Models\Concerns\HasPasskeys;
 
 class PasskeyList extends SharpEntityList
 {
@@ -70,14 +69,16 @@ class PasskeyList extends SharpEntityList
 
     public function delete(mixed $id): void
     {
-        $this->currentUser()->passKeys()->findOrFail($id)->delete();
+        app(PasskeyManager::class)->userPasskeys(auth()->user())->findOrFail($id)->delete();
     }
 
     public function getListData(): array|Arrayable
     {
+        $lastUsedPasskey = app(PasskeyManager::class)->getLastUsedPasskey();
+
         return $this
-            ->setCustomTransformer('usage', function ($value, Model $passkey) {
-                return $passkey->getKey() == request()->cookie('sharp_last_used_passkey')
+            ->setCustomTransformer('usage', function ($value, Model $passkey) use ($lastUsedPasskey) {
+                return $passkey->is($lastUsedPasskey)
                     ? trans('sharp::auth.passkeys.list.used_in_this_browser_badge')
                     : null;
             })
@@ -88,15 +89,7 @@ class PasskeyList extends SharpEntityList
                 return $passkey->created_at?->isoFormat('LLL');
             })
             ->transform(
-                $this->currentUser()->passkeys()->orderByDesc('created_at')->get()
+                app(PasskeyManager::class)->userPasskeys(auth()->user())->orderByDesc('created_at')->get()
             );
-    }
-
-    protected function currentUser(): Authenticatable&HasPasskeys
-    {
-        /** @var Authenticatable&HasPasskeys $user */
-        $user = auth()->user();
-
-        return $user;
     }
 }

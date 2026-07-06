@@ -641,7 +641,6 @@ export type FormUploadFieldData = {
   type: "upload";
   imageCropRatio: [number, number];
   imageTransformable: boolean;
-  imageCompactThumbnail: boolean;
   imageTransformKeepOriginal: boolean | null;
   imageTransformableFileTypes: Array<string> | null;
   allowedExtensions: Array<string> | null;
@@ -984,6 +983,7 @@ export type ShowTextFieldData = {
   embeds: { [key: string]: EmbedData } | null;
   label: string | null;
 };
+export type TwoFactorMode = "notification" | "totp" | "passkey";
 export type UserData = {
   name: string | null;
   email: string | null;

@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Auth\TwoFactor;
 
+use Code16\Sharp\Enums\MultiFactorMethod;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 
@@ -61,5 +62,10 @@ class Sharp2faPasskeyHandler implements Sharp2faHandler
     protected function getSessionKey(): string
     {
         return 'sharp:2fa:prompt-passkey';
+    }
+
+    public function method(): MultiFactorMethod
+    {
+        return MultiFactorMethod::Passkey;
     }
 }

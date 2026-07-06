@@ -15,13 +15,9 @@
     import { FormItem } from "@/components/ui/form";
     import { Check } from "lucide-vue-next";
     import TemplateRenderer from "@/components/TemplateRenderer.vue";
-    import { onMounted } from "vue";
     import {
-        startAuthentication,
         browserSupportsWebAuthn,
-        browserSupportsWebAuthnAutofill
     } from "@simplewebauthn/browser";
-    import { api } from "@/api/api";
     import { Separator } from "@/components/ui/separator";
     import { usePasskeyLogin } from "@/Pages/Auth/usePasskeyLogin";
 
@@ -43,12 +39,8 @@
         supports_passkeys: browserSupportsWebAuthn(),
     });
 
-    const { loginWithPasskey } = usePasskeyLogin();
-
-    onMounted(async () => {
-        if(config('sharp.auth.passkeys.enabled') && await browserSupportsWebAuthnAutofill()) {
-            await loginWithPasskey({ autofill: true });
-        }
+    const { loginWithPasskey } = usePasskeyLogin({
+        autofill: config('sharp.auth.passkeys.enabled'),
     });
 </script>
 

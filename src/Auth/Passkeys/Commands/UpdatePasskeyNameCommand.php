@@ -2,10 +2,10 @@
 
 namespace Code16\Sharp\Auth\Passkeys\Commands;
 
+use Code16\Sharp\Auth\Passkeys\PasskeyManager;
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
-use Spatie\LaravelPasskeys\Models\Passkey;
 
 class UpdatePasskeyNameCommand extends InstanceCommand
 {
@@ -25,7 +25,7 @@ class UpdatePasskeyNameCommand extends InstanceCommand
     protected function initialData(mixed $instanceId): array
     {
         return [
-            'name' => Passkey::findOrFail($instanceId)->name,
+            'name' => app(PasskeyManager::class)->model()::findOrFail($instanceId)->name,
         ];
     }
 
@@ -35,7 +35,7 @@ class UpdatePasskeyNameCommand extends InstanceCommand
             'name' => 'required',
         ]);
 
-        Passkey::findOrFail($instanceId)->update([
+        app(PasskeyManager::class)->model()::findOrFail($instanceId)->update([
             'name' => $data['name'],
         ]);
 

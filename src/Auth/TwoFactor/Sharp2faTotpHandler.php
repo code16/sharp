@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Auth\TwoFactor;
 
 use Code16\Sharp\Auth\TwoFactor\Engines\Sharp2faTotpEngine;
+use Code16\Sharp\Enums\MultiFactorMethod;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
@@ -72,6 +73,11 @@ abstract class Sharp2faTotpHandler implements Sharp2faHandler
     protected function getSessionKey(): string
     {
         return 'sharp:2fa:code';
+    }
+
+    public function method(): MultiFactorMethod
+    {
+        return MultiFactorMethod::Totp;
     }
 
     public function setUser($user): self

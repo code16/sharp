@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Auth\TwoFactor;
 
 use Carbon\Carbon;
+use Code16\Sharp\Enums\MultiFactorMethod;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
@@ -80,5 +81,10 @@ class Sharp2faNotificationHandler implements Sharp2faHandler
     protected function getSessionKey(): string
     {
         return 'sharp:2fa:code';
+    }
+
+    public function method(): MultiFactorMethod
+    {
+        return MultiFactorMethod::Notification;
     }
 }
