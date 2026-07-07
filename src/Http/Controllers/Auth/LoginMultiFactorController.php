@@ -12,19 +12,19 @@ use Illuminate\Routing\Controller;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class Login2faController extends Controller
+class LoginMultiFactorController extends Controller
 {
     public function create(Request $request, MultiFactorManager $multiFactor, PasskeyManager $passkeys): RedirectResponse|Response
     {
-        if ($multiFactor->currentHandler()?->isExpectingLogin()) {
-            $user = $multiFactor->currentUser();
+        $user = $multiFactor->currentUser();
 
+        if ($user && $multiFactor->currentHandler()?->isExpectingLogin()) {
             if ($multiFactor->currentMethod() === MultiFactorMethod::Passkey
                 && ! $passkeys->userHasPasskey($user)) {
                 return redirect()->route('code16.sharp.passkeys.create');
             }
 
-            return Inertia::render('Auth/Login2Fa', [
+            return Inertia::render('Auth/LoginMultiFactor', [
                 'helpText' => $multiFactor->currentHandlerHelpText(),
                 'mode' => $multiFactor->currentMethod(),
                 'passkeyError' => $passkeys->getErrorMessage(),

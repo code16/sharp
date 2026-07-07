@@ -9,6 +9,7 @@ use Code16\Sharp\SharpInternalServiceProvider;
 use Orchestra\Testbench\Pest\WithPest;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Spatie\LaravelImageOptimizer\ImageOptimizerServiceProvider;
+use Spatie\LaravelPasskeys\LaravelPasskeysServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -28,6 +29,7 @@ class TestCase extends Orchestra
             ContentRendererServiceProvider::class,
             BladeIconsServiceProvider::class,
             ImageOptimizerServiceProvider::class,
+            LaravelPasskeysServiceProvider::class,
         ];
     }
 

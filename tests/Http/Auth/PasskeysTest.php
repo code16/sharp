@@ -14,6 +14,7 @@ use Illuminate\Events\Dispatcher;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\ValidationException;
 use Spatie\LaravelPasskeys\Actions\GeneratePasskeyRegisterOptionsAction;
@@ -26,11 +27,16 @@ use Spatie\LaravelPasskeys\Models\Passkey;
 use Webauthn\PublicKeyCredentialCreationOptions;
 
 use function Orchestra\Testbench\Pest\defineEnvironment;
+use function Orchestra\Testbench\Pest\defineRoutes;
 
 pest()->use(LazilyRefreshDatabase::class);
 
 defineEnvironment(function () {
     sharp()->config()->enablePasskeys();
+});
+
+defineRoutes(function () {
+    Route::passkeys();
 });
 
 beforeEach(function () {
@@ -200,7 +206,8 @@ it('queues a cookie when passkey is used to authenticate', function () {
     $user = createPasskeyTestUser();
     $passkey = createPasskey($user);
 
-    $request = \Mockery::mock(AuthenticateUsingPasskeysRequest::class);
+    $request = AuthenticateUsingPasskeysRequest::create(route('passkeys.login'));
+    $request->headers->set('X-Sharp', '1');
     $event = new PasskeyUsedToAuthenticateEvent($passkey, $request);
     app(Dispatcher::class)->dispatch($event);
 
@@ -261,10 +268,10 @@ it('requires authentication to access passkey create', function () {
 it('validates name on passkey validate endpoint', function () {
     loginPasskeyUser();
 
-    $this->postJson(route('code16.sharp.passkeys.validate'), ['name' => ''])
+    $this->postJson(route('code16.sharp.passkeys.spatie.validate'), ['name' => ''])
         ->assertJsonValidationErrors('name');
 
-    $this->postJson(route('code16.sharp.passkeys.validate'), ['name' => str_repeat('a', 256)])
+    $this->postJson(route('code16.sharp.passkeys.spatie.validate'), ['name' => str_repeat('a', 256)])
         ->assertJsonValidationErrors('name');
 });
 
@@ -275,13 +282,13 @@ it('returns passkey options on successful validate', function () {
     // Configure a fake action that returns a JSON string
     config()->set('passkeys.actions.generate_passkey_register_options', FakeGeneratePasskeyRegisterOptionsAction::class);
 
-    $this->postJson(route('code16.sharp.passkeys.validate'), ['name' => 'My Key'])
+    $this->postJson(route('code16.sharp.passkeys.spatie.validate'), ['name' => 'My Key'])
         ->assertOk()
         ->assertJsonStructure(['passkeyOptions']);
 });
 
 it('store endpoint requires authentication', function () {
-    $this->post(route('code16.sharp.passkeys.store'))
+    $this->post(route('code16.sharp.passkeys.spatie.store'))
         ->assertRedirect();
 });
 
@@ -292,7 +299,7 @@ it('store endpoint catches action errors and throws validation exception', funct
     // Put fake options in session as the controller expects them
     session()->put('passkey-registration-options', '{"fake":"options"}');
 
-    $this->postJson(route('code16.sharp.passkeys.store'), [
+    $this->postJson(route('code16.sharp.passkeys.spatie.store'), [
         'passkey' => 'invalid-passkey-data',
         'name' => 'My Key',
     ])
@@ -334,7 +341,7 @@ it('store endpoint calls StorePasskeyAction with appropriate arguments', functio
     FakeStorePasskeyAction::$mock = $mockAction;
     config()->set('passkeys.actions.store_passkey', FakeStorePasskeyAction::class);
 
-    $this->postJson(route('code16.sharp.passkeys.store'), [
+    $this->postJson(route('code16.sharp.passkeys.spatie.store'), [
         'passkey' => $passkeyData,
         'name' => $passkeyName,
     ])

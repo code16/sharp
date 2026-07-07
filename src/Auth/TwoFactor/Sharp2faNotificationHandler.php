@@ -4,13 +4,14 @@ namespace Code16\Sharp\Auth\TwoFactor;
 
 use Carbon\Carbon;
 use Code16\Sharp\Enums\MultiFactorMethod;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 
 class Sharp2faNotificationHandler implements Sharp2faHandler
 {
-    protected $user = null;
+    protected ?Authenticatable $user = null;
 
     public function generateCode(bool $remember = false): void
     {
@@ -19,7 +20,7 @@ class Sharp2faNotificationHandler implements Sharp2faHandler
         Session::put(
             $this->getSessionKey(),
             [
-                'user_id' => $this->user->id,
+                'user_id' => $this->user->getAuthIdentifier(),
                 'code' => Hash::make($code),
                 'remember' => $remember,
                 'expires_at' => now()->addMinutes(15)->format('Y-m-d H:i:s'),

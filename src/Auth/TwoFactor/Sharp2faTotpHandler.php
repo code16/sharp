@@ -4,13 +4,14 @@ namespace Code16\Sharp\Auth\TwoFactor;
 
 use Code16\Sharp\Auth\TwoFactor\Engines\Sharp2faTotpEngine;
 use Code16\Sharp\Enums\MultiFactorMethod;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 
 abstract class Sharp2faTotpHandler implements Sharp2faHandler
 {
-    protected $user = null;
+    protected ?Authenticatable $user = null;
 
     public function __construct(protected Sharp2faTotpEngine $engine) {}
 
@@ -19,7 +20,7 @@ abstract class Sharp2faTotpHandler implements Sharp2faHandler
         Session::put(
             $this->getSessionKey(),
             [
-                'user_id' => $this->user->id,
+                'user_id' => $this->user->getAuthIdentifier(),
                 'remember' => $remember,
             ]
         );
@@ -46,7 +47,7 @@ abstract class Sharp2faTotpHandler implements Sharp2faHandler
 
     public function userId(): mixed
     {
-        return $this->user?->id ?? (Session::get($this->getSessionKey())['user_id'] ?? null);
+        return $this->user?->getAuthIdentifier() ?? (Session::get($this->getSessionKey())['user_id'] ?? null);
     }
 
     public function remember(): bool

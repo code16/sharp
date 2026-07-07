@@ -19,7 +19,7 @@ class SpatiePasskeyManager implements PasskeyManager
 {
     public function isEnabled(): bool
     {
-        return sharp()->config()->get('auth.passkeys.enabled');
+        return (bool) sharp()->config()->get('auth.passkeys.enabled');
     }
 
     public function setLastUsedPasskey(Model $passkey): void
@@ -39,14 +39,16 @@ class SpatiePasskeyManager implements PasskeyManager
 
     public function setRedirectUrl(): void
     {
+        $intendedUrl = Redirect::intended(
+            route('code16.sharp.home', [
+                'globalFilter' => sharp()->context()->globalFilterUrlSegmentValue(),
+            ])
+        )->getTargetUrl();
+
         config()->set(
             'passkeys.redirect_to_after_login',
             route('code16.sharp.passkeys.authenticated', [
-                'intended_url' => Redirect::intended(
-                    route('code16.sharp.home', [
-                        'globalFilter' => sharp()->context()->globalFilterUrlSegmentValue(),
-                    ])
-                )->getTargetUrl(),
+                'intended_url' => $intendedUrl,
             ])
         );
     }
@@ -69,7 +71,7 @@ class SpatiePasskeyManager implements PasskeyManager
     public function subscribe(Dispatcher $events): void
     {
         $events->listen(function (PasskeyUsedToAuthenticateEvent $event) {
-            if (request()->headers->has('X-Sharp')) {
+            if ($event->request->headers->has('X-Sharp')) {
                 $this->setLastUsedPasskey($event->passkey);
                 $this->setRedirectUrl();
             }

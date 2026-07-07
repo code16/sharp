@@ -3,19 +3,20 @@
 namespace Code16\Sharp\Auth\TwoFactor;
 
 use Code16\Sharp\Enums\MultiFactorMethod;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 
 class Sharp2faPasskeyHandler implements Sharp2faHandler
 {
-    protected $user = null;
+    protected ?Authenticatable $user = null;
 
     public function generateCode(bool $remember = false): void
     {
         Session::put(
             $this->getSessionKey(),
             [
-                'user_id' => $this->user->id,
+                'user_id' => $this->user->getAuthIdentifier(),
                 'remember' => $remember,
             ]
         );
