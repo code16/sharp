@@ -1,6 +1,10 @@
 <script setup lang="ts">
     import { config } from "@/utils/config";
     import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+
+    defineProps<{
+        empty?: boolean,
+    }>();
 </script>
 
 <template>
@@ -18,7 +22,7 @@
                 </CardDescription>
             </template>
         </CardHeader>
-        <CardContent>
+        <CardContent :class="empty ? 'p-0' : ''">
             <slot />
         </CardContent>
         <CardFooter>

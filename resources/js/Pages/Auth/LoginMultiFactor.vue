@@ -10,13 +10,14 @@
     import { Label } from "@/components/ui/label";
     import { Input } from "@/components/ui/input";
     import { FormItem, FormMessage } from "@/components/ui/form";
-    import { TwoFactorMode } from "@/types";
+    import { TwoFactorMode, UserData } from "@/types";
     import { usePasskeyLogin } from "@/Pages/Auth/usePasskeyLogin";
 
     const props = defineProps<{
-        helpText: string,
         mode: TwoFactorMode,
+        helpText: string,
         passkeyError: string,
+        errors: Record<string, string>,
     }>();
 
     const form = useForm({
@@ -32,23 +33,26 @@
             {{ __('sharp::pages/auth/login.title') }}
         </Title>
 
-        <template v-if="form.hasErrors || passkeyError">
+        <template v-if="Object.keys(errors).length || passkeyError">
             <Alert class="mb-4" variant="destructive">
                 <AlertDescription>
-                    {{ Object.values(form.errors)[0] || passkeyError }}
+                    {{ Object.values(errors)[0] || passkeyError }}
                 </AlertDescription>
             </Alert>
         </template>
 
         <form @submit.prevent="mode === 'passkey' ? loginWithPasskey({}) : form.post(route('code16.sharp.login.2fa.post'))">
-            <AuthCard>
+            <AuthCard :empty="mode == 'passkey'">
                 <template #title>
                     {{ __('sharp::pages/auth/login.title') }}
                 </template>
                 <template v-if="helpText" #description>
                     <div class="space-y-2" v-html="helpText"></div>
                 </template>
-                <template v-if="mode !== 'passkey'">
+                <template v-if="mode == 'passkey'">
+                    <input class="sr-only" autocomplete="webauthn"></input>
+                </template>
+                <template v-else>
                     <FormItem>
                         <Label for="code">
                             {{ __('sharp::pages/auth/login.code_field') }}
