@@ -8,7 +8,8 @@ use Illuminate\Contracts\Auth\StatefulGuard;
 
 class TestAuthGuard implements Guard, StatefulGuard
 {
-    private ?User $user = null;
+    private ?Authenticatable $user = null;
+    public bool $isOnce = false;
 
     public function check()
     {
@@ -27,7 +28,7 @@ class TestAuthGuard implements Guard, StatefulGuard
 
     public function id()
     {
-        return $this->hasUser() ? 1 : null;
+        return $this->user?->id;
     }
 
     public function validate(array $credentials = []) {}
@@ -45,7 +46,7 @@ class TestAuthGuard implements Guard, StatefulGuard
     public function attempt(array $credentials = [], $remember = false)
     {
         if ($credentials['email'] === 'test@example.org' && $credentials['password'] === 'password') {
-            $this->login(new User(array_merge($credentials, ['shouldRemember' => $remember])));
+            $this->login(new User(['id' => 1, ...$credentials, 'shouldRemember' => $remember]));
 
             return true;
         }
@@ -56,7 +57,8 @@ class TestAuthGuard implements Guard, StatefulGuard
     public function once(array $credentials = [])
     {
         if ($credentials['email'] === 'test@example.org' && $credentials['password'] === 'password') {
-            $this->setUser(new User($credentials));
+            $this->setUser(new User(['id' => 1, ...$credentials]));
+            $this->isOnce = true;
 
             return true;
         }
@@ -69,7 +71,16 @@ class TestAuthGuard implements Guard, StatefulGuard
         $this->setUser($user);
     }
 
-    public function loginUsingId($id, $remember = false) {}
+    public function loginUsingId($id, $remember = false)
+    {
+        if ($id === 1) {
+            $this->login($user = new User(['id' => 1, 'email' => 'test@example.org']));
+
+            return $user;
+        }
+
+        return false;
+    }
 
     public function onceUsingId($id) {}
 

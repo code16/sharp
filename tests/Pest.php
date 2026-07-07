@@ -1,12 +1,15 @@
 <?php
 
+use Code16\Sharp\Filters\GlobalFilters\GlobalFilters;
 use Code16\Sharp\Filters\GlobalRequiredFilter;
 use Code16\Sharp\Tests\Fixtures\User;
 use Code16\Sharp\Tests\TestCase;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\URL;
 
 uses(TestCase::class)
     ->in(__DIR__);
@@ -15,7 +18,7 @@ uses()
     ->beforeEach(function () {
         // We add a default here to avoid putting this everywhere in unit tests
         // it's handled by middleware in a real request, but we don't want to test that here.
-        \Illuminate\Support\Facades\URL::defaults(['globalFilter' => \Code16\Sharp\Filters\GlobalFilters\GlobalFilters::$defaultKey]);
+        URL::defaults(['globalFilter' => GlobalFilters::$defaultKey]);
     })
     ->in(__DIR__);
 
@@ -83,6 +86,22 @@ function login(?User $user = null)
         $user ?: new User(),
         sharp()->config()->get('auth.guard') ?: 'web'
     );
+}
+
+function postLoginFor2fa($email, $password): void
+{
+    test()->post(
+        route('code16.sharp.login.post'),
+        ['login' => $email, 'password' => $password]
+    )
+        ->assertRedirect(route('code16.sharp.login.2fa'));
+
+    /**
+     * We assume the configured sharp guard is @see \Code16\Sharp\Tests\Fixtures\TestAuthGuard
+     */
+    $guard = sharp()->config()->get('auth.guard');
+    expect(Auth::guard($guard)->isOnce)->toBeTrue();
+    Auth::guard($guard)->logout();
 }
 
 function fakeListFor(string $entityKeyOrClass, $fakeImplementation)

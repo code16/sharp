@@ -73,8 +73,7 @@ beforeEach(function () {
 });
 
 it('redirects to 2fa code page after successful first step login', function () {
-    $this->post(route('code16.sharp.login.post'), ['login' => 'test@example.org', 'password' => 'password'])
-        ->assertRedirect(route('code16.sharp.login.2fa'));
+    postLoginFor2fa('test@example.org', 'password');
 });
 
 it('does not redirect to 2fa code page after failed first step login', function () {
@@ -86,12 +85,7 @@ it('does not redirect to 2fa code page after failed first step login', function 
 });
 
 it('logs in the user after successful 2fa code validation', function () {
-    $this
-        ->post(
-            route('code16.sharp.login.post'),
-            ['login' => 'test@example.org', 'password' => 'password']
-        )
-        ->assertRedirect(route('code16.sharp.login.2fa'));
+    postLoginFor2fa('test@example.org', 'password');
 
     $this
         ->post(
@@ -104,12 +98,7 @@ it('logs in the user after successful 2fa code validation', function () {
 });
 
 it('logs in the user after entering a valid recovery code', function () {
-    $this
-        ->post(
-            route('code16.sharp.login.post'),
-            ['login' => 'test@example.org', 'password' => 'password']
-        )
-        ->assertRedirect(route('code16.sharp.login.2fa'));
+    postLoginFor2fa('test@example.org', 'password');
 
     $this
         ->post(
@@ -122,12 +111,7 @@ it('logs in the user after entering a valid recovery code', function () {
 });
 
 it('does not log in the user after invalid 2fa code validation', function () {
-    $this
-        ->post(
-            route('code16.sharp.login.post'),
-            ['login' => 'test@example.org', 'password' => 'password']
-        )
-        ->assertRedirect(route('code16.sharp.login.2fa'));
+    postLoginFor2fa('test@example.org', 'password');
 
     $this
         ->from(route('code16.sharp.login.2fa'))
