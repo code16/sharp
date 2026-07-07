@@ -26,7 +26,7 @@ class MultiFactorManager
     public function currentHandlerHelpText(): ?string
     {
         return method_exists($this->currentHandler(), 'formHelpText')
-            ? $this->currentHandler()->formHelpText()
+            ? $this->currentHandler()->setUser($this->pendingUser())->formHelpText()
             : trans('sharp::auth.2fa.form_help_text');
     }
 
@@ -37,14 +37,20 @@ class MultiFactorManager
             && $this->currentHandler()->isExpectingLogin();
     }
 
-    public function currentUser(): ?Authenticatable
+    public function pendingUser(): ?Authenticatable
     {
-        $userId = $this->currentHandler()?->userId();
+        if ($userId = $this->currentHandler()?->userId()) {
+            return $this->findUser($userId);
+        }
 
-        return $userId
-            ? Auth::guard(sharp()->config()->get('auth.guard'))
-                ->getProvider()
-                ->retrieveById($userId)
-            : null;
+        return null;
+    }
+
+    protected function findUser($id): ?Authenticatable
+    {
+        return once(fn () => Auth::guard(sharp()->config()->get('auth.guard'))
+            ->getProvider()
+            ->retrieveById($id)
+        );
     }
 }

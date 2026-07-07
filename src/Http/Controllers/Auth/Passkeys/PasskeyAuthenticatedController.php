@@ -12,11 +12,18 @@ class PasskeyAuthenticatedController extends Controller
     public function __invoke(Request $request, MultiFactorManager $multiFactor)
     {
         if ($multiFactor->isUsingPasskeyMethod()) {
-            if (! $request->user()->is($multiFactor->currentUser())) {
+            $authId = Auth::guard(sharp()->config()->get('auth.guard'))->user()->getAuthIdentifier();
+            $pendingId = $multiFactor->pendingUser()?->getAuthIdentifier();
+
+            if ($authId !== $pendingId) {
                 Auth::guard(sharp()->config()->get('auth.guard'))->logout();
 
-                return redirect()->route('code16.sharp.login.2fa')
-                    ->withErrors(['error' => 'The passkey does not belong to the current user.']);
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+                return redirect()->route('code16.sharp.login')
+                    ->with('status', __('sharp::auth.2fa.passkey.mismatch_error'))
+                    ->with('status_level', 'error');
             }
 
             $multiFactor->currentHandler()->forgetCode();

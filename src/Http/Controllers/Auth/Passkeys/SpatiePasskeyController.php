@@ -33,7 +33,7 @@ class SpatiePasskeyController extends Controller
         $storePasskeyAction = Config::getAction('store_passkey', StorePasskeyAction::class);
 
         try {
-            $storePasskeyAction->execute(
+            $registeredPasskey = $storePasskeyAction->execute(
                 $this->currentUser(),
                 $passkey, $this->previouslyGeneratedPasskeyOptions(),
                 request()->getHost(),
@@ -45,13 +45,15 @@ class SpatiePasskeyController extends Controller
             ])->errorBag('passkeyForm');
         }
 
-        return redirect()->intended(route('code16.sharp.home'));
+        return redirect()
+            ->route('code16.sharp.passkeys.registered')
+            ->with('registered_passkey', $registeredPasskey);
     }
 
     protected function currentUser(): Authenticatable&HasPasskeys
     {
         return app(MultiFactorManager::class)->isUsingPasskeyMethod()
-            ? app(MultiFactorManager::class)->currentUser()
+            ? app(MultiFactorManager::class)->pendingUser()
             : auth()->user();
     }
 

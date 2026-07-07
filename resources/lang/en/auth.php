@@ -27,6 +27,10 @@ return [
                 ],
             ],
         ],
+        'passkey' => [
+            'form_help_text' => 'Please click on the button below to use one of your passkey for :email account.',
+            'mismatch_error' => 'The passkey used is linked to a different account.',
+        ],
     ],
     'passkeys' => [
         'entity_label' => 'Passkey',

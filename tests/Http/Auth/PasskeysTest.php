@@ -345,7 +345,7 @@ it('store endpoint calls StorePasskeyAction with appropriate arguments', functio
         'passkey' => $passkeyData,
         'name' => $passkeyName,
     ])
-        ->assertRedirect(route('code16.sharp.home'));
+        ->assertRedirect(route('code16.sharp.passkeys.registered'));
 
     $mockAction->shouldHaveReceived('execute');
 });

@@ -4,7 +4,6 @@ namespace Code16\Sharp\Auth\TwoFactor;
 
 use Code16\Sharp\Enums\MultiFactorMethod;
 use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 
 class Sharp2faPasskeyHandler implements Sharp2faHandler
@@ -41,8 +40,7 @@ class Sharp2faPasskeyHandler implements Sharp2faHandler
 
     public function checkCode(string $code): bool
     {
-        return $this->isExpectingLogin()
-            && Hash::check($code, Session::get($this->getSessionKey())['code']);
+        throw new \Exception('Passkey multi-factor is not based on code matching');
     }
 
     public function userId(): mixed
@@ -58,6 +56,13 @@ class Sharp2faPasskeyHandler implements Sharp2faHandler
     public function forgetCode(): void
     {
         Session::forget($this->getSessionKey());
+    }
+
+    public function formHelpText(): string
+    {
+        return trans('sharp::auth.2fa.passkey.form_help_text', [
+            'email' => $this->user->{sharp()->config()->get('auth.login_attribute')} ?? null,
+        ]);
     }
 
     protected function getSessionKey(): string

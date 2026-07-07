@@ -5,16 +5,16 @@
     import Title from "@/components/Title.vue";
     import { route } from "@/utils/url";
     import { Button } from "@/components/ui/button";
-    import { Alert, AlertDescription } from "@/components/ui/alert";
+    import { Alert, AlertTitle } from "@/components/ui/alert";
     import AuthCard from "@/Layouts/Auth/AuthCard.vue";
     import { Label } from "@/components/ui/label";
     import { Input } from "@/components/ui/input";
-    import { FormItem, FormMessage } from "@/components/ui/form";
-    import { TwoFactorMode, UserData } from "@/types";
+    import { FormItem } from "@/components/ui/form";
+    import { MultiFactorMethod } from "@/types";
     import { usePasskeyLogin } from "@/Pages/Auth/usePasskeyLogin";
 
     const props = defineProps<{
-        mode: TwoFactorMode,
+        method: MultiFactorMethod,
         helpText: string,
         passkeyError: string,
         errors: Record<string, string>,
@@ -24,7 +24,7 @@
         code: '',
     });
 
-    const { loginWithPasskey } = usePasskeyLogin({ autofill: props.mode === 'passkey' });
+    const { loginWithPasskey } = usePasskeyLogin({ autofill: props.method === 'passkey' });
 </script>
 
 <template>
@@ -35,21 +35,21 @@
 
         <template v-if="Object.keys(errors).length || passkeyError">
             <Alert class="mb-4" variant="destructive">
-                <AlertDescription>
+                <AlertTitle class="mb-0">
                     {{ Object.values(errors)[0] || passkeyError }}
-                </AlertDescription>
+                </AlertTitle>
             </Alert>
         </template>
 
-        <form @submit.prevent="mode === 'passkey' ? loginWithPasskey({}) : form.post(route('code16.sharp.login.2fa.post'))">
-            <AuthCard :empty="mode == 'passkey'">
+        <form @submit.prevent="method === 'passkey' ? loginWithPasskey({}) : form.post(route('code16.sharp.login.2fa.post'))">
+            <AuthCard :empty="method == 'passkey'">
                 <template #title>
                     {{ __('sharp::pages/auth/login.title') }}
                 </template>
                 <template v-if="helpText" #description>
                     <div class="space-y-2" v-html="helpText"></div>
                 </template>
-                <template v-if="mode == 'passkey'">
+                <template v-if="method == 'passkey'">
                     <input class="sr-only" autocomplete="webauthn"></input>
                 </template>
                 <template v-else>
@@ -62,7 +62,7 @@
                 </template>
                 <template #footer>
                     <Button type="submit" class="w-full">
-                        <template v-if="mode === 'passkey'">
+                        <template v-if="method === 'passkey'">
                             {{ __('sharp::pages/auth/login.passkey_button') }}
                         </template>
                         <template v-else>

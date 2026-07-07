@@ -579,9 +579,11 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.password.reset.post": [],
     "code16.sharp.passkeys.create": [],
-    "code16.sharp.passkeys.validate": [],
-    "code16.sharp.passkeys.store": [],
-    "code16.sharp.passkeys.skip-prompt": []
+    "code16.sharp.passkeys.spatie.validate": [],
+    "code16.sharp.passkeys.spatie.store": [],
+    "code16.sharp.passkeys.registered": [],
+    "code16.sharp.passkeys.skip-prompt": [],
+    "code16.sharp.passkeys.authenticated": []
 }
 }
 export {};

@@ -16,7 +16,7 @@ class LoginMultiFactorController extends Controller
 {
     public function create(Request $request, MultiFactorManager $multiFactor, PasskeyManager $passkeys): RedirectResponse|Response
     {
-        $user = $multiFactor->currentUser();
+        $user = $multiFactor->pendingUser();
 
         if ($user && $multiFactor->currentHandler()?->isExpectingLogin()) {
             if ($multiFactor->currentMethod() === MultiFactorMethod::Passkey
@@ -26,7 +26,7 @@ class LoginMultiFactorController extends Controller
 
             return Inertia::render('Auth/LoginMultiFactor', [
                 'helpText' => $multiFactor->currentHandlerHelpText(),
-                'mode' => $multiFactor->currentMethod(),
+                'method' => $multiFactor->currentMethod(),
                 'passkeyError' => $passkeys->getErrorMessage(),
             ]);
         }

@@ -2,6 +2,7 @@
 
 use Code16\Sharp\Http\Controllers\Auth\Passkeys\PasskeyAuthenticatedController;
 use Code16\Sharp\Http\Controllers\Auth\Passkeys\PasskeyController;
+use Code16\Sharp\Http\Controllers\Auth\Passkeys\PasskeyRegisteredController;
 use Code16\Sharp\Http\Controllers\Auth\Passkeys\PasskeySkipPromptController;
 use Code16\Sharp\Http\Controllers\Auth\Passkeys\SpatiePasskeyController;
 use Code16\Sharp\Http\Middleware\SharpAuthenticateOrInMultiFactor;
@@ -20,6 +21,9 @@ Route::middleware(['sharp_common', 'sharp_web'])
             Route::post('/spatie-passkeys', [SpatiePasskeyController::class, 'store'])
                 ->name('code16.sharp.passkeys.spatie.store');
         });
+
+        Route::get('/passkeys/registered', PasskeyRegisteredController::class)
+            ->name('code16.sharp.passkeys.registered');
 
         Route::middleware(['sharp_auth'])->group(function () {
             Route::post('/passkeys/skip-prompt', PasskeySkipPromptController::class)
