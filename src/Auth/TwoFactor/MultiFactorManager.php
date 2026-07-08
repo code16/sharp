@@ -48,9 +48,12 @@ class MultiFactorManager
 
     protected function findUser($id): ?Authenticatable
     {
-        return once(fn () => Auth::guard(sharp()->config()->get('auth.guard'))
-            ->getProvider()
-            ->retrieveById($id)
-        );
+        return once(function () use ($id) {
+            $user = Auth::guard(sharp()->config()->get('auth.guard'))
+                ->onceUsingId($id);
+            Auth::forgetGuards();
+
+            return $user;
+        });
     }
 }

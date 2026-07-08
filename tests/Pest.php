@@ -7,7 +7,6 @@ use Code16\Sharp\Tests\TestCase;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\URL;
 
@@ -86,22 +85,6 @@ function login(?User $user = null)
         $user ?: new User(),
         sharp()->config()->get('auth.guard') ?: 'web'
     );
-}
-
-function postLoginFor2fa($email, $password): void
-{
-    test()->post(
-        route('code16.sharp.login.post'),
-        ['login' => $email, 'password' => $password]
-    )
-        ->assertRedirect(route('code16.sharp.login.2fa'));
-
-    /**
-     * We assume the configured sharp guard is @see \Code16\Sharp\Tests\Fixtures\TestAuthGuard
-     */
-    $guard = sharp()->config()->get('auth.guard');
-    expect(Auth::guard($guard)->isOnce)->toBeTrue();
-    Auth::guard($guard)->logout();
 }
 
 function fakeListFor(string $entityKeyOrClass, $fakeImplementation)

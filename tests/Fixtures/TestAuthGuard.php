@@ -82,7 +82,10 @@ class TestAuthGuard implements Guard, StatefulGuard
         return false;
     }
 
-    public function onceUsingId($id) {}
+    public function onceUsingId($id)
+    {
+        return $this->loginUsingId($id);
+    }
 
     public function viaRemember() {}
 

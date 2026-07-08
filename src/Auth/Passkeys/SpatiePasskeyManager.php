@@ -27,7 +27,7 @@ class SpatiePasskeyManager implements PasskeyManager
         Cookie::queue('sharp_last_used_passkey', $passkey->getKey(), 576000);
     }
 
-    public function getLastUsedPasskey(): ?Passkey
+    public function getLastUsedPasskey(): ?Model
     {
         return $this->model()::find(Cookie::get('sharp_last_used_passkey'));
     }

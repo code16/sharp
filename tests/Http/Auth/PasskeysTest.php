@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\ValidationException;
+use Spatie\LaravelPasskeys\Actions\FindPasskeyToAuthenticateAction;
 use Spatie\LaravelPasskeys\Actions\GeneratePasskeyRegisterOptionsAction;
 use Spatie\LaravelPasskeys\Actions\StorePasskeyAction;
 use Spatie\LaravelPasskeys\Events\PasskeyUsedToAuthenticateEvent;
@@ -199,6 +200,29 @@ it('validates name is required when renaming', function () {
         ->toThrow(ValidationException::class);
 });
 
+it('authenticates user directly when logging in with passkey', function () {
+    $user = createPasskeyTestUser();
+    $passkey = createPasskey($user);
+
+    FakeFindPasskeyToAuthenticateAction::$passkey = $passkey;
+
+    config()->set('passkeys.actions.find_passkey', FakeFindPasskeyToAuthenticateAction::class);
+    session()->put('passkey-authentication-options', 'test');
+
+    $this->post(route('passkeys.login'), ['start_authentication_response' => '{}'], headers: ['X-Sharp' => '1'])
+        ->assertSessionMissing('authenticatePasskey::message')
+        ->assertSessionHasNoErrors()
+        ->assertRedirect(route('code16.sharp.passkeys.authenticated', [
+            'intended_url' => route('code16.sharp.home'),
+        ]));
+
+    $this->get(route('code16.sharp.passkeys.authenticated'))
+        ->assertRedirect(route('code16.sharp.home'));
+
+    expect(auth()->check())->toBeTrue();
+    expect(auth()->user()->id)->toBe($user->id);
+});
+
 // --- PasskeyEventSubscriber ---
 
 it('queues a cookie when passkey is used to authenticate', function () {
@@ -372,6 +396,16 @@ class TestPasskey extends Passkey
             get: fn ($value) => $value,
             set: fn ($value) => ['data' => is_string($value) ? $value : json_encode($value)],
         );
+    }
+}
+
+class FakeFindPasskeyToAuthenticateAction extends FindPasskeyToAuthenticateAction
+{
+    public static ?Passkey $passkey = null;
+
+    public function execute(string $publicKeyCredentialJson, string $passkeyOptionsJson): ?Passkey
+    {
+        return self::$passkey;
     }
 }
 

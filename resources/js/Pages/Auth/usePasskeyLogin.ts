@@ -18,7 +18,7 @@ function useSpatiePasskeyLogin(options: PasskeyLoginOptions) {
         start_authentication_response: '',
     });
 
-    async function loginWithPasskey({ autofill = false, remember = false }) {
+    async function loginWithPasskey({ autofill = false, remember = false } = {}) {
         try {
             const response = await api.get(route('passkeys.authentication_options'), {
                 ignoreContentType: true,

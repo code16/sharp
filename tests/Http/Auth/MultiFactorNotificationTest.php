@@ -19,7 +19,12 @@ beforeEach(function () {
 it('redirects to 2fa code page after successful first step login', function () {
     Notification::fake();
 
-    postLoginFor2fa('test@example.org', 'password');
+    $this
+        ->post(
+            route('code16.sharp.login.post'),
+            ['login' => 'test@example.org', 'password' => 'password']
+        )
+        ->assertRedirect(route('code16.sharp.login.2fa'));
 });
 
 it('does not redirect to 2fa code page after failed first step login', function () {
@@ -33,7 +38,12 @@ it('does not redirect to 2fa code page after failed first step login', function 
 it('sends to the user a 2fa notification after successful first step login', function () {
     Notification::fake();
 
-    postLoginFor2fa('test@example.org', 'password');
+    $this
+        ->post(
+            route('code16.sharp.login.post'),
+            ['login' => 'test@example.org', 'password' => 'password']
+        )
+        ->assertRedirect(route('code16.sharp.login.2fa'));
 
     Notification::assertSentTimes(Sharp2faDefaultNotification::class, 1);
 });
@@ -51,7 +61,12 @@ it('logs in the user after successful 2fa code validation', function () {
         }
     );
 
-    postLoginFor2fa('test@example.org', 'password');
+    $this
+        ->post(
+            route('code16.sharp.login.post'),
+            ['login' => 'test@example.org', 'password' => 'password']
+        )
+        ->assertRedirect(route('code16.sharp.login.2fa'));
 
     $this
         ->post(
@@ -66,7 +81,12 @@ it('logs in the user after successful 2fa code validation', function () {
 it('does not log in the user after invalid 2fa code validation', function () {
     Notification::fake();
 
-    postLoginFor2fa('test@example.org', 'password');
+    $this
+        ->post(
+            route('code16.sharp.login.post'),
+            ['login' => 'test@example.org', 'password' => 'password']
+        )
+        ->assertRedirect(route('code16.sharp.login.2fa'));
 
     $this
         ->from(route('code16.sharp.login.2fa'))

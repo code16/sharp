@@ -41,7 +41,7 @@
             </Alert>
         </template>
 
-        <form @submit.prevent="method === 'passkey' ? loginWithPasskey({}) : form.post(route('code16.sharp.login.2fa.post'))">
+        <form @submit.prevent="method === 'passkey' ? loginWithPasskey() : form.post(route('code16.sharp.login.2fa.post'))">
             <AuthCard :empty="method == 'passkey'">
                 <template #title>
                     {{ __('sharp::pages/auth/login.title') }}
