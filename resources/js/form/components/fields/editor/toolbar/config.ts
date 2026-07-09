@@ -16,6 +16,7 @@ import {
     ImageIcon,
     Paperclip, Minus, SquarePlay, CodeXml, FileCode, Undo, Redo, TextQuote,
     Superscript,
+    StickyNote,
 } from "lucide-vue-next";
 import { Component } from "vue";
 
@@ -134,6 +135,12 @@ export const buttons: { [key in Exclude<FormEditorToolbarButton, '|' | 'link' | 
         isActive: editor => editor.isActive('superscript'),
         icon: Superscript,
         label: () => __('sharp::form.editor.toolbar.superscript.title'),
+    },
+    'footnote': {
+        command: editor => editor.chain().focus().addFootnote().run(),
+        isActive: editor => false,
+        icon: StickyNote,
+        label: () => __('sharp::form.editor.toolbar.footnote.title'),
     },
     'undo': {
         command: editor => editor.chain().undo().run(),

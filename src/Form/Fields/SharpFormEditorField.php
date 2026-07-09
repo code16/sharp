@@ -51,6 +51,7 @@ class SharpFormEditorField extends SharpFormField implements IsSharpFieldWithEmb
     const RAW_HTML = FormEditorToolbarButton::Html;
     const CODE_BLOCK = FormEditorToolbarButton::CodeBlock;
     const SUP = FormEditorToolbarButton::Superscript;
+    const FOOTNOTE = FormEditorToolbarButton::Footnote;
     const UNDO = FormEditorToolbarButton::Undo;
     const REDO = FormEditorToolbarButton::Redo;
 

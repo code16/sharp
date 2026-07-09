@@ -28,6 +28,7 @@ import { Clipboard } from './Clipboard';
 import { Small } from './Small';
 import { FormEditorFieldData, FormEditorToolbarButton } from "@/types";
 import { CodeBlock } from "@/form/components/fields/editor/extensions/CodeBlock";
+import { Footnotes, FootnoteReference, Footnote } from "tiptap-footnotes";
 
 export function getExtensions(field: FormEditorFieldData) {
     const toolbarHas = (buttonName: FormEditorToolbarButton | FormEditorToolbarButton[]) =>
@@ -54,11 +55,19 @@ export function getExtensions(field: FormEditorFieldData) {
         toolbarHas('code') && Code,
         toolbarHas('code-block') && CodeBlock,
         Document.extend({
-            content: field.uploads || Object.keys(field.embeds ?? {}).length
-                ? '(block | embed)+'
-                : 'block+',
+            content: [
+                field.uploads || Object.keys(field.embeds ?? {}).length
+                    ? '(block | embed)+'
+                    : 'block+',
+                toolbarHas('footnote') && 'footnotes?',
+            ].filter(Boolean).join(' '),
         }),
         Dropcursor,
+        toolbarHas('footnote') && [
+            Footnote,
+            Footnotes,
+            FootnoteReference,
+        ],
         Gapcursor,
         HardBreak.extend({
             addKeyboardShortcuts() {
