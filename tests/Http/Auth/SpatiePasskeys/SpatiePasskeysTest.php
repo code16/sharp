@@ -1,34 +1,24 @@
 <?php
 
-
 use Code16\Sharp\Auth\Passkeys\Commands\UpdatePasskeyNameCommand;
 use Code16\Sharp\Auth\Passkeys\Entity\PasskeyEntity;
 use Code16\Sharp\Auth\Passkeys\Entity\PasskeyList;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
-use Code16\Sharp\Tests\Fixtures\User;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Events\Dispatcher;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\ValidationException;
-use Spatie\LaravelPasskeys\Actions\FindPasskeyToAuthenticateAction;
 use Spatie\LaravelPasskeys\Actions\GeneratePasskeyRegisterOptionsAction;
 use Spatie\LaravelPasskeys\Actions\StorePasskeyAction;
-use Spatie\LaravelPasskeys\Events\PasskeyUsedToAuthenticateEvent;
-use Spatie\LaravelPasskeys\Http\Requests\AuthenticateUsingPasskeysRequest;
 use Spatie\LaravelPasskeys\Models\Concerns\HasPasskeys;
-use Spatie\LaravelPasskeys\Models\Concerns\InteractsWithPasskeys;
 use Spatie\LaravelPasskeys\Models\Passkey;
 use Webauthn\PublicKeyCredentialCreationOptions;
 
 use function Orchestra\Testbench\Pest\defineEnvironment;
 use function Orchestra\Testbench\Pest\defineRoutes;
-
 
 require_once __DIR__.'/helpers.php';
 
@@ -283,7 +273,6 @@ it('store endpoint catches action errors and throws validation exception', funct
         ->assertJsonValidationErrors('name');
 });
 
-
 it('store endpoint calls StorePasskeyAction with appropriate arguments', function () {
     $user = createPasskeyUser();
     login($user);
@@ -346,4 +335,3 @@ class FakeGeneratePasskeyRegisterOptionsAction extends GeneratePasskeyRegisterOp
         return '{"challenge":"fake-challenge","rp":{"name":"test"}}';
     }
 }
-
