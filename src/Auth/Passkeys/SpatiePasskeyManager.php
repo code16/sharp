@@ -13,6 +13,8 @@ use Spatie\LaravelPasskeys\Models\Passkey;
 use Spatie\LaravelPasskeys\Support\Config;
 
 /**
+ * @internal
+ *
  * @implements PasskeyManager<Passkey>
  */
 class SpatiePasskeyManager implements PasskeyManager

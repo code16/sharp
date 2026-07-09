@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Events\Dispatcher;
 
 /**
+ * @internal
+ *
  * @template TModel of Model
  */
 interface PasskeyManager
