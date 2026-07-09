@@ -11,40 +11,15 @@
     import { startRegistration } from "@simplewebauthn/browser";
     import { api } from "@/api/api";
     import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
+    import { usePasskeyRegister } from "@/Pages/Auth/usePasskeyRegister";
 
-    const props = defineProps<{
+    defineProps<{
         prompt: boolean,
+        isMultiFactor: boolean,
         cancelUrl: string,
     }>();
 
-    const form = useForm({
-        name: '',
-        passkey: '',
-    });
-
-    async function submit() {
-        form.clearErrors();
-
-        try {
-            const optionsResponse = await api.post(route('code16.sharp.passkeys.validate'), {
-                name: form.name,
-            });
-
-            const registrationResponse = await startRegistration({
-                optionsJSON: optionsResponse.data.passkeyOptions,
-            });
-
-            form.passkey = JSON.stringify(registrationResponse);
-
-            form.post(route('code16.sharp.passkeys.store'));
-        } catch (error) {
-            if (error.response?.status === 422) {
-                form.setError({ name: error.response.data.errors?.name?.[0] });
-            } else {
-                console.error(error);
-            }
-        }
-    }
+    const { form, registerPasskey } = usePasskeyRegister();
 </script>
 
 <template>
@@ -53,7 +28,7 @@
             {{ __('sharp::pages/auth/passkeys.title') }}
         </Title>
 
-        <form @submit.prevent="submit">
+        <form @submit.prevent="registerPasskey()">
             <AuthCard>
                 <template #title>
                     {{ __('sharp::pages/auth/passkeys.title') }}
@@ -88,39 +63,45 @@
 
                 <template #footer>
                     <div class="grid gap-2 w-full">
-                        <Button type="submit" class="w-full" :disabled="form.processing">
-                            {{ prompt ? __('sharp::pages/auth/passkeys.prompt_version.button') : __('sharp::pages/auth/passkeys.account_version.button') }}
-                        </Button>
-
-                        <template v-if="prompt">
-                            <Button
-                                type="button"
-                                variant="outline"
-                                class="w-full"
-                                as="a"
-                                :href="route('code16.sharp.home')"
-                            >
-                                {{ __('sharp::pages/auth/passkeys.prompt_version.skip_prompt_button') }}
-                            </Button>
-                            <Button
-                                type="button"
-                                variant="ghost"
-                                class="w-full"
-                                @click="useForm({}).post(route('code16.sharp.passkeys.skip-prompt'))"
-                            >
-                                {{ __('sharp::pages/auth/passkeys.prompt_version.never_ask_again_button') }}
+                        <template v-if="isMultiFactor">
+                            <Button type="submit" class="w-full" :disabled="form.processing">
+                                {{ __('sharp::pages/auth/passkeys.prompt_version.button')  }}
                             </Button>
                         </template>
                         <template v-else>
-                            <Button
-                                type="button"
-                                variant="ghost"
-                                class="w-full"
-                                as="a"
-                                :href="cancelUrl"
-                            >
-                                {{ __('sharp::pages/auth/passkeys.account_version.cancel_button') }}
+                            <Button type="submit" class="w-full" :disabled="form.processing">
+                                {{ prompt ? __('sharp::pages/auth/passkeys.prompt_version.button') : __('sharp::pages/auth/passkeys.account_version.button') }}
                             </Button>
+                            <template v-if="prompt">
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    class="w-full"
+                                    as="a"
+                                    :href="route('code16.sharp.home')"
+                                >
+                                    {{ __('sharp::pages/auth/passkeys.prompt_version.skip_prompt_button') }}
+                                </Button>
+                                <Button
+                                    type="button"
+                                    variant="ghost"
+                                    class="w-full"
+                                    @click="useForm({}).post(route('code16.sharp.passkeys.skip-prompt'))"
+                                >
+                                    {{ __('sharp::pages/auth/passkeys.prompt_version.never_ask_again_button') }}
+                                </Button>
+                            </template>
+                            <template v-else>
+                                <Button
+                                    type="button"
+                                    variant="ghost"
+                                    class="w-full"
+                                    as="a"
+                                    :href="cancelUrl"
+                                >
+                                    {{ __('sharp::pages/auth/passkeys.account_version.cancel_button') }}
+                                </Button>
+                            </template>
                         </template>
                     </div>
                 </template>

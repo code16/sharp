@@ -3,13 +3,15 @@
 namespace Code16\Sharp;
 
 use Code16\Sharp\Auth\Impersonate\SharpImpersonationHandler;
-use Code16\Sharp\Auth\Passkeys\PasskeyEventSubscriber;
+use Code16\Sharp\Auth\Passkeys\PasskeyManager;
+use Code16\Sharp\Auth\Passkeys\SpatiePasskeyManager;
 use Code16\Sharp\Auth\SharpAuthorizationManager;
 use Code16\Sharp\Auth\TwoFactor\Engines\GoogleTotpEngine;
 use Code16\Sharp\Auth\TwoFactor\Engines\Sharp2faTotpEngine;
 use Code16\Sharp\Auth\TwoFactor\Sharp2faEloquentDefaultTotpHandler;
 use Code16\Sharp\Auth\TwoFactor\Sharp2faHandler;
 use Code16\Sharp\Auth\TwoFactor\Sharp2faNotificationHandler;
+use Code16\Sharp\Auth\TwoFactor\Sharp2faPasskeyHandler;
 use Code16\Sharp\Config\SharpConfigBuilder;
 use Code16\Sharp\Console\DashboardMakeCommand;
 use Code16\Sharp\Console\EntityCommandMakeCommand;
@@ -89,7 +91,7 @@ class SharpInternalServiceProvider extends ServiceProvider
 
         $this->configureOctane();
 
-        Event::subscribe(PasskeyEventSubscriber::class);
+        Event::subscribe(PasskeyManager::class);
     }
 
     public function register()
@@ -114,6 +116,7 @@ class SharpInternalServiceProvider extends ServiceProvider
             fn () => match (sharp()->config()->get('auth.2fa.handler')) {
                 'notification' => app(Sharp2faNotificationHandler::class),
                 'totp' => app(Sharp2faEloquentDefaultTotpHandler::class),
+                'passkey' => app(Sharp2faPasskeyHandler::class),
                 default => sharp()->config()->get('auth.2fa.handler'),
             }
         );
@@ -123,6 +126,8 @@ class SharpInternalServiceProvider extends ServiceProvider
                 ? sharp()->config()->get('auth.impersonate.handler')
                 : null;
         });
+
+        $this->app->bind(PasskeyManager::class, SpatiePasskeyManager::class);
 
         $this->app->register(InertiaServiceProvider::class);
 

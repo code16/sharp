@@ -2,38 +2,28 @@
 
 namespace Code16\Sharp\Auth\TwoFactor;
 
-use Carbon\Carbon;
 use Code16\Sharp\Enums\MultiFactorMethod;
 use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Notifications\Notification;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 
-class Sharp2faNotificationHandler implements Sharp2faHandler
+class Sharp2faPasskeyHandler implements Sharp2faHandler
 {
     protected ?Authenticatable $user = null;
 
     public function generateCode(bool $remember = false): void
     {
-        $code = $this->generateRandomCode();
-
         Session::put(
             $this->getSessionKey(),
             [
                 'user_id' => $this->user->getAuthIdentifier(),
-                'code' => Hash::make($code),
                 'remember' => $remember,
-                'expires_at' => now()->addMinutes(15)->format('Y-m-d H:i:s'),
             ]
         );
-
-        $this->user->notify($this->getNotification($code));
     }
 
     public function isExpectingLogin(): bool
     {
-        return Session::has($this->getSessionKey())
-            && (new Carbon(Session::get($this->getSessionKey())['expires_at']))?->isFuture();
+        return Session::has($this->getSessionKey());
     }
 
     public function setUser($user): self
@@ -50,8 +40,7 @@ class Sharp2faNotificationHandler implements Sharp2faHandler
 
     public function checkCode(string $code): bool
     {
-        return $this->isExpectingLogin()
-            && Hash::check($code, Session::get($this->getSessionKey())['code']);
+        throw new \Exception('Passkey multi-factor is not based on code matching');
     }
 
     public function userId(): mixed
@@ -69,23 +58,20 @@ class Sharp2faNotificationHandler implements Sharp2faHandler
         Session::forget($this->getSessionKey());
     }
 
-    protected function getNotification(int $code): Notification
+    public function formHelpText(): string
     {
-        return new Sharp2faDefaultNotification($code);
-    }
-
-    protected function generateRandomCode(): int
-    {
-        return random_int(100000, 999999);
+        return trans('sharp::auth.2fa.passkey.form_help_text', [
+            'email' => $this->user->{sharp()->config()->get('auth.login_attribute')} ?? null,
+        ]);
     }
 
     protected function getSessionKey(): string
     {
-        return 'sharp:2fa:code';
+        return 'sharp:2fa:prompt-passkey';
     }
 
     public function method(): MultiFactorMethod
     {
-        return MultiFactorMethod::Notification;
+        return MultiFactorMethod::Passkey;
     }
 }

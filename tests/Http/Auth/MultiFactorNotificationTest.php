@@ -4,7 +4,6 @@ use Code16\Sharp\Auth\TwoFactor\Sharp2faDefaultNotification;
 use Code16\Sharp\Auth\TwoFactor\Sharp2faNotificationHandler;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\TestAuthGuard;
-use Code16\Sharp\Tests\Fixtures\User;
 use Illuminate\Support\Facades\Notification;
 
 beforeEach(function () {
@@ -20,7 +19,11 @@ beforeEach(function () {
 it('redirects to 2fa code page after successful first step login', function () {
     Notification::fake();
 
-    $this->post(route('code16.sharp.login.post'), ['login' => 'test@example.org', 'password' => 'password'])
+    $this
+        ->post(
+            route('code16.sharp.login.post'),
+            ['login' => 'test@example.org', 'password' => 'password']
+        )
         ->assertRedirect(route('code16.sharp.login.2fa'));
 });
 
@@ -35,15 +38,14 @@ it('does not redirect to 2fa code page after failed first step login', function 
 it('sends to the user a 2fa notification after successful first step login', function () {
     Notification::fake();
 
-    $this->post(
-        route('code16.sharp.login.post'),
-        ['login' => 'test@example.org', 'password' => 'password']
-    );
+    $this
+        ->post(
+            route('code16.sharp.login.post'),
+            ['login' => 'test@example.org', 'password' => 'password']
+        )
+        ->assertRedirect(route('code16.sharp.login.2fa'));
 
-    Notification::assertSentTo(
-        new User(['email' => 'test@example.org']),
-        Sharp2faDefaultNotification::class
-    );
+    Notification::assertSentTimes(Sharp2faDefaultNotification::class, 1);
 });
 
 it('logs in the user after successful 2fa code validation', function () {

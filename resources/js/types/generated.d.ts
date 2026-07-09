@@ -641,7 +641,6 @@ export type FormUploadFieldData = {
   type: "upload";
   imageCropRatio: [number, number];
   imageTransformable: boolean;
-  imageCompactThumbnail: boolean;
   imageTransformKeepOriginal: boolean | null;
   imageTransformableFileTypes: Array<string> | null;
   allowedExtensions: Array<string> | null;
@@ -748,6 +747,7 @@ export type MenuItemData = {
   isCollapsible: boolean;
   openInNewTab: boolean;
 };
+export type MultiFactorMethod = "notification" | "totp" | "passkey";
 export type NotificationData = {
   title: string;
   level: NotificationLevel;

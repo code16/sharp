@@ -2,6 +2,8 @@
 
 namespace Code16\Sharp\Auth\TwoFactor;
 
+use Code16\Sharp\Enums\MultiFactorMethod;
+
 interface Sharp2faHandler
 {
     public function generateCode(bool $remember = false): void;
@@ -19,4 +21,6 @@ interface Sharp2faHandler
     public function setUser($user): self;
 
     public function remember(): bool;
+
+    public function method(): MultiFactorMethod;
 }

@@ -27,6 +27,10 @@ return [
                 ],
             ],
         ],
+        'passkey' => [
+            'form_help_text' => 'Veuillez cliquer sur le bouton ci-dessous pour utiliser une clé d’accès associé au compte :email',
+            'mismatch_error' => 'La clé d’accès utilisée est associée à un autre compte.',
+        ],
     ],
     'passkeys' => [
         'entity_label' => 'Clé d’accès',

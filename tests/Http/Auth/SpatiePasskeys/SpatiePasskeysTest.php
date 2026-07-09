@@ -1,6 +1,5 @@
 <?php
 
-namespace Code16\Sharp\Tests\Http\Auth;
 
 use Code16\Sharp\Auth\Passkeys\Commands\UpdatePasskeyNameCommand;
 use Code16\Sharp\Auth\Passkeys\Entity\PasskeyEntity;
@@ -14,8 +13,10 @@ use Illuminate\Events\Dispatcher;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\ValidationException;
+use Spatie\LaravelPasskeys\Actions\FindPasskeyToAuthenticateAction;
 use Spatie\LaravelPasskeys\Actions\GeneratePasskeyRegisterOptionsAction;
 use Spatie\LaravelPasskeys\Actions\StorePasskeyAction;
 use Spatie\LaravelPasskeys\Events\PasskeyUsedToAuthenticateEvent;
@@ -26,11 +27,19 @@ use Spatie\LaravelPasskeys\Models\Passkey;
 use Webauthn\PublicKeyCredentialCreationOptions;
 
 use function Orchestra\Testbench\Pest\defineEnvironment;
+use function Orchestra\Testbench\Pest\defineRoutes;
+
+
+require_once __DIR__.'/helpers.php';
 
 pest()->use(LazilyRefreshDatabase::class);
 
 defineEnvironment(function () {
     sharp()->config()->enablePasskeys();
+});
+
+defineRoutes(function () {
+    Route::passkeys();
 });
 
 beforeEach(function () {
@@ -61,43 +70,6 @@ beforeEach(function () {
         ->declareEntity(PersonEntity::class);
 });
 
-function createPasskeyTestUser(array $attributes = []): PasskeyTestUser
-{
-    return PasskeyTestUser::create(array_merge([
-        'email' => 'test@example.org',
-        'name' => 'Test',
-    ], $attributes));
-}
-
-function createPasskey(PasskeyTestUser $user, array $attributes = []): TestPasskey
-{
-    $attrs = array_merge([
-        'name' => 'My Passkey',
-        'credential_id' => 'test-credential-'.uniqid(),
-        'last_used_at' => null,
-    ], $attributes);
-
-    $id = DB::table('passkeys')->insertGetId([
-        'authenticatable_id' => $user->id,
-        'name' => $attrs['name'],
-        'credential_id' => $attrs['credential_id'],
-        'data' => json_encode(['test' => true]),
-        'last_used_at' => $attrs['last_used_at'],
-        'created_at' => $attrs['created_at'] ?? now(),
-        'updated_at' => now(),
-    ]);
-
-    return TestPasskey::find($id);
-}
-
-function loginPasskeyUser(?PasskeyTestUser $user = null)
-{
-    test()->actingAs(
-        $user ?: createPasskeyTestUser(),
-        sharp()->config()->get('auth.guard') ?: 'web'
-    );
-}
-
 // --- PasskeyEntity tests ---
 
 it('has correct prohibited actions', function () {
@@ -110,9 +82,9 @@ it('has correct prohibited actions', function () {
 // --- PasskeyList data ---
 
 it('returns list data for authenticated user', function () {
-    $user = createPasskeyTestUser();
+    $user = createPasskeyUser();
     createPasskey($user, ['name' => 'My Passkey', 'last_used_at' => now()->subDay()]);
-    loginPasskeyUser($user);
+    login($user);
 
     $list = app(PasskeyList::class);
     $data = $list->getListData();
@@ -122,10 +94,10 @@ it('returns list data for authenticated user', function () {
 });
 
 it('does not return passkeys of other users', function () {
-    $user = createPasskeyTestUser();
-    $otherUser = createPasskeyTestUser(['email' => 'other@example.org']);
+    $user = createPasskeyUser();
+    $otherUser = createPasskeyUser(['email' => 'other@example.org']);
     createPasskey($otherUser, ['name' => 'Other Passkey']);
-    loginPasskeyUser($user);
+    login($user);
 
     $list = app(PasskeyList::class);
     $data = $list->getListData();
@@ -134,9 +106,9 @@ it('does not return passkeys of other users', function () {
 });
 
 it('transforms last_used_at to human readable format', function () {
-    $user = createPasskeyTestUser();
+    $user = createPasskeyUser();
     createPasskey($user, ['last_used_at' => now()->subHour()]);
-    loginPasskeyUser($user);
+    login($user);
 
     $list = app(PasskeyList::class);
     $data = $list->getListData();
@@ -147,9 +119,9 @@ it('transforms last_used_at to human readable format', function () {
 // --- PasskeyList delete ---
 
 it('deletes a passkey for the authenticated user', function () {
-    $user = createPasskeyTestUser();
+    $user = createPasskeyUser();
     $passkey = createPasskey($user);
-    loginPasskeyUser($user);
+    login($user);
 
     $list = app(PasskeyList::class);
     $list->delete($passkey->id);
@@ -158,10 +130,10 @@ it('deletes a passkey for the authenticated user', function () {
 });
 
 it('cannot delete another user passkey', function () {
-    $user = createPasskeyTestUser();
-    $otherUser = createPasskeyTestUser(['email' => 'other@example.org']);
+    $user = createPasskeyUser();
+    $otherUser = createPasskeyUser(['email' => 'other@example.org']);
     $passkey = createPasskey($otherUser);
-    loginPasskeyUser($user);
+    login($user);
 
     $list = app(PasskeyList::class);
 
@@ -172,9 +144,9 @@ it('cannot delete another user passkey', function () {
 // --- UpdatePasskeyNameCommand ---
 
 it('renames a passkey', function () {
-    $user = createPasskeyTestUser();
+    $user = createPasskeyUser();
     $passkey = createPasskey($user);
-    loginPasskeyUser($user);
+    login($user);
 
     $command = app(UpdatePasskeyNameCommand::class);
     $command->execute($passkey->id, ['name' => 'Renamed Passkey']);
@@ -183,9 +155,9 @@ it('renames a passkey', function () {
 });
 
 it('validates name is required when renaming', function () {
-    $user = createPasskeyTestUser();
+    $user = createPasskeyUser();
     $passkey = createPasskey($user);
-    loginPasskeyUser($user);
+    login($user);
 
     $command = app(UpdatePasskeyNameCommand::class);
 
@@ -193,16 +165,27 @@ it('validates name is required when renaming', function () {
         ->toThrow(ValidationException::class);
 });
 
+it('authenticates user directly when logging in with passkey', function () {
+    $user = createPasskeyUser();
+    $passkey = createPasskey($user);
+
+    loginUsingSpatiePasskey($passkey);
+
+    $this->get(route('code16.sharp.passkeys.authenticated'))
+        ->assertRedirect(route('code16.sharp.home'));
+
+    expect(auth()->check())->toBeTrue();
+    expect(auth()->user()->id)->toBe($user->id);
+});
+
 // --- PasskeyEventSubscriber ---
 
 it('queues a cookie when passkey is used to authenticate', function () {
     // here we expects the SharpInternalServiceProvider is booted
-    $user = createPasskeyTestUser();
+    $user = createPasskeyUser();
     $passkey = createPasskey($user);
 
-    $request = \Mockery::mock(AuthenticateUsingPasskeysRequest::class);
-    $event = new PasskeyUsedToAuthenticateEvent($passkey, $request);
-    app(Dispatcher::class)->dispatch($event);
+    loginUsingSpatiePasskey($passkey);
 
     $queued = Cookie::getQueuedCookies();
     $names = array_map(fn ($c) => $c->getName(), $queued);
@@ -212,9 +195,9 @@ it('queues a cookie when passkey is used to authenticate', function () {
 // --- Usage badge ---
 
 it('shows usage badge when passkey matches cookie', function () {
-    $user = createPasskeyTestUser();
+    $user = createPasskeyUser();
     $passkey = createPasskey($user);
-    loginPasskeyUser($user);
+    login($user);
 
     request()->cookies->set('sharp_last_used_passkey', (string) $passkey->id);
 
@@ -225,9 +208,9 @@ it('shows usage badge when passkey matches cookie', function () {
 });
 
 it('does not show usage badge when passkey does not match cookie', function () {
-    $user = createPasskeyTestUser();
+    $user = createPasskeyUser();
     createPasskey($user);
-    loginPasskeyUser($user);
+    login($user);
 
     request()->cookies->set('sharp_last_used_passkey', '99999');
 
@@ -240,14 +223,14 @@ it('does not show usage badge when passkey does not match cookie', function () {
 // --- PasskeyController tests ---
 
 it('renders the passkey create page', function () {
-    loginPasskeyUser();
+    login(createPasskeyUser());
 
     $this->get(route('code16.sharp.passkeys.create'))
         ->assertOk();
 });
 
 it('renders the passkey create page with prompt parameter', function () {
-    loginPasskeyUser();
+    login(createPasskeyUser());
 
     $this->get(route('code16.sharp.passkeys.create', ['prompt' => 1]))
         ->assertOk();
@@ -259,40 +242,40 @@ it('requires authentication to access passkey create', function () {
 });
 
 it('validates name on passkey validate endpoint', function () {
-    loginPasskeyUser();
+    login(createPasskeyUser());
 
-    $this->postJson(route('code16.sharp.passkeys.validate'), ['name' => ''])
+    $this->postJson(route('code16.sharp.passkeys.spatie.validate'), ['name' => ''])
         ->assertJsonValidationErrors('name');
 
-    $this->postJson(route('code16.sharp.passkeys.validate'), ['name' => str_repeat('a', 256)])
+    $this->postJson(route('code16.sharp.passkeys.spatie.validate'), ['name' => str_repeat('a', 256)])
         ->assertJsonValidationErrors('name');
 });
 
 it('returns passkey options on successful validate', function () {
-    $user = createPasskeyTestUser();
-    loginPasskeyUser($user);
+    $user = createPasskeyUser();
+    login($user);
 
     // Configure a fake action that returns a JSON string
     config()->set('passkeys.actions.generate_passkey_register_options', FakeGeneratePasskeyRegisterOptionsAction::class);
 
-    $this->postJson(route('code16.sharp.passkeys.validate'), ['name' => 'My Key'])
+    $this->postJson(route('code16.sharp.passkeys.spatie.validate'), ['name' => 'My Key'])
         ->assertOk()
         ->assertJsonStructure(['passkeyOptions']);
 });
 
 it('store endpoint requires authentication', function () {
-    $this->post(route('code16.sharp.passkeys.store'))
+    $this->post(route('code16.sharp.passkeys.spatie.store'))
         ->assertRedirect();
 });
 
 it('store endpoint catches action errors and throws validation exception', function () {
-    $user = createPasskeyTestUser();
-    loginPasskeyUser($user);
+    $user = createPasskeyUser();
+    login($user);
 
     // Put fake options in session as the controller expects them
     session()->put('passkey-registration-options', '{"fake":"options"}');
 
-    $this->postJson(route('code16.sharp.passkeys.store'), [
+    $this->postJson(route('code16.sharp.passkeys.spatie.store'), [
         'passkey' => 'invalid-passkey-data',
         'name' => 'My Key',
     ])
@@ -300,18 +283,10 @@ it('store endpoint catches action errors and throws validation exception', funct
         ->assertJsonValidationErrors('name');
 });
 
-class FakeStorePasskeyAction extends StorePasskeyAction
-{
-    public static $mock;
-    public function execute($authenticatable, $passkeyJson, $passkeyOptionsJson, $hostName, $additionalProperties = []): Passkey
-    {
-        return static::$mock->execute($authenticatable, $passkeyJson, $passkeyOptionsJson, $hostName, $additionalProperties);
-    }
-}
 
 it('store endpoint calls StorePasskeyAction with appropriate arguments', function () {
-    $user = createPasskeyTestUser();
-    loginPasskeyUser($user);
+    $user = createPasskeyUser();
+    login($user);
 
     $passkeyData = '{"id":"some-id","rawId":"some-raw-id","type":"public-key","response":{"attestationObject":"some-attestation","clientDataJSON":"some-client-data"}}';
     $passkeyOptions = '{"challenge":"some-challenge"}';
@@ -319,7 +294,7 @@ it('store endpoint calls StorePasskeyAction with appropriate arguments', functio
 
     session()->put('passkey-registration-options', $passkeyOptions);
 
-    $mockAction = \Mockery::mock(Spatie\LaravelPasskeys\Actions\StorePasskeyAction::class);
+    $mockAction = \Mockery::mock(StorePasskeyAction::class);
     $mockAction->shouldReceive('execute')
         ->once()
         ->withArgs(function ($authenticatable, $passkeyJson, $optionsJson, $host, $additionalProperties) use ($user, $passkeyData, $passkeyOptions, $passkeyName) {
@@ -334,11 +309,11 @@ it('store endpoint calls StorePasskeyAction with appropriate arguments', functio
     FakeStorePasskeyAction::$mock = $mockAction;
     config()->set('passkeys.actions.store_passkey', FakeStorePasskeyAction::class);
 
-    $this->postJson(route('code16.sharp.passkeys.store'), [
+    $this->postJson(route('code16.sharp.passkeys.spatie.store'), [
         'passkey' => $passkeyData,
         'name' => $passkeyName,
     ])
-        ->assertRedirect(route('code16.sharp.home'));
+        ->assertRedirect(route('code16.sharp.passkeys.registered'));
 
     $mockAction->shouldHaveReceived('execute');
 });
@@ -346,7 +321,7 @@ it('store endpoint calls StorePasskeyAction with appropriate arguments', functio
 // --- PasskeySkipPromptController tests ---
 
 it('skip prompt redirects to home with cookie', function () {
-    loginPasskeyUser();
+    login(createPasskeyUser());
 
     $this->post(route('code16.sharp.passkeys.skip-prompt'))
         ->assertRedirect(route('code16.sharp.home'))
@@ -355,16 +330,12 @@ it('skip prompt redirects to home with cookie', function () {
 
 // --- Fixtures ---
 
-class TestPasskey extends Passkey
+class FakeStorePasskeyAction extends StorePasskeyAction
 {
-    protected $table = 'passkeys';
-
-    public function data(): Attribute
+    public static $mock;
+    public function execute($authenticatable, $passkeyJson, $passkeyOptionsJson, $hostName, $additionalProperties = []): Passkey
     {
-        return new Attribute(
-            get: fn ($value) => $value,
-            set: fn ($value) => ['data' => is_string($value) ? $value : json_encode($value)],
-        );
+        return static::$mock->execute($authenticatable, $passkeyJson, $passkeyOptionsJson, $hostName, $additionalProperties);
     }
 }
 
@@ -376,24 +347,3 @@ class FakeGeneratePasskeyRegisterOptionsAction extends GeneratePasskeyRegisterOp
     }
 }
 
-class PasskeyTestUser extends User implements HasPasskeys
-{
-    use InteractsWithPasskeys;
-
-    protected $table = 'users';
-
-    public function getPasskeyName(): string
-    {
-        return $this->email;
-    }
-
-    public function getPasskeyId(): string
-    {
-        return (string) $this->id;
-    }
-
-    public function getPasskeyDisplayName(): string
-    {
-        return $this->name ?? $this->email;
-    }
-}

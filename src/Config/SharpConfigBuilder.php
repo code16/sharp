@@ -511,6 +511,18 @@ class SharpConfigBuilder
         return $this;
     }
 
+    public function enable2faByPasskey(): self
+    {
+        $this->config['auth']['2fa'] = [
+            'enabled' => true,
+            'handler' => 'passkey',
+        ];
+
+        $this->enablePasskeys();
+
+        return $this;
+    }
+
     public function enablePasskeys(bool $promptAfterLogin = true): self
     {
         $this->config['auth']['passkeys'] = [

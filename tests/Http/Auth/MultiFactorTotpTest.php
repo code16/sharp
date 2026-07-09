@@ -73,7 +73,11 @@ beforeEach(function () {
 });
 
 it('redirects to 2fa code page after successful first step login', function () {
-    $this->post(route('code16.sharp.login.post'), ['login' => 'test@example.org', 'password' => 'password'])
+    $this
+        ->post(
+            route('code16.sharp.login.post'),
+            ['login' => 'test@example.org', 'password' => 'password']
+        )
         ->assertRedirect(route('code16.sharp.login.2fa'));
 });
 
