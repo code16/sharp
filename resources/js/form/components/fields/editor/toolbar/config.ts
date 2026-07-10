@@ -16,7 +16,7 @@ import {
     ImageIcon,
     Paperclip, Minus, SquarePlay, CodeXml, FileCode, Undo, Redo, TextQuote,
     Superscript,
-    StickyNote,
+    SquareAsterisk,
 } from "lucide-vue-next";
 import { Component } from "vue";
 
@@ -139,7 +139,7 @@ export const buttons: { [key in Exclude<FormEditorToolbarButton, '|' | 'link' | 
     'footnote': {
         command: editor => editor.chain().focus().addFootnote().run(),
         isActive: editor => false,
-        icon: StickyNote,
+        icon: SquareAsterisk,
         label: () => __('sharp::form.editor.toolbar.footnote.title'),
     },
     'undo': {

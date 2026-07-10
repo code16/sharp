@@ -419,6 +419,7 @@
                                 'group/editor content w-full rounded-b-md focus:outline-none px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50',
                                 '[&_.selection-highlight]:bg-[Highlight] [&_.selection-highlight]:py-0.5',
                                 '[&_.ProseMirror-selectednode]:outline-none! [&:focus_.ProseMirror-selectednode]:ring-1 [&_.ProseMirror-selectednode]:ring-primary',
+                                `[&_.footnote-ref]:before:content-['['] [&_.footnote-ref]:after:content-[']']`,
                                 {
                                     'content-lg max-w-3xl mx-auto py-6 px-4 sm:px-6 text-base min-h-max': isFullscreen,
                                 },

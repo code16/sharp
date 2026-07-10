@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}">
+<html lang="{{ app()->getLocale() }}"
+    class="[&:not(:has(:is([data-sticky-top],.sticky):focus-within))]:scroll-pt-48 scroll-pb-24"
+>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
