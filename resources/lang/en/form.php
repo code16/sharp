@@ -132,6 +132,9 @@ return [
     'editor.toolbar.upload_image.title' => 'Insert image',
     'editor.toolbar.horizontal_rule.title' => 'Horizontal rule',
     'editor.toolbar.fullscreen.title' => 'Full screen',
+    'editor.toolbar.footnote.title' => 'Footnote',
     'editor.toolbar.undo.title' => 'Undo',
     'editor.toolbar.redo.title' => 'Redo',
+
+    'editor.footnotes.title' => 'Footnotes',
 ];

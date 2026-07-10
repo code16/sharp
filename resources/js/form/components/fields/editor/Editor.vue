@@ -363,7 +363,7 @@
                 </template>
 
                 <div :class="cn(
-                    'flex-1 grid grid-cols-1 overflow-y-auto overflow-x-clip',
+                    'flex-1 grid grid-cols-1 overflow-y-auto scroll-py-4 overflow-x-clip',
                         isFullscreen
                             ? 'lg:[scrollbar-gutter:stable]'
                             : ['min-h-20', {
@@ -419,11 +419,12 @@
                                 'group/editor content w-full rounded-b-md focus:outline-none px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50',
                                 '[&_.selection-highlight]:bg-[Highlight] [&_.selection-highlight]:py-0.5',
                                 '[&_.ProseMirror-selectednode]:outline-none! [&:focus_.ProseMirror-selectednode]:ring-1 [&_.ProseMirror-selectednode]:ring-primary',
-                                `[&_.footnote-ref]:before:content-['['] [&_.footnote-ref]:after:content-[']']`,
+                                `[&_.footnotes]:before:content-(--footnote-title) [&_.footnotes]:before:text-xs [&_.footnotes]:before:text-muted-foreground [&_.footnotes]:before:block [&_.footnotes]:before:ml-[-1.75em] [&_.footnotes]:before:mb-2 [&_.footnotes]:-mx-3 [&_.footnotes]:pt-2 [&_.footnotes]:pb-2 [&_.footnotes]:pr-3 [&_.footnotes]:pl-[calc(.75rem+1.75em)] [&_.footnotes>li]:relative [&_.footnotes>li]:pl-[1.25em] [&_.footnotes]:border-t [&_.footnote-ref]:underline [&_.footnote-ref]:underline-offset-4 [&_.footnote-ref]:decoration-foreground/20 [&_.footnote-ref]:hover:decoration-foreground [&_.footnote-ref]:before:content-['['] [&_.footnote-ref]:after:content-[']']`,
                                 {
                                     'content-lg max-w-3xl mx-auto py-6 px-4 sm:px-6 text-base min-h-max': isFullscreen,
                                 },
                             )"
+                            :style="{ '--footnote-title': `'${__('sharp::form.editor.footnotes.title')}'` }"
                             role="textbox"
                         />
                     </div>

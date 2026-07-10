@@ -135,6 +135,9 @@ return [
     'editor.toolbar.upload_image.title' => 'Insérer une image',
     'editor.toolbar.horizontal_rule.title' => 'Séparateur',
     'editor.toolbar.fullscreen.title' => 'Plein écran',
+    'editor.toolbar.footnote.title' => 'Note de bas de page',
     'editor.toolbar.undo.title' => 'Annuler',
     'editor.toolbar.redo.title' => 'Rétablir',
+
+    'editor.footnotes.title' => 'Notes de bas de page',
 ];
