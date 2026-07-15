@@ -136,6 +136,7 @@ return [
     'editor.toolbar.horizontal_rule.title' => 'Séparateur',
     'editor.toolbar.fullscreen.title' => 'Plein écran',
     'editor.toolbar.footnote.title' => 'Note de bas de page',
+    'editor.toolbar.footnote.tootlip' => 'Cliquez pour insérer une référence<br>Cliquez sur la référence <sup>[1]</sup> pour descendre vers la note et éditer son contenu<br>Cliquez sur <sup>[^]</sup> pour remonter vers la référence',
     'editor.toolbar.undo.title' => 'Annuler',
     'editor.toolbar.redo.title' => 'Rétablir',
 

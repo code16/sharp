@@ -27,7 +27,7 @@ export const Footnotes = Extension.create({
                                                     const a = document.createElement('a');
                                                     a.href = `#fnref:${refId}`;
                                                     a.draggable = false;
-                                                    a.className = 'underline underline-offset-4 decoration-foreground/20 hover:decoration-foreground select-none';
+                                                    a.className = 'underline p-1 -m-1 underline-offset-4 decoration-foreground/20 hover:decoration-foreground select-none';
                                                     a.textContent = '[^]';
                                                     sup.className = 'footnote-backref absolute left-[.125em] top-1.5'
                                                     sup.appendChild(a);
@@ -66,7 +66,7 @@ export const Footnotes = Extension.create({
                                     )
                                     .run();
 
-                                matchedFootnote.element.scrollIntoView({ block: 'end' });
+                                matchedFootnote.element.scrollIntoView({ block: 'nearest' });
                                 return true;
                             }
                             return false;
