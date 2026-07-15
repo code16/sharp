@@ -3,11 +3,13 @@
 namespace Code16\Sharp\Http\Controllers\Api\Embeds;
 
 use Code16\Sharp\Data\Embeds\EmbedFormData;
+use Code16\Sharp\Http\Controllers\Api\HandlesFieldContainer;
 use Code16\Sharp\Http\Controllers\Controller;
 
 class ApiEmbedsFormController extends Controller
 {
     use HandlesEmbed;
+    use HandlesFieldContainer;
 
     public function show(string $globalFilter, string $embedKey, string $entityKey, ?string $instanceId = null)
     {
@@ -17,7 +19,7 @@ class ApiEmbedsFormController extends Controller
             $this->authorizationManager->check('entity', $entityKey);
         }
 
-        $embed = $this->getEmbedFromKey($embedKey);
+        $embed = $this->getEmbedFromKey($entityKey, $embedKey);
 
         return EmbedFormData::from([
             'fields' => $embed->fields(),
@@ -36,7 +38,7 @@ class ApiEmbedsFormController extends Controller
             $this->authorizationManager->check('create', $entityKey);
         }
 
-        $embed = $this->getEmbedFromKey($embedKey);
+        $embed = $this->getEmbedFromKey($entityKey, $embedKey);
 
         $data = $embed->updateContent(
             $embed->formatRequestData(request()->all())

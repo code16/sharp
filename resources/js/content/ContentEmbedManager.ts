@@ -1,5 +1,5 @@
 import { Form } from "@/form/Form";
-import { EmbedData, FormData, FormEditorFieldData } from "@/types";
+import { EmbedData, FormData, FormEditorFieldData, RequestFieldContainerData } from "@/types";
 import { api } from "@/api/api";
 import { route } from "@/utils/url";
 import { Show } from "@/show/Show";
@@ -97,7 +97,7 @@ export class ContentEmbedManager<Root extends Form | Show> {
         };
     }
 
-    postResolveForm(id: string, embed: EmbedData): Promise<FormData> {
+    postResolveForm(id: string, embed: EmbedData, fieldContainerData: RequestFieldContainerData): Promise<FormData> {
         const { entityKey, instanceId } = this.root;
 
         return api
@@ -105,19 +105,27 @@ export class ContentEmbedManager<Root extends Form | Show> {
                 instanceId
                     ? route('code16.sharp.api.embed.instance.form.show', { embedKey: embed.key, entityKey, instanceId })
                     : route('code16.sharp.api.embed.form.show', { embedKey: embed.key, entityKey }),
-                { ...this.contentEmbeds[embed.key]?.[id]?.value }
+                { ...this.contentEmbeds[embed.key]?.[id]?.value },
+                { params: { ...fieldContainerData } },
             )
             .then(response => response.data);
     }
 
-    async postForm(id: string, embed: EmbedData, locale: string | null, data: EmbedData['value']): Promise<{ id:string }> {
+    async postForm(
+        id: string,
+        embed: EmbedData,
+        locale: string | null,
+        fieldContainerData: RequestFieldContainerData,
+        data: EmbedData['value'],
+    ): Promise<{ id:string }> {
         const { entityKey, instanceId } = this.root;
         const responseData = await api
             .post(
                 instanceId
                     ? route('code16.sharp.api.embed.instance.form.update', { embedKey: embed.key, entityKey, instanceId })
                     : route('code16.sharp.api.embed.form.update', { embedKey: embed.key, entityKey }),
-                { ...data }
+                { ...data },
+                { params: { ...fieldContainerData } }
             )
             .then(response => response.data);
 

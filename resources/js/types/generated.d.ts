@@ -814,6 +814,7 @@ export type PieGraphWidgetData = {
 };
 export type RequestFieldContainerData = {
   embed_key: string | null;
+  embed_editor_key: string | null;
   entity_list_command_key: string | null;
   show_command_key: string | null;
   dashboard_command_key: string | null;

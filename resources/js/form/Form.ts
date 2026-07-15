@@ -42,18 +42,24 @@ export class Form implements FormData, CommandFormData, EventTarget {
     entityKey: string;
     instanceId: string | number | null;
     embedKey?: string;
+    embedEditorKey?: string;
     commandKey?: string;
 
     constructor(
         data: FormData | EmbedFormData,
         entityKey: string,
         instanceId: string | number | null,
-        additionalProps?: { embedKey?: string, commandKey?: string }
+        additionalProps?: {
+            embedKey?: string,
+            embedEditorKey?: string,
+            commandKey?: string,
+        }
     ) {
         Object.assign(this, data);
         this.entityKey = entityKey;
         this.instanceId = instanceId;
         this.embedKey = additionalProps?.embedKey;
+        this.embedEditorKey = additionalProps?.embedEditorKey;
         this.commandKey = additionalProps?.commandKey;
     }
 

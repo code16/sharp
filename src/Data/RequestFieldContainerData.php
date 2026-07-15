@@ -9,6 +9,7 @@ final class RequestFieldContainerData extends Data
 {
     public function __construct(
         public ?string $embed_key,
+        public ?string $embed_editor_key,
         public ?string $entity_list_command_key,
         public ?string $show_command_key,
         public ?string $dashboard_command_key,
@@ -19,6 +20,7 @@ final class RequestFieldContainerData extends Data
     {
         return new self(
             embed_key: $request['embed_key'] ?? null,
+            embed_editor_key: $request['embed_editor_key'] ?? null,
             entity_list_command_key: $request['entity_list_command_key'] ?? null,
             show_command_key: $request['show_command_key'] ?? null,
             dashboard_command_key: $request['dashboard_command_key'] ?? null,

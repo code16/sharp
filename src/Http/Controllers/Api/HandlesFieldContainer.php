@@ -19,12 +19,15 @@ trait HandlesFieldContainer
     use HandlesEntityCommand;
     use HandlesInstanceCommand;
 
-    private function getFieldContainer(EntityKey $entityKey): SharpFormEditorEmbed|Command|SharpForm
+    private function getFieldContainer(EntityKey $entityKey, ?RequestFieldContainerData $requestFieldContainerData = null): SharpFormEditorEmbed|Command|SharpForm
     {
-        $requestFieldContainerData = RequestFieldContainerData::from(request()->query());
+        $requestFieldContainerData ??= RequestFieldContainerData::from(request()->query());
 
         if ($requestFieldContainerData->embed_key) {
-            return $this->getEmbedFromKey($requestFieldContainerData->embed_key);
+            return $this->getEmbedFromKey(
+                $entityKey,
+                $requestFieldContainerData->embed_key,
+            );
         }
 
         $entity = $this->entityManager->entityFor($entityKey);

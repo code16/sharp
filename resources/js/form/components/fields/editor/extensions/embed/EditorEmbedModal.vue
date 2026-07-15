@@ -16,23 +16,26 @@
     } from "@/components/ui/dialog";
     import { Button } from "@/components/ui/button";
     import type FormComponent from "@/form/components/Form.vue";
+    import { useFieldContainerData } from "@/form/useFieldContainerData";
 
     const props = defineProps<{
         field: FormEditorFieldData,
         editor: Editor,
     }>();
     const parentForm = useParentForm();
-    const embedManager = useParentEditor().embedManager;
+    const parentEditor = useParentEditor();
     const modalEmbed = ref<{ id?: string, embed: EmbedData, locale: string | null, form?: Form, loading?: boolean } | null>(null);
     const modalForm = useTemplateRef<InstanceType<typeof FormComponent>>('modalForm');
     const modalOpen = ref(false);
+    const fieldContainerData = useFieldContainerData(parentForm);
 
     async function postForm(data: EmbedData['value']) {
         modalEmbed.value.loading = true;
-        const { id } = await embedManager.postForm(
+        const { id } = await parentEditor.embedManager.postForm(
             modalEmbed.value.id,
             modalEmbed.value.embed,
             modalEmbed.value.locale,
+            fieldContainerData,
             data
         )
             .finally(() => {
@@ -51,12 +54,19 @@
 
     async function open({ id, embed, locale }: { id?: string, embed: EmbedData, locale: string | null }) {
         if(Object.keys(embed.fields).length > 0) {
-            const embedForm = await embedManager.postResolveForm(id, embed);
+            const embedForm = await parentEditor.embedManager.postResolveForm(id, embed, fieldContainerData);
             modalEmbed.value = {
                 id,
                 embed,
                 locale,
-                form: new Form(embedForm, parentForm.entityKey, parentForm.instanceId, { embedKey: embed.key }),
+                form: new Form(
+                    embedForm,
+                    parentForm.entityKey,
+                    parentForm.instanceId,
+                    {
+                        embedKey: embed.key,
+                    }
+                ),
             }
             modalOpen.value = true;
         } else {
