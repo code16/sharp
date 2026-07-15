@@ -8,6 +8,7 @@ use Code16\Sharp\Exceptions\Form\SharpFormUpdateException;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Form\SharpSingleForm;
 use Code16\Sharp\Utils\Entities\ValueObjects\EntityKey;
+use Code16\Sharp\Utils\Fields\FieldIdentifierFactory;
 use Code16\Sharp\Utils\Uploads\SharpUploadManager;
 use Illuminate\Support\Uri;
 use Inertia\Inertia;
@@ -215,7 +216,7 @@ class FormController extends Controller
     private function buildFormData(SharpForm $form, array $formData, string $entityKey, $instanceId = null): array
     {
         return [
-            'fields' => $form->fields(),
+            'fields' => $form->fields(app(FieldIdentifierFactory::class)->form(instanceId: $instanceId)),
             'layout' => $form->formLayout(),
             'config' => $form->formConfig(),
             'data' => $form->applyFormatters($formData),

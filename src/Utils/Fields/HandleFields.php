@@ -36,11 +36,14 @@ trait HandleFields
     /**
      * Get the SharpFormField|SharpShowField array representation.
      */
-    final public function fields(): array
+    final public function fields(?FieldIdentifier $baseIdentifier = null): array
     {
         return $this->getBuiltFields()
             ->when($this->pageTitleField ?? null, fn ($collection) => $collection->push($this->pageTitleField))
-            ->map(fn ($collection) => $collection->toArray())
+            ->map(fn ($field) => [
+                ...$field->toArray(),
+                'identifier' => $baseIdentifier?->forField($field)->encrypt(),
+            ])
             ->keyBy('key')
             ->all();
     }

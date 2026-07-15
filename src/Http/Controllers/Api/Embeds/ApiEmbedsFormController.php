@@ -4,12 +4,13 @@ namespace Code16\Sharp\Http\Controllers\Api\Embeds;
 
 use Code16\Sharp\Data\Embeds\EmbedFormData;
 use Code16\Sharp\Http\Controllers\Controller;
+use Code16\Sharp\Utils\Fields\FieldIdentifierFactory;
 
 class ApiEmbedsFormController extends Controller
 {
     use HandlesEmbed;
 
-    public function show(string $globalFilter, string $embedKey, string $entityKey, ?string $instanceId = null)
+    public function show(FieldIdentifierFactory $fieldIdentifierFactory, string $globalFilter, string $embedKey, string $entityKey, ?string $instanceId = null)
     {
         if ($instanceId) {
             $this->authorizationManager->check('view', $entityKey, $instanceId);
@@ -20,7 +21,11 @@ class ApiEmbedsFormController extends Controller
         $embed = $this->getEmbedFromKey($embedKey);
 
         return EmbedFormData::from([
-            'fields' => $embed->fields(),
+            'fields' => $embed->fields(
+                $fieldIdentifierFactory
+                    ->decrypt(request()->query('identifier'))
+                    ->embed(embedKey: $embed->key())
+            ),
             'layout' => $embed->formLayout(),
             'data' => $embed->applyFormatters(
                 $embed->transformDataForFormFields(request()->all())
