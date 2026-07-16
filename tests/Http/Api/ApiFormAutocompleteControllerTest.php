@@ -3,11 +3,13 @@
 use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
 use Code16\Sharp\EntityList\Commands\SingleInstanceCommand;
+use Code16\Sharp\Exceptions\SharpInvalidConfigException;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteRemoteField;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
+use Code16\Sharp\Tests\Fixtures\Entities\SinglePersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonForm;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonShow;
@@ -379,7 +381,7 @@ it('fails if field is missing', function () {
             'entityKey' => 'person',
             'autocompleteFieldKey' => 'autocomplete_field',
         ]));
-})->throws(\Code16\Sharp\Exceptions\SharpInvalidConfigException::class);
+})->throws(SharpInvalidConfigException::class);
 
 it('fails if field is not a remote autocomplete field', function () {
     $this->withoutExceptionHandling();
@@ -399,7 +401,7 @@ it('fails if field is not a remote autocomplete field', function () {
             'entityKey' => 'person',
             'autocompleteFieldKey' => 'name',
         ]));
-})->throws(\Code16\Sharp\Exceptions\SharpInvalidConfigException::class);
+})->throws(SharpInvalidConfigException::class);
 
 it('validates that the sent remote endpoint is the same that was defined in the autocomplete field', function () {
     $this->withoutExceptionHandling();
@@ -427,7 +429,7 @@ it('validates that the sent remote endpoint is the same that was defined in the 
             'endpoint' => '/another/endpoint',
             'search' => 'my search',
         ]);
-})->throws(\Code16\Sharp\Exceptions\SharpInvalidConfigException::class);
+})->throws(SharpInvalidConfigException::class);
 
 it('allows the defined endpoint to have a querystring', function () {
     $this->withoutExceptionHandling();
@@ -602,7 +604,7 @@ it('won’t allow external remote endpoint', function () {
             'endpoint' => 'https://google.fr',
             'search' => 'my search',
         ]);
-})->throws(\Code16\Sharp\Exceptions\SharpInvalidConfigException::class);
+})->throws(SharpInvalidConfigException::class);
 
 it('allows internal remote endpoint with a querystring', function () {
     $this->withoutExceptionHandling();
@@ -829,7 +831,9 @@ it('allows to call an functional endpoint for a remote autocomplete field in an 
 });
 
 it('allows to call an functional endpoint for a remote autocomplete field in an InstanceCommand of a SingleShow', function () {
-    fakeShowFor('person', new class() extends PersonSingleShow
+    sharp()->config()->declareEntity(SinglePersonEntity::class);
+
+    fakeShowFor(SinglePersonEntity::class, new class() extends PersonSingleShow
     {
         public function getInstanceCommands(): ?array
         {
@@ -866,7 +870,7 @@ it('allows to call an functional endpoint for a remote autocomplete field in an 
 
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
-            'entityKey' => 'person',
+            'entityKey' => 'single-person',
             'autocompleteFieldKey' => 'autocomplete_field',
             'show_command_key' => 'my-command',
             'endpoint' => '/my/endpoint',

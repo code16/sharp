@@ -6,7 +6,6 @@ use Code16\Sharp\Data\RequestFieldContainerData;
 use Code16\Sharp\EntityList\Commands\Command;
 use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
 use Code16\Sharp\Form\SharpForm;
-use Code16\Sharp\Form\SharpSingleForm;
 use Code16\Sharp\Http\Controllers\Api\Commands\HandlesDashboardCommand;
 use Code16\Sharp\Http\Controllers\Api\Commands\HandlesEntityCommand;
 use Code16\Sharp\Http\Controllers\Api\Commands\HandlesInstanceCommand;
@@ -33,6 +32,8 @@ trait HandlesFieldContainer
         $entity = $this->entityManager->entityFor($entityKey);
 
         if ($commandKey = $requestFieldContainerData->entity_list_command_key) {
+            $this->authorizationManager->check('entity', $entityKey);
+
             if ($requestFieldContainerData->instance_id) {
                 return $this->getInstanceCommandHandler(
                     $entity->getListOrFail(),
@@ -48,6 +49,8 @@ trait HandlesFieldContainer
         }
 
         if ($commandKey = $requestFieldContainerData->show_command_key) {
+            $this->authorizationManager->check('view', $entityKey, $requestFieldContainerData->instance_id);
+
             return $this->getInstanceCommandHandler(
                 $entity->getShowOrFail(),
                 $commandKey,
@@ -56,15 +59,15 @@ trait HandlesFieldContainer
         }
 
         if ($commandKey = $requestFieldContainerData->dashboard_command_key) {
+            $this->authorizationManager->check('entity', $entityKey);
+
             return $this->getDashboardCommandHandler(
                 $entity->getViewOrFail(),
                 $commandKey
             );
         }
 
-        $form = $entity->getFormOrFail($entityKey->multiformKey());
-
-        if ($requestFieldContainerData->instance_id !== null) {
+        if ($requestFieldContainerData->instance_id !== null || $entity->isSingle()) {
             if ($isUpdate) {
                 $this->authorizationManager->check('update', $entityKey, $requestFieldContainerData->instance_id);
             } else {
@@ -72,12 +75,12 @@ trait HandlesFieldContainer
             }
         } else {
             if ($isUpdate) {
-                $this->authorizationManager->check($form instanceof SharpSingleForm ? 'update' : 'create', $entityKey);
+                $this->authorizationManager->check('create', $entityKey);
             } else {
                 $this->authorizationManager->check('entity', $entityKey);
             }
         }
 
-        return $form;
+        return $entity->getFormOrFail($entityKey->multiformKey());
     }
 }
