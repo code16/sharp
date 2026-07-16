@@ -9,6 +9,7 @@ use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
+use Code16\Sharp\Tests\Fixtures\Entities\SinglePersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonForm;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonShow;
@@ -830,7 +831,9 @@ it('allows to call an functional endpoint for a remote autocomplete field in an 
 });
 
 it('allows to call an functional endpoint for a remote autocomplete field in an InstanceCommand of a SingleShow', function () {
-    fakeShowFor('person', new class() extends PersonSingleShow
+    sharp()->config()->declareEntity(SinglePersonEntity::class);
+
+    fakeShowFor(SinglePersonEntity::class, new class() extends PersonSingleShow
     {
         public function getInstanceCommands(): ?array
         {
@@ -867,7 +870,7 @@ it('allows to call an functional endpoint for a remote autocomplete field in an 
 
     $this
         ->postJson(route('code16.sharp.api.form.autocomplete.index', [
-            'entityKey' => 'person',
+            'entityKey' => 'single-person',
             'autocompleteFieldKey' => 'autocomplete_field',
             'show_command_key' => 'my-command',
             'endpoint' => '/my/endpoint',

@@ -11,7 +11,7 @@ class ApiFormRefreshController extends Controller
 
     public function update(string $globalFilter, EntityKey $entityKey)
     {
-        $fieldContainer = $this->getFieldContainer($entityKey);
+        $fieldContainer = $this->getFieldContainer($entityKey, isUpdate: false);
 
         return response()->json([
             'form' => [

@@ -20,6 +20,8 @@ class ApiEntityListEntityCommandController extends Controller
 
     public function show(string $globalFilter, string $entityKey, string $commandKey)
     {
+        $this->authorizationManager->check('entity', $entityKey);
+
         $list = $this->entityManager->entityFor($entityKey)->getListOrFail();
         $list->buildListConfig();
         $list->initQueryParams(request()->query());
@@ -35,6 +37,8 @@ class ApiEntityListEntityCommandController extends Controller
 
     public function update(string $globalFilter, string $entityKey, string $commandKey)
     {
+        $this->authorizationManager->check('entity', $entityKey);
+
         $list = $this->entityManager->entityFor($entityKey)->getListOrFail();
         $list->buildListConfig();
         $list->initQueryParams(request()->input('query'));

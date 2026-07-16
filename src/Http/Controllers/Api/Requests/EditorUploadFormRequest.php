@@ -15,6 +15,6 @@ class EditorUploadFormRequest extends FormRequest
 
     protected function prepareForValidation()
     {
-        $this->merge($this->get('data'));
+        $this->merge($this->input('data'));
     }
 }

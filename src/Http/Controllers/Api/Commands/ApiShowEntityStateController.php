@@ -13,6 +13,8 @@ class ApiShowEntityStateController extends Controller
 
     public function update(string $globalFilter, string $entityKey, mixed $instanceId = null)
     {
+        $this->authorizationManager->check('view', $entityKey, $instanceId);
+
         $showPage = $this->getShowPage($entityKey, $instanceId);
         $stateHandler = $showPage->entityStateHandler();
 
