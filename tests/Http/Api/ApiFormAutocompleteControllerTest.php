@@ -3,6 +3,7 @@
 use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
 use Code16\Sharp\EntityList\Commands\SingleInstanceCommand;
+use Code16\Sharp\Exceptions\SharpInvalidConfigException;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteRemoteField;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormListField;
@@ -379,7 +380,7 @@ it('fails if field is missing', function () {
             'entityKey' => 'person',
             'autocompleteFieldKey' => 'autocomplete_field',
         ]));
-})->throws(\Code16\Sharp\Exceptions\SharpInvalidConfigException::class);
+})->throws(SharpInvalidConfigException::class);
 
 it('fails if field is not a remote autocomplete field', function () {
     $this->withoutExceptionHandling();
@@ -399,7 +400,7 @@ it('fails if field is not a remote autocomplete field', function () {
             'entityKey' => 'person',
             'autocompleteFieldKey' => 'name',
         ]));
-})->throws(\Code16\Sharp\Exceptions\SharpInvalidConfigException::class);
+})->throws(SharpInvalidConfigException::class);
 
 it('validates that the sent remote endpoint is the same that was defined in the autocomplete field', function () {
     $this->withoutExceptionHandling();
@@ -427,7 +428,7 @@ it('validates that the sent remote endpoint is the same that was defined in the 
             'endpoint' => '/another/endpoint',
             'search' => 'my search',
         ]);
-})->throws(\Code16\Sharp\Exceptions\SharpInvalidConfigException::class);
+})->throws(SharpInvalidConfigException::class);
 
 it('allows the defined endpoint to have a querystring', function () {
     $this->withoutExceptionHandling();
@@ -602,7 +603,7 @@ it('won’t allow external remote endpoint', function () {
             'endpoint' => 'https://google.fr',
             'search' => 'my search',
         ]);
-})->throws(\Code16\Sharp\Exceptions\SharpInvalidConfigException::class);
+})->throws(SharpInvalidConfigException::class);
 
 it('allows internal remote endpoint with a querystring', function () {
     $this->withoutExceptionHandling();
@@ -614,7 +615,7 @@ it('allows internal remote endpoint with a querystring', function () {
             $formFields->addField(
                 SharpFormAutocompleteRemoteField::make('autocomplete_field')
                     ->setRemoteMethodPOST()
-                    ->setRemoteEndpoint('/my/endpoint')
+                    ->setRemoteEndpoint('/my/endpoint?param1=one')
             );
         }
     });
