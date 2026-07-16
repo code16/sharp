@@ -1,7 +1,7 @@
 <script setup lang="ts">
-    import { Editor } from "@tiptap/vue-3";
-    import { StyleValue, useAttrs, watchEffect } from "vue";
-    import { normalizeStyle, stringifyStyle } from "@vue/shared";
+    import { Editor } from '@tiptap/core';
+    import { StyleValue, useAttrs, watchEffect } from 'vue';
+    import { normalizeStyle, stringifyStyle } from '@vue/shared';
 
     const props = defineProps<{
         editor: Editor,

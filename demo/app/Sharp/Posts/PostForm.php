@@ -59,6 +59,7 @@ class PostForm extends SharpForm
                         SharpFormEditorField::IFRAME,
                         SharpFormEditorField::UPLOAD,
                         SharpFormEditorField::CODE_BLOCK,
+                        SharpFormEditorField::FOOTNOTE,
                         AuthorEmbed::class,
                     ])
                     ->allowEmbeds([
@@ -79,7 +80,7 @@ class PostForm extends SharpForm
                     ])
                     ->allowFullscreen()
                     ->setMaxLength(2000)
-                    ->setHeight(300, 0)
+                    ->setHeight(400)
             )
             ->addField(
                 SharpFormTagsField::make('categories', Category::pluck('name', 'id')->toArray())

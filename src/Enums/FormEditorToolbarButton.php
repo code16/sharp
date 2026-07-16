@@ -27,6 +27,7 @@ enum FormEditorToolbarButton: string
     case Html = 'html';
     case CodeBlock = 'code-block';
     case Superscript = 'superscript';
+    case Footnote = 'footnote';
 
     case Undo = 'undo';
     case Redo = 'redo';

@@ -9,6 +9,7 @@
 @source '../views/**/*.blade.php';
 @source '../js/**/*.vue';
 @source '../js/components/ui/**/*.ts';
+@source '../js/form/components/fields/editor/extensions/Footnotes.ts';
 
 @custom-variant dark (&:is(.dark *));
 

@@ -41,6 +41,7 @@ trait FormatsSanitizedValue
     {
         $config = (new HtmlSanitizerConfig())
             ->allowSafeElements()
+            ->allowAttribute('data-id', ['a', 'li'])
             ->allowElement('iframe', [
                 'allow',
                 'allowfullscreen',
@@ -61,7 +62,7 @@ trait FormatsSanitizedValue
             ])
             ->allowRelativeLinks()
             ->allowRelativeMedias()
-            ->allowElement('div', ['data-encoded-content'])
+            ->allowElement('div', ['data-encoded-content', 'data-id'])
             ->allowAttribute('class', allowedElements: '*')
             ->allowAttribute('style', allowedElements: '*')
             ->withMaxInputLength(500000);

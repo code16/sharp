@@ -4,7 +4,7 @@ import { Text } from '@tiptap/extension-text';
 import { Paragraph } from '@tiptap/extension-paragraph';
 import { Blockquote } from '@tiptap/extension-blockquote';
 import { Bold } from '@tiptap/extension-bold';
-import { UndoRedo, Placeholder, Gapcursor, Dropcursor, CharacterCount, TrailingNode } from '@tiptap/extensions';
+import { UndoRedo, Placeholder, Gapcursor, Dropcursor, CharacterCount } from '@tiptap/extensions';
 import { BulletList } from '@tiptap/extension-bullet-list';
 import { Code } from '@tiptap/extension-code';
 import { Heading } from '@tiptap/extension-heading';
@@ -28,6 +28,8 @@ import { Clipboard } from './Clipboard';
 import { Small } from './Small';
 import { FormEditorFieldData, FormEditorToolbarButton } from "@/types";
 import { CodeBlock } from "@/form/components/fields/editor/extensions/CodeBlock";
+import { Footnotes } from "@/form/components/fields/editor/extensions/Footnotes";
+import { TrailingNode } from "@/form/components/fields/editor/extensions/TrailingNode";
 
 export function getExtensions(field: FormEditorFieldData) {
     const toolbarHas = (buttonName: FormEditorToolbarButton | FormEditorToolbarButton[]) =>
@@ -42,6 +44,7 @@ export function getExtensions(field: FormEditorFieldData) {
         toolbarHas('bold') && Bold,
         toolbarHas('bullet-list') && BulletList,
         Extension.create({
+            name: 'characterCountExtension',
             addExtensions() { // use addExtension to ensure unique state
                 return [
                     CharacterCount.configure(),
@@ -54,11 +57,15 @@ export function getExtensions(field: FormEditorFieldData) {
         toolbarHas('code') && Code,
         toolbarHas('code-block') && CodeBlock,
         Document.extend({
-            content: field.uploads || Object.keys(field.embeds ?? {}).length
-                ? '(block | embed)+'
-                : 'block+',
+            content: [
+                field.uploads || Object.keys(field.embeds ?? {}).length
+                    ? '(block | embed)+'
+                    : 'block+',
+                toolbarHas('footnote') && 'footnotes?',
+            ].filter(Boolean).join(' '),
         }),
         Dropcursor,
+        toolbarHas('footnote') && Footnotes,
         Gapcursor,
         HardBreak.extend({
             addKeyboardShortcuts() {

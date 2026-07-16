@@ -62,6 +62,7 @@
         getTextInputReplacementsExtension
     } from "@/form/components/fields/editor/extensions/TextInputReplacements";
     import CodeBlockDropdown from "@/form/components/fields/editor/toolbar/CodeBlockDropdown.vue";
+    import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
     const emit = defineEmits<FormFieldEmits<FormEditorFieldData>>();
     const props = defineProps<FormFieldProps<FormEditorFieldData>>();
@@ -189,11 +190,6 @@
         }
     );
 
-    declare module '@tiptap/core' {
-        interface Storage {
-            scrollYPercentage: number;
-        }
-    }
 
     const isFullscreen = ref(false);
     const fullscreenPlaceholderHeight = ref(0);
@@ -303,17 +299,29 @@
                                         <Separator orientation="vertical" class="h-4 self-center last:hidden" />
                                     </template>
                                     <template v-else :key="button">
-                                        <Toggle
-                                            size="sm"
-                                            :model-value="buttons[button].isActive(editor)"
-                                            :disabled="field.readOnly"
-                                            :title="buttons[button].label()"
-                                            @click="button === 'upload' || button === 'upload-image'
-                                            ? uploadModal.open({ locale: props.locale })
-                                            : buttons[button].command(editor)"
-                                        >
-                                            <component :is="buttons[button].icon" class="size-4" />
-                                        </Toggle>
+                                        <TooltipProvider>
+                                            <Tooltip :disabled="!buttons[button].tooltip" :delay-duration="0" disable-hoverable-content>
+                                                <TooltipTrigger as-child>
+                                                    <Toggle
+                                                        size="sm"
+                                                        :model-value="buttons[button].isActive(editor)"
+                                                        :disabled="field.readOnly"
+                                                        :title="!buttons[button].tooltip ? buttons[button].label() : null"
+                                                        @click="button === 'upload' || button === 'upload-image'
+                                                            ? uploadModal.open({ locale: props.locale })
+                                                            : buttons[button].command(editor)"
+                                                        >
+                                                        <component :is="buttons[button].icon" class="size-4" />
+                                                    </Toggle>
+                                                </TooltipTrigger>
+                                                <template v-if="buttons[button].tooltip">
+                                                    <TooltipContent side="top" :side-offset="10">
+                                                        <h4 class="font-medium">{{ buttons[button].label() }}</h4>
+                                                        <div v-html="buttons[button].tooltip()"></div>
+                                                    </TooltipContent>
+                                                </template>
+                                            </Tooltip>
+                                        </TooltipProvider>
                                     </template>
                                 </template>
                                 <template v-if="dropdownEmbeds.length > 0">
@@ -363,7 +371,7 @@
                 </template>
 
                 <div :class="cn(
-                    'flex-1 grid grid-cols-1 overflow-y-auto overflow-x-clip',
+                    'flex-1 grid grid-cols-1 overflow-y-auto scroll-py-4 overflow-x-clip',
                         isFullscreen
                             ? 'lg:[scrollbar-gutter:stable]'
                             : ['min-h-20', {
@@ -419,10 +427,13 @@
                                 'group/editor content w-full rounded-b-md focus:outline-none px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50',
                                 '[&_.selection-highlight]:bg-[Highlight] [&_.selection-highlight]:py-0.5',
                                 '[&_.ProseMirror-selectednode]:outline-none! [&:focus_.ProseMirror-selectednode]:ring-1 [&_.ProseMirror-selectednode]:ring-primary',
+                                `[&_.footnotes]:before:content-(--footnote-title) [&_.footnotes]:before:text-xs [&_.footnotes]:before:text-muted-foreground [&_.footnotes]:before:block [&_.footnotes]:before:ml-[-1.75em] [&_.footnotes]:before:mb-2 [&_.footnotes]:-mx-3 [&_.footnotes]:pt-2 [&_.footnotes]:pb-2 [&_.footnotes]:pr-3 [&_.footnotes]:pl-[calc(.75rem+1.75em)] [&_.footnotes>li]:relative [&_.footnotes>li]:pl-[1.25em] [&_.footnotes]:border-t`,
+                                ` [&_.footnote-ref]:cursor-pointer [&_.footnote-ref]:underline [&_.footnote-ref]:underline-offset-4 [&_.footnote-ref]:decoration-foreground/20 [&_.footnote-ref]:hover:decoration-foreground [&_.footnote-ref]:p-1 [&_.footnote-ref]:-m-1 [&_.footnote-ref]:before:content-['['] [&_.footnote-ref]:after:content-[']']`,
                                 {
                                     'content-lg max-w-3xl mx-auto py-6 px-4 sm:px-6 text-base min-h-max': isFullscreen,
                                 },
                             )"
+                            :style="{ '--footnote-title': `'${__('sharp::form.editor.footnotes.title')}'` }"
                             role="textbox"
                         />
                     </div>
