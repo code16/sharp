@@ -6,6 +6,7 @@ use Code16\Sharp\Data\RequestFieldContainerData;
 use Code16\Sharp\EntityList\Commands\Command;
 use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
 use Code16\Sharp\Form\SharpForm;
+use Code16\Sharp\Form\SharpSingleForm;
 use Code16\Sharp\Http\Controllers\Api\Commands\HandlesDashboardCommand;
 use Code16\Sharp\Http\Controllers\Api\Commands\HandlesEntityCommand;
 use Code16\Sharp\Http\Controllers\Api\Commands\HandlesInstanceCommand;
@@ -19,11 +20,13 @@ trait HandlesFieldContainer
     use HandlesEntityCommand;
     use HandlesInstanceCommand;
 
-    private function getFieldContainer(EntityKey $entityKey): SharpFormEditorEmbed|Command|SharpForm
+    private function getFieldContainer(EntityKey $entityKey, bool $isUpdate): SharpFormEditorEmbed|Command|SharpForm
     {
         $requestFieldContainerData = RequestFieldContainerData::from(request()->query());
 
         if ($requestFieldContainerData->embed_key) {
+            $this->authorizationManager->check('entity', $entityKey);
+
             return $this->getEmbedFromKey($requestFieldContainerData->embed_key);
         }
 
@@ -59,6 +62,22 @@ trait HandlesFieldContainer
             );
         }
 
-        return $entity->getFormOrFail($entityKey->multiformKey());
+        $form = $entity->getFormOrFail($entityKey->multiformKey());
+
+        if ($requestFieldContainerData->instance_id !== null) {
+            if ($isUpdate) {
+                $this->authorizationManager->check('update', $entityKey, $requestFieldContainerData->instance_id);
+            } else {
+                $this->authorizationManager->check('view', $entityKey, $requestFieldContainerData->instance_id);
+            }
+        } else {
+            if ($isUpdate) {
+                $this->authorizationManager->check($form instanceof SharpSingleForm ? 'update' : 'create', $entityKey);
+            } else {
+                $this->authorizationManager->check('entity', $entityKey);
+            }
+        }
+
+        return $form;
     }
 }

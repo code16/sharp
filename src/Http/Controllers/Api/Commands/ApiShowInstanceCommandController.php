@@ -21,6 +21,8 @@ class ApiShowInstanceCommandController extends Controller
 
     public function show(string $globalFilter, string $entityKey, string $commandKey, mixed $instanceId = null)
     {
+        $this->authorizationManager->check('view', $entityKey, $instanceId);
+
         $showPage = $this->getShowPage($entityKey, $instanceId);
         $commandHandler = $this->getInstanceCommandHandler($showPage, $commandKey, $instanceId);
 
@@ -33,6 +35,8 @@ class ApiShowInstanceCommandController extends Controller
 
     public function update(string $globalFilter, string $entityKey, string $commandKey, mixed $instanceId = null)
     {
+        $this->authorizationManager->check('view', $entityKey, $instanceId);
+
         $showPage = $this->getShowPage($entityKey, $instanceId);
         $commandHandler = $this->getInstanceCommandHandler($showPage, $commandKey, $instanceId);
 

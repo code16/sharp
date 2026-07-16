@@ -12,6 +12,8 @@ class ApiEntityListEntityStateController extends Controller
 
     public function update(string $globalFilter, string $entityKey, mixed $instanceId)
     {
+        $this->authorizationManager->check('entity', $entityKey);
+
         $list = $this->entityManager->entityFor($entityKey)->getListOrFail();
         $list->buildListConfig();
         $list->initQueryParams(request()->input('query'));

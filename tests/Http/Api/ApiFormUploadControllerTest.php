@@ -191,6 +191,8 @@ class UploadTestEmbed extends SharpFormEditorEmbed
 }
 
 it('allows to upload a file in an embed', function () {
+    sharp()->config()->declareEntity(PersonEntity::class);
+
     $this
         ->postJson(
             route('code16.sharp.api.form.upload', [

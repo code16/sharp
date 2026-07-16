@@ -16,7 +16,7 @@ class ApiFormAutocompleteController extends Controller
 
     public function index(string $globalFilter, EntityKey $entityKey, string $autocompleteFieldKey)
     {
-        $fieldContainer = $this->getFieldContainer($entityKey);
+        $fieldContainer = $this->getFieldContainer($entityKey, isUpdate: false);
         $field = $fieldContainer->findFieldByKey($autocompleteFieldKey);
 
         if ($field === null) {

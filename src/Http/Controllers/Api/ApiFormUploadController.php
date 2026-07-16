@@ -16,8 +16,9 @@ class ApiFormUploadController extends Controller
 
     public function store(string $globalFilter, EntityKey $entityKey, string $uploadFieldKey, FileUtil $fileUtil)
     {
-        $field = $this->getFieldContainer($entityKey)
-            ->findFieldByKey($uploadFieldKey);
+        $container = $this->getFieldContainer($entityKey, isUpdate: true);
+
+        $field = $container->findFieldByKey($uploadFieldKey);
 
         if ($field instanceof SharpFormEditorField) {
             $field = $field->uploadsConfig();

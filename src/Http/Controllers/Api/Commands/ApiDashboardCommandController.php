@@ -20,6 +20,8 @@ class ApiDashboardCommandController extends Controller
 
     public function show(string $globalFilter, string $entityKey, string $commandKey)
     {
+        $this->authorizationManager->check('entity', $entityKey);
+
         $dashboard = $this->entityManager->entityFor($entityKey)->getViewOrFail();
         $dashboard->buildDashboardConfig();
         $dashboard->initQueryParams(request()->query());
@@ -35,6 +37,8 @@ class ApiDashboardCommandController extends Controller
 
     public function update(string $globalFilter, string $entityKey, string $commandKey)
     {
+        $this->authorizationManager->check('entity', $entityKey);
+
         $dashboard = $this->entityManager->entityFor($entityKey)->getViewOrFail();
         $dashboard->buildDashboardConfig();
         $dashboard->initQueryParams(request()->input('query'));

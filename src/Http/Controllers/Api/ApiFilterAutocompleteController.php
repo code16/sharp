@@ -11,6 +11,8 @@ class ApiFilterAutocompleteController extends Controller
 {
     public function index(string $globalFilter, EntityKey $entityKey, string $filterHandlerKey): array
     {
+        $this->authorizationManager->check('entity', $entityKey);
+
         $entity = $this->entityManager->entityFor($entityKey);
 
         if ($entity instanceof SharpDashboardEntity) {
