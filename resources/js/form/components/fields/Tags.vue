@@ -27,7 +27,7 @@
 
     const canAdd = computed(() => {
         return !props.field.maxTagCount
-            || props.value.length < props.field.maxTagCount
+            || (props.value ?? []).length < props.field.maxTagCount
     });
     const canCreate = computed(() => {
         return props.field.creatable
