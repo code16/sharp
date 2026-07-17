@@ -3,7 +3,7 @@
     import { FormTagsFieldData } from "@/types";
     import { TagsInput, TagsInputInput, TagsInputItem, TagsInputItemText, TagsInputItemDelete } from "@/components/ui/tags-input";
     import { ComboboxAnchor, ComboboxContent, ComboboxPortal, ComboboxRoot, ComboboxInput } from "reka-ui";
-    import { computed, ref } from "vue";
+    import { computed, ref, useTemplateRef, watch, nextTick } from "vue";
     import { __ } from "@/utils/i18n";
     import { CommandEmpty, CommandGroup, CommandItem, CommandList, CommandSeparator } from "@/components/ui/command";
     import FormFieldLayout from "@/form/components/FormFieldLayout.vue";
@@ -13,6 +13,7 @@
     const emit = defineEmits<FormFieldEmits<FormTagsFieldData>>();
 
     const open = ref(false);
+    const input = useTemplateRef<InstanceType<typeof TagsInputInput>>('input');
     const searchTerm = ref('');
 
     let itemKeyIndex = 0;
@@ -24,26 +25,57 @@
         }
     }
 
+    const canAdd = computed(() => {
+        return !props.field.maxTagCount
+            || props.value.length < props.field.maxTagCount
+    });
+    const canCreate = computed(() => {
+        return props.field.creatable
+            && searchTerm.value.length > 0
+            && !props.value?.find(v => v.label === searchTerm.value)
+            && !props.field.options.find(o => o.label === searchTerm.value);
+    });
+
     function onCreateClick() {
-        emit('input', [
-            ...(props.value ?? []),
-            withItemKey({
-                id: null,
-                label: searchTerm.value,
-            }),
-        ]);
+        if(canAdd.value) {
+            emit('input', [
+                ...(props.value ?? []),
+                withItemKey({
+                    id: null,
+                    label: searchTerm.value,
+                }),
+            ]);
+        }
     }
 
     function onOptionClick(option: FormTagsFieldData['options'][0]) {
-        emit('input', [
-            ...(props.value ?? []),
-            withItemKey(option),
-        ]);
+        if(canAdd.value) {
+            emit('input', [
+                ...(props.value ?? []),
+                withItemKey(option),
+            ]);
+        }
     }
 
-    function onDeleteClick(item: FormTagsFieldData['value'][0]) {
+    async function onDeleteClick(item: FormTagsFieldData['value'][0]) {
         emit('input', props.value.filter(i => i[itemKey] !== item[itemKey]));
+        await nextTick();
+        onInputClick();
     }
+
+    async function onInputClick() {
+        if(canAdd.value) {
+            open.value = true;
+            await nextTick();
+            input.value.$el.focus();
+        }
+    }
+
+    watch(canAdd, () => {
+        if(!canAdd.value && open.value) {
+            open.value = false;
+        }
+    });
 
     const { fullTextSearch } = useFullTextSearch(() => props.field.options, { id: 'id', searchKeys: ['label'] });
     const filteredOptions = computed(() => {
@@ -52,12 +84,6 @@
             : props.field.options;
         return filtered
             .filter(o => !props.value?.find(v => o.id != null && v.id != null && o.id === v.id)); // show only unselected options
-    });
-    const canCreate = computed(() => {
-        return props.field.creatable
-            && searchTerm.value.length > 0
-            && !props.value?.find(v => v.label === searchTerm.value)
-            && !props.field.options.find(o => o.label === searchTerm.value);
     });
 
     emit('input', props.value?.map(option => withItemKey(option)), { skipRefresh: true });
@@ -73,11 +99,12 @@
         >
             <ComboboxAnchor>
                 <TagsInput
-                    class="ring-offset-background data-disabled:pointer-events-none data-disabled:opacity-50 has-[:focus-visible]:ring-ring has-focus-visible:ring-2 has-focus-visible:ring-offset-2"
+                    class="min-h-10 ring-offset-background data-disabled:pointer-events-none data-disabled:opacity-50 has-[:focus-visible]:ring-ring has-focus-visible:ring-2 has-focus-visible:ring-offset-2"
                     :model-value="props.value"
                     :display-value="(item: typeof props.value[0]) => item.label ?? item.id"
                     :disabled="props.field.readOnly"
-                    @click="open = true; $refs.input.$el.focus()"
+                    :max="props.field.maxTagCount"
+                    @click="onInputClick"
                 >
                     <template v-for="item in value" :key="item[itemKey]">
                         <TagsInputItem :value="item">
@@ -91,7 +118,7 @@
                     </template>
 
                     <ComboboxInput v-model="searchTerm" :placeholder="props.field.placeholder ?? __('sharp::form.multiselect.placeholder')" as-child>
-                        <TagsInputInput :id="id" :aria-describedby="ariaDescribedBy" :disabled="props.field.readOnly" class="flex-1 w-40" autocomplete="off" @keydown.enter.prevent ref="input" />
+                        <TagsInputInput :id="id" :aria-describedby="ariaDescribedBy" :disabled="props.field.readOnly" class="flex-1 w-40" v-show="canAdd" autocomplete="off" @keydown.enter.prevent ref="input" />
                     </ComboboxInput>
                 </TagsInput>
             </ComboboxAnchor>
