@@ -449,6 +449,7 @@ export type FormEditorToolbarButton =
   | "html"
   | "code-block"
   | "superscript"
+  | "footnote"
   | "undo"
   | "redo"
   | "|";

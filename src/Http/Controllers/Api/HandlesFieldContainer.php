@@ -19,17 +19,21 @@ trait HandlesFieldContainer
     use HandlesEntityCommand;
     use HandlesInstanceCommand;
 
-    private function getFieldContainer(EntityKey $entityKey): SharpFormEditorEmbed|Command|SharpForm
+    private function getFieldContainer(EntityKey $entityKey, bool $isUpdate): SharpFormEditorEmbed|Command|SharpForm
     {
         $requestFieldContainerData = RequestFieldContainerData::from(request()->query());
 
         if ($requestFieldContainerData->embed_key) {
+            $this->authorizationManager->check('entity', $entityKey);
+
             return $this->getEmbedFromKey($requestFieldContainerData->embed_key);
         }
 
         $entity = $this->entityManager->entityFor($entityKey);
 
         if ($commandKey = $requestFieldContainerData->entity_list_command_key) {
+            $this->authorizationManager->check('entity', $entityKey);
+
             if ($requestFieldContainerData->instance_id) {
                 return $this->getInstanceCommandHandler(
                     $entity->getListOrFail(),
@@ -45,6 +49,8 @@ trait HandlesFieldContainer
         }
 
         if ($commandKey = $requestFieldContainerData->show_command_key) {
+            $this->authorizationManager->check('view', $entityKey, $requestFieldContainerData->instance_id);
+
             return $this->getInstanceCommandHandler(
                 $entity->getShowOrFail(),
                 $commandKey,
@@ -53,10 +59,26 @@ trait HandlesFieldContainer
         }
 
         if ($commandKey = $requestFieldContainerData->dashboard_command_key) {
+            $this->authorizationManager->check('entity', $entityKey);
+
             return $this->getDashboardCommandHandler(
                 $entity->getViewOrFail(),
                 $commandKey
             );
+        }
+
+        if ($requestFieldContainerData->instance_id !== null || $entity->isSingle()) {
+            if ($isUpdate) {
+                $this->authorizationManager->check('update', $entityKey, $requestFieldContainerData->instance_id);
+            } else {
+                $this->authorizationManager->check('view', $entityKey, $requestFieldContainerData->instance_id);
+            }
+        } else {
+            if ($isUpdate) {
+                $this->authorizationManager->check('create', $entityKey);
+            } else {
+                $this->authorizationManager->check('entity', $entityKey);
+            }
         }
 
         return $entity->getFormOrFail();

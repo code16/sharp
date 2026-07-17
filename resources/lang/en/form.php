@@ -132,6 +132,10 @@ return [
     'editor.toolbar.upload_image.title' => 'Insert image',
     'editor.toolbar.horizontal_rule.title' => 'Horizontal rule',
     'editor.toolbar.fullscreen.title' => 'Full screen',
+    'editor.toolbar.footnote.title' => 'Footnote',
+    'editor.toolbar.footnote.tootlip' => 'Click to insert a reference<br>Click on the reference <sup>[1]</sup> to go down to the note and edit its content<br>Click on <sup>[^]</sup> to go back up to the reference',
     'editor.toolbar.undo.title' => 'Undo',
     'editor.toolbar.redo.title' => 'Redo',
+
+    'editor.footnotes.title' => 'Footnotes',
 ];

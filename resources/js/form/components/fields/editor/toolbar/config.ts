@@ -16,6 +16,7 @@ import {
     ImageIcon,
     Paperclip, Minus, SquarePlay, CodeXml, FileCode, Undo, Redo, TextQuote,
     Superscript,
+    SquareAsterisk,
 } from "lucide-vue-next";
 import { Component } from "vue";
 
@@ -24,6 +25,7 @@ type ButtonConfig = {
     isActive?: (editor: Editor) => boolean,
     icon: Component,
     label?: () => string,
+    tooltip?: () => string,
 }
 
 export const buttons: { [key in Exclude<FormEditorToolbarButton, '|' | 'link' | 'table'>]: ButtonConfig } = {
@@ -134,6 +136,13 @@ export const buttons: { [key in Exclude<FormEditorToolbarButton, '|' | 'link' | 
         isActive: editor => editor.isActive('superscript'),
         icon: Superscript,
         label: () => __('sharp::form.editor.toolbar.superscript.title'),
+    },
+    'footnote': {
+        command: editor => editor.chain().focus().addFootnote().run(),
+        isActive: editor => false,
+        icon: SquareAsterisk,
+        label: () => __('sharp::form.editor.toolbar.footnote.title'),
+        tooltip: () => __('sharp::form.editor.toolbar.footnote.tootlip'),
     },
     'undo': {
         command: editor => editor.chain().undo().run(),

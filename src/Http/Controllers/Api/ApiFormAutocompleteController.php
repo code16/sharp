@@ -9,6 +9,8 @@ use Code16\Sharp\Utils\Entities\ValueObjects\EntityKey;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ApiFormAutocompleteController extends Controller
 {
@@ -16,7 +18,7 @@ class ApiFormAutocompleteController extends Controller
 
     public function index(string $globalFilter, EntityKey $entityKey, string $autocompleteFieldKey)
     {
-        $fieldContainer = $this->getFieldContainer($entityKey);
+        $fieldContainer = $this->getFieldContainer($entityKey, isUpdate: false);
         $field = $fieldContainer->findFieldByKey($autocompleteFieldKey);
 
         if ($field === null) {
@@ -58,7 +60,7 @@ class ApiFormAutocompleteController extends Controller
         $fieldEndpoint = $this->normalizeEndpoint($field->remoteEndpoint());
 
         // Check that requestEndpoint is valid
-        $this->checkEndpoint($requestEndpoint, $fieldEndpoint);
+        $this->checkEndpoint($requestEndpoint, $fieldEndpoint, $field->remoteMethod());
 
         $apiResponse = app()->handle(
             tap(Request::create(
@@ -89,25 +91,22 @@ class ApiFormAutocompleteController extends Controller
         return str($input)->startsWith('http') ? $input : url($input);
     }
 
-    private function checkEndpoint(string $requestEndpoint, string $fieldEndpoint): void
+    private function checkEndpoint(string $requestEndpoint, string $fieldEndpoint, string $fieldMethod): void
     {
         // Validates that the endpoint defined in the field is the same as the one called
         preg_match(
-            '#'
+            '#^'
             .str()
                 ->of(preg_quote($fieldEndpoint))
                 ->replaceMatches('#\\\\{\\\\{(.*)\\\\}\\\\}#', '(.*)')
-            .'#im',
+            .'$#im',
             $requestEndpoint
         ) ?: throw new SharpInvalidConfigException('The endpoint is not the one defined in the autocomplete field.');
 
-        // Check that the remote route exists in the app
-        collect(Route::getRoutes()->getRoutes())
-            ->map(fn ($route) => url($route->uri))
-            ->filter(fn (string $routeUrl) => preg_match(
-                '#'.str()->of($routeUrl)->replaceMatches('#\\{(.*)\\}#', '(.*)').'#im',
-                str($requestEndpoint)->before('?')
-            ))
-            ->count() > 0 ?: throw new SharpInvalidConfigException('The endpoint is not a valid internal route.');
+        try {
+            Route::getRoutes()->match(Request::create($requestEndpoint, method: $fieldMethod));
+        } catch (NotFoundHttpException|MethodNotAllowedHttpException $e) {
+            throw new SharpInvalidConfigException('The endpoint is not a valid internal route.', previous: $e);
+        }
     }
 }

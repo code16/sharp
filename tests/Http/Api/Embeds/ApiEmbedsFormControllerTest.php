@@ -2,6 +2,7 @@
 
 use Code16\Sharp\Auth\SharpEntityPolicy;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
+use Code16\Sharp\Tests\Fixtures\User;
 use Code16\Sharp\Tests\Http\Api\Embeds\Fixtures\ApiEmbedsFormControllerTestEmbed;
 use Illuminate\Support\Str;
 
@@ -190,4 +191,38 @@ it('validates data when updating an embed', function () {
             ]
         )
         ->assertJsonValidationErrorFor('name');
+});
+
+it('fails if class is not an embed', function () {
+    $this->withoutExceptionHandling();
+
+    expect(function () {
+        $this
+            ->postJson(
+                route('code16.sharp.api.embed.instance.form.show', [
+                    'embedKey' => str(User::class)->replace('\\', '.'),
+                    'entityKey' => 'person',
+                    'instanceId' => 1,
+                ]),
+                [
+                    'name' => 'aaa',
+                ]
+            );
+    })->toThrow(Exception::class, sprintf('Embed class %s is not a SharpFormEditorEmbed', User::class));
+
+    expect(function () {
+        $this
+            ->postJson(
+                route('code16.sharp.api.embed.instance.form.update', [
+                    'embedKey' => str(User::class)->replace('\\', '.'),
+                    'entityKey' => 'person',
+                    'instanceId' => 1,
+                ]),
+                [
+                    'name' => 'aaa',
+                    'bio' => ['text' => 'aaa'],
+                ]
+            );
+    })->toThrow(Exception::class, sprintf('Embed class %s is not a SharpFormEditorEmbed', User::class));
+
 });

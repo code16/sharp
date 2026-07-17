@@ -15,3 +15,9 @@ export type WithRequiredOptions<E extends Node> =
     Omit<E, 'configure'> & {
         configure(options: E['options']): E
     }
+
+declare module '@tiptap/core' {
+    interface Storage {
+        scrollYPercentage: number;
+    }
+}
