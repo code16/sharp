@@ -30,5 +30,5 @@ it('allows to update assets', function () {
     $notifications = session('sharp_notifications');
     $notification = collect($notifications)->first();
     expect($notification['title'])->toBe('Assets updated successfully')
-        ->and($notification['level']->value)->toBe('success');
+        ->and($notification['level'])->toBe('success');
 });
