@@ -288,7 +288,11 @@ class GeneratorCommand extends Command
             'Dashboard' => $this->generateDashboardEntity(),
         };
 
-        if (confirm(label: 'Do you want to automatically declare this Entity in the Sharp configuration?')) {
+        if (confirm(
+            label: 'Do you want to automatically declare this Entity in the Sharp configuration?',
+            default: false,
+            hint: 'If you enabled auto discovery in your Sharp Service Provider, this isn’t necessary.')
+        ) {
             $providerFound = false;
 
             while (! $providerFound) {
@@ -313,7 +317,7 @@ class GeneratorCommand extends Command
                 $providerFound = true;
             }
 
-            $reflector = new \ReflectionClass($provider);
+            $reflector = new ReflectionClass($provider);
             $this->declareEntityInSharpConfiguration($reflector->getFileName(), $entityPath, $entityKey);
 
             $this->components->info(

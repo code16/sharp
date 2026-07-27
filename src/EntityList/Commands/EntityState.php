@@ -2,8 +2,10 @@
 
 namespace Code16\Sharp\EntityList\Commands;
 
+use BackedEnum;
 use Code16\Sharp\Exceptions\EntityList\SharpInvalidEntityStateException;
 use Code16\Sharp\Exceptions\SharpInvalidConfigException;
+use InvalidArgumentException;
 
 /**
  * Base class for applicative Entity States.
@@ -19,8 +21,12 @@ abstract class EntityState extends InstanceCommand
         return $this->states;
     }
 
-    protected function addState(string $key, string $label, ?string $color = null): self
+    protected function addState($key, string $label, ?string $color = null): self
     {
+        if ($key instanceof BackedEnum && ! is_string($key = $key->value)) {
+            throw new InvalidArgumentException('When using enum as a key, it must be string backed.');
+        }
+
         $this->states[$key] = [$label, $color];
 
         return $this;
