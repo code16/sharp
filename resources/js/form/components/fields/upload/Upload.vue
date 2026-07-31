@@ -187,6 +187,7 @@
                 ...response.body,
                 thumbnail: transformedImg?.value ?? uppyFile.value.preview,
                 editable_thumbnail: persistedEditableImg.value,
+                playable_preview_url: playablePreviewUrl.value,
                 mime_type: file.type,
                 size: file.size,
             });
@@ -195,6 +196,7 @@
                 ...response.body,
                 thumbnail: transformedImg?.value ?? uppyFile.value.preview,
                 editable_thumbnail: persistedEditableImg.value,
+                playable_preview_url: playablePreviewUrl.value,
                 mime_type: file.type,
                 size: file.size,
             });
@@ -436,7 +438,7 @@
         if(!props.persistThumbnailUrl && transformedImg.value) {
             URL.revokeObjectURL(transformedImg.value);
         }
-        if(playablePreviewUrl.value) {
+        if(!props.persistThumbnailUrl && playablePreviewUrl.value) {
             URL.revokeObjectURL(playablePreviewUrl.value);
         }
         emit('uploading', false);
