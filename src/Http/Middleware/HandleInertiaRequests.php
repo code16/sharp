@@ -11,7 +11,6 @@ use Code16\Sharp\Data\SessionData;
 use Code16\Sharp\Data\UserData;
 use Code16\Sharp\Enums\SessionStatusLevel;
 use Code16\Sharp\Filters\GlobalFilters\GlobalFilters;
-use Code16\Sharp\Http\Requests\SharpInertiaRequest;
 use Code16\Sharp\Utils\Menu\SharpMenuManager;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
@@ -41,11 +40,20 @@ class HandleInertiaRequests extends Middleware
             'query' => (object) $request->query(),
         ]);
 
-        $inertiaRequest = SharpInertiaRequest::createFrom($request);
+        // let inertia remove the following query params in the url (history.replaceState in JS)
+        Inertia::resolveUrlUsing(function (Request $request) {
+            return str(
+                $request->fullUrlWithoutQuery([
+                    'popstate',
+                    'highlighted_entity_key',
+                    'highlighted_instance_id',
+                ])
+            )
+                ->after($request->schemeAndHttpHost())
+                ->start('/');
+        });
 
-        app()->instance('request', $inertiaRequest);
-
-        return parent::handle($inertiaRequest, $next);
+        return parent::handle($request, $next);
     }
 
     public function share(Request $request)
