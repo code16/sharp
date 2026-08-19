@@ -44,7 +44,7 @@ class PendingEntityList
         return new PendingShow($this->test, $entityClassNameOrKey, $instanceId, parent: $this);
     }
 
-    public function sharpForm(string $entityClassNameOrKey, string|int $instanceId): PendingForm
+    public function sharpForm(string $entityClassNameOrKey, string|int|null $instanceId = null): PendingForm
     {
         return new PendingForm($this->test, $entityClassNameOrKey, $instanceId, parent: $this);
     }
