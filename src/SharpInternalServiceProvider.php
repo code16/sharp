@@ -58,7 +58,7 @@ use Laravel\Octane\Events\TickReceived;
 
 class SharpInternalServiceProvider extends ServiceProvider
 {
-    const VERSION = '9.23.5';
+    const VERSION = '9.23.6';
 
     public function boot()
     {
