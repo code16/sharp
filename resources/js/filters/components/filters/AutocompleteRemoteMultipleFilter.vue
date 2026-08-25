@@ -1,29 +1,28 @@
 <script setup lang="ts">
     import { computed, ref, watch } from "vue";
+    import { X } from "lucide-vue-next";
     import { AutocompleteRemoteFilterData } from "@/types";
     import { FilterEmits, FilterProps } from "@/filters/types";
     import { useRemoteAutocomplete } from "@/composables/useRemoteAutocomplete";
     import { api } from "@/api/api";
     import { route } from "@/utils/url";
     import { __, trans_choice } from "@/utils/i18n";
+    import { cn } from "@/utils/cn";
     import { Label } from "@/components/ui/label";
     import { Separator } from "@/components/ui/separator";
+    import { Badge } from "@/components/ui/badge";
     import { Button } from "@/components/ui/button";
+    import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+    import SelectButton from "@/filters/components/filters/SelectButton.vue";
     import {
-        TagsInput,
-        TagsInputInput,
-        TagsInputItem,
-        TagsInputItemDelete,
-        TagsInputItemText,
-    } from "@/components/ui/tags-input";
-    import {
+        Command,
         CommandEmpty,
         CommandGroup,
+        CommandInput,
         CommandItem,
         CommandList,
         CommandSeparator,
     } from "@/components/ui/command";
-    import { ComboboxAnchor, ComboboxInput, ComboboxPortal, ComboboxRoot } from "reka-ui";
 
     type Option = { id: string | number, label: string };
 
@@ -58,6 +57,19 @@
     );
 
     const availableResults = computed(() => results.value.filter(result => !isSelected(result)));
+    const selectedSummary = computed(() => {
+        if (selectedValues.value.length === 1) {
+            return selectedValues.value[0].label;
+        }
+        if (selectedValues.value.length > 1) {
+            return trans_choice(
+                'sharp::filters.select.label.selected',
+                selectedValues.value.length,
+                { count: selectedValues.value.length },
+            );
+        }
+        return null;
+    });
 
     function isSelected(option: Option) {
         return selectedValues.value.some(selected => String(selected.id) === String(option.id));
@@ -74,8 +86,8 @@
         }
     }
 
-    function onTagsInput(value: Option[]) {
-        updateValue(value ?? []);
+    function onRemove(option: Option) {
+        updateValue(selectedValues.value.filter(selected => String(selected.id) !== String(option.id)));
     }
 
     function onSearchInput(query: string) {
@@ -99,102 +111,118 @@
             {{ filter.label }}
         </Label>
 
-        <ComboboxRoot
-            v-model:open="open"
-            :model-value="selectedValues"
-            by="id"
-            ignore-filter
-            multiple
-            open-on-click
-            open-on-focus
-            :reset-search-term-on-select="false"
-            @update:open="$event ? onOpen() : null"
-        >
-            <ComboboxAnchor>
-                <TagsInput
-                    :class="inline ? 'min-h-8 py-1 px-2' : 'mt-2 min-h-9'"
-                    :model-value="selectedValues"
-                    :display-value="(option: Option) => option.label"
-                    :disabled="disabled"
-                    @update:model-value="onTagsInput($event as Option[])"
-                    @click="open = true"
-                >
+        <Popover v-model:open="open" :modal="!inline" @update:open="$event ? onOpen() : null">
+            <PopoverTrigger as-child>
+                <SelectButton v-bind="props">
                     <template v-if="inline">
-                        <span class="px-1" aria-hidden="true">{{ filter.label }}</span>
-                        <Separator orientation="vertical" class="h-4" />
+                        <template v-if="selectedSummary">
+                            <Separator orientation="vertical" class="h-4" />
+                            <Badge variant="secondary" class="block max-w-52 truncate rounded-sm px-1 font-normal">
+                                {{ selectedSummary }}
+                            </Badge>
+                        </template>
                     </template>
-
-                    <template v-for="option in selectedValues" :key="option.id">
-                        <TagsInputItem :value="option">
-                            <TagsInputItemText />
-                            <TagsInputItemDelete
-                                :aria-labelledby="undefined"
-                                :aria-label="__('sharp::form.tags.tag_delete_button.aria_label', { option_label: option.label })"
-                                @click.stop
-                            />
-                        </TagsInputItem>
+                    <template v-else>
+                        <Badge
+                            v-if="selectedSummary"
+                            variant="secondary"
+                            class="block max-w-[calc(100%-1.5rem)] truncate rounded-sm px-1 font-normal"
+                        >
+                            {{ selectedSummary }}
+                        </Badge>
+                        <span v-else class="truncate text-muted-foreground">
+                            {{ __('sharp::form.autocomplete.placeholder') }}
+                        </span>
                     </template>
+                </SelectButton>
+            </PopoverTrigger>
 
-                    <ComboboxInput
+            <PopoverContent
+                :class="cn('p-0 w-auto min-w-[200px]', !inline ? 'w-(--reka-popover-trigger-width)' : '')"
+                align="start"
+            >
+                <Command
+                    :model-value="selectedValues"
+                    by="id"
+                    ignore-filter
+                    multiple
+                    highlight-on-hover
+                    :reset-search-term-on-select="false"
+                >
+                    <CommandInput
+                        class="field-sizing-content"
                         :model-value="searchTerm"
                         :placeholder="
                             filter.searchMinChars > 1
                                 ? trans_choice('sharp::form.autocomplete.query_too_short', filter.searchMinChars, { min_chars: filter.searchMinChars })
                                 : __('sharp::form.autocomplete.placeholder')
                         "
-                        as-child
                         @update:model-value="onSearchInput"
-                    >
-                        <TagsInputInput
-                            class="min-w-28"
-                            :aria-label="filter.label ?? __('sharp::form.autocomplete.placeholder')"
-                            :disabled="disabled"
-                            autocomplete="off"
-                            @keydown.enter.prevent
-                        />
-                    </ComboboxInput>
-                </TagsInput>
-            </ComboboxAnchor>
+                    />
 
-            <ComboboxPortal>
-                <CommandList
-                    position="popper"
-                    position-strategy="absolute"
-                    class="z-50 mt-2 w-(--reka-popper-anchor-width) min-w-[200px] rounded-md border bg-popover text-popover-foreground shadow-md outline-none"
-                >
-                    <template v-if="loading">
-                        <div class="py-6 px-4 text-center text-sm">
-                            {{ __('sharp::form.autocomplete.loading') }}
-                        </div>
-                    </template>
-                    <template v-else-if="!availableResults.length && searchTerm.length < filter.searchMinChars">
-                        <div class="py-6 px-4 text-center text-sm">
-                            {{ trans_choice('sharp::form.autocomplete.query_too_short', filter.searchMinChars, { min_chars: filter.searchMinChars }) }}
-                        </div>
-                    </template>
-                    <template v-else>
-                        <CommandEmpty>
-                            {{ __('sharp::form.autocomplete.no_results_text') }}
-                        </CommandEmpty>
-                        <CommandGroup v-if="availableResults.length">
-                            <template v-for="option in availableResults" :key="option.id">
-                                <CommandItem :value="option" @select.prevent="onSelect(option)">
+                    <div
+                        v-if="selectedValues.length"
+                        class="flex max-w-full gap-1 overflow-x-auto border-b p-2"
+                    >
+                        <Badge
+                            v-for="option in selectedValues"
+                            :key="option.id"
+                            variant="secondary"
+                            class="max-w-52 shrink-0 gap-1 rounded-sm px-1 font-normal"
+                        >
+                            <span class="truncate">{{ option.label }}</span>
+                            <button
+                                type="button"
+                                class="rounded-sm opacity-70 outline-none hover:opacity-100 focus-visible:ring-2 focus-visible:ring-ring"
+                                :aria-label="__('sharp::form.tags.tag_delete_button.aria_label', { option_label: option.label })"
+                                @mousedown.prevent
+                                @click.stop="onRemove(option)"
+                            >
+                                <X class="size-3" />
+                            </button>
+                        </Badge>
+                    </div>
+
+                    <CommandList class="scroll-pb-12">
+                        <template v-if="loading">
+                            <div class="px-4 py-6 text-center text-sm">
+                                {{ __('sharp::form.autocomplete.loading') }}
+                            </div>
+                        </template>
+                        <template v-else-if="!availableResults.length && searchTerm.length < filter.searchMinChars">
+                            <div class="px-4 py-6 text-center text-sm">
+                                {{ trans_choice('sharp::form.autocomplete.query_too_short', filter.searchMinChars, { min_chars: filter.searchMinChars }) }}
+                            </div>
+                        </template>
+                        <template v-else>
+                            <CommandEmpty>
+                                {{ __('sharp::form.autocomplete.no_results_text') }}
+                            </CommandEmpty>
+                            <CommandGroup v-if="availableResults.length">
+                                <CommandItem
+                                    v-for="option in availableResults"
+                                    :key="option.id"
+                                    :value="option"
+                                    @select.prevent="onSelect(option)"
+                                >
                                     <div class="max-w-80 line-clamp-2" v-html="option.label"></div>
                                 </CommandItem>
-                            </template>
-                        </CommandGroup>
-                    </template>
+                            </CommandGroup>
+                        </template>
 
-                    <template v-if="selectedValues.length">
-                        <CommandSeparator />
-                        <div class="p-1">
-                            <Button class="w-full h-8" variant="ghost" @click="updateValue([])">
-                                {{ __('sharp::filters.select.reset') }}
-                            </Button>
-                        </div>
-                    </template>
-                </CommandList>
-            </ComboboxPortal>
-        </ComboboxRoot>
+                        <template v-if="selectedValues.length">
+                            <div class="sticky -bottom-px rounded-b-md border-b border-transparent bg-popover">
+                                <CommandSeparator />
+                                <div class="p-1">
+                                    <Button class="h-8 w-full" variant="ghost" @click="updateValue([])">
+                                        {{ __('sharp::filters.select.reset') }}
+                                    </Button>
+                                </div>
+                            </div>
+                        </template>
+                    </CommandList>
+                </Command>
+            </PopoverContent>
+        </Popover>
     </div>
 </template>

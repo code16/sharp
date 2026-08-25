@@ -1,1 +1,0 @@
-import{Mr as e,Qr as t,Tr as n,Ur as r,_ as i,fi as a,si as o,wr as s,wt as c}from"./sharp-iUU4aExz.js";var l={class:`@container`},u={class:`container pt-6 @3xl:pt-10`},d={class:`text-xl`},f=e({__name:`Welcome`,setup(e){return(e,f)=>(r(),n(i,null,{default:t(()=>[s(`div`,l,[s(`div`,u,[s(`h1`,d,a(o(c)(`sharp::menu.no-dashboard-message`)),1)])])]),_:1}))}});export{f as default};
