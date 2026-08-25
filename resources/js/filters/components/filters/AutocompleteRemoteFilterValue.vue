@@ -1,16 +1,17 @@
 <script setup lang="ts">
-    import { AutocompleteRemoteFilterData, SelectFilterData } from "@/types";
+    import { AutocompleteRemoteFilterData } from "@/types";
     import { Badge } from "@/components/ui/badge";
     import { FilterProps } from "@/filters/types";
-    import { trans_choice } from "@/utils/i18n";
+    import { computed } from "vue";
 
     const props = defineProps<FilterProps<AutocompleteRemoteFilterData>>();
+    const singleValue = computed(() => Array.isArray(props.value) ? null : props.value);
 </script>
 
 <template>
     <div class="flex gap-1" :class="{ 'flex-wrap': !inline }">
         <Badge variant="secondary" class="block rounded-sm px-1 font-normal max-w-52 truncate">
-            {{ value.label }}
+            {{ singleValue?.label }}
         </Badge>
     </div>
 </template>

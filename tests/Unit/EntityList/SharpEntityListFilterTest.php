@@ -813,6 +813,7 @@ it('allows to define a autocomplete remote filter', function () {
             'type' => 'autocompleteRemote',
             'master' => false,
             'required' => false,
+            'multiple' => false,
             'debounceDelay' => 500,
             'searchMinChars' => 2,
         ]);

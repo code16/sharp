@@ -309,6 +309,40 @@ function entityListSuite(test: TestType<PlaywrightTestArgs & PlaywrightTestOptio
       await page.getByRole('button', { name: 'Reset all' }).click();
       await expect(page.getByText('20 items', { exact: true }).first()).toBeVisible();
     });
+    test('autocomplete remote multiple', async ({ page, init, goto, reload }) => {
+      await init();
+      await goto();
+
+      const input = page.getByRole('combobox', { name: 'Autocomplete remote multiple', exact: true });
+      await input.fill('O');
+      await expect(page.getByText('Enter at least 2 characters to search...', { exact: true })).toBeVisible();
+
+      await input.fill('Option 1');
+      await page.getByRole('option', { name: 'Option 1', exact: true }).click();
+      await expect(page.getByRole('button', { name: 'Delete Option 1', exact: true })).toBeVisible();
+      await expect(page.getByText('1 item', { exact: true }).first()).toBeVisible();
+
+      await input.fill('Option 2');
+      await page.getByRole('option', { name: 'Option 2', exact: true }).click();
+      await expect(page.getByRole('button', { name: 'Delete Option 2', exact: true })).toBeVisible();
+      await expect(page.getByText('2 items', { exact: true }).first()).toBeVisible();
+
+      await input.fill('Option 2');
+      await expect(page.getByRole('option', { name: 'Option 2', exact: true })).toHaveCount(0);
+
+      await reload();
+      await expect(page.getByRole('button', { name: 'Delete Option 1', exact: true })).toBeVisible();
+      await expect(page.getByRole('button', { name: 'Delete Option 2', exact: true })).toBeVisible();
+
+      await page.getByRole('button', { name: 'Delete Option 1', exact: true }).click();
+      await expect(page.getByRole('button', { name: 'Delete Option 1', exact: true })).toHaveCount(0);
+      await expect(page.getByText('1 item', { exact: true }).first()).toBeVisible();
+
+      await input.click();
+      await page.getByRole('button', { name: 'Reset', exact: true }).click();
+      await expect(page.getByRole('button', { name: 'Delete Option 2', exact: true })).toHaveCount(0);
+      await expect(page.getByText('20 items', { exact: true }).first()).toBeVisible();
+    });
   });
   test('search', async ({ page, init, goto, reload }) => {
     await init();
@@ -520,5 +554,4 @@ function entityListSuite(test: TestType<PlaywrightTestArgs & PlaywrightTestOptio
     });
   });
 }
-
 
