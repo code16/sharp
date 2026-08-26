@@ -100,7 +100,7 @@
                     :model-value="inputValue"
                     @focus="window.setTimeout(() => $event.target.select(), 50)"
                     @blur="onInputBlur"
-                    @keyup.enter="onInputEnter"
+                    @keydown.enter="onInputEnter"
                 />
                 <span>
                     {{ __('sharp::entity_list.pagination.current', { last_page: entityList.meta.last_page }).split(':current_page')[1] }}
