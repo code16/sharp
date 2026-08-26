@@ -1,6 +1,5 @@
 <script setup lang="ts">
     import { AutocompleteRemoteFilterData } from "@/types";
-    import { Checkbox } from "@/components/ui/checkbox";
     import { Label } from "@/components/ui/label";
     import { FilterEmits, FilterProps } from "@/filters/types";
     import { useRemoteAutocomplete } from "@/composables/useRemoteAutocomplete";
@@ -19,17 +18,20 @@
     } from "@/components/ui/command";
     import { Check } from "lucide-vue-next";
     import { cn } from "@/utils/cn";
-    import { computed, ref } from "vue";
+    import { ref } from "vue";
     import AutocompleteRemoteFilterValue from "@/filters/components/filters/AutocompleteRemoteFilterValue.vue";
     import { route } from "@/utils/url";
     import { Button } from "@/components/ui/button";
+    import AutocompleteRemoteMultipleFilter from "@/filters/components/filters/AutocompleteRemoteMultipleFilter.vue";
+
+    type Option = { id: string | number, label: string };
 
     const props = defineProps<FilterProps<AutocompleteRemoteFilterData>>();
     const emit = defineEmits<FilterEmits<AutocompleteRemoteFilterData>>();
     const open = ref(false);
 
     const searchTerm = ref('');
-    const { results, loading, search } = useRemoteAutocomplete<AutocompleteRemoteFilterData['value'][]>(
+    const { results, loading, search } = useRemoteAutocomplete<Option[]>(
         ({ query, signal, onSuccess, onError }) =>
             api.post(
                 route('code16.sharp.api.filters.autocomplete.index', {
@@ -48,25 +50,15 @@
         }
     )
 
-    function isSelected(selectValue: AutocompleteRemoteFilterData['value']) {
+    function isSelected(selectValue: Option) {
         return Array.isArray(props.value)
             ? !!props.value.find(v => selectValue.id == v.id)
             : props.value?.id == selectValue.id;
     }
 
-    function onSelect(selectValue: AutocompleteRemoteFilterData['value']) {
-        // if(props.filter.multiple) {
-        //     const value = Object.values({
-        //         ...Object.fromEntries(
-        //             Object.entries(props.value || []).map(([i,v]) => [v.id, v])
-        //         ),
-        //         [selectValue.id]: selectValue,
-        //     });
-        //     emit('input', value);
-        // } else {
-            open.value = false;
-            emit('input', props.value?.id == selectValue.id ? null : selectValue);
-        // }
+    function onSelect(selectValue: Option) {
+        open.value = false;
+        emit('input', !Array.isArray(props.value) && props.value?.id == selectValue.id ? null : selectValue);
     }
 
     function onSearchInput(query: string) {
@@ -85,7 +77,12 @@
 </script>
 
 <template>
-    <div>
+    <AutocompleteRemoteMultipleFilter
+        v-if="filter.multiple"
+        v-bind="props"
+        @input="emit('input', $event)"
+    />
+    <div v-else>
         <Label v-if="!inline">
             {{ filter.label }}
         </Label>
@@ -112,7 +109,6 @@
             </PopoverTrigger>
             <PopoverContent :class="cn('p-0 w-auto min-w-[200px]', !inline ? 'w-(--reka-popover-trigger-width)' : '')" align="start">
                 <Command highlight-on-hover>
-<!--                :multiple="props.filter.multiple" -->
                     <CommandInput
                         class="field-sizing-content"
                         :model-value="searchTerm"
@@ -130,11 +126,6 @@
                                 {{ __('sharp::form.autocomplete.loading') }}
                             </div>
                         </template>
-<!--                        <template v-else-if="!results?.length && searchTerm.length < props.filter.searchMinChars">-->
-<!--                            <div class="py-6 px-4 text-center text-sm">-->
-<!--                                {{ trans_choice('sharp::form.autocomplete.query_too_short', props.filter.searchMinChars, { min_chars: props.filter.searchMinChars }) }}-->
-<!--                            </div>-->
-<!--                        </template>-->
                         <template v-else>
                             <CommandEmpty>{{ __('sharp::form.autocomplete.no_results_text') }}</CommandEmpty>
                             <template v-if="results.length">
@@ -146,20 +137,12 @@
                                             :aria-selected="isSelected(selectValue)"
                                             @select="onSelect(selectValue)"
                                         >
-<!--                                            <template v-if="filter.multiple">-->
-<!--                                                <Checkbox-->
-<!--                                                    :class="{ 'opacity-50': !isSelected(selectValue) }"-->
-<!--                                                    :model-value="isSelected(selectValue)"-->
-<!--                                                />-->
-<!--                                            </template>-->
-<!--                                            <template v-if="!filter.multiple">-->
-                                                <Check
-                                                    :class="cn(
-                                                      'h-4 w-4',
-                                                      isSelected(selectValue) ? 'opacity-100' : 'opacity-0',
-                                                    )"
-                                                />
-<!--                                            </template>-->
+                                            <Check
+                                                :class="cn(
+                                                  'h-4 w-4',
+                                                  isSelected(selectValue) ? 'opacity-100' : 'opacity-0',
+                                                )"
+                                            />
                                             <div class="max-w-80 line-clamp-2" v-html="selectValue.label"></div>
                                         </CommandItem>
                                     </template>

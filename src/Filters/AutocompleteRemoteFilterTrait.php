@@ -68,7 +68,7 @@ trait AutocompleteRemoteFilterTrait
             'type' => FilterType::AutocompleteRemote->value,
             'master' => $this->isMaster,
             'required' => $this instanceof AutocompleteRemoteRequiredFilter,
-            // 'multiple' => $this instanceof AutocompleteRemoteMultipleFilter,
+            'multiple' => $this instanceof AutocompleteRemoteMultipleFilter,
             'debounceDelay' => $this->debounceDelay,
             'searchMinChars' => $this->searchMinChars,
         ]);

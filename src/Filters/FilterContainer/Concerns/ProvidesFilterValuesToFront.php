@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Filters\FilterContainer\Concerns;
 
+use Code16\Sharp\Filters\AutocompleteRemoteMultipleFilter;
 use Code16\Sharp\Filters\Filter;
 use Code16\Sharp\Filters\SelectMultipleFilter;
 use Illuminate\Support\Arr;
@@ -36,9 +37,9 @@ trait ProvidesFilterValuesToFront
                 ->mapWithKeys(function (Filter $handler) use ($currentValues, $defaultValues) {
                     $current = $currentValues[$handler->getKey()] ?? null;
                     $default = $defaultValues[$handler->getKey()] ?? null;
-                    if ($handler instanceof SelectMultipleFilter) {
-                        $current = is_array($current) ? Arr::sort($current) : [];
-                        $default = is_array($default) ? Arr::sort($default) : [];
+                    if ($handler instanceof SelectMultipleFilter || $handler instanceof AutocompleteRemoteMultipleFilter) {
+                        $current = Arr::sort($handler->formatRawValue($current));
+                        $default = Arr::sort($handler->formatRawValue($default));
                     }
                     $isValuated = (string) $handler->toQueryParam($current) !== (string) $handler->toQueryParam($default);
 
