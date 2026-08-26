@@ -5,6 +5,8 @@
     import { Button } from "@/components/ui/button";
     import en from "apexcharts/dist/locales/en.json";
     import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+    import { Input } from "@/components/ui/input";
+    import { ref, watchEffect } from "vue";
 
     const props = defineProps<{
         entityList: EntityListData,
@@ -12,6 +14,7 @@
     }>();
 
     const emit = defineEmits(['change']);
+    const inputValue = ref(props.entityList.meta.current_page)
 
     function onLinkClick(e: MouseEvent, inSelect = false) {
         if(props.linksOpenable && (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey)) {
@@ -30,6 +33,26 @@
         url.searchParams.set('page', String(page));
         return url.toString();
     }
+
+    function onInputEnter(e: KeyboardEvent) {
+        const input = e.target as HTMLInputElement;
+        const value = input.value;
+        if(!value || Number.isNaN(Number(value))) {
+            input.value = String(inputValue.value);
+            return;
+        }
+        inputValue.value = Math.min(Math.max(Number(value), 1), props.entityList.meta.last_page);
+        input.value = String(inputValue.value);
+        emit('change', inputValue.value);
+    }
+
+    function onInputBlur(e: FocusEvent) {
+        (e.target as HTMLInputElement).value = String(inputValue.value);
+    }
+
+    watchEffect(() => {
+        inputValue.value = props.entityList.meta.current_page;
+    });
 </script>
 
 <template>
@@ -68,24 +91,17 @@
                 <span>
                     {{ __('sharp::entity_list.pagination.current').split(':current_page')[0] }}
                 </span>
-                <Select :model-value="String(entityList.meta.current_page)" @update:model-value="$emit('change', $event)">
-                    <SelectTrigger
-                        class="w-10 justify-center [&_svg]:hidden"
-                        :aria-label="__('sharp::entity_list.pagination.select.aria_label')"
-                    >
-                        {{ entityList.meta.current_page }}
-                    </SelectTrigger>
-                    <SelectContent :align-offset="-22">
-                        <template v-for="page in entityList.meta.last_page">
-                            <SelectItem :value="String(page)">
-                                <template v-if="linksOpenable">
-                                    <a class="absolute inset-0" :href="linkUrl(page)"  @pointerup="onLinkClick($event, true)"></a>
-                                </template>
-                                {{ page }}
-                            </SelectItem>
-                        </template>
-                    </SelectContent>
-                </Select>
+                <Input
+                    class="w-min field-sizing-content min-w-10 text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    type="number"
+                    aria-label="{{ __('sharp::entity_list.pagination.select.aria_label') }}"
+                    :min="1"
+                    :max="entityList.meta.last_page"
+                    :model-value="inputValue"
+                    @focus="window.setTimeout(() => $event.target.select(), 50)"
+                    @blur="onInputBlur"
+                    @keyup.enter="onInputEnter"
+                />
                 <span>
                     {{ __('sharp::entity_list.pagination.current', { last_page: entityList.meta.last_page }).split(':current_page')[1] }}
                 </span>
