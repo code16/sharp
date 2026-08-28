@@ -4,8 +4,8 @@ namespace Code16\Sharp\Utils\Fields\Formatters;
 
 use Code16\Sharp\Form\Fields\Formatters\EditorEmbedsFormatter;
 use Code16\Sharp\Form\Fields\SharpFormField;
+use Code16\Sharp\Utils\Fields\IsSharpFieldWithEmbeds;
 use Code16\Sharp\Utils\Fields\IsSharpFieldWithLocalization;
-use Code16\Sharp\Utils\Fields\SharpFieldWithEmbeds;
 use DOMAttr;
 use Illuminate\Support\Str;
 
@@ -14,7 +14,7 @@ trait FormatsEditorEmbeds
     use FormatsHtmlContent;
 
     /**
-     * @param  SharpFieldWithEmbeds&IsSharpFieldWithLocalization  $field
+     * @param  IsSharpFieldWithEmbeds&IsSharpFieldWithLocalization  $field
      */
     protected function formatEditorEmbedsToFront(IsSharpFieldWithLocalization $field, $value): array
     {

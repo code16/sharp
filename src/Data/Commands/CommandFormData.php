@@ -17,10 +17,10 @@ final class CommandFormData extends Data
         #[LiteralTypeScriptType('{ [key:string]: FormFieldData["value"] }')]
         public ?array $data,
         public CommandFormConfigData $config,
-        /** @var array<string,FormFieldData> */
+        /** @var array<string,FormFieldData>|null */
         public ?array $fields = null,
         public ?FormLayoutData $layout = null,
-        /** @var array<string> */
+        /** @var array<string>|null */
         public ?array $locales = null,
         public ?PageAlertData $pageAlert = null,
         public ?array $_rawData = null,
