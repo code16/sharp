@@ -616,6 +616,7 @@ export type FormTextFieldData = {
   placeholder: string | null;
   maxLength: number | null;
   localized: boolean | null;
+  suggestions: string[] | null;
   label: string | null;
   readOnly: boolean | null;
   conditionalDisplay: FormConditionalDisplayData | null;
@@ -751,7 +752,7 @@ export type MenuItemData = {
 };
 export type NotificationData = {
   title: string;
-  level: NotificationLevel;
+  level: NotificationLevel | null;
   message: string | null;
   autoHide: boolean;
 };
