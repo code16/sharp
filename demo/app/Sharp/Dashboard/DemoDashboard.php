@@ -16,6 +16,7 @@ use Code16\Sharp\Dashboard\Layout\DashboardLayout;
 use Code16\Sharp\Dashboard\Layout\DashboardLayoutRow;
 use Code16\Sharp\Dashboard\Layout\DashboardLayoutSection;
 use Code16\Sharp\Dashboard\SharpDashboard;
+use Code16\Sharp\Dashboard\Widgets\Graph\NumberFormatOptions;
 use Code16\Sharp\Dashboard\Widgets\SharpAreaGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpBarGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpFigureWidget;
@@ -56,6 +57,7 @@ class DemoDashboard extends SharpDashboard
                 SharpAreaGraphWidget::make('visits_line')
                     ->setTitle('Visits')
                     ->setHeight(200)
+                    ->setTooltipValueFormat(new NumberFormatOptions(style: 'unit', unit: 'gigabyte'))
                     // ->setStacked()
                     // ->setShowStackTotal(label: 'Total visits')
                     // ->setShowLegend()

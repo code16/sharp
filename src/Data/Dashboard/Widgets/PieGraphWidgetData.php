@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Data\Dashboard\Widgets;
 
+use Code16\Sharp\Dashboard\Widgets\Graph\NumberFormatOptions;
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Enums\GraphWidgetDisplay;
 use Code16\Sharp\Enums\WidgetType;
@@ -28,6 +29,7 @@ final class PieGraphWidgetData extends Data
         public ?int $ratioX = null,
         public ?int $ratioY = null,
         public ?int $height = null,
+        public ?NumberFormatOptions $formatOptions = null,
     ) {}
 
     public static function from(array $widget): self
