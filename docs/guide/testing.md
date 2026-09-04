@@ -136,6 +136,14 @@ $this->sharpList(Post::class)
     ->assertOk();
 ```
 
+### Deleting an instance
+
+```php
+$this->sharpList(Post::class)
+    ->delete(1)
+    ->assertOk();
+```
+
 ## Testing Show Pages
 
 Use `sharpShow()` to test your Show Pages.
@@ -162,6 +170,14 @@ $this->sharpShow(Post::class, 1)
     ->instanceCommand(PublishPost::class)
     ->post()
     ->assertOk();
+```
+
+### Deleting an instance
+
+```php
+$this->sharpShow(Post::class, 1)
+    ->delete()
+    ->assertRedirect();
 ```
 
 ### List & dashboard fields

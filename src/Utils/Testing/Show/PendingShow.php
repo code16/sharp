@@ -14,6 +14,8 @@ use Code16\Sharp\Utils\Testing\Form\PendingForm;
 use Code16\Sharp\Utils\Testing\IsPendingComponent;
 use Code16\Sharp\Utils\Testing\SharpAssertions;
 use Illuminate\Foundation\Testing\TestCase;
+use Illuminate\Testing\TestResponse;
+use PHPUnit\Framework\Assert as PHPUnit;
 
 class PendingShow
 {
@@ -67,6 +69,18 @@ class PendingShow
                     ])
                 )
         );
+    }
+
+    public function delete(): TestResponse
+    {
+        PHPUnit::assertNotNull($this->instanceId, 'Cannot delete a show without an instance id.');
+
+        return $this->test
+            ->delete(route('code16.sharp.show.delete', [
+                'parentUri' => $this->getParentUri(),
+                'entityKey' => $this->entityKey,
+                'instanceId' => $this->instanceId,
+            ]));
     }
 
     public function instanceCommand(string $commandKeyOrClassName): PendingCommand
