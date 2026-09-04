@@ -28,13 +28,13 @@ php artisan sharp:make:form <class_name> [--model=<model_name>,--single]
 php artisan sharp:make:show-page <class_name> [--model=<model_name>,--single]
 
 # Generate a Policy
-php artisan sharp:make:policy <class_name> [--entity-only]
+php artisan sharp:make:policy <class_name> [--single]
 
 # Generate an Entity Command
-php artisan sharp:make:entity-command <class_name> [--model=<model_name>,--wizard,--form]
+php artisan sharp:make:entity-command <class_name> [--wizard,--form]
 
 # Generate an Instance Command
-php artisan sharp:make:intance-command <class_name> [--model=<model_name>,--wizard,--form]
+php artisan sharp:make:instance-command <class_name> [--wizard,--form]
 
 # Generate a Entity List Filter
 php artisan sharp:make:entity-list-filter <class_name> [--required,--multiple,--date-range,--check]

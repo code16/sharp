@@ -78,7 +78,10 @@ class MyShow extends SharpShow
     
     public function buildShowFields(FieldsContainer $showFields): void
     {
-      SharpShowEntityListField::make('products');
+        $showFields
+            ->addField(
+                SharpShowEntityListField::make('products')
+            );
     }
 }
 ```
@@ -307,18 +310,21 @@ class MyShow extends SharpShow
 Here is the full list of available methods:
 
 - `configureBreadcrumbCustomLabelAttribute(string $breadcrumbAttribute)`: declare the data attribute to use for the breadcrumb; [see detailed doc](sharp-breadcrumb.md)
-- `configurePageAlert(string $template, string $alertLevel = null, string $fieldKey = null, bool $declareTemplateAsPath = false)`: display a dynamic message above the Show Page; [see detailed doc](page-alerts.md)
 - `configureEntityState(string $stateAttribute, $stateHandlerOrClassName)`: add a state
   toggle, [see detailed doc](entity-states.md)
 - `configurePageTitleAttribute(string $titleAttribute, bool $localized = false)`: define a title to the Show Page, configuring an attribute that should be part of the `find($id)` array
 - `configureDeleteConfirmationText(string $text)` to add a custom confirm message when the use clicks on the delete button.
 - `configureEditButtonLabel(string $label)` to set a custom "Edit..." button label.
 
+### Display a Page Alert
+
+Override `buildPageAlert(PageAlert $pageAlert): void` to display a dynamic message above the Show Page; [see detailed doc](page-alerts.md).
+
 ## Accessing the navigation breadcrumb
 
 A common pattern for Shows is to add an embedded EntityList with related entities, and to allow update but also creation from there. Taking back our order / products example, we may need to add a product to the order. Question is: how can we attach a newly created product to an existing order?
 
-The answer is by accessing the navigation breadcrumb, with [Sharp Context](context.md), and more precisely with its `getPreviousPageFromBreadcrumb()` method. Here's a full example:
+The answer is by accessing the navigation breadcrumb, with [Sharp Context](context.md), and more precisely with its `breadcrumb()->previousShowSegment()` method. Here's a full example:
 
 ```php
 class ProductSharpForm extends SharpForm
@@ -329,7 +335,7 @@ class ProductSharpForm extends SharpForm
         $product = $this->save($product, $data);
         
         if (sharp()->context()->isCreation()) {
-              Order::findOrFail(sharp()->context()->previousShowSegment()->instanceId())
+              Order::findOrFail(sharp()->context()->breadcrumb()->previousShowSegment()->instanceId())
                   ->products()
                   ->attach($product->id);
         }

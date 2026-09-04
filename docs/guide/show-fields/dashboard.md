@@ -54,7 +54,7 @@ SharpShowDashboardField::make(PostDashboardEntity::class)
     ->hideFilterWithValue(PostFilter::class, fn ($instanceId) => $instanceId);
 ```
 
-**One final note**: sometimes the linked filter is really just a scope, never displayed to the user. In this case, it can be tedious to write a full implementation in the Dashboard. In this situation, you can use the `HiddenFiler` class for the filter, passing a key:
+**One final note**: sometimes the linked filter is really just a scope, never displayed to the user. In this case, it can be tedious to write a full implementation in the Dashboard. In this situation, you can use the `HiddenFilter` class for the filter, passing a key:
 
 ```php
 class PostShow extends SharpShow
@@ -87,10 +87,10 @@ class PostDashboard extends SharpDashboard
     
     protected function buildWidgetsData(): void
     {
-        return $this->setFigureData('visit_count', 
+        $this->setFigureData('visit_count',
             figure: Post::query()
                 ->findOrFail($this->queryParams->filterFor('post'))
-                ->get()?->visit_count
+                ->visit_count
         );
     }
 }

@@ -116,8 +116,8 @@ class Activate2faCommand extends SingleInstanceWizardCommand
 ```php
 class Deactivate2faCommand extends SingleInstanceCommand
 {
-    use Code16\Sharp\Auth\TwoFactor\Commands\Deactivate2FaViaTotpSingleInstanceCommandTrait;
-    // or Code16\Sharp\Auth\TwoFactor\Commands\Deactivate2FaViaTotpEntityCommandTrait
+    use Code16\Sharp\Auth\TwoFactor\Commands\Deactivate2faViaTotpSingleInstanceCommandTrait;
+    // or Code16\Sharp\Auth\TwoFactor\Commands\Deactivate2faViaTotpEntityCommandTrait
 }
 ```
 

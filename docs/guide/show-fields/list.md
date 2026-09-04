@@ -17,8 +17,6 @@ class MyShow extends SharpShow
                 ->setLabel('additional pictures')
                 ->addItemField(
                     SharpShowFileField::make('file')
-                        ->setStorageDisk('local')
-                        ->setStorageBasePath('data/Product/{id}/pictures')
                 )
                 ->addItemField(
                     SharpShowTextField::make('legend')

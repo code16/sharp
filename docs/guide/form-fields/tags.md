@@ -29,11 +29,7 @@ Default: []
 Set the id name attribute of tags.
 Default: "id"
 
-### `setDisplayAsDropdown()`
-
-Display as a classic dropdown.
-
-### `setMaxTagsCount(int $maxTagCount)`
+### `setMaxTagCount(int $maxTagCount)`
 
 Set a maximum tags selection.
 Default: unlimited.
@@ -41,10 +37,6 @@ Default: unlimited.
 ### `setMaxTagCountUnlimited`
 
 Unset a maximum tags selection.
-
-### `setInline(bool $inline = true)`
-
-Display an inline checklist (if multiple + display=list).
 
 
 ## Formatter

@@ -35,6 +35,7 @@ class BookForm extends SharpForm
             SharpFormTextField::make('title')
                 ->setLabel('Title')
                 ->setLocalized()
+        );
     }
 }
 ```
@@ -50,6 +51,8 @@ Sharp is expecting, for localized fields, a key / value array where the locales 
 ```php
 class BookForm extends SharpForm
 {
+    use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
+
     // [...]
     
     function find($id): array
@@ -81,6 +84,10 @@ class BookForm extends SharpForm
     }
 }
 ```
+
+::: info
+`ignore()` and `save()` come from the `WithSharpFormEloquentUpdater` trait ([see the Eloquent updater documentation](building-form.md)) - a plain `SharpForm` subclass doesn't have them.
+:::
 
 As you see here, Sharp data structure for localized values is the name of the field suffixed with a dot and the locale. So if `title` is a localized field, and "en" and "fr" locales are configured for the Form, Sharp will expect `title` to be a key / value array with the locales as keys, and will send it back in the `update()` method with this same format.
 

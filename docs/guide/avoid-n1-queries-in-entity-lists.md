@@ -80,7 +80,7 @@ class PostPolicy extends SharpEntityPolicy
         }
         
         return sharp()->context()
-            ->findListInstance($postId, fn($postId) => Post::find($postId))
+            ->findListInstance($instanceId, fn($instanceId) => Post::find($instanceId))
             ->author_id === auth()->id();
     }
 }
@@ -93,7 +93,7 @@ This `findListInstance()` method in the `sharp()->context()` helper class (see [
 The `findListInstance()` takes a second argument: this is a callback that will be called only if the instance is not already in the cache, passing the instance id as parameter. This Closure must return the instance.
 
 ::: info
-Note that the cache set is automatic if you use the standard `->transform()` method. In case you don’t, you can still set it manually calling `sharp()->context()->cacheInstances(?Collection $instances)`. 
+Note that the cache set is automatic if you use the standard `->transform()` method. In case you don’t, you can still set it manually calling `sharp()->context()->cacheListInstances(?Collection $instances)`. 
 :::
 
 With this quite simple trick you can avoid a lot of useless queries and improve the performance of your Entity Lists.

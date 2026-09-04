@@ -122,7 +122,7 @@ it('allows the user to display a leaf form', function () {
 });
 ```
 
-#### `withSharpGlobalFilterValues(array|string $filterValues): self`
+#### `withSharpGlobalFilterValues(array|string $globalFilterValues): self`
 
 You can specify the global filter values to use in the Sharp context.
 
