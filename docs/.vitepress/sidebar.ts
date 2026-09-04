@@ -4,10 +4,18 @@ export function sidebar(): DefaultTheme.SidebarItem[] {
     return [
         {
             text: 'Introduction',
+            collapsed: true,
             items: [
-                { text: 'Getting started and installation', link: '/guide/index.md' },
+                { text: 'Getting started', link: '/guide/index.md' },
+                { text: 'Installation', link: '/guide/installation.md' }
+            ]
+        },
+        {
+            text: 'Entity class & Menu',
+            collapsed: true,
+            items: [
                 { text: 'The entity class', link: '/guide/entity-class.md' },
-                { text: 'The Menu', link: '/guide/building-menu.md' }
+                { text: 'Create the main Menu', link: '/guide/building-menu.md' }
             ]
         },
         {
@@ -29,22 +37,28 @@ export function sidebar(): DefaultTheme.SidebarItem[] {
                 { text: 'Using Single Form for unique resources', link: '/guide/single-form.md' },
                 { text: 'Quick creation form', link: '/guide/quick-creation-form.md' },
                 { text: 'Write an Embed for the Editor field', link: '/guide/form-editor-embeds.md' },
-                { text: 'Text', link: '/guide/form-fields/text.md' },
-                { text: 'Textarea', link: '/guide/form-fields/textarea.md' },
-                { text: 'Editor', link: '/guide/form-fields/editor.md' },
-                { text: 'Number', link: '/guide/form-fields/number.md' },
-                { text: 'Html', link: '/guide/form-fields/html.md' },
-                { text: 'Check', link: '/guide/form-fields/check.md' },
-                { text: 'Date', link: '/guide/form-fields/date.md' },
-                { text: 'Upload', link: '/guide/form-fields/upload.md' },
-                { text: 'Select', link: '/guide/form-fields/select.md' },
-                { text: 'Autocomplete', link: '/guide/form-fields/autocomplete.md' },
-                { text: 'Tags', link: '/guide/form-fields/tags.md' },
-                { text: 'List', link: '/guide/form-fields/list.md' },
-                { text: 'AutocompleteList', link: '/guide/form-fields/autocomplete-list.md' },
-                { text: 'Geolocation', link: '/guide/form-fields/geolocation.md' },
                 { text: 'Multi-Forms (deprecated)', link: '/guide/multiforms.md' },
-                // { text: 'Custom form field', link: '/guide/custom-form-fields.md' }
+                {
+                    text: 'Fields reference',
+                    collapsed: true,
+                    items: [
+                        { text: 'Text', link: '/guide/form-fields/text.md' },
+                        { text: 'Textarea', link: '/guide/form-fields/textarea.md' },
+                        { text: 'Editor', link: '/guide/form-fields/editor.md' },
+                        { text: 'Number', link: '/guide/form-fields/number.md' },
+                        { text: 'Html', link: '/guide/form-fields/html.md' },
+                        { text: 'Check', link: '/guide/form-fields/check.md' },
+                        { text: 'Date', link: '/guide/form-fields/date.md' },
+                        { text: 'Upload', link: '/guide/form-fields/upload.md' },
+                        { text: 'Select', link: '/guide/form-fields/select.md' },
+                        { text: 'Autocomplete', link: '/guide/form-fields/autocomplete.md' },
+                        { text: 'Tags', link: '/guide/form-fields/tags.md' },
+                        { text: 'List', link: '/guide/form-fields/list.md' },
+                        { text: 'AutocompleteList', link: '/guide/form-fields/autocomplete-list.md' },
+                        { text: 'Geolocation', link: '/guide/form-fields/geolocation.md' },
+                        // { text: 'Custom form field', link: '/guide/custom-form-fields.md' }
+                    ]
+                }
             ]
         },
         {
@@ -53,13 +67,19 @@ export function sidebar(): DefaultTheme.SidebarItem[] {
             items: [
                 { text: 'Create a Show Page', link: '/guide/building-show-page.md' },
                 { text: 'Using Single Show for unique resources', link: '/guide/single-show.md' },
-                { text: 'Text', link: '/guide/show-fields/text.md' },
-                { text: 'Picture', link: '/guide/show-fields/picture.md' },
-                { text: 'List', link: '/guide/show-fields/list.md' },
-                { text: 'File', link: '/guide/show-fields/file.md' },
-                { text: 'Entity List', link: '/guide/show-fields/entity-list.md' },
-                { text: 'Dashboard', link: '/guide/show-fields/dashboard.md' },
-                // { text: 'Custom show field', link: '/guide/custom-show-fields.md' }
+                {
+                    text: 'Fields reference',
+                    collapsed: true,
+                    items: [
+                        { text: 'Text', link: '/guide/show-fields/text.md' },
+                        { text: 'Picture', link: '/guide/show-fields/picture.md' },
+                        { text: 'List', link: '/guide/show-fields/list.md' },
+                        { text: 'File', link: '/guide/show-fields/file.md' },
+                        { text: 'Entity List', link: '/guide/show-fields/entity-list.md' },
+                        { text: 'Dashboard', link: '/guide/show-fields/dashboard.md' },
+                        // { text: 'Custom show field', link: '/guide/custom-show-fields.md' }
+                    ]
+                }
             ]
         },
         {
@@ -92,21 +112,39 @@ export function sidebar(): DefaultTheme.SidebarItem[] {
             ]
         },
         {
-            text: 'Generalities',
+            text: 'Core APIs',
+            collapsed: true,
+            items: [
+                { text: 'Sharp Context', link: '/guide/context.md' },
+                { text: 'How to transform data', link: '/guide/how-to-transform-data.md' },
+                { text: 'Sharp built-in solution for uploads', link: '/guide/sharp-uploads.md' },
+                { text: 'Data localization in Form and Show Page', link: '/guide/data-localization.md' }
+            ]
+        },
+        {
+            text: 'Navigation & Feedback',
             collapsed: true,
             items: [
                 { text: 'Sharp’s breadcrumb', link: '/guide/sharp-breadcrumb.md' },
-                { text: 'Implement global search', link: '/guide/global-search.md' },
-                { text: 'How to transform data', link: '/guide/how-to-transform-data.md' },
                 { text: 'Create links to an entity', link: '/guide/link-to.md' },
-                { text: 'Add global page alert', link: '/guide/page-alerts.md' },
-                { text: 'Sharp Context', link: '/guide/context.md' },
-                { text: 'Sharp built-in solution for uploads', link: '/guide/sharp-uploads.md' },
-                { text: 'Data localization in Form and Show Page', link: '/guide/data-localization.md' },
+                { text: 'Implement global search', link: '/guide/global-search.md' },
+                { text: 'Add global page alert', link: '/guide/page-alerts.md' }
+            ]
+        },
+        {
+            text: 'Customization',
+            collapsed: true,
+            items: [
+                { text: 'Style & Visual Theme', link: '/guide/style-visual-theme.md' }
+            ]
+        },
+        {
+            text: 'Testing & Tooling',
+            collapsed: true,
+            items: [
                 { text: 'Testing', link: '/guide/testing.md' },
                 { text: 'Testing (legacy API)', link: '/guide/testing-legacy.md' },
-                { text: 'Artisan Generators', link: '/guide/artisan-generators.md' },
-                { text: 'Style & Visual Theme', link: '/guide/style-visual-theme.md' }
+                { text: 'Artisan Generators', link: '/guide/artisan-generators.md' }
             ]
         },
         {
@@ -116,11 +154,17 @@ export function sidebar(): DefaultTheme.SidebarItem[] {
                 { text: 'Upgrading from 8.x to 9.x', link: '/guide/upgrading/9.0.md' },
                 { text: 'Upgrading from 7.x to 8.x', link: '/guide/upgrading/8.0.md' },
                 { text: 'Upgrading from 6.x to 7.x', link: '/guide/upgrading/7.0.md' },
-                { text: 'Upgrading from 5.x to 6.x', link: '/guide/upgrading/6.0.md' },
-                { text: 'Upgrading from 4.2.x to 5.x', link: '/guide/upgrading/5.0.md' },
-                { text: 'Upgrading from 4.1.x to 4.2', link: '/guide/upgrading/4.2.md' },
-                { text: 'Upgrading from 4.1 to 4.1.3', link: '/guide/upgrading/4.1.3.md' },
-                { text: 'Upgrading from 4.0 to 4.1', link: '/guide/upgrading/4.1.md' }
+                {
+                    text: 'Older versions',
+                    collapsed: true,
+                    items: [
+                        { text: 'Upgrading from 5.x to 6.x', link: '/guide/upgrading/6.0.md' },
+                        { text: 'Upgrading from 4.2.x to 5.x', link: '/guide/upgrading/5.0.md' },
+                        { text: 'Upgrading from 4.1.x to 4.2', link: '/guide/upgrading/4.2.md' },
+                        { text: 'Upgrading from 4.1 to 4.1.3', link: '/guide/upgrading/4.1.3.md' },
+                        { text: 'Upgrading from 4.0 to 4.1', link: '/guide/upgrading/4.1.md' }
+                    ]
+                }
             ]
         }
     ];
