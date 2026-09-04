@@ -167,7 +167,7 @@ class MyShow extends SharpShow
 }
 ```
 
-A `ShowLayoutColumn`, very much like a `FormLayoutColumn`, can declare single field rows and multi fields rows. Report to the [Form layout documentation](building-form.md#buildformlayout) to find out how.
+A `ShowLayoutColumn`, very much like a `FormLayoutColumn`, can declare single field rows and multi fields rows. Report to the [Form layout documentation](building-form.md#buildformlayoutformlayout-formlayout) to find out how.
 
 #### SharpShowListField's layout
 
