@@ -20,6 +20,7 @@ class SharpFormTextField extends SharpFormField implements IsSharpFieldWithHtmlS
     const FIELD_TYPE = 'text';
 
     protected string $inputType = 'text';
+    private ?array $suggestions = null;
 
     public static function make(string $key): self
     {
@@ -61,10 +62,19 @@ class SharpFormTextField extends SharpFormField implements IsSharpFieldWithHtmlS
         return $this;
     }
 
+    public function setSuggestions(?array $suggestions = null): self
+    {
+        $this->suggestions = $suggestions;
+
+        return $this;
+    }
+
     protected function validationRules(): array
     {
         return [
             'inputType' => 'required|in:text,password,email,tel,url',
+            'suggestions' => 'nullable|array',
+            'suggestions.*' => 'string',
         ];
     }
 
@@ -75,6 +85,7 @@ class SharpFormTextField extends SharpFormField implements IsSharpFieldWithHtmlS
             'placeholder' => $this->placeholder,
             'maxLength' => $this->maxLength,
             'localized' => $this->localized,
+            'suggestions' => $this->suggestions,
         ]);
     }
 }
