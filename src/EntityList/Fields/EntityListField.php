@@ -6,6 +6,9 @@ use Code16\Sharp\Utils\Sanitization\IsSharpFieldWithHtmlSanitization;
 use Code16\Sharp\Utils\Sanitization\SharpFieldWithHtmlSanitization;
 use Illuminate\Contracts\Support\Arrayable;
 
+/**
+ * @implements Arrayable<array-key, mixed>
+ */
 class EntityListField implements Arrayable, IsEntityListField, IsSharpFieldWithHtmlSanitization
 {
     use HasCommonEntityListFieldAttributes;
