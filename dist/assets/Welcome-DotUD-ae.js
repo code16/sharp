@@ -1,0 +1,1 @@
+import{C as e,Gr as t,Ir as n,Tr as r,Ut as i,_r as a,ai as o,ei as s,vr as c}from"./sharp-IOnEV7nn.js";var l={class:`@container`},u={class:`container pt-6 @3xl:pt-10`},d={class:`text-xl`},f=r({__name:`Welcome`,setup(r){return(r,f)=>(n(),c(e,null,{default:t(()=>[a(`div`,l,[a(`div`,u,[a(`h1`,d,o(s(i)(`sharp::menu.no-dashboard-message`)),1)])])]),_:1}))}});export{f as default};
