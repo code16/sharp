@@ -86,6 +86,7 @@ class SharpFormTextField extends SharpFormField implements IsSharpFieldWithHtmlS
             'maxLength' => $this->maxLength,
             'localized' => $this->localized,
             'suggestions' => $this->suggestions,
+            'suggestionType' => $this->suggestions ? 'local' : null,
         ]);
     }
 }

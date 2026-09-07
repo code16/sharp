@@ -26,6 +26,8 @@ final class FormTextFieldData extends Data
         public ?bool $localized = null,
         #[LiteralTypeScriptType('string[] | null')]
         public ?array $suggestions = null,
+        #[LiteralTypeScriptType('"local" | null')]
+        public ?string $suggestionType = null,
         public ?string $label = null,
         public ?bool $readOnly = null,
         public ?FormConditionalDisplayData $conditionalDisplay = null,

@@ -617,6 +617,7 @@ export type FormTextFieldData = {
   maxLength: number | null;
   localized: boolean | null;
   suggestions: string[] | null;
+  suggestionType: "local" | null;
   label: string | null;
   readOnly: boolean | null;
   conditionalDisplay: FormConditionalDisplayData | null;
