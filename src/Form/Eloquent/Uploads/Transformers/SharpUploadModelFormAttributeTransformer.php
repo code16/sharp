@@ -79,6 +79,7 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
                         'path',
                         'disk',
                         'thumbnail',
+                        'large_thumbnail',
                         'playable_preview_url',
                         'download_url',
                         'size',
@@ -109,6 +110,7 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
                     'disk' => $upload->disk,
                     'mime_type' => $upload->mime_type,
                     'thumbnail' => $this->getThumbnailUrl($upload),
+                    'large_thumbnail' => $this->getLargeThumbnailUrl($upload),
                     'playable_preview_url' => $this->getPlayableMediaUrl($upload),
                     'download_url' => URL::temporarySignedRoute(
                         'code16.sharp.download.show',
@@ -125,6 +127,25 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
             ...$upload->custom_properties ?? [], // Including filters
             'id' => $upload->id,
         ];
+    }
+
+    private function getLargeThumbnailUrl(SharpUploadModel $upload): ?string
+    {
+        // prevent generating thumbnail for non-image files
+        if ($upload->mime_type && ! str($upload->mime_type)->startsWith('image/')) {
+            return null;
+        }
+
+        return URL::signedRoute(
+            'code16.sharp.api.form.upload.thumbnail.show',
+            [
+                'entityKey' => sharp()->context()->entityKey(),
+                'instanceId' => sharp()->context()->instanceId(),
+                'disk' => $upload->disk,
+                'path' => $upload->file_name,
+                'width' => 1200,
+                'height' => 1000,
+            ]);
     }
 
     private function getThumbnailUrl(SharpUploadModel $upload): ?string
