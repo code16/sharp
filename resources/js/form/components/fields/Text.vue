@@ -30,7 +30,7 @@
     )
 
     const { fullTextSearch } = useFullTextSearch(
-        () => props.field.suggestions?.map(suggestion => ({ suggestion })) ?? null,
+        () => props.field.suggestions?.map(suggestion => ({ suggestion })),
         { id: 'suggestion', searchKeys: ['suggestion'] }
     );
     const filteredSuggestions = ref([]);
