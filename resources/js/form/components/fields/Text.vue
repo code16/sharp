@@ -80,13 +80,15 @@
     <FormFieldLayout v-bind="props" @locale-change="emit('locale-change', $event)" v-slot="{ id, ariaDescribedBy }">
         <Combobox
             ignore-filter
+            :reset-search-term-on-blur="false"
+            :reset-search-term-on-select="false"
             :open-on-focus="props.field.suggestionType && !textValue"
             :open-on-click="props.field.suggestionType && !textValue"
             @update:open="$event ? onOpen() : null"
         >
             <ComboboxAnchor class="w-full">
                 <div class="relative">
-                    <ComboboxInput :model-value="textValue" as-child>
+                    <ComboboxInput :model-value="textValue" :display-value="() => textValue" as-child>
                         <Input
                             :id="id"
                             :class="field.inputType === 'password' ? 'pr-10' : ''"
