@@ -8,6 +8,9 @@ use Code16\Sharp\Filters\GlobalRequiredFilter;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 
+/**
+ * @implements Arrayable<array-key, mixed>
+ */
 final class GlobalFilters implements Arrayable
 {
     use HasFilters;

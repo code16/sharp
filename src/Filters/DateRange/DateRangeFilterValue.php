@@ -5,6 +5,9 @@ namespace Code16\Sharp\Filters\DateRange;
 use ArrayAccess;
 use Carbon\Carbon;
 
+/**
+ * @implements ArrayAccess<array-key, mixed>
+ */
 class DateRangeFilterValue implements ArrayAccess
 {
     public function __construct(

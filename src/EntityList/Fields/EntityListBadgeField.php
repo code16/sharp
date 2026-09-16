@@ -4,6 +4,9 @@ namespace Code16\Sharp\EntityList\Fields;
 
 use Illuminate\Contracts\Support\Arrayable;
 
+/**
+ * @implements Arrayable<array-key, mixed>
+ */
 class EntityListBadgeField implements Arrayable, IsEntityListField
 {
     use HasCommonEntityListFieldAttributes;
