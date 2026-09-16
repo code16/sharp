@@ -51,6 +51,9 @@ class SharpAuthenticate extends BaseAuthenticate
     {
         Auth::guard($guards[0] ?? sharp()->config()->get('auth.guard'))->logout();
 
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
         session()->flash('status', __('sharp::auth.access_denied'));
         session()->flash('status_level', SessionStatusLevel::Error->value);
 
