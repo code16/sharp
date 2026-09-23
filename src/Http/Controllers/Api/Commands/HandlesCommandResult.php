@@ -19,7 +19,8 @@ trait HandlesCommandResult
     protected function returnCommandResult(
         SharpEntityList|SharpShow|SharpDashboard $commandContainer,
         string $entityKey,
-        CommandReturn $commandReturn
+        CommandReturn $commandReturn,
+        ?array $additionalData = null
     ): StreamedResponse|JsonResponse {
         if ($commandReturn->isAction(CommandAction::Download)) {
             return Storage::disk($commandReturn->getDiskName())
@@ -38,7 +39,10 @@ trait HandlesCommandResult
             );
         }
 
-        $returnedValue = $commandReturn->toArray();
+        $returnedValue = [
+            ...$commandReturn->toArray(),
+            ...$additionalData ?? [],
+        ];
 
         if ($commandReturn->isAction(CommandAction::Refresh) && $commandContainer instanceof SharpEntityList) {
             // We have to load and build items from ids
