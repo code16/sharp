@@ -21,7 +21,7 @@ class VisitFacebookProfileCommand extends InstanceCommand
 
     public function execute(mixed $instanceId, array $data = []): CommandReturn
     {
-        return $this->link('https://facebook.com', openInNewTab: true);
+        return $this->link('https://facebook.com')->inNewTab();
     }
 
     public function authorizeFor(mixed $instanceId): bool

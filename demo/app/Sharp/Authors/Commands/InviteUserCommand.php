@@ -53,6 +53,6 @@ class InviteUserCommand extends EntityCommand
 
         // Here we send an invitation, or something
 
-        return $this->info('Invitation sent!', reload: true);
+        return $this->info('Invitation sent!')->withReload();
     }
 }

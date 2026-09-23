@@ -6,7 +6,16 @@ use Code16\Sharp\Enums\CommandAction;
 
 class CommandLinkReturn extends CommandReturn
 {
-    public function __construct(private readonly string $link, private readonly bool $openInNewTab = false) {}
+    private bool $openInNewTab = false;
+
+    public function __construct(private readonly string $link) {}
+
+    public function inNewTab(bool $openInNewTab = true): self
+    {
+        $this->openInNewTab = $openInNewTab;
+
+        return $this;
+    }
 
     protected function commandAction(): CommandAction
     {

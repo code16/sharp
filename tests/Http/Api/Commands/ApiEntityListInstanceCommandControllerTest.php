@@ -100,7 +100,7 @@ it('allows to call an info + reload instance command', function () {
 
                     public function execute($instanceId, array $data = []): CommandReturn
                     {
-                        return $this->info('ok', reload: true);
+                        return $this->info('ok')->withReload();
                     }
                 },
             ];

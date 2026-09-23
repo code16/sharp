@@ -101,7 +101,7 @@ it('allows to call an info + reload entity command', function () {
 
                     public function execute(array $data = []): CommandReturn
                     {
-                        return $this->info('ok', reload: true);
+                        return $this->info('ok')->withReload();
                     }
                 },
             ];
@@ -280,7 +280,7 @@ it('allows to call an link + openInNewTab entity command', function () {
 
                     public function execute(array $data = []): CommandReturn
                     {
-                        return $this->link('https://sharp.code16.fr', openInNewTab: true);
+                        return $this->link('https://sharp.code16.fr')->inNewTab();
                     }
                 },
             ];

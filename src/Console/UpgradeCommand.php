@@ -143,6 +143,10 @@ class UpgradeCommand extends Command
             }
         }
 
+        // Positional / named bool arguments were replaced by fluent modifiers
+        $content = $this->upgradeHelperBoolArgument($content, 'info', 'reload', 'withReload');
+        $content = $this->upgradeHelperBoolArgument($content, 'link', 'openInNewTab', 'inNewTab');
+
         foreach (array_unique($imports) as $class) {
             $content = $this->addImport($content, 'Code16\\Sharp\\EntityList\\Commands\\Returns\\'.$class);
         }
@@ -171,5 +175,128 @@ class UpgradeCommand extends Command
         }
 
         return $content;
+    }
+
+    /**
+     * Rewrite `$this->info('msg', true)` / `$this->info('msg', reload: $x)`
+     * to `$this->info('msg')->withReload()` / `$this->info('msg')->withReload($x)`.
+     */
+    private function upgradeHelperBoolArgument(string $content, string $helper, string $argName, string $modifier): string
+    {
+        $search = '$this->'.$helper.'(';
+        $offset = 0;
+
+        while (($start = strpos($content, $search, $offset)) !== false) {
+            $argsStart = $start + strlen($search);
+            $argsEnd = $this->findClosingParenthesis($content, $argsStart);
+
+            if ($argsEnd === null) {
+                break;
+            }
+
+            $args = $this->splitArguments(substr($content, $argsStart, $argsEnd - $argsStart));
+            $offset = $argsEnd;
+
+            if (count($args) !== 2) {
+                continue;
+            }
+
+            $boolIndex = preg_match('/^'.$argName.'\s*:/', $args[0]) ? 0 : 1;
+            $boolArg = preg_replace('/^'.$argName.'\s*:\s*/', '', $args[$boolIndex]);
+            $call = $search.$args[1 - $boolIndex].')'.match (strtolower($boolArg)) {
+                'true' => "->{$modifier}()",
+                'false' => '',
+                default => "->{$modifier}({$boolArg})",
+            };
+
+            $content = substr($content, 0, $start).$call.substr($content, $argsEnd + 1);
+            $offset = $start + strlen($call);
+        }
+
+        return $content;
+    }
+
+    /**
+     * Return the position of the parenthesis closing the one opened just before $position,
+     * skipping strings and nested brackets.
+     */
+    private function findClosingParenthesis(string $content, int $position): ?int
+    {
+        $depth = 0;
+        $length = strlen($content);
+
+        for ($i = $position; $i < $length; $i++) {
+            $char = $content[$i];
+
+            if ($char === '"' || $char === "'") {
+                $i = $this->skipString($content, $i);
+            } elseif (in_array($char, ['(', '[', '{'])) {
+                $depth++;
+            } elseif (in_array($char, [')', ']', '}'])) {
+                if ($depth === 0) {
+                    return $char === ')' ? $i : null;
+                }
+                $depth--;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Split a raw argument list on its top-level commas.
+     */
+    private function splitArguments(string $args): array
+    {
+        $parts = [];
+        $depth = 0;
+        $current = '';
+        $length = strlen($args);
+
+        for ($i = 0; $i < $length; $i++) {
+            $char = $args[$i];
+
+            if ($char === '"' || $char === "'") {
+                $end = $this->skipString($args, $i);
+                $current .= substr($args, $i, $end - $i + 1);
+                $i = $end;
+
+                continue;
+            }
+
+            if (in_array($char, ['(', '[', '{'])) {
+                $depth++;
+            } elseif (in_array($char, [')', ']', '}'])) {
+                $depth--;
+            } elseif ($char === ',' && $depth === 0) {
+                $parts[] = trim($current);
+                $current = '';
+
+                continue;
+            }
+
+            $current .= $char;
+        }
+
+        $parts[] = trim($current);
+
+        // Allow trailing comma
+        return array_values(array_filter($parts, fn ($part) => $part !== ''));
+    }
+
+    private function skipString(string $content, int $position): int
+    {
+        $quote = $content[$position];
+        $length = strlen($content);
+
+        for ($i = $position + 1; $i < $length; $i++) {
+            if ($content[$i] === '\\') {
+                $i++;
+            } elseif ($content[$i] === $quote) {
+                return $i;
+            }
+        }
+
+        return $length - 1;
     }
 }

@@ -6,7 +6,16 @@ use Code16\Sharp\Enums\CommandAction;
 
 class CommandInfoReturn extends CommandReturn
 {
-    public function __construct(private readonly string $message, private readonly bool $reload) {}
+    private bool $reload = false;
+
+    public function __construct(private readonly string $message) {}
+
+    public function withReload(bool $reload = true): self
+    {
+        $this->reload = $reload;
+
+        return $this;
+    }
 
     protected function commandAction(): CommandAction
     {

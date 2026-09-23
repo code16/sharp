@@ -41,14 +41,14 @@ abstract class Command
     private ?string $description = null;
     private ?string $icon = null;
 
-    protected function info(string $message, bool $reload = false): CommandInfoReturn
+    protected function info(string $message): CommandInfoReturn
     {
-        return new CommandInfoReturn($message, $reload);
+        return new CommandInfoReturn($message);
     }
 
-    protected function link(string $link, bool $openInNewTab = false): CommandLinkReturn
+    protected function link(string $link): CommandLinkReturn
     {
-        return new CommandLinkReturn($link, $openInNewTab);
+        return new CommandLinkReturn($link);
     }
 
     protected function reload(): CommandReloadReturn

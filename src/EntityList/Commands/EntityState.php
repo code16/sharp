@@ -39,7 +39,7 @@ abstract class EntityState extends InstanceCommand
         throw new SharpInvalidConfigException('View return type is not supported for a state.');
     }
 
-    protected function info(string $message, bool $reload = false): CommandInfoReturn
+    protected function info(string $message): CommandInfoReturn
     {
         throw new SharpInvalidConfigException('Info return type is not supported for a state.');
     }
@@ -54,7 +54,7 @@ abstract class EntityState extends InstanceCommand
         throw new SharpInvalidConfigException('StreamDownload return type is not supported for a state.');
     }
 
-    protected function link(string $link, bool $openInNewTab = false): CommandLinkReturn
+    protected function link(string $link): CommandLinkReturn
     {
         throw new SharpInvalidConfigException('Link return type is not supported for a state.');
     }
