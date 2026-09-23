@@ -2,8 +2,10 @@
 
 use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
+use Code16\Sharp\EntityList\Commands\Returns\CommandReturn;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\Unit\EntityList\Fakes\FakeSharpEntityList;
+use Illuminate\Contracts\Support\Arrayable;
 
 it('returns commands config', function () {
     $list = new class() extends FakeSharpEntityList
@@ -18,7 +20,7 @@ it('returns commands config', function () {
                         return 'My Entity Command';
                     }
 
-                    public function execute(array $data = []): array {}
+                    public function execute(array $data = []): CommandReturn {}
                 },
             ];
         }
@@ -33,7 +35,7 @@ it('returns commands config', function () {
                         return 'My Instance Command';
                     }
 
-                    public function execute($instanceId, array $data = []): array {}
+                    public function execute($instanceId, array $data = []): CommandReturn {}
                 },
             ];
         }
@@ -94,7 +96,7 @@ it('handles confirmation on a command', function () {
                         $this->configureConfirmationText('Sure?', title: 'Are you sure?', buttonLabel: 'Yes, do it');
                     }
 
-                    public function execute(array $data = []): array {}
+                    public function execute(array $data = []): CommandReturn {}
                 },
             ];
         }
@@ -127,7 +129,7 @@ it('allows to declare instance selection mode on a command', function () {
                         $this->configureInstanceSelectionRequired();
                     }
 
-                    public function execute(array $data = []): array {}
+                    public function execute(array $data = []): CommandReturn {}
                 },
                 'command_allowed' => new class() extends EntityCommand
                 {
@@ -141,7 +143,7 @@ it('allows to declare instance selection mode on a command', function () {
                         $this->configureInstanceSelectionAllowed();
                     }
 
-                    public function execute(array $data = []): array {}
+                    public function execute(array $data = []): CommandReturn {}
                 },
                 'command_none' => new class() extends EntityCommand
                 {
@@ -155,7 +157,7 @@ it('allows to declare instance selection mode on a command', function () {
                         $this->configureInstanceSelectionNone();
                     }
 
-                    public function execute(array $data = []): array {}
+                    public function execute(array $data = []): CommandReturn {}
                 },
             ];
         }
@@ -191,7 +193,7 @@ it('allows to define a form to a command', function () {
                         $column->withField('message');
                     }
 
-                    public function execute(array $data = []): array {}
+                    public function execute(array $data = []): CommandReturn {}
                 },
             ];
         }
@@ -220,7 +222,7 @@ it('handles authorization in an entity command', function () {
                         return false;
                     }
 
-                    public function execute(array $data = []): array {}
+                    public function execute(array $data = []): CommandReturn {}
                 },
             ];
         }
@@ -249,12 +251,12 @@ it('handles authorization in an instance command', function () {
                         return $instanceId < 3;
                     }
 
-                    public function execute($instanceId, array $data = []): array {}
+                    public function execute($instanceId, array $data = []): CommandReturn {}
                 },
             ];
         }
 
-        public function getListData(): array|\Illuminate\Contracts\Support\Arrayable
+        public function getListData(): array|Arrayable
         {
             return [
                 ['id' => 1], ['id' => 2], ['id' => 3],
@@ -288,7 +290,7 @@ it('allows to define a description & icon on a command', function () {
                             ->configureIcon('testicon-user');
                     }
 
-                    public function execute(array $data = []): array {}
+                    public function execute(array $data = []): CommandReturn {}
                 },
             ];
         }
@@ -318,7 +320,7 @@ it('allows to define separators in instance commands', function () {
                         return '';
                     }
 
-                    public function execute($instanceId, array $data = []): array {}
+                    public function execute($instanceId, array $data = []): CommandReturn {}
                 },
                 'command-2' => new class() extends InstanceCommand
                 {
@@ -327,7 +329,7 @@ it('allows to define separators in instance commands', function () {
                         return '';
                     }
 
-                    public function execute($instanceId, array $data = []): array {}
+                    public function execute($instanceId, array $data = []): CommandReturn {}
                 },
                 '---',
                 'command-3' => new class() extends InstanceCommand
@@ -337,7 +339,7 @@ it('allows to define separators in instance commands', function () {
                         return '';
                     }
 
-                    public function execute($instanceId, array $data = []): array {}
+                    public function execute($instanceId, array $data = []): CommandReturn {}
                 },
             ];
         }
@@ -364,7 +366,7 @@ it('allows to define separators in entity commands', function () {
                         return '';
                     }
 
-                    public function execute(array $data = []): array {}
+                    public function execute(array $data = []): CommandReturn {}
                 },
                 '---',
                 'command-2' => new class() extends EntityCommand
@@ -374,7 +376,7 @@ it('allows to define separators in entity commands', function () {
                         return '';
                     }
 
-                    public function execute(array $data = []): array {}
+                    public function execute(array $data = []): CommandReturn {}
                 },
                 'command-3' => new class() extends EntityCommand
                 {
@@ -383,7 +385,7 @@ it('allows to define separators in entity commands', function () {
                         return '';
                     }
 
-                    public function execute(array $data = []): array {}
+                    public function execute(array $data = []): CommandReturn {}
                 },
             ];
         }
@@ -410,7 +412,7 @@ it('allows to declare an entity command as primary', function () {
                         return 'My Entity Command';
                     }
 
-                    public function execute(array $data = []): array {}
+                    public function execute(array $data = []): CommandReturn {}
                 },
                 'primary-entity' => new class() extends EntityCommand
                 {
@@ -419,7 +421,7 @@ it('allows to declare an entity command as primary', function () {
                         return 'My Primary Entity Command';
                     }
 
-                    public function execute(array $data = []): array {}
+                    public function execute(array $data = []): CommandReturn {}
                 },
             ];
         }

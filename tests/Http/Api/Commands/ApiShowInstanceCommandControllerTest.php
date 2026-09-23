@@ -1,6 +1,7 @@
 <?php
 
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
+use Code16\Sharp\EntityList\Commands\Returns\CommandReturn;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Entities\SinglePersonEntity;
@@ -27,7 +28,7 @@ it('allows to call an info instance command from a show', function () {
                         return 'instance';
                     }
 
-                    public function execute($instanceId, array $data = []): array
+                    public function execute($instanceId, array $data = []): CommandReturn
                     {
                         return $this->info('ok: '.$instanceId);
                     }
@@ -63,7 +64,7 @@ it('allows to call an info instance command from a single show', function () {
                         return 'instance';
                     }
 
-                    public function execute($instanceId, array $data = []): array
+                    public function execute($instanceId, array $data = []): CommandReturn
                     {
                         return $this->info('ok');
                     }
@@ -117,7 +118,7 @@ it('gets form and initialize form data in an instance command of a show', functi
                         ];
                     }
 
-                    public function execute($instanceId, array $data = []): array
+                    public function execute($instanceId, array $data = []): CommandReturn
                     {
                         $this->validate($data, ['name' => 'required']);
 
@@ -216,7 +217,7 @@ it('gets form and initialize form data in an instance command of a single show',
                         ];
                     }
 
-                    public function execute($instanceId, array $data = []): array
+                    public function execute($instanceId, array $data = []): CommandReturn
                     {
                         $this->validate($data, ['name' => 'required']);
 

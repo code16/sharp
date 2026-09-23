@@ -3,6 +3,7 @@
 use Code16\Sharp\Dashboard\Commands\DashboardCommand;
 use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
+use Code16\Sharp\EntityList\Commands\Returns\CommandReturn;
 use Code16\Sharp\EntityList\Commands\Wizards\EntityWizardCommand;
 use Code16\Sharp\Filters\CheckFilter;
 use Code16\Sharp\Filters\DateRange\DateRangeFilterValue;
@@ -107,7 +108,7 @@ it('call & assert an entity list entity command form', function () {
                         return ['field_with_initial_value' => 'test'];
                     }
 
-                    public function execute(array $data = []): array
+                    public function execute(array $data = []): CommandReturn
                     {
                         $this->postedData = $data;
 
@@ -199,7 +200,7 @@ it('call & assert an entity list entity command with filters', function () {
                         return 'entity';
                     }
 
-                    public function execute(array $data = []): array
+                    public function execute(array $data = []): CommandReturn
                     {
                         $this->filterValues = ['is_valid' => $this->queryParams->filterFor('is_valid')];
 
@@ -251,7 +252,7 @@ it('call & assert an entity list entity wizard command', function () {
                             ->addField(SharpFormTextField::make('field_with_initial_value'));
                     }
 
-                    protected function executeFirstStep(array $data): array
+                    protected function executeFirstStep(array $data): CommandReturn
                     {
                         $this->postedData = $data;
 
@@ -272,7 +273,7 @@ it('call & assert an entity list entity wizard command', function () {
                             ->addField(SharpFormTextField::make('field_with_initial_value'));
                     }
 
-                    protected function executeStepSecondStep(array $data): array
+                    protected function executeStepSecondStep(array $data): CommandReturn
                     {
                         $this->postedData = $data;
 
@@ -323,7 +324,7 @@ it('call & assert a entity list instance command', function () {
                         $formFields->addField(SharpFormTextField::make('action'));
                     }
 
-                    public function execute($instanceId, array $data = []): array
+                    public function execute($instanceId, array $data = []): CommandReturn
                     {
                         return match ($data['action']) {
                             'info' => $this->info('instance '.$instanceId),
@@ -337,7 +338,7 @@ it('call & assert a entity list instance command', function () {
                         return 'entity';
                     }
 
-                    public function execute($instanceId, array $data = []): array
+                    public function execute($instanceId, array $data = []): CommandReturn
                     {
                         return $this->info('instance '.$instanceId);
                     }
@@ -373,7 +374,7 @@ it('call & assert a show instance command', function () {
                         $formFields->addField(SharpFormTextField::make('action'));
                     }
 
-                    public function execute($instanceId, array $data = []): array
+                    public function execute($instanceId, array $data = []): CommandReturn
                     {
                         return match ($data['action']) {
                             'info' => $this->info('instance '.$instanceId),
@@ -387,7 +388,7 @@ it('call & assert a show instance command', function () {
                         return 'entity';
                     }
 
-                    public function execute($instanceId, array $data = []): array
+                    public function execute($instanceId, array $data = []): CommandReturn
                     {
                         return $this->info('instance '.$instanceId);
                     }
@@ -808,7 +809,7 @@ it('call & assert a dashboard command', function () {
                         $formFields->addField(SharpFormTextField::make('action'));
                     }
 
-                    public function execute(array $data = []): array
+                    public function execute(array $data = []): CommandReturn
                     {
                         return match ($data['action']) {
                             'info' => $this->info('dashboard'),
@@ -822,7 +823,7 @@ it('call & assert a dashboard command', function () {
                         return 'dashboard';
                     }
 
-                    public function execute(array $data = []): array
+                    public function execute(array $data = []): CommandReturn
                     {
                         return $this->info('dashboard');
                     }

@@ -1,5 +1,6 @@
 <?php
 
+use Code16\Sharp\EntityList\Commands\Returns\CommandReturn;
 use Code16\Sharp\EntityList\Commands\Wizards\EntityWizardCommand;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
@@ -29,7 +30,7 @@ it('displays first step form on the first call of a wizard entity command', func
                         $formFields->addField(SharpFormTextField::make('name'));
                     }
 
-                    protected function executeFirstStep(array $data): array
+                    protected function executeFirstStep(array $data): CommandReturn
                     {
                         return $this->reload();
                     }
@@ -96,7 +97,7 @@ it('allows to post first step of a wizard entity command', function () {
                         $formFields->addField(SharpFormTextField::make('name'));
                     }
 
-                    protected function executeFirstStep(array $data): array
+                    protected function executeFirstStep(array $data): CommandReturn
                     {
                         $this->validate($data, ['name' => 'required']);
 
@@ -149,7 +150,7 @@ it('allows to check if context is valid', function () {
 
                     public function buildFormFieldsForFirstStep(FieldsContainer $formFields): void {}
 
-                    protected function executeFirstStep(array $data): array
+                    protected function executeFirstStep(array $data): CommandReturn
                     {
                         $this->getWizardContext()->put('first-step-passed', true);
 
@@ -170,7 +171,7 @@ it('allows to check if context is valid', function () {
                         $formFields->addField(SharpFormTextField::make('age'));
                     }
 
-                    protected function executeStepNextStep(array $data): array
+                    protected function executeStepNextStep(array $data): CommandReturn
                     {
                         return $this->reload();
                     }
@@ -249,7 +250,7 @@ it('allows to post second step of a wizard entity command', function () {
                         $formFields->addField(SharpFormTextField::make('name'));
                     }
 
-                    protected function executeFirstStep(array $data): array
+                    protected function executeFirstStep(array $data): CommandReturn
                     {
                         $this->validate($data, ['name' => 'required']);
 
@@ -261,7 +262,7 @@ it('allows to post second step of a wizard entity command', function () {
                         $formFields->addField(SharpFormTextField::make('age'));
                     }
 
-                    protected function executeStepNextStep(array $data): array
+                    protected function executeStepNextStep(array $data): CommandReturn
                     {
                         return $this->reload();
                     }
@@ -336,7 +337,7 @@ it('authorize() is only called for firstStep', function () {
                         $formFields->addField(SharpFormTextField::make('name'));
                     }
 
-                    protected function executeFirstStep(array $data): array
+                    protected function executeFirstStep(array $data): CommandReturn
                     {
                         $this->validate($data, ['name' => 'required']);
 
@@ -348,7 +349,7 @@ it('authorize() is only called for firstStep', function () {
                         $formFields->addField(SharpFormTextField::make('age'));
                     }
 
-                    protected function executeStepNextStep(array $data): array
+                    protected function executeStepNextStep(array $data): CommandReturn
                     {
                         return $this->reload();
                     }
@@ -418,7 +419,7 @@ it('allows to define a global method for step execution', function () {
                         $formFields->addField(SharpFormTextField::make('name'));
                     }
 
-                    public function executeFirstStep(array $data): array
+                    public function executeFirstStep(array $data): CommandReturn
                     {
                         return $this->toStep('next-step');
                     }
@@ -430,7 +431,7 @@ it('allows to define a global method for step execution', function () {
                         }
                     }
 
-                    public function executeStep(string $step, array $data = []): array
+                    public function executeStep(string $step, array $data = []): CommandReturn
                     {
                         if ($step === 'next-step') {
                             return $this->reload();

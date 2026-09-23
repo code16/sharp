@@ -1,6 +1,7 @@
 <?php
 
 use Code16\Sharp\Dashboard\Commands\DashboardCommand;
+use Code16\Sharp\EntityList\Commands\Returns\CommandReturn;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\Fixtures\Entities\DashboardEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\TestDashboard;
@@ -24,7 +25,7 @@ it('allows to call an info dashboard command', function () {
                         return 'entity';
                     }
 
-                    public function execute(array $data = []): array
+                    public function execute(array $data = []): CommandReturn
                     {
                         return $this->info('ok');
                     }
@@ -67,7 +68,7 @@ it('allows to initialize form data in a dashboard command', function () {
                         $formFields->addField(SharpFormTextField::make('name'));
                     }
 
-                    public function execute(array $data = []): array
+                    public function execute(array $data = []): CommandReturn
                     {
                         return $this->reload();
                     }

@@ -1,6 +1,7 @@
 <?php
 
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
+use Code16\Sharp\EntityList\Commands\Returns\CommandReturn;
 use Code16\Sharp\Enums\PageAlertLevel;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
@@ -8,6 +9,7 @@ use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\PageAlerts\PageAlert;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\UploadedFile;
 
 beforeEach(function () {
@@ -28,7 +30,7 @@ it('allows to call an info instance command', function () {
                         return 'my command';
                     }
 
-                    public function execute($instanceId, array $data = []): array
+                    public function execute($instanceId, array $data = []): CommandReturn
                     {
                         return $this->info('ok');
                     }
@@ -63,7 +65,7 @@ it('allows to call a reload instance command', function () {
                         return 'my command';
                     }
 
-                    public function execute($instanceId, array $data = []): array
+                    public function execute($instanceId, array $data = []): CommandReturn
                     {
                         return $this->reload();
                     }
@@ -96,7 +98,7 @@ it('allows to call an info + reload instance command', function () {
                         return 'my command';
                     }
 
-                    public function execute($instanceId, array $data = []): array
+                    public function execute($instanceId, array $data = []): CommandReturn
                     {
                         return $this->info('ok', reload: true);
                     }
@@ -131,7 +133,7 @@ it('allows to call a view instance command', function () {
                         return 'my command';
                     }
 
-                    public function execute($instanceId, array $data = []): array
+                    public function execute($instanceId, array $data = []): CommandReturn
                     {
                         return $this->view('welcome');
                     }
@@ -164,7 +166,7 @@ it('allows to call a html instance command', function () {
                         return 'my command';
                     }
 
-                    public function execute($instanceId, array $data = []): array
+                    public function execute($instanceId, array $data = []): CommandReturn
                     {
                         return $this->html('Hello world');
                     }
@@ -197,7 +199,7 @@ it('allows to call a refresh instance command', function () {
                         return 'my command';
                     }
 
-                    public function execute($instanceId, array $data = []): array
+                    public function execute($instanceId, array $data = []): CommandReturn
                     {
                         return $this->refresh([1, 3]);
                     }
@@ -205,7 +207,7 @@ it('allows to call a refresh instance command', function () {
             ];
         }
 
-        public function getListData(): array|\Illuminate\Contracts\Support\Arrayable
+        public function getListData(): array|Arrayable
         {
             return collect([
                 ['id' => 1, 'name' => 'Marie Curie'],
@@ -250,7 +252,7 @@ it('allows to call a form instance command and it handles 422', function () {
                         $formFields->addField(SharpFormTextField::make('name'));
                     }
 
-                    public function execute($instanceId, array $data = []): array
+                    public function execute($instanceId, array $data = []): CommandReturn
                     {
                         $this->validate($data, ['name' => 'required']);
 
@@ -300,7 +302,7 @@ it('allows to call a download instance command', function () {
                         return 'my command';
                     }
 
-                    public function execute($instanceId, array $data = []): array
+                    public function execute($instanceId, array $data = []): CommandReturn
                     {
                         Storage::fake('files');
                         UploadedFile::fake()
@@ -339,7 +341,7 @@ it('allows to call a streamDownload instance command', function () {
                         return 'my command';
                     }
 
-                    public function execute($instanceId, array $data = []): array
+                    public function execute($instanceId, array $data = []): CommandReturn
                     {
                         return $this->streamDownload('content', 'stream.txt');
                     }
@@ -374,7 +376,7 @@ it('returns an applicative exception as a 417 as always', function () {
                         return 'my command';
                     }
 
-                    public function execute($instanceId, array $data = []): array
+                    public function execute($instanceId, array $data = []): CommandReturn
                     {
                         throw new SharpApplicativeException('error');
                     }
@@ -413,7 +415,7 @@ it('disallows to call an unauthorized instance command', function () {
                         return $instanceId != 1;
                     }
 
-                    public function execute($instanceId, array $data = []): array
+                    public function execute($instanceId, array $data = []): CommandReturn
                     {
                         return $this->reload();
                     }
@@ -457,7 +459,7 @@ it('returns the form of the instance command', function () {
                         $formFields->addField(SharpFormTextField::make('name'));
                     }
 
-                    public function execute($instanceId, array $data = []): array
+                    public function execute($instanceId, array $data = []): CommandReturn
                     {
                         return $this->reload();
                     }
@@ -528,7 +530,7 @@ it('allows to configure a page alert on an instance command', function () {
                         $formFields->addField(SharpFormTextField::make('name'));
                     }
 
-                    public function execute($instanceId, array $data = []): array
+                    public function execute($instanceId, array $data = []): CommandReturn
                     {
                         return $this->reload();
                     }
@@ -572,7 +574,7 @@ it('handles localized form of the instance command', function () {
                         $formFields->addField(SharpFormTextField::make('name')->setLocalized());
                     }
 
-                    public function execute($instanceId, array $data = []): array
+                    public function execute($instanceId, array $data = []): CommandReturn
                     {
                         return $this->reload();
                     }
@@ -630,7 +632,7 @@ it('allows to initialize form data in an instance command', function () {
                         $formFields->addField(SharpFormTextField::make('name'));
                     }
 
-                    public function execute($instanceId, array $data = []): array
+                    public function execute($instanceId, array $data = []): CommandReturn
                     {
                         return $this->reload();
                     }

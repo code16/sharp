@@ -3,6 +3,7 @@
 use Code16\Sharp\Dashboard\Commands\DashboardCommand;
 use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
+use Code16\Sharp\EntityList\Commands\Returns\CommandReturn;
 use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
 use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
@@ -223,7 +224,7 @@ it('allows to upload a file in an entity list entity command', function () {
             );
         }
 
-        public function execute(array $data = []): array
+        public function execute(array $data = []): CommandReturn
         {
             return $this->reload();
         }
@@ -277,7 +278,7 @@ it('allows to upload a file in an entity list instance command', function () {
             );
         }
 
-        public function execute(mixed $instanceId, array $data = []): array
+        public function execute(mixed $instanceId, array $data = []): CommandReturn
         {
             return $this->reload();
         }
@@ -327,7 +328,7 @@ it('allows to upload a file in a show instance command', function () {
             );
         }
 
-        public function execute(mixed $instanceId, array $data = []): array
+        public function execute(mixed $instanceId, array $data = []): CommandReturn
         {
             return $this->reload();
         }
@@ -379,7 +380,7 @@ it('allows to upload a file within a dashboard command form', function () {
             );
         }
 
-        public function execute(array $data = []): array
+        public function execute(array $data = []): CommandReturn
         {
             return $this->reload();
         }

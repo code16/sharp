@@ -1,6 +1,7 @@
 <?php
 
 use Code16\Sharp\EntityList\Commands\EntityCommand;
+use Code16\Sharp\EntityList\Commands\Returns\CommandReturn;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\Fixtures\Entities\DashboardEntity;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
@@ -73,7 +74,7 @@ it('sets the current globalFilter according to the URL for API routes', function
                         $formFields->addField(SharpFormTextField::make('name'));
                     }
 
-                    public function execute(array $data = []): array {}
+                    public function execute(array $data = []): CommandReturn {}
                 },
             ];
         }

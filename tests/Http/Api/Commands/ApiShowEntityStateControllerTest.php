@@ -1,6 +1,8 @@
 <?php
 
 use Code16\Sharp\EntityList\Commands\EntityState;
+use Code16\Sharp\EntityList\Commands\Returns\CommandRefreshReturn;
+use Code16\Sharp\EntityList\Commands\Returns\CommandReloadReturn;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Entities\SinglePersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonShow;
@@ -25,7 +27,7 @@ it('updates the state of an instance from a show and return a "refresh" action b
                         ->addState('ko', 'KO', 'red');
                 }
 
-                protected function updateState($instanceId, string $stateId): ?array
+                protected function updateState($instanceId, string $stateId): CommandReloadReturn|CommandRefreshReturn|null
                 {
                     return null;
                 }
@@ -63,7 +65,7 @@ it('allows to update the state of an instance from a single show', function () {
                         ->addState('ko', 'KO', 'red');
                 }
 
-                protected function updateState($instanceId, string $stateId): ?array
+                protected function updateState($instanceId, string $stateId): CommandReloadReturn|CommandRefreshReturn|null
                 {
                     return null;
                 }

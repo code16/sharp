@@ -1,6 +1,7 @@
 <?php
 
 use Code16\Sharp\Dashboard\Commands\DashboardCommand;
+use Code16\Sharp\EntityList\Commands\Returns\CommandReturn;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\Unit\Dashboard\Fakes\FakeSharpDashboard;
 
@@ -17,7 +18,7 @@ it('returns list commands config of a dashboard', function () {
                         return 'My Dashboard Command';
                     }
 
-                    public function execute(array $data = []): array {}
+                    public function execute(array $data = []): CommandReturn {}
                 },
             ];
         }
@@ -53,7 +54,7 @@ it('handles list section placed commands config of a dashboard', function () {
                             return 'My Dashboard Command';
                         }
 
-                        public function execute(array $data = []): array {}
+                        public function execute(array $data = []): CommandReturn {}
                     },
                 ],
                 'dashboardCommand' => new class() extends DashboardCommand
@@ -63,7 +64,7 @@ it('handles list section placed commands config of a dashboard', function () {
                         return 'Another Dashboard Command';
                     }
 
-                    public function execute(array $data = []): array {}
+                    public function execute(array $data = []): CommandReturn {}
                 },
             ];
         }
@@ -95,7 +96,7 @@ it('allows to define that the dashboard command has a form', function () {
                         $formFields->addField(SharpFormTextField::make('message'));
                     }
 
-                    public function execute(array $data = []): array {}
+                    public function execute(array $data = []): CommandReturn {}
                 },
             ];
         }

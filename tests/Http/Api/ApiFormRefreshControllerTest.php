@@ -2,6 +2,7 @@
 
 use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
+use Code16\Sharp\EntityList\Commands\Returns\CommandReturn;
 use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\SharpForm;
@@ -85,7 +86,7 @@ it('gets updated HTML fields with live refresh of an entity list entity command 
                         return 'entity';
                     }
 
-                    public function execute(array $data = []): array
+                    public function execute(array $data = []): CommandReturn
                     {
                         return [];
                     }
@@ -135,7 +136,7 @@ it('gets updated HTML fields with live refresh of an entity list instance comman
                         return 'entity';
                     }
 
-                    public function execute(mixed $instanceId, array $data = []): array
+                    public function execute(mixed $instanceId, array $data = []): CommandReturn
                     {
                         return [];
                     }
@@ -186,7 +187,7 @@ it('gets updated HTML fields with live refresh of a show instance command form',
                         return 'entity';
                     }
 
-                    public function execute(mixed $instanceId, array $data = []): array
+                    public function execute(mixed $instanceId, array $data = []): CommandReturn
                     {
                         return [];
                     }

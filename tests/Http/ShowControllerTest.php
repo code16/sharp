@@ -2,6 +2,9 @@
 
 use Code16\Sharp\EntityList\Commands\EntityState;
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
+use Code16\Sharp\EntityList\Commands\Returns\CommandRefreshReturn;
+use Code16\Sharp\EntityList\Commands\Returns\CommandReloadReturn;
+use Code16\Sharp\EntityList\Commands\Returns\CommandReturn;
 use Code16\Sharp\Enums\PageAlertLevel;
 use Code16\Sharp\Show\Fields\SharpShowPictureField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
@@ -98,7 +101,7 @@ it('gets attribute for entity state if defined', function () {
             {
                 protected function buildStates(): void {}
 
-                protected function updateState($instanceId, string $stateId): array
+                protected function updateState($instanceId, string $stateId): CommandReloadReturn|CommandRefreshReturn|null
                 {
                     return [];
                 }
@@ -243,7 +246,7 @@ it('returns commands authorization in config', function () {
                         return 'command';
                     }
 
-                    public function execute(mixed $instanceId, array $data = []): array
+                    public function execute(mixed $instanceId, array $data = []): CommandReturn
                     {
                         return $this->info('ok');
                     }
