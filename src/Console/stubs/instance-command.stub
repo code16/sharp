@@ -3,6 +3,7 @@
 namespace DummyNamespace;
 
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
+use Code16\Sharp\EntityList\Commands\Returns\CommandReturn;
 
 class DummyClass extends InstanceCommand
 {
@@ -18,7 +19,7 @@ class DummyClass extends InstanceCommand
             ->configureConfirmationText('History will be lost. Are you sure ?');
     }
 
-    public function execute($instanceId, array $data = []): array
+    public function execute($instanceId, array $data = []): CommandReturn
     {
         return $this->refresh($instanceId);
     }

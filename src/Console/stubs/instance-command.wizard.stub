@@ -2,6 +2,7 @@
 
 namespace DummyNamespace;
 
+use Code16\Sharp\EntityList\Commands\Returns\CommandReturn;
 use Code16\Sharp\EntityList\Commands\Wizards\InstanceWizardCommand;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
@@ -28,7 +29,7 @@ class DummyClass extends InstanceWizardCommand
             );
     }
 
-    public function executeFirstStep(mixed $instanceId, array $data = []): array
+    public function executeFirstStep(mixed $instanceId, array $data = []): CommandReturn
     {
         $this->validate($data, [
             'my_field' => [
@@ -50,7 +51,7 @@ class DummyClass extends InstanceWizardCommand
             );
     }
 
-    public function executeSecondStep(mixed $instanceId, array $data = []): array
+    public function executeSecondStep(mixed $instanceId, array $data = []): CommandReturn
     {
         return $this->reload();
     }

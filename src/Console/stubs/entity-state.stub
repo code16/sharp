@@ -3,6 +3,8 @@
 namespace DummyNamespace;
 
 use Code16\Sharp\EntityList\Commands\EntityState;
+use Code16\Sharp\EntityList\Commands\Returns\CommandReloadReturn;
+use Code16\Sharp\EntityList\Commands\Returns\CommandRefreshReturn;
 
 class DummyClass extends EntityState
 {
@@ -13,7 +15,7 @@ class DummyClass extends EntityState
             ->addState('inactive', 'Inactive', 'red');
     }
 
-    protected function updateState($instanceId, string $stateId): array
+    protected function updateState($instanceId, string $stateId): CommandReloadReturn|CommandRefreshReturn|null
     {
         //
     }
