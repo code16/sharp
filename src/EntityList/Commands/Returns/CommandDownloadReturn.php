@@ -17,6 +17,21 @@ class CommandDownloadReturn extends CommandReturn
         return CommandAction::Download;
     }
 
+    public function getDiskName(): ?string
+    {
+        return $this->diskName;
+    }
+
+    public function getFilePath(): string
+    {
+        return $this->filePath;
+    }
+
+    public function getFileName(): ?string
+    {
+        return $this->fileName;
+    }
+
     protected function additionalReturnData(): array
     {
         return [

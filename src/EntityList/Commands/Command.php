@@ -56,7 +56,7 @@ abstract class Command
         return new CommandReloadReturn();
     }
 
-    protected function refresh($ids): CommandRefreshReturn
+    protected function refresh($ids): CommandRefreshReturn|CommandReloadReturn
     {
         return new CommandRefreshReturn((array) $ids);
     }

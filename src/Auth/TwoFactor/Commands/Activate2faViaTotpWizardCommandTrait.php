@@ -10,6 +10,7 @@ use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 use BaconQrCode\Writer;
 use Closure;
 use Code16\Sharp\Auth\TwoFactor\Sharp2faHandler;
+use Code16\Sharp\EntityList\Commands\Returns\CommandReturn;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Form\Fields\SharpFormHtmlField;
 use Code16\Sharp\Form\Fields\SharpFormTextareaField;
@@ -35,7 +36,7 @@ trait Activate2faViaTotpWizardCommandTrait
             );
     }
 
-    protected function executeFirstStep(array $data): array
+    protected function executeFirstStep(array $data): CommandReturn
     {
         $this->validate($data, [
             'password' => [
@@ -95,7 +96,7 @@ trait Activate2faViaTotpWizardCommandTrait
             );
     }
 
-    protected function executeStepConfirm(array $data): array
+    protected function executeStepConfirm(array $data): CommandReturn
     {
         $this->validate($data, [
             'code' => [
@@ -133,7 +134,7 @@ trait Activate2faViaTotpWizardCommandTrait
             );
     }
 
-    protected function executeStepShowRecoveryCodes(array $data): array
+    protected function executeStepShowRecoveryCodes(array $data): CommandReturn
     {
         return $this->reload();
     }

@@ -13,6 +13,16 @@ class CommandStreamDownloadReturn extends CommandReturn
         return CommandAction::StreamDownload;
     }
 
+    public function getFileContent(): string
+    {
+        return $this->fileContent;
+    }
+
+    public function getFileName(): ?string
+    {
+        return $this->fileName;
+    }
+
     protected function additionalReturnData(): array
     {
         return [

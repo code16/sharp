@@ -2,12 +2,13 @@
 
 namespace Code16\Sharp\EntityList\Commands\Wizards;
 
+use Code16\Sharp\EntityList\Commands\Returns\CommandReturn;
 use Code16\Sharp\Exceptions\SharpMethodNotImplementedException;
 use Illuminate\Support\Str;
 
 trait IsEntityWizardCommand
 {
-    public function execute(array $data = []): array
+    public function execute(array $data = []): CommandReturn
     {
         if (! $step = $this->extractStepFromRequest()) {
             return $this->executeFirstStep($data);
@@ -22,9 +23,9 @@ trait IsEntityWizardCommand
             : $this->executeStep($step, $data);
     }
 
-    abstract protected function executeFirstStep(array $data): array;
+    abstract protected function executeFirstStep(array $data): CommandReturn;
 
-    public function executeStep(string $step, array $data = []): array
+    public function executeStep(string $step, array $data = []): CommandReturn
     {
         // You can either implement this method and test $step (quick for small commands)
         // or leave this and implement for each step executeStepXXX

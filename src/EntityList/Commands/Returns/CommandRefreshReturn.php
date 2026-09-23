@@ -13,6 +13,11 @@ class CommandRefreshReturn extends CommandReturn
         return CommandAction::Refresh;
     }
 
+    public function getItems(): array
+    {
+        return $this->ids;
+    }
+
     protected function additionalReturnData(): array
     {
         return [

@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Http\Controllers\Api\Commands;
 
 use Code16\Sharp\Dashboard\SharpDashboard;
+use Code16\Sharp\EntityList\Commands\Returns\CommandReturn;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Enums\CommandAction;
 use Code16\Sharp\Http\Controllers\HandlesEntityListItems;
@@ -18,30 +19,32 @@ trait HandlesCommandResult
     protected function returnCommandResult(
         SharpEntityList|SharpShow|SharpDashboard $commandContainer,
         string $entityKey,
-        array $returnedValue
+        CommandReturn $commandReturn
     ): StreamedResponse|JsonResponse {
-        if ($returnedValue['action'] == CommandAction::Download->value) {
-            return Storage::disk($returnedValue['disk'])
+        if ($commandReturn->isAction(CommandAction::Download)) {
+            return Storage::disk($commandReturn->getDiskName())
                 ->download(
-                    $returnedValue['file'],
-                    $returnedValue['name'],
+                    $commandReturn->getFilePath(),
+                    $commandReturn->getFileName(),
                 );
         }
 
-        if ($returnedValue['action'] == CommandAction::StreamDownload->value) {
+        if ($commandReturn->isAction(CommandAction::StreamDownload)) {
             return response()->streamDownload(
-                function () use ($returnedValue) {
-                    echo $returnedValue['content'];
+                function () use ($commandReturn) {
+                    echo $commandReturn->getFileContent();
                 },
-                $returnedValue['name'],
+                $commandReturn->getFileName(),
             );
         }
 
-        if ($returnedValue['action'] == CommandAction::Refresh->value && $commandContainer instanceof SharpEntityList) {
+        $returnedValue = $commandReturn->toArray();
+
+        if ($commandReturn->isAction(CommandAction::Refresh) && $commandContainer instanceof SharpEntityList) {
             // We have to load and build items from ids
             $returnedValue['items'] = $this->addMetaToItems(
                 $commandContainer
-                    ->updateQueryParamsWithSpecificIds($returnedValue['items'])
+                    ->updateQueryParamsWithSpecificIds($commandReturn->getItems())
                     ->data()['items'],
                 $entityKey,
                 $commandContainer,

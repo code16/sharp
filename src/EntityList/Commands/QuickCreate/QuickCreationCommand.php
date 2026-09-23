@@ -3,6 +3,7 @@
 namespace Code16\Sharp\EntityList\Commands\QuickCreate;
 
 use Code16\Sharp\EntityList\Commands\EntityCommand;
+use Code16\Sharp\EntityList\Commands\Returns\CommandReturn;
 use Code16\Sharp\Exceptions\Form\SharpFormUpdateException;
 use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\SharpForm;
@@ -71,7 +72,7 @@ class QuickCreationCommand extends EntityCommand
         return $this->instanceId;
     }
 
-    public function execute(array $data = []): array
+    public function execute(array $data = []): CommandReturn
     {
         $breadcrumb = sharp()->context()->breadcrumb();
         $currentPageUrl = $breadcrumb->getCurrentSegmentUrl();
