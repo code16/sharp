@@ -41,6 +41,7 @@ class UpgradeCommand extends Command
             '->configureMultiformAttribute()' => '/configureMultiformAttribute\s*\(/',
             '->setDisplayFormat()' => '/setDisplayFormat\s*\(/',
             'getMultiforms()' => '/getMultiforms\s*\(/',
+            'execute(): array' => '/function\s+execute\w*\s*\((?:[^()]|\([^()]*\))*\)\s*:\s*\??array\b/',
         ];
 
         $updatedFiles = [];
@@ -66,6 +67,8 @@ class UpgradeCommand extends Command
                 foreach ($replacements as $pattern => $replacement) {
                     $content = preg_replace($pattern, $replacement, $content);
                 }
+
+                $content = $this->upgradeCommandReturnTypes($content);
 
                 foreach ($detections as $label => $pattern) {
                     if (preg_match($pattern, $content)) {
@@ -103,5 +106,70 @@ class UpgradeCommand extends Command
         } else {
             $this->info(sprintf('Finished! %d files were successfully updated.', count($updatedFiles)));
         }
+    }
+
+    /**
+     * Commands must now return a CommandReturn object instead of an array.
+     */
+    private function upgradeCommandReturnTypes(string $content): string
+    {
+        $commandBaseClasses = 'EntityCommand|InstanceCommand|SingleInstanceCommand|DashboardCommand'
+            .'|EntityState|SingleEntityState|EntityWizardCommand|InstanceWizardCommand'
+            .'|SingleInstanceWizardCommand|QuickCreationCommand';
+
+        if (! preg_match('/\bextends\s+('.$commandBaseClasses.')\b/', $content)) {
+            return $content;
+        }
+
+        $params = '\((?:[^()]|\([^()]*\))*\)';
+        $returnTypes = [
+            'execute\w*' => ['CommandReturn', ['CommandReturn']],
+            'updateState' => ['CommandReloadReturn|CommandRefreshReturn|null', ['CommandRefreshReturn', 'CommandReloadReturn']],
+            'updateSingleState' => ['CommandReloadReturn', ['CommandReloadReturn']],
+        ];
+
+        $imports = [];
+        foreach ($returnTypes as $methodPattern => [$returnType, $classes]) {
+            $content = preg_replace(
+                '/(function\s+'.$methodPattern.'\s*'.$params.'\s*:\s*)\??array\b/',
+                '$1'.$returnType,
+                $content,
+                -1,
+                $count,
+            );
+
+            if ($count > 0) {
+                $imports = [...$imports, ...$classes];
+            }
+        }
+
+        foreach (array_unique($imports) as $class) {
+            $content = $this->addImport($content, 'Code16\\Sharp\\EntityList\\Commands\\Returns\\'.$class);
+        }
+
+        return $content;
+    }
+
+    private function addImport(string $content, string $fqcn): string
+    {
+        if (preg_match('/^use\s+'.preg_quote($fqcn, '/').'\s*;/m', $content)) {
+            return $content;
+        }
+
+        // Insert after the last top-level use statement, or after the namespace declaration
+        if (preg_match_all('/^use\s+[^;]+;\R/m', $content, $matches, PREG_OFFSET_CAPTURE)) {
+            [$lastUse, $offset] = end($matches[0]);
+            $position = $offset + strlen($lastUse);
+
+            return substr($content, 0, $position)."use {$fqcn};\n".substr($content, $position);
+        }
+
+        if (preg_match('/^namespace\s+[^;]+;\R/m', $content, $match, PREG_OFFSET_CAPTURE)) {
+            $position = $match[0][1] + strlen($match[0][0]);
+
+            return substr($content, 0, $position)."\nuse {$fqcn};\n".substr($content, $position);
+        }
+
+        return $content;
     }
 }

@@ -3,8 +3,11 @@
 namespace Code16\Sharp\EntityList\Commands\Returns;
 
 use Code16\Sharp\Enums\CommandAction;
+use Illuminate\Contracts\Support\Responsable;
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
-class CommandDownloadReturn extends CommandReturn
+class CommandDownloadReturn extends CommandReturn implements Responsable
 {
     public function __construct(
         private readonly string $filePath,
@@ -30,6 +33,11 @@ class CommandDownloadReturn extends CommandReturn
     public function getFileName(): ?string
     {
         return $this->fileName;
+    }
+
+    public function toResponse($request): StreamedResponse
+    {
+        return Storage::disk($this->diskName)->download($this->filePath, $this->fileName);
     }
 
     protected function additionalReturnData(): array

@@ -3,13 +3,14 @@
 namespace Code16\Sharp\Http\Controllers\Api\Commands;
 
 use Code16\Sharp\Dashboard\SharpDashboard;
+use Code16\Sharp\EntityList\Commands\Returns\CommandRefreshReturn;
+use Code16\Sharp\EntityList\Commands\Returns\CommandReloadReturn;
 use Code16\Sharp\EntityList\Commands\Returns\CommandReturn;
 use Code16\Sharp\EntityList\SharpEntityList;
-use Code16\Sharp\Enums\CommandAction;
 use Code16\Sharp\Http\Controllers\HandlesEntityListItems;
 use Code16\Sharp\Show\SharpShow;
+use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 trait HandlesCommandResult
@@ -22,21 +23,13 @@ trait HandlesCommandResult
         CommandReturn $commandReturn,
         ?array $additionalData = null
     ): StreamedResponse|JsonResponse {
-        if ($commandReturn->isAction(CommandAction::Download)) {
-            return Storage::disk($commandReturn->getDiskName())
-                ->download(
-                    $commandReturn->getFilePath(),
-                    $commandReturn->getFileName(),
-                );
+        if ($commandReturn instanceof Responsable) {
+            return $commandReturn->toResponse(request());
         }
 
-        if ($commandReturn->isAction(CommandAction::StreamDownload)) {
-            return response()->streamDownload(
-                function () use ($commandReturn) {
-                    echo $commandReturn->getFileContent();
-                },
-                $commandReturn->getFileName(),
-            );
+        if ($commandReturn instanceof CommandRefreshReturn && $commandContainer instanceof SharpDashboard) {
+            // Refresh has no meaning in the Dashboard; we just do a classic reload.
+            $commandReturn = new CommandReloadReturn();
         }
 
         $returnedValue = [
@@ -44,7 +37,7 @@ trait HandlesCommandResult
             ...$additionalData ?? [],
         ];
 
-        if ($commandReturn->isAction(CommandAction::Refresh) && $commandContainer instanceof SharpEntityList) {
+        if ($commandReturn instanceof CommandRefreshReturn && $commandContainer instanceof SharpEntityList) {
             // We have to load and build items from ids
             $returnedValue['items'] = $this->addMetaToItems(
                 $commandContainer

@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\EntityList\Commands;
 
-use Code16\Sharp\EntityList\Commands\Returns\CommandRefreshReturn;
 use Code16\Sharp\EntityList\Commands\Returns\CommandReloadReturn;
 
 abstract class SingleEntityState extends EntityState
@@ -12,10 +11,10 @@ abstract class SingleEntityState extends EntityState
         return $this->authorize();
     }
 
-    final protected function updateState(mixed $instanceId, string $stateId): CommandReloadReturn|CommandRefreshReturn|null
+    final protected function updateState(mixed $instanceId, string $stateId): CommandReloadReturn
     {
         return $this->updateSingleState($stateId);
     }
 
-    abstract protected function updateSingleState(string $stateId): ?CommandReloadReturn;
+    abstract protected function updateSingleState(string $stateId): CommandReloadReturn;
 }

@@ -15,11 +15,6 @@ abstract class CommandReturn implements Arrayable
         ];
     }
 
-    public function isAction(CommandAction $commandAction): bool
-    {
-        return $this->commandAction() == $commandAction;
-    }
-
     protected function additionalReturnData(): array
     {
         return [];

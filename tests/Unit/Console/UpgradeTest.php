@@ -94,3 +94,133 @@ PHP;
 
     expect(File::get($this->dummyFilePath))->toBe($modernContent);
 });
+
+it('upgrades command return types to CommandReturn', function () {
+    File::put($this->absoluteTestPath.'/MyCommand.php', <<<'PHP'
+<?php
+
+namespace App\Sharp\Commands;
+
+use Code16\Sharp\EntityList\Commands\InstanceCommand;
+
+class MyCommand extends InstanceCommand
+{
+    public function label(): ?string
+    {
+        return 'My command';
+    }
+
+    public function execute(mixed $instanceId, array $data = []): array
+    {
+        return $this->reload();
+    }
+
+    protected function helper(): array
+    {
+        return [];
+    }
+}
+PHP);
+
+    File::put($this->absoluteTestPath.'/MyWizard.php', <<<'PHP'
+<?php
+
+namespace App\Sharp\Commands;
+
+use Code16\Sharp\EntityList\Commands\Returns\CommandReturn;
+use Code16\Sharp\EntityList\Commands\Wizards\EntityWizardCommand;
+
+class MyWizard extends EntityWizardCommand
+{
+    protected function executeFirstStep(array $data): array
+    {
+        return $this->toStep('second');
+    }
+
+    public function executeStepSecond(array $data = []): array
+    {
+        return $this->reload();
+    }
+}
+PHP);
+
+    File::put($this->absoluteTestPath.'/MyState.php', <<<'PHP'
+<?php
+
+namespace App\Sharp\States;
+
+use Code16\Sharp\EntityList\Commands\EntityState;
+
+class MyState extends EntityState
+{
+    protected function buildStates(): void {}
+
+    protected function updateState($instanceId, string $stateId): ?array
+    {
+        return null;
+    }
+}
+PHP);
+
+    File::put($this->absoluteTestPath.'/MySingleState.php', <<<'PHP'
+<?php
+
+namespace App\Sharp\States;
+
+use Code16\Sharp\EntityList\Commands\SingleEntityState;
+
+class MySingleState extends SingleEntityState
+{
+    protected function buildStates(): void {}
+
+    protected function updateSingleState(string $stateId): array
+    {
+        return $this->reload();
+    }
+}
+PHP);
+
+    File::put($this->absoluteTestPath.'/NotACommand.php', <<<'PHP'
+<?php
+
+namespace App\Services;
+
+class NotACommand
+{
+    public function execute(array $data = []): array
+    {
+        return [];
+    }
+}
+PHP);
+
+    $this->artisan('sharp:upgrade '.$this->testPath)
+        ->expectsOutputToContain('Updated: MyCommand.php')
+        ->expectsOutputToContain('Updated: MyWizard.php')
+        ->expectsOutputToContain('Updated: MyState.php')
+        ->expectsOutputToContain('Updated: MySingleState.php')
+        ->assertSuccessful();
+
+    expect(File::get($this->absoluteTestPath.'/MyCommand.php'))
+        ->toContain("use Code16\\Sharp\\EntityList\\Commands\\InstanceCommand;\nuse Code16\\Sharp\\EntityList\\Commands\\Returns\\CommandReturn;\n")
+        ->toContain('public function execute(mixed $instanceId, array $data = []): CommandReturn')
+        ->toContain('protected function helper(): array');
+
+    expect(File::get($this->absoluteTestPath.'/MyWizard.php'))
+        ->toContain('protected function executeFirstStep(array $data): CommandReturn')
+        ->toContain('public function executeStepSecond(array $data = []): CommandReturn')
+        ->and(substr_count(File::get($this->absoluteTestPath.'/MyWizard.php'), 'use Code16\\Sharp\\EntityList\\Commands\\Returns\\CommandReturn;'))
+        ->toBe(1);
+
+    expect(File::get($this->absoluteTestPath.'/MyState.php'))
+        ->toContain('protected function updateState($instanceId, string $stateId): CommandReloadReturn|CommandRefreshReturn|null')
+        ->toContain('use Code16\\Sharp\\EntityList\\Commands\\Returns\\CommandRefreshReturn;')
+        ->toContain('use Code16\\Sharp\\EntityList\\Commands\\Returns\\CommandReloadReturn;');
+
+    expect(File::get($this->absoluteTestPath.'/MySingleState.php'))
+        ->toContain('protected function updateSingleState(string $stateId): CommandReloadReturn')
+        ->toContain('use Code16\\Sharp\\EntityList\\Commands\\Returns\\CommandReloadReturn;');
+
+    expect(File::get($this->absoluteTestPath.'/NotACommand.php'))
+        ->toContain('public function execute(array $data = []): array');
+});
