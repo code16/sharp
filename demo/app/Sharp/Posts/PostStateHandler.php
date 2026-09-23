@@ -4,6 +4,8 @@ namespace App\Sharp\Posts;
 
 use App\Models\Post;
 use Code16\Sharp\EntityList\Commands\EntityState;
+use Code16\Sharp\EntityList\Commands\Returns\CommandRefreshReturn;
+use Code16\Sharp\EntityList\Commands\Returns\CommandReloadReturn;
 
 class PostStateHandler extends EntityState
 {
@@ -13,7 +15,7 @@ class PostStateHandler extends EntityState
             ->addState('online', 'Online', '#0c4589');
     }
 
-    protected function updateState($instanceId, string $stateId): array
+    protected function updateState($instanceId, string $stateId): CommandReloadReturn|CommandRefreshReturn|null
     {
         Post::findOrFail($instanceId)->update([
             'state' => $stateId,

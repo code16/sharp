@@ -4,6 +4,7 @@ namespace App\Sharp\Posts\Commands;
 
 use App\Models\Post;
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
+use Code16\Sharp\EntityList\Commands\Returns\CommandReturn;
 
 class PreviewPostCommand extends InstanceCommand
 {
@@ -14,7 +15,7 @@ class PreviewPostCommand extends InstanceCommand
 
     public function buildCommandConfig(): void {}
 
-    public function execute(mixed $instanceId, array $data = []): array
+    public function execute(mixed $instanceId, array $data = []): CommandReturn
     {
         return $this->view('pages.post', [
             'post' => Post::findOrFail($instanceId),
