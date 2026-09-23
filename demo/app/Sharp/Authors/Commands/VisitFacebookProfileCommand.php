@@ -3,8 +3,8 @@
 namespace App\Sharp\Authors\Commands;
 
 use App\Models\User;
-use Code16\Sharp\EntityList\Commands\InstanceCommand;
-use Code16\Sharp\EntityList\Commands\Returns\CommandReturn;
+use Code16\Sharp\Commands\InstanceCommand;
+use Code16\Sharp\Commands\Returns\CommandReturn;
 
 class VisitFacebookProfileCommand extends InstanceCommand
 {

@@ -1,8 +1,8 @@
 <?php
 
 use Code16\Sharp\Auth\Password\Command\IsChangePasswordCommandTrait;
-use Code16\Sharp\EntityList\Commands\Returns\CommandReturn;
-use Code16\Sharp\EntityList\Commands\SingleInstanceCommand;
+use Code16\Sharp\Commands\Returns\CommandReturn;
+use Code16\Sharp\Commands\SingleInstanceCommand;
 use Code16\Sharp\Tests\Fixtures\Entities\SinglePersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\SinglePersonShow;
 use Code16\Sharp\Tests\Fixtures\User;

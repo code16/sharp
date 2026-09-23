@@ -1,10 +1,10 @@
 <?php
 
+use Code16\Sharp\Commands\EntityCommand;
+use Code16\Sharp\Commands\InstanceCommand;
+use Code16\Sharp\Commands\Returns\CommandReturn;
+use Code16\Sharp\Commands\Wizards\EntityWizardCommand;
 use Code16\Sharp\Dashboard\Commands\DashboardCommand;
-use Code16\Sharp\EntityList\Commands\EntityCommand;
-use Code16\Sharp\EntityList\Commands\InstanceCommand;
-use Code16\Sharp\EntityList\Commands\Returns\CommandReturn;
-use Code16\Sharp\EntityList\Commands\Wizards\EntityWizardCommand;
 use Code16\Sharp\Filters\CheckFilter;
 use Code16\Sharp\Filters\DateRange\DateRangeFilterValue;
 use Code16\Sharp\Filters\DateRangeFilter;

@@ -10,7 +10,7 @@ use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 use BaconQrCode\Writer;
 use Closure;
 use Code16\Sharp\Auth\TwoFactor\Sharp2faHandler;
-use Code16\Sharp\EntityList\Commands\Returns\CommandReturn;
+use Code16\Sharp\Commands\Returns\CommandReturn;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Form\Fields\SharpFormHtmlField;
 use Code16\Sharp\Form\Fields\SharpFormTextareaField;

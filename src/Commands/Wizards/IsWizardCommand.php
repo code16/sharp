@@ -1,8 +1,8 @@
 <?php
 
-namespace Code16\Sharp\EntityList\Commands\Wizards;
+namespace Code16\Sharp\Commands\Wizards;
 
-use Code16\Sharp\EntityList\Commands\Returns\CommandStepReturn;
+use Code16\Sharp\Commands\Returns\CommandStepReturn;
 use Code16\Sharp\Exceptions\SharpMethodNotImplementedException;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Utils\Fields\FieldsContainer;

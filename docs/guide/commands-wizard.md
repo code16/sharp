@@ -19,8 +19,8 @@ php artisan sharp:make:instance-command <class_name> --wizard [--model=<model_na
 ## Write the Wizard Command class
 
 The class must extend either: 
-- `Code16\Sharp\EntityList\Commands\Wizards\EntityWizardCommand`: for an Entity command, on an Entity List
-- `Code16\Sharp\EntityList\Commands\Wizards\InstanceWizardCommand`: for an Instance command, on an Entity List or a Show Page
+- `Code16\Sharp\Commands\Wizards\EntityWizardCommand`: for an Entity command, on an Entity List
+- `Code16\Sharp\Commands\Wizards\InstanceWizardCommand`: for an Instance command, on an Entity List or a Show Page
 - `Code16\Sharp\Dashboard\Commands\DashboardWizardCommand`: for a Dashboard Command
 
 Like any Command, you must extend `label(): string` function, and can extend `buildCommandConfig(): void` (see [Commands documentation](commands.md)). 

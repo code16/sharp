@@ -1,15 +1,15 @@
 <?php
 
-namespace Code16\Sharp\EntityList\Commands;
+namespace Code16\Sharp\Commands;
 
 use Closure;
-use Code16\Sharp\EntityList\Commands\Returns\CommandDownloadReturn;
-use Code16\Sharp\EntityList\Commands\Returns\CommandInfoReturn;
-use Code16\Sharp\EntityList\Commands\Returns\CommandLinkReturn;
-use Code16\Sharp\EntityList\Commands\Returns\CommandRefreshReturn;
-use Code16\Sharp\EntityList\Commands\Returns\CommandReloadReturn;
-use Code16\Sharp\EntityList\Commands\Returns\CommandStreamDownloadReturn;
-use Code16\Sharp\EntityList\Commands\Returns\CommandViewReturn;
+use Code16\Sharp\Commands\Returns\CommandDownloadReturn;
+use Code16\Sharp\Commands\Returns\CommandInfoReturn;
+use Code16\Sharp\Commands\Returns\CommandLinkReturn;
+use Code16\Sharp\Commands\Returns\CommandRefreshReturn;
+use Code16\Sharp\Commands\Returns\CommandReloadReturn;
+use Code16\Sharp\Commands\Returns\CommandStreamDownloadReturn;
+use Code16\Sharp\Commands\Returns\CommandViewReturn;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\HasModalFormLayout;
 use Code16\Sharp\Utils\Fields\FieldsContainer;

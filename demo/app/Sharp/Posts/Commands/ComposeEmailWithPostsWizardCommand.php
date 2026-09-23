@@ -4,8 +4,8 @@ namespace App\Sharp\Posts\Commands;
 
 use App\Models\Post;
 use App\Models\User;
-use Code16\Sharp\EntityList\Commands\Returns\CommandReturn;
-use Code16\Sharp\EntityList\Commands\Wizards\EntityWizardCommand;
+use Code16\Sharp\Commands\Returns\CommandReturn;
+use Code16\Sharp\Commands\Wizards\EntityWizardCommand;
 use Code16\Sharp\Form\Fields\SharpFormCheckField;
 use Code16\Sharp\Form\Fields\SharpFormHtmlField;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;

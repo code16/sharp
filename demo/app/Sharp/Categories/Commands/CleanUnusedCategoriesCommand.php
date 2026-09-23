@@ -3,8 +3,8 @@
 namespace App\Sharp\Categories\Commands;
 
 use App\Models\Category;
-use Code16\Sharp\EntityList\Commands\EntityCommand;
-use Code16\Sharp\EntityList\Commands\Returns\CommandReturn;
+use Code16\Sharp\Commands\EntityCommand;
+use Code16\Sharp\Commands\Returns\CommandReturn;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 
 class CleanUnusedCategoriesCommand extends EntityCommand

@@ -1,9 +1,9 @@
 <?php
 
-namespace Code16\Sharp\EntityList\Commands\Wizards;
+namespace Code16\Sharp\Commands\Wizards;
 
-use Code16\Sharp\EntityList\Commands\InstanceCommand;
-use Code16\Sharp\EntityList\Commands\Returns\CommandReturn;
+use Code16\Sharp\Commands\InstanceCommand;
+use Code16\Sharp\Commands\Returns\CommandReturn;
 use Code16\Sharp\Exceptions\SharpMethodNotImplementedException;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Illuminate\Support\Str;

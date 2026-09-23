@@ -1,14 +1,18 @@
 <?php
 
-namespace Code16\Sharp\EntityList\Commands\Wizards;
+namespace Code16\Sharp\Commands\Wizards;
 
-use Code16\Sharp\EntityList\Commands\Returns\CommandReturn;
+use Code16\Sharp\Commands\Returns\CommandReturn;
+use Code16\Sharp\Commands\SingleInstanceCommand;
 use Code16\Sharp\Exceptions\SharpMethodNotImplementedException;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Illuminate\Support\Str;
 
-trait IsEntityWizardCommand
+abstract class SingleInstanceWizardCommand extends SingleInstanceCommand
 {
-    public function execute(array $data = []): CommandReturn
+    use IsWizardCommand;
+
+    public function executeSingle(array $data = []): CommandReturn
     {
         if (! $step = $this->extractStepFromRequest()) {
             return $this->executeFirstStep($data);
@@ -23,8 +27,6 @@ trait IsEntityWizardCommand
             : $this->executeStep($step, $data);
     }
 
-    abstract protected function executeFirstStep(array $data): CommandReturn;
-
     public function executeStep(string $step, array $data = []): CommandReturn
     {
         // You can either implement this method and test $step (quick for small commands)
@@ -33,7 +35,7 @@ trait IsEntityWizardCommand
         throw new SharpMethodNotImplementedException();
     }
 
-    protected function initialData(): array
+    protected function initialSingleData(): array
     {
         if (! $step = $this->extractStepFromRequest()) {
             return $this->initialDataForFirstStep();
@@ -56,8 +58,7 @@ trait IsEntityWizardCommand
         return [];
     }
 
-    public function authorizeForStep(string $step): bool
-    {
-        return true;
-    }
+    abstract protected function executeFirstStep(array $data): CommandReturn;
+
+    abstract protected function buildFormFieldsForFirstStep(FieldsContainer $formFields): void;
 }

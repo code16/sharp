@@ -2,9 +2,9 @@
 
 namespace Code16\Sharp\Http\Controllers\Api\Commands;
 
+use Code16\Sharp\Commands\EntityCommand;
+use Code16\Sharp\Commands\InstanceCommand;
 use Code16\Sharp\Dashboard\Commands\DashboardCommand;
-use Code16\Sharp\EntityList\Commands\EntityCommand;
-use Code16\Sharp\EntityList\Commands\InstanceCommand;
 
 trait HandlesCommandForm
 {

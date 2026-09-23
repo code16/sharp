@@ -3,9 +3,9 @@
 namespace DummyNamespace;
 
 use DummyFullModelClass;
-use Code16\Sharp\EntityList\Commands\EntityState;
-use Code16\Sharp\EntityList\Commands\Returns\CommandReloadReturn;
-use Code16\Sharp\EntityList\Commands\Returns\CommandRefreshReturn;
+use Code16\Sharp\Commands\EntityState;
+use Code16\Sharp\Commands\Returns\CommandReloadReturn;
+use Code16\Sharp\Commands\Returns\CommandRefreshReturn;
 
 class DummyClass extends EntityState
 {

@@ -18,7 +18,7 @@ php artisan sharp:make:instance-command <class_name> [--model=<model_name>,--wiz
 
 ## Write the Command class
 
-First we need to write a class for our Command. It must extend the `Code16\Sharp\EntityList\Commands\EntityCommand` abstract class (for "entity commands", more on that below), and implement two functions.
+First we need to write a class for our Command. It must extend the `Code16\Sharp\Commands\EntityCommand` abstract class (for "entity commands", more on that below), and implement two functions.
 
 - `label(): string`: must return the text label of the Command, displayed to the user
 - `execute(array $data=[]): array` handles the work of the Command itself.
@@ -42,7 +42,7 @@ class ReloadCommand extends EntityCommand
 
 The example above is an "entity" case, which is reserved to Entity Lists: Command applies to a subset of instances, or all of them. To get the Entity List context (search, page, filters...), you can check `$this->queryParams`, just like in the Entity List itself.
 
-To create an instance Command (relative to a specific instance, which can be placed on each Entity List row, or in a Show Page), the Command class must extend `Code16\Sharp\EntityList\Commands\InstanceCommand`. The execute method signature is a bit different:
+To create an instance Command (relative to a specific instance, which can be placed on each Entity List row, or in a Show Page), the Command class must extend `Code16\Sharp\Commands\InstanceCommand`. The execute method signature is a bit different:
 
 ```php
 class PromoteToAdminCommand extends InstanceCommand

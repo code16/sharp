@@ -3,9 +3,9 @@
 namespace App\Sharp\Posts;
 
 use App\Models\Post;
-use Code16\Sharp\EntityList\Commands\EntityState;
-use Code16\Sharp\EntityList\Commands\Returns\CommandRefreshReturn;
-use Code16\Sharp\EntityList\Commands\Returns\CommandReloadReturn;
+use Code16\Sharp\Commands\EntityState;
+use Code16\Sharp\Commands\Returns\CommandRefreshReturn;
+use Code16\Sharp\Commands\Returns\CommandReloadReturn;
 
 class PostStateHandler extends EntityState
 {

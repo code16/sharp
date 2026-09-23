@@ -2,10 +2,10 @@
 
 namespace Code16\Sharp\Http\Controllers\Api\Commands;
 
+use Code16\Sharp\Commands\Returns\CommandRefreshReturn;
+use Code16\Sharp\Commands\Returns\CommandReloadReturn;
+use Code16\Sharp\Commands\Returns\CommandReturn;
 use Code16\Sharp\Dashboard\SharpDashboard;
-use Code16\Sharp\EntityList\Commands\Returns\CommandRefreshReturn;
-use Code16\Sharp\EntityList\Commands\Returns\CommandReloadReturn;
-use Code16\Sharp\EntityList\Commands\Returns\CommandReturn;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Http\Controllers\HandlesEntityListItems;
 use Code16\Sharp\Show\SharpShow;

@@ -3,8 +3,8 @@
 namespace App\Sharp\Dashboard\Commands;
 
 use App\Sharp\Utils\Filters\PeriodRequiredFilter;
+use Code16\Sharp\Commands\Returns\CommandReturn;
 use Code16\Sharp\Dashboard\Commands\DashboardCommand;
-use Code16\Sharp\EntityList\Commands\Returns\CommandReturn;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\PageAlerts\PageAlert;

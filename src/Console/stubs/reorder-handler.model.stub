@@ -3,7 +3,7 @@
 namespace DummyNamespace;
 
 use DummyFullModelClass;
-use Code16\Sharp\EntityList\Commands\ReorderHandler;
+use Code16\Sharp\EntityList\ReorderHandler;
 
 class DummyClass implements ReorderHandler
 {

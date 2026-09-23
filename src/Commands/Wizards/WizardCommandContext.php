@@ -1,6 +1,6 @@
 <?php
 
-namespace Code16\Sharp\EntityList\Commands\Wizards;
+namespace Code16\Sharp\Commands\Wizards;
 
 use Code16\Sharp\Exceptions\Commands\SharpInvalidStepException;
 use Illuminate\Contracts\Validation\Factory as Validator;

@@ -3,8 +3,8 @@
 namespace App\Sharp\Posts\Commands;
 
 use App\Models\Post;
-use Code16\Sharp\EntityList\Commands\EntityCommand;
-use Code16\Sharp\EntityList\Commands\Returns\CommandReturn;
+use Code16\Sharp\Commands\EntityCommand;
+use Code16\Sharp\Commands\Returns\CommandReturn;
 
 class BulkPublishPostsCommand extends EntityCommand
 {

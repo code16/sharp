@@ -27,6 +27,10 @@ class UpgradeCommand extends Command
             '/Code16\\\\Sharp\\\\EntityList\\\\Filters\\\\EntityList([A-Za-z]+Filter)/' => 'Code16\\Sharp\\Filters\\\\$1',
             '/Code16\\\\Sharp\\\\Utils\\\\Filters\\\\([A-Za-z]+Filter)/' => 'Code16\\Sharp\\Filters\\\\$1',
 
+            // Commands moved out of EntityList (except QuickCreate); ReorderHandler moved to EntityList
+            '/Code16\\\\Sharp\\\\EntityList\\\\Commands\\\\ReorderHandler\b/' => 'Code16\\\\Sharp\\\\EntityList\\\\ReorderHandler',
+            '/Code16\\\\Sharp\\\\EntityList\\\\Commands\\\\(?!QuickCreate\\\\)/' => 'Code16\\\\Sharp\\\\Commands\\\\',
+
             '/\bEntityList(CheckFilter|DateRangeFilter|DateRangeRequiredFilter|SelectFilter|SelectMultipleFilter|SelectRequiredFilter)\b/' => '$1',
         ];
 
@@ -148,7 +152,7 @@ class UpgradeCommand extends Command
         $content = $this->upgradeHelperBoolArgument($content, 'link', 'openInNewTab', 'inNewTab');
 
         foreach (array_unique($imports) as $class) {
-            $content = $this->addImport($content, 'Code16\\Sharp\\EntityList\\Commands\\Returns\\'.$class);
+            $content = $this->addImport($content, 'Code16\\Sharp\\Commands\\Returns\\'.$class);
         }
 
         return $content;

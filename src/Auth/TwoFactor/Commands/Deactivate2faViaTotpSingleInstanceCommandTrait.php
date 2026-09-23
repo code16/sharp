@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Auth\TwoFactor\Commands;
 
-use Code16\Sharp\EntityList\Commands\Returns\CommandReturn;
+use Code16\Sharp\Commands\Returns\CommandReturn;
 
 trait Deactivate2faViaTotpSingleInstanceCommandTrait
 {

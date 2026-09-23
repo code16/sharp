@@ -1,8 +1,8 @@
 <?php
 
-namespace Code16\Sharp\EntityList\Commands;
+namespace Code16\Sharp\Commands;
 
-use Code16\Sharp\EntityList\Commands\Returns\CommandReloadReturn;
+use Code16\Sharp\Commands\Returns\CommandReloadReturn;
 
 abstract class SingleEntityState extends EntityState
 {

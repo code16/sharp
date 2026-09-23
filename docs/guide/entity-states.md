@@ -10,7 +10,7 @@ php artisan sharp:make:entity-state <class_name> [--model=<model_name>]
 
 ## Write the Entity state class
 
-First, you'll have to write a class that extends the `Code16\Sharp\EntityList\Commands\EntityState` abstract class.
+First, you'll have to write a class that extends the `Code16\Sharp\Commands\EntityState` abstract class.
 
 You'll have to implement two functions: `buildStates()` and `updateState($instanceId, $stateId)`.
 

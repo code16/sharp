@@ -3,8 +3,8 @@
 namespace App\Sharp\Profile\Commands;
 
 use Code16\Sharp\Auth\Password\Command\IsChangePasswordCommandTrait;
-use Code16\Sharp\EntityList\Commands\Returns\CommandReturn;
-use Code16\Sharp\EntityList\Commands\SingleInstanceCommand;
+use Code16\Sharp\Commands\Returns\CommandReturn;
+use Code16\Sharp\Commands\SingleInstanceCommand;
 use Illuminate\Validation\Rules\Password;
 
 class ChangePasswordCommand extends SingleInstanceCommand

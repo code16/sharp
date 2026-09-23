@@ -2,9 +2,9 @@
 
 namespace Code16\Sharp\Dashboard\Commands;
 
+use Code16\Sharp\Commands\Command;
+use Code16\Sharp\Commands\Returns\CommandReturn;
 use Code16\Sharp\Dashboard\DashboardQueryParams;
-use Code16\Sharp\EntityList\Commands\Command;
-use Code16\Sharp\EntityList\Commands\Returns\CommandReturn;
 
 abstract class DashboardCommand extends Command
 {

@@ -2,8 +2,8 @@
 
 namespace Code16\Sharp\Http\Controllers\Api;
 
+use Code16\Sharp\Commands\Command;
 use Code16\Sharp\Data\RequestFieldContainerData;
-use Code16\Sharp\EntityList\Commands\Command;
 use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Http\Controllers\Api\Commands\HandlesDashboardCommand;

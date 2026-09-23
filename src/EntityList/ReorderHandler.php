@@ -1,6 +1,6 @@
 <?php
 
-namespace Code16\Sharp\EntityList\Commands;
+namespace Code16\Sharp\EntityList;
 
 interface ReorderHandler
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Code16\Sharp\EntityList\Commands\Returns;
+namespace Code16\Sharp\Commands\Returns;
 
 use Code16\Sharp\Enums\CommandAction;
 use Illuminate\Contracts\Support\Responsable;

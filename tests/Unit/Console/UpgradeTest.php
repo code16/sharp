@@ -202,24 +202,24 @@ PHP);
         ->assertSuccessful();
 
     expect(File::get($this->absoluteTestPath.'/MyCommand.php'))
-        ->toContain("use Code16\\Sharp\\EntityList\\Commands\\InstanceCommand;\nuse Code16\\Sharp\\EntityList\\Commands\\Returns\\CommandReturn;\n")
+        ->toContain("use Code16\\Sharp\\Commands\\InstanceCommand;\nuse Code16\\Sharp\\Commands\\Returns\\CommandReturn;\n")
         ->toContain('public function execute(mixed $instanceId, array $data = []): CommandReturn')
         ->toContain('protected function helper(): array');
 
     expect(File::get($this->absoluteTestPath.'/MyWizard.php'))
         ->toContain('protected function executeFirstStep(array $data): CommandReturn')
         ->toContain('public function executeStepSecond(array $data = []): CommandReturn')
-        ->and(substr_count(File::get($this->absoluteTestPath.'/MyWizard.php'), 'use Code16\\Sharp\\EntityList\\Commands\\Returns\\CommandReturn;'))
+        ->and(substr_count(File::get($this->absoluteTestPath.'/MyWizard.php'), 'use Code16\\Sharp\\Commands\\Returns\\CommandReturn;'))
         ->toBe(1);
 
     expect(File::get($this->absoluteTestPath.'/MyState.php'))
         ->toContain('protected function updateState($instanceId, string $stateId): CommandReloadReturn|CommandRefreshReturn|null')
-        ->toContain('use Code16\\Sharp\\EntityList\\Commands\\Returns\\CommandRefreshReturn;')
-        ->toContain('use Code16\\Sharp\\EntityList\\Commands\\Returns\\CommandReloadReturn;');
+        ->toContain('use Code16\\Sharp\\Commands\\Returns\\CommandRefreshReturn;')
+        ->toContain('use Code16\\Sharp\\Commands\\Returns\\CommandReloadReturn;');
 
     expect(File::get($this->absoluteTestPath.'/MySingleState.php'))
         ->toContain('protected function updateSingleState(string $stateId): CommandReloadReturn')
-        ->toContain('use Code16\\Sharp\\EntityList\\Commands\\Returns\\CommandReloadReturn;');
+        ->toContain('use Code16\\Sharp\\Commands\\Returns\\CommandReloadReturn;');
 
     expect(File::get($this->absoluteTestPath.'/NotACommand.php'))
         ->toContain('public function execute(array $data = []): array');
@@ -291,4 +291,40 @@ PHP;
     $this->artisan('sharp:upgrade '.$this->testPath)->assertSuccessful();
 
     expect(File::get($this->absoluteTestPath.'/MyArtisanCommand.php'))->toBe($content);
+});
+
+it('moves commands out of the EntityList namespace, except QuickCreate', function () {
+    File::put($this->absoluteTestPath.'/MyList.php', <<<'PHP'
+<?php
+
+namespace App\Sharp;
+
+use Code16\Sharp\EntityList\Commands\EntityCommand;
+use Code16\Sharp\EntityList\Commands\QuickCreate\QuickCreationCommand;
+use Code16\Sharp\EntityList\Commands\ReorderHandler;
+use Code16\Sharp\EntityList\Commands\Returns\CommandReturn;
+use Code16\Sharp\EntityList\Commands\Wizards\InstanceWizardCommand;
+use Code16\Sharp\EntityList\SharpEntityList;
+
+class MyList extends SharpEntityList
+{
+    public function getReorderHandler(): ?\Code16\Sharp\EntityList\Commands\ReorderHandler
+    {
+        return null;
+    }
+}
+PHP);
+
+    $this->artisan('sharp:upgrade '.$this->testPath)
+        ->expectsOutputToContain('Updated: MyList.php')
+        ->assertSuccessful();
+
+    expect(File::get($this->absoluteTestPath.'/MyList.php'))
+        ->toContain('use Code16\\Sharp\\Commands\\EntityCommand;')
+        ->toContain('use Code16\\Sharp\\EntityList\\Commands\\QuickCreate\\QuickCreationCommand;')
+        ->toContain('use Code16\\Sharp\\EntityList\\ReorderHandler;')
+        ->toContain('use Code16\\Sharp\\Commands\\Returns\\CommandReturn;')
+        ->toContain('use Code16\\Sharp\\Commands\\Wizards\\InstanceWizardCommand;')
+        ->toContain('use Code16\\Sharp\\EntityList\\SharpEntityList;')
+        ->toContain('?\\Code16\\Sharp\\EntityList\\ReorderHandler');
 });
