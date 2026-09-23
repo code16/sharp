@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\EntityList\Commands\Wizards;
 
-use Code16\Sharp\Enums\CommandAction;
+use Code16\Sharp\EntityList\Commands\Returns\CommandStepReturn;
 use Code16\Sharp\Exceptions\SharpMethodNotImplementedException;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
@@ -26,16 +26,13 @@ trait IsWizardCommand
         return $this->wizardCommandContext;
     }
 
-    protected function toStep(string $step): array
+    protected function toStep(string $step): CommandStepReturn
     {
         if ($this->wizardCommandContext) {
             session()->put(sprintf('CWC.%s.%s', get_class($this), $this->getKey()), $this->wizardCommandContext);
         }
 
-        return [
-            'action' => CommandAction::Step->value,
-            'step' => "{$step}:{$this->getKey()}",
-        ];
+        return new CommandStepReturn("{$step}:{$this->getKey()}");
     }
 
     public function extractStepFromRequest(): ?string
