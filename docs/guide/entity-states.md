@@ -46,7 +46,7 @@ When the user clicks on a state to update it, the `updateState()` method is call
 ```php
 class ProductState extends EntityState
 {
-    public function updateState($instanceId, $stateId): array
+    protected function updateState($instanceId, string $stateId): CommandReloadReturn|CommandRefreshReturn|null
     {
         Product::findOrFail($instanceId)
             ->update(['state' => $stateId]);
@@ -58,7 +58,7 @@ class ProductState extends EntityState
 }
 ```
 
-About the `return $this->refresh($instanceId);`: Entity states can return either a `refresh` or a `reload` (as described in the [Commands documentation](commands.md)), but if omitted the refresh of the `$instanceId` is the default (meaning in the code sample above this line can be removed).
+About the `return $this->refresh($instanceId);`: Entity states can return either a `refresh` or a `reload` (as described in the [Commands documentation](commands.md)), or `null`, in which case the refresh of the `$instanceId` is the default (meaning in the code sample above this line could be replaced by `return null;`). Other return types (`info()`, `link()`, `view()`, `download()`...) are not supported for a state.
 
 ## Configure the state
 

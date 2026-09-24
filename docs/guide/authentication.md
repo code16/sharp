@@ -185,7 +185,7 @@ class ChangePasswordCommand extends SingleInstanceCommand
             );
     }
 
-    protected function executeSingle(array $data): array
+    protected function executeSingle(array $data): CommandReturn
     {
         // The trait handles validation and rate limiting.
     

@@ -44,14 +44,14 @@ Notice the `$isSingle` property, which indicates that this entity does not have 
 
 Declared Commands must also be implemented as *single*. Like for Shows, this only means extending a more specific abstract class: `Code16\Sharp\Commands\SingleInstanceCommand`. The two differences with regular `InstanceCommand` are:
 
-- `executeSingle(array $data = []): array`, which does not take any `$instanceId` is parameter
+- `executeSingle(array $data = []): CommandReturn`, which does not take any `$instanceId` is parameter
 - `authorize(): bool`, in case you need to define a specific authorization, instead of `authorizeFor($instanceId)`.
 
 ## Single EntityState
 
 Same for EntityState: in a `SingleShow` case, you must implement EntityState as a `Code16\Sharp\Commands\SingleEntityState`, which differs a bit:
 
-- `updateSingleState(string $stateId)`
+- `updateSingleState(string $stateId): CommandReloadReturn`, which must return `$this->reload()`
 - `authorize(): bool`
 
 ## What if you need a Form?
