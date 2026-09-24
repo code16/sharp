@@ -4,9 +4,6 @@ use App\Models\Post;
 use App\Models\User;
 use App\Sharp\Entities\PostEntity;
 use App\Sharp\Posts\Commands\PreviewPostCommand;
-use Code16\Sharp\Utils\Testing\SharpAssertions;
-
-uses(SharpAssertions::class);
 
 it('can edit a post', function () {
     $this->loginAsSharpUser(User::factory()->create(['role' => 'admin']));
@@ -31,10 +28,8 @@ it('can update a post', function () {
                 $post->toArray(),
                 [
                     'content' => [
-                        'text' => [
-                            'fr' => 'new',
-                            'en' => 'new',
-                        ],
+                        'fr' => 'new',
+                        'en' => 'new',
                     ],
                 ],
             ),
@@ -77,10 +72,8 @@ it('can store a new post', function () {
             ],
             'published_at' => now()->setTime(10, 30)->format('Y-m-d H:i:s'),
             'content' => [
-                'text' => [
-                    'fr' => 'nouveau',
-                    'en' => 'new',
-                ],
+                'fr' => 'nouveau',
+                'en' => 'new',
             ],
         ])
         ->assertSessionHasNoErrors();
@@ -122,7 +115,8 @@ it('as an editor is not authorized to update a post of another editor', function
         ->get()
         ->assertOk();
 
-    $this->sharpShow(PostEntity::class, $publishedPost->id)
+    $this->sharpList(PostEntity::class)
+        ->sharpShow(PostEntity::class, $publishedPost->id)
         ->sharpForm(PostEntity::class, $publishedPost->id)
         ->edit()
         ->assertForbidden();
