@@ -1,6 +1,8 @@
 <?php
 
-use Code16\Sharp\EntityList\Commands\EntityState;
+use Code16\Sharp\Commands\EntityState;
+use Code16\Sharp\Commands\Returns\CommandRefreshReturn;
+use Code16\Sharp\Commands\Returns\CommandReloadReturn;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
@@ -24,7 +26,7 @@ it('updates the state of an instance from a list and return a "refresh" action b
                         ->addState('ko', 'KO', 'red');
                 }
 
-                protected function updateState($instanceId, string $stateId): ?array
+                protected function updateState($instanceId, string $stateId): CommandReloadReturn|CommandRefreshReturn|null
                 {
                     return null;
                 }
@@ -72,7 +74,7 @@ it('allow to return a "reload" action', function () {
                         ->addState('ko', 'KO', 'red');
                 }
 
-                protected function updateState($instanceId, string $stateId): ?array
+                protected function updateState($instanceId, string $stateId): CommandReloadReturn|CommandRefreshReturn|null
                 {
                     return $this->reload();
                 }
@@ -108,7 +110,7 @@ it('disallows to update the state of an entity with a wrong state', function () 
                         ->addState('ko', 'KO', 'red');
                 }
 
-                protected function updateState($instanceId, string $stateId): ?array
+                protected function updateState($instanceId, string $stateId): CommandReloadReturn|CommandRefreshReturn|null
                 {
                     return null;
                 }
@@ -139,7 +141,7 @@ it('returns a 417 on an applicative exception', function () {
                         ->addState('ko', 'KO', 'red');
                 }
 
-                protected function updateState($instanceId, string $stateId): ?array
+                protected function updateState($instanceId, string $stateId): CommandReloadReturn|CommandRefreshReturn|null
                 {
                     throw new SharpApplicativeException('Nope');
                 }
@@ -167,7 +169,7 @@ it('disallows to update the state if unauthorized', function () {
             {
                 protected function buildStates(): void {}
 
-                protected function updateState($instanceId, string $stateId): ?array
+                protected function updateState($instanceId, string $stateId): CommandReloadReturn|CommandRefreshReturn|null
                 {
                     return null;
                 }

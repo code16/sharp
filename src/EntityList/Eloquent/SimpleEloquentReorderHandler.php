@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\EntityList\Eloquent;
 
-use Code16\Sharp\EntityList\Commands\ReorderHandler;
+use Code16\Sharp\EntityList\ReorderHandler;
 
 class SimpleEloquentReorderHandler implements ReorderHandler
 {

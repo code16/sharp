@@ -1,6 +1,8 @@
 <?php
 
-namespace Code16\Sharp\EntityList\Commands;
+namespace Code16\Sharp\Commands;
+
+use Code16\Sharp\Commands\Returns\CommandReturn;
 
 abstract class SingleInstanceCommand extends InstanceCommand
 {
@@ -19,7 +21,7 @@ abstract class SingleInstanceCommand extends InstanceCommand
         return [];
     }
 
-    final public function execute(mixed $instanceId, array $data = []): array
+    final public function execute(mixed $instanceId, array $data = []): CommandReturn
     {
         return $this->executeSingle($data);
     }
@@ -34,5 +36,5 @@ abstract class SingleInstanceCommand extends InstanceCommand
         return $this->authorize();
     }
 
-    abstract protected function executeSingle(array $data): array;
+    abstract protected function executeSingle(array $data): CommandReturn;
 }

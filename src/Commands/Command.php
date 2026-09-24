@@ -1,9 +1,15 @@
 <?php
 
-namespace Code16\Sharp\EntityList\Commands;
+namespace Code16\Sharp\Commands;
 
 use Closure;
-use Code16\Sharp\Enums\CommandAction;
+use Code16\Sharp\Commands\Returns\CommandDownloadReturn;
+use Code16\Sharp\Commands\Returns\CommandInfoReturn;
+use Code16\Sharp\Commands\Returns\CommandLinkReturn;
+use Code16\Sharp\Commands\Returns\CommandRefreshReturn;
+use Code16\Sharp\Commands\Returns\CommandReloadReturn;
+use Code16\Sharp\Commands\Returns\CommandStreamDownloadReturn;
+use Code16\Sharp\Commands\Returns\CommandViewReturn;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\HasModalFormLayout;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
@@ -35,76 +41,48 @@ abstract class Command
     private ?string $description = null;
     private ?string $icon = null;
 
-    protected function info(string $message, bool $reload = false): array
+    protected function info(string $message): CommandInfoReturn
     {
-        return [
-            'action' => CommandAction::Info->value,
-            'message' => $message,
-            'reload' => $reload,
-        ];
+        return new CommandInfoReturn($message);
     }
 
-    protected function link(string $link, bool $openInNewTab = false): array
+    protected function link(string $link): CommandLinkReturn
     {
-        return [
-            'action' => CommandAction::Link->value,
-            'link' => $link,
-            'openInNewTab' => $openInNewTab,
-        ];
+        return new CommandLinkReturn($link);
     }
 
-    protected function reload(): array
+    protected function reload(): CommandReloadReturn
     {
-        return [
-            'action' => CommandAction::Reload->value,
-        ];
+        return new CommandReloadReturn();
     }
 
-    protected function refresh($ids): array
+    protected function refresh($ids): CommandRefreshReturn
     {
-        return [
-            'action' => CommandAction::Refresh->value,
-            'items' => (array) $ids,
-        ];
+        return new CommandRefreshReturn((array) $ids);
     }
 
-    protected function view(string $bladeView, array $params = []): array
+    protected function view(string $bladeView, array $params = []): CommandViewReturn
     {
-        return [
-            'action' => CommandAction::View->value,
-            'html' => view($bladeView, $params)->render(),
-        ];
+        return new CommandViewReturn(view($bladeView, $params)->render());
     }
 
-    protected function html(string $htmlContent): array
+    protected function html(string $htmlContent): CommandViewReturn
     {
-        return [
-            'action' => CommandAction::View->value,
-            'html' => $htmlContent,
-        ];
+        return new CommandViewReturn($htmlContent);
     }
 
-    protected function download(string $filePath, ?string $fileName = null, ?string $diskName = null): array
+    protected function download(string $filePath, ?string $fileName = null, ?string $diskName = null): CommandDownloadReturn
     {
-        return [
-            'action' => CommandAction::Download->value,
-            'file' => $filePath,
-            'disk' => $diskName,
-            'name' => $fileName,
-        ];
+        return new CommandDownloadReturn($filePath, $fileName, $diskName);
     }
 
-    protected function streamDownload(string $fileContent, string $fileName): array
+    protected function streamDownload(string $fileContent, string $fileName): CommandStreamDownloadReturn
     {
-        return [
-            'action' => CommandAction::StreamDownload->value,
-            'content' => $fileContent,
-            'name' => $fileName,
-        ];
+        return new CommandStreamDownloadReturn($fileContent, $fileName);
     }
 
     /**
-     * @param  string|(\Closure(array $formData): string)  $formModalTitle
+     * @param  string|(Closure(array $formData): string)  $formModalTitle
      * @return $this
      */
     final protected function configureFormModalTitle(string|Closure $formModalTitle): self
@@ -115,7 +93,7 @@ abstract class Command
     }
 
     /**
-     * @param  string|(\Closure(array $formData): string)  $formModalDescription
+     * @param  string|(Closure(array $formData): string)  $formModalDescription
      * @return $this
      */
     final protected function configureFormModalDescription(string|Closure $formModalDescription): self

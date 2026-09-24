@@ -6,7 +6,7 @@
             "condition": [
                 {
                     "classFqn": [
-                        "Code16\\Sharp\\EntityList\\Commands\\Command"
+                        "Code16\\Sharp\\Commands\\Command"
                     ],
                     "methodNames": [
                         "view"
@@ -55,7 +55,7 @@
                 },
                 {
                     "classFqn": [
-                        "Code16\\Sharp\\EntityList\\Commands\\Command"
+                        "Code16\\Sharp\\Commands\\Command"
                     ],
                     "methodNames": [
                         "configureIcon"

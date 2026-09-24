@@ -1,7 +1,8 @@
 <?php
 
-namespace Code16\Sharp\EntityList\Commands;
+namespace Code16\Sharp\Commands;
 
+use Code16\Sharp\Commands\Returns\CommandReturn;
 use Code16\Sharp\EntityList\EntityListQueryParams;
 
 abstract class EntityCommand extends Command
@@ -89,5 +90,5 @@ abstract class EntityCommand extends Command
             : [];
     }
 
-    abstract public function execute(array $data = []): array;
+    abstract public function execute(array $data = []): CommandReturn;
 }

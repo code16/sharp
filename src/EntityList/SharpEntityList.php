@@ -3,7 +3,6 @@
 namespace Code16\Sharp\EntityList;
 
 use Code16\Sharp\EntityList\Commands\QuickCreate\QuickCreationCommand;
-use Code16\Sharp\EntityList\Commands\ReorderHandler;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\Traits\HandleEntityCommands;
 use Code16\Sharp\EntityList\Traits\HandleEntityState;

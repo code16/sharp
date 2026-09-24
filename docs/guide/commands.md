@@ -18,10 +18,10 @@ php artisan sharp:make:instance-command <class_name> [--wizard,--form]
 
 ## Write the Command class
 
-First we need to write a class for our Command. It must extend the `Code16\Sharp\EntityList\Commands\EntityCommand` abstract class (for "entity commands", more on that below), and implement two functions.
+First we need to write a class for our Command. It must extend the `Code16\Sharp\Commands\EntityCommand` abstract class (for "entity commands", more on that below), and implement two functions.
 
 - `label(): string`: must return the text label of the Command, displayed to the user
-- `execute(array $data=[]): array` handles the work of the Command itself.
+- `execute(array $data=[]): CommandReturn` handles the work of the Command itself; it must return a `Code16\Sharp\Commands\Returns\CommandReturn`, built with one of the helpers described in [Command return types](#command-return-types).
 
 ```php
 class ReloadCommand extends EntityCommand
@@ -31,7 +31,7 @@ class ReloadCommand extends EntityCommand
         return 'Reload full list';
     }
 
-    public function execute(array $data=[]): array
+    public function execute(array $data=[]): CommandReturn
     {
         return $this->reload();
     }
@@ -42,12 +42,12 @@ class ReloadCommand extends EntityCommand
 
 The example above is an "entity" case, which is reserved to Entity Lists: Command applies to a subset of instances, or all of them. To get the Entity List context (search, page, filters...), you can check `$this->queryParams`, just like in the Entity List itself.
 
-To create an instance Command (relative to a specific instance, which can be placed on each Entity List row, or in a Show Page), the Command class must extend `Code16\Sharp\EntityList\Commands\InstanceCommand`. The execute method signature is a bit different:
+To create an instance Command (relative to a specific instance, which can be placed on each Entity List row, or in a Show Page), the Command class must extend `Code16\Sharp\Commands\InstanceCommand`. The execute method signature is a bit different:
 
 ```php
 class PromoteToAdminCommand extends InstanceCommand
 {
-    public function execute($instanceId, array $params = []): array
+    public function execute($instanceId, array $params = []): CommandReturn
     {
         // ...
     }
@@ -89,7 +89,7 @@ class SendInvoiceToCustomerCommand extends InstanceCommand
 {
     // ...
     
-    public function execute($instanceId, array $data = []): array
+    public function execute($instanceId, array $data = []): CommandReturn
     {
         $this->validate($data, [
             'message' => 'required'
@@ -172,14 +172,14 @@ Override `buildPageAlert(PageAlert $pageAlert): void` to display a message above
 
 ### Command return types
 
-Finally, let's review the return possibilities: after a Command has been executed, the code must return something to tell to the front what to do next. There are eight of them:
+Finally, let's review the return possibilities: after a Command has been executed, the code must return something to tell to the front what to do next. Each helper returns a dedicated `Code16\Sharp\Commands\Returns\CommandReturn` subclass; there are eight of them:
 
-- `return $this->info(string $message, bool $reload = false)`: displays the entered text in a modal. The second argument allows reloading the page first.
+- `return $this->info(string $message)`: displays the entered text in a modal. Chain `->withReload()` to reload the page first.
 - `return $this->reload()`: reload the current page (with context).
 - `return $this->refresh(mixed $ids)`*: refresh only instance(s) with an id in `$ids`, which can be either a single id or an array.
 - `return $this->view(string $bladeView, array $params = [])`: display a view right in Sharp; useful for page previews.
 - `return $this->html(string $htmlContent)`: display an HTML content.
-- `return $this->link(string $link, bool $openInNewTab = false)`: redirect to the given path. The second argument, optional (default is `false`), is a boolean to open the link in a new tab.
+- `return $this->link(string $link)`: redirect to the given path. Chain `->inNewTab()` to open the link in a new tab.
 - `return $this->download(string $filePath, ?string $fileName = null, ?string $diskName = null)`: the browser will download the specified file.
 - `return $this->streamDownload(string $fileContent, string $fileName)`: the browser will stream the specified file.
 
@@ -199,12 +199,26 @@ class OrderList extends SharpEntityList
 }
 ```
 
+The `withReload()` and `inNewTab()` modifiers accept an optional boolean, which is useful for conditional cases:
+
+```php
+public function execute(array $data = []): CommandReturn
+{
+    // ...
+
+    return $this->info('Invitation sent!')
+        ->withReload($data['notify_team']);
+}
+```
+
+Since the return value is typed, you can also declare a more specific return type if you want to, for instance `execute(array $data = []): CommandDownloadReturn`.
+
 ### Display notifications
 
 In the same fashion as for a Form, you can display notifications after a Command has been executed. Here is an example:
 
 ```php
-public function execute($instanceId, array $data= []): array
+public function execute($instanceId, array $data= []): CommandReturn
 {
     // ...
 
@@ -332,7 +346,7 @@ A use case could be to provide a Command with a form for the "create" task, leav
 Show Pages can only define instance commands (obviously); apart from that, the API is the same.
 
 It's a common pattern to reuse the same instance commands in an Entity List and in a Show Page.
-Remember that `reload()` return action is treated as a `refresh()`.
+Remember that in a Show Page, a `refresh()` return action is treated as a `reload()`.
 
 ### Attach Commands to sections
 
@@ -379,7 +393,7 @@ With that, the `PreviewPostCommand` will appear alongside the "Content" section.
 Dashboard can use Commands too, with a very similar API, apart for:
 
 - There is no Instance or Entity distinction; a command handler must extend `Code16\Sharp\Dashboard\Commands\DashboardCommand`.
-- A Dashboard Command can not return a `refresh()` action, since there is no Instance.
+- Since there is no Instance, a `refresh()` return action is treated as a `reload()`.
 
 ## Bulk Commands (Entity List only)
 
@@ -412,7 +426,7 @@ class MyBulkCommand extends EntityCommand
 {
     // ...
     
-    public function execute(array $data = []): array
+    public function execute(array $data = []): CommandReturn
     {
         Post::whereIn('id', $this->selectedIds())
             ->get()

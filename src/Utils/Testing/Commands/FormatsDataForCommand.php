@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Utils\Testing\Commands;
 
-use Code16\Sharp\EntityList\Commands\Command;
+use Code16\Sharp\Commands\Command;
 
 trait FormatsDataForCommand
 {

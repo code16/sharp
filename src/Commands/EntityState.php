@@ -1,8 +1,15 @@
 <?php
 
-namespace Code16\Sharp\EntityList\Commands;
+namespace Code16\Sharp\Commands;
 
-use BackedEnum;
+use Code16\Sharp\Commands\Returns\CommandDownloadReturn;
+use Code16\Sharp\Commands\Returns\CommandInfoReturn;
+use Code16\Sharp\Commands\Returns\CommandLinkReturn;
+use Code16\Sharp\Commands\Returns\CommandRefreshReturn;
+use Code16\Sharp\Commands\Returns\CommandReloadReturn;
+use Code16\Sharp\Commands\Returns\CommandReturn;
+use Code16\Sharp\Commands\Returns\CommandStreamDownloadReturn;
+use Code16\Sharp\Commands\Returns\CommandViewReturn;
 use Code16\Sharp\Exceptions\EntityList\SharpInvalidEntityStateException;
 use Code16\Sharp\Exceptions\SharpInvalidConfigException;
 use InvalidArgumentException;
@@ -32,27 +39,27 @@ abstract class EntityState extends InstanceCommand
         return $this;
     }
 
-    protected function view(string $bladeView, array $params = []): array
+    protected function view(string $bladeView, array $params = []): CommandViewReturn
     {
         throw new SharpInvalidConfigException('View return type is not supported for a state.');
     }
 
-    protected function info(string $message, bool $reload = false): array
+    protected function info(string $message): CommandInfoReturn
     {
         throw new SharpInvalidConfigException('Info return type is not supported for a state.');
     }
 
-    protected function download(string $filePath, ?string $fileName = null, ?string $diskName = null): array
+    protected function download(string $filePath, ?string $fileName = null, ?string $diskName = null): CommandDownloadReturn
     {
         throw new SharpInvalidConfigException('Download return type is not supported for a state.');
     }
 
-    protected function streamDownload(string $fileContent, string $fileName): array
+    protected function streamDownload(string $fileContent, string $fileName): CommandStreamDownloadReturn
     {
         throw new SharpInvalidConfigException('StreamDownload return type is not supported for a state.');
     }
 
-    protected function link(string $link, bool $openInNewTab = false): array
+    protected function link(string $link): CommandLinkReturn
     {
         throw new SharpInvalidConfigException('Link return type is not supported for a state.');
     }
@@ -60,7 +67,7 @@ abstract class EntityState extends InstanceCommand
     /**
      * @throws SharpInvalidEntityStateException
      */
-    public function execute($instanceId, array $data = []): array
+    public function execute($instanceId, array $data = []): CommandReturn
     {
         $stateId = $data['value'];
         $this->buildStates();
@@ -79,5 +86,5 @@ abstract class EntityState extends InstanceCommand
 
     abstract protected function buildStates(): void;
 
-    abstract protected function updateState($instanceId, string $stateId): ?array;
+    abstract protected function updateState($instanceId, string $stateId): CommandReloadReturn|CommandRefreshReturn|null;
 }

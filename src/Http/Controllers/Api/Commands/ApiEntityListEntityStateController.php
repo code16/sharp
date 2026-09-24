@@ -26,10 +26,8 @@ class ApiEntityListEntityStateController extends Controller
         return $this->returnCommandResult(
             $list,
             $entityKey,
-            array_merge(
-                $list->entityStateHandler()->execute($instanceId, request()->only('value')),
-                ['value' => request('value')],
-            ),
+            $list->entityStateHandler()->execute($instanceId, request()->only('value')),
+            ['value' => request('value')],
         );
     }
 }

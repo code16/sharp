@@ -3,7 +3,8 @@
 namespace App\Sharp\Categories\Commands;
 
 use App\Models\Category;
-use Code16\Sharp\EntityList\Commands\EntityCommand;
+use Code16\Sharp\Commands\EntityCommand;
+use Code16\Sharp\Commands\Returns\CommandReturn;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 
 class CleanUnusedCategoriesCommand extends EntityCommand
@@ -19,7 +20,7 @@ class CleanUnusedCategoriesCommand extends EntityCommand
             ->configureDescription('This action will remove all orphan categories');
     }
 
-    public function execute(array $data = []): array
+    public function execute(array $data = []): CommandReturn
     {
         $deletedCount = Category::whereDoesntHave('posts')->delete();
 

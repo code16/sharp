@@ -7,7 +7,8 @@ export function sidebar(): DefaultTheme.SidebarItem[] {
             collapsed: true,
             items: [
                 { text: 'Getting started', link: '/guide/index.md' },
-                { text: 'Installation', link: '/guide/installation.md' }
+                { text: 'Installation', link: '/guide/installation.md' },
+                { text: 'Upgrade guide', link: '/guide/upgrade.md' }
             ]
         },
         {
@@ -145,26 +146,6 @@ export function sidebar(): DefaultTheme.SidebarItem[] {
                 { text: 'Testing', link: '/guide/testing.md' },
                 { text: 'Testing (legacy API)', link: '/guide/testing-legacy.md' },
                 { text: 'Artisan Generators', link: '/guide/artisan-generators.md' }
-            ]
-        },
-        {
-            text: 'Migrations guide',
-            collapsed: true,
-            items: [
-                { text: 'Upgrading from 8.x to 9.x', link: '/guide/upgrading/9.0.md' },
-                { text: 'Upgrading from 7.x to 8.x', link: '/guide/upgrading/8.0.md' },
-                { text: 'Upgrading from 6.x to 7.x', link: '/guide/upgrading/7.0.md' },
-                {
-                    text: 'Older versions',
-                    collapsed: true,
-                    items: [
-                        { text: 'Upgrading from 5.x to 6.x', link: '/guide/upgrading/6.0.md' },
-                        { text: 'Upgrading from 4.2.x to 5.x', link: '/guide/upgrading/5.0.md' },
-                        { text: 'Upgrading from 4.1.x to 4.2', link: '/guide/upgrading/4.2.md' },
-                        { text: 'Upgrading from 4.1 to 4.1.3', link: '/guide/upgrading/4.1.3.md' },
-                        { text: 'Upgrading from 4.0 to 4.1', link: '/guide/upgrading/4.1.md' }
-                    ]
-                }
             ]
         }
     ];

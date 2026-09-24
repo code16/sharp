@@ -1,8 +1,9 @@
 <?php
 
-use Code16\Sharp\EntityList\Commands\EntityCommand;
-use Code16\Sharp\EntityList\Commands\InstanceCommand;
-use Code16\Sharp\EntityList\Commands\SingleInstanceCommand;
+use Code16\Sharp\Commands\EntityCommand;
+use Code16\Sharp\Commands\InstanceCommand;
+use Code16\Sharp\Commands\Returns\CommandReturn;
+use Code16\Sharp\Commands\SingleInstanceCommand;
 use Code16\Sharp\Exceptions\SharpInvalidConfigException;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteRemoteField;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
@@ -694,7 +695,7 @@ it('allows to call an functional endpoint for a remote autocomplete field in an 
                         );
                     }
 
-                    public function execute(mixed $instanceId, array $data = []): array {}
+                    public function execute(mixed $instanceId, array $data = []): CommandReturn {}
                 },
             ];
         }
@@ -747,7 +748,7 @@ it('allows to call an functional endpoint for a remote autocomplete field in an 
                         );
                     }
 
-                    public function execute(array $data = []): array {}
+                    public function execute(array $data = []): CommandReturn {}
                 },
             ];
         }
@@ -799,7 +800,7 @@ it('allows to call an functional endpoint for a remote autocomplete field in an 
                         );
                     }
 
-                    protected function executeSingle(array $data): array {}
+                    protected function executeSingle(array $data): CommandReturn {}
                 },
             ];
         }
@@ -854,7 +855,7 @@ it('allows to call an functional endpoint for a remote autocomplete field in an 
                         );
                     }
 
-                    protected function executeSingle(array $data): array {}
+                    protected function executeSingle(array $data): CommandReturn {}
                 },
             ];
         }
@@ -911,7 +912,7 @@ it('won’t allow to call an functional endpoint for a remote autocomplete field
                         return false;
                     }
 
-                    public function execute(mixed $instanceId, array $data = []): array {}
+                    public function execute(mixed $instanceId, array $data = []): CommandReturn {}
                 },
             ];
         }

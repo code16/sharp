@@ -6,6 +6,7 @@ use Code16\Sharp\Http\Context\SharpBreadcrumb;
 use Code16\Sharp\Show\SharpShow;
 use Code16\Sharp\Show\SharpSingleShow;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
+use Code16\Sharp\Utils\Testing\Commands\AssertableCommand;
 use Code16\Sharp\Utils\Testing\Commands\FormatsDataForCommand;
 use Code16\Sharp\Utils\Testing\Commands\PendingCommand;
 use Code16\Sharp\Utils\Testing\Dashboard\PendingDashboard;
@@ -131,6 +132,26 @@ class PendingShow
                         SharpBreadcrumb::CURRENT_PAGE_URL_HEADER => $this->getCurrentPageUrlFromParents(),
                     ]
                 ),
+            commandContainer: $this->show,
+        );
+    }
+
+    public function entityState(string $stateValue): AssertableCommand
+    {
+        return new AssertableCommand(
+            postCommand: fn () => $this
+                ->test
+                ->postJson(
+                    route(
+                        'code16.sharp.api.show.state',
+                        ['entityKey' => $this->entityKey, 'instanceId' => $this->instanceId]
+                    ),
+                    ['value' => $stateValue],
+                    headers: [
+                        SharpBreadcrumb::CURRENT_PAGE_URL_HEADER => $this->getCurrentPageUrlFromParents(),
+                    ]
+                ),
+            getForm: fn () => PHPUnit::fail('An entity state has no form.'),
             commandContainer: $this->show,
         );
     }

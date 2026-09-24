@@ -1,9 +1,14 @@
 <?php
 
+use Code16\Sharp\Commands\EntityCommand;
+use Code16\Sharp\Commands\EntityState;
+use Code16\Sharp\Commands\InstanceCommand;
+use Code16\Sharp\Commands\Returns\CommandRefreshReturn;
+use Code16\Sharp\Commands\Returns\CommandReloadReturn;
+use Code16\Sharp\Commands\Returns\CommandReturn;
+use Code16\Sharp\Commands\SingleEntityState;
+use Code16\Sharp\Commands\Wizards\EntityWizardCommand;
 use Code16\Sharp\Dashboard\Commands\DashboardCommand;
-use Code16\Sharp\EntityList\Commands\EntityCommand;
-use Code16\Sharp\EntityList\Commands\InstanceCommand;
-use Code16\Sharp\EntityList\Commands\Wizards\EntityWizardCommand;
 use Code16\Sharp\Filters\CheckFilter;
 use Code16\Sharp\Filters\DateRange\DateRangeFilterValue;
 use Code16\Sharp\Filters\DateRangeFilter;
@@ -23,8 +28,10 @@ use Code16\Sharp\Tests\ResetUrlDefaults;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Testing\SharpAssertions;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Illuminate\Testing\TestResponse;
+use PHPUnit\Framework\ExpectationFailedException;
 
 pest()
     ->use(ResetUrlDefaults::class)
@@ -168,7 +175,7 @@ it('call & assert an entity list entity command form', function () {
                         return ['field_with_initial_value' => 'test'];
                     }
 
-                    public function execute(array $data = []): array
+                    public function execute(array $data = []): CommandReturn
                     {
                         $this->postedData = $data;
 
@@ -260,7 +267,7 @@ it('call & assert an entity list entity command with filters', function () {
                         return 'entity';
                     }
 
-                    public function execute(array $data = []): array
+                    public function execute(array $data = []): CommandReturn
                     {
                         $this->filterValues = ['is_valid' => $this->queryParams->filterFor('is_valid')];
 
@@ -312,7 +319,7 @@ it('call & assert an entity list entity wizard command', function () {
                             ->addField(SharpFormTextField::make('field_with_initial_value'));
                     }
 
-                    protected function executeFirstStep(array $data): array
+                    protected function executeFirstStep(array $data): CommandReturn
                     {
                         $this->postedData = $data;
 
@@ -333,7 +340,7 @@ it('call & assert an entity list entity wizard command', function () {
                             ->addField(SharpFormTextField::make('field_with_initial_value'));
                     }
 
-                    protected function executeStepSecondStep(array $data): array
+                    protected function executeStepSecondStep(array $data): CommandReturn
                     {
                         $this->postedData = $data;
 
@@ -384,7 +391,7 @@ it('call & assert a entity list instance command', function () {
                         $formFields->addField(SharpFormTextField::make('action'));
                     }
 
-                    public function execute($instanceId, array $data = []): array
+                    public function execute($instanceId, array $data = []): CommandReturn
                     {
                         return match ($data['action']) {
                             'info' => $this->info('instance '.$instanceId),
@@ -398,7 +405,7 @@ it('call & assert a entity list instance command', function () {
                         return 'entity';
                     }
 
-                    public function execute($instanceId, array $data = []): array
+                    public function execute($instanceId, array $data = []): CommandReturn
                     {
                         return $this->info('instance '.$instanceId);
                     }
@@ -434,7 +441,7 @@ it('call & assert a show instance command', function () {
                         $formFields->addField(SharpFormTextField::make('action'));
                     }
 
-                    public function execute($instanceId, array $data = []): array
+                    public function execute($instanceId, array $data = []): CommandReturn
                     {
                         return match ($data['action']) {
                             'info' => $this->info('instance '.$instanceId),
@@ -448,7 +455,7 @@ it('call & assert a show instance command', function () {
                         return 'entity';
                     }
 
-                    public function execute($instanceId, array $data = []): array
+                    public function execute($instanceId, array $data = []): CommandReturn
                     {
                         return $this->info('instance '.$instanceId);
                     }
@@ -869,7 +876,7 @@ it('call & assert a dashboard command', function () {
                         $formFields->addField(SharpFormTextField::make('action'));
                     }
 
-                    public function execute(array $data = []): array
+                    public function execute(array $data = []): CommandReturn
                     {
                         return match ($data['action']) {
                             'info' => $this->info('dashboard'),
@@ -883,7 +890,7 @@ it('call & assert a dashboard command', function () {
                         return 'dashboard';
                     }
 
-                    public function execute(array $data = []): array
+                    public function execute(array $data = []): CommandReturn
                     {
                         return $this->info('dashboard');
                     }
@@ -955,4 +962,288 @@ it('set specified global filter', function () {
         ->assertOk()
         ->tap(fn (TestResponse $response) => expect($response->baseRequest->route('globalFilter'))->toEqual('one')
         );
+});
+
+it('asserts the returned view, even with partials', function () {
+    fakeListFor(PersonEntity::class, new class() extends PersonList
+    {
+        protected function getInstanceCommands(): ?array
+        {
+            return [
+                'cmd' => new class() extends InstanceCommand
+                {
+                    public function label(): ?string
+                    {
+                        return 'entity';
+                    }
+
+                    public function execute($instanceId, array $data = []): CommandReturn
+                    {
+                        return $this->view('fixtures::test-with-partial', ['text' => 'text']);
+                    }
+                },
+            ];
+        }
+    });
+
+    $this->sharpList(PersonEntity::class)
+        ->instanceCommand('cmd', 1)
+        ->post()
+        ->assertReturnsView('fixtures::test-with-partial', ['text' => 'text']);
+});
+
+it('asserts info reload and link new tab modifiers', function () {
+    fakeListFor(PersonEntity::class, new class() extends PersonList
+    {
+        protected function getEntityCommands(): ?array
+        {
+            return [
+                'cmd' => new class() extends EntityCommand
+                {
+                    public function label(): ?string
+                    {
+                        return 'entity';
+                    }
+
+                    public function buildFormFields(FieldsContainer $formFields): void
+                    {
+                        $formFields->addField(SharpFormTextField::make('action'));
+                    }
+
+                    public function execute(array $data = []): CommandReturn
+                    {
+                        return match ($data['action']) {
+                            'info' => $this->info('ok'),
+                            'info_reload' => $this->info('ok')->withReload(),
+                            'link' => $this->link('https://example.org'),
+                            'link_new_tab' => $this->link('https://example.org')->inNewTab(),
+                        };
+                    }
+                },
+            ];
+        }
+    });
+
+    $post = fn (string $action) => $this->sharpList(PersonEntity::class)
+        ->entityCommand('cmd')
+        ->getForm()
+        ->post(['action' => $action]);
+
+    $post('info')->assertReturnsInfo('ok', reload: false)->assertReturnsInfo();
+    $post('info_reload')->assertReturnsInfo('ok', reload: true)->assertReturnsInfo('ok');
+    $post('link')->assertReturnsLink('https://example.org', newTab: false);
+    $post('link_new_tab')->assertReturnsLink('https://example.org', newTab: true);
+
+    expect(fn () => $post('info')->assertReturnsInfo(reload: true))
+        ->toThrow(ExpectationFailedException::class);
+    expect(fn () => $post('link')->assertReturnsLink(newTab: true))
+        ->toThrow(ExpectationFailedException::class);
+});
+
+it('asserts a refresh from a show', function () {
+    fakeShowFor(PersonEntity::class, new class() extends PersonShow
+    {
+        public function getInstanceCommands(): ?array
+        {
+            return [
+                'cmd' => new class() extends InstanceCommand
+                {
+                    public function label(): ?string
+                    {
+                        return 'entity';
+                    }
+
+                    public function execute($instanceId, array $data = []): CommandReturn
+                    {
+                        return $this->refresh($instanceId);
+                    }
+                },
+            ];
+        }
+    });
+
+    $this->sharpShow(PersonEntity::class, 1)
+        ->instanceCommand('cmd')
+        ->post()
+        ->assertReturnsRefresh([1])
+        ->assertReturnsRefresh();
+});
+
+it('asserts the content of a download', function () {
+    fakeListFor(PersonEntity::class, new class() extends PersonList
+    {
+        protected function getEntityCommands(): ?array
+        {
+            return [
+                'cmd' => new class() extends EntityCommand
+                {
+                    public function label(): ?string
+                    {
+                        return 'entity';
+                    }
+
+                    public function buildFormFields(FieldsContainer $formFields): void
+                    {
+                        $formFields->addField(SharpFormTextField::make('action'));
+                    }
+
+                    public function execute(array $data = []): CommandReturn
+                    {
+                        if ($data['action'] === 'stream') {
+                            return $this->streamDownload('a,b,c', 'export.csv');
+                        }
+
+                        Storage::fake('files');
+                        Storage::disk('files')->put('exports/export.csv', 'd,e,f');
+
+                        return $this->download('exports/export.csv', 'export.csv', 'files');
+                    }
+                },
+            ];
+        }
+    });
+
+    $this->sharpList(PersonEntity::class)
+        ->entityCommand('cmd')->getForm()->post(['action' => 'stream'])
+        ->assertReturnsDownload('export.csv', 'a,b,c');
+
+    $this->sharpList(PersonEntity::class)
+        ->entityCommand('cmd')->getForm()->post(['action' => 'disk'])
+        ->assertReturnsDownload('export.csv', 'd,e,f');
+});
+
+it('gives back values from delegated response methods', function () {
+    fakeListFor(PersonEntity::class, new class() extends PersonList
+    {
+        protected function getEntityCommands(): ?array
+        {
+            return [
+                'cmd' => new class() extends EntityCommand
+                {
+                    public function label(): ?string
+                    {
+                        return 'entity';
+                    }
+
+                    public function execute(array $data = []): CommandReturn
+                    {
+                        return $this->info('ok');
+                    }
+                },
+            ];
+        }
+    });
+
+    $command = $this->sharpList(PersonEntity::class)->entityCommand('cmd')->post();
+
+    expect($command->assertOk())->toBe($command)
+        ->and($command->json('message'))->toBe('ok');
+});
+
+it('call & assert an entity list entity state', function () {
+    $updated = [];
+
+    fakeListFor(PersonEntity::class, new class($updated) extends PersonList
+    {
+        public function __construct(public &$updated) {}
+
+        public function buildListConfig(): void
+        {
+            $this->configureEntityState('state', new class($this->updated) extends EntityState
+            {
+                public function __construct(public &$updated) {}
+
+                protected function buildStates(): void
+                {
+                    $this->addState('ok', 'Ok', 'green')
+                        ->addState('ko', 'KO', 'red');
+                }
+
+                protected function updateState($instanceId, string $stateId): CommandReloadReturn|CommandRefreshReturn|null
+                {
+                    $this->updated[$instanceId] = $stateId;
+
+                    return $stateId === 'ko' ? $this->reload() : null;
+                }
+            });
+        }
+
+        public function getListData(): array
+        {
+            return collect([
+                ['id' => 1, 'name' => 'Marie Curie'],
+                ['id' => 2, 'name' => 'Niels Bohr'],
+            ])
+                ->when($this->queryParams->specificIds(), fn ($items, $ids) => $items->whereIn('id', $ids))
+                ->values()
+                ->all();
+        }
+    });
+
+    $this->sharpList(PersonEntity::class)
+        ->entityState(1, 'ok')
+        ->assertReturnsRefresh([1])
+        ->assertJson(['value' => 'ok']);
+
+    $this->sharpList(PersonEntity::class)
+        ->entityState(2, 'ko')
+        ->assertReturnsReload();
+
+    $this->sharpList(PersonEntity::class)
+        ->entityState(1, 'unknown')
+        ->assertStatus(422);
+
+    expect($updated)->toEqual([1 => 'ok', 2 => 'ko']);
+});
+
+it('call & assert a show and a single show entity state', function () {
+    $stateHandler = fn () => new class() extends EntityState
+    {
+        protected function buildStates(): void
+        {
+            $this->addState('ok', 'Ok', 'green');
+        }
+
+        protected function updateState($instanceId, string $stateId): CommandReloadReturn|CommandRefreshReturn|null
+        {
+            return null;
+        }
+    };
+
+    fakeShowFor(PersonEntity::class, new class($stateHandler) extends PersonShow
+    {
+        public function __construct(private $stateHandler) {}
+
+        public function buildShowConfig(): void
+        {
+            $this->configureEntityState('state', ($this->stateHandler)());
+        }
+    });
+
+    fakeShowFor(SinglePersonEntity::class, new class() extends SinglePersonShow
+    {
+        public function buildShowConfig(): void
+        {
+            $this->configureEntityState('state', new class() extends SingleEntityState
+            {
+                protected function buildStates(): void
+                {
+                    $this->addState('ok', 'Ok', 'green');
+                }
+
+                protected function updateSingleState(string $stateId): CommandReloadReturn
+                {
+                    return $this->reload();
+                }
+            });
+        }
+    });
+
+    $this->sharpShow(PersonEntity::class, 1)
+        ->entityState('ok')
+        ->assertReturnsRefresh([1]);
+
+    $this->sharpShow(SinglePersonEntity::class)
+        ->entityState('ok')
+        ->assertReturnsReload();
 });

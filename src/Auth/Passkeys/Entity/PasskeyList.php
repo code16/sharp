@@ -4,7 +4,8 @@ namespace Code16\Sharp\Auth\Passkeys\Entity;
 
 use Code16\Sharp\Auth\Passkeys\Commands\UpdatePasskeyNameCommand;
 use Code16\Sharp\Auth\Passkeys\PasskeyManager;
-use Code16\Sharp\EntityList\Commands\EntityCommand;
+use Code16\Sharp\Commands\EntityCommand;
+use Code16\Sharp\Commands\Returns\CommandReturn;
 use Code16\Sharp\EntityList\Fields\EntityListBadgeField;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
@@ -50,7 +51,7 @@ class PasskeyList extends SharpEntityList
                     return trans('sharp::auth.passkeys.list.commands.add.command_label');
                 }
 
-                public function execute(array $data = []): array
+                public function execute(array $data = []): CommandReturn
                 {
                     redirect()->setIntendedUrl(sharp()->context()->breadcrumb()->getCurrentSegmentUrl());
 
