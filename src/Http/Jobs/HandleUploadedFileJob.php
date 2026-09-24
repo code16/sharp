@@ -2,11 +2,13 @@
 
 namespace Code16\Sharp\Http\Jobs;
 
+use Code16\Sharp\Events\FileSaved;
 use Code16\Sharp\Exceptions\Form\SharpFormUpdateException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 
 class HandleUploadedFileJob implements ShouldQueue
@@ -57,8 +59,11 @@ class HandleUploadedFileJob implements ShouldQueue
             );
         }
 
-        Storage::disk($this->disk)
-            ->put($this->determineFilePath(), Storage::disk($tmpDisk)->get($tmpFilePath));
+        $path = $this->determineFilePath();
+
+        Storage::disk($this->disk)->put($path, Storage::disk($tmpDisk)->get($tmpFilePath));
+
+        Event::dispatch(new FileSaved(path: $path, disk: $this->disk));
     }
 
     private function determineFilePath(): string

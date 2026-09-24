@@ -14,11 +14,11 @@ Let the user enter a time (default is false).
 
 ### `setMondayFirst(bool $mondayFirst = true)`
 
-Put monday as the first day in the calendar (default: false).
+Put monday as the first day in the calendar (default: true).
 
 ### `setSundayFirst(bool $sundayFirst = true)`
 
-Put sunday as the first day in the calendar (default: true).
+Put sunday as the first day in the calendar (default: false).
 
 ### `setMinTime(int $hours, int $minutes = 0)`
 ### `setMaxTime(int $hours, int $minutes = 0)`

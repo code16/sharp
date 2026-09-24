@@ -184,3 +184,7 @@ The embed should be treated like any regular Laravel blade component. Here's an 
     </div>
 @endif
 ```
+
+## Security
+
+If you add a `slot` field to the embed, the text of the slot is **not sanitized**. If you use a textarea or text field, you will have to call `->setSanitizeHtml()` on those.

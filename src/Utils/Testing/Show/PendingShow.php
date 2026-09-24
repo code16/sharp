@@ -74,6 +74,8 @@ class PendingShow
 
     public function delete(): TestResponse
     {
+        PHPUnit::assertNotNull($this->instanceId, 'Cannot delete a show without an instance id.');
+
         return $this->test
             ->delete(
                 route('code16.sharp.show.delete', [

@@ -7,13 +7,13 @@ Commands can be defined in an Entity List, in a Show Page or in a Dashboard. Thi
 ## Generator for an 'Entity' command
 
 ```bash
-php artisan sharp:make:entity-command <class_name> [--model=<model_name>,--wizard,--form]
+php artisan sharp:make:entity-command <class_name> [--wizard,--form]
 ```
 
 ## Generator for an 'Instance' command
 
 ```bash
-php artisan sharp:make:instance-command <class_name> [--model=<model_name>,--wizard,--form]
+php artisan sharp:make:instance-command <class_name> [--wizard,--form]
 ```
 
 ## Write the Command class
@@ -98,7 +98,7 @@ class SendInvoiceToCustomerCommand extends InstanceCommand
         Order::findOrFail($instanceId)
             ->sendInvoice($data['message'], $data['now'] ?? false);
             
-        return $this->info('Invoice sent.')
+        return $this->info('Invoice sent.');
     }
 }
 ```
@@ -164,8 +164,11 @@ Here is the full list of available methods:
 - `configureDescription(string $description)`: this text will appear under the Command label
 - `configureFormModalTitle(string $formModalTitle)`: if the Command has a Form, the title of the modal will be its label, or `$formModalTitle` if defined
 - `configureFormModalButtonLabel(string $formModalButtonLabel)`: if the Command has a Form, the label of the OK button will be `$formModalButtonLabel`
-- `configurePageAlert(string $template, string $alertLevel = null, string $fieldKey = null, bool $declareTemplateAsPath = false)`: display a dynamic message above the Form; [see detailed doc](page-alerts.md)
 - `configureFormModalSubmitAndReopenButton(?string $label = null)`: only useful to Commands with forms; if set, an additional button will be displayed to allow the user to submit the form and immediately reopen the Command; the label of the button will be `$label` if defined.
+
+### Display a Page Alert
+
+Override `buildPageAlert(PageAlert $pageAlert): void` to display a message above the Command's Form; [see detailed doc](page-alerts.md).
 
 ### Command return types
 

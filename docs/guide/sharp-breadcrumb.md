@@ -11,7 +11,7 @@ class PostEntity extends \Code16\Sharp\Utils\Entities\SharpEntity
 {
     // ...
     
-    protected string $label = = 'Post';
+    protected string $label = 'Post';
 }
 ```
 
@@ -98,7 +98,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
     protected function configureSharp(SharpConfigBuilder $config): void
     {
         $config
-            ->enableBreadcrumbLabelsLazyLoading()
+            ->enableBreadcrumbLabelsLazyLoading();
     }
 }
 ```

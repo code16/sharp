@@ -1,10 +1,12 @@
 <?php
 
+use Code16\Sharp\Events\FileSaved;
 use Code16\Sharp\Exceptions\Form\SharpFormUpdateException;
 use Code16\Sharp\Http\Jobs\HandleUploadedFileJob;
 use Code16\Sharp\Http\Jobs\OptimizeImageJob;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 
 beforeEach(function () {
@@ -24,6 +26,26 @@ it('moves a newly uploaded file in the correct folder', function () {
     );
 
     Storage::disk('local')->assertExists('data/image.jpg');
+});
+
+it('dispatches FileSaved event', function () {
+    Event::fake();
+
+    UploadedFile::fake()
+        ->image('image.jpg')
+        ->storeAs('/tmp', 'image.jpg', ['disk' => 'local']);
+
+    HandleUploadedFileJob::dispatch(
+        uploadedFileName: 'image.jpg',
+        disk: 'local',
+        filePath: 'data/things/{id}/image.jpg',
+        shouldOptimizeImage: false,
+        instanceId: 50,
+    );
+
+    Event::assertDispatched(function (FileSaved $event) {
+        return $event->path === 'data/things/50/image.jpg' && $event->disk === 'local';
+    });
 });
 
 it('handles the {id} segment of the file path', function () {

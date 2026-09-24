@@ -54,14 +54,14 @@
                         <Label for="password">
                             {{ __('sharp::pages/auth/reset-password.password_field') }}
                         </Label>
-                        <Input id="password" type="password" v-model="form.password" />
+                        <Input id="password" type="password" v-model="form.password" autocomplete="new-password" />
                         <FormMessage :message="form.errors.password" />
                     </FormItem>
                     <FormItem>
                         <Label for="password_confirmation">
                             {{ __('sharp::pages/auth/reset-password.password_confirmation_field') }}
                         </Label>
-                        <Input id="password_confirmation" type="password" v-model="form.password_confirmation" />
+                        <Input id="password_confirmation" type="password" v-model="form.password_confirmation" autocomplete="new-password" />
                         <FormMessage :message="form.errors.password_confirmation" />
                     </FormItem>
                 </div>
