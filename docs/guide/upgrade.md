@@ -2,18 +2,99 @@
 
 ## The upgrade command
 
-Sharp 10 comes with an upgrade command that replaces and notifies for deprecated and removed code. You can run it with
+Sharp 10 comes with an upgrade command that replaces and notifies for deprecated and removed code. You can run it with:
 
 ```bash
 php artisan sharp:upgrade app/Sharp
 ```
 
-Where `app/Sharp` is the path of your sharp code.
+Where `app/Sharp` is the base path of your sharp code. Use the `--dry-run` option to list the files that would be updated without writing them.
+
+The command handles most of the changes described below:
+- it **rewrites** moved classes and namespaces, renamed methods, Command return types and the `info()` / `link()` boolean arguments;
+- it **reports** the files where it detected removed code that must be migrated by hand (like `currentSharpRequest()`, or `execute(): array` methods it could not safely rewrite).
 
 ## Updating Dependencies
 
 If you depend on them, you should update the following dependencies in your `composer.json` file :
 - `inertiajs/inertia-laravel` to `^3.0` (cf. https://inertiajs.com/docs/v3/getting-started/upgrade-guide)
+
+## Commands
+
+### Commands have moved out of the EntityList namespace
+
+Commands are used everywhere in Sharp (Entity Lists, Show Pages, Dashboards), so they now live in their own namespace. The `ReorderHandler` interface, which is not a command, has moved to the EntityList namespace. *(handled by `sharp:upgrade`)*
+
+```php
+use Code16\Sharp\EntityList\Commands\EntityCommand; // [!code --]
+use Code16\Sharp\Commands\EntityCommand; // [!code ++]
+
+use Code16\Sharp\EntityList\Commands\Wizards\InstanceWizardCommand; // [!code --]
+use Code16\Sharp\Commands\Wizards\InstanceWizardCommand; // [!code ++]
+
+use Code16\Sharp\EntityList\Commands\ReorderHandler; // [!code --]
+use Code16\Sharp\EntityList\ReorderHandler; // [!code ++]
+```
+
+This applies to all classes of `Code16\Sharp\EntityList\Commands` (`Command`, `EntityCommand`, `InstanceCommand`, `SingleInstanceCommand`, `EntityState`, `SingleEntityState` and the `Wizards` classes), except `Code16\Sharp\EntityList\Commands\QuickCreate\QuickCreationCommand`, which is specific to Entity Lists and stays where it is. `Code16\Sharp\Dashboard\Commands\DashboardCommand` is unchanged as well.
+
+### Commands must return a `CommandReturn`
+
+Command execution methods now return a typed `Code16\Sharp\Commands\Returns\CommandReturn` object instead of an array. Since the `$this->info()`, `$this->reload()`, `$this->refresh()`... helpers are unchanged, you only need to update the return types. *(handled by `sharp:upgrade`)*
+
+```php
+use Code16\Sharp\Commands\Returns\CommandReturn; // [!code ++]
+
+class MyCommand extends InstanceCommand
+{
+    public function execute(mixed $instanceId, array $data = []): array // [!code --]
+    public function execute(mixed $instanceId, array $data = []): CommandReturn // [!code ++]
+    {
+        return $this->reload();
+    }
+}
+```
+
+This applies to `execute()`, `executeSingle()`, and the Wizard `executeFirstStep()` / `executeStep()` / `executeStepXXX()` methods. Entity States have more specific return types:
+
+```php
+use Code16\Sharp\Commands\Returns\CommandRefreshReturn; // [!code ++]
+use Code16\Sharp\Commands\Returns\CommandReloadReturn; // [!code ++]
+
+// EntityState
+protected function updateState($instanceId, string $stateId): ?array // [!code --]
+protected function updateState($instanceId, string $stateId): CommandReloadReturn|CommandRefreshReturn|null // [!code ++]
+
+// SingleEntityState
+protected function updateSingleState(string $stateId): array // [!code --]
+protected function updateSingleState(string $stateId): CommandReloadReturn // [!code ++]
+```
+
+Note that `updateSingleState()` can no longer return `null`: it must return `$this->reload()`.
+
+::: warning
+`sharp:upgrade` only rewrites classes that directly extend a Sharp Command class. If your Commands extend your own abstract class, the command will report the remaining `execute(): array` methods, which you must update by hand.
+:::
+
+### `info()` and `link()` boolean arguments are replaced by fluent modifiers
+
+*(handled by `sharp:upgrade`)*
+
+```php
+return $this->info('Invitation sent!', reload: true); // [!code --]
+return $this->info('Invitation sent!')->withReload(); // [!code ++]
+
+return $this->link('https://example.org', openInNewTab: true); // [!code --]
+return $this->link('https://example.org')->inNewTab(); // [!code ++]
+```
+
+Both modifiers accept an optional boolean, for conditional cases: `->withReload($shouldReload)`.
+
+### Testing assertions
+
+A few Command testing assertions were improved (cf. [Testing](testing#asserting-command-results)), with two small behavior changes:
+- `assertReturnsInfo('')` and `assertReturnsLink('')` now assert an empty message / link; to assert any value, omit the parameter.
+- Response methods called on testing objects now return their value: `->json('message')` returns the message instead of the testing object.
 
 ## Deprecated methods
 

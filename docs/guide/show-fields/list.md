@@ -2,23 +2,21 @@
 
 Class: `Code16\Sharp\Show\Fields\SharpShowListField`
 
-This field is very similar to the [Form's File field](../form-fields/list.md), and its purpose is to display items made of other Show fields.
+This field is very similar to the [Form's List field](../form-fields/list.md), and its purpose is to display items made of other Show fields.
 
 Here's an example, for a list of pictures with a legend:
 
 ```php
-class MyShow extend SharpShow
+class MyShow extends SharpShow
 {
-    // ...
-    function buildShowLayout(ShowLayout $showLayout): void
+    // [...]
+    function buildShowFields(FieldsContainer $showFields): void
     {
-        $showLayout->addField(
+        $showFields->addField(
             SharpShowListField::make('pictures')
                 ->setLabel('additional pictures')
                 ->addItemField(
                     SharpShowFileField::make('file')
-                        ->setStorageDisk('local')
-                        ->setStorageBasePath('data/Product/{id}/pictures')
                 )
                 ->addItemField(
                     SharpShowTextField::make('legend')
@@ -46,7 +44,7 @@ The List item layout must be defined like the show itself, in the `buildShowLayo
 Example:
 
 ```php
-class MyShow extend SharpShow
+class MyShow extends SharpShow
 {
     // ...
     function buildShowLayout(ShowLayout $showLayout): void

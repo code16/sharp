@@ -30,9 +30,9 @@ But why can't we use a classic List for this? Well, the `model->winners` relatio
 
 Configuration is the same as the classic [List](list.md), except for:
 
-### `setItemField(SharpFormAutocompleteRemoteField $field)`
+### `setItemField(IsSharpFormAutocompleteField $field)`
 
-You can use this function instead of `addItemField`, since items of AutocompleteList have only one field.
+You can use this function instead of `addItemField`, since items of AutocompleteList have only one field. It accepts either a `SharpFormAutocompleteRemoteField` or a `SharpFormAutocompleteLocalField`.
 
 ### `addItemField(SharpFormField $field)`
 
@@ -44,6 +44,6 @@ This method is an alias for `setItemField()`, meaning that you can only pass an 
 
 Well, you must provide an array or Collection (same as for a List, see [related documentation](list.md)) of models with at least attributes designated by templates for the Autocomplete (see [related documentation](autocomplete.md)).
 
-### `formFront`
+### `fromFront`
 
 Returns the selected item id.

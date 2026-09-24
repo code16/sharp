@@ -1,5 +1,6 @@
 <?php
 
+use Code16\Sharp\Commands\Returns\CommandReturn;
 use Code16\Sharp\Dashboard\Commands\DashboardCommand;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\Fixtures\Entities\DashboardEntity;
@@ -24,7 +25,7 @@ it('allows to call an info dashboard command', function () {
                         return 'entity';
                     }
 
-                    public function execute(array $data = []): array
+                    public function execute(array $data = []): CommandReturn
                     {
                         return $this->info('ok');
                     }
@@ -40,6 +41,37 @@ it('allows to call an info dashboard command', function () {
         ->assertJson([
             'action' => 'info',
             'message' => 'ok',
+        ]);
+});
+
+it('turns a refresh into a reload in a dashboard command', function () {
+    fakeShowFor('dashboard', new class() extends TestDashboard
+    {
+        public function getDashboardCommands(): ?array
+        {
+            return [
+                'refresh' => new class() extends DashboardCommand
+                {
+                    public function label(): ?string
+                    {
+                        return 'entity';
+                    }
+
+                    public function execute(array $data = []): CommandReturn
+                    {
+                        return $this->refresh([1, 2]);
+                    }
+                },
+            ];
+        }
+    });
+
+    $this->withoutExceptionHandling();
+
+    $this->postJson(route('code16.sharp.api.dashboard.command', ['dashboard', 'refresh']))
+        ->assertOk()
+        ->assertExactJson([
+            'action' => 'reload',
         ]);
 });
 
@@ -67,7 +99,7 @@ it('allows to initialize form data in a dashboard command', function () {
                         $formFields->addField(SharpFormTextField::make('name'));
                     }
 
-                    public function execute(array $data = []): array
+                    public function execute(array $data = []): CommandReturn
                     {
                         return $this->reload();
                     }

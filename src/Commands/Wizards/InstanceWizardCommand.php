@@ -1,8 +1,9 @@
 <?php
 
-namespace Code16\Sharp\EntityList\Commands\Wizards;
+namespace Code16\Sharp\Commands\Wizards;
 
-use Code16\Sharp\EntityList\Commands\InstanceCommand;
+use Code16\Sharp\Commands\InstanceCommand;
+use Code16\Sharp\Commands\Returns\CommandReturn;
 use Code16\Sharp\Exceptions\SharpMethodNotImplementedException;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Illuminate\Support\Str;
@@ -11,7 +12,7 @@ abstract class InstanceWizardCommand extends InstanceCommand
 {
     use IsWizardCommand;
 
-    public function execute(mixed $instanceId, array $data = []): array
+    public function execute(mixed $instanceId, array $data = []): CommandReturn
     {
         if (! $step = $this->extractStepFromRequest()) {
             return $this->executeFirstStep($instanceId, $data);
@@ -26,7 +27,7 @@ abstract class InstanceWizardCommand extends InstanceCommand
             : $this->executeStep($step, $instanceId, $data);
     }
 
-    public function executeStep(string $step, mixed $instanceId, array $data = []): array
+    public function executeStep(string $step, mixed $instanceId, array $data = []): CommandReturn
     {
         // You can either implement this method and test $step (quick for small commands)
         // or leave this and implement for each step executeStepXXX
@@ -62,7 +63,7 @@ abstract class InstanceWizardCommand extends InstanceCommand
         return true;
     }
 
-    abstract protected function executeFirstStep(mixed $instanceId, array $data): array;
+    abstract protected function executeFirstStep(mixed $instanceId, array $data): CommandReturn;
 
     abstract protected function buildFormFieldsForFirstStep(FieldsContainer $formFields): void;
 }

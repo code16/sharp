@@ -11,30 +11,30 @@ A Wizard Command can not be configured as bulk (meaning: with instance selection
 ## Generator
 
 ```bash
-php artisan sharp:make:entity-command <class_name> --wizard [--model=<model_name>]
-php artisan sharp:make:instance-command <class_name> --wizard [--model=<model_name>]
+php artisan sharp:make:entity-command <class_name> --wizard
+php artisan sharp:make:instance-command <class_name> --wizard
 ```
 
 
 ## Write the Wizard Command class
 
 The class must extend either: 
-- `Code16\Sharp\EntityList\Commands\Wizards\EntityWizardCommand`: for an Entity command, on an Entity List
-- `Code16\Sharp\EntityList\Commands\Wizards\InstanceWizardCommand`: for an Instance command, on an Entity List or a Show Page
+- `Code16\Sharp\Commands\Wizards\EntityWizardCommand`: for an Entity command, on an Entity List
+- `Code16\Sharp\Commands\Wizards\InstanceWizardCommand`: for an Instance command, on an Entity List or a Show Page
 - `Code16\Sharp\Dashboard\Commands\DashboardWizardCommand`: for a Dashboard Command
 
 Like any Command, you must extend `label(): string` function, and can extend `buildCommandConfig(): void` (see [Commands documentation](commands.md)). 
 
 ## Implement the first step of the Wizard
 
-Instead of `execute()`, you must implement `executeFirstStep(array $data): array`, or `executeFirstStep(mixed $instanceId, array $data): array` in an instance case. This method, as expected, must contain the execution code of your first step:
+Instead of `execute()`, you must implement `executeFirstStep(array $data): CommandReturn`, or `executeFirstStep(mixed $instanceId, array $data): CommandReturn` in an instance case. This method, as expected, must contain the execution code of your first step:
 
 ```php
 class SendEmailWithPostsWizardCommand extends EntityWizardCommand
 {
     // ...
     
-    public function executeFirstStep(array $data): array
+    public function executeFirstStep(array $data): CommandReturn
     {
         // Do something
     }
@@ -86,7 +86,7 @@ protected function initialDataForFirstStep(): array
 To tell Sharp to go to the next step, Wizard commands expose a new `toStep(string $step)` action, which expects a string key representing you step: 
 
 ```php
-public function executeFirstStep(array $data): array
+public function executeFirstStep(array $data): CommandReturn
 {
     // Do something
     
@@ -202,7 +202,7 @@ class SendEmailWithPostsWizardCommand extends EntityWizardCommand
 {
     // ...
     
-    public function executeStep(string $step, array $data = []): array
+    public function executeStep(string $step, array $data = []): CommandReturn
     {
         if ($step === 'compose-message') {
             return $this->toStep('checkout');
@@ -216,7 +216,7 @@ class SendEmailWithPostsWizardCommand extends EntityWizardCommand
 Instance case:
 
 ```php
-public function executeStep(string $step, mixed $instanceId, array $data = []): array
+public function executeStep(string $step, mixed $instanceId, array $data = []): CommandReturn
 {
     // ...
 }
@@ -227,7 +227,7 @@ public function executeStep(string $step, mixed $instanceId, array $data = []): 
 Similarly to forms and layouts; for Entity and Dashboard cases:
 
 ```php
-public function executeStepComposeMessage(array $data = []): array
+public function executeStepComposeMessage(array $data = []): CommandReturn
 {
     // ...
 }
@@ -236,7 +236,7 @@ public function executeStepComposeMessage(array $data = []): array
 Instance case:
 
 ```php
-public function executeStepComposeMessage(mixed $instanceId, array $data = []): array
+public function executeStepComposeMessage(mixed $instanceId, array $data = []): CommandReturn
 {
     // ...
 }
@@ -247,7 +247,7 @@ public function executeStepComposeMessage(mixed $instanceId, array $data = []): 
 Validation works the same as for regular Commands, with `$this->validate()`:
 
 ```php
-public function executeStepComposeMessage(array $data = []): array
+public function executeStepComposeMessage(array $data = []): CommandReturn
 {
     $this->validate($data, ['message' => 'required']);
     // ...
@@ -270,7 +270,7 @@ For this purpose, you have access to a shared context, maintained between each s
 
 - store a value: `$this->getWizardContext()->put('name', 'value')` (typically, in the `execute()` method)
 - retrieve a value: `$this->getWizardContext()->get('name')` (in the `initialData()` method)
-- validate a stored value: `$this->getWizardContext()->validate('name', $rules)` (in the `initialData()` method)
+- validate the stored values: `$this->getWizardContext()->validate($rules)` (in the `initialData()` method)
 
 Consider the following example; first we build and execute the first step; in the process, we save the select post ids in the context:
 
@@ -288,7 +288,7 @@ class SendEmailWithPostsWizardCommand extends EntityWizardCommand
         );
     }
     
-    public function executeFirstStep(array $data = []): array
+    public function executeFirstStep(array $data = []): CommandReturn
     {
         $this->validate($data, ['posts' => 'required']);
         $this->getWizardContext()->put('posts', $data['posts']);
@@ -337,7 +337,7 @@ class SendEmailWithPostsWizardCommand extends EntityWizardCommand
         );
     }
     
-    public function executeStepComposeMessage(array $data = []): array
+    public function executeStepComposeMessage(array $data = []): CommandReturn
     {
         $this->validate($data, ['message' => 'required']);
         $this->getWizardContext()->put('message', $data['message']);

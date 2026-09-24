@@ -20,7 +20,7 @@ The Entity name should be singular, in CamelCase and end with the "Entity" suffi
 
 ## Write the class
 
-The class must extend `Code16\Sharp\Entities\SharpEntity`. The easiest way to declare your attached classes is to simply override a bunch of protected attributes: 
+The class must extend `Code16\Sharp\Utils\Entities\SharpEntity`. The easiest way to declare your attached classes is to simply override a bunch of protected attributes: 
 
 ```php
 class ProductEntity extends SharpEntity
@@ -56,20 +56,20 @@ If you need more control, you can override these instead of the attributes:
 
 ```php
 protected function getLabel(): string {}
-protected function getList(): ?string {}
-protected function getShow(): ?string {}
-protected function getForm(): ?string {}
-protected function getPolicy(): string|SharpEntityPolicy|null {}
+protected function getList(): ?SharpEntityList {}
+protected function getShow(): ?SharpShow {}
+protected function getForm(): ?SharpForm {}
+protected function getPolicy(): ?SharpEntityPolicy {}
 ```
 
-The last one, `getPolicy()`, allows you to return a `SharpEntityPolicy` implementation instead of a classname, as it's sometimes easier to declare a quick policy right in here. For example:
+Note that, unlike the `$list`/`$show`/`$form`/`$policy` attributes, these methods return instances, not classnames - resolve the class yourself (e.g. `app($this->list)`) if you still want to store a classname internally. The last one, `getPolicy()`, allows you to return a `SharpEntityPolicy` implementation directly, as it's sometimes easier to declare a quick policy right in here. For example:
 
 ```php
 class MyEntity extends SharpEntity
 {
     // ...
 
-    protected function getPolicy(): string|SharpEntityPolicy|null
+    protected function getPolicy(): ?SharpEntityPolicy
     {
         return new class extends SharpEntityPolicy
         {

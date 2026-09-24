@@ -3,7 +3,8 @@
 namespace Code16\Sharp\Auth\Passkeys\Commands;
 
 use Code16\Sharp\Auth\Passkeys\PasskeyManager;
-use Code16\Sharp\EntityList\Commands\InstanceCommand;
+use Code16\Sharp\Commands\InstanceCommand;
+use Code16\Sharp\Commands\Returns\CommandReturn;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
@@ -29,7 +30,7 @@ class UpdatePasskeyNameCommand extends InstanceCommand
         ];
     }
 
-    public function execute(mixed $instanceId, array $data = []): array
+    public function execute(mixed $instanceId, array $data = []): CommandReturn
     {
         $this->validate($data, [
             'name' => 'required',

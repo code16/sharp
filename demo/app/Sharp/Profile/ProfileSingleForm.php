@@ -35,6 +35,12 @@ class ProfileSingleForm extends SharpSingleForm
                     ->setHelpMessage('It will be displayed publicly'),
             )
             ->addField(
+                SharpFormTextField::make('occupation')
+                    ->setLabel('Occupation')
+                    ->setMaxLength(300)
+                    ->setSuggestions(['Developer', 'Designer', 'Manager', 'Other'])
+            )
+            ->addField(
                 SharpFormTextField::make('email')
                     ->setLabel('Email address')
                     ->setMaxLength(150)
@@ -48,6 +54,7 @@ class ProfileSingleForm extends SharpSingleForm
             ->addColumn(6, function (FormLayoutColumn $column) {
                 $column
                     ->withField('name')
+                    ->withField('occupation')
                     ->withField('email');
             })
             ->addColumn(6, function (FormLayoutColumn $column) {
@@ -65,10 +72,10 @@ class ProfileSingleForm extends SharpSingleForm
 
     protected function updateSingle(array $data)
     {
-        $this->validate(
-            $data,
-            ['name' => ['required', 'string', 'max:300']]
-        );
+        $this->validate($data, [
+            'name' => ['required', 'string', 'max:300'],
+            'occupation' => ['nullable', 'string', 'max:200'],
+        ]);
 
         $user = auth()->user();
 

@@ -3,6 +3,7 @@
 namespace App\Sharp\Dashboard\Commands;
 
 use App\Sharp\Utils\Filters\PeriodRequiredFilter;
+use Code16\Sharp\Commands\Returns\CommandReturn;
 use Code16\Sharp\Dashboard\Commands\DashboardCommand;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
@@ -43,7 +44,7 @@ class ExportStatsAsCsvCommand extends DashboardCommand
         return auth()->user()->isAdmin();
     }
 
-    public function execute(array $data = []): array
+    public function execute(array $data = []): CommandReturn
     {
         $this->validate($data, [
             'stats' => ['required', 'array'],

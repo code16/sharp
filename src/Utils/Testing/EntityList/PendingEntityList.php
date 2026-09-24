@@ -7,6 +7,7 @@ use Code16\Sharp\Http\Context\SharpBreadcrumb;
 use Code16\Sharp\Show\Fields\SharpShowEntityListField;
 use Code16\Sharp\Show\Fields\SharpShowField;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
+use Code16\Sharp\Utils\Testing\Commands\AssertableCommand;
 use Code16\Sharp\Utils\Testing\Commands\FormatsDataForCommand;
 use Code16\Sharp\Utils\Testing\Commands\PendingCommand;
 use Code16\Sharp\Utils\Testing\Form\PendingForm;
@@ -45,7 +46,7 @@ class PendingEntityList
         return new PendingShow($this->test, $entityClassNameOrKey, $instanceId, parent: $this);
     }
 
-    public function sharpForm(string $entityClassNameOrKey, string|int $instanceId): PendingForm
+    public function sharpForm(string $entityClassNameOrKey, string|int|null $instanceId = null): PendingForm
     {
         return new PendingForm($this->test, $entityClassNameOrKey, $instanceId, parent: $this);
     }
@@ -89,15 +90,14 @@ class PendingEntityList
     public function delete(int|string $instanceId): TestResponse
     {
         return $this->test
-            ->delete(
-                route('code16.sharp.api.list.delete', [
-                    'entityKey' => $this->entityKey,
-                    'instanceId' => $instanceId,
-                ]),
-                headers: [
-                    SharpBreadcrumb::CURRENT_PAGE_URL_HEADER => $this->getCurrentPageUrlFromParents(),
-                ]
-            );
+            ->withHeader(
+                SharpBreadcrumb::CURRENT_PAGE_URL_HEADER,
+                $this->getCurrentPageUrlFromParents(),
+            )
+            ->delete(route('code16.sharp.api.list.delete', [
+                'entityKey' => $this->entityKey,
+                'instanceId' => $instanceId,
+            ]));
     }
 
     public function entityCommand(string $commandKeyOrClassName): PendingCommand
@@ -191,6 +191,29 @@ class PendingEntityList
                         SharpBreadcrumb::CURRENT_PAGE_URL_HEADER => $this->getCurrentPageUrlFromParents(),
                     ]
                 ),
+            commandContainer: $this->entityList,
+        );
+    }
+
+    public function entityState(int|string $instanceId, string $stateValue): AssertableCommand
+    {
+        return new AssertableCommand(
+            postCommand: fn () => $this
+                ->test
+                ->postJson(
+                    route(
+                        'code16.sharp.api.list.state',
+                        ['entityKey' => $this->entityKey, 'instanceId' => $instanceId]
+                    ),
+                    [
+                        'value' => $stateValue,
+                        'query' => $this->entityListQueryParams(),
+                    ],
+                    headers: [
+                        SharpBreadcrumb::CURRENT_PAGE_URL_HEADER => $this->getCurrentPageUrlFromParents(),
+                    ]
+                ),
+            getForm: fn () => PHPUnit::fail('An entity state has no form.'),
             commandContainer: $this->entityList,
         );
     }

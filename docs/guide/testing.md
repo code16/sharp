@@ -117,6 +117,44 @@ $this->sharpList(Post::class)
     ->assertReturnsReload();
 ```
 
+### Asserting Command results
+
+The object returned by `post()` provides dedicated assertions for each [Command return type](commands.md#command-return-types). All parameters are optional: they are only checked when given.
+
+- `assertReturnsInfo(?string $message = null, ?bool $reload = null)`
+- `assertReturnsLink(?string $url = null, ?bool $newTab = null)`
+- `assertReturnsReload()`
+- `assertReturnsRefresh(?array $ids = null)`
+- `assertReturnsView(?string $view = null, ?array $data = null)`
+- `assertReturnsStep(?string $step = null)`
+- `assertReturnsDownload(?string $filename = null, ?string $content = null)`, for both `download()` and `streamDownload()`
+
+```php
+$this->sharpList(Post::class)
+    ->entityCommand(InviteUsers::class)
+    ->post()
+    ->assertReturnsInfo('Invitation sent!', reload: true);
+
+$this->sharpList(Post::class)
+    ->entityCommand(ExportPosts::class)
+    ->post()
+    ->assertReturnsDownload('posts.csv', content: "id,title\n1,My first post\n");
+```
+
+Every `TestResponse` method is also available, and methods returning a value (like `json()`) give it back. This is useful to test validation and authorization:
+
+```php
+$this->sharpList(Post::class)
+    ->entityCommand(InviteUsers::class)
+    ->post(['email' => ''])
+    ->assertJsonValidationErrors(['email']);
+
+$this->sharpList(Post::class)
+    ->instanceCommand(PublishPost::class, 1)
+    ->post()
+    ->assertForbidden();
+```
+
 ### Multi-step Commands (Wizards)
 
 For commands that have multiple steps, you can use `getNextStepForm()`:
@@ -136,9 +174,18 @@ $this->sharpList(Post::class)
     ->assertOk();
 ```
 
-### Delete an instance
+### Entity States
 
-To test the deletion of an instance, you can use `delete()`;
+Use `entityState()` to update the state of an instance. Since an Entity State has no form, the request is posted right away, and the same `assertReturns*()` assertions are available:
+
+```php
+$this->sharpList(Post::class)
+    ->entityState(1, 'published')
+    ->assertOk()
+    ->assertReturnsRefresh([1]);
+```
+
+### Deleting an instance
 
 ```php
 $this->sharpList(Post::class)
@@ -172,6 +219,27 @@ $this->sharpShow(Post::class, 1)
     ->instanceCommand(PublishPost::class)
     ->post()
     ->assertOk();
+```
+
+### Entity States from Show
+
+```php
+$this->sharpShow(Post::class, 1)
+    ->entityState('published')
+    ->assertReturnsRefresh([1]);
+
+// In a Single Show
+$this->sharpShow(Profile::class)
+    ->entityState('active')
+    ->assertReturnsReload();
+```
+
+### Deleting an instance
+
+```php
+$this->sharpShow(Post::class, 1)
+    ->delete()
+    ->assertRedirect();
 ```
 
 ### List & dashboard fields
@@ -301,9 +369,11 @@ $this->sharpDashboard(MyDashboard::class)
     ->assertOk();
 ```
 
+Remember that in a Dashboard, a `refresh()` return action is treated as a `reload()`: assert it with `assertReturnsReload()`.
+
 ## Global filters
 
-If your app contains global filters, you should be able to test normally, but it will be set to its default value. If you need, you can set a specific value using `withGlobalFilter()`:
+If your app contains global filters, you should be able to test normally, but it will be set to its default value. If you need, you can set a specific value using `withSharpGlobalFilter()`:
 
 ```php
 $this->withSharpGlobalFilter(CompanyFilter::class, 'apple')

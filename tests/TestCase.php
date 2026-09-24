@@ -40,6 +40,7 @@ class TestCase extends Orchestra
         $app['config']->set('inertia.pages.paths', [__DIR__.'/../resources/js/Pages']);
         $app['config']->set('inertia.testing.ensure_pages_exist', true);
         $app['config']->set('database.default', 'testing');
+        $app['config']->set('session.serialization', 'json');
 
         $app['view']->addNamespace('fixtures', __DIR__.'/Fixtures/resources/views');
 

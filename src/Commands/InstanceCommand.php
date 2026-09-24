@@ -1,6 +1,8 @@
 <?php
 
-namespace Code16\Sharp\EntityList\Commands;
+namespace Code16\Sharp\Commands;
+
+use Code16\Sharp\Commands\Returns\CommandReturn;
 
 abstract class InstanceCommand extends Command
 {
@@ -28,7 +30,7 @@ abstract class InstanceCommand extends Command
         return [];
     }
 
-    abstract public function execute(mixed $instanceId, array $data = []): array;
+    abstract public function execute(mixed $instanceId, array $data = []): CommandReturn;
 
     /**
      * Check if the current user is allowed to use this Command for this instance.

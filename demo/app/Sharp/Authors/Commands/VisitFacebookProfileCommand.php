@@ -3,7 +3,8 @@
 namespace App\Sharp\Authors\Commands;
 
 use App\Models\User;
-use Code16\Sharp\EntityList\Commands\InstanceCommand;
+use Code16\Sharp\Commands\InstanceCommand;
+use Code16\Sharp\Commands\Returns\CommandReturn;
 
 class VisitFacebookProfileCommand extends InstanceCommand
 {
@@ -18,9 +19,9 @@ class VisitFacebookProfileCommand extends InstanceCommand
             ->configureIcon('lucide-facebook');
     }
 
-    public function execute(mixed $instanceId, array $data = []): array
+    public function execute(mixed $instanceId, array $data = []): CommandReturn
     {
-        return $this->link('https://facebook.com', openInNewTab: true);
+        return $this->link('https://facebook.com')->inNewTab();
     }
 
     public function authorizeFor(mixed $instanceId): bool

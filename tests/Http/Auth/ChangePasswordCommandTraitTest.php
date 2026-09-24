@@ -1,7 +1,8 @@
 <?php
 
 use Code16\Sharp\Auth\Password\Command\IsChangePasswordCommandTrait;
-use Code16\Sharp\EntityList\Commands\SingleInstanceCommand;
+use Code16\Sharp\Commands\Returns\CommandReturn;
+use Code16\Sharp\Commands\SingleInstanceCommand;
 use Code16\Sharp\Tests\Fixtures\Entities\SinglePersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\SinglePersonShow;
 use Code16\Sharp\Tests\Fixtures\User;
@@ -28,7 +29,7 @@ it('exposes proper form fields and label (without confirmation) for change passw
                 {
                     use IsChangePasswordCommandTrait;
 
-                    protected function executeSingle(array $data): array
+                    protected function executeSingle(array $data): CommandReturn
                     {
                         // no-op in tests
                         return $this->reload();
@@ -72,7 +73,7 @@ it('shows confirmation field when enabled and enforces custom password rule and 
                             ->configurePasswordRule(Password::min(8)->numbers());
                     }
 
-                    protected function executeSingle(array $data): array
+                    protected function executeSingle(array $data): CommandReturn
                     {
                         return $this->reload();
                     }
@@ -155,7 +156,7 @@ it('allows to hide the current password field', function () {
                         $this->configureValidateCurrentPassword(false);
                     }
 
-                    protected function executeSingle(array $data): array
+                    protected function executeSingle(array $data): CommandReturn
                     {
                         return $this->reload();
                     }
@@ -201,7 +202,7 @@ it('rate limits after too many attempts and returns a helpful message', function
                 {
                     use IsChangePasswordCommandTrait;
 
-                    protected function executeSingle(array $data): array
+                    protected function executeSingle(array $data): CommandReturn
                     {
                         return $this->reload();
                     }

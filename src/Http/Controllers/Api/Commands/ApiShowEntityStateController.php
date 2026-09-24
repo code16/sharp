@@ -26,10 +26,8 @@ class ApiShowEntityStateController extends Controller
         return $this->returnCommandResult(
             $showPage,
             $entityKey,
-            array_merge(
-                $stateHandler->execute($instanceId, request()->only('value')),
-                ['value' => request('value')],
-            ),
+            $stateHandler->execute($instanceId, request()->only('value')),
+            ['value' => request('value')],
         );
     }
 

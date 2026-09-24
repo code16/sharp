@@ -2,7 +2,7 @@
 
 namespace DummyNamespace;
 
-use Code16\Sharp\EntityList\Commands\ReorderHandler;
+use Code16\Sharp\EntityList\ReorderHandler;
 
 class DummyClass implements ReorderHandler
 {

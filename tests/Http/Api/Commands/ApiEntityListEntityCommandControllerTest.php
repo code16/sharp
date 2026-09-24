@@ -1,6 +1,7 @@
 <?php
 
-use Code16\Sharp\EntityList\Commands\EntityCommand;
+use Code16\Sharp\Commands\EntityCommand;
+use Code16\Sharp\Commands\Returns\CommandReturn;
 use Code16\Sharp\Enums\PageAlertLevel;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Exceptions\Form\SharpFormFieldLayoutException;
@@ -11,6 +12,7 @@ use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\PageAlerts\PageAlert;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\UploadedFile;
 
 beforeEach(function () {
@@ -31,7 +33,7 @@ it('allows to call an info entity command', function () {
                         return 'entity';
                     }
 
-                    public function execute(array $data = []): array
+                    public function execute(array $data = []): CommandReturn
                     {
                         return $this->info('ok');
                     }
@@ -65,7 +67,7 @@ it('allows to call a reload entity command', function () {
                         return 'entity';
                     }
 
-                    public function execute(array $data = []): array
+                    public function execute(array $data = []): CommandReturn
                     {
                         return $this->reload();
                     }
@@ -97,9 +99,9 @@ it('allows to call an info + reload entity command', function () {
                         return 'entity';
                     }
 
-                    public function execute(array $data = []): array
+                    public function execute(array $data = []): CommandReturn
                     {
-                        return $this->info('ok', reload: true);
+                        return $this->info('ok')->withReload();
                     }
                 },
             ];
@@ -131,7 +133,7 @@ it('allows to call a view entity command', function () {
                         return 'entity';
                     }
 
-                    public function execute(array $data = []): array
+                    public function execute(array $data = []): CommandReturn
                     {
                         return $this->view('welcome');
                     }
@@ -163,7 +165,7 @@ it('allows to call a html instance command', function () {
                         return 'my command';
                     }
 
-                    public function execute(array $data = []): array
+                    public function execute(array $data = []): CommandReturn
                     {
                         return $this->html('Hello world');
                     }
@@ -195,7 +197,7 @@ it('allows to call a refresh entity command', function () {
                         return 'entity';
                     }
 
-                    public function execute(array $data = []): array
+                    public function execute(array $data = []): CommandReturn
                     {
                         return $this->refresh([1, 3]);
                     }
@@ -203,7 +205,7 @@ it('allows to call a refresh entity command', function () {
             ];
         }
 
-        public function getListData(): array|\Illuminate\Contracts\Support\Arrayable
+        public function getListData(): array|Arrayable
         {
             return collect([
                 ['id' => 1, 'name' => 'Marie Curie'],
@@ -242,7 +244,7 @@ it('allows to call an link entity command', function () {
                         return 'entity';
                     }
 
-                    public function execute(array $data = []): array
+                    public function execute(array $data = []): CommandReturn
                     {
                         return $this->link('https://sharp.code16.fr');
                     }
@@ -276,9 +278,9 @@ it('allows to call an link + openInNewTab entity command', function () {
                         return 'entity';
                     }
 
-                    public function execute(array $data = []): array
+                    public function execute(array $data = []): CommandReturn
                     {
-                        return $this->link('https://sharp.code16.fr', openInNewTab: true);
+                        return $this->link('https://sharp.code16.fr')->inNewTab();
                     }
                 },
             ];
@@ -315,7 +317,7 @@ it('allows to call a form entity command and it handles 422', function () {
                         $formFields->addField(SharpFormTextField::make('name'));
                     }
 
-                    public function execute(array $data = []): array
+                    public function execute(array $data = []): CommandReturn
                     {
                         $this->validate($data, ['name' => 'required']);
 
@@ -373,7 +375,7 @@ it('allows to validate posted data with the rules() method', function () {
                         return ['name' => 'required'];
                     }
 
-                    public function execute(array $data = []): array
+                    public function execute(array $data = []): CommandReturn
                     {
                         return $this->reload();
                     }
@@ -419,7 +421,7 @@ it('allows to call a download entity command', function () {
                         return 'entity';
                     }
 
-                    public function execute(array $data = []): array
+                    public function execute(array $data = []): CommandReturn
                     {
                         Storage::fake('files');
                         UploadedFile::fake()
@@ -457,7 +459,7 @@ it('allows to call a streamDownload entity command', function () {
                         return 'entity';
                     }
 
-                    public function execute(array $data = []): array
+                    public function execute(array $data = []): CommandReturn
                     {
                         return $this->streamDownload('content', 'stream.txt');
                     }
@@ -491,7 +493,7 @@ it('returns an applicative exception as a 417 as always', function () {
                         return 'entity';
                     }
 
-                    public function execute(array $data = []): array
+                    public function execute(array $data = []): CommandReturn
                     {
                         throw new SharpApplicativeException('error');
                     }
@@ -524,7 +526,7 @@ it('allows to access to the full query in an entity command', function () {
                         return 'entity';
                     }
 
-                    public function execute(array $data = []): array
+                    public function execute(array $data = []): CommandReturn
                     {
                         return $this->info($this->queryParams->sortedBy()
                             .$this->queryParams->sortedDir());
@@ -566,7 +568,7 @@ it('provides selected ids in a bulk command', function () {
                         $this->configureInstanceSelectionRequired();
                     }
 
-                    public function execute(array $data = []): array
+                    public function execute(array $data = []): CommandReturn
                     {
                         return $this->info(implode('-', $this->selectedIds()));
                     }
@@ -606,7 +608,7 @@ it('disallows to call an unauthorized entity command', function () {
                         return false;
                     }
 
-                    public function execute(array $data = []): array
+                    public function execute(array $data = []): CommandReturn
                     {
                         return $this->reload();
                     }
@@ -646,7 +648,7 @@ it('returns the form fields of the entity command and build a basic layout if mi
                             );
                     }
 
-                    public function execute(array $data = []): array
+                    public function execute(array $data = []): CommandReturn
                     {
                         return $this->reload();
                     }
@@ -724,7 +726,7 @@ it('fails when referencing an undeclared form field in the layout', function () 
                         $column->withField('title');
                     }
 
-                    public function execute(array $data = []): array {}
+                    public function execute(array $data = []): CommandReturn {}
                 },
             ];
         }
@@ -762,7 +764,7 @@ it('allows to configure a page alert on an entity command', function () {
                         $formFields->addField(SharpFormTextField::make('name'));
                     }
 
-                    public function execute(array $data = []): array
+                    public function execute(array $data = []): CommandReturn
                     {
                         return $this->reload();
                     }
@@ -806,7 +808,7 @@ it('handles localized form of the entity command', function () {
                         $formFields->addField(SharpFormTextField::make('name')->setLocalized());
                     }
 
-                    public function execute(array $data = []): array
+                    public function execute(array $data = []): CommandReturn
                     {
                         return $this->reload();
                     }
@@ -863,7 +865,7 @@ it('allows to initialize form data in an entity command', function () {
                         $formFields->addField(SharpFormTextField::make('name'));
                     }
 
-                    public function execute(array $data = []): array
+                    public function execute(array $data = []): CommandReturn
                     {
                         return $this->reload();
                     }
