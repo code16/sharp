@@ -2,13 +2,13 @@
 
 ## The upgrade command
 
-Sharp 10 comes with an upgrade command that replaces and notifies for deprecated and removed code. You can run it with
+Sharp 10 comes with an upgrade command that replaces and notifies for deprecated and removed code. You can run it with:
 
 ```bash
 php artisan sharp:upgrade app/Sharp
 ```
 
-Where `app/Sharp` is the path of your sharp code.
+Where `app/Sharp` is the base path of your sharp code.
 
 ## Updating Dependencies
 
