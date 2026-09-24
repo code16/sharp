@@ -173,7 +173,7 @@ function buildShowFields(FieldsContainer $showFields): void
 {
     $showFields->addField(
         SharpCustomShowFieldTitle::make('name')
-            ->setLevel(2)
+            ->setTitleLevel(2)
     );
 }
 ```

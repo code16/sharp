@@ -17,10 +17,12 @@ trait IsWizardCommand
     protected function getWizardContext(): WizardCommandContext
     {
         if (! $this->wizardCommandContext) {
-            $this->wizardCommandContext = session()->get(sprintf('CWC.%s.%s', get_class($this), $this->getKey()));
-            if (! $this->wizardCommandContext) {
-                $this->wizardCommandContext = new WizardCommandContext();
-            }
+            $context = session()->get(sprintf('CWC.%s.%s', get_class($this), $this->getKey()));
+            $this->wizardCommandContext = match (true) {
+                $context instanceof WizardCommandContext => $context,
+                is_array($context) => WizardCommandContext::fromArray($context),
+                default => new WizardCommandContext(),
+            };
         }
 
         return $this->wizardCommandContext;
@@ -29,7 +31,7 @@ trait IsWizardCommand
     protected function toStep(string $step): array
     {
         if ($this->wizardCommandContext) {
-            session()->put(sprintf('CWC.%s.%s', get_class($this), $this->getKey()), $this->wizardCommandContext);
+            session()->put(sprintf('CWC.%s.%s', get_class($this), $this->getKey()), $this->wizardCommandContext->toArray());
         }
 
         return [

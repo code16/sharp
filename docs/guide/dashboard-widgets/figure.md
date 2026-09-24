@@ -8,7 +8,8 @@ This widget is intended to display a single figure, with an optional evolution i
 $widgetsContainer->addWidget(
     SharpFigureWidget::make('sales')
         ->setTitle('Total sales in €')
-        ->setLink(LinkToEntityList::make('orders')->addFilter(StateFilter::class, 'confirmed'));
+        ->setLink(LinkToEntityList::make('orders')->addFilter(StateFilter::class, 'confirmed'))
+);
 ```
 
 Note that the `setLink()` method is expecting a [LinkTo... instance](../link-to.md).

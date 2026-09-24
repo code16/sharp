@@ -15,7 +15,7 @@ class SharpNotification
 
         $notifications[$this->id] = [
             'title' => $title,
-            'level' => NotificationLevel::Info,
+            'level' => NotificationLevel::Info->value,
             'message' => null,
             'autoHide' => true,
         ];
@@ -33,28 +33,28 @@ class SharpNotification
     public function setLevelSuccess(): self
     {
         return $this->update([
-            'level' => NotificationLevel::Success,
+            'level' => NotificationLevel::Success->value,
         ]);
     }
 
     public function setLevelInfo(): self
     {
         return $this->update([
-            'level' => NotificationLevel::Info,
+            'level' => NotificationLevel::Info->value,
         ]);
     }
 
     public function setLevelWarning(): self
     {
         return $this->update([
-            'level' => NotificationLevel::Warning,
+            'level' => NotificationLevel::Warning->value,
         ]);
     }
 
     public function setLevelDanger(): self
     {
         return $this->update([
-            'level' => NotificationLevel::Danger,
+            'level' => NotificationLevel::Danger->value,
         ]);
     }
 

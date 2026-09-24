@@ -45,7 +45,7 @@ class PendingEntityList
         return new PendingShow($this->test, $entityClassNameOrKey, $instanceId, parent: $this);
     }
 
-    public function sharpForm(string $entityClassNameOrKey, string|int $instanceId): PendingForm
+    public function sharpForm(string $entityClassNameOrKey, string|int|null $instanceId = null): PendingForm
     {
         return new PendingForm($this->test, $entityClassNameOrKey, $instanceId, parent: $this);
     }
@@ -89,15 +89,14 @@ class PendingEntityList
     public function delete(int|string $instanceId): TestResponse
     {
         return $this->test
-            ->delete(
-                route('code16.sharp.api.list.delete', [
-                    'entityKey' => $this->entityKey,
-                    'instanceId' => $instanceId,
-                ]),
-                headers: [
-                    SharpBreadcrumb::CURRENT_PAGE_URL_HEADER => $this->getCurrentPageUrlFromParents(),
-                ]
-            );
+            ->withHeader(
+                SharpBreadcrumb::CURRENT_PAGE_URL_HEADER,
+                $this->getCurrentPageUrlFromParents(),
+            )
+            ->delete(route('code16.sharp.api.list.delete', [
+                'entityKey' => $this->entityKey,
+                'instanceId' => $instanceId,
+            ]));
     }
 
     public function entityCommand(string $commandKeyOrClassName): PendingCommand

@@ -136,9 +136,7 @@ $this->sharpList(Post::class)
     ->assertOk();
 ```
 
-### Delete an instance
-
-To test the deletion of an instance, you can use `delete()`;
+### Deleting an instance
 
 ```php
 $this->sharpList(Post::class)
@@ -172,6 +170,14 @@ $this->sharpShow(Post::class, 1)
     ->instanceCommand(PublishPost::class)
     ->post()
     ->assertOk();
+```
+
+### Deleting an instance
+
+```php
+$this->sharpShow(Post::class, 1)
+    ->delete()
+    ->assertRedirect();
 ```
 
 ### List & dashboard fields
@@ -303,7 +309,7 @@ $this->sharpDashboard(MyDashboard::class)
 
 ## Global filters
 
-If your app contains global filters, you should be able to test normally, but it will be set to its default value. If you need, you can set a specific value using `withGlobalFilter()`:
+If your app contains global filters, you should be able to test normally, but it will be set to its default value. If you need, you can set a specific value using `withSharpGlobalFilter()`:
 
 ```php
 $this->withSharpGlobalFilter(CompanyFilter::class, 'apple')

@@ -3,11 +3,14 @@
 namespace Code16\Sharp\EntityList\Commands\Wizards;
 
 use Code16\Sharp\Exceptions\Commands\SharpInvalidStepException;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Validation\Factory as Validator;
 
-class WizardCommandContext
+class WizardCommandContext implements Arrayable
 {
-    protected array $attributes = [];
+    public function __construct(
+        protected array $attributes = [],
+    ) {}
 
     public function setCurrentStep(string $step): self
     {
@@ -41,5 +44,19 @@ class WizardCommandContext
                 ),
             );
         }
+    }
+
+    public static function fromArray(array $data): static
+    {
+        return new static(
+            attributes: $data['attributes'] ?? [],
+        );
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'attributes' => $this->attributes,
+        ];
     }
 }

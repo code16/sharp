@@ -11,8 +11,8 @@ A Wizard Command can not be configured as bulk (meaning: with instance selection
 ## Generator
 
 ```bash
-php artisan sharp:make:entity-command <class_name> --wizard [--model=<model_name>]
-php artisan sharp:make:instance-command <class_name> --wizard [--model=<model_name>]
+php artisan sharp:make:entity-command <class_name> --wizard
+php artisan sharp:make:instance-command <class_name> --wizard
 ```
 
 
@@ -270,7 +270,7 @@ For this purpose, you have access to a shared context, maintained between each s
 
 - store a value: `$this->getWizardContext()->put('name', 'value')` (typically, in the `execute()` method)
 - retrieve a value: `$this->getWizardContext()->get('name')` (in the `initialData()` method)
-- validate a stored value: `$this->getWizardContext()->validate('name', $rules)` (in the `initialData()` method)
+- validate the stored values: `$this->getWizardContext()->validate($rules)` (in the `initialData()` method)
 
 Consider the following example; first we build and execute the first step; in the process, we save the select post ids in the context:
 

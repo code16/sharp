@@ -18,7 +18,7 @@ The first step is to create a new class extending `Code16\Sharp\Dashboard\SharpD
 
 - `buildWidgets(WidgetsContainer $widgetsContainer)`,
 - `buildDashboardLayout(DashboardLayout $dashboardLayout)`,
-- and `buildWidgetsData(DashboardQueryParams $params)`, for the actual Dashboard data
+- and `buildWidgetsData()`, for the actual Dashboard data
 
 ### `buildWidgets(WidgetsContainer $widgetsContainer): void`
 
