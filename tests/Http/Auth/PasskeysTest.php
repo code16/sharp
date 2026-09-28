@@ -193,6 +193,31 @@ it('validates name is required when renaming', function () {
         ->toThrow(ValidationException::class);
 });
 
+it('does not authorize renaming another user passkey', function () {
+    $user = createPasskeyTestUser();
+    $otherUser = createPasskeyTestUser(['email' => 'other@example.org']);
+    $passkey = createPasskey($otherUser);
+    loginPasskeyUser($user);
+
+    $command = app(UpdatePasskeyNameCommand::class);
+
+    expect($command->authorizeFor($passkey->id))->toBeFalse();
+});
+
+it('cannot rename another user passkey', function () {
+    $user = createPasskeyTestUser();
+    $otherUser = createPasskeyTestUser(['email' => 'other@example.org']);
+    $passkey = createPasskey($otherUser, ['name' => 'Other Passkey']);
+    loginPasskeyUser($user);
+
+    $command = app(UpdatePasskeyNameCommand::class);
+
+    expect(fn () => $command->execute($passkey->id, ['name' => 'Hacked']))
+        ->toThrow(ModelNotFoundException::class);
+
+    expect($passkey->fresh()->name)->toBe('Other Passkey');
+});
+
 // --- PasskeyEventSubscriber ---
 
 it('queues a cookie when passkey is used to authenticate', function () {
