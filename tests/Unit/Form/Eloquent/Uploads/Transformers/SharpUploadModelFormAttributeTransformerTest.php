@@ -44,6 +44,18 @@ it('transforms a single upload', function () {
                 'disk' => 'local',
                 'size' => $upload->size,
                 'thumbnail' => $upload->thumbnail(200, 200),
+                'large_thumbnail' => URL::temporarySignedRoute(
+                    'code16.sharp.api.form.upload.thumbnail.show',
+                    $time->copy()->addMinutes(config('session.lifetime')),
+                    [
+                        'entityKey' => 'person',
+                        'instanceId' => '1',
+                        'disk' => 'local',
+                        'path' => $upload->file_name,
+                        'width' => 1200,
+                        'height' => 1000,
+                    ]
+                ),
                 'playable_preview_url' => null,
                 'mime_type' => 'image/png',
                 'download_url' => URL::temporarySignedRoute(
@@ -95,6 +107,18 @@ it('transforms a single upload with transformations', function () {
                 'size' => $upload->size,
                 'mime_type' => 'image/png',
                 'thumbnail' => $upload->thumbnail(200, 200),
+                'large_thumbnail' => URL::temporarySignedRoute(
+                    'code16.sharp.api.form.upload.thumbnail.show',
+                    $time->copy()->addMinutes(config('session.lifetime')),
+                    [
+                        'entityKey' => 'person',
+                        'instanceId' => '1',
+                        'disk' => 'local',
+                        'path' => $upload->file_name,
+                        'width' => 1200,
+                        'height' => 1000,
+                    ]
+                ),
                 'playable_preview_url' => null,
                 'filters' => [
                     'crop' => [
@@ -150,6 +174,18 @@ it('transforms a list of upload', function () {
                     'disk' => 'local',
                     'size' => $upload1->size,
                     'thumbnail' => $upload1->thumbnail(200, 200),
+                    'large_thumbnail' => URL::temporarySignedRoute(
+                        'code16.sharp.api.form.upload.thumbnail.show',
+                        $time->copy()->addMinutes(config('session.lifetime')),
+                        [
+                            'entityKey' => 'person',
+                            'instanceId' => '1',
+                            'disk' => 'local',
+                            'path' => $upload1->file_name,
+                            'width' => 1200,
+                            'height' => 1000,
+                        ]
+                    ),
                     'playable_preview_url' => null,
                     'mime_type' => 'image/png',
                     'download_url' => URL::temporarySignedRoute(
@@ -172,6 +208,18 @@ it('transforms a list of upload', function () {
                     'disk' => 'local',
                     'size' => $upload2->size,
                     'thumbnail' => $upload2->thumbnail(200, 200),
+                    'large_thumbnail' => URL::temporarySignedRoute(
+                        'code16.sharp.api.form.upload.thumbnail.show',
+                        $time->copy()->addMinutes(config('session.lifetime')),
+                        [
+                            'entityKey' => 'person',
+                            'instanceId' => '1',
+                            'disk' => 'local',
+                            'path' => $upload2->file_name,
+                            'width' => 1200,
+                            'height' => 1000,
+                        ]
+                    ),
                     'playable_preview_url' => null,
                     'mime_type' => 'image/png',
                     'download_url' => URL::temporarySignedRoute(
@@ -233,6 +281,18 @@ it('transforms a list of upload with transformations', function () {
                     'disk' => 'local',
                     'size' => $upload1->size,
                     'thumbnail' => $upload1->thumbnail(200, 200),
+                    'large_thumbnail' => URL::temporarySignedRoute(
+                        'code16.sharp.api.form.upload.thumbnail.show',
+                        $time->copy()->addMinutes(config('session.lifetime')),
+                        [
+                            'entityKey' => 'person',
+                            'instanceId' => '1',
+                            'disk' => 'local',
+                            'path' => $upload1->file_name,
+                            'width' => 1200,
+                            'height' => 1000,
+                        ]
+                    ),
                     'playable_preview_url' => null,
                     'filters' => $filters,
                     'mime_type' => 'image/png',
@@ -256,6 +316,18 @@ it('transforms a list of upload with transformations', function () {
                     'disk' => 'local',
                     'size' => $upload2->size,
                     'thumbnail' => $upload2->thumbnail(200, 200),
+                    'large_thumbnail' => URL::temporarySignedRoute(
+                        'code16.sharp.api.form.upload.thumbnail.show',
+                        $time->copy()->addMinutes(config('session.lifetime')),
+                        [
+                            'entityKey' => 'person',
+                            'instanceId' => '1',
+                            'disk' => 'local',
+                            'path' => $upload2->file_name,
+                            'width' => 1200,
+                            'height' => 1000,
+                        ]
+                    ),
                     'playable_preview_url' => null,
                     'mime_type' => 'image/png',
                     'download_url' => URL::temporarySignedRoute(
@@ -300,6 +372,7 @@ it('transforms an upload with playable preview', function () {
                 'disk' => 'local',
                 'size' => $upload->size,
                 'thumbnail' => null,
+                'large_thumbnail' => null,
                 'playable_preview_url' => '/'.$upload->file_name.'?expiration='.$time->copy()->addMinutes(30)->timestamp,
                 'mime_type' => 'video/mp4',
                 'download_url' => URL::temporarySignedRoute(
@@ -341,6 +414,7 @@ it('transforms a list of upload with playable preview', function () {
                     'disk' => 'local',
                     'size' => $upload1->size,
                     'thumbnail' => null,
+                    'large_thumbnail' => null,
                     'playable_preview_url' => '/'.$upload1->file_name.'?expiration='.$time->copy()->addMinutes(30)->timestamp,
                     'mime_type' => 'audio/mp3',
                     'download_url' => URL::temporarySignedRoute(
@@ -386,6 +460,18 @@ describe('dynamicInstance', function () {
                 'disk' => 'local',
                 'size' => 120,
                 'thumbnail' => (new SharpUploadModel($uploadData))->thumbnail(200, 200),
+                'large_thumbnail' => URL::temporarySignedRoute(
+                    'code16.sharp.api.form.upload.thumbnail.show',
+                    $time->copy()->addMinutes(config('session.lifetime')),
+                    [
+                        'entityKey' => 'person',
+                        'instanceId' => '1',
+                        'disk' => 'local',
+                        'path' => $file,
+                        'width' => 1200,
+                        'height' => 1000,
+                    ]
+                ),
                 'playable_preview_url' => null,
                 'filters' => [],
                 'mime_type' => 'image/png',
