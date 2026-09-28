@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="7.0.0-beta19@7e751c06a756fa64dc4c759c09fe4a173afcb433">
+  <file src="src/Auth/TwoFactor/Engines/GoogleTotpEngine.php">
+    <UndefinedClass>
+      <code><![CDATA[$this->google2fa]]></code>
+      <code><![CDATA[$this->google2fa]]></code>
+      <code><![CDATA[$this->google2fa]]></code>
+      <code><![CDATA[protected]]></code>
+    </UndefinedClass>
+  </file>
+  <file src="src/Config/SharpLegacyConfigBuilder.php">
+    <NoValue>
+      <code><![CDATA[$blade]]></code>
+      <code><![CDATA[$blade]]></code>
+    </NoValue>
+  </file>
+  <file src="src/Data/Dashboard/DashboardLayoutSectionData.php">
+    <TooFewArguments>
+      <code><![CDATA[new self(...$section)]]></code>
+      <code><![CDATA[new self(...$section)]]></code>
+    </TooFewArguments>
+  </file>
+  <file src="src/Data/Dashboard/Widgets/GraphWidgetData.php">
+    <TooFewArguments>
+      <code><![CDATA[new AreaGraphWidgetData(...$widget)]]></code>
+      <code><![CDATA[new AreaGraphWidgetData(...$widget)]]></code>
+      <code><![CDATA[new AreaGraphWidgetData(...$widget)]]></code>
+      <code><![CDATA[new AreaGraphWidgetData(...$widget)]]></code>
+      <code><![CDATA[new AreaGraphWidgetData(...$widget)]]></code>
+      <code><![CDATA[new BarGraphWidgetData(...$widget)]]></code>
+      <code><![CDATA[new BarGraphWidgetData(...$widget)]]></code>
+      <code><![CDATA[new BarGraphWidgetData(...$widget)]]></code>
+      <code><![CDATA[new BarGraphWidgetData(...$widget)]]></code>
+      <code><![CDATA[new BarGraphWidgetData(...$widget)]]></code>
+      <code><![CDATA[new LineGraphWidgetData(...$widget)]]></code>
+      <code><![CDATA[new LineGraphWidgetData(...$widget)]]></code>
+      <code><![CDATA[new LineGraphWidgetData(...$widget)]]></code>
+      <code><![CDATA[new LineGraphWidgetData(...$widget)]]></code>
+      <code><![CDATA[new LineGraphWidgetData(...$widget)]]></code>
+      <code><![CDATA[new PieGraphWidgetData(...$widget)]]></code>
+      <code><![CDATA[new PieGraphWidgetData(...$widget)]]></code>
+      <code><![CDATA[new PieGraphWidgetData(...$widget)]]></code>
+      <code><![CDATA[new PieGraphWidgetData(...$widget)]]></code>
+      <code><![CDATA[new PieGraphWidgetData(...$widget)]]></code>
+    </TooFewArguments>
+  </file>
+  <file src="src/Data/Embeds/EmbedData.php">
+    <TooFewArguments>
+      <code><![CDATA[new self(...$embed)]]></code>
+      <code><![CDATA[new self(...$embed)]]></code>
+      <code><![CDATA[new self(...$embed)]]></code>
+      <code><![CDATA[new self(...$embed)]]></code>
+      <code><![CDATA[new self(...$embed)]]></code>
+      <code><![CDATA[new self(...$embed)]]></code>
+    </TooFewArguments>
+  </file>
+  <file src="src/Data/EntityList/EntityListEntityData.php">
+    <TooFewArguments>
+      <code><![CDATA[new self(...$listEntity)]]></code>
+      <code><![CDATA[new self(...$listEntity)]]></code>
+      <code><![CDATA[new self(...$listEntity)]]></code>
+      <code><![CDATA[new self(...$listEntity)]]></code>
+    </TooFewArguments>
+  </file>
+  <file src="src/Data/Form/Fields/FormAutocompleteLocalFieldData.php">
+    <TooFewArguments>
+      <code><![CDATA[new self(...$field)]]></code>
+      <code><![CDATA[new self(...$field)]]></code>
+      <code><![CDATA[new self(...$field)]]></code>
+      <code><![CDATA[new self(...$field)]]></code>
+      <code><![CDATA[new self(...$field)]]></code>
+    </TooFewArguments>
+  </file>
+  <file src="src/Data/Form/Fields/FormAutocompleteRemoteFieldData.php">
+    <TooFewArguments>
+      <code><![CDATA[new self(...$field)]]></code>
+      <code><![CDATA[new self(...$field)]]></code>
+      <code><![CDATA[new self(...$field)]]></code>
+      <code><![CDATA[new self(...$field)]]></code>
+      <code><![CDATA[new self(...$field)]]></code>
+      <code><![CDATA[new self(...$field)]]></code>
+    </TooFewArguments>
+  </file>
+  <file src="src/Data/Form/FormLayoutColumnData.php">
+    <TooFewArguments>
+      <code><![CDATA[new self(...$column)]]></code>
+    </TooFewArguments>
+  </file>
+  <file src="src/Data/Form/FormLayoutFieldsetData.php">
+    <TooFewArguments>
+      <code><![CDATA[new self(...$fieldset)]]></code>
+    </TooFewArguments>
+  </file>
+  <file src="src/Data/LayoutFieldData.php">
+    <TooFewArguments>
+      <code><![CDATA[new self(...$field)]]></code>
+      <code><![CDATA[new self(...$field)]]></code>
+    </TooFewArguments>
+  </file>
+  <file src="src/Data/SearchResultSetData.php">
+    <TooFewArguments>
+      <code><![CDATA[new self(...$resultSet)]]></code>
+    </TooFewArguments>
+  </file>
+  <file src="src/Data/Show/Fields/ShowDashboardFieldData.php">
+    <TooFewArguments>
+      <code><![CDATA[new self(...$field)]]></code>
+      <code><![CDATA[new self(...$field)]]></code>
+      <code><![CDATA[new self(...$field)]]></code>
+      <code><![CDATA[new self(...$field)]]></code>
+      <code><![CDATA[new self(...$field)]]></code>
+      <code><![CDATA[new self(...$field)]]></code>
+    </TooFewArguments>
+  </file>
+  <file src="src/Data/Show/Fields/ShowEntityListFieldData.php">
+    <TooFewArguments>
+      <code><![CDATA[new self(...$field)]]></code>
+      <code><![CDATA[new self(...$field)]]></code>
+      <code><![CDATA[new self(...$field)]]></code>
+      <code><![CDATA[new self(...$field)]]></code>
+      <code><![CDATA[new self(...$field)]]></code>
+      <code><![CDATA[new self(...$field)]]></code>
+      <code><![CDATA[new self(...$field)]]></code>
+      <code><![CDATA[new self(...$field)]]></code>
+      <code><![CDATA[new self(...$field)]]></code>
+      <code><![CDATA[new self(...$field)]]></code>
+      <code><![CDATA[new self(...$field)]]></code>
+    </TooFewArguments>
+  </file>
+  <file src="src/Data/Show/Fields/ShowListFieldData.php">
+    <TooFewArguments>
+      <code><![CDATA[new self(...$list)]]></code>
+      <code><![CDATA[new self(...$list)]]></code>
+      <code><![CDATA[new self(...$list)]]></code>
+    </TooFewArguments>
+  </file>
+  <file src="src/Data/Show/Fields/ShowTextFieldData.php">
+    <TooFewArguments>
+      <code><![CDATA[new self(...$field)]]></code>
+      <code><![CDATA[new self(...$field)]]></code>
+      <code><![CDATA[new self(...$field)]]></code>
+      <code><![CDATA[new self(...$field)]]></code>
+      <code><![CDATA[new self(...$field)]]></code>
+    </TooFewArguments>
+  </file>
+  <file src="src/Data/Show/ShowConfigData.php">
+    <TooFewArguments>
+      <code><![CDATA[new self(...$config)]]></code>
+      <code><![CDATA[new self(...$config)]]></code>
+    </TooFewArguments>
+  </file>
+  <file src="src/Data/Show/ShowLayoutColumnData.php">
+    <TooFewArguments>
+      <code><![CDATA[new self(...$column)]]></code>
+    </TooFewArguments>
+  </file>
+  <file src="src/Data/Show/ShowLayoutSectionData.php">
+    <TooFewArguments>
+      <code><![CDATA[new self(...$section)]]></code>
+      <code><![CDATA[new self(...$section)]]></code>
+      <code><![CDATA[new self(...$section)]]></code>
+    </TooFewArguments>
+  </file>
+  <file src="src/Http/Controllers/Auth/LoginController.php">
+    <UndefinedClass>
+      <code><![CDATA[$request->user()]]></code>
+    </UndefinedClass>
+  </file>
+  <file src="src/SharpInternalServiceProvider.php">
+    <UndefinedClass>
+      <code><![CDATA[RequestReceived]]></code>
+      <code><![CDATA[RequestTerminated]]></code>
+      <code><![CDATA[TaskReceived]]></code>
+      <code><![CDATA[TickReceived]]></code>
+    </UndefinedClass>
+  </file>
+  <file src="src/Utils/Testing/Dashboard/PendingDashboard.php">
+    <UndefinedDocblockClass>
+      <code><![CDATA[$this
+                ->test]]></code>
+      <code><![CDATA[$this
+                ->test]]></code>
+      <code><![CDATA[$this->test]]></code>
+      <code><![CDATA[$this->test]]></code>
+      <code><![CDATA[protected]]></code>
+    </UndefinedDocblockClass>
+  </file>
+  <file src="src/Utils/Testing/EntityList/PendingEntityList.php">
+    <UndefinedDocblockClass>
+      <code><![CDATA[$this
+                ->test]]></code>
+      <code><![CDATA[$this
+                ->test]]></code>
+      <code><![CDATA[$this
+                ->test]]></code>
+      <code><![CDATA[$this
+                ->test]]></code>
+      <code><![CDATA[$this->test]]></code>
+      <code><![CDATA[$this->test]]></code>
+      <code><![CDATA[protected]]></code>
+    </UndefinedDocblockClass>
+  </file>
+  <file src="src/Utils/Testing/Form/PendingForm.php">
+    <UndefinedDocblockClass>
+      <code><![CDATA[$this->test]]></code>
+      <code><![CDATA[$this->test]]></code>
+      <code><![CDATA[$this->test]]></code>
+      <code><![CDATA[$this->test]]></code>
+      <code><![CDATA[protected]]></code>
+    </UndefinedDocblockClass>
+  </file>
+  <file src="src/Utils/Testing/Show/PendingShow.php">
+    <UndefinedDocblockClass>
+      <code><![CDATA[$this
+                ->test]]></code>
+      <code><![CDATA[$this
+                ->test]]></code>
+      <code><![CDATA[$this->test]]></code>
+      <code><![CDATA[protected]]></code>
+    </UndefinedDocblockClass>
+  </file>
+</files>

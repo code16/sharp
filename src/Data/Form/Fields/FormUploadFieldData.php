@@ -23,12 +23,12 @@ final class FormUploadFieldData extends Data
         public bool $imageTransformable = true,
         public bool $imageCompactThumbnail = false,
         public ?bool $imageTransformKeepOriginal = null,
-        /** @var array<string> */
+        /** @var array<string>|null */
         public ?array $imageTransformableFileTypes = null,
-        /** @var array<string> */
+        /** @var array<string>|null */
         public ?array $allowedExtensions = null,
         public ?int $maxFileSize = null,
-        /** @var array<string> */
+        /** @var array<string>|null */
         public ?array $validationRule = null,
         public ?string $label = null,
         public ?bool $readOnly = null,

@@ -32,9 +32,9 @@ final class FormAutocompleteLocalFieldData extends Data
         public ?string $resultItemTemplate = null,
         #[LiteralTypeScriptType('{ [key:string]: any } | null')]
         public ?array $templateData = null,
-        /** @var array<string> */
+        /** @var array<string>|null */
         public ?array $searchKeys = null,
-        /** @var FormDynamicAttributeData[]|null */
+        /** @var FormDynamicAttributeData[]|null|null */
         public ?array $dynamicAttributes = null,
         public ?string $label = null,
         public ?bool $readOnly = null,

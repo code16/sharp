@@ -14,7 +14,7 @@ final class FormDynamicAttributeData extends Data
         public string $name,
         #[LiteralTypeScriptType('"map" | "template"')]
         public string $type,
-        /** @var array<string> */
+        /** @var array<string>|null */
         public ?array $path = null,
         public ?string $default = null,
     ) {}
