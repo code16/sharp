@@ -6,6 +6,22 @@
 ### Patterns
 Use `make()` static methods to initialize fields, columns, and other components.
 
+#### Entities
+An Entity List, Form, Show Page, and Dashboard aren't wired into Sharp on their own: each one belongs to an `Entity` class (`Code16\Sharp\Utils\Entities\SharpEntity`, or `SharpDashboardEntity` for dashboards) that ties them together and gets registered in `SharpAppServiceProvider::configureSharp()`, usually via `->discoverEntities()` (scans `app/Sharp/Entities`) or explicitly via `->addEntity('key', MyEntity::class)`. When scaffolding a new resource, always create/update the Entity class and confirm it's discoverable — don't stop at the List/Form/Show classes. See the `sharp-crud-scaffolding` skill for the full workflow.
+@verbatim
+<code-snippet name="Sharp Entity" lang="php">
+use Code16\Sharp\Utils\Entities\SharpEntity;
+
+class UserEntity extends SharpEntity
+{
+    protected string $label = 'User';
+    protected ?string $list = UserList::class;
+    protected ?string $form = UserForm::class;
+    protected ?string $show = UserShow::class;
+}
+</code-snippet>
+@endverbatim
+
 #### Entity Lists
 Entity Lists are used to display a list of records.
 @verbatim
@@ -210,8 +226,8 @@ public function buildFormConfig(): void
 {
     $this
         ->configureDisplayShowPageAfterCreation()
-        ->configureCreateFormTitle('Create new user')
-        ->configureEditFormTitle('Edit user');
+        ->configureCreateTitle('Create new user')
+        ->configureEditTitle('Edit user');
 }
 
 // Show Configuration
