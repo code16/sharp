@@ -7,6 +7,7 @@ use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Utils\Fields\Formatters\FormatsEditorEmbeds;
 use Code16\Sharp\Utils\Fields\Formatters\FormatsHtmlContent;
+use Code16\Sharp\Utils\Sanitization\FormatsSanitizedValue;
 use DOMElement;
 use Illuminate\Support\Str;
 
@@ -14,6 +15,7 @@ class EditorEmbedsFormatter extends SharpFieldFormatter implements FormatsAfterU
 {
     use FormatsEditorEmbeds;
     use FormatsHtmlContent;
+    use FormatsSanitizedValue;
 
     /**
      * @param  SharpFormEditorField  $field
@@ -42,16 +44,16 @@ class EditorEmbedsFormatter extends SharpFieldFormatter implements FormatsAfterU
                     $elements = $this->getRootElementsByTagNames($domDocument, [$embed->tagName()]);
                     foreach ($elements as $element) {
                         $dataKey = $element->getAttribute('data-key');
-                        foreach ($embed->getBuiltFields() as $fieldKey => $field) {
+                        foreach ($embed->getBuiltFields() as $fieldKey => $embedField) {
                             $embedData = ((array) $value['embeds'][$embedKey])[$dataKey];
                             $fieldValue = $embedData[$fieldKey] ?? null;
-                            if ($field->formatter() instanceof UploadFormatter) {
-                                $fieldValue = $field->formatter()
+                            if ($embedField->formatter() instanceof UploadFormatter) {
+                                $fieldValue = $embedField->formatter()
                                     ->setInstanceId($this->instanceId)
-                                    ->fromFront($field, $fieldKey, $fieldValue);
+                                    ->fromFront($embedField, $fieldKey, $fieldValue);
                             }
-                            if ($field->formatter() instanceof ListFormatter) {
-                                $fieldValue = $field->formatter()
+                            if ($embedField->formatter() instanceof ListFormatter) {
+                                $fieldValue = $embedField->formatter()
                                     ->formatItemFieldUsing(function (SharpFormField $field) {
                                         if ($field instanceof SharpFormUploadField) {
                                             return $field->formatter();
@@ -61,11 +63,14 @@ class EditorEmbedsFormatter extends SharpFieldFormatter implements FormatsAfterU
                                         return new class() extends AbstractSimpleFormatter {};
                                     })
                                     ->setInstanceId($this->instanceId)
-                                    ->fromFront($field, $fieldKey, $fieldValue);
+                                    ->fromFront($embedField, $fieldKey, $fieldValue);
                             }
                             if ($fieldValue !== null) {
                                 if ($fieldKey === 'slot') {
-                                    $this->setInnerHtml($element, $fieldValue);
+                                    // The slot is injected as raw innerHTML regardless of the slot
+                                    // field's own (irrelevant) sanitizeHtml setting, so sanitization
+                                    // is always governed by the parent editor field instead.
+                                    $this->setInnerHtml($element, $this->sanitizeHtmlIfNeeded($field, $fieldValue));
                                 } else {
                                     $this->setAttribute($element, $fieldKey, $fieldValue);
                                 }
