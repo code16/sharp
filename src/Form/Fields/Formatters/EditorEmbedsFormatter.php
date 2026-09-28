@@ -67,9 +67,6 @@ class EditorEmbedsFormatter extends SharpFieldFormatter implements FormatsAfterU
                             }
                             if ($fieldValue !== null) {
                                 if ($fieldKey === 'slot') {
-                                    // The slot is injected as raw innerHTML regardless of the slot
-                                    // field's own (irrelevant) sanitizeHtml setting, so sanitization
-                                    // is always governed by the parent editor field instead.
                                     $this->setInnerHtml($element, $this->sanitizeHtmlIfNeeded($field, $fieldValue));
                                 } else {
                                     $this->setAttribute($element, $fieldKey, $fieldValue);
