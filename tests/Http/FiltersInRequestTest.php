@@ -1,5 +1,6 @@
 <?php
 
+use Code16\Sharp\Filters\AutocompleteRemoteMultipleFilter;
 use Code16\Sharp\Filters\SelectFilter;
 use Code16\Sharp\Filters\SelectMultipleFilter;
 use Code16\Sharp\Filters\SelectRequiredFilter;
@@ -181,6 +182,77 @@ it('handles multiple filter values', function () {
             )
             ->count('entityList.data', 1)
         );
+});
+
+it('handles remote autocomplete multiple filter values as an array of IDs', function () {
+    $labelCalls = [];
+
+    fakeListFor('person', new class($labelCalls) extends PersonList
+    {
+        public function __construct(private array &$labelCalls) {}
+
+        protected function getFilters(): ?array
+        {
+            return [
+                new class($this->labelCalls) extends AutocompleteRemoteMultipleFilter
+                {
+                    public function __construct(private array &$labelCalls) {}
+
+                    public function buildFilterConfig(): void
+                    {
+                        $this->configureKey('job');
+                    }
+
+                    public function values(string $query): array
+                    {
+                        return [];
+                    }
+
+                    public function valueLabelsFor(array $ids): array
+                    {
+                        $this->labelCalls[] = $ids;
+
+                        return collect($ids)
+                            ->mapWithKeys(fn ($id) => [$id => ucfirst($id)])
+                            ->all();
+                    }
+                },
+            ];
+        }
+
+        public function getListData(): array|Arrayable
+        {
+            $selectedJobs = $this->queryParams->filterFor('job');
+
+            expect($selectedJobs)->toBe(['physicist', 'physician']);
+
+            return collect([
+                ['id' => 1, 'name' => 'Marie Curie', 'job' => 'physicist'],
+                ['id' => 2, 'name' => 'Louis Pasteur', 'job' => 'physician'],
+            ])
+                ->filter(fn ($item) => in_array($item['job'], $selectedJobs))
+                ->values();
+        }
+    });
+
+    $this
+        ->get(route('code16.sharp.list', [
+            'entityKey' => 'person',
+            'filter_job' => 'physicist,physician',
+        ]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('entityList.filterValues.current.job', [
+                ['id' => 'physicist', 'label' => 'Physicist'],
+                ['id' => 'physician', 'label' => 'Physician'],
+            ])
+            ->count('entityList.data', 2)
+        );
+
+    expect($labelCalls)->toEqual([[
+        'physicist',
+        'physician',
+    ]]);
 });
 
 it('saves retained filters in the session when set', function () {

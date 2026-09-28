@@ -19,6 +19,7 @@ use App\Sharp\Commands\TestSelectionCommand;
 use App\Sharp\Commands\TestViewEntityCommand;
 use App\Sharp\Commands\TestViewInstanceCommand;
 use App\Sharp\Filters\TestAutocompleteRemoteFilter;
+use App\Sharp\Filters\TestAutocompleteRemoteMultipleFilter;
 use App\Sharp\Filters\TestCheckFilter;
 use App\Sharp\Filters\TestDateRangeFilter;
 use App\Sharp\Filters\TestDateRangeRequiredFilter;
@@ -106,6 +107,7 @@ class TestModelList extends SharpEntityList
     {
         return [
             TestAutocompleteRemoteFilter::class,
+            TestAutocompleteRemoteMultipleFilter::class,
             TestCheckFilter::class,
             TestDateRangeFilter::class,
             TestDateRangeRequiredFilter::class,
@@ -126,6 +128,9 @@ class TestModelList extends SharpEntityList
                     )
                     ->when($this->queryParams->filterFor(TestAutocompleteRemoteFilter::class), function (Builder $query, $value) {
                         $query->where('select_dropdown', $value);
+                    })
+                    ->when($this->queryParams->filterFor(TestAutocompleteRemoteMultipleFilter::class), function (Builder $query, $value) {
+                        $query->whereIn('select_dropdown', $value);
                     })
                     ->when($this->queryParams->filterFor(TestCheckFilter::class), function (Builder $query, $check) {
                         $query->where('check', $check);
