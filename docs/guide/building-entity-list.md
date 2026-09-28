@@ -233,17 +233,19 @@ Here is the full list of available methods:
 
 - `configureEntityMap(string $attribute, EntityListEntities $entities)`: configure an Entity Map to display multiple entities in a single Entity List; [see detailed section](#entity-map) above.
 
-- `configurePageAlert(string $template, string $alertLevel = null, string $fieldKey = null, bool $declareTemplateAsPath = false)`: display a dynamic message above the list; [see detailed doc](page-alerts.md)
-
 - `configureEntityState(string $stateAttribute, $stateHandlerOrClassName)`: add a state toggle, [see detailed doc](entity-states.md)
 
 - `configurePrimaryEntityCommand(string $commandKeyOrClassName)`: define an instance command as "primary", by passing its key or full cass name. The command should be declared for this Entity List ([see related doc](commands.md)).
 
 - `configureQuickCreationForm(?array $fields = null)`: show the creation form in a modal instead of a full page ([see detailed doc](quick-creation-form.md))
 
-- `configureDelete(bool $hide = false, ?string $onfirmationText = null)`: the first argument is to show / hide the delete command on each instance (shown by default); this is only useful to hide the link if you want to only display the delete action in the Show Page (if you have defined one), this is NOT to be used for authorization purpose (see [dedicated documentation on this topic](entity-authorizations.md)). The second argument is the message to display in the confirmation dialog (a sensible default will be used).
+- `configureDelete(bool $hide = false, ?string $confirmationText = null)`: the first argument is to show / hide the delete command on each instance (shown by default); this is only useful to hide the link if you want to only display the delete action in the Show Page (if you have defined one), this is NOT to be used for authorization purpose (see [dedicated documentation on this topic](entity-authorizations.md)). The second argument is the message to display in the confirmation dialog (a sensible default will be used).
 
 - `configureCreateButtonLabel(string $label)` to set a custom "New..." button label.
+
+### Display a Page Alert
+
+Override `buildPageAlert(PageAlert $pageAlert): void` to display a dynamic message above the list; [see detailed doc](page-alerts.md).
 
 ## Declare the Entity List
 

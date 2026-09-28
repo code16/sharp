@@ -76,6 +76,67 @@ it('get & assert an entity list', function () {
     expect($filterValues)->toEqual(['is_valid' => true]);
 });
 
+it('deletes an instance from a sharpList', function () {
+    $deletedId = null;
+
+    fakeShowFor(PersonEntity::class, new class($deletedId) extends PersonShow
+    {
+        public function __construct(public &$deletedId) {}
+
+        public function delete($id): void
+        {
+            $this->deletedId = $id;
+        }
+    });
+
+    $this->sharpList(PersonEntity::class)
+        ->delete(1)
+        ->assertOk();
+
+    expect($deletedId)->toEqual(1);
+});
+
+it('deletes an instance from a sharpShow', function () {
+    $deletedId = null;
+
+    fakeShowFor(PersonEntity::class, new class($deletedId) extends PersonShow
+    {
+        public function __construct(public &$deletedId) {}
+
+        public function delete($id): void
+        {
+            $this->deletedId = $id;
+        }
+    });
+
+    $this->sharpShow(PersonEntity::class, 1)
+        ->delete()
+        ->assertRedirect();
+
+    expect($deletedId)->toEqual(1);
+});
+
+it('deletes an instance from a sharpShow reached through a sharpList', function () {
+    $deletedId = null;
+
+    fakeShowFor(PersonEntity::class, new class($deletedId) extends PersonShow
+    {
+        public function __construct(public &$deletedId) {}
+
+        public function delete($id): void
+        {
+            $this->deletedId = $id;
+        }
+    });
+
+    $this->sharpList(PersonEntity::class)
+        ->sharpShow(PersonEntity::class, 1)
+        ->delete()
+        ->assertRedirect();
+
+    expect($deletedId)->toEqual(1);
+});
+
 it('call & assert an entity list entity command form', function () {
     $postedData = [];
 

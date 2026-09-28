@@ -8,6 +8,7 @@ This widget is intended to display any useful information to the user, based on 
 $widgetsContainer->addWidget(
     SharpPanelWidget::make('messages')
         ->setTemplate('my/blade/template')
+);
 ```
 
 The Panel needs a blade template to be rendered:

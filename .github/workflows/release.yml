@@ -39,6 +39,15 @@ jobs:
         env:
           VERSION: ${{ inputs.version }}
 
+      - name: Check tag does not already exist
+        run: |
+          if git ls-remote --tags --exit-code origin "refs/tags/v${VERSION}" > /dev/null; then
+            echo "::error::Tag v${VERSION} already exists"
+            exit 1
+          fi
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+
       - name: Install NPM dependencies
         run: npm ci
 

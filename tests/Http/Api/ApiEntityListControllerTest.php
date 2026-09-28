@@ -52,6 +52,50 @@ it('allows to reorder instances', function () {
     expect($ids)->toEqual([3, 2, 1]);
 });
 
+it('does not allow to reorder instances without reorder policy', function () {
+    fakeListFor('person', new class() extends PersonList
+    {
+        public function buildListConfig(): void
+        {
+            $this->configureReorderable(
+                new class() implements ReorderHandler
+                {
+                    public function reorder(array $ids): void
+                    {
+                        throw new Exception('Should not be called');
+                    }
+                }
+            );
+        }
+    });
+
+    fakePolicyFor('person', new class() extends SharpEntityPolicy
+    {
+        public function reorder($user): bool
+        {
+            return false;
+        }
+    });
+
+    $this
+        ->postJson(
+            route('code16.sharp.api.list.reorder', ['person']),
+            ['instances' => [3, 2, 1]]
+        )
+        ->assertForbidden();
+});
+
+it('returns a 404 when reordering an entity list without reorder handler', function () {
+    fakeListFor('person', new class() extends PersonList {});
+
+    $this
+        ->postJson(
+            route('code16.sharp.api.list.reorder', ['person']),
+            ['instances' => [3, 2, 1]]
+        )
+        ->assertNotFound();
+});
+
 it('allows to delete an instance in the entity list if delete method is implemented', function () {
     $deletedId = null;
 

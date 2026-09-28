@@ -37,7 +37,7 @@ Display lines with curved angles. Default is `true`.
 
 Change the opacity of the filled areas. Default is `0.4`.
 
-### `setShowGradient(bool $showGradient = true)`
+### `setShowGradient(bool $gradient = true)`
 
 Display a gradient on top of the filled areas.
 

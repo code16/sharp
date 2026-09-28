@@ -4,10 +4,12 @@ namespace Code16\Sharp\Http\Middleware;
 
 use Closure;
 use Code16\Sharp\Auth\Impersonate\SharpImpersonationHandler;
+use Code16\Sharp\Enums\SessionStatusLevel;
 use Code16\Sharp\Exceptions\SharpAuthenticationException;
 use Code16\Sharp\Exceptions\SharpTokenMismatchException;
 use Illuminate\Auth\Middleware\Authenticate as BaseAuthenticate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class SharpAuthenticate extends BaseAuthenticate
@@ -22,11 +24,11 @@ class SharpAuthenticate extends BaseAuthenticate
 
         if (Gate::has('viewSharp')) {
             if (! Gate::allows('viewSharp')) {
-                $this->unauthenticated($request, $guards);
+                $this->unauthorized($request, $guards);
             }
         } elseif ($checkHandler = config('sharp.auth.check_handler')) {
             if (! instanciate($checkHandler)->check(auth()->guard($guards[0] ?? null)->user())) {
-                $this->unauthenticated($request, $guards);
+                $this->unauthorized($request, $guards);
             }
         }
 
@@ -40,6 +42,23 @@ class SharpAuthenticate extends BaseAuthenticate
 
         throw new SharpAuthenticationException(
             'Unauthenticated.',
+            $guards,
+            $this->redirectTo($request)
+        );
+    }
+
+    protected function unauthorized($request, array $guards)
+    {
+        Auth::guard($guards[0] ?? sharp()->config()->get('auth.guard'))->logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        session()->flash('status', __('sharp::auth.access_denied'));
+        session()->flash('status_level', SessionStatusLevel::Error->value);
+
+        throw new SharpAuthenticationException(
+            'Unauthorized.',
             $guards,
             $this->redirectTo($request)
         );

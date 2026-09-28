@@ -32,13 +32,13 @@ class TeamsList extends \Code16\Sharp\EntityList\SharpEntityList
 {
    // ...
    
-   function getListData(EntityListQueryParams $params)
+   function getListData(): array|Arrayable
    {
       return $this
           ->setCustomTransformer('players', function($value, $yeam) {
               return $yeam->players
                   ->map(fn ($player) => LinkToForm::make(PlayerEntity::class, $player->id)
-                      ->renderAsText($pilot->name); // This will render a full <a...> tag
+                      ->renderAsText($player->name); // This will render a full <a...> tag
                   )
                   ->implode('<br>');
           })
@@ -136,7 +136,7 @@ To generate a list > show > form breadcrumb, instead of (by default) just a list
 
 ### `withListEntityKey(string $entityClassOrKey)`
 
-`LinkToShow` and `LinkToForm` only
+`LinkToShowPage` and `LinkToForm` only
 
 Allows specifying the entity key of the list, very useful in multi-entities lists (see the [Entity map feature](building-entity-list.md#entity-map)).
 

@@ -14,6 +14,7 @@ use Code16\Sharp\Utils\Testing\IsPendingComponent;
 use Code16\Sharp\Utils\Testing\SharpAssertions;
 use Code16\Sharp\Utils\Testing\Show\PendingShow;
 use Illuminate\Foundation\Testing\TestCase;
+use Illuminate\Testing\TestResponse;
 use PHPUnit\Framework\Assert as PHPUnit;
 
 class PendingEntityList
@@ -83,6 +84,19 @@ class PendingEntityList
                 ])),
             $this,
         );
+    }
+
+    public function delete(int|string $instanceId): TestResponse
+    {
+        return $this->test
+            ->withHeader(
+                SharpBreadcrumb::CURRENT_PAGE_URL_HEADER,
+                $this->getCurrentPageUrlFromParents(),
+            )
+            ->delete(route('code16.sharp.api.list.delete', [
+                'entityKey' => $this->entityKey,
+                'instanceId' => $instanceId,
+            ]));
     }
 
     public function entityCommand(string $commandKeyOrClassName): PendingCommand

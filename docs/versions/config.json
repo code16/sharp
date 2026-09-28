@@ -1,11 +1,19 @@
 [
     {
         "__IMPORTANT__": "For new version, add sitemap in /demo/public/robots.txt, update /demo/public/llms.txt symlinks",
+        "name": "10.x",
+        "title": "Sharp 10.x",
+        "branch": "10.x",
+        "slug": "10.x",
+        "algoliaTag": "v10"
+    },
+    {
         "name": "9.x",
         "title": "Sharp 9.x",
         "branch": "9.x",
         "slug": "9.x",
-        "algoliaTag": "v9"
+        "algoliaTag": "v9",
+        "latest": true
     },
     {
         "name": "8.x",

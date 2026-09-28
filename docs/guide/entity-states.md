@@ -21,7 +21,7 @@ The goal is to declare the available states for the entity, using `$this->addSta
 ```php
 class ProductState extends EntityState
 {
-    protected function buildStates()
+    protected function buildStates(): void
     {
         $this->addState('active', 'Active', 'green')
             ->addState('inactive', 'Retired', 'orange')
@@ -69,7 +69,7 @@ class ProductList extends SharpEntityList
 {
     function buildListConfig(): void
     {
-        $this->configureEntityState('state', ProductState::class)
+        $this->configureEntityState('state', ProductState::class);
     }
     
     // ...

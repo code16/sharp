@@ -136,6 +136,14 @@ $this->sharpList(Post::class)
     ->assertOk();
 ```
 
+### Deleting an instance
+
+```php
+$this->sharpList(Post::class)
+    ->delete(1)
+    ->assertOk();
+```
+
 ## Testing Show Pages
 
 Use `sharpShow()` to test your Show Pages.
@@ -162,6 +170,14 @@ $this->sharpShow(Post::class, 1)
     ->instanceCommand(PublishPost::class)
     ->post()
     ->assertOk();
+```
+
+### Deleting an instance
+
+```php
+$this->sharpShow(Post::class, 1)
+    ->delete()
+    ->assertRedirect();
 ```
 
 ### List & dashboard fields
@@ -198,6 +214,7 @@ $this->sharpList(Post::class)
     ->sharpShow(Post::class, 1)
     ->sharpListField(Comment::class)
     ->sharpShow(Comment::class, 1)
+    ->get()
     ->assertOk();
 ```
 
@@ -282,7 +299,7 @@ $this->sharpDashboard(MyDashboard::class)
 
 ## Global filters
 
-If your app contains global filters, you should be able to test normally, but it will be set to its default value. If you need, you can set a specific value using `withGlobalFilter()`:
+If your app contains global filters, you should be able to test normally, but it will be set to its default value. If you need, you can set a specific value using `withSharpGlobalFilter()`:
 
 ```php
 $this->withSharpGlobalFilter(CompanyFilter::class, 'apple')

@@ -59,7 +59,7 @@ If you want to use a `{id}` special placeholder to add the instance id in the pa
 
 Keep the file only in the upload directory/disk (configured [here](#general-configuration)). `setStorageDisk()` and `setStorageBasePath()` will be ignored.
 
-### `setAllowedExtensions(string|array $allowedExtensions)`
+### `setAllowedExtensions(string|array $extensions)`
 
 Define the allowed file extensions. 
 
@@ -81,13 +81,13 @@ The argument `$transformKeepOriginal` overrides the global config (which is `tru
 
 With `$transformKeepOriginal` set to true, the original file will remain unchanged, meaning the transformations will be stored apart: using the [built-in way to handle uploads](../sharp-uploads.md), it's transparent. Otherwise, see the Formatter part below.
 
-### `setImageCropRatio(string $ratio, array $croppableFileTypes = null)`
+### `setImageCropRatio(?string $ratio = null, ?array $transformableFileTypes = null)`
 
 Set a ratio constraint to uploaded images, formatted like this: `width:height`. For instance: `16:9`, or `1:1`.
 
 When a crop ratio is set, any uploaded picture will be auto-cropped (centered).
 
-The second argument, `$croppableFileTypes`, provide a way to limit the crop configuration to a list of image files extensions. For instance, it can be useful to define a crop for jpg and png, but not for gif because it will destroy animation.
+The second argument, `$transformableFileTypes`, provide a way to limit the crop configuration to a list of image files extensions. For instance, it can be useful to define a crop for jpg and png, but not for gif because it will destroy animation.
 
 ### `setImageCompactThumbnail(bool $compactThumbnail = true)`
 
@@ -115,7 +115,7 @@ Notice that `setAllowedExtensions()` and `setImageOnly()` already are basic vali
 
 But there are a few more rules available:
 
-### `setMaxFileSize(int $maxFileSizeInMB)` and `setMinFileSize(int $minFileSizeInMB)`
+### `setMaxFileSize(float $maxFileSizeInMB)` and `setMinFileSize(float $minFileSizeInMB)`
 
 Set the maximum and minimum (even if this is a rare use-case) file size in MB.
 

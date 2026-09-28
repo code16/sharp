@@ -37,7 +37,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
 }
 ```
 
-The file should be an SVG, you can customize the logo height by setting the `logo_height` config.
+The file should be an SVG, you can customize the logo height by setting the `logo_height` config. You can also define a URL for a favicon as the `faviconUrl` argument of the same `setThemeLogo()` method.
 
 :::tip
 With the newly added dark theme, it is recommended to use an SVG logo with `fill="currentColor"` to allow the logo to adapt to the theme, Sharp will handle it for you.
@@ -69,24 +69,6 @@ The custom message is displayed under the form; you can either provide HTML or t
 <x-sharp::card>
     Display a custom message to your users
 </x-sharp::card>
-```
-
-### Favicon
-
-You can define an URL for a favicon that Sharp will as a 3rd argument of the same `setThemeLogo()` method:
-
-```php
-class SharpServiceProvider extends SharpAppServiceProvider
-{
-    protected function configureSharp(SharpConfigBuilder $config): void
-    {
-        $config
-            ->setThemeLogo(
-                faviconUrl: '/my-sharp-assets/favicon.png'
-            )
-            // [...]
-    }
-}
 ```
 
 ### Injecting CSS

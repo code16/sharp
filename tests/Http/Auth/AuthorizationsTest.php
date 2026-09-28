@@ -270,3 +270,15 @@ it('checks useSharp Gate', function () {
     $this->get(route('code16.sharp.list', 'person'))
         ->assertRedirect(route('code16.sharp.login'));
 });
+
+it('logs out and flashes an error message when useSharp Gate denies access', function () {
+    Gate::define('viewSharp', fn ($user) => $user->name === 'ok');
+
+    login(new User(['name' => 'ko']));
+    $this->get(route('code16.sharp.list', 'person'))
+        ->assertRedirect(route('code16.sharp.login'));
+
+    expect(auth()->guard('web')->check())->toBeFalse();
+    expect(session('status'))->not->toBeNull();
+    expect(session('status_level'))->toBe('error');
+});

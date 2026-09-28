@@ -36,7 +36,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
     {
         $config
             ->suggestRememberMeOnLoginForm()
-            ->enableLoginRateLimiting(maxAttemps: 3)
+            ->enableLoginRateLimiting(maxAttempts: 3)
             // [...]
     }
 }

@@ -1,19 +1,19 @@
 # Number
 
-Designate a integer-only textfield.
+Designate a numeric textfield.
 Class: `Code16\Sharp\Form\Fields\SharpFormNumberField`
 
 ## Configuration
 
-### `setMin(int $min)`
+### `setMin(float $min)`
 
 The minimum value that the UI allows.
 
-### `setMax(int $max)`
+### `setMax(float $max)`
 
 The maximum value that the UI allows.
 
-### `setStep(int $step)`
+### `setStep(float $step)`
 
 The step between values (with controls or arrow keys).
 Default is 1.
@@ -26,5 +26,5 @@ Default is false.
 
 ## Formatter
 
-- `toFront`: will cast the provided value as an int.
-- `fromFront`: returns an int.
+- `toFront`: will cast the provided value as a float.
+- `fromFront`: returns a float.

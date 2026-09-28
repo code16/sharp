@@ -411,8 +411,6 @@ This method, entirely optional, is the place to configure these:
 
 - `configureDisplayShowPageAfterCreation(bool $displayShowPage = true)` to tell Sharp to redirect to the entity Show Page (instead of the EntityList) after the store. No existence check is done here, meaning if there is no Show Page configured it will end up in a 404.
 
-- `configurePageAlert(string $template, string $alertLevel = null, string $fieldKey = null, bool $declareTemplateAsPath = false)`: display a dynamic message above the Form; [see detailed doc](page-alerts.md)
-
 Example
 
 ```php
@@ -423,10 +421,14 @@ class ProductForm extends SharpForm
 	public function buildFormConfig(): void
 	{
 		$this->configureBreadcrumbCustomLabelAttribute('name')
-			->setDisplayShowPageAfterCreation();
+			->configureDisplayShowPageAfterCreation();
 	}
 }
 ```
+
+### Display a Page Alert
+
+Override `buildPageAlert(PageAlert $pageAlert): void` to display a dynamic message above the Form; [see detailed doc](page-alerts.md).
 
 ## Input validation
 
