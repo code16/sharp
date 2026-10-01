@@ -87,7 +87,8 @@ export function useXYChart(props: DashboardWidgetProps<LineGraphWidgetData | Bar
                 return formatDate(nearestDate);
             }
             return props.value.labels[Math.round(x as number)];
-        }
+        },
+        valueFormatter: (y) => new Intl.NumberFormat(undefined, props.widget.formatOptions as any).format(y),
     });
 
     const rotate = computed(() =>
@@ -138,6 +139,9 @@ export function useXYChart(props: DashboardWidgetProps<LineGraphWidgetData | Bar
             if(!Number.isInteger(tick) && !needsDecimals.value) {
                 return '';
             }
+            // if(props.widget.formatOptions) {
+            //     return new Intl.NumberFormat(undefined, props.widget.formatOptions as any).format(tick as number);
+            // }
         },
         tickValues: yScale.value.ticks(yNumTicks.value),
     }));
