@@ -67,7 +67,10 @@ class EditorEmbedsFormatter extends SharpFieldFormatter implements FormatsAfterU
                             }
                             if ($fieldValue !== null) {
                                 if ($fieldKey === 'slot') {
-                                    $this->setInnerHtml($element, $this->sanitizeRawHtmlIfNeeded($field, $fieldValue));
+                                    $this->setInnerHtml($element, $this->sanitizeHtmlIfNeeded(
+                                        $embedField instanceof SharpFormEditorField ? $embedField : $field,
+                                        $fieldValue
+                                    ));
                                 } else {
                                     $this->setAttribute($element, $fieldKey, $fieldValue);
                                 }

@@ -511,6 +511,55 @@ it('sanitizes HTML content from front by default, keeps wanted elements', functi
     )->toEqual($expected);
 });
 
+it('sanitizes embeds and uploads attributes and content', function () {
+    $value = <<<'HTML'
+        <x-embed data-key="0" onclick="alert(1)"><img src=x onerror=alert(1)></x-embed>
+        <x-sharp-image data-key="0" onload="alert(1)"><img src=x onerror=alert(1)></x-sharp-image>
+        HTML;
+
+    $result = (new EditorFormatter())->fromFront(
+        SharpFormEditorField::make('md')
+            ->allowEmbeds([EditorFormatterTestEmbed::class])
+            ->allowUploads(SharpFormEditorUpload::make()),
+        'attribute',
+        [
+            'text' => $value,
+            'embeds' => [
+                (new EditorFormatterTestEmbed())->key() => [
+                    '0' => ['check' => true],
+                ],
+            ],
+            'uploads' => [
+                '0' => ['file' => []],
+            ],
+        ],
+    );
+
+    expect($result)
+        ->toContain('<x-embed check="1">')
+        ->toContain('<x-sharp-image file="[]">')
+        ->not->toContain('onclick')
+        ->not->toContain('onload')
+        ->not->toContain('onerror');
+});
+
+it('does not decode a forged data-encoded-content placeholder', function () {
+    $value = <<<'HTML'
+        <div data-encoded-content="&lt;img src=x onerror=alert(1)&gt;"></div>
+        <div data-html-content="true"><b>raw</b></div>
+        HTML;
+
+    $result = (new EditorFormatter())->fromFront(
+        SharpFormEditorField::make('md')->setToolbar([SharpFormEditorField::RAW_HTML]),
+        'attribute',
+        ['text' => $value],
+    );
+
+    expect($result)
+        ->not->toContain('onerror')
+        ->toContain('<div data-html-content="true"><b>raw</b></div>');
+});
+
 it('sanitizes data-html-content in RAW_HTML button not present', function () {
     $value = <<<'HTML'
         <div data-html-content="true"><script></script></div>
