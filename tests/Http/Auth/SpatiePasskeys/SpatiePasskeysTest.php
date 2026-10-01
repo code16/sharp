@@ -64,7 +64,7 @@ beforeEach(function () {
 
 it('has correct prohibited actions', function () {
     $entity = new PasskeyEntity();
-    $reflection = new \ReflectionProperty($entity, 'prohibitedActions');
+    $reflection = new ReflectionProperty($entity, 'prohibitedActions');
 
     expect($reflection->getValue($entity))->toContain('create', 'update');
 });
@@ -156,10 +156,10 @@ it('validates name is required when renaming', function () {
 });
 
 it('does not authorize renaming another user passkey', function () {
-    $user = createPasskeyTestUser();
-    $otherUser = createPasskeyTestUser(['email' => 'other@example.org']);
+    $user = createPasskeyUser();
+    $otherUser = createPasskeyUser(['email' => 'other@example.org']);
     $passkey = createPasskey($otherUser);
-    loginPasskeyUser($user);
+    login($user);
 
     $command = app(UpdatePasskeyNameCommand::class);
 
@@ -167,10 +167,10 @@ it('does not authorize renaming another user passkey', function () {
 });
 
 it('cannot rename another user passkey', function () {
-    $user = createPasskeyTestUser();
-    $otherUser = createPasskeyTestUser(['email' => 'other@example.org']);
+    $user = createPasskeyUser();
+    $otherUser = createPasskeyUser(['email' => 'other@example.org']);
     $passkey = createPasskey($otherUser, ['name' => 'Other Passkey']);
-    loginPasskeyUser($user);
+    login($user);
 
     $command = app(UpdatePasskeyNameCommand::class);
 
@@ -308,7 +308,7 @@ it('store endpoint calls StorePasskeyAction with appropriate arguments', functio
 
     session()->put('passkey-registration-options', $passkeyOptions);
 
-    $mockAction = \Mockery::mock(StorePasskeyAction::class);
+    $mockAction = Mockery::mock(StorePasskeyAction::class);
     $mockAction->shouldReceive('execute')
         ->once()
         ->withArgs(function ($authenticatable, $passkeyJson, $optionsJson, $host, $additionalProperties) use ($user, $passkeyData, $passkeyOptions, $passkeyName) {
