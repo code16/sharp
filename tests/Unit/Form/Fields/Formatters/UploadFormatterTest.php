@@ -240,7 +240,7 @@ describe('path signature', function () {
     });
 
     it('does not check signatures when disabled', function () {
-        sharp()->config()->configureUploads(signPaths: false);
+        sharp()->config()->disableUploadPathSigning();
 
         $field = SharpFormUploadField::make('upload')->setStorageDisk('local');
 
