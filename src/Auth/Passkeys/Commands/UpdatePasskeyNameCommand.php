@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Auth\Passkeys\Commands;
 
-use Code16\Sharp\Auth\Passkeys\PasskeyManager;
 use Code16\Sharp\Commands\InstanceCommand;
 use Code16\Sharp\Commands\Returns\CommandReturn;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
@@ -26,7 +25,7 @@ class UpdatePasskeyNameCommand extends InstanceCommand
     protected function initialData(mixed $instanceId): array
     {
         return [
-            'name' => app(PasskeyManager::class)->model()::findOrFail($instanceId)->name,
+            'name' => auth()->user()->passkeys()->findOrFail($instanceId)->name,
         ];
     }
 
@@ -36,10 +35,15 @@ class UpdatePasskeyNameCommand extends InstanceCommand
             'name' => 'required',
         ]);
 
-        app(PasskeyManager::class)->model()::findOrFail($instanceId)->update([
+        auth()->user()->passkeys()->findOrFail($instanceId)->update([
             'name' => $data['name'],
         ]);
 
         return $this->refresh($instanceId);
+    }
+
+    public function authorizeFor(mixed $instanceId): bool
+    {
+        return auth()->user()->passkeys()->whereKey($instanceId)->exists();
     }
 }

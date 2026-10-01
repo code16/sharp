@@ -14,10 +14,12 @@ class ApiEntityListController extends Controller
      */
     public function update(string $globalFilter, string $entityKey)
     {
-        $this->authorizationManager->check('entity', $entityKey);
+        $this->authorizationManager->check('reorder', $entityKey);
 
         $list = $this->entityManager->entityFor($entityKey)->getListOrFail();
         $list->buildListConfig();
+
+        abort_if($list->reorderHandler() === null, 404);
 
         $list->reorderHandler()->reorder(request('instances'));
 
