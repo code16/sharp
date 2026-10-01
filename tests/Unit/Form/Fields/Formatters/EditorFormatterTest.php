@@ -543,21 +543,35 @@ it('sanitizes embeds and uploads attributes and content', function () {
         ->not->toContain('onerror');
 });
 
-it('does not decode a forged data-encoded-content placeholder', function () {
+it('strips forged data-encoded-content placeholders', function (array $toolbar) {
     $value = <<<'HTML'
         <div data-encoded-content="&lt;img src=x onerror=alert(1)&gt;"></div>
+        <p><div data-encoded-content="&lt;img src=x onerror=alert(1)&gt;"></div></p>
         <div data-html-content="true"><b>raw</b></div>
         HTML;
 
     $result = (new EditorFormatter())->fromFront(
-        SharpFormEditorField::make('md')->setToolbar([SharpFormEditorField::RAW_HTML]),
+        SharpFormEditorField::make('md')->setToolbar($toolbar),
         'attribute',
         ['text' => $value],
     );
 
     expect($result)
         ->not->toContain('onerror')
-        ->toContain('<div data-html-content="true"><b>raw</b></div>');
+        ->not->toContain('data-encoded-content');
+})->with([
+    'with RAW_HTML' => [[SharpFormEditorField::RAW_HTML]],
+    'without RAW_HTML' => [[]],
+]);
+
+it('keeps RAW_HTML content verbatim', function () {
+    $value = '<div data-html-content="true"><b>raw</b><span data-encoded-content="kept"></span></div>';
+
+    expect((new EditorFormatter())->fromFront(
+        SharpFormEditorField::make('md')->setToolbar([SharpFormEditorField::RAW_HTML]),
+        'attribute',
+        ['text' => $value],
+    ))->toEqual($value);
 });
 
 it('sanitizes data-html-content in RAW_HTML button not present', function () {

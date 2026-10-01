@@ -5,6 +5,7 @@ namespace Code16\Sharp\Utils\Sanitization;
 use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use DOMElement;
+use DOMXPath;
 use Illuminate\Support\Str;
 use Masterminds\HTML5;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizer;
@@ -21,16 +22,18 @@ trait FormatsSanitizedValue
         }
 
         if ($field instanceof SharpFormEditorField) {
-            $sanitizer = $this->sanitizer($this->collectEmbeds($field));
+            $embeds = $this->collectEmbeds($field);
 
             if (in_array(SharpFormEditorField::RAW_HTML, $field->getToolbar())
                 && str_contains($value, 'data-html-content')
             ) {
                 // Security risk (opt-in): RAW_HTML content bypasses sanitization, as warned in docs/guide/form-fields/editor.md
-                return $this->decodeRawHtml($sanitizer->sanitize($this->encodeRawHtml($value)));
+                return $this->decodeRawHtml(
+                    $this->sanitizer($embeds, allowEncodedRawHtml: true)->sanitize($this->encodeRawHtml($value))
+                );
             }
 
-            return $sanitizer->sanitize($value);
+            return $this->sanitizer($embeds)->sanitize($value);
         }
 
         return $this->sanitizer()->sanitize($value);
@@ -61,7 +64,7 @@ trait FormatsSanitizedValue
     /**
      * @param  SharpFormEditorEmbed[]  $embeds
      */
-    private function sanitizer(array $embeds = []): HtmlSanitizer
+    private function sanitizer(array $embeds = [], bool $allowEncodedRawHtml = false): HtmlSanitizer
     {
         $config = (new HtmlSanitizerConfig())
             ->allowSafeElements()
@@ -86,7 +89,7 @@ trait FormatsSanitizedValue
             ])
             ->allowRelativeLinks()
             ->allowRelativeMedias()
-            ->allowElement('div', ['data-encoded-content', 'data-id'])
+            ->allowElement('div', $allowEncodedRawHtml ? ['data-encoded-content', 'data-id'] : ['data-id'])
             ->allowElement('x-sharp-image', ['data-key', 'file', 'legend'])
             ->allowElement('x-sharp-file', ['data-key', 'file', 'legend'])
             ->allowAttribute('class', allowedElements: '*')
@@ -114,22 +117,24 @@ trait FormatsSanitizedValue
     {
         $fragment = (new HTML5())->loadHTMLFragment($value);
 
+        // only placeholders created here may be decoded
+        $forged = (new DOMXPath($fragment->ownerDocument))->query(
+            'descendant::*[@data-encoded-content][not(ancestor-or-self::*[@data-html-content])]',
+            $fragment
+        );
+        foreach ($forged as $node) {
+            $node->removeAttribute('data-encoded-content');
+        }
+
         for ($i = 0; $i < $fragment->childNodes->length; $i++) {
             $node = $fragment->childNodes->item($i);
-            if (! $node instanceof DOMElement) {
-                continue;
-            }
-
-            if ($node->hasAttribute('data-html-content')) {
+            if ($node instanceof DOMElement && $node->hasAttribute('data-html-content')) {
                 $replacement = $node->ownerDocument->createElement('div');
                 $replacement->setAttribute(
                     'data-encoded-content',
                     htmlspecialchars((new HTML5())->saveHTML($node), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')
                 );
                 $node->parentNode->replaceChild($replacement, $node);
-            } else {
-                // only placeholders created here may be decoded
-                $node->removeAttribute('data-encoded-content');
             }
         }
 
