@@ -1,6 +1,6 @@
 # Installation
 
-Sharp 9 needs Laravel 11+ and PHP 8.3+.
+Sharp 10 needs Laravel 11+ and PHP 8.3+.
 
 - Add the package with composer: `composer require code16/sharp`
 - Then run: `php artisan sharp:install`

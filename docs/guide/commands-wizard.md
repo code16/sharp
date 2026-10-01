@@ -19,22 +19,22 @@ php artisan sharp:make:instance-command <class_name> --wizard
 ## Write the Wizard Command class
 
 The class must extend either: 
-- `Code16\Sharp\EntityList\Commands\Wizards\EntityWizardCommand`: for an Entity command, on an Entity List
-- `Code16\Sharp\EntityList\Commands\Wizards\InstanceWizardCommand`: for an Instance command, on an Entity List or a Show Page
+- `Code16\Sharp\Commands\Wizards\EntityWizardCommand`: for an Entity command, on an Entity List
+- `Code16\Sharp\Commands\Wizards\InstanceWizardCommand`: for an Instance command, on an Entity List or a Show Page
 - `Code16\Sharp\Dashboard\Commands\DashboardWizardCommand`: for a Dashboard Command
 
 Like any Command, you must extend `label(): string` function, and can extend `buildCommandConfig(): void` (see [Commands documentation](commands.md)). 
 
 ## Implement the first step of the Wizard
 
-Instead of `execute()`, you must implement `executeFirstStep(array $data): array`, or `executeFirstStep(mixed $instanceId, array $data): array` in an instance case. This method, as expected, must contain the execution code of your first step:
+Instead of `execute()`, you must implement `executeFirstStep(array $data): CommandReturn`, or `executeFirstStep(mixed $instanceId, array $data): CommandReturn` in an instance case. This method, as expected, must contain the execution code of your first step:
 
 ```php
 class SendEmailWithPostsWizardCommand extends EntityWizardCommand
 {
-    // [...]
+    // ...
     
-    public function executeFirstStep(array $data): array
+    public function executeFirstStep(array $data): CommandReturn
     {
         // Do something
     }
@@ -50,7 +50,7 @@ Wizard Commands needs forms, one for each step. To build the forms, we use the s
 ```php
 class SendEmailWithPostsWizardCommand extends EntityWizardCommand
 {
-    // [...]
+    // ...
     
     public function buildFormFieldsForFirstStep(FieldsContainer $formFields): void
     {
@@ -86,7 +86,7 @@ protected function initialDataForFirstStep(): array
 To tell Sharp to go to the next step, Wizard commands expose a new `toStep(string $step)` action, which expects a string key representing you step: 
 
 ```php
-public function executeFirstStep(array $data): array
+public function executeFirstStep(array $data): CommandReturn
 {
     // Do something
     
@@ -109,7 +109,7 @@ If your Wizard is small, this could be the right way to proceed. Simply extend t
 ```php
 class SendEmailWithPostsWizardCommand extends EntityWizardCommand
 {
-    // [...]
+    // ...
     
     protected function buildFormFieldsForStep(string $step, FieldsContainer $formFields): void
     {
@@ -133,7 +133,7 @@ This should be a better option in many cases, to clarify things in the Wizard cl
 ```php
 class SendEmailWithPostsWizardCommand extends EntityWizardCommand
 {
-    // [...]
+    // ...
     
     public function buildFormFieldsForStepComposeMessage(FieldsContainer $formFields): void
     {
@@ -200,9 +200,9 @@ Entity and Dashboard case:
 ```php
 class SendEmailWithPostsWizardCommand extends EntityWizardCommand
 {
-    // [...]
+    // ...
     
-    public function executeStep(string $step, array $data = []): array
+    public function executeStep(string $step, array $data = []): CommandReturn
     {
         if ($step === 'compose-message') {
             return $this->toStep('checkout');
@@ -216,7 +216,7 @@ class SendEmailWithPostsWizardCommand extends EntityWizardCommand
 Instance case:
 
 ```php
-public function executeStep(string $step, mixed $instanceId, array $data = []): array
+public function executeStep(string $step, mixed $instanceId, array $data = []): CommandReturn
 {
     // ...
 }
@@ -227,7 +227,7 @@ public function executeStep(string $step, mixed $instanceId, array $data = []): 
 Similarly to forms and layouts; for Entity and Dashboard cases:
 
 ```php
-public function executeStepComposeMessage(array $data = []): array
+public function executeStepComposeMessage(array $data = []): CommandReturn
 {
     // ...
 }
@@ -236,7 +236,7 @@ public function executeStepComposeMessage(array $data = []): array
 Instance case:
 
 ```php
-public function executeStepComposeMessage(mixed $instanceId, array $data = []): array
+public function executeStepComposeMessage(mixed $instanceId, array $data = []): CommandReturn
 {
     // ...
 }
@@ -247,7 +247,7 @@ public function executeStepComposeMessage(mixed $instanceId, array $data = []): 
 Validation works the same as for regular Commands, with `$this->validate()`:
 
 ```php
-public function executeStepComposeMessage(array $data = []): array
+public function executeStepComposeMessage(array $data = []): CommandReturn
 {
     $this->validate($data, ['message' => 'required']);
     // ...
@@ -277,7 +277,7 @@ Consider the following example; first we build and execute the first step; in th
 ```php
 class SendEmailWithPostsWizardCommand extends EntityWizardCommand
 {
-    // [...]
+    // ...
     
     public function buildFormFieldsForFirstStep(FieldsContainer $formFields): void
     {
@@ -288,7 +288,7 @@ class SendEmailWithPostsWizardCommand extends EntityWizardCommand
         );
     }
     
-    public function executeFirstStep(array $data = []): array
+    public function executeFirstStep(array $data = []): CommandReturn
     {
         $this->validate($data, ['posts' => 'required']);
         $this->getWizardContext()->put('posts', $data['posts']);
@@ -303,7 +303,7 @@ For the `compose_message` step, we initialize data based on what is in the conte
 ```php
 class SendEmailWithPostsWizardCommand extends EntityWizardCommand
 {
-    // [...]
+    // ...
     
     protected function initialDataForStepComposeMessage(): array
     {
@@ -328,7 +328,7 @@ We build the form, and store a result useful for the next step in the context (a
 ```php
 class SendEmailWithPostsWizardCommand extends EntityWizardCommand
 {
-    // [...]
+    // ...
     
     public function buildFormFieldsForStepComposeMessage(FieldsContainer $formFields): void
     {
@@ -337,7 +337,7 @@ class SendEmailWithPostsWizardCommand extends EntityWizardCommand
         );
     }
     
-    public function executeStepComposeMessage(array $data = []): array
+    public function executeStepComposeMessage(array $data = []): CommandReturn
     {
         $this->validate($data, ['message' => 'required']);
         $this->getWizardContext()->put('message', $data['message']);

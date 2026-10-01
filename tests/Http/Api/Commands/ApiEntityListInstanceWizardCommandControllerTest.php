@@ -1,6 +1,7 @@
 <?php
 
-use Code16\Sharp\EntityList\Commands\Wizards\InstanceWizardCommand;
+use Code16\Sharp\Commands\Returns\CommandReturn;
+use Code16\Sharp\Commands\Wizards\InstanceWizardCommand;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
@@ -29,7 +30,7 @@ it('displays first step form on the first call of a wizard instance command', fu
                         $formFields->addField(SharpFormTextField::make('name'));
                     }
 
-                    protected function executeFirstStep($instanceId, array $data): array
+                    protected function executeFirstStep($instanceId, array $data): CommandReturn
                     {
                         return $this->reload();
                     }
@@ -96,7 +97,7 @@ it('allows to post first step of a wizard instance command', function () {
                         $formFields->addField(SharpFormTextField::make('name'));
                     }
 
-                    protected function executeFirstStep($instanceId, array $data): array
+                    protected function executeFirstStep($instanceId, array $data): CommandReturn
                     {
                         $this->validate($data, ['name' => 'required']);
 
@@ -150,7 +151,7 @@ it('allows to check if context is valid', function () {
 
                     public function buildFormFieldsForFirstStep(FieldsContainer $formFields): void {}
 
-                    protected function executeFirstStep($instanceId, array $data): array
+                    protected function executeFirstStep($instanceId, array $data): CommandReturn
                     {
                         $this->getWizardContext()->put('first-step-passed', true);
 
@@ -171,7 +172,7 @@ it('allows to check if context is valid', function () {
                         $formFields->addField(SharpFormTextField::make('age'));
                     }
 
-                    protected function executeStepNextStep($instanceId, array $data): array
+                    protected function executeStepNextStep($instanceId, array $data): CommandReturn
                     {
                         return $this->reload();
                     }
@@ -253,7 +254,7 @@ it('allows to post second step of a wizard instance command', function () {
                         $formFields->addField(SharpFormTextField::make('name'));
                     }
 
-                    protected function executeFirstStep($instanceId, array $data): array
+                    protected function executeFirstStep($instanceId, array $data): CommandReturn
                     {
                         $this->validate($data, ['name' => 'required']);
 
@@ -265,7 +266,7 @@ it('allows to post second step of a wizard instance command', function () {
                         $formFields->addField(SharpFormTextField::make('age'));
                     }
 
-                    protected function executeStepNextStep($instanceId, array $data): array
+                    protected function executeStepNextStep($instanceId, array $data): CommandReturn
                     {
                         return $this->reload();
                     }
@@ -341,7 +342,7 @@ it('authorize() is only called for firstStep', function () {
                         $formFields->addField(SharpFormTextField::make('name'));
                     }
 
-                    protected function executeFirstStep($instanceId, array $data): array
+                    protected function executeFirstStep($instanceId, array $data): CommandReturn
                     {
                         $this->validate($data, ['name' => 'required']);
 
@@ -353,7 +354,7 @@ it('authorize() is only called for firstStep', function () {
                         $formFields->addField(SharpFormTextField::make('age'));
                     }
 
-                    protected function executeStepNextStep($instanceId, array $data): array
+                    protected function executeStepNextStep($instanceId, array $data): CommandReturn
                     {
                         return $this->reload();
                     }
@@ -425,7 +426,7 @@ it('allows to define a global method for step execution', function () {
                         $formFields->addField(SharpFormTextField::make('name'));
                     }
 
-                    public function executeFirstStep($instanceId, array $data): array
+                    public function executeFirstStep($instanceId, array $data): CommandReturn
                     {
                         return $this->toStep('next-step');
                     }
@@ -437,7 +438,7 @@ it('allows to define a global method for step execution', function () {
                         }
                     }
 
-                    public function executeStep(string $step, $instanceId, array $data = []): array
+                    public function executeStep(string $step, $instanceId, array $data = []): CommandReturn
                     {
                         if ($step === 'next-step') {
                             return $this->reload();

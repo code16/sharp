@@ -49,7 +49,6 @@ class LoginRequest extends FormRequest
 
     private function attemptToLogin(bool $remember): bool
     {
-        $guard = $this->getGuard();
         $credentials = [
             sharp()->config()->get('auth.login_attribute') => $this->input('login'),
             sharp()->config()->get('auth.password_attribute') => $this->input('password'),
@@ -57,10 +56,13 @@ class LoginRequest extends FormRequest
 
         if (sharp()->config()->get('auth.2fa.enabled')) {
             // 2fa is globally configured, but we have to ensure that the user has 2fa enabled
-            if ($guard->once($credentials)) {
+            if ($this->guard()->once($credentials)) {
                 $handler = app(Sharp2faHandler::class);
-                if ($handler->isEnabledFor($guard->user())) {
-                    $handler->setUser($guard->user())->generateCode($remember);
+                $user = $this->guard()->user();
+                Auth::forgetGuards();
+
+                if ($handler->isEnabledFor($user)) {
+                    $handler->setUser($user)->generateCode($remember);
 
                     throw new SharpAuthenticationNeeds2faException();
                 }
@@ -69,7 +71,7 @@ class LoginRequest extends FormRequest
             }
         }
 
-        return $guard->attempt($credentials, $remember);
+        return $this->guard()->attempt($credentials, $remember);
     }
 
     private function ensureIsNotRateLimited(): void
@@ -102,7 +104,7 @@ class LoginRequest extends FormRequest
         return Str::transliterate(Str::lower($this->input('login')).'|'.$this->ip());
     }
 
-    private function getGuard(): StatefulGuard
+    private function guard(): StatefulGuard
     {
         return Auth::guard(sharp()->config()->get('auth.guard'));
     }

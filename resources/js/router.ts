@@ -1,5 +1,5 @@
 import { router, useRemember as inertiaUseRemember } from "@inertiajs/vue3";
-import { VisitOptions, Page } from "@inertiajs/core";
+import type { VisitOptions, Page } from "@inertiajs/core";
 import { Ref } from "vue";
 
 const state = {
@@ -43,7 +43,7 @@ export function initRouter() {
             //     console.timeEnd('prefetching');
             // },
             onSuccess(e) {
-                router.flush(url);
+                // router.flush(url);
                 // const url = new URL(location.href);
                 // url.searchParams.delete('popstate');
                 // router.replace({
@@ -56,18 +56,10 @@ export function initRouter() {
             },
         };
 
-        document.addEventListener('inertia:navigate', () => {
+        document.addEventListener('inertia:navigate', (e) => {
             state.hasPoppedState = false;
             document.body.style.minHeight = `${document.body.clientHeight}px`;
             router.visit(url, params);
         }, { once: true });
-    });
-
-// on server error (e.g. 500) we want to visit errored page for debugging purposes
-    router.on('invalid', event => {
-        const response = event.detail.response;
-        if(response.config.method.toLowerCase() === 'get') {
-            location.href = event.detail.response.config.url;
-        }
     });
 }

@@ -21,7 +21,7 @@ Valuation is handled by a dedicated `$this->setFigureData(string $figureWidgetKe
 ```php
 class MyDashboard extends \Code16\Sharp\Dashboard\SharpDashboard
 {
-    // [...]
+    // ...
     
     public function buildWidgetsData(): void
     {

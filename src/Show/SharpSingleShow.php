@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Show;
 
-use Code16\Sharp\EntityList\Commands\SingleEntityState;
+use Code16\Sharp\Commands\SingleEntityState;
 use Code16\Sharp\Exceptions\SharpException;
 
 abstract class SharpSingleShow extends SharpShow

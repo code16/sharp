@@ -46,7 +46,7 @@ Example:
 ```php
 class MyShow extends SharpShow
 {
-    // [...]
+    // ...
     function buildShowLayout(ShowLayout $showLayout): void
     {
         $showLayout->addColumn(6, function (ShowLayoutColumn $column) {

@@ -14,10 +14,6 @@ class SharpEntityManager
 
         if (count(sharp()->config()->get('entities')) > 0) {
             $entityClass = sharp()->config()->get('entities.'.$entityKey);
-            if (! $entityClass) {
-                // Legacy dashboard configuration (to be removed in 10.x)
-                $entityClass = sharp()->config()->get('dashboards.'.$entityKey);
-            }
         } elseif ($sharpEntityResolver = sharp()->config()->get('entity_resolver')) {
             // A custom SharpEntityResolver is used
             if (! app()->bound(get_class($sharpEntityResolver))) {

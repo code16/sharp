@@ -4,7 +4,8 @@ namespace App\Sharp\Posts\Commands;
 
 use App\Models\Post;
 use App\Models\User;
-use Code16\Sharp\EntityList\Commands\Wizards\EntityWizardCommand;
+use Code16\Sharp\Commands\Returns\CommandReturn;
+use Code16\Sharp\Commands\Wizards\EntityWizardCommand;
 use Code16\Sharp\Form\Fields\SharpFormCheckField;
 use Code16\Sharp\Form\Fields\SharpFormHtmlField;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
@@ -41,7 +42,7 @@ class ComposeEmailWithPostsWizardCommand extends EntityWizardCommand
         );
     }
 
-    public function executeFirstStep(array $data = []): array
+    public function executeFirstStep(array $data = []): CommandReturn
     {
         $this->validate($data, [
             'posts' => ['required', 'array'],
@@ -88,7 +89,7 @@ class ComposeEmailWithPostsWizardCommand extends EntityWizardCommand
             );
     }
 
-    public function executeStepComposeMessage(array $data = []): array
+    public function executeStepComposeMessage(array $data = []): CommandReturn
     {
         $this->validate($data, [
             'message' => ['required'],
@@ -132,7 +133,7 @@ class ComposeEmailWithPostsWizardCommand extends EntityWizardCommand
             );
     }
 
-    public function executeStepChooseRecipients(array $data = []): array
+    public function executeStepChooseRecipients(array $data = []): CommandReturn
     {
         $this->validate($data, [
             'recipients' => ['required', 'array'],

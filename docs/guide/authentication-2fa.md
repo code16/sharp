@@ -11,7 +11,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
             ->enable2faByNotification()
             // or ->enable2faByTotp()
             // or ->enable2faCustom()
-            // [...]
+            // ...
     }
 }
 ```
@@ -36,7 +36,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
     {
         $config
             ->enable2faCustom(\App\Sharp\My2faNotificationHandler::class)
-            // [...]
+            // ...
     }
 }
 ```
@@ -75,7 +75,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
     {
         $config
             ->enable2faByTotp()
-            // [...]
+            // ...
     }
 }
 ```

@@ -2,11 +2,9 @@
 
 namespace Code16\Sharp\Exceptions;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Inertia\Inertia;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Throwable;
 
 class SharpException extends \Exception
@@ -19,9 +17,14 @@ class SharpException extends \Exception
         parent::__construct($message, 0, $previous);
     }
 
-    public function render(Request $request): Response|RedirectResponse|JsonResponse|bool
+    public function render(Request $request): SymfonyResponse|bool
     {
         if ($this->getStatusCode() >= 500 && config('app.debug')) {
+            // for debugging purposes, redirect to the errored page
+            if ($request->inertia() && $request->method() === 'GET') {
+                return Inertia::location($request->fullUrl());
+            }
+
             return false;
         }
 

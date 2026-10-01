@@ -3,7 +3,7 @@
 namespace Code16\Sharp\Utils\Transformers;
 
 use Closure;
-use Code16\Sharp\EntityList\Commands\Command;
+use Code16\Sharp\Commands\Command;
 use Code16\Sharp\Form\Fields\Editor\Uploads\FormEditorUploadForm;
 use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
 use Code16\Sharp\Form\SharpForm;

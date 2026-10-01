@@ -4,7 +4,7 @@ sidebarDepth: 3
 
 # Create a Form
 
-Forms as used to create or update instances.
+Forms are used to create or update instances.
 
 ## Generator
 

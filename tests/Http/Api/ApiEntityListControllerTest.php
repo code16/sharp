@@ -1,8 +1,8 @@
 <?php
 
 use Code16\Sharp\Auth\SharpEntityPolicy;
-use Code16\Sharp\EntityList\Commands\ReorderHandler;
 use Code16\Sharp\EntityList\EntityListEntities;
+use Code16\Sharp\EntityList\ReorderHandler;
 use Code16\Sharp\Http\Context\SharpBreadcrumb;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonChemistEntity;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;

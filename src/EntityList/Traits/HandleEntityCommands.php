@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\EntityList\Traits;
 
-use Code16\Sharp\EntityList\Commands\EntityCommand;
+use Code16\Sharp\Commands\EntityCommand;
 use Code16\Sharp\Exceptions\SharpException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;

@@ -144,7 +144,7 @@ public function buildFormFields(FieldsContainer $formFields): void
                     RelatedPostEmbed::class,
                 ])
         );
-    // [...]
+    // ...
 }
 ```
 
@@ -159,7 +159,7 @@ protected function buildShowFields(FieldsContainer $showFields): void
                     RelatedPostEmbed::class,
                 ])
         );
-    // [...]
+    // ...
 }
 ```
 

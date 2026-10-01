@@ -5,13 +5,13 @@ use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\Menu\SharpMenu;
 
 it('allows to add an entity link with its key in the menu', function () {
-    sharp()->config()->addEntity('my-entity', PersonEntity::class);
+    sharp()->config()->declareEntity(PersonEntity::class);
 
     $menu = new class() extends SharpMenu
     {
         public function build(): SharpMenu
         {
-            return $this->addEntityLink('my-entity', 'test', 'fa-user');
+            return $this->addEntityLink('person', 'test', 'fa-user');
         }
     };
 
@@ -19,8 +19,8 @@ it('allows to add an entity link with its key in the menu', function () {
         ->getLabel()->toEqual('test')
         ->getIcon()->toEqual('fa-user')
         ->isEntity()->toBeTrue()
-        ->getEntityKey()->toEqual('my-entity')
-        ->getUrl()->toEqual(route('code16.sharp.list', 'my-entity'));
+        ->getEntityKey()->toEqual('person')
+        ->getUrl()->toEqual(route('code16.sharp.list', 'person'));
 });
 
 it('allows to add an entity link with its entity class name in the menu', function () {
@@ -102,7 +102,7 @@ it('allows to add an external link in the menu', function () {
 });
 
 it('allows to group links in sections', function () {
-    sharp()->config()->addEntity('my-entity', PersonEntity::class);
+    sharp()->config()->declareEntity(PersonEntity::class);
 
     $menu = new class() extends SharpMenu
     {
@@ -110,7 +110,7 @@ it('allows to group links in sections', function () {
         {
             return $this->addSection(
                 'my section',
-                fn ($section) => $section->addEntityLink('my-entity', 'test', 'fa-user')
+                fn ($section) => $section->addEntityLink('person', 'test', 'fa-user')
             );
         }
     };

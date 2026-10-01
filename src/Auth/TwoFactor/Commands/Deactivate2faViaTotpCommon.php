@@ -4,6 +4,7 @@ namespace Code16\Sharp\Auth\TwoFactor\Commands;
 
 use Closure;
 use Code16\Sharp\Auth\TwoFactor\Sharp2faHandler;
+use Code16\Sharp\Commands\Returns\CommandReturn;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
@@ -26,7 +27,7 @@ trait Deactivate2faViaTotpCommon
             );
     }
 
-    protected function executeSingleOrEntity(array $data = []): array
+    protected function executeSingleOrEntity(array $data = []): CommandReturn
     {
         $this->validate($data, [
             'password' => [

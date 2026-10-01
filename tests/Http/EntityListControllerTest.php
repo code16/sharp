@@ -14,7 +14,6 @@ use Code16\Sharp\Tests\Fixtures\Entities\PersonUnknownEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonForm;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonShow;
-use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\PageAlerts\PageAlert;
 use Illuminate\Contracts\Support\Arrayable;
@@ -413,116 +412,6 @@ it('gets authorizations of each instance', function () {
                 'view' => true,
                 'delete' => true,
             ])
-        );
-});
-
-it('gets multiforms if configured', function () {
-    $this->withoutExceptionHandling();
-    fakeListFor('person', new class() extends PersonList
-    {
-        public function getListData(): array|Arrayable
-        {
-            return [
-                ['id' => 1, 'name' => 'Marie Curie', 'nobel' => 'yes'],
-                ['id' => 2, 'name' => 'Rosalind Franklin', 'nobel' => 'nope'],
-            ];
-        }
-
-        public function buildListConfig(): void
-        {
-            $this->configureMultiformAttribute('nobel');
-        }
-    });
-
-    app(SharpEntityManager::class)
-        ->entityFor('person')
-        ->setMultiforms([
-            'yes' => [PersonForm::class, 'With Nobel prize'],
-            'nope' => [PersonForm::class, 'No Nobel prize'],
-        ]);
-
-    $this->get(route('code16.sharp.list', 'person'))
-        ->assertOk()
-        ->assertInertia(fn (Assert $page) => $page
-            ->has('entityList.entities', 2)
-            ->has('entityList.entities.0', fn (Assert $config) => $config
-                ->where('key', 'yes')
-                ->where('entityKey', 'person:yes')
-                ->where('label', 'With Nobel prize')
-                ->etc()
-            )
-            ->has('entityList.entities.1', fn (Assert $config) => $config
-                ->where('key', 'nope')
-                ->where('entityKey', 'person:nope')
-                ->where('label', 'No Nobel prize')
-
-                ->etc()
-            )
-            ->has('entityList.data.0', fn (Assert $json) => $json
-                ->where('_meta.url', route('code16.sharp.show.show', ['parentUri' => 's-list/person', 'entityKey' => 'person:yes', 'instanceId' => 1]))
-                ->etc()
-            )
-            ->has('entityList.data.1', fn (Assert $json) => $json
-                ->where('_meta.url', route('code16.sharp.show.show', ['parentUri' => 's-list/person', 'entityKey' => 'person:nope', 'instanceId' => 2]))
-                ->etc()
-            )
-        );
-});
-
-it('gets multiform form url if configured', function () {
-    $this->withoutExceptionHandling();
-    fakeListFor('person', new class() extends PersonList
-    {
-        public function getListData(): array|Arrayable
-        {
-            return [
-                ['id' => 1, 'name' => 'Marie Curie', 'nobel' => 'yes'],
-                ['id' => 2, 'name' => 'Rosalind Franklin', 'nobel' => 'nope'],
-            ];
-        }
-
-        public function buildListConfig(): void
-        {
-            $this->configureMultiformAttribute('nobel');
-        }
-    });
-
-    app(SharpEntityManager::class)
-        ->entityFor('person')
-        ->setShow(null)
-        ->setMultiforms([
-            'yes' => [PersonForm::class, 'With Nobel prize'],
-            'nope' => [PersonForm::class, 'No Nobel prize'],
-        ]);
-
-    $this->get(route('code16.sharp.list', 'person'))
-        ->assertOk()
-        ->assertInertia(fn (Assert $page) => $page
-            ->has('entityList.data.0', fn (Assert $json) => $json
-                ->where('_meta.url', route('code16.sharp.form.edit', ['parentUri' => 's-list/person', 'entityKey' => 'person:yes', 'instanceId' => 1]))
-                ->etc()
-            )
-            ->has('entityList.data.1', fn (Assert $json) => $json
-                ->where('_meta.url', route('code16.sharp.form.edit', ['parentUri' => 's-list/person', 'entityKey' => 'person:nope', 'instanceId' => 2]))
-                ->etc()
-            )
-        );
-
-    app(SharpEntityManager::class)
-        ->entityFor('person')
-        ->setForm(null);
-
-    $this->get(route('code16.sharp.list', 'person'))
-        ->assertOk()
-        ->assertInertia(fn (Assert $page) => $page
-            ->has('entityList.data.0', fn (Assert $json) => $json
-                ->where('_meta.url', route('code16.sharp.form.edit', ['parentUri' => 's-list/person', 'entityKey' => 'person:yes', 'instanceId' => 1]))
-                ->etc()
-            )
-            ->has('entityList.data.1', fn (Assert $json) => $json
-                ->where('_meta.url', route('code16.sharp.form.edit', ['parentUri' => 's-list/person', 'entityKey' => 'person:nope', 'instanceId' => 2]))
-                ->etc()
-            )
         );
 });
 

@@ -1,16 +1,10 @@
 <?php
 
-function sharp(): \Code16\Sharp\Utils\SharpUtil
-{
-    return app(\Code16\Sharp\Utils\SharpUtil::class);
-}
+use Code16\Sharp\Utils\SharpUtil;
 
-/**
- * @deprecated use sharp()->context() instead
- */
-function currentSharpRequest(): \Code16\Sharp\Http\Context\CurrentSharpRequest
+function sharp(): SharpUtil
 {
-    return app(\Code16\Sharp\Http\Context\CurrentSharpRequest::class);
+    return app(SharpUtil::class);
 }
 
 function instanciate($class)
