@@ -39,3 +39,13 @@ it('sanitizes a raw <script> payload injected through an embed slot field', func
 
     expect($result)->not->toContain('<script');
 });
+
+it('sanitizes a raw <img onerror> wrapped in an embed/raw-html marker', function () {
+    $field = SharpFormEditorField::make('body')->allowEmbeds([EditorFormatterTestEmbed::class]);
+    $embedKey = (new EditorFormatterTestEmbed())->key();
+    $result = (new EditorFormatter())->fromFront($field, 'body', [
+        'text' => '<x-embed data-key="0"></x-embed>',
+        'embeds' => [$embedKey => ['0' => ['slot' => '<x-sharp-image><img src=x onerror=alert(1)></x-sharp-image>', 'check' => false]]],
+    ]);
+    expect($result)->not->toContain('onerror');
+});

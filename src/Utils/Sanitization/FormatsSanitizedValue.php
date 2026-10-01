@@ -37,6 +37,24 @@ trait FormatsSanitizedValue
         return $this->sanitizer()->sanitize($value);
     }
 
+    /**
+     * Sanitizes a raw HTML fragment directly, without the editor's embed/raw-html
+     * encode-decode round-trip: that round-trip exists to protect a document body's
+     * live embed nodes while sanitizing the rest of the body, and must not be applied
+     * to a leaf value (e.g. an embed's "slot") that is itself destined to be injected
+     * as raw HTML, since its content never needs to survive as live embed markup.
+     */
+    private function sanitizeRawHtmlIfNeeded(
+        IsSharpFieldWithHtmlSanitization $field,
+        ?string $value
+    ): ?string {
+        if (! $value || ! str_contains($value, '<') || ! $field->isSanitizingHtml()) {
+            return $value;
+        }
+
+        return $this->sanitizer()->sanitize($value);
+    }
+
     private function sanitizer(): HtmlSanitizer
     {
         $config = (new HtmlSanitizerConfig())
