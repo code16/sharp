@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Utils\Fields\Formatters;
 
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
+use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Utils\Fields\IsSharpFieldWithEmbeds;
 use Code16\Sharp\Utils\Fields\IsSharpFieldWithLocalization;
 use DOMDocument;
@@ -12,6 +13,9 @@ trait FormatsEditorUploads
 {
     use FormatsHtmlContent;
 
+    /**
+     * @param  SharpFormEditorField  $field
+     */
     protected function formatEditorUploadsToFront(IsSharpFieldWithEmbeds&IsSharpFieldWithLocalization $field, $value): array
     {
         $uploads = [];

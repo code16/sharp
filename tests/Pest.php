@@ -1,12 +1,15 @@
 <?php
 
+use Code16\Sharp\Filters\GlobalFilters\GlobalFilters;
 use Code16\Sharp\Filters\GlobalRequiredFilter;
 use Code16\Sharp\Tests\Fixtures\User;
 use Code16\Sharp\Tests\TestCase;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
+use Code16\Sharp\Utils\Uploads\UploadPathSignature;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\URL;
 
 uses(TestCase::class)
     ->in(__DIR__);
@@ -15,7 +18,7 @@ uses()
     ->beforeEach(function () {
         // We add a default here to avoid putting this everywhere in unit tests
         // it's handled by middleware in a real request, but we don't want to test that here.
-        \Illuminate\Support\Facades\URL::defaults(['globalFilter' => \Code16\Sharp\Filters\GlobalFilters\GlobalFilters::$defaultKey]);
+        URL::defaults(['globalFilter' => GlobalFilters::$defaultKey]);
     })
     ->in(__DIR__);
 
@@ -175,4 +178,14 @@ function fakeGlobalFilter(string $key = 'test'): void
             }
         }
     );
+}
+
+function uploadPathSignature(?string $disk, string $path): string
+{
+    return UploadPathSignature::make($disk, $path);
+}
+
+function signedUpload(array $upload): array
+{
+    return [...$upload, 'path_signature' => uploadPathSignature($upload['disk'] ?? null, $upload['path'])];
 }

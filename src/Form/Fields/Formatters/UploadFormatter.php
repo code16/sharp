@@ -6,8 +6,10 @@ use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Utils\FileUtil;
 use Code16\Sharp\Utils\Uploads\SharpUploadManager;
+use Code16\Sharp\Utils\Uploads\UploadPathSignature;
 use Illuminate\Filesystem\LocalFilesystemAdapter;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 
 class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
 {
@@ -16,6 +18,14 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
      */
     public function toFront(SharpFormField $field, $value)
     {
+        if (is_array($value)
+            && UploadPathSignature::enabled()
+            && ($value['path'] ?? null)
+            && ! isset($value['path_signature'])
+        ) {
+            $value['path_signature'] = UploadPathSignature::make($value['disk'] ?? null, $value['path']);
+        }
+
         return $value;
     }
 
@@ -25,6 +35,8 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
     public function fromFront(SharpFormField $field, string $attribute, $value): ?array
     {
         if ($value['uploaded'] ?? false) {
+            $this->ensurePathIsSafe($attribute, $value['name'] ?? null);
+
             $uploadedFieldRelativePath = sprintf(
                 '%s/%s',
                 sharp()->config()->get('uploads.tmp_dir'),
@@ -51,7 +63,9 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
                 'filters' => $field->isImageTransformOriginal()
                     ? null
                     : $value['filters'] ?? null,
-            ]), function (&$formatted) use ($field, $value, $uploadedFieldRelativePath) {
+            ]), function (&$formatted) use ($field, $attribute, $value, $uploadedFieldRelativePath) {
+                $this->ensurePathIsSafe($attribute, $formatted['file_name']);
+
                 if ($field->storageDisk()) {
                     app(SharpUploadManager::class)->queueHandleUploadedFile(
                         uploadedFileName: $value['name'],
@@ -74,6 +88,8 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
 
         if ($value['transformed'] ?? false) {
             // Transformation on an existing file
+            $this->ensureExistingFileIsUnchanged($attribute, $value);
+
             return tap($this->normalizeFromFront($value), function ($formatted) use ($field) {
                 if ($field->isImageTransformOriginal()) {
                     app(SharpUploadManager::class)->queueHandleTransformedFile(
@@ -86,6 +102,8 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
         }
 
         // No change was made
+        $this->ensureExistingFileIsUnchanged($attribute, $value);
+
         return $this->normalizeFromFront($value);
     }
 
@@ -98,6 +116,50 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
         }
 
         return $value;
+    }
+
+    protected function ensurePathIsSafe(string $attribute, mixed $path): void
+    {
+        if ($path === null) {
+            return;
+        }
+
+        if (! is_string($path)
+            || str_contains($path, "\0")
+            || str_contains($path, '\\')
+            || in_array('..', explode('/', $path), true)
+        ) {
+            $this->rejectFile($attribute);
+        }
+    }
+
+    /**
+     * The path and disk of an existing file are sent back by the client: they are only accepted
+     * if they were signed by the server when the form was rendered (see UploadPathSignature).
+     */
+    protected function ensureExistingFileIsUnchanged(string $attribute, ?array $value): void
+    {
+        if (! $value || ! UploadPathSignature::enabled()) {
+            return;
+        }
+
+        $disk = $value['disk'] ?? null;
+        $path = $value['file_name'] ?? $value['path'] ?? null;
+
+        if ($disk === null && $path === null) {
+            return;
+        }
+
+        if (! UploadPathSignature::check($value['path_signature'] ?? null, $disk, $path)) {
+            $this->rejectFile($attribute, 'invalid_file_signature');
+        }
+    }
+
+    protected function rejectFile(string $attribute, string $error = 'file_not_found'): never
+    {
+        throw ValidationException::withMessages([
+            $attribute => trans('sharp::errors.'.$error),
+        ]);
     }
 
     protected function normalizeFromFront(?array $value, ?array $formatted = null): ?array
