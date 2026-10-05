@@ -5,14 +5,14 @@ namespace Code16\Sharp\Utils\Sanitization;
 use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use DOMElement;
+use DOMXPath;
+use Illuminate\Support\Str;
 use Masterminds\HTML5;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizer;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizerConfig;
 
 trait FormatsSanitizedValue
 {
-    private ?HtmlSanitizer $sanitizer = null;
-
     private function sanitizeHtmlIfNeeded(
         IsSharpFieldWithHtmlSanitization $field,
         ?string $value
@@ -22,22 +22,49 @@ trait FormatsSanitizedValue
         }
 
         if ($field instanceof SharpFormEditorField) {
-            $needsEncoding = $this->isEncodingNeeded($field, $value);
-            $sanitized = $this->sanitizer()->sanitize(
-                $needsEncoding
-                    ? $this->encodeEmbedsAndRawHtml($field, $value)
-                    : $value
-            );
+            $embeds = $this->collectEmbeds($field);
 
-            return $needsEncoding
-                ? $this->decodeEmbedsAndRawHtml($field, $sanitized)
-                : $sanitized;
+            if (in_array(SharpFormEditorField::RAW_HTML, $field->getToolbar())
+                && str_contains($value, 'data-html-content')
+            ) {
+                // Security risk (opt-in): RAW_HTML content bypasses sanitization, as warned in docs/guide/form-fields/editor.md
+                return $this->decodeRawHtml(
+                    $this->sanitizer($embeds, allowEncodedRawHtml: true)->sanitize($this->encodeRawHtml($value))
+                );
+            }
+
+            return $this->sanitizer($embeds)->sanitize($value);
         }
 
         return $this->sanitizer()->sanitize($value);
     }
 
-    private function sanitizer(): HtmlSanitizer
+    /**
+     * Embeds allowed by the field and, recursively, by their editor "slot" fields.
+     *
+     * @return array<string, SharpFormEditorEmbed>
+     */
+    private function collectEmbeds(SharpFormEditorField $field, array $collected = []): array
+    {
+        foreach ($field->embeds() as $key => $embed) {
+            if (isset($collected[$key])) {
+                continue;
+            }
+
+            $collected[$key] = $embed;
+
+            if (($slot = $embed->getBuiltFields()->get('slot')) instanceof SharpFormEditorField) {
+                $collected = $this->collectEmbeds($slot, $collected);
+            }
+        }
+
+        return $collected;
+    }
+
+    /**
+     * @param  SharpFormEditorEmbed[]  $embeds
+     */
+    private function sanitizer(array $embeds = [], bool $allowEncodedRawHtml = false): HtmlSanitizer
     {
         $config = (new HtmlSanitizerConfig())
             ->allowSafeElements()
@@ -62,40 +89,46 @@ trait FormatsSanitizedValue
             ])
             ->allowRelativeLinks()
             ->allowRelativeMedias()
-            ->allowElement('div', ['data-encoded-content', 'data-id'])
+            ->allowElement('div', $allowEncodedRawHtml ? ['data-encoded-content', 'data-id'] : ['data-id'])
+            ->allowElement('x-sharp-image', ['data-key', 'file', 'legend'])
+            ->allowElement('x-sharp-file', ['data-key', 'file', 'legend'])
             ->allowAttribute('class', allowedElements: '*')
             ->allowAttribute('style', allowedElements: '*')
             ->withMaxInputLength(500000);
 
-        return $this->sanitizer ??= new HtmlSanitizer($config);
+        foreach ($embeds as $embed) {
+            $config = $config->allowElement($embed->tagName(), [
+                'data-key',
+                ...$embed->getBuiltFields()
+                    ->keys()
+                    ->reject(fn (string $key) => $key === 'slot')
+                    ->map(fn (string $key) => Str::kebab($key))
+                    ->all(),
+            ]);
+        }
+
+        return new HtmlSanitizer($config);
     }
 
-    private function isEncodingNeeded(SharpFormEditorField $field, string $value): bool
-    {
-        return collect([
-            ...$field->embeds()->map(fn (SharpFormEditorEmbed $embed) => '<'.$embed->tagName())->all(),
-            '<x-sharp-image',
-            '<x-sharp-file',
-            in_array(SharpFormEditorField::RAW_HTML, $field->getToolbar())
-                ? 'data-html-content'
-                : null,
-        ])
-            ->filter()
-            ->contains(fn (string $needle) => str_contains($value, $needle));
-    }
-
-    private function encodeEmbedsAndRawHtml(SharpFormEditorField $field, string $value): string
+    /**
+     * Security risk (opt-in via RAW_HTML, warned in docs): hides data-html-content nodes from the sanitizer.
+     */
+    private function encodeRawHtml(string $value): string
     {
         $fragment = (new HTML5())->loadHTMLFragment($value);
-        $embedTags = $field->embeds()->map(fn (SharpFormEditorEmbed $embed) => $embed->tagName())->all();
+
+        // only placeholders created here may be decoded
+        $forged = (new DOMXPath($fragment->ownerDocument))->query(
+            'descendant::*[@data-encoded-content][not(ancestor-or-self::*[@data-html-content])]',
+            $fragment
+        );
+        foreach ($forged as $node) {
+            $node->removeAttribute('data-encoded-content');
+        }
 
         for ($i = 0; $i < $fragment->childNodes->length; $i++) {
             $node = $fragment->childNodes->item($i);
-            if ($node instanceof DOMElement
-                && (in_array($node->tagName, $embedTags)
-                    || str_starts_with($node->tagName, 'x-')
-                    || $node->hasAttribute('data-html-content'))
-            ) {
+            if ($node instanceof DOMElement && $node->hasAttribute('data-html-content')) {
                 $replacement = $node->ownerDocument->createElement('div');
                 $replacement->setAttribute(
                     'data-encoded-content',
@@ -108,7 +141,10 @@ trait FormatsSanitizedValue
         return (new HTML5())->saveHTML($fragment->childNodes);
     }
 
-    private function decodeEmbedsAndRawHtml(SharpFormEditorField $field, string $value): string
+    /**
+     * Security risk (opt-in via RAW_HTML, warned in docs): restores data-html-content nodes unsanitized.
+     */
+    private function decodeRawHtml(string $value): string
     {
         $fragment = (new HTML5())->loadHTMLFragment($value);
 
