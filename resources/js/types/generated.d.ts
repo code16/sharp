@@ -648,7 +648,6 @@ export type FormUploadFieldData = {
   type: "upload";
   imageCropRatio: [number, number];
   imageTransformable: boolean;
-  imageCompactThumbnail: boolean;
   imageTransformKeepOriginal: boolean | null;
   imageTransformableFileTypes: Array<string> | null;
   allowedExtensions: Array<string> | null;
@@ -668,6 +667,8 @@ export type FormUploadFieldValueData = {
   mime_type: string;
   size: number;
   thumbnail: string | null;
+  large_thumbnail: string | null;
+  path_signature: string | null;
   editable_thumbnail: string | null;
   playable_preview_url: string | null;
   download_url: string | null;
@@ -755,6 +756,7 @@ export type MenuItemData = {
   isCollapsible: boolean;
   openInNewTab: boolean;
 };
+export type MultiFactorMethod = "notification" | "totp" | "passkey";
 export type NotificationData = {
   title: string;
   level: NotificationLevel | null;

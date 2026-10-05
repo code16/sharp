@@ -2,7 +2,8 @@
 
 namespace DummyNamespace;
 
-use Code16\Sharp\EntityList\Commands\Wizards\EntityWizardCommand;
+use Code16\Sharp\Commands\Returns\CommandReturn;
+use Code16\Sharp\Commands\Wizards\EntityWizardCommand;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 
@@ -28,7 +29,7 @@ class DummyClass extends EntityWizardCommand
             );
     }
 
-    public function executeFirstStep(array $data = []): array
+    public function executeFirstStep(array $data = []): CommandReturn
     {
         $this->validate($data, [
             'my_field' => [
@@ -50,7 +51,7 @@ class DummyClass extends EntityWizardCommand
             );
     }
 
-    public function executeSecondStep(array $data = []): array
+    public function executeSecondStep(array $data = []): CommandReturn
     {
         return $this->reload();
     }

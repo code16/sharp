@@ -12,6 +12,7 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 
 beforeEach(function () {
     $this->withoutExceptionHandling();
@@ -237,20 +238,20 @@ it('does not dispatch HandlePostedFilesJob if not needed', function () {
     $this
         ->post('/sharp/root/s-list/person/s-form/person/2', [
             'name' => 'Stephen Hawking',
-            'file' => [
+            'file' => signedUpload([
                 'name' => 'doc.pdf',
                 'path' => 'data/test/doc.pdf',
                 'disk' => 'local',
-            ],
+            ]),
             'bio' => [
                 'text' => '<x-sharp-file data-key="0"></x-sharp-file>',
                 'uploads' => [
                     [
-                        'file' => [
+                        'file' => signedUpload([
                             'name' => 'doc-2.pdf',
                             'path' => 'data/test/doc-2.pdf',
                             'disk' => 'local',
-                        ],
+                        ]),
                     ],
                 ],
             ],
@@ -261,18 +262,18 @@ it('does not dispatch HandlePostedFilesJob if not needed', function () {
     $this
         ->post('/sharp/root/s-list/person/s-form/person', [
             'name' => 'Marie Curie',
-            'file' => [
+            'file' => signedUpload([
                 'name' => 'doc.pdf',
                 'path' => 'data/test/doc.pdf',
                 'disk' => 'local',
-            ],
+            ]),
             'bio' => [
                 'files' => [
-                    [
+                    signedUpload([
                         'name' => 'doc-2.pdf',
                         'path' => 'data/test/doc-2.pdf',
                         'disk' => 'local',
-                    ],
+                    ]),
                 ],
             ],
         ])
@@ -280,6 +281,36 @@ it('does not dispatch HandlePostedFilesJob if not needed', function () {
         ->assertRedirect();
 
     Queue::assertNotPushed(HandleUploadedFileJob::class);
+});
+
+it('handles an existing file when temporary', function () {
+    fakeFormFor('person', new class() extends PersonForm
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(SharpFormUploadField::make('file')->setStorageTemporary());
+        }
+    });
+
+    $this
+        ->post('/sharp/root/s-list/person/s-form/person/2', [
+            'name' => 'Stephen Hawking',
+            'file' => signedUpload([
+                'name' => 'image.jpg',
+                'path' => 'final/dir/image.jpg',
+                'disk' => 'local',
+            ]),
+        ])
+        ->assertSessionHasNoErrors()
+        ->assertRedirect();
+
+    Queue::assertNotPushed(HandleUploadedFileJob::class);
+    Queue::assertNotPushed(HandleTransformedFileJob::class);
+
+    expect(fn () => $this->post('/sharp/root/s-list/person/s-form/person/2', [
+        'name' => 'Stephen Hawking',
+        'file' => ['name' => 'image.jpg', 'path' => 'final/dir/image.jpg', 'disk' => 'local'],
+    ]))->toThrow(ValidationException::class);
 });
 
 it('does not dispatch HandlePostedFilesJob when temporary', function () {
@@ -409,7 +440,7 @@ it('handles isTransformOriginal to transform the image on an existing file', fun
 
     $this
         ->post('/sharp/root/s-list/person/s-form/person/1', [
-            'file' => [
+            'file' => signedUpload([
                 'path' => 'data/test/image.jpg',
                 'size' => 12,
                 'disk' => 'local',
@@ -418,7 +449,7 @@ it('handles isTransformOriginal to transform the image on an existing file', fun
                 'filters' => [
                     'rotate' => ['angle' => 90],
                 ],
-            ],
+            ]),
         ])
         ->assertSessionHasNoErrors()
         ->assertRedirect();

@@ -5,6 +5,7 @@ import * as path from 'node:path';
 import legacy from '@vitejs/plugin-legacy'
 import svgLoader from 'vite-svg-loader';
 import tailwindcss from "@tailwindcss/vite";
+import inertia from "@inertiajs/vite";
 
 
 export default defineConfig(({ mode, command }) => {
@@ -59,6 +60,7 @@ export default defineConfig(({ mode, command }) => {
                     ? env.APP_URL.replace('https://', '')
                     : false,
             }),
+            inertia(),
             vue({
                 template: {
                     transformAssetUrls: {

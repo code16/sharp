@@ -3,3 +3,4 @@ Disallow:
 
 Sitemap: https://sharp.code16.fr/docs/8.x/sitemap.xml
 Sitemap: https://sharp.code16.fr/docs/9.x/sitemap.xml
+Sitemap: https://sharp.code16.fr/docs/10.x/sitemap.xml

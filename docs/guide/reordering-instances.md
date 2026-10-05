@@ -10,7 +10,7 @@ php artisan sharp:make:reorder-handler <class_name> [--model=<model_name>]
 
 ## Write the class
 
-First, we need to write a class for the reordering itself, which must implement `Code16\Sharp\EntityList\Commands\ReorderHandler`, and therefore the `reorder(array $ids)` function.
+First, we need to write a class for the reordering itself, which must implement `Code16\Sharp\EntityList\ReorderHandler`, and therefore the `reorder(array $ids)` function.
 
 Here's an example with Eloquent and a numerical `order` column:
 

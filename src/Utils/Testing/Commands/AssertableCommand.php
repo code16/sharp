@@ -48,7 +48,7 @@ class AssertableCommand
         return $this;
     }
 
-    public function assertViewIs($value)
+    public function assertViewIs($value): static
     {
         $this->response->original = $this->createdView;
         $this->response->assertViewIs($value);
@@ -74,22 +74,24 @@ class AssertableCommand
         return $this;
     }
 
-    public function assertReturnsInfo(string $message = ''): static
+    public function assertReturnsInfo(?string $message = null, ?bool $reload = null): static
     {
         $this->response->assertOk()->assertJson(fn (AssertableJson $json) => $json
             ->where('action', 'info')
-            ->when($message)->where('message', $message)
+            ->when($message !== null, fn (AssertableJson $json) => $json->where('message', $message))
+            ->when($reload !== null, fn (AssertableJson $json) => $json->where('reload', $reload))
             ->etc()
         );
 
         return $this;
     }
 
-    public function assertReturnsLink(string $url = ''): static
+    public function assertReturnsLink(?string $url = null, ?bool $newTab = null): static
     {
         $this->response->assertOk()->assertJson(fn (AssertableJson $json) => $json
             ->where('action', 'link')
-            ->when($url)->where('link', $url)
+            ->when($url !== null, fn (AssertableJson $json) => $json->where('link', $url))
+            ->when($newTab !== null, fn (AssertableJson $json) => $json->where('openInNewTab', $newTab))
             ->etc()
         );
 
@@ -106,17 +108,22 @@ class AssertableCommand
         return $this;
     }
 
-    public function assertReturnsRefresh(array $ids): static
+    public function assertReturnsRefresh(?array $ids = null): static
     {
         $this->response->assertOk()->assertJson(fn (AssertableJson $json) => $json
             ->where('action', 'refresh')
             ->etc()
         );
 
-        PHPUnit::assertEqualsCanonicalizing(
-            $ids,
-            collect($this->response->json('items'))->pluck($this->commandContainer->getInstanceIdAttribute())->all()
-        );
+        if ($ids !== null) {
+            PHPUnit::assertEqualsCanonicalizing(
+                $ids,
+                $this->commandContainer instanceof SharpEntityList
+                    // In an Entity List, refreshed items are returned fully built
+                    ? collect($this->response->json('items'))->pluck($this->commandContainer->getInstanceIdAttribute())->all()
+                    : $this->response->json('items'),
+            );
+        }
 
         return $this;
     }
@@ -135,13 +142,17 @@ class AssertableCommand
         return $this;
     }
 
-    public function assertReturnsDownload(?string $filename = null): static
+    public function assertReturnsDownload(?string $filename = null, ?string $content = null): static
     {
         $this->response->assertOk()->assertStreamed();
 
-        if ($filename) {
+        if ($filename !== null) {
             preg_match('/filename="?([^";]+)"?/', $this->response->headers->get('Content-Disposition'), $matches);
             PHPUnit::assertEquals($filename, $matches[1] ?? null);
+        }
+
+        if ($content !== null) {
+            PHPUnit::assertEquals($content, $this->response->streamedContent());
         }
 
         return $this;
@@ -161,8 +172,11 @@ class AssertableCommand
 
     protected function post(): TestResponse
     {
+        $this->createdView = null;
+
+        // Keep the first created view: the one returned by the command, not its partials / components
         Facades\View::creator('*', function (View $view) {
-            $this->createdView = $view;
+            $this->createdView ??= $view;
         });
 
         return tap(($this->postCommand)($this->data, $this->step), function () {

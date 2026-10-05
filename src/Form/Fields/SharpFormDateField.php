@@ -71,14 +71,6 @@ class SharpFormDateField extends SharpFormField
         return $this;
     }
 
-    /**
-     * @deprecated This feature is not available anymore as the native HTML date input is now used
-     */
-    public function setDisplayFormat(?string $displayFormat = null): self
-    {
-        return $this;
-    }
-
     public function hasDate(): bool
     {
         return $this->hasDate;

@@ -66,9 +66,22 @@ it('allows to format a text with uploads to front', function () {
                         'name' => 'image.jpg',
                         'path' => 'data/Posts/1/image.jpg',
                         'disk' => 'local',
+                        'path_signature' => uploadPathSignature('local', 'data/Posts/1/image.jpg'),
                         'thumbnail' => sprintf(
                             '/storage/thumbnails/data/Posts/1/200-200_q-90/image.jpg?%s',
                             Storage::disk('public')->lastModified('/thumbnails/data/Posts/1/200-200_q-90/image.jpg')
+                        ),
+                        'large_thumbnail' => URL::temporarySignedRoute(
+                            'code16.sharp.api.form.upload.thumbnail.show',
+                            $time->copy()->addMinutes(config('session.lifetime')),
+                            [
+                                'entityKey' => 'person',
+                                'instanceId' => '1',
+                                'disk' => 'local',
+                                'path' => 'data/Posts/1/image.jpg',
+                                'width' => 1200,
+                                'height' => 1000,
+                            ]
                         ),
                         'playable_preview_url' => null,
                         'download_url' => URL::temporarySignedRoute(
@@ -96,7 +109,9 @@ it('allows to format a text with uploads to front', function () {
                         'name' => 'doc.pdf',
                         'path' => 'data/Posts/1/doc.pdf',
                         'disk' => 'local',
+                        'path_signature' => uploadPathSignature('local', 'data/Posts/1/doc.pdf'),
                         'thumbnail' => null,
+                        'large_thumbnail' => null,
                         'playable_preview_url' => null,
                         'download_url' => URL::temporarySignedRoute(
                             'code16.sharp.download.show',

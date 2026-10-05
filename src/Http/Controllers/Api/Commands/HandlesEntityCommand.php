@@ -2,8 +2,8 @@
 
 namespace Code16\Sharp\Http\Controllers\Api\Commands;
 
-use Code16\Sharp\EntityList\Commands\EntityCommand;
-use Code16\Sharp\EntityList\Commands\Wizards\EntityWizardCommand;
+use Code16\Sharp\Commands\EntityCommand;
+use Code16\Sharp\Commands\Wizards\EntityWizardCommand;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
 

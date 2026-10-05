@@ -59,9 +59,9 @@ class SharpBreadcrumb
         return $this->breadcrumbItems()->reverse()->skip(1)->first();
     }
 
-    public function previousShowSegment(?string $entityKeyOrClassName = null, ?string $multiformKey = null): ?BreadcrumbItem
+    public function previousShowSegment(?string $entityKeyOrClassName = null): ?BreadcrumbItem
     {
-        return $this->findPreviousSegment('s-show', $entityKeyOrClassName, $multiformKey);
+        return $this->findPreviousSegment('s-show', $entityKeyOrClassName);
     }
 
     public function previousListSegment(?string $entityKeyOrClassName = null): ?BreadcrumbItem
@@ -108,7 +108,7 @@ class SharpBreadcrumb
         return $this->breadcrumbItems;
     }
 
-    private function findPreviousSegment(string $type, ?string $entityKeyOrClassName = null, ?string $multiformKey = null): ?BreadcrumbItem
+    private function findPreviousSegment(string $type, ?string $entityKeyOrClassName = null): ?BreadcrumbItem
     {
         $modeNotEquals = false;
         if ($entityKeyOrClassName && Str::startsWith($entityKeyOrClassName, '!')) {
@@ -121,8 +121,8 @@ class SharpBreadcrumb
             ->filter(fn (BreadcrumbItem $item) => $item->type === $type)
             ->when($entityKeyOrClassName !== null, fn ($items) => $items
                 ->filter(fn (BreadcrumbItem $breadcrumbItem) => $modeNotEquals
-                    ? ! $breadcrumbItem->entityIs($entityKeyOrClassName, $multiformKey)
-                    : $breadcrumbItem->entityIs($entityKeyOrClassName, $multiformKey)
+                    ? ! $breadcrumbItem->entityIs($entityKeyOrClassName)
+                    : $breadcrumbItem->entityIs($entityKeyOrClassName)
                 )
             )
             ->first();
@@ -262,7 +262,7 @@ class SharpBreadcrumb
 
         return app(SharpEntityManager::class)
             ->entityFor($item->key)
-            ->getLabelOrFail((new EntityKey($item->key))->multiformKey());
+            ->getLabelOrFail();
     }
 
     private function resolveParentShowLabel(BreadcrumbItem $formItem): ?string

@@ -25,12 +25,6 @@ class SharpRedirectIfAuthenticated
                 return Gate::allows('viewSharp');
             }
 
-            // Legacy check:
-            if ($checkHandler = config('sharp.auth.check_handler')) {
-                return instanciate($checkHandler)
-                    ->check(auth()->guard($guard)->user());
-            }
-
             return true;
         }
 

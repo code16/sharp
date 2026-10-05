@@ -22,7 +22,7 @@ First let's write the applicative class, and make it extend `Code16\Sharp\Entity
 - `buildList(EntityListFieldsContainer $fields)` for the structure,
 - and `getListData()` for the actual data of the list.
 
-There are a two more optional methods, for the list config and instance deletion. 
+There are two more optional methods, for the list config and instance deletion. 
 Each one is detailed here:
 
 ### `buildList(EntityListFieldsContainer $fields)`
@@ -44,7 +44,7 @@ class ProductList extends SharpEntityList
             )
             ->addField(/* ... */);
     }
-    // [...]
+    // ...
 }
 ```
 
@@ -103,7 +103,7 @@ class ProductList extends SharpEntityList
             ]
         ];
     }
-    // [...]
+    // ...
 }
 ```
 
@@ -229,9 +229,7 @@ Here is the full list of available methods:
 
 - `configureDefaultSort(string $sortBy, string $sortDir = "asc")`: `EntityListQueryParams $queryParams` will be filled with this default value (see above)
 
-- `configureMultiformAttribute(string $attribute)`: :warning: This feature has been deprecated in version 9.6.0 and was replaced by the [Entity Map](#entity-map) feature. You can still access to the [documentation](multiforms.md) for legacy usage. 
-
-- `configureEntityMap(string $attribute, EntityListEntities $entities)`: configure an Entity Map to display multiple entities in a single Entity List; [see detailed section](#entity-map) above.
+- `configureEntityMap(string $attribute, EntityListEntities $entities)`: configure an Entity Map to display multiple entities in a single Entity List; [see detailed section](#entity-map) below.
 
 - `configureEntityState(string $stateAttribute, $stateHandlerOrClassName)`: add a state toggle, [see detailed doc](entity-states.md)
 
@@ -256,10 +254,6 @@ After this we can access the Entity List at the following URL: **/sharp/s-list/p
 To go ahead and learn how to add a link in the Sharp side menu, [look here](building-menu.md).
 
 ## Entity Map
-
-::: info
-This feature replaces the deprecated Multiforms functionality, which remains available for legacy use in version 9.x but will be removed in 10.x.
-:::
 
 The Entity Map lets you display multiple entities within a single Entity List. This makes it possible to link different Show Pages or Forms based on a discriminating attribute.
 

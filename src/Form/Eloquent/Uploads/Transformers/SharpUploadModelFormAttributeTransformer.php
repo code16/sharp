@@ -5,6 +5,7 @@ namespace Code16\Sharp\Form\Eloquent\Uploads\Transformers;
 use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
 use Code16\Sharp\Form\Eloquent\Uploads\Traits\UsesSharpUploadModel;
 use Code16\Sharp\Utils\Transformers\SharpAttributeTransformer;
+use Code16\Sharp\Utils\Uploads\UploadPathSignature;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Arr;
@@ -79,6 +80,8 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
                         'path',
                         'disk',
                         'thumbnail',
+                        'large_thumbnail',
+                        'path_signature',
                         'playable_preview_url',
                         'download_url',
                         'size',
@@ -108,7 +111,11 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
                     'path' => $upload->file_name,
                     'disk' => $upload->disk,
                     'mime_type' => $upload->mime_type,
+                    ...UploadPathSignature::enabled()
+                        ? ['path_signature' => UploadPathSignature::make($upload->disk, $upload->file_name)]
+                        : [],
                     'thumbnail' => $this->getThumbnailUrl($upload),
+                    'large_thumbnail' => $this->getLargeThumbnailUrl($upload),
                     'playable_preview_url' => $this->getPlayableMediaUrl($upload),
                     'download_url' => URL::temporarySignedRoute(
                         'code16.sharp.download.show',
@@ -145,6 +152,30 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
         } catch (DecoderException) {
             return null;
         }
+    }
+
+    private function getLargeThumbnailUrl(SharpUploadModel $upload): ?string
+    {
+        if (! $this->withThumbnails) {
+            return null;
+        }
+
+        // prevent generating thumbnail for non-image files
+        if ($upload->mime_type && ! str($upload->mime_type)->startsWith('image/')) {
+            return null;
+        }
+
+        return URL::temporarySignedRoute(
+            'code16.sharp.api.form.upload.thumbnail.show',
+            now()->plus(minutes: config('session.lifetime')),
+            [
+                'entityKey' => sharp()->context()->entityKey(),
+                'instanceId' => sharp()->context()->instanceId(),
+                'disk' => $upload->disk,
+                'path' => $upload->file_name,
+                'width' => 1200,
+                'height' => 1000,
+            ]);
     }
 
     private function getPlayableMediaUrl(SharpUploadModel $upload): ?string

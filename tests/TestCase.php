@@ -9,6 +9,7 @@ use Code16\Sharp\SharpInternalServiceProvider;
 use Orchestra\Testbench\Pest\WithPest;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Spatie\LaravelImageOptimizer\ImageOptimizerServiceProvider;
+use Spatie\LaravelPasskeys\LaravelPasskeysServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -28,6 +29,7 @@ class TestCase extends Orchestra
             ContentRendererServiceProvider::class,
             BladeIconsServiceProvider::class,
             ImageOptimizerServiceProvider::class,
+            LaravelPasskeysServiceProvider::class,
         ];
     }
 
@@ -35,7 +37,8 @@ class TestCase extends Orchestra
     {
         $app['config']->set('app.key', 'base64:'.base64_encode(random_bytes(32)));
         $app['config']->set('view.cache', false);
-        $app['config']->set('inertia.testing.page_paths', [__DIR__.'/../resources/js/Pages']);
+        $app['config']->set('inertia.pages.paths', [__DIR__.'/../resources/js/Pages']);
+        $app['config']->set('inertia.testing.ensure_pages_exist', true);
         $app['config']->set('database.default', 'testing');
         $app['config']->set('session.serialization', 'json');
 

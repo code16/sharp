@@ -78,32 +78,14 @@ class EntityListController extends Controller
             return null;
         }
 
-        $forms = $this->entityManager->entityFor($entityKey)->getMultiforms();
         $entities = $list->getEntities()?->all();
 
-        if (! $forms && ! $entities) {
+        if (! $entities) {
             throw new SharpInvalidConfigException(
                 'The list for the entity ['.$entityKey.'] defines a sub-entity attribute ['
                 .$list->getEntityAttribute()
                 .'] but the entity is has no sub-entities.'
             );
-        }
-
-        if ($forms) {
-            return collect($forms)
-                ->map(fn ($value, $key) => [
-                    'key' => $key,
-                    'entityKey' => EntityKey::multiform(baseKey: $entityKey, multiformKey: $key),
-                    'label' => is_array($value) && count($value) > 1 ? $value[1] : $key,
-                    'icon' => null,
-                    'formCreateUrl' => route('code16.sharp.form.create', [
-                        'parentUri' => sharp()->context()->breadcrumb()->getCurrentPath(),
-                        'entityKey' => EntityKey::multiform(baseKey: $entityKey, multiformKey: $key),
-                    ]),
-                ])
-                ->whereNotNull('label')
-                ->values()
-                ->all();
         }
 
         return collect($entities)

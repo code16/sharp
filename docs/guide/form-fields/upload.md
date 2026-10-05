@@ -18,7 +18,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
                 globalMaxFileSize: 5,
                 keepOriginalImageOnTransform: true
             )
-            // [...]
+            // ...
     }
 }
 ```
@@ -88,10 +88,6 @@ Set a ratio constraint to uploaded images, formatted like this: `width:height`. 
 When a crop ratio is set, any uploaded picture will be auto-cropped (centered).
 
 The second argument, `$transformableFileTypes`, provide a way to limit the crop configuration to a list of image files extensions. For instance, it can be useful to define a crop for jpg and png, but not for gif because it will destroy animation.
-
-### `setImageCompactThumbnail(bool $compactThumbnail = true)`
-
-If true and if the upload has a thumbnail, it is limited to 60px high (to compact in a list item, for instance).
 
 ### `setImageOptimize(bool $imageOptimize = true)`
 
@@ -265,9 +261,25 @@ class SharpServiceProvider extends SharpAppServiceProvider
                 fileHandingQueue: 'default',
                 fileHandlingQueueConnection: 'sync',
             )
-            // [...]
+            // ...
     }
 }
 ```
 
 Queue and connection should be [properly configured](https://laravel.com/docs/queues).
+
+## Security
+
+When an upload field is sent back to the server without changes (or with a transformation), Sharp checks that its `path` and `disk` are the ones it rendered in the form, thanks to a signature (`path_signature`) based on your `APP_KEY` (`APP_PREVIOUS_KEYS` is supported). This prevents a user from pointing an upload to an arbitrary file of your storage disks.
+
+It is enabled by default and must stay enabled in production. If you post upload values yourself in your tests, you have to provide a valid `path_signature` (cf. `Code16\Sharp\Utils\Uploads\UploadPathSignature`), or disable the check in your tests only:
+
+```php
+// tests/TestCase.php (or in a Pest `beforeEach`)
+protected function setUp(): void
+{
+    parent::setUp();
+
+    sharp()->config()->disableUploadPathSigning();
+}
+```

@@ -21,7 +21,6 @@ final class FormUploadFieldData extends Data
         #[LiteralTypeScriptType('[number, number]')]
         public ?array $imageCropRatio = null,
         public bool $imageTransformable = true,
-        public bool $imageCompactThumbnail = false,
         public ?bool $imageTransformKeepOriginal = null,
         /** @var array<string> */
         public ?array $imageTransformableFileTypes = null,

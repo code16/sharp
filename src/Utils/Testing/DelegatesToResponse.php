@@ -15,9 +15,10 @@ trait DelegatesToResponse
 
     public function __call(string $name, array $arguments)
     {
-        $this->response->{$name}(...$arguments);
+        $result = $this->response->{$name}(...$arguments);
 
-        return $this;
+        // Keep chaining on fluent assertions, but give back actual values (json(), streamedContent()...)
+        return $result === $this->response ? $this : $result;
     }
 
     public function __get(string $name)

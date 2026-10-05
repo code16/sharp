@@ -2,11 +2,13 @@
 
 namespace Code16\Sharp\Auth\TwoFactor\Commands;
 
+use Code16\Sharp\Commands\Returns\CommandReturn;
+
 trait Deactivate2faViaTotpEntityCommandTrait
 {
     use Deactivate2faViaTotpCommon;
 
-    public function execute(array $data = []): array
+    public function execute(array $data = []): CommandReturn
     {
         return $this->executeSingleOrEntity($data);
     }

@@ -11,7 +11,7 @@ First, define which locales the Form should handle:
 ```php
 class BookForm extends SharpForm
 {
-    // [...]
+    // ...
 
     function getDataLocalizations()
     {
@@ -27,7 +27,7 @@ Next, each localized field must be marked, using `setLocalized()`:
 ```php
 class BookForm extends SharpForm
 {
-    // [...]
+    // ...
     
     function buildFormFields()
     {
@@ -53,7 +53,7 @@ class BookForm extends SharpForm
 {
     use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 
-    // [...]
+    // ...
     
     function find($id): array
     {
@@ -111,7 +111,7 @@ And since the package, like other, is using this array with locales convention, 
 ```php
 class BookForm extends SharpForm
 {
-    // [...]
+    // ...
     
     function find($id): array
     {
@@ -135,7 +135,7 @@ Validation allows differentiating rules between locales:
 ```php
 class BookForm extends SharpForm
 {
-    // [...]
+    // ...
     
     public function rules()
     {
@@ -153,7 +153,7 @@ First, like expressed before, a solution could be to display both versions for e
 ```php
 class BookShow extends SharpShow
 {
-    // [...]
+    // ...
     
     protected function buildShowFields(FieldsContainer $showFields): void
     {

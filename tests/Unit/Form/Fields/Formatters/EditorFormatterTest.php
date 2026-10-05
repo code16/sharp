@@ -160,9 +160,22 @@ it('allows to format a text with uploads to front', function () {
                         'name' => 'image.jpg',
                         'path' => 'data/Posts/1/image.jpg',
                         'disk' => 'local',
+                        'path_signature' => uploadPathSignature('local', 'data/Posts/1/image.jpg'),
                         'thumbnail' => sprintf(
                             '/storage/thumbnails/data/Posts/1/200-200_q-90/image.jpg?%s',
                             Storage::disk('public')->lastModified('/thumbnails/data/Posts/1/200-200_q-90/image.jpg')
+                        ),
+                        'large_thumbnail' => URL::temporarySignedRoute(
+                            'code16.sharp.api.form.upload.thumbnail.show',
+                            $time->copy()->addMinutes(config('session.lifetime')),
+                            [
+                                'entityKey' => 'person',
+                                'instanceId' => '1',
+                                'disk' => 'local',
+                                'path' => 'data/Posts/1/image.jpg',
+                                'width' => 1200,
+                                'height' => 1000,
+                            ]
                         ),
                         'playable_preview_url' => null,
                         'download_url' => URL::temporarySignedRoute(
@@ -190,7 +203,9 @@ it('allows to format a text with uploads to front', function () {
                         'name' => 'doc.pdf',
                         'path' => 'data/Posts/1/doc.pdf',
                         'disk' => 'local',
+                        'path_signature' => uploadPathSignature('local', 'data/Posts/1/doc.pdf'),
                         'thumbnail' => null,
+                        'large_thumbnail' => null,
                         'playable_preview_url' => null,
                         'download_url' => URL::temporarySignedRoute(
                             'code16.sharp.download.show',
@@ -243,6 +258,7 @@ it('allows to format text with uploads from front', function () {
                 'file' => [
                     'name' => 'transformed.jpg',
                     'path' => 'data/Posts/1/transformed.jpg',
+                    'path_signature' => uploadPathSignature('local', 'data/Posts/1/transformed.jpg'),
                     'mime_type' => 'image/jpeg',
                     'disk' => 'local',
                     'size' => 120,
@@ -254,6 +270,7 @@ it('allows to format text with uploads from front', function () {
                 'file' => [
                     'name' => 'doc.pdf',
                     'path' => 'data/Posts/1/doc.pdf',
+                    'path_signature' => uploadPathSignature('local', 'data/Posts/1/doc.pdf'),
                     'mime_type' => 'application/pdf',
                     'disk' => 'local',
                     'size' => 120,
@@ -331,7 +348,20 @@ it('allows to format embeds with uploads to front', function () {
                             'name' => 'image.jpg',
                             'path' => 'data/Posts/1/image.jpg',
                             'disk' => 'local',
+                            'path_signature' => uploadPathSignature('local', 'data/Posts/1/image.jpg'),
                             'thumbnail' => $thumbnail,
+                            'large_thumbnail' => URL::temporarySignedRoute(
+                                'code16.sharp.api.form.upload.thumbnail.show',
+                                $time->copy()->addMinutes(config('session.lifetime')),
+                                [
+                                    'entityKey' => 'person',
+                                    'instanceId' => '1',
+                                    'disk' => 'local',
+                                    'path' => 'data/Posts/1/image.jpg',
+                                    'width' => 1200,
+                                    'height' => 1000,
+                                ]
+                            ),
                             'playable_preview_url' => null,
                             'download_url' => URL::temporarySignedRoute(
                                 'code16.sharp.download.show',
@@ -380,6 +410,7 @@ it('allows to format embeds with uploads from front', function () {
                         'name' => 'image.jpg',
                         'path' => 'data/Posts/1/image.jpg',
                         'disk' => 'local',
+                        'path_signature' => uploadPathSignature('local', 'data/Posts/1/image.jpg'),
                         'thumbnail' => 'thumbnail.jpg',
                         'size' => 120,
                         'mime_type' => 'image/jpeg',
@@ -509,6 +540,69 @@ it('sanitizes HTML content from front by default, keeps wanted elements', functi
             ],
         )
     )->toEqual($expected);
+});
+
+it('sanitizes embeds and uploads attributes and content', function () {
+    $value = <<<'HTML'
+        <x-embed data-key="0" onclick="alert(1)"><img src=x onerror=alert(1)></x-embed>
+        <x-sharp-image data-key="0" onload="alert(1)"><img src=x onerror=alert(1)></x-sharp-image>
+        HTML;
+
+    $result = (new EditorFormatter())->fromFront(
+        SharpFormEditorField::make('md')
+            ->allowEmbeds([EditorFormatterTestEmbed::class])
+            ->allowUploads(SharpFormEditorUpload::make()),
+        'attribute',
+        [
+            'text' => $value,
+            'embeds' => [
+                (new EditorFormatterTestEmbed())->key() => [
+                    '0' => ['check' => true],
+                ],
+            ],
+            'uploads' => [
+                '0' => ['file' => []],
+            ],
+        ],
+    );
+
+    expect($result)
+        ->toContain('<x-embed check="1">')
+        ->toContain('<x-sharp-image file="[]">')
+        ->not->toContain('onclick')
+        ->not->toContain('onload')
+        ->not->toContain('onerror');
+});
+
+it('strips forged data-encoded-content placeholders', function (array $toolbar) {
+    $value = <<<'HTML'
+        <div data-encoded-content="&lt;img src=x onerror=alert(1)&gt;"></div>
+        <p><div data-encoded-content="&lt;img src=x onerror=alert(1)&gt;"></div></p>
+        <div data-html-content="true"><b>raw</b></div>
+        HTML;
+
+    $result = (new EditorFormatter())->fromFront(
+        SharpFormEditorField::make('md')->setToolbar($toolbar),
+        'attribute',
+        ['text' => $value],
+    );
+
+    expect($result)
+        ->not->toContain('onerror')
+        ->not->toContain('data-encoded-content');
+})->with([
+    'with RAW_HTML' => [[SharpFormEditorField::RAW_HTML]],
+    'without RAW_HTML' => [[]],
+]);
+
+it('keeps RAW_HTML content verbatim', function () {
+    $value = '<div data-html-content="true"><b>raw</b><span data-encoded-content="kept"></span></div>';
+
+    expect((new EditorFormatter())->fromFront(
+        SharpFormEditorField::make('md')->setToolbar([SharpFormEditorField::RAW_HTML]),
+        'attribute',
+        ['text' => $value],
+    ))->toEqual($value);
 });
 
 it('sanitizes data-html-content in RAW_HTML button not present', function () {

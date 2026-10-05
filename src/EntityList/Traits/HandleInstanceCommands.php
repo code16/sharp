@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\EntityList\Traits;
 
-use Code16\Sharp\EntityList\Commands\InstanceCommand;
+use Code16\Sharp\Commands\InstanceCommand;
 use Code16\Sharp\EntityList\Traits\Utils\CommonCommandUtils;
 use Code16\Sharp\Exceptions\SharpException;
 use Illuminate\Contracts\Support\Arrayable;

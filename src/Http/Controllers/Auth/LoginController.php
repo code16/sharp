@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Http\Controllers\Auth;
 
+use Code16\Sharp\Auth\Passkeys\PasskeyManager;
 use Code16\Sharp\Exceptions\Auth\SharpAuthenticationNeeds2faException;
 use Code16\Sharp\Http\Controllers\Auth\Requests\LoginRequest;
 use Illuminate\Contracts\View\View;
@@ -15,15 +16,13 @@ use Inertia\Response;
 
 class LoginController extends Controller
 {
-    public function create(): RedirectResponse|Response
+    public function create(PasskeyManager $passkeys): RedirectResponse|Response
     {
         if ($loginPageUrl = sharp()->config()->get('auth.login_page_url')) {
             return redirect()->to($loginPageUrl);
         }
 
-        if (sharp()->config()->get('auth.passkeys.enabled')) {
-            session()->put('passkeys.redirect', route('code16.sharp.home'));
-
+        if ($passkeys->isEnabled()) {
             if (! Route::has('passkeys.login')) {
                 throw new \Exception('Passkeys routes are not defined. Add `Route::passkeys()` in your routes/web.php file.');
             }
@@ -38,11 +37,11 @@ class LoginController extends Controller
                     ? $message->render()
                     : view('sharp::partials.login-form-message', ['message' => $message])->render()
                 : null,
-            'passkeyError' => session('authenticatePasskey::message'),
+            'passkeyError' => $passkeys->getErrorMessage(),
         ]);
     }
 
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(LoginRequest $request, PasskeyManager $passkeys): RedirectResponse
     {
         try {
             $request->authenticate();
@@ -53,12 +52,11 @@ class LoginController extends Controller
 
         $request->session()->regenerate();
 
-        if (sharp()->config()->get('auth.passkeys.enabled')
+        if ($passkeys->isEnabled()
             && sharp()->config()->get('auth.passkeys.prompt_after_login')
             && ! $request->cookie('sharp_skip_passkey_prompt')
             && $request->boolean('supports_passkeys')
-            && method_exists($request->user(), 'passkeys')
-            && $request->user()->passkeys()->count() === 0
+            && ! $passkeys->userHasPasskey($request->user())
         ) {
             return redirect()->route('code16.sharp.passkeys.create', ['prompt' => true]);
         }

@@ -1,6 +1,7 @@
 <?php
 
-use Code16\Sharp\EntityList\Commands\InstanceCommand;
+use Code16\Sharp\Commands\InstanceCommand;
+use Code16\Sharp\Commands\Returns\CommandReturn;
 use Code16\Sharp\Enums\PageAlertLevel;
 use Code16\Sharp\Show\Fields\SharpShowEntityListField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
@@ -150,21 +151,6 @@ it('allows to define a custom key to a section', function () {
     expect($sharpShow->showLayout()['sections'][0]['key'])->toEqual('my-section');
 });
 
-it('allows to declare a multiformAttribute', function () {
-    $sharpShow = new class() extends FakeSharpShow
-    {
-        public function buildShowConfig(): void
-        {
-            $this->configureMultiformAttribute('role');
-        }
-    };
-
-    $sharpShow->buildShowConfig();
-
-    expect($sharpShow->showConfig(1))
-        ->toHaveKey('multiformAttribute', 'role');
-});
-
 it('allows to set an edit button label', function () {
     $sharpShow = new class() extends FakeSharpShow
     {
@@ -269,7 +255,7 @@ it('allows to configure show instance command in sections', function () {
                         return 'test';
                     }
 
-                    public function execute(mixed $instanceId, array $data = []): array
+                    public function execute(mixed $instanceId, array $data = []): CommandReturn
                     {
                         return [];
                     }
@@ -282,7 +268,7 @@ it('allows to configure show instance command in sections', function () {
                             return 'test-2';
                         }
 
-                        public function execute(mixed $instanceId, array $data = []): array
+                        public function execute(mixed $instanceId, array $data = []): CommandReturn
                         {
                             return [];
                         }
@@ -316,7 +302,7 @@ it('allows to configure primary instance commands', function () {
                         return 'test';
                     }
 
-                    public function execute(mixed $instanceId, array $data = []): array
+                    public function execute(mixed $instanceId, array $data = []): CommandReturn
                     {
                         return [];
                     }
@@ -329,7 +315,7 @@ it('allows to configure primary instance commands', function () {
                             return 'test-2';
                         }
 
-                        public function execute(mixed $instanceId, array $data = []): array
+                        public function execute(mixed $instanceId, array $data = []): CommandReturn
                         {
                             return [];
                         }

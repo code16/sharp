@@ -225,9 +225,9 @@ use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttribut
 
 class MyForm extends SharpForm
 {
-    function buildFormFields()
+    function buildFormFields(FieldsContainer $formFields): void
     {
-        $this->addField(
+        $formFields->addField(
             SharpFormUploadField::make('cover')
                 ->setLabel('Cover')
                 ->setImageOnly()
@@ -235,6 +235,7 @@ class MyForm extends SharpForm
                 ->setStorageDisk('local')
                 ->setStorageBasePath('data/Books')
         );
+        
         // ...
     }
     
