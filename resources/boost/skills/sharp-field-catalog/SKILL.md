@@ -56,7 +56,7 @@ Use `->addField(SharpFormSelectField::make('status', ['draft' => 'Draft', 'publi
 |---|---|
 | `EntityListField` | generic column (text, formatted value via a transformer) |
 | `EntityListBadgeField` | colored badge/pill (e.g. status) |
-| `EntityListStateField` | the entity's state selector column, when using [Entity States](https://sharp.code16.fr/docs/guide/entity-states) |
+| `EntityListStateField` | the entity's state selector column, when using [Entity States](vendor/code16/sharp/docs/guide/entity-states.md) |
 
 ## Dashboard widgets (`Code16\Sharp\Dashboard\Widgets\...`)
 | Class | Use for |

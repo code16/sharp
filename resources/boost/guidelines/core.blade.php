@@ -249,3 +249,6 @@ public function buildShowConfig(): void
 - **Show Fields:** `Code16\Sharp\Show\Fields\...`
 - **Entity List Fields:** `Code16\Sharp\EntityList\Fields\...`
 - **Eloquent Updater:** `Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater`
+
+### Documentation
+The full Sharp documentation, matching the installed version, is available as Markdown files in `vendor/code16/sharp/docs/`. Start with `vendor/code16/sharp/docs/llms.txt` (an index of all pages, with paths relative to that `docs` directory), and read the relevant page before using an unfamiliar Sharp feature.

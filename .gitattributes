@@ -17,7 +17,14 @@
 /tests export-ignore
 /tests-e2e export-ignore
 /demo export-ignore
-/docs export-ignore
+/docs/** export-ignore
+/docs/index.md -export-ignore
+/docs/llms.txt -export-ignore
+/docs/guide -export-ignore
+/docs/guide/dashboard-widgets -export-ignore
+/docs/guide/form-fields -export-ignore
+/docs/guide/show-fields -export-ignore
+/docs/guide/**/*.md -export-ignore
 /README.md export-ignore
 /ABOUT.md export-ignore
 /SECURITY.md export-ignore

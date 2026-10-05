@@ -100,7 +100,7 @@ export default async () => {
         },
 
         vite: {
-            plugins: [llmstxt()],
+            plugins: [llmstxt({ ignoreFiles: ['versions/**'] })],
         },
     });
 
