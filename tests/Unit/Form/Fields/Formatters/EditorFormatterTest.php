@@ -536,6 +536,69 @@ it('sanitizes HTML content from front by default, keeps wanted elements', functi
     )->toEqual($expected);
 });
 
+it('sanitizes embeds and uploads attributes and content', function () {
+    $value = <<<'HTML'
+        <x-embed data-key="0" onclick="alert(1)"><img src=x onerror=alert(1)></x-embed>
+        <x-sharp-image data-key="0" onload="alert(1)"><img src=x onerror=alert(1)></x-sharp-image>
+        HTML;
+
+    $result = (new EditorFormatter())->fromFront(
+        SharpFormEditorField::make('md')
+            ->allowEmbeds([EditorFormatterTestEmbed::class])
+            ->allowUploads(SharpFormEditorUpload::make()),
+        'attribute',
+        [
+            'text' => $value,
+            'embeds' => [
+                (new EditorFormatterTestEmbed())->key() => [
+                    '0' => ['check' => true],
+                ],
+            ],
+            'uploads' => [
+                '0' => ['file' => []],
+            ],
+        ],
+    );
+
+    expect($result)
+        ->toContain('<x-embed check="1">')
+        ->toContain('<x-sharp-image file="[]">')
+        ->not->toContain('onclick')
+        ->not->toContain('onload')
+        ->not->toContain('onerror');
+});
+
+it('strips forged data-encoded-content placeholders', function (array $toolbar) {
+    $value = <<<'HTML'
+        <div data-encoded-content="&lt;img src=x onerror=alert(1)&gt;"></div>
+        <p><div data-encoded-content="&lt;img src=x onerror=alert(1)&gt;"></div></p>
+        <div data-html-content="true"><b>raw</b></div>
+        HTML;
+
+    $result = (new EditorFormatter())->fromFront(
+        SharpFormEditorField::make('md')->setToolbar($toolbar),
+        'attribute',
+        ['text' => $value],
+    );
+
+    expect($result)
+        ->not->toContain('onerror')
+        ->not->toContain('data-encoded-content');
+})->with([
+    'with RAW_HTML' => [[SharpFormEditorField::RAW_HTML]],
+    'without RAW_HTML' => [[]],
+]);
+
+it('keeps RAW_HTML content verbatim', function () {
+    $value = '<div data-html-content="true"><b>raw</b><span data-encoded-content="kept"></span></div>';
+
+    expect((new EditorFormatter())->fromFront(
+        SharpFormEditorField::make('md')->setToolbar([SharpFormEditorField::RAW_HTML]),
+        'attribute',
+        ['text' => $value],
+    ))->toEqual($value);
+});
+
 it('sanitizes data-html-content in RAW_HTML button not present', function () {
     $value = <<<'HTML'
         <div data-html-content="true"><script></script></div>
