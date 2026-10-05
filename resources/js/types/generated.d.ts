@@ -663,6 +663,7 @@ export type FormUploadFieldValueData = {
   mime_type: string;
   size: number;
   thumbnail: string | null;
+  large_thumbnail: string | null;
   editable_thumbnail: string | null;
   playable_preview_url: string | null;
   download_url: string | null;

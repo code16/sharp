@@ -12,6 +12,8 @@ class ApiFormUploadThumbnailController extends Controller
     // Used to generate large thumbnail for upload crop modal
     public function show(string $globalFilter, string $entityKey, ?string $instanceId = null)
     {
+        abort_unless(request()->hasValidSignature(), 401);
+
         $this->authorizationManager->check('view', $entityKey, $instanceId);
 
         return response()->json([
