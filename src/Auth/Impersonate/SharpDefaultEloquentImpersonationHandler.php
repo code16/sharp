@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Auth\Impersonate;
 
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Gate;
 
 class SharpDefaultEloquentImpersonationHandler extends SharpImpersonationHandler
@@ -20,7 +21,7 @@ class SharpDefaultEloquentImpersonationHandler extends SharpImpersonationHandler
                 Gate::has('viewSharp'),
                 fn ($users) => $users->filter(fn ($user) => Gate::forUser($user)->allows('viewSharp'))
             )
-            ->mapWithKeys(fn ($user) => [$user->id => $user->$loginAttribute])
+            ->mapWithKeys(fn (Authenticatable $user) => [$user->getAuthIdentifier() => $user->$loginAttribute])
             ->all();
     }
 }

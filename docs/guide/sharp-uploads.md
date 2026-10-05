@@ -205,7 +205,7 @@ class MyModifier extends ThumbnailModifier
 The following modifiers are available out of the box:
 
 - `GreyscaleModifier`
-- `FitModifier`:  will center-fit the image with a constraints set via `->setSize($width, $height)`.
+- `FitModifier`: will center-fit the image within the constraints passed to its constructor, e.g. `new FitModifier($width, $height)`.
 
 You can provide a custom Modifier; you’ll need to create a class that extends `Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\ThumbnailModifier`, implementing:
 
@@ -225,9 +225,9 @@ use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttribut
 
 class MyForm extends SharpForm
 {
-    function buildFormFields()
+    function buildFormFields(FieldsContainer $formFields): void
     {
-        $this->addField(
+        $formFields->addField(
             SharpFormUploadField::make('cover')
                 ->setLabel('Cover')
                 ->setImageOnly()
@@ -235,6 +235,7 @@ class MyForm extends SharpForm
                 ->setStorageDisk('local')
                 ->setStorageBasePath('data/Books')
         );
+        
         // ...
     }
     

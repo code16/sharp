@@ -2,8 +2,8 @@
 
 namespace Code16\Sharp\EntityList\Traits\Utils;
 
-use Code16\Sharp\EntityList\Commands\Command;
-use Code16\Sharp\EntityList\Commands\EntityCommand;
+use Code16\Sharp\Commands\Command;
+use Code16\Sharp\Commands\EntityCommand;
 use Code16\Sharp\Utils\Icons\IconManager;
 use Illuminate\Support\Collection;
 

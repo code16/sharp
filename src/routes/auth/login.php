@@ -1,7 +1,7 @@
 <?php
 
-use Code16\Sharp\Http\Controllers\Auth\Login2faController;
 use Code16\Sharp\Http\Controllers\Auth\LoginController;
+use Code16\Sharp\Http\Controllers\Auth\LoginMultiFactorController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['sharp_common', 'sharp_web'])
@@ -15,10 +15,12 @@ Route::middleware(['sharp_common', 'sharp_web'])
             ->middleware('sharp_guest')
             ->name('code16.sharp.login.post');
 
-        Route::get('/login/2fa', [Login2faController::class, 'create'])
+        Route::get('/login/2fa', [LoginMultiFactorController::class, 'create'])
+            ->middleware('sharp_guest')
             ->name('code16.sharp.login.2fa');
 
-        Route::post('/login/2fa', [Login2faController::class, 'store'])
+        Route::post('/login/2fa', [LoginMultiFactorController::class, 'store'])
+            ->middleware('sharp_guest')
             ->name('code16.sharp.login.2fa.post');
 
         Route::post('/logout', [LoginController::class, 'destroy'])

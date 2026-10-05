@@ -3,6 +3,7 @@
 return [
     'validation_error' => 'Veuillez renseigner les deux champs',
     'invalid_credentials' => 'Impossible de trouver un compte avec ces identifiants',
+    'access_denied' => 'Vous n’êtes pas autorisé à accéder à cette application.',
     '2fa' => [
         'validation_error' => 'Veuillez saisir le code',
         'invalid' => 'Ce code est invalide',
@@ -26,6 +27,10 @@ return [
                     'command_label' => 'Désactiver l’authentification à deux facteurs',
                 ],
             ],
+        ],
+        'passkey' => [
+            'form_help_text' => 'Veuillez cliquer sur le bouton ci-dessous pour utiliser une clé d’accès associé au compte :email',
+            'mismatch_error' => 'La clé d’accès utilisée est associée à un autre compte.',
         ],
     ],
     'passkeys' => [

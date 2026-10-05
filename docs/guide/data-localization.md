@@ -11,7 +11,7 @@ First, define which locales the Form should handle:
 ```php
 class BookForm extends SharpForm
 {
-    // [...]
+    // ...
 
     function getDataLocalizations()
     {
@@ -27,7 +27,7 @@ Next, each localized field must be marked, using `setLocalized()`:
 ```php
 class BookForm extends SharpForm
 {
-    // [...]
+    // ...
     
     function buildFormFields()
     {
@@ -35,6 +35,7 @@ class BookForm extends SharpForm
             SharpFormTextField::make('title')
                 ->setLabel('Title')
                 ->setLocalized()
+        );
     }
 }
 ```
@@ -50,7 +51,9 @@ Sharp is expecting, for localized fields, a key / value array where the locales 
 ```php
 class BookForm extends SharpForm
 {
-    // [...]
+    use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
+
+    // ...
     
     function find($id): array
     {
@@ -82,6 +85,10 @@ class BookForm extends SharpForm
 }
 ```
 
+::: info
+`ignore()` and `save()` come from the `WithSharpFormEloquentUpdater` trait ([see the Eloquent updater documentation](building-form.md)) - a plain `SharpForm` subclass doesn't have them.
+:::
+
 As you see here, Sharp data structure for localized values is the name of the field suffixed with a dot and the locale. So if `title` is a localized field, and "en" and "fr" locales are configured for the Form, Sharp will expect `title` to be a key / value array with the locales as keys, and will send it back in the `update()` method with this same format.
 
 ### Using this format as data structure
@@ -104,7 +111,7 @@ And since the package, like other, is using this array with locales convention, 
 ```php
 class BookForm extends SharpForm
 {
-    // [...]
+    // ...
     
     function find($id): array
     {
@@ -128,7 +135,7 @@ Validation allows differentiating rules between locales:
 ```php
 class BookForm extends SharpForm
 {
-    // [...]
+    // ...
     
     public function rules()
     {
@@ -146,7 +153,7 @@ First, like expressed before, a solution could be to display both versions for e
 ```php
 class BookShow extends SharpShow
 {
-    // [...]
+    // ...
     
     protected function buildShowFields(FieldsContainer $showFields): void
     {

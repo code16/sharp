@@ -3,7 +3,8 @@
 namespace App\Sharp\Posts\Commands;
 
 use App\Models\Post;
-use Code16\Sharp\EntityList\Commands\Wizards\InstanceWizardCommand;
+use Code16\Sharp\Commands\Returns\CommandReturn;
+use Code16\Sharp\Commands\Wizards\InstanceWizardCommand;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
 use Code16\Sharp\Form\Fields\SharpFormTextareaField;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
@@ -24,7 +25,7 @@ class EvaluateDraftPostWizardCommand extends InstanceWizardCommand
         );
     }
 
-    public function executeFirstStep(mixed $instanceId, array $data = []): array
+    public function executeFirstStep(mixed $instanceId, array $data = []): CommandReturn
     {
         $this->validate($data, [
             'decision' => ['required'],
@@ -63,7 +64,7 @@ class EvaluateDraftPostWizardCommand extends InstanceWizardCommand
             );
     }
 
-    public function executeStepRefusalReason(mixed $instanceId, array $data = []): array
+    public function executeStepRefusalReason(mixed $instanceId, array $data = []): CommandReturn
     {
         $this->validate($data, [
             'reason' => ['required'],

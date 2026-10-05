@@ -27,7 +27,7 @@ This method is meant to host the code responsible for the declaration and config
 ```php
 class SalesDashboard extends SharpDashboard
 {
-    // [...]
+    // ...
     function buildWidgets(WidgetsContainer $widgetsContainer): void
     {
         $widgetsContainer

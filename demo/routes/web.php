@@ -15,8 +15,9 @@ Route::get('/docs{segment}', function (?string $segment = null) {
 
     if (! str_contains($segment, '/')) {
         $versions = json_decode(file_get_contents(base_path('../docs/versions/config.json')), true);
-        if ($segment !== $versions[0]['slug']) {
-            return redirect('/docs/'.$versions[0]['slug']);
+        $latestVersion = collect($versions)->where('latest', true)->first() ?: $versions[0];
+        if ($segment !== $latestVersion['slug']) {
+            return redirect('/docs/'.$latestVersion['slug']);
         }
     }
 

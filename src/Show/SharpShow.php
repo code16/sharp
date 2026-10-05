@@ -77,14 +77,6 @@ abstract class SharpShow
         });
     }
 
-    /**
-     * @deprecated to be deleted, no more useful
-     */
-    final protected function configureMultiformAttribute(string $attribute): self
-    {
-        return $this;
-    }
-
     final protected function configurePageTitleAttribute(string $attribute, bool $localized = false): self
     {
         $this->pageTitleField = SharpShowTextField::make($attribute)->setLocalized($localized);

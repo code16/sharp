@@ -26,6 +26,10 @@ class ProfileSingleShow extends SharpSingleShow
                     ->setLabel('Email address'),
             )
             ->addField(
+                SharpShowTextField::make('occupation')
+                    ->setLabel('Occupation'),
+            )
+            ->addField(
                 SharpShowPictureField::make('avatar'),
             )
             ->when(config('demo.enable_passkeys'), fn () => $showFields->addField(
@@ -37,11 +41,13 @@ class ProfileSingleShow extends SharpSingleShow
     protected function buildShowLayout(ShowLayout $showLayout): void
     {
         $showLayout
-            ->addSection('', function (ShowLayoutSection $section) {
-                $section
-                    ->addColumn(6, fn (ShowLayoutColumn $column) => $column->withField('email'))
-                    ->addColumn(6, fn (ShowLayoutColumn $column) => $column->withField('avatar'));
-            })
+            ->addSection(fn (ShowLayoutSection $section) => $section
+                ->addColumn(6, fn (ShowLayoutColumn $column) => $column
+                    ->withField('email')
+                    ->withField('occupation')
+                )
+                ->addColumn(6, fn (ShowLayoutColumn $column) => $column->withField('avatar'))
+            )
             ->when(config('demo.enable_passkeys'))->addEntityListSection(PasskeyEntity::class);
     }
 

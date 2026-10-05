@@ -17,8 +17,6 @@ class MyShow extends SharpShow
                 ->setLabel('additional pictures')
                 ->addItemField(
                     SharpShowFileField::make('file')
-                        ->setStorageDisk('local')
-                        ->setStorageBasePath('data/Product/{id}/pictures')
                 )
                 ->addItemField(
                     SharpShowTextField::make('legend')
@@ -48,7 +46,7 @@ Example:
 ```php
 class MyShow extends SharpShow
 {
-    // [...]
+    // ...
     function buildShowLayout(ShowLayout $showLayout): void
     {
         $showLayout->addColumn(6, function (ShowLayoutColumn $column) {

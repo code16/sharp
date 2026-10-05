@@ -20,27 +20,33 @@ Show or hide the toolbar (shown by default).
 
 ### `setToolbar(array $toolbar)`
 
-Override the default toolbar, providing an array built with `SharpFormEditorField`'s constants:
+Override the default toolbar, providing an array built with `SharpFormEditorField`'s constants (each one backed by the `FormEditorToolbarButton` enum):
 
 ```php
-const B = 'bold';
-const I = 'italic';
-const HIGHLIGHT = 'highlight';
-const UL = 'unordered-list';
-const OL = 'ordered-list';
-const SEPARATOR = ''|'';
-const A = 'link';
-const H1 = 'heading-1';
-const H2 = 'heading-2';
-const H3 = 'heading-3';
-const TABLE = 'table';
-const IFRAME = 'iframe';
-const RAW_HTML = 'html';
-const UNDO = 'undo';
-const REDO = 'redo';
-const CODE = 'code';
-const QUOTE = 'blockquote';
-const HR = 'horizontal-rule';
+const B = FormEditorToolbarButton::Bold;             // 'bold'
+const I = FormEditorToolbarButton::Italic;            // 'italic'
+const HIGHLIGHT = FormEditorToolbarButton::Highlight;  // 'highlight'
+const SMALL = FormEditorToolbarButton::Small;          // 'small'
+const UL = FormEditorToolbarButton::BulletList;        // 'bullet-list'
+const OL = FormEditorToolbarButton::OrderedList;       // 'ordered-list'
+const SEPARATOR = FormEditorToolbarButton::Separator;  // '|'
+const A = FormEditorToolbarButton::Link;               // 'link'
+const H1 = FormEditorToolbarButton::Heading1;          // 'heading-1'
+const H2 = FormEditorToolbarButton::Heading2;          // 'heading-2'
+const H3 = FormEditorToolbarButton::Heading3;          // 'heading-3'
+const CODE = FormEditorToolbarButton::Code;            // 'code'
+const QUOTE = FormEditorToolbarButton::Blockquote;     // 'blockquote'
+const UPLOAD_IMAGE = FormEditorToolbarButton::UploadImage; // 'upload-image'
+const UPLOAD = FormEditorToolbarButton::Upload;        // 'upload'
+const HR = FormEditorToolbarButton::HorizontalRule;    // 'horizontal-rule'
+const TABLE = FormEditorToolbarButton::Table;          // 'table'
+const IFRAME = FormEditorToolbarButton::Iframe;        // 'iframe'
+const RAW_HTML = FormEditorToolbarButton::Html;        // 'html'
+const CODE_BLOCK = FormEditorToolbarButton::CodeBlock; // 'code-block'
+const SUP = FormEditorToolbarButton::Superscript;      // 'superscript'
+const FOOTNOTE = FormEditorToolbarButton::Footnote;    // 'footnote'
+const UNDO = FormEditorToolbarButton::Undo;            // 'undo'
+const REDO = FormEditorToolbarButton::Redo;            // 'redo'
 ```
 
 Example:
@@ -107,7 +113,7 @@ Toggle HTML sanitization (enabled by default). See [security](#security).
 
 The Editor field can embed images or regular files. To use this feature, you must first allow the field to handle uploads:
 
-### `allowUploads(SharpFormEditorEmbedUpload $formEditorUpload)`
+### `allowUploads(SharpFormEditorUpload $formEditorUpload)`
 
 This method allows the user to upload files and images in the editor:
 
@@ -115,14 +121,14 @@ This method allows the user to upload files and images in the editor:
 $formFields->addField(
     SharpFormEditorField::make('bio')
         ->allowUploads(
-            SharpFormEditorEmbedUpload::make()
+            SharpFormEditorUpload::make()
                 ->setStorageBasePath('posts/embeds')
                 ->setStorageDisk('local')
         )
 );
 ```
 
-The `SharpFormEditorEmbedUpload` can be configured with the same API as the `SharpFormUploadField`: `setMaxFileSize()`, `setImageOnly()`, `setAllowedExtensions()`, ... ([see full documentation](../form-fields/upload.md))
+The `SharpFormEditorUpload` can be configured with the same API as the `SharpFormUploadField`: `setMaxFileSize()`, `setImageOnly()`, `setAllowedExtensions()`, ... ([see full documentation](../form-fields/upload.md))
 
 ### A note on `setImageTransformable(bool $transformable = true, bool $transformKeepOriginal = true)`
 

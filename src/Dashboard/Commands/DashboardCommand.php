@@ -2,8 +2,9 @@
 
 namespace Code16\Sharp\Dashboard\Commands;
 
+use Code16\Sharp\Commands\Command;
+use Code16\Sharp\Commands\Returns\CommandReturn;
 use Code16\Sharp\Dashboard\DashboardQueryParams;
-use Code16\Sharp\EntityList\Commands\Command;
 
 abstract class DashboardCommand extends Command
 {
@@ -36,11 +37,5 @@ abstract class DashboardCommand extends Command
         return [];
     }
 
-    protected function refresh($ids): array
-    {
-        // Refresh has no meaning in the Dashboard; we just do a classic reload.
-        return $this->reload();
-    }
-
-    abstract public function execute(array $data = []): array;
+    abstract public function execute(array $data = []): CommandReturn;
 }

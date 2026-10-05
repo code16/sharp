@@ -1,9 +1,9 @@
 <?php
 
-use Code16\Sharp\EntityList\Commands\ReorderHandler;
 use Code16\Sharp\EntityList\Fields\EntityListBadgeField;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
+use Code16\Sharp\EntityList\ReorderHandler;
 use Code16\Sharp\Enums\PageAlertLevel;
 use Code16\Sharp\Exceptions\SharpInvalidConfigException;
 use Code16\Sharp\Tests\Unit\EntityList\Fakes\FakeSharpEntityList;

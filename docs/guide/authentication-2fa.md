@@ -11,7 +11,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
             ->enable2faByNotification()
             // or ->enable2faByTotp()
             // or ->enable2faCustom()
-            // [...]
+            // ...
     }
 }
 ```
@@ -36,7 +36,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
     {
         $config
             ->enable2faCustom(\App\Sharp\My2faNotificationHandler::class)
-            // [...]
+            // ...
     }
 }
 ```
@@ -75,7 +75,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
     {
         $config
             ->enable2faByTotp()
-            // [...]
+            // ...
     }
 }
 ```
@@ -116,8 +116,8 @@ class Activate2faCommand extends SingleInstanceWizardCommand
 ```php
 class Deactivate2faCommand extends SingleInstanceCommand
 {
-    use Code16\Sharp\Auth\TwoFactor\Commands\Deactivate2FaViaTotpSingleInstanceCommandTrait;
-    // or Code16\Sharp\Auth\TwoFactor\Commands\Deactivate2FaViaTotpEntityCommandTrait
+    use Code16\Sharp\Auth\TwoFactor\Commands\Deactivate2faViaTotpSingleInstanceCommandTrait;
+    // or Code16\Sharp\Auth\TwoFactor\Commands\Deactivate2faViaTotpEntityCommandTrait
 }
 ```
 

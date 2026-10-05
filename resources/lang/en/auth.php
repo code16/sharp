@@ -3,6 +3,7 @@
 return [
     'validation_error' => 'Please enter a value for both fields',
     'invalid_credentials' => 'We could not find a user with these credentials',
+    'access_denied' => 'You are not allowed to access this application.',
     '2fa' => [
         'validation_error' => 'Please enter a value for the code',
         'invalid' => 'This code is invalid',
@@ -26,6 +27,10 @@ return [
                     'command_label' => 'Disable two-factor authentication',
                 ],
             ],
+        ],
+        'passkey' => [
+            'form_help_text' => 'Please click on the button below to use one of your passkey for :email account.',
+            'mismatch_error' => 'The passkey used is linked to a different account.',
         ],
     ],
     'passkeys' => [

@@ -10,7 +10,7 @@ php artisan sharp:make:reorder-handler <class_name> [--model=<model_name>]
 
 ## Write the class
 
-First, we need to write a class for the reordering itself, which must implement `Code16\Sharp\EntityList\Commands\ReorderHandler`, and therefore the `reorder(array $ids)` function.
+First, we need to write a class for the reordering itself, which must implement `Code16\Sharp\EntityList\ReorderHandler`, and therefore the `reorder(array $ids)` function.
 
 Here's an example with Eloquent and a numerical `order` column:
 
@@ -40,7 +40,7 @@ Then, in your Entity List you have to configure your reorder handler:
 ```php
 class PageList extends SharpEntityList
 {
-    public function buildListConfig()
+    public function buildListConfig(): void
     {
         $this->configureReorderable(new PageReorderHandler());
     }
@@ -64,7 +64,7 @@ Sometimes you may need to restrict the reorder action depending on the actual da
 ```php
 class PostList extends SharpEntityList
 {
-    public function buildListConfig()
+    public function buildListConfig(): void
     {
         $this->configureReorderable(new PostReorderHandler());
     }
@@ -92,7 +92,7 @@ A common pattern with an Eloquent model is to simply define an `order` attribute
 ```php
 class PageList extends SharpEntityList
 {
-    public function buildListConfig()
+    public function buildListConfig(): void
     {
         $this->configureReorderable(new SimpleEloquentReorderHandler(MyModel::class));
     }
@@ -106,10 +106,10 @@ The `Code16\Sharp\EntityList\Eloquent\SimpleEloquentReorderHandler` class expect
 ```php
 class PageList extends SharpEntityList
 {
-    public function buildListConfig()
+    public function buildListConfig(): void
     {
         $this->configureReorderable(
-            new SimpleEloquentReorderHandler(MyModel::class)
+            (new SimpleEloquentReorderHandler(MyModel::class))
                 ->setIdAttribute('uuid')
                 ->setOrderAttribute('position')
         );

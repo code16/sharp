@@ -40,6 +40,8 @@ class HandleInertiaRequests extends Middleware
             'query' => (object) $request->query(),
         ]);
 
+        config()->set('inertia.pages.ensure_pages_exist', false);
+
         // let inertia remove the following query params in the url (history.replaceState in JS)
         Inertia::resolveUrlUsing(function (Request $request) {
             return str(

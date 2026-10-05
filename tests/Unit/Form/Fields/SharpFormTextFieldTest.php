@@ -44,3 +44,11 @@ it('allows to define maxLength', function () {
     expect($formField->toArray())
         ->toHaveKey('maxLength', 10);
 });
+
+it('allows to define suggestions', function () {
+    $formField = SharpFormTextField::make('text')
+        ->setSuggestions(['a', 'b', 'c']);
+
+    expect($formField->toArray())
+        ->toHaveKey('suggestions', ['a', 'b', 'c']);
+});

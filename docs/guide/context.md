@@ -26,14 +26,14 @@ class MyForm extends SharpForm
                 SharpFormTextField::make('key')
                     ->setReadOnly(sharp()->context()->isUpdate())
             )
-            ->addFiled(/*...*/);
+            ->addField(/*...*/);
     }
 }
 ```
 
 The SharpContext class allows you to get the following information: 
 
-### `entityKey(): string`
+### `entityKey(): ?string`
 
 Grab the current entity key.
 
@@ -48,7 +48,7 @@ Find out the current page type.
 
 In Form case, check the current status.
 
-### `instanceId(): string`
+### `instanceId(): ?string`
 
 In Form and Show Page cases, grab the instance id.
 
@@ -67,7 +67,7 @@ sharp()->context()->breadcrumb();
 
 Get the current or previous breadcrumb item.
 
-### `previousShowSegment(?string $entityKeyOrClassName = null, ?string $subEntity = null): ?BreadcrumbItem`
+### `previousShowSegment(?string $entityKeyOrClassName = null, ?string $multiformKey = null): ?BreadcrumbItem`
 ### `previousListSegment(?string $entityKeyOrClassName = null): ?BreadcrumbItem`
 
 Get (if existing) the closest Show or List in the breadcrumb.
@@ -78,16 +78,16 @@ As always, prefer the entity class name to the entity key. For instance: `sharp(
 
 ### The `BreadcrumbItem` class
 
-A `BreadcrumbItem` instance has the same methods seen above:
+A `BreadcrumbItem` instance has most of the methods seen above (note: no `isUpdate()`/`isCreation()` here, since a breadcrumb segment doesn't carry that information):
 
 #### `entityKey(): string`
 #### `isEntityList(): bool`
 #### `isShow(): bool`
+#### `isSingleShow(): bool`
 #### `isForm(): bool`
-#### `isUpdate(): bool`
-#### `isCreation(): bool`
-#### `instanceId(): string`
-#### `entityIs(string $entityKeyOrClassName, ?string $subEntity = null): bool`
+#### `isSingleForm(): bool`
+#### `instanceId(): ?string`
+#### `entityIs(string $entityKeyOrClassName, ?string $multiformKey = null): bool`
 
 Here's an example of how this information could be useful: imagine you have a Show for a `Post` instance, with an Embedded Entity List of `Comment`. When creating a new `Comment`, you'll need to set its `post_id` attribute on the Form `update()` method. You can for this make use of the breadcrumb context like this:
 

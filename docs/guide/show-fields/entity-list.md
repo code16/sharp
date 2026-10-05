@@ -70,7 +70,7 @@ SharpShowEntityListField::make('products')
     ->hideFilterWithValue(OrderFilter::class, fn ($instanceId) => $instanceId);
 ```
 
-One final note: sometimes the linked filter is really just a scope, never displayed to the user. In this case, it can be tedious to write a full implementation in the Entity List. In this situation, you can use the `HiddenFiler` class for the filter, passing a key:
+One final note: sometimes the linked filter is really just a scope, never displayed to the user. In this case, it can be tedious to write a full implementation in the Entity List. In this situation, you can use the `HiddenFilter` class for the filter, passing a key:
 
 ```php
 class OrderShow extends SharpShow

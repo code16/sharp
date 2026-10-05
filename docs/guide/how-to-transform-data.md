@@ -18,7 +18,7 @@ Eloquent example in an Entity List:
 ```php
 class ProductEntityList extends SharpEntityList
 {
-    // [...]
+    // ...
     
     public function getListData(): array|Arrayable
     {
@@ -35,7 +35,7 @@ Eloquent example in a Form (or a Show Page, they share the API):
 ```php
 class ProductForm extends SharpForm
 {
-    // [...]
+    // ...
     
     public function find($id): array
     {
@@ -48,12 +48,12 @@ class ProductForm extends SharpForm
 
 ## Custom transformers
 
-Wa can handle transformations with `setCustomTransformer()`:
+We can handle transformations with `setCustomTransformer()`:
 
 ```php
 class ProductEntityList extends SharpEntityList
 {
-    // [...]
+    // ...
     
     function getListData(): array|Arrayable
     {
@@ -101,12 +101,12 @@ Sometimes you'll need to reference a related attribute, like for instance the na
 ```php
 class ProductEntityList extends SharpEntityList
 {
-    // [...]
+    // ...
     
     function buildList(EntityListFieldsContainer $fields): void
     {
         $fields->addField(
-            EntityListDataContainer::make('author:name')
+            EntityListField::make('author:name')
                 ->setLabel('Author')
         );
     }
@@ -118,7 +118,7 @@ or in a Form / Show Page:
 ```php
 class ProductForm extends SharpForm
 {
-    // [...]
+    // ...
     
     function buildFormFields(FieldsContainer $formFields): void
     {

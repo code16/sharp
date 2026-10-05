@@ -3,7 +3,6 @@
 namespace Code16\Sharp\EntityList;
 
 use Code16\Sharp\EntityList\Commands\QuickCreate\QuickCreationCommand;
-use Code16\Sharp\EntityList\Commands\ReorderHandler;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\Traits\HandleEntityCommands;
 use Code16\Sharp\EntityList\Traits\HandleEntityState;
@@ -189,17 +188,6 @@ abstract class SharpEntityList
         return $this;
     }
 
-    /**
-     * @deprecated
-     * @see self::configureEntityMap()
-     */
-    final protected function configureMultiformAttribute(?string $attribute): self
-    {
-        $this->entityAttribute = $attribute;
-
-        return $this;
-    }
-
     final protected function configureEntityMap(string $attribute, EntityListEntities $entities): self
     {
         $this->entityAttribute = $attribute;
@@ -300,12 +288,4 @@ abstract class SharpEntityList
      * Retrieve all rows data as an array.
      */
     abstract public function getListData(): array|Arrayable;
-
-    /**
-     * @deprecated no more in use, will be removed in v10.x
-     */
-    final public function configurePaginated(bool $paginated = true): self
-    {
-        return $this;
-    }
 }

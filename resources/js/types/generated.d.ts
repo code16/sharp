@@ -616,6 +616,8 @@ export type FormTextFieldData = {
   placeholder: string | null;
   maxLength: number | null;
   localized: boolean | null;
+  suggestions: string[] | null;
+  suggestionType: "local" | null;
   label: string | null;
   readOnly: boolean | null;
   conditionalDisplay: FormConditionalDisplayData | null;
@@ -642,7 +644,6 @@ export type FormUploadFieldData = {
   type: "upload";
   imageCropRatio: [number, number];
   imageTransformable: boolean;
-  imageCompactThumbnail: boolean;
   imageTransformKeepOriginal: boolean | null;
   imageTransformableFileTypes: Array<string> | null;
   allowedExtensions: Array<string> | null;
@@ -749,9 +750,10 @@ export type MenuItemData = {
   isCollapsible: boolean;
   openInNewTab: boolean;
 };
+export type MultiFactorMethod = "notification" | "totp" | "passkey";
 export type NotificationData = {
   title: string;
-  level: NotificationLevel;
+  level: NotificationLevel | null;
   message: string | null;
   autoHide: boolean;
 };
