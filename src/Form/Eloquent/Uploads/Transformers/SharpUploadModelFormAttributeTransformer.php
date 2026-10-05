@@ -79,6 +79,7 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
                         'path',
                         'disk',
                         'thumbnail',
+                        'large_thumbnail',
                         'playable_preview_url',
                         'download_url',
                         'size',
@@ -109,6 +110,7 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
                     'disk' => $upload->disk,
                     'mime_type' => $upload->mime_type,
                     'thumbnail' => $this->getThumbnailUrl($upload),
+                    'large_thumbnail' => $this->getLargeThumbnailUrl($upload),
                     'playable_preview_url' => $this->getPlayableMediaUrl($upload),
                     'download_url' => URL::temporarySignedRoute(
                         'code16.sharp.download.show',
@@ -145,6 +147,30 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
         } catch (DecoderException) {
             return null;
         }
+    }
+
+    private function getLargeThumbnailUrl(SharpUploadModel $upload): ?string
+    {
+        if (! $this->withThumbnails) {
+            return null;
+        }
+
+        // prevent generating thumbnail for non-image files
+        if ($upload->mime_type && ! str($upload->mime_type)->startsWith('image/')) {
+            return null;
+        }
+
+        return URL::temporarySignedRoute(
+            'code16.sharp.api.form.upload.thumbnail.show',
+            now()->plus(minutes: config('session.lifetime')),
+            [
+                'entityKey' => sharp()->context()->entityKey(),
+                'instanceId' => sharp()->context()->instanceId(),
+                'disk' => $upload->disk,
+                'path' => $upload->file_name,
+                'width' => 1200,
+                'height' => 1000,
+            ]);
     }
 
     private function getPlayableMediaUrl(SharpUploadModel $upload): ?string

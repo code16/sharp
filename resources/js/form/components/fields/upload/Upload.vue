@@ -291,15 +291,8 @@
         }
 
         if(!editModalImageUrl.value) {
-            if(props.value?.path) {
-                const data = await api.post(route('code16.sharp.api.form.upload.thumbnail.show', {
-                    entityKey: form.entityKey,
-                    instanceId: form.instanceId,
-                    path: props.value.path,
-                    disk: props.value.disk,
-                    width: 1200,
-                    height: 1000,
-                }))
+            if(props.value?.large_thumbnail) {
+                const data = await api.post(props.value.large_thumbnail)
                     .then(response => response.data) as { thumbnail: string|null };
 
                 if(!data.thumbnail) {
