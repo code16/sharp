@@ -1,8 +1,10 @@
 <?php
 
-function sharp(): \Code16\Sharp\Utils\SharpUtil
+use Code16\Sharp\Utils\SharpUtil;
+
+function sharp(): SharpUtil
 {
-    return app(\Code16\Sharp\Utils\SharpUtil::class);
+    return app(SharpUtil::class);
 }
 
 function instanciate($class)

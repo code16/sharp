@@ -115,6 +115,7 @@ class SharpConfigBuilder
             'image_driver' => Driver::class,
             'file_handling_queue' => 'default',
             'file_handling_queue_connection' => 'sync',
+            'sign_paths' => true,
         ],
         'downloads' => [
             'allowed_disks' => '*',
@@ -341,6 +342,17 @@ class SharpConfigBuilder
         $this->config['uploads']['transform_keep_original_image'] = $keepOriginalImageOnTransform;
         $this->config['uploads']['file_handling_queue'] = $fileHandingQueue;
         $this->config['uploads']['file_handling_queue_connection'] = $fileHandlingQueueConnection;
+
+        return $this;
+    }
+
+    /**
+     * Disables the check of the signature of existing uploads (path_signature). For security reasons,
+     * it should only be used in tests, never in production.
+     */
+    public function disableUploadPathSigning(): self
+    {
+        $this->config['uploads']['sign_paths'] = false;
 
         return $this;
     }

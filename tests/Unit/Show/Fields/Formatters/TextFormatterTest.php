@@ -66,6 +66,7 @@ it('allows to format a text with uploads to front', function () {
                         'name' => 'image.jpg',
                         'path' => 'data/Posts/1/image.jpg',
                         'disk' => 'local',
+                        'path_signature' => uploadPathSignature('local', 'data/Posts/1/image.jpg'),
                         'thumbnail' => sprintf(
                             '/storage/thumbnails/data/Posts/1/200-200_q-90/image.jpg?%s',
                             Storage::disk('public')->lastModified('/thumbnails/data/Posts/1/200-200_q-90/image.jpg')
@@ -108,6 +109,7 @@ it('allows to format a text with uploads to front', function () {
                         'name' => 'doc.pdf',
                         'path' => 'data/Posts/1/doc.pdf',
                         'disk' => 'local',
+                        'path_signature' => uploadPathSignature('local', 'data/Posts/1/doc.pdf'),
                         'thumbnail' => null,
                         'large_thumbnail' => null,
                         'playable_preview_url' => null,

@@ -96,6 +96,49 @@ A few Command testing assertions were improved (cf. [Testing](testing#asserting-
 - `assertReturnsInfo('')` and `assertReturnsLink('')` now assert an empty message / link; to assert any value, omit the parameter.
 - Response methods called on testing objects now return their value: `->json('message')` returns the message instead of the testing object.
 
+## Uploads
+
+### Existing uploads must be signed
+
+For security reasons, when an existing upload is sent back by an Upload field (unchanged, or with a transformation), Sharp now checks that its `disk` and `path` are the ones it rendered in the form. To do that, it adds a `path_signature` attribute to upload values (based on your `APP_KEY`, `APP_PREVIOUS_KEYS` is supported), which the front sends back with the rest of the value. If the signature is missing or does not match, the update fails with a validation error.
+
+This is transparent when using Sharp forms and its built-in uploads, but it impacts any code that posts existing upload values by hand, typically your tests:
+
+```php
+use Code16\Sharp\Utils\Uploads\UploadPathSignature; // [!code ++]
+
+$this->sharpForm(Post::class, 1)
+    ->edit()
+    ->update([
+        // picture is already on the Post 
+        'picture' => [
+            'path' => 'data/test/image.jpg',
+            'disk' => 'local',
+            'path_signature' => UploadPathSignature::make(disk: 'local', path: 'data/test/image.jpg'), // [!code ++]
+        ],
+    ]);
+```
+
+Note that new uploads (`'uploaded' => true`) are not impacted.
+
+### Disabling the signature check in tests
+
+If you have a lot of tests posting upload values by hand and can't sign them all right away, you can disable the check **in your tests only**, with the `disableUploadPathSigning()` config method. `path_signature` is then neither sent nor checked.
+
+```php
+// tests/TestCase.php (or in a Pest `beforeEach`)
+protected function setUp(): void
+{
+    parent::setUp();
+
+    sharp()->config()->disableUploadPathSigning(); // [!code ++]
+}
+```
+
+::: danger
+Do not disable the signature check in your service provider or in production. It would allow any user who can update an entity with an Upload field to store an arbitrary `disk` and `path`, and then read the matching file through the generated thumbnail or download URLs.
+:::
+
 ## Deprecated methods
 
 ### Forms

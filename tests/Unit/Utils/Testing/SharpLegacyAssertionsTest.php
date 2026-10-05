@@ -1,6 +1,7 @@
 <?php
 
 use Code16\Sharp\Utils\Testing\SharpAssertions;
+use Orchestra\Testbench\TestCase;
 
 it('allows to test getSharpShow', function () {
     $response = fakeResponse()->getSharpShow('leaves', 6);
@@ -215,7 +216,7 @@ it('allows to test getSharpForm for edit with global filter keys', function () {
 
 function fakeResponse()
 {
-    return new class('fake') extends Orchestra\Testbench\TestCase
+    return new class('fake') extends TestCase
     {
         use SharpAssertions;
 

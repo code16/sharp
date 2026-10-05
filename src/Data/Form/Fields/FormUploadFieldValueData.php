@@ -20,6 +20,7 @@ final class FormUploadFieldValueData extends Data
         public int $size,
         public ?string $thumbnail,
         public ?string $large_thumbnail,
+        public ?string $path_signature,
         public ?string $editable_thumbnail,
         public ?string $playable_preview_url,
         public ?string $download_url,

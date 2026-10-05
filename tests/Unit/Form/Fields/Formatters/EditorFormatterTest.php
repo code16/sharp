@@ -160,6 +160,7 @@ it('allows to format a text with uploads to front', function () {
                         'name' => 'image.jpg',
                         'path' => 'data/Posts/1/image.jpg',
                         'disk' => 'local',
+                        'path_signature' => uploadPathSignature('local', 'data/Posts/1/image.jpg'),
                         'thumbnail' => sprintf(
                             '/storage/thumbnails/data/Posts/1/200-200_q-90/image.jpg?%s',
                             Storage::disk('public')->lastModified('/thumbnails/data/Posts/1/200-200_q-90/image.jpg')
@@ -202,6 +203,7 @@ it('allows to format a text with uploads to front', function () {
                         'name' => 'doc.pdf',
                         'path' => 'data/Posts/1/doc.pdf',
                         'disk' => 'local',
+                        'path_signature' => uploadPathSignature('local', 'data/Posts/1/doc.pdf'),
                         'thumbnail' => null,
                         'large_thumbnail' => null,
                         'playable_preview_url' => null,
@@ -256,6 +258,7 @@ it('allows to format text with uploads from front', function () {
                 'file' => [
                     'name' => 'transformed.jpg',
                     'path' => 'data/Posts/1/transformed.jpg',
+                    'path_signature' => uploadPathSignature('local', 'data/Posts/1/transformed.jpg'),
                     'mime_type' => 'image/jpeg',
                     'disk' => 'local',
                     'size' => 120,
@@ -267,6 +270,7 @@ it('allows to format text with uploads from front', function () {
                 'file' => [
                     'name' => 'doc.pdf',
                     'path' => 'data/Posts/1/doc.pdf',
+                    'path_signature' => uploadPathSignature('local', 'data/Posts/1/doc.pdf'),
                     'mime_type' => 'application/pdf',
                     'disk' => 'local',
                     'size' => 120,
@@ -344,6 +348,7 @@ it('allows to format embeds with uploads to front', function () {
                             'name' => 'image.jpg',
                             'path' => 'data/Posts/1/image.jpg',
                             'disk' => 'local',
+                            'path_signature' => uploadPathSignature('local', 'data/Posts/1/image.jpg'),
                             'thumbnail' => $thumbnail,
                             'large_thumbnail' => URL::temporarySignedRoute(
                                 'code16.sharp.api.form.upload.thumbnail.show',
@@ -405,6 +410,7 @@ it('allows to format embeds with uploads from front', function () {
                         'name' => 'image.jpg',
                         'path' => 'data/Posts/1/image.jpg',
                         'disk' => 'local',
+                        'path_signature' => uploadPathSignature('local', 'data/Posts/1/image.jpg'),
                         'thumbnail' => 'thumbnail.jpg',
                         'size' => 120,
                         'mime_type' => 'image/jpeg',

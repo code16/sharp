@@ -42,6 +42,7 @@ it('transforms a single upload', function () {
                 'name' => basename($upload->file_name),
                 'path' => $upload->file_name,
                 'disk' => 'local',
+                'path_signature' => uploadPathSignature('local', $upload->file_name),
                 'size' => $upload->size,
                 'thumbnail' => $upload->thumbnail(200, 200),
                 'large_thumbnail' => URL::temporarySignedRoute(
@@ -104,6 +105,7 @@ it('transforms a single upload with transformations', function () {
                 'name' => basename($upload->file_name),
                 'path' => $upload->file_name,
                 'disk' => 'local',
+                'path_signature' => uploadPathSignature('local', $upload->file_name),
                 'size' => $upload->size,
                 'mime_type' => 'image/png',
                 'thumbnail' => $upload->thumbnail(200, 200),
@@ -172,6 +174,7 @@ it('transforms a list of upload', function () {
                     'name' => basename($upload1->file_name),
                     'path' => $upload1->file_name,
                     'disk' => 'local',
+                    'path_signature' => uploadPathSignature('local', $upload1->file_name),
                     'size' => $upload1->size,
                     'thumbnail' => $upload1->thumbnail(200, 200),
                     'large_thumbnail' => URL::temporarySignedRoute(
@@ -206,6 +209,7 @@ it('transforms a list of upload', function () {
                     'name' => basename($upload2->file_name),
                     'path' => $upload2->file_name,
                     'disk' => 'local',
+                    'path_signature' => uploadPathSignature('local', $upload2->file_name),
                     'size' => $upload2->size,
                     'thumbnail' => $upload2->thumbnail(200, 200),
                     'large_thumbnail' => URL::temporarySignedRoute(
@@ -279,6 +283,7 @@ it('transforms a list of upload with transformations', function () {
                     'name' => basename($upload1->file_name),
                     'path' => $upload1->file_name,
                     'disk' => 'local',
+                    'path_signature' => uploadPathSignature('local', $upload1->file_name),
                     'size' => $upload1->size,
                     'thumbnail' => $upload1->thumbnail(200, 200),
                     'large_thumbnail' => URL::temporarySignedRoute(
@@ -314,6 +319,7 @@ it('transforms a list of upload with transformations', function () {
                     'name' => basename($upload2->file_name),
                     'path' => $upload2->file_name,
                     'disk' => 'local',
+                    'path_signature' => uploadPathSignature('local', $upload2->file_name),
                     'size' => $upload2->size,
                     'thumbnail' => $upload2->thumbnail(200, 200),
                     'large_thumbnail' => URL::temporarySignedRoute(
@@ -370,6 +376,7 @@ it('transforms an upload with playable preview', function () {
                 'name' => basename($upload->file_name),
                 'path' => $upload->file_name,
                 'disk' => 'local',
+                'path_signature' => uploadPathSignature('local', $upload->file_name),
                 'size' => $upload->size,
                 'thumbnail' => null,
                 'large_thumbnail' => null,
@@ -412,6 +419,7 @@ it('transforms a list of upload with playable preview', function () {
                     'name' => basename($upload1->file_name),
                     'path' => $upload1->file_name,
                     'disk' => 'local',
+                    'path_signature' => uploadPathSignature('local', $upload1->file_name),
                     'size' => $upload1->size,
                     'thumbnail' => null,
                     'large_thumbnail' => null,
@@ -458,6 +466,7 @@ describe('dynamicInstance', function () {
                 'name' => basename($file),
                 'path' => $file,
                 'disk' => 'local',
+                'path_signature' => uploadPathSignature('local', $file),
                 'size' => 120,
                 'thumbnail' => (new SharpUploadModel($uploadData))->thumbnail(200, 200),
                 'large_thumbnail' => URL::temporarySignedRoute(

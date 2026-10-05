@@ -5,6 +5,7 @@ use Code16\Sharp\Filters\GlobalRequiredFilter;
 use Code16\Sharp\Tests\Fixtures\User;
 use Code16\Sharp\Tests\TestCase;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
+use Code16\Sharp\Utils\Uploads\UploadPathSignature;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Schema;
@@ -177,4 +178,14 @@ function fakeGlobalFilter(string $key = 'test'): void
             }
         }
     );
+}
+
+function uploadPathSignature(?string $disk, string $path): string
+{
+    return UploadPathSignature::make($disk, $path);
+}
+
+function signedUpload(array $upload): array
+{
+    return [...$upload, 'path_signature' => uploadPathSignature($upload['disk'] ?? null, $upload['path'])];
 }

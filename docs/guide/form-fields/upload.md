@@ -267,3 +267,19 @@ class SharpServiceProvider extends SharpAppServiceProvider
 ```
 
 Queue and connection should be [properly configured](https://laravel.com/docs/queues).
+
+## Security
+
+When an upload field is sent back to the server without changes (or with a transformation), Sharp checks that its `path` and `disk` are the ones it rendered in the form, thanks to a signature (`path_signature`) based on your `APP_KEY` (`APP_PREVIOUS_KEYS` is supported). This prevents a user from pointing an upload to an arbitrary file of your storage disks.
+
+It is enabled by default and must stay enabled in production. If you post upload values yourself in your tests, you have to provide a valid `path_signature` (cf. `Code16\Sharp\Utils\Uploads\UploadPathSignature`), or disable the check in your tests only:
+
+```php
+// tests/TestCase.php (or in a Pest `beforeEach`)
+protected function setUp(): void
+{
+    parent::setUp();
+
+    sharp()->config()->disableUploadPathSigning();
+}
+```

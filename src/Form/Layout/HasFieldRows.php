@@ -24,7 +24,7 @@ trait HasFieldRows
     }
 
     /**
-     * @param  (\Closure(LayoutColumn): mixed)  $subLayoutCallback
+     * @param  (Closure(LayoutColumn): mixed)  $subLayoutCallback
      * @return $this
      */
     public function withListField(string $fieldKey, Closure $subLayoutCallback): static
@@ -49,10 +49,10 @@ trait HasFieldRows
     }
 
     /**
-     * @param  (\Closure(LayoutColumn): mixed)|null  $subLayoutCallback
+     * @param  (Closure(LayoutColumn): mixed)|null  $subLayoutCallback
      * @return $this
      */
-    public function insertSingleFieldAt(int $index, string $fieldKey, ?\Closure $subLayoutCallback = null): static
+    public function insertSingleFieldAt(int $index, string $fieldKey, ?Closure $subLayoutCallback = null): static
     {
         $rows = collect($this->rows);
         $rows->splice($index, 0, [[$this->newLayoutField($fieldKey, $subLayoutCallback)]]);
@@ -97,7 +97,7 @@ trait HasFieldRows
             ->firstWhere(fn ($row) => count($row) > 0) !== null;
     }
 
-    protected function newLayoutField(string|array $fieldKey, ?\Closure $subLayoutCallback = null): LayoutField
+    protected function newLayoutField(string|array $fieldKey, ?Closure $subLayoutCallback = null): LayoutField
     {
         return new FormLayoutField($fieldKey, $subLayoutCallback);
     }
