@@ -21,9 +21,5 @@
         "branch": "8.x",
         "slug": "8.x",
         "algoliaTag": "v8"
-    },
-    {
-        "name": "7.x",
-        "url": "https://sharp7.code16.fr/docs/guide"
     }
 ]
