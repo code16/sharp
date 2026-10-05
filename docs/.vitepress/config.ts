@@ -1,5 +1,6 @@
-import { type DefaultTheme, defineConfig, loadEnv } from 'vitepress'
+import { type DefaultTheme, defineConfig, loadEnv, type SiteConfig } from 'vitepress'
 import * as path from 'node:path';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { transformContent } from "./transform-content";
 import versions from '../versions/config.json';
 import { sidebar } from "./sidebar";
@@ -102,7 +103,49 @@ export default async () => {
         vite: {
             plugins: [llmstxt({ ignoreFiles: ['versions/**'] })],
         },
+
+        buildEnd(siteConfig: SiteConfig) {
+            fixLlmstxtPaths(siteConfig);
+            if (process.env.UPDATE_LLMSTXT_FOR_VENDOR_PACKAGE) {
+                updateLlmstxtForVendorPackage(siteConfig);
+            }
+        },
     });
+
+    // vitepress-plugin-llms does not prefix the site base on links of nested sidebar groups,
+    // so we fix them (e.g. "/guide/form-fields/text.md" => "/docs/10.x/guide/form-fields/text.md")
+    function fixLlmstxtPaths(siteConfig: SiteConfig) {
+        const llmsTxtPath = path.join(siteConfig.outDir, 'llms.txt');
+        if (!existsSync(llmsTxtPath)) {
+            return;
+        }
+        const base = siteConfig.site.base.replace(/\/$/, '');
+        writeFileSync(
+            llmsTxtPath,
+            readFileSync(llmsTxtPath, 'utf8').replace(
+                /\]\((\/[^)]*)\)/g,
+                (match, href) => href.startsWith(`${base}/`) ? match : `](${base}${href})`,
+            ),
+        );
+    }
+
+    // Copies llms.txt to docs/llms.txt, rewriting its site links ("/docs/guide/x.md") to paths relative to docs/,
+    // so that they resolve when the docs are shipped in the composer package (vendor/code16/sharp/docs/).
+    function updateLlmstxtForVendorPackage(siteConfig: SiteConfig) {
+        const base = siteConfig.site.base.replace(/\/$/, '');
+        const content = readFileSync(path.join(siteConfig.outDir, 'llms.txt'), 'utf8')
+            .replace(
+                /\]\((\/[^)]*)\)/g,
+                (match, href) => {
+                    if (!href.startsWith(`${base}/`)) {
+                        return match;
+                    }
+                    const relativePath = href.slice(base.length + 1);
+                    return `](${relativePath === 'guide.md' ? 'guide/index.md' : relativePath})`;
+                },
+            );
+        writeFileSync(path.resolve(__dirname, '../llms.txt'), content);
+    }
 
     function nav(): DefaultTheme.NavItem[] {
         return [

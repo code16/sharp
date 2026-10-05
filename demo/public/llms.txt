@@ -1,1 +1,1 @@
-docs/9.x/llms.txt
+docs/10.x/llms.txt
