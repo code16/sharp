@@ -13,7 +13,7 @@ use Spatie\TypeScriptTransformer\Attributes\Optional;
 final class AutocompleteRemoteFilterData extends Data
 {
     #[Optional]
-    #[LiteralTypeScriptType('{ id: string|number, label: string }')]
+    #[LiteralTypeScriptType('{ id: string|number, label: string } | Array<{ id: string|number, label: string }> | null')]
     public mixed $value;
 
     public function __construct(
@@ -21,7 +21,7 @@ final class AutocompleteRemoteFilterData extends Data
         public ?string $label,
         #[LiteralTypeScriptType('"'.FilterType::AutocompleteRemote->value.'"')]
         public FilterType $type,
-        // public bool $multiple,
+        public bool $multiple,
         public bool $required,
         public bool $master,
         public int $debounceDelay,
