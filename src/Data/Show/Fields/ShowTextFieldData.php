@@ -27,7 +27,7 @@ final class ShowTextFieldData extends Data
         public bool $sanitize,
         public ?bool $localized = null,
         public ?int $collapseToWordCount = null,
-        /** @var array<string, EmbedData> */
+        /** @var array<string, EmbedData>|null */
         public ?array $embeds = null,
         public ?string $label = null,
     ) {}

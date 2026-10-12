@@ -4,6 +4,9 @@ namespace Code16\Sharp\Form\Fields\Editor\TextInputReplacement;
 
 use Illuminate\Contracts\Support\Arrayable;
 
+/**
+ * @implements Arrayable<array-key, mixed>
+ */
 class EditorTextInputReplacement implements Arrayable
 {
     /**

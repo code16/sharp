@@ -27,7 +27,7 @@ final class ShowDashboardFieldData extends Data
         public string $endpointUrl,
         public ShowFieldAuthorizationsData $authorizations,
         public ?string $label = null,
-        /** @var array<string, mixed> */
+        /** @var array<string, mixed>|null */
         public ?array $hiddenFilters = null,
     ) {}
 

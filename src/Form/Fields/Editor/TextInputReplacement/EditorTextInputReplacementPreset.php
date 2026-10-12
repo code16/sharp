@@ -7,6 +7,9 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Macroable;
 
+/**
+ * @implements Arrayable<array-key, mixed>
+ */
 class EditorTextInputReplacementPreset implements Arrayable
 {
     use Conditionable;

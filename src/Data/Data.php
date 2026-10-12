@@ -8,6 +8,8 @@ use ReflectionParameter;
 
 /**
  * @internal
+ *
+ * @implements Arrayable<array-key, mixed>
  */
 abstract class Data implements Arrayable
 {
