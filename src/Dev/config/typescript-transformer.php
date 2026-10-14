@@ -9,6 +9,7 @@ return [
     'auto_discover_types' => [
         __DIR__.'/../../Data',
         __DIR__.'/../../Enums',
+        __DIR__.'/../../Dashboard/Widgets/Graph',
     ],
 
     /*
@@ -18,9 +19,9 @@ return [
      */
 
     'collectors' => [
-        Spatie\TypeScriptTransformer\Collectors\DefaultCollector::class,
+        \Spatie\TypeScriptTransformer\Collectors\DefaultCollector::class,
         \Code16\Sharp\Dev\TypeScriptTransformer\DataTypeScriptCollector::class,
-        Spatie\TypeScriptTransformer\Collectors\EnumCollector::class,
+        \Spatie\TypeScriptTransformer\Collectors\EnumCollector::class,
     ],
 
     /*
@@ -29,7 +30,8 @@ return [
      */
 
     'transformers' => [
-        Spatie\TypeScriptTransformer\Transformers\EnumTransformer::class,
+        \Spatie\TypeScriptTransformer\Transformers\EnumTransformer::class,
+        \Spatie\LaravelTypeScriptTransformer\Transformers\DtoTransformer::class,
     ],
 
     /*
