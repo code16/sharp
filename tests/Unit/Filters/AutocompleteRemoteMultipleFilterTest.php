@@ -27,11 +27,7 @@ function makeAutocompleteRemoteMultipleFilter(array &$calls): AutocompleteRemote
 
             return collect($ids)
                 ->reverse()
-                ->map(fn ($id) => [
-                    'id' => $id,
-                    'label' => "Product {$id}",
-                ])
-                ->values()
+                ->mapWithKeys(fn ($id) => [$id => "Product {$id}"])
                 ->all();
         }
     };
@@ -69,19 +65,18 @@ it('restores all selected labels in one batch and keeps selection order', functi
         ]]);
 });
 
-it('caches restored labels and only batches unresolved IDs', function () {
+it('caches restored labels for the same selection', function () {
     $calls = [];
     $filter = makeAutocompleteRemoteMultipleFilter($calls);
 
     $filter->fromQueryParam('1,2');
 
-    expect($filter->fromQueryParam('2,3'))->toEqual([
+    expect($filter->fromQueryParam('1,2'))->toEqual([
+        ['id' => '1', 'label' => 'Product 1'],
         ['id' => '2', 'label' => 'Product 2'],
-        ['id' => '3', 'label' => 'Product 3'],
     ])
         ->and($calls)->toEqual([
             ['1', '2'],
-            ['3'],
         ]);
 });
 

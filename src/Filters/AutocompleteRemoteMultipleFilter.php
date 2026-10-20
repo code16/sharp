@@ -4,41 +4,35 @@ namespace Code16\Sharp\Filters;
 
 use Illuminate\Support\Arr;
 
-abstract class AutocompleteRemoteMultipleFilter extends AutocompleteRemoteFilter
+abstract class AutocompleteRemoteMultipleFilter extends Filter
 {
-    private array $resolvedValues = [];
-    private array $resolvedIds = [];
+    use AutocompleteRemoteFilterTrait;
 
     public function fromQueryParam($value): array
     {
-        $ids = $this->idsFromValue($value);
-        $missingIds = collect($ids)
-            ->reject(fn (string|int $id) => isset($this->resolvedIds[(string) $id]))
-            ->values()
-            ->all();
-
-        if (count($missingIds)) {
-            foreach ($missingIds as $id) {
-                $this->resolvedIds[(string) $id] = true;
-            }
-
-            foreach ($this->format($this->valueLabelsFor($missingIds)) as $resolvedValue) {
-                if (isset($resolvedValue['id'], $resolvedValue['label'])) {
-                    $this->resolvedValues[(string) $resolvedValue['id']] = $resolvedValue;
-                }
-            }
+        if (! is_string($value) || $value === '') {
+            return [];
         }
 
-        return collect($ids)
-            ->map(fn (string|int $id) => $this->resolvedValues[(string) $id] ?? null)
-            ->filter()
-            ->values()
-            ->all();
+        $ids = $this->formatIds(explode(',', $value));
+
+        return once(function () use ($ids) {
+            $labels = $this->valueLabelsFor($ids);
+
+            return collect($ids)
+                ->filter(fn (string|int $id) => isset($labels[$id]))
+                ->map(fn (string|int $id) => [
+                    'id' => $id,
+                    'label' => $labels[$id],
+                ])
+                ->values()
+                ->all();
+        });
     }
 
     public function toQueryParam($value): ?string
     {
-        $ids = $this->idsFromValue($value);
+        $ids = $this->formatIds(Arr::wrap($value));
 
         return count($ids)
             ? implode(',', $ids)
@@ -52,30 +46,15 @@ abstract class AutocompleteRemoteMultipleFilter extends AutocompleteRemoteFilter
 
     public function formatRawValue(mixed $value): array
     {
-        return $this->idsFromValue($value);
-    }
-
-    final public function valueLabelFor(string $id): ?string
-    {
-        return $this->fromQueryParam($id)[0]['label'] ?? null;
+        return $this->formatIds(Arr::wrap($value));
     }
 
     /**
      * @return array<int, string|int>
      */
-    private function idsFromValue(mixed $value): array
+    private function formatIds(array $value): array
     {
-        if ($value === null || $value === '') {
-            return [];
-        }
-
-        if (is_array($value) && array_key_exists('id', $value)) {
-            $value = [$value];
-        } elseif (! is_array($value)) {
-            $value = explode(',', (string) $value);
-        }
-
-        return collect(Arr::wrap($value))
+        return collect($value)
             ->map(fn ($item) => is_array($item) ? ($item['id'] ?? null) : $item)
             ->filter(fn ($id) => is_string($id) || is_int($id))
             ->unique(fn (string|int $id) => (string) $id)
@@ -84,11 +63,10 @@ abstract class AutocompleteRemoteMultipleFilter extends AutocompleteRemoteFilter
     }
 
     /**
-     * Return labels for all requested IDs in one batch. The result may use either
-     * the [id => label] or the [['id' => ..., 'label' => ...]] format.
+     * Return labels for all requested IDs in one batch, as [id => label].
      *
      * @param  array<int, string|int>  $ids
-     * @return array<int|string, string|array{id: string|int, label: string}>
+     * @return array<int|string, string>
      */
     abstract public function valueLabelsFor(array $ids): array;
 }

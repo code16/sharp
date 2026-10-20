@@ -12,7 +12,6 @@ trait AutocompleteRemoteFilterTrait
     private bool $isMaster = false;
     private int $debounceDelay = 300;
     private int $searchMinChars = 1;
-    private array $cache = [];
 
     final public function configureMaster(bool $isMaster = true): self
     {
@@ -33,33 +32,6 @@ trait AutocompleteRemoteFilterTrait
         $this->searchMinChars = $minChars;
 
         return $this;
-    }
-
-    public function fromQueryParam($value): mixed
-    {
-        if ($value) {
-            if ($this->cache[$value] ?? null) {
-                return $this->cache[$value];
-            }
-            if ($label = $this->valueLabelFor($value)) {
-                return $this->cache[$value] = [
-                    'id' => $value,
-                    'label' => $label,
-                ];
-            }
-        }
-
-        return null;
-    }
-
-    public function toQueryParam($value): mixed
-    {
-        return is_array($value) ? $value['id'] : $value;
-    }
-
-    public function defaultValue(): mixed
-    {
-        return null;
     }
 
     public function toArray(): array
@@ -88,12 +60,10 @@ trait AutocompleteRemoteFilterTrait
         return $values;
     }
 
-    public function formatRawValue(mixed $value): mixed
-    {
-        return $value ? $value['id'] : null;
-    }
-
+    /**
+     * Return the options matching the typed search, as [id => label].
+     *
+     * @return array<int|string, string>
+     */
     abstract public function values(string $query): array;
-
-    abstract public function valueLabelFor(string $id): ?string;
 }

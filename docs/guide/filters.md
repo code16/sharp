@@ -249,11 +249,7 @@ class ProductFilter extends AutocompleteRemoteMultipleFilter
         return Product::query()
             ->where('name', 'like', "%{$query}%")
             ->limit(50)
-            ->get()
-            ->map(fn (Product $product) => [
-                'id' => (string) $product->id,
-                'label' => $product->name,
-            ])
+            ->pluck('name', 'id')
             ->all();
     }
 
@@ -261,17 +257,13 @@ class ProductFilter extends AutocompleteRemoteMultipleFilter
     {
         return Product::query()
             ->whereKey($ids)
-            ->get()
-            ->map(fn (Product $product) => [
-                'id' => (string) $product->id,
-                'label' => $product->name,
-            ])
+            ->pluck('name', 'id')
             ->all();
     }
 }
 ```
 
-`values()` is called only for the typed search and should limit its result set. `valueLabelsFor()` is called once with the selected IDs when Sharp restores the filter from the URL or session; this avoids one query per selected value. Both methods also accept the associative `[id => label]` return format.
+Both methods must return an `[id => label]` array. `values()` is called only for the typed search and should limit its result set. `valueLabelsFor()` is called once with the selected IDs when Sharp restores the filter from the URL or session; this avoids one query per selected value.
 
 In the Entity List, the selected value is an array of IDs:
 

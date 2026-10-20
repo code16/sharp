@@ -3,6 +3,8 @@
 namespace Code16\Sharp\Http\Controllers\Api;
 
 use Code16\Sharp\Filters\AutocompleteRemoteFilter;
+use Code16\Sharp\Filters\AutocompleteRemoteMultipleFilter;
+use Code16\Sharp\Filters\AutocompleteRemoteRequiredFilter;
 use Code16\Sharp\Http\Controllers\Controller;
 use Code16\Sharp\Utils\Entities\SharpDashboardEntity;
 use Code16\Sharp\Utils\Entities\ValueObjects\EntityKey;
@@ -21,7 +23,9 @@ class ApiFilterAutocompleteController extends Controller
             $filter = $entity->getListOrFail()->filterContainer()->findFilterHandler($filterHandlerKey);
         }
 
-        if (! $filter instanceof AutocompleteRemoteFilter) {
+        if (! $filter instanceof AutocompleteRemoteFilter
+            && ! $filter instanceof AutocompleteRemoteRequiredFilter
+            && ! $filter instanceof AutocompleteRemoteMultipleFilter) {
             return [
                 'data' => [],
             ];
