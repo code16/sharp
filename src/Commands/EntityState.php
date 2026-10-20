@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Commands;
 
+use BackedEnum;
 use Code16\Sharp\Commands\Returns\CommandDownloadReturn;
 use Code16\Sharp\Commands\Returns\CommandInfoReturn;
 use Code16\Sharp\Commands\Returns\CommandLinkReturn;

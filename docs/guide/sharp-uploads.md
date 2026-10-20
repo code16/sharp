@@ -209,7 +209,7 @@ The following modifiers are available out of the box:
 
 You can provide a custom Modifier; you’ll need to create a class that extends `Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\ThumbnailModifier`, implementing:
 
-- `function apply(ImageInterface $image): ImageInterface`: apply your filter, using the great [Intervention API](https://image.intervention.io/v3).
+- `function apply(ImageInterface $image): ImageInterface`: apply your filter, using the great [Intervention API](https://image.intervention.io) (Intervention Image v3 and v4 are both supported).
 - `function resized(): bool`: must return true if the resize is part of the `apply()` code (optional, default to false).
 
 ## Update with Sharp

@@ -2,6 +2,7 @@
 
 use App\Models\Post;
 use App\Models\User;
+use App\Support\DocVersion;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -14,10 +15,9 @@ Route::get('/docs{segment}', function (?string $segment = null) {
     $segment = trim($segment ?: '', '/');
 
     if (! str_contains($segment, '/')) {
-        $versions = json_decode(file_get_contents(base_path('../docs/versions/config.json')), true);
-        $latestVersion = collect($versions)->where('latest', true)->first() ?: $versions[0];
-        if ($segment !== $latestVersion['slug']) {
-            return redirect('/docs/'.$latestVersion['slug']);
+        $latestSlug = DocVersion::latest()->slug;
+        if ($segment !== $latestSlug) {
+            return redirect('/docs/'.$latestSlug);
         }
     }
 
@@ -27,6 +27,22 @@ Route::get('/docs{segment}', function (?string $segment = null) {
         default => abort(404),
     };
 })->where('segment', '.*');
+
+Route::get('/robots.txt', function () {
+    $sitemaps = DocVersion::all()
+        ->map(fn (DocVersion $version) => 'Sitemap: '.url('/docs/'.$version->slug.'/sitemap.xml'))
+        ->implode("\n");
+
+    return response("User-agent: *\nDisallow:\n\n".$sitemaps."\n", 200, ['Content-Type' => 'text/plain; charset=UTF-8']);
+});
+
+Route::get('/{file}', function (string $file) {
+    $path = public_path('docs/'.DocVersion::latest()->slug.'/'.$file);
+
+    return file_exists($path)
+        ? response()->file($path, ['Content-Type' => 'text/plain; charset=UTF-8'])
+        : abort(404);
+})->whereIn('file', ['llms.txt', 'llms-full.txt']);
 
 Route::get('/post/{post}', function (Post $post) {
     return view('pages.post', ['post' => $post]);

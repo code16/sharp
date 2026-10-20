@@ -5,6 +5,7 @@ use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\Fields\EntityListStateField;
 use Code16\Sharp\Tests\Unit\EntityList\Fakes\FakeEntityState;
 use Code16\Sharp\Tests\Unit\EntityList\Fakes\FakeSharpEntityList;
+use Illuminate\Contracts\Support\Arrayable;
 
 it('gets list entity state config', function () {
     $list = new class() extends FakeSharpEntityList
@@ -54,7 +55,7 @@ it('adds the entity state attribute to the entity data', function () {
             });
         }
 
-        public function getListData(): array|\Illuminate\Contracts\Support\Arrayable
+        public function getListData(): array|Arrayable
         {
             return [
                 ['id' => 1, 'name' => 'Marie Curie', 'state' => true],
@@ -90,7 +91,7 @@ it('handles authorization in a state', function () {
             });
         }
 
-        public function getListData(): array|\Illuminate\Contracts\Support\Arrayable
+        public function getListData(): array|Arrayable
         {
             return [
                 ['id' => 1], ['id' => 2], ['id' => 3],
@@ -206,3 +207,54 @@ it('sends state field as last column if state configured and not declared as a c
             'hideOnXS' => false,
         ]);
 });
+
+it('allows to use a string backed enum as a state key', function () {
+    enum FakeStringBackedEntityStateEnum: string
+    {
+        case Active = 'active';
+        case Inactive = 'inactive';
+    }
+
+    $list = new class() extends FakeSharpEntityList
+    {
+        public function buildListConfig(): void
+        {
+            $this->configureEntityState('_state', new class() extends FakeEntityState
+            {
+                protected function buildStates(): void
+                {
+                    $this->addState(FakeStringBackedEntityStateEnum::Active, 'Active', 'green')
+                        ->addState(FakeStringBackedEntityStateEnum::Inactive, 'Inactive', 'red');
+                }
+            });
+        }
+    };
+
+    $list->buildListConfig();
+
+    expect($list->listConfig()['state'])->toEqual([
+        'attribute' => '_state',
+        'values' => [
+            ['value' => 'active', 'label' => 'Active', 'color' => 'green'],
+            ['value' => 'inactive', 'label' => 'Inactive', 'color' => 'red'],
+        ],
+        'authorization' => [],
+    ]);
+});
+
+it('does not allow to use an int backed enum as a state key', function () {
+    enum FakeIntBackedEntityStateEnum: int
+    {
+        case Active = 1;
+    }
+
+    $state = new class() extends FakeEntityState
+    {
+        protected function buildStates(): void
+        {
+            $this->addState(FakeIntBackedEntityStateEnum::Active, 'Active', 'green');
+        }
+    };
+
+    $state->states();
+})->throws(InvalidArgumentException::class, 'When using enum as a key, it must be string backed.');

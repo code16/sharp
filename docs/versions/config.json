@@ -1,19 +1,18 @@
 [
     {
-        "__IMPORTANT__": "For new version, add sitemap in /demo/public/robots.txt, update /demo/public/llms.txt symlinks",
         "name": "10.x",
         "title": "Sharp 10.x",
         "branch": "10.x",
         "slug": "10.x",
-        "algoliaTag": "v10"
+        "algoliaTag": "v10",
+        "latest": true
     },
     {
         "name": "9.x",
         "title": "Sharp 9.x",
         "branch": "9.x",
         "slug": "9.x",
-        "algoliaTag": "v9",
-        "latest": true
+        "algoliaTag": "v9"
     },
     {
         "name": "8.x",
@@ -21,9 +20,5 @@
         "branch": "8.x",
         "slug": "8.x",
         "algoliaTag": "v8"
-    },
-    {
-        "name": "7.x",
-        "url": "https://sharp7.code16.fr/docs/guide"
     }
 ]
