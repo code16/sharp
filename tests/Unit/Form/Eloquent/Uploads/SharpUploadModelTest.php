@@ -4,6 +4,7 @@ use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
 use Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\Thumbnail;
 use Code16\Sharp\Tests\Fixtures\Person;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Drivers\Imagick\Driver;
 
 beforeEach(function () {
     //    sharp()->config()->configureUploadsThumbnailCreation(
@@ -92,6 +93,13 @@ it('returns null on error with a thumbnail creation', function () {
     expect($upload->thumbnail(150))->toBeNull();
 });
 
+it('returns null with a thumbnail creation when the source file is empty', function () {
+    Storage::disk('local')->put('data/empty.png', '');
+    $upload = createSharpUploadModel('data/empty.png');
+
+    expect($upload->thumbnail(150))->toBeNull();
+});
+
 it('handles transformation filters when creating a thumbnail', function () {
     $filters = [
         'crop' => [
@@ -171,7 +179,7 @@ it('allows to define an encoder when creating the thumbnail', function (string $
         ->toEqual('/storage/thumbnails/data/150-_q-80/my-image.jpeg')
         ->and(Storage::disk('public')->exists('thumbnails/data/150-_q-80/my-image.jpeg'))->toBeTrue();
 
-    if ($driver === \Intervention\Image\Drivers\Imagick\Driver::class) {
+    if ($driver === Driver::class) {
         expect(
             createSharpUploadModel(createImage(name: 'my-image.png'))->thumbnail()->setQuality(80)
                 ->toAvif()->make(150)
@@ -181,8 +189,8 @@ it('allows to define an encoder when creating the thumbnail', function (string $
     }
 })
     ->with([
-        \Intervention\Image\Drivers\Gd\Driver::class,
-        \Intervention\Image\Drivers\Imagick\Driver::class,
+        Intervention\Image\Drivers\Gd\Driver::class,
+        Driver::class,
     ]);
 
 it('allows to create SVG thumbnail by only copying the file', function () {

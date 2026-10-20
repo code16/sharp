@@ -150,9 +150,13 @@ class Thumbnail
                 );
             } else {
                 try {
-                    $sourceImg = $this->imageManager->read(
-                        Storage::disk($sourceDisk)->get($sourceRelativeFilePath),
-                    );
+                    $sourceContents = Storage::disk($sourceDisk)->get($sourceRelativeFilePath);
+
+                    if ($sourceContents === null || $sourceContents === '') {
+                        return null;
+                    }
+
+                    $sourceImg = $this->imageManager->read($sourceContents);
 
                     // Transformation filters
                     if ($this->transformationFilters) {
