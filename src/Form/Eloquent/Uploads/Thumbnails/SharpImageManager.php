@@ -6,9 +6,14 @@ use Intervention\Image\ImageManager;
 use Intervention\Image\Interfaces\DecoderInterface;
 use Intervention\Image\Interfaces\DriverInterface;
 use Intervention\Image\Interfaces\ImageInterface;
-use Intervention\Image\Interfaces\ImageManagerInterface;
 
-class SharpImageManager implements ImageManagerInterface
+/**
+ * Thin wrapper around Intervention's ImageManager, compatible with both v3 and v4
+ * (which renamed read() to decode() and create() to createImage()).
+ *
+ * @internal
+ */
+class SharpImageManager
 {
     protected ImageManager $manager;
 
@@ -19,21 +24,22 @@ class SharpImageManager implements ImageManagerInterface
 
     public function create(int $width, int $height): ImageInterface
     {
-        return $this->manager->create($width, $height);
+        return method_exists($this->manager, 'createImage')
+            ? $this->manager->createImage($width, $height)
+            : $this->manager->create($width, $height);
     }
 
-    public function read(mixed $input, array|string|DecoderInterface $decoders = []): ImageInterface
+    public function read(mixed $input, array|string|DecoderInterface|null $decoders = null): ImageInterface
     {
-        return $this->manager->read($input, $decoders);
-    }
-
-    public function animate(callable $init): ImageInterface
-    {
-        return $this->manager->animate($init);
+        return method_exists($this->manager, 'decode')
+            ? $this->manager->decode($input, $decoders)
+            : $this->manager->read($input, $decoders ?? []);
     }
 
     public function driver(): DriverInterface
     {
-        return $this->manager->driver();
+        return method_exists($this->manager, 'driver')
+            ? $this->manager->driver()
+            : $this->manager->driver;
     }
 }

@@ -181,7 +181,7 @@ class Thumbnail
                     }
 
                     // Resize if needed
-                    if (! $alreadyResized) {
+                    if (! $alreadyResized && ($width || $height)) {
                         $sourceImg->scaleDown($width, $height);
                     }
 
