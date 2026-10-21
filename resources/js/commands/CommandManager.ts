@@ -1,7 +1,7 @@
 import { CommandData, CommandFormData, CommandResponseData, FormData } from "@/types";
 import { api } from "@/api/api";
 import { RootAlertDialog, showAlert, showConfirm } from "@/utils/dialogs";
-import { parseBlobJSONContent } from "@/utils/request";
+import { blobHasMimeType, parseBlobJSONContent } from "@/utils/request";
 import { AxiosResponse } from "axios";
 import { reactive } from "vue";
 import { __ } from "@/utils/i18n";
@@ -140,7 +140,7 @@ export class CommandManager {
     }
 
     async handleCommandApiResponse(response: AxiosResponse<Blob>): Promise<void> {
-        if(response.data.type !== 'application/json') {
+        if(!blobHasMimeType(response.data, 'application/json')) {
             const link = document.createElement("a");
             link.download = (response.headers['content-disposition'] as string)?.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/)?.[1] ?? 'download';
             link.href = URL.createObjectURL(response.data);

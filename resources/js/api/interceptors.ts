@@ -1,4 +1,4 @@
-import { parseBlobJSONContent } from "@/utils/request";
+import { blobHasMimeType, parseBlobJSONContent } from "@/utils/request";
 import { handleErrorAlert } from "./errors";
 import { Axios, AxiosError, isCancel } from "axios";
 import { CURRENT_PAGE_URL } from "@/api/headers";
@@ -50,9 +50,9 @@ export function installInterceptors(api: Axios) {
                 const response = error.response;
 
                 if(response.data instanceof Blob) {
-                    if(response.data.type === 'application/json') {
+                    if(blobHasMimeType(response.data, 'application/json')) {
                         response.data = await parseBlobJSONContent(response.data);
-                    } else if(response.data.type === 'text/html') {
+                    } else if(blobHasMimeType(response.data, 'text/html')) {
                         response.data = await response.data.text();
                     }
                 }
