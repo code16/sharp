@@ -6,6 +6,8 @@
     import { FormFieldEmits, FormFieldProps } from "@/form/types";
     import FormFieldLayout from "@/form/components/FormFieldLayout.vue";
     import TextInput from "@/form/components/fields/text/TextInput.vue";
+    import { Button } from "@/components/ui/button";
+    import { Eye, EyeOff } from 'lucide-vue-next';
     import { useFullTextSearch } from "@/composables/useFullTextSearch";
     import { ComboboxInput } from "reka-ui";
     import {
@@ -20,6 +22,7 @@
     const emit = defineEmits<FormFieldEmits<FormTextFieldData>>();
 
     const input = ref<InstanceType<typeof TextInput>>();
+    const passwordVisible = ref(false);
     const textValue = computed(() =>
         props.field.localized && typeof props.value === 'object'
             ? props.value?.[props.locale]
@@ -91,6 +94,7 @@
                                 v-bind="props"
                                 :id="id"
                                 :aria-describedby="ariaDescribedBy"
+                                :password-visible="passwordVisible"
                                 :model-value="textValue"
                                 @update:model-value="onInput"
                                 ref="input"
@@ -115,10 +119,21 @@
                     v-bind="props"
                     :id="id"
                     :aria-describedby="ariaDescribedBy"
+                    :password-visible="passwordVisible"
                     :model-value="textValue"
                     @update:model-value="onInput"
                     ref="input"
                 />
+            </template>
+            <template v-if="field.inputType === 'password'">
+                <Button class="absolute size-9.5 right-px top-px rounded-[calc(var(--radius)-3px)]" size="icon" variant="ghost" @click="passwordVisible = !passwordVisible">
+                    <template v-if="passwordVisible">
+                        <EyeOff />
+                    </template>
+                    <template v-else>
+                        <Eye />
+                    </template>
+                </Button>
             </template>
         </div>
     </FormFieldLayout>
