@@ -226,6 +226,52 @@ class ProductCategoryFilter extends AutocompleteRemoteFilter
 
 The `values()` method must return an `[{id} => {label}]` array. The `valueLabelFor()` method is used to display the label in the dropdown for the selected id.
 
+### Multiple remote autocomplete filter
+
+For a large set of options, use `Code16\Sharp\Filters\AutocompleteRemoteMultipleFilter`. It combines remote searching with a multiple selection, without sending the complete option list to the browser.
+
+```php
+use Code16\Sharp\Filters\AutocompleteRemoteMultipleFilter;
+
+class ProductFilter extends AutocompleteRemoteMultipleFilter
+{
+    public function buildFilterConfig(): void
+    {
+        $this
+            ->configureKey('products')
+            ->configureLabel('Products')
+            ->configureSearchMinChars(2)
+            ->configureDebounceDelay(300);
+    }
+
+    public function values(string $query): array
+    {
+        return Product::query()
+            ->where('name', 'like', "%{$query}%")
+            ->limit(50)
+            ->pluck('name', 'id')
+            ->all();
+    }
+
+    public function valueLabelsFor(array $ids): array
+    {
+        return Product::query()
+            ->whereKey($ids)
+            ->pluck('name', 'id')
+            ->all();
+    }
+}
+```
+
+Both methods must return an `[id => label]` array. `values()` is called only for the typed search and should limit its result set. `valueLabelsFor()` is called once with the selected IDs when Sharp restores the filter from the URL or session; this avoids one query per selected value.
+
+In the Entity List, the selected value is an array of IDs:
+
+```php
+if ($productIds = $this->queryParams->filterFor(ProductFilter::class)) {
+    $products->whereIn('id', $productIds);
+}
+```
 
 ## Required filters
 

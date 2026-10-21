@@ -12,7 +12,6 @@ trait SelectFilterTrait
     private bool $isMaster = false;
     private bool $isSearchable = false;
     private array $searchKeys = ['label'];
-    private ?array $cachedValues = null;
 
     final public function isMaster(): bool
     {
@@ -89,7 +88,7 @@ trait SelectFilterTrait
 
     public function cachedValues(): array
     {
-        return $this->cachedValues ??= $this->values();
+        return once(fn () => $this->values());
     }
 
     abstract public function values(): array;

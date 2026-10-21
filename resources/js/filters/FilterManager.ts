@@ -47,6 +47,16 @@ export class FilterManager {
         return { ...this.currentValues, [filter.key]: value };
     }
 
+    /**
+     * Optimistically apply values before the server responds, so that successive changes don't build on stale values
+     */
+    setCurrentValues(values: FilterValues) {
+        this.state.filterValues = {
+            ...this.filterValues,
+            current: { ...this.currentValues, ...values },
+        };
+    }
+
     defaultValues(filters: FilterData[]) {
         return Object.fromEntries(
             filters.map(filter => [filter.key, this.filterValues.default[filter.key]])

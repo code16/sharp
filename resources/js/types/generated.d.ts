@@ -19,10 +19,14 @@ export type AreaGraphWidgetData = {
   opacity: number | null;
 };
 export type AutocompleteRemoteFilterData = {
-  value?: { id: string | number; label: string };
+  value?:
+    | { id: string | number; label: string }
+    | Array<{ id: string | number; label: string }>
+    | null;
   key: string;
   label: string | null;
   type: "autocompleteRemote";
+  multiple: boolean;
   required: boolean;
   master: boolean;
   debounceDelay: number;

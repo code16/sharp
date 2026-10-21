@@ -4,6 +4,7 @@ namespace App\Sharp\Categories;
 
 use App\Models\Category;
 use App\Sharp\Categories\Commands\CleanUnusedCategoriesCommand;
+use App\Sharp\Utils\Filters\PostFilter;
 use Code16\Sharp\EntityList\Eloquent\SimpleEloquentReorderHandler;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
@@ -50,16 +51,25 @@ class CategoryList extends SharpEntityList
                         ->configureLabel('Orphan categories only.');
                 }
             },
+            PostFilter::class,
         ];
     }
 
     public function getListData(): array|Arrayable
     {
-        $categories = Category::withCount('posts')
+        $postIds = $this->queryParams->filterFor(PostFilter::class);
+
+        $categories = Category::withCount([
+            'posts' => fn ($q) => $q->when($postIds, fn ($q) => $q->whereKey($postIds)),
+        ])
             ->orderBy('order')
             ->when(
                 $this->queryParams->filterFor('orphan'),
                 fn ($q) => $q->having('posts_count', 0)
+            )
+            ->when(
+                $postIds,
+                fn ($q) => $q->whereHas('posts', fn ($q) => $q->whereKey($postIds))
             );
 
         return $this->transform($categories->get());
