@@ -93,11 +93,13 @@
     }
 
     async function onFilterChange(filter: FilterData, value: FilterData['value']) {
+        const filterValues = filters.nextValues(filter, value);
+        filters.setCurrentValues(filterValues);
         const data = await api.post(
             route('code16.sharp.api.list.filters.store', { entityKey: props.field.entityListKey }),
             {
                 query: entityList.value.query,
-                filterValues: filters.nextValues(filter, value),
+                filterValues,
                 hiddenFilters: props.field.hiddenFilters,
             }
         )
@@ -107,11 +109,13 @@
     }
 
     async function onFilterResetAll() {
+        const filterValues = filters.defaultValues(filters.rootFilters);
+        filters.setCurrentValues(filterValues);
         const data = await api.post(
             route('code16.sharp.api.list.filters.store', { entityKey: props.field.entityListKey }),
             {
                 query: { ...entityList.value.query, search: null },
-                filterValues: filters.defaultValues(filters.rootFilters),
+                filterValues,
                 hiddenFilters: props.field.hiddenFilters,
             }
         )

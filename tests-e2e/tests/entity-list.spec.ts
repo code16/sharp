@@ -309,6 +309,46 @@ function entityListSuite(test: TestType<PlaywrightTestArgs & PlaywrightTestOptio
       await page.getByRole('button', { name: 'Reset all' }).click();
       await expect(page.getByText('20 items', { exact: true }).first()).toBeVisible();
     });
+    test('autocomplete remote multiple', async ({ page, init, goto, reload }) => {
+      await init();
+      await goto();
+
+      const trigger = page.getByRole('combobox', { name: 'Autocomplete remote multiple' });
+      const dialog = page.getByRole('dialog');
+      const input = dialog.getByRole('combobox', { name: 'Search...', exact: true });
+      await trigger.click();
+      await input.fill('O');
+      await expect(dialog.getByText('Enter at least 2 characters to search...', { exact: true })).toBeVisible();
+
+      await input.fill('Option 1');
+      await dialog.getByRole('option', { name: 'Option 1', exact: true }).click();
+      await expect(dialog.getByRole('option', { name: 'Option 1', exact: true })).toHaveAttribute('aria-selected', 'true');
+      await expect(page.getByText('1 item', { exact: true }).first()).toBeVisible();
+
+      await input.fill('Option 2');
+      await dialog.getByRole('option', { name: 'Option 2', exact: true }).click();
+      await expect(page.getByText('2 items', { exact: true }).first()).toBeVisible();
+      // selected options are listed first and not repeated in the results
+      await expect(dialog.getByRole('option', { name: 'Option 2', exact: true })).toHaveCount(1);
+      await expect(dialog.getByRole('option', { name: 'Option 2', exact: true })).toHaveAttribute('aria-selected', 'true');
+      await page.mouse.click(0, 0);
+      await expect(dialog).toBeHidden();
+      await expect(trigger).toContainText('2 selected');
+
+      await reload();
+      await expect(trigger).toContainText('2 selected');
+      await trigger.click();
+      await expect(dialog.getByRole('option', { name: 'Option 1', exact: true })).toHaveAttribute('aria-selected', 'true');
+      await expect(dialog.getByRole('option', { name: 'Option 2', exact: true })).toHaveAttribute('aria-selected', 'true');
+
+      await dialog.getByRole('option', { name: 'Option 1', exact: true }).click();
+      await expect(dialog.getByRole('option', { name: 'Option 1', exact: true })).toHaveCount(0);
+      await expect(page.getByText('1 item', { exact: true }).first()).toBeVisible();
+
+      await dialog.getByRole('button', { name: 'Reset', exact: true }).click();
+      await expect(dialog.getByRole('option', { name: 'Option 2', exact: true })).toHaveCount(0);
+      await expect(page.getByText('20 items', { exact: true }).first()).toBeVisible();
+    });
   });
   test('search', async ({ page, init, goto, reload }) => {
     await init();
@@ -520,5 +560,3 @@ function entityListSuite(test: TestType<PlaywrightTestArgs & PlaywrightTestOptio
     });
   });
 }
-
-

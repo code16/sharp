@@ -1,6 +1,5 @@
 <script setup lang="ts">
     import { AutocompleteRemoteFilterData } from "@/types";
-    import { Checkbox } from "@/components/ui/checkbox";
     import { Label } from "@/components/ui/label";
     import { FilterEmits, FilterProps } from "@/filters/types";
     import { useRemoteAutocomplete } from "@/composables/useRemoteAutocomplete";
@@ -24,12 +23,16 @@
     import { route } from "@/utils/url";
     import { Button } from "@/components/ui/button";
 
+    type Option = { id: string | number, label: string };
+
     const props = defineProps<FilterProps<AutocompleteRemoteFilterData>>();
     const emit = defineEmits<FilterEmits<AutocompleteRemoteFilterData>>();
     const open = ref(false);
 
+    const selectedValues = computed(() => toOptions(props.value));
+
     const searchTerm = ref('');
-    const { results, loading, search } = useRemoteAutocomplete<AutocompleteRemoteFilterData['value'][]>(
+    const { results, loading, search } = useRemoteAutocomplete<Option[]>(
         ({ query, signal, onSuccess, onError }) =>
             api.post(
                 route('code16.sharp.api.filters.autocomplete.index', {
@@ -48,25 +51,44 @@
         }
     )
 
-    function isSelected(selectValue: AutocompleteRemoteFilterData['value']) {
-        return Array.isArray(props.value)
-            ? !!props.value.find(v => selectValue.id == v.id)
-            : props.value?.id == selectValue.id;
+    const displayedResults = computed(() => props.filter.multiple
+        ? results.value.filter(result => !isSelected(result))
+        : results.value
+    );
+
+    const showReset = computed(() => props.valuated);
+
+    function toOptions(value: AutocompleteRemoteFilterData['value']): Option[] {
+        if(Array.isArray(value)) {
+            return value;
+        }
+        return value ? [value] : [];
     }
 
-    function onSelect(selectValue: AutocompleteRemoteFilterData['value']) {
-        // if(props.filter.multiple) {
-        //     const value = Object.values({
-        //         ...Object.fromEntries(
-        //             Object.entries(props.value || []).map(([i,v]) => [v.id, v])
-        //         ),
-        //         [selectValue.id]: selectValue,
-        //     });
-        //     emit('input', value);
-        // } else {
+    function isSelected(option: Option) {
+        return selectedValues.value.some(selected => String(selected.id) === String(option.id));
+    }
+
+    function onSelect(option: Option, event: Event) {
+        if(props.filter.multiple) {
+            event.preventDefault();
+            emit('input', isSelected(option)
+                ? selectedValues.value.filter(selected => String(selected.id) !== String(option.id))
+                : [...selectedValues.value, option]
+            );
+        } else {
             open.value = false;
-            emit('input', props.value?.id == selectValue.id ? null : selectValue);
-        // }
+            emit('input', isSelected(option) ? null : option);
+        }
+    }
+
+    function onReset() {
+        if(props.filter.multiple) {
+            emit('input', []);
+        } else {
+            open.value = false;
+            emit('input', null);
+        }
     }
 
     function onSearchInput(query: string) {
@@ -93,14 +115,14 @@
             <PopoverTrigger as-child>
                 <SelectButton v-bind="props">
                     <template v-if="inline">
-                        <template v-if="props.value">
+                        <template v-if="selectedValues.length">
                             <Separator orientation="vertical" class="h-4" />
-                            <AutocompleteRemoteFilterValue v-bind="props" />
+                            <AutocompleteRemoteFilterValue v-bind="props" :value="selectedValues" />
                         </template>
                     </template>
                     <template v-else>
-                        <template v-if="props.value">
-                            <AutocompleteRemoteFilterValue v-bind="props" />
+                        <template v-if="selectedValues.length">
+                            <AutocompleteRemoteFilterValue v-bind="props" :value="selectedValues" />
                         </template>
                         <template v-else>
                             <span class="text-muted-foreground">
@@ -111,68 +133,83 @@
                 </SelectButton>
             </PopoverTrigger>
             <PopoverContent :class="cn('p-0 w-auto min-w-[200px]', !inline ? 'w-(--reka-popover-trigger-width)' : '')" align="start">
-                <Command highlight-on-hover>
-<!--                :multiple="props.filter.multiple" -->
+                <Command
+                    :model-value="filter.multiple ? selectedValues : undefined"
+                    by="id"
+                    :multiple="filter.multiple"
+                    :reset-search-term-on-select="!filter.multiple"
+                    ignore-filter
+                    highlight-on-hover
+                >
                     <CommandInput
                         class="field-sizing-content"
                         :model-value="searchTerm"
-                        :placeholder="
-                            props.filter.searchMinChars > 1
-                                ? trans_choice('sharp::form.autocomplete.query_too_short', props.filter.searchMinChars, { min_chars: props.filter.searchMinChars })
-                                : __('sharp::form.autocomplete.placeholder')
-                        "
+                        :placeholder="__('sharp::form.autocomplete.placeholder')"
                         @update:model-value="onSearchInput"
                     />
 
                     <CommandList class="scroll-pb-12">
-                        <template v-if="loading">
-                            <div class="py-6 px-4 text-center text-sm">
-                                {{ __('sharp::form.autocomplete.loading') }}
-                            </div>
-                        </template>
-<!--                        <template v-else-if="!results?.length && searchTerm.length < props.filter.searchMinChars">-->
-<!--                            <div class="py-6 px-4 text-center text-sm">-->
-<!--                                {{ trans_choice('sharp::form.autocomplete.query_too_short', props.filter.searchMinChars, { min_chars: props.filter.searchMinChars }) }}-->
-<!--                            </div>-->
-<!--                        </template>-->
-                        <template v-else>
-                            <CommandEmpty>{{ __('sharp::form.autocomplete.no_results_text') }}</CommandEmpty>
-                            <template v-if="results.length">
-                                <CommandGroup>
-                                    <template v-for="selectValue in results" :key="selectValue.id">
-                                        <CommandItem
-                                            class="pr-6"
-                                            :value="selectValue"
-                                            :aria-selected="isSelected(selectValue)"
-                                            @select="onSelect(selectValue)"
-                                        >
-<!--                                            <template v-if="filter.multiple">-->
-<!--                                                <Checkbox-->
-<!--                                                    :class="{ 'opacity-50': !isSelected(selectValue) }"-->
-<!--                                                    :model-value="isSelected(selectValue)"-->
-<!--                                                />-->
-<!--                                            </template>-->
-<!--                                            <template v-if="!filter.multiple">-->
-                                                <Check
-                                                    :class="cn(
-                                                      'h-4 w-4',
-                                                      isSelected(selectValue) ? 'opacity-100' : 'opacity-0',
-                                                    )"
-                                                />
-<!--                                            </template>-->
-                                            <div class="max-w-80 line-clamp-2" v-html="selectValue.label"></div>
-                                        </CommandItem>
-                                    </template>
-                                </CommandGroup>
+                        <template v-if="filter.multiple && selectedValues.length">
+                            <CommandGroup>
+                                <template v-for="option in selectedValues" :key="option.id">
+                                    <CommandItem
+                                        class="pr-6"
+                                        :value="option"
+                                        aria-selected="true"
+                                        @select="onSelect(option, $event)"
+                                    >
+                                        <Check class="h-4 w-4" />
+                                        <div class="max-w-80 line-clamp-2" v-html="option.label"></div>
+                                    </CommandItem>
+                                </template>
+                            </CommandGroup>
+                            <template v-if="displayedResults.length && !loading">
+                                <CommandSeparator />
                             </template>
                         </template>
-                        <template v-if="valuated">
-                            <div class="sticky -bottom-px border-b border-transparent rounded-b-md bg-popover">
-                                <template v-if="results.length || loading">
+                        <template v-if="loading || !displayedResults.length">
+                            <div class="sticky bg-popover" :class="showReset ? 'bottom-10' : 'bottom-0'">
+                                <template v-if="filter.multiple && selectedValues.length">
                                     <CommandSeparator />
                                 </template>
+                                <div class="py-6 px-4 text-center text-sm">
+                                    <template v-if="loading">
+                                        {{ __('sharp::form.autocomplete.loading') }}
+                                    </template>
+                                    <template v-else-if="searchTerm.length < filter.searchMinChars">
+                                        {{ trans_choice('sharp::form.autocomplete.query_too_short', filter.searchMinChars, { min_chars: filter.searchMinChars }) }}
+                                    </template>
+                                    <template v-else>
+                                        {{ __('sharp::form.autocomplete.no_results_text') }}
+                                    </template>
+                                </div>
+                            </div>
+                        </template>
+                        <template v-else-if="displayedResults.length">
+                            <CommandGroup>
+                                <template v-for="option in displayedResults" :key="option.id">
+                                    <CommandItem
+                                        class="pr-6"
+                                        :value="option"
+                                        :aria-selected="isSelected(option)"
+                                        @select="onSelect(option, $event)"
+                                    >
+                                        <Check
+                                            :class="cn(
+                                              'h-4 w-4',
+                                              isSelected(option) ? 'opacity-100' : 'opacity-0',
+                                            )"
+                                        />
+                                        <div class="max-w-80 line-clamp-2" v-html="option.label"></div>
+                                    </CommandItem>
+                                </template>
+                            </CommandGroup>
+                        </template>
+                        <template v-if="showReset">
+                            <div class="sticky -bottom-px border-b border-transparent rounded-b-md bg-popover">
+                                <CommandSeparator />
                                 <div class="p-1">
-                                    <Button class="w-full h-8" variant="ghost" @click="emit('input', null); open = false">
+                                    <Button class="w-full h-8" variant="ghost" @click="onReset">
                                         {{ __('sharp::filters.select.reset') }}
                                     </Button>
                                 </div>

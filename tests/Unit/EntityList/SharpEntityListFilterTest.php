@@ -3,6 +3,7 @@
 use Carbon\Carbon;
 use Code16\Sharp\EntityList\Filters\HiddenFilter;
 use Code16\Sharp\Filters\AutocompleteRemoteFilter;
+use Code16\Sharp\Filters\AutocompleteRemoteMultipleFilter;
 use Code16\Sharp\Filters\CheckFilter;
 use Code16\Sharp\Filters\DateRange\DateRangePreset;
 use Code16\Sharp\Filters\DateRangeFilter;
@@ -379,6 +380,50 @@ it('allows unrequired filter to have a default value', function () {
             'select' => false,
             'date' => false,
         ]);
+});
+
+it('computes valuated state of a remote autocomplete multiple filter regardless of id type and order', function () {
+    $list = new class() extends FakeSharpEntityList
+    {
+        public function getFilters(): array
+        {
+            return [
+                new class() extends AutocompleteRemoteMultipleFilter
+                {
+                    public function buildFilterConfig(): void
+                    {
+                        $this->configureKey('products');
+                    }
+
+                    public function defaultValue(): array
+                    {
+                        return [2, 1];
+                    }
+
+                    public function values(string $query): array
+                    {
+                        return [];
+                    }
+
+                    public function valueLabelsFor(array $ids): array
+                    {
+                        return collect($ids)
+                            ->mapWithKeys(fn ($id) => [$id => "Product {$id}"])
+                            ->all();
+                    }
+                },
+            ];
+        }
+    };
+
+    $list->buildListConfig();
+
+    expect($list->filterContainer()->getCurrentFilterValuesForFront(null)['valuated'])
+        ->toEqual(['products' => false])
+        ->and($list->filterContainer()->getCurrentFilterValuesForFront(['filter_products' => '1,2'])['valuated'])
+        ->toEqual(['products' => false])
+        ->and($list->filterContainer()->getCurrentFilterValuesForFront(['filter_products' => '1,3'])['valuated'])
+        ->toEqual(['products' => true]);
 });
 
 it('allows to declare a filter as retained and to set its default value', function () {
@@ -813,6 +858,7 @@ it('allows to define a autocomplete remote filter', function () {
             'type' => 'autocompleteRemote',
             'master' => false,
             'required' => false,
+            'multiple' => false,
             'debounceDelay' => 500,
             'searchMinChars' => 2,
         ]);
