@@ -267,10 +267,12 @@ function entityListSuite(test: TestType<PlaywrightTestArgs & PlaywrightTestOptio
       await goto();
       async function valuate() {
         await test.step('valuate', async () => {
+          const listResponse = page.waitForResponse(r => r.url().includes('filter_TestSelectRequiredFilter=3'));
           await page.getByRole('combobox', { name: 'Select required', exact: true }).click();
           await page.getByRole('listbox').getByRole('option', { name: 'Option 3', exact: true }).click();
           await expect(page.getByRole('listbox')).toBeHidden();
           await expect(page.getByText('Option 3', { exact: true }).first()).toBeVisible();
+          await (await listResponse).finished();
         });
       }
       await expect(page.getByText('Option 7', { exact: true }).first()).toBeVisible();
@@ -289,11 +291,13 @@ function entityListSuite(test: TestType<PlaywrightTestArgs & PlaywrightTestOptio
       await goto();
       async function valuate() {
         await test.step('valuate', async () => {
+          const listResponse = page.waitForResponse(r => r.url().includes('filter_TestAutocompleteRemoteFilter=2'));
           await page.getByRole('combobox', { name: 'Autocomplete remote', exact: true }).click();
           await page.getByRole('combobox', { name: 'Search...' }).fill('2');
           await page.getByRole('option', { name: 'Option 2', exact: true }).click();
           await expect(page.getByRole('dialog')).toBeHidden();
           await expect(page.getByText('Option 2', { exact: true }).first()).toBeVisible();
+          await (await listResponse).finished();
         });
       }
       await valuate();
