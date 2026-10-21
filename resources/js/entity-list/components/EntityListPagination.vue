@@ -3,7 +3,6 @@
     import { __ } from "@/utils/i18n";
     import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-vue-next";
     import { Button } from "@/components/ui/button";
-    import en from "apexcharts/dist/locales/en.json";
     import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
     import { Input } from "@/components/ui/input";
     import { ref, watchEffect } from "vue";
