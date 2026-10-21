@@ -18,7 +18,7 @@
     } from "@/components/ui/command";
     import { Check } from "lucide-vue-next";
     import { cn } from "@/utils/cn";
-    import { computed, ref, watch } from "vue";
+    import { computed, ref } from "vue";
     import AutocompleteRemoteFilterValue from "@/filters/components/filters/AutocompleteRemoteFilterValue.vue";
     import { route } from "@/utils/url";
     import { Button } from "@/components/ui/button";
@@ -29,12 +29,7 @@
     const emit = defineEmits<FilterEmits<AutocompleteRemoteFilterData>>();
     const open = ref(false);
 
-    // local copy so successive selections in a multiple filter don't wait for `value` to be updated by the parent
-    const selectedValues = ref<Option[]>(toOptions(props.value));
-
-    watch(() => props.value, value => {
-        selectedValues.value = toOptions(value);
-    });
+    const selectedValues = computed(() => toOptions(props.value));
 
     const searchTerm = ref('');
     const { results, loading, search } = useRemoteAutocomplete<Option[]>(
@@ -61,14 +56,11 @@
         : results.value
     );
 
-    const showReset = computed(() => props.filter.multiple
-        ? selectedValues.value.length > 0
-        : props.valuated
-    );
+    const showReset = computed(() => props.valuated);
 
     function toOptions(value: AutocompleteRemoteFilterData['value']): Option[] {
         if(Array.isArray(value)) {
-            return [...value];
+            return value;
         }
         return value ? [value] : [];
     }
@@ -77,15 +69,10 @@
         return selectedValues.value.some(selected => String(selected.id) === String(option.id));
     }
 
-    function updateValue(value: Option[]) {
-        selectedValues.value = value;
-        emit('input', value);
-    }
-
     function onSelect(option: Option, event: Event) {
         if(props.filter.multiple) {
             event.preventDefault();
-            updateValue(isSelected(option)
+            emit('input', isSelected(option)
                 ? selectedValues.value.filter(selected => String(selected.id) !== String(option.id))
                 : [...selectedValues.value, option]
             );
@@ -97,7 +84,7 @@
 
     function onReset() {
         if(props.filter.multiple) {
-            updateValue([]);
+            emit('input', []);
         } else {
             open.value = false;
             emit('input', null);

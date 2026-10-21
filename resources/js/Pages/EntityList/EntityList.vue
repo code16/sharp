@@ -49,10 +49,12 @@
     }
 
     function onFilterChange(filter: FilterData, value: FilterData['value']) {
+        const filterValues = filters.nextValues(filter, value);
+        filters.setCurrentValues(filterValues);
         router.post(
             route('code16.sharp.list.filters.store', { entityKey }),
             {
-                filterValues: filters.nextValues(filter, value),
+                filterValues,
                 query: entityList.value.query,
             },
             { preserveState: true, preserveScroll: false }
@@ -60,10 +62,12 @@
     }
 
     function onReset() {
+        const filterValues = filters.defaultValues(filters.rootFilters);
+        filters.setCurrentValues(filterValues);
         router.post(
             route('code16.sharp.list.filters.store', { entityKey }),
             {
-                filterValues: filters.defaultValues(filters.rootFilters),
+                filterValues,
                 query: { ...entityList.value.query, search: null },
             },
             { preserveState: true, preserveScroll: false }

@@ -29,10 +29,12 @@
     });
 
     function onFilterChange(filter: FilterData, value: FilterData['value']) {
+        const filterValues = filters.nextValues(filter, value);
+        filters.setCurrentValues(filterValues);
         router.post(
             route('code16.sharp.dashboard.filters.store', { dashboardKey }),
             {
-                filterValues: filters.nextValues(filter, value),
+                filterValues,
                 query: parseQuery(location.search),
             },
             { preserveState: true, preserveScroll: true },
@@ -40,10 +42,12 @@
     }
 
     function onFiltersReset(resettedFilters: FilterData[]) {
+        const filterValues = filters.defaultValues(resettedFilters);
+        filters.setCurrentValues(filterValues);
         router.post(
             route('code16.sharp.dashboard.filters.store', { dashboardKey }),
             {
-                filterValues: filters.defaultValues(resettedFilters),
+                filterValues,
                 query: parseQuery(location.search),
             },
             { preserveState: true, preserveScroll: true },
