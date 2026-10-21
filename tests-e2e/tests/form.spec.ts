@@ -687,7 +687,7 @@ test.describe('form', () => {
   });
   test('validation', async ({ page }) => {
     await init(page);
-    await page.goto('/sharp/root/s-list/test-models/s-form/test-models:required');
+    await page.goto('/sharp/root/s-list/test-models/s-form/test-models-required');
     await page.getByRole('button', { name: 'Create' }).click();
     async function hasError(field: Locator, error: RegExp) {
       await test.step(`hasError`, async () => {
@@ -736,7 +736,7 @@ test.describe('form', () => {
     await init(page);
     await page.goto('/sharp/root/s-list/test-models/s-form/test-models');
     await expect(page.getByRole('tablist')).toBeHidden();
-    await page.goto('/sharp/root/s-list/test-models/s-form/test-models:tabs');
+    await page.goto('/sharp/root/s-list/test-models/s-form/test-models-tabs');
     await expect(page.getByRole('tablist')).toBeVisible();
     await expect(page.getByRole('tab', { name: 'Tab 1' })).toHaveAttribute('aria-selected', 'true');
     await expect(page.getByRole('textbox', { name: 'Text', exact: true })).toBeVisible();

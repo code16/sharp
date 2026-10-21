@@ -2,7 +2,8 @@
 
 namespace App\Sharp\Commands;
 
-use Code16\Sharp\EntityList\Commands\EntityCommand;
+use Code16\Sharp\Commands\EntityCommand;
+use Code16\Sharp\Commands\Returns\CommandReturn;
 
 class TestLinkEntityCommand extends EntityCommand
 {
@@ -11,7 +12,7 @@ class TestLinkEntityCommand extends EntityCommand
         return 'Test link command';
     }
 
-    public function execute(array $data = []): array
+    public function execute(array $data = []): CommandReturn
     {
         return $this->link(route('test-page'));
     }

@@ -46,6 +46,11 @@
         emit('change', inputValue.value);
     }
 
+    function onInputFocus(e: FocusEvent) {
+        const input = e.target as HTMLInputElement;
+        setTimeout(() => input.select(), 50);
+    }
+
     function onInputBlur(e: FocusEvent) {
         (e.target as HTMLInputElement).value = String(inputValue.value);
     }
@@ -94,11 +99,11 @@
                 <Input
                     class="w-min field-sizing-content min-w-10 text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                     type="number"
-                    aria-label="{{ __('sharp::entity_list.pagination.select.aria_label') }}"
+                    :aria-label="__('sharp::entity_list.pagination.select.aria_label')"
                     :min="1"
                     :max="entityList.meta.last_page"
                     :model-value="inputValue"
-                    @focus="window.setTimeout(() => $event.target.select(), 50)"
+                    @focus="onInputFocus"
                     @blur="onInputBlur"
                     @keydown.enter="onInputEnter"
                 />

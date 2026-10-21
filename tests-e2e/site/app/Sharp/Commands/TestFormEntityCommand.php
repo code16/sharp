@@ -2,7 +2,8 @@
 
 namespace App\Sharp\Commands;
 
-use Code16\Sharp\EntityList\Commands\EntityCommand;
+use Code16\Sharp\Commands\EntityCommand;
+use Code16\Sharp\Commands\Returns\CommandReturn;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class TestFormEntityCommand extends EntityCommand
@@ -25,7 +26,7 @@ class TestFormEntityCommand extends EntityCommand
         $this->buildTestFormCommandFields($formFields);
     }
 
-    public function execute(array $data = []): array
+    public function execute(array $data = []): CommandReturn
     {
         return $this->executeTestFormCommand(null, $data);
     }

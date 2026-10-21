@@ -18,6 +18,9 @@ use App\Sharp\Commands\TestReloadInstanceCommand;
 use App\Sharp\Commands\TestSelectionCommand;
 use App\Sharp\Commands\TestViewEntityCommand;
 use App\Sharp\Commands\TestViewInstanceCommand;
+use App\Sharp\Entities\TestModelReadonlyEntity;
+use App\Sharp\Entities\TestModelRequiredEntity;
+use App\Sharp\Entities\TestModelTabsEntity;
 use App\Sharp\Filters\TestAutocompleteRemoteFilter;
 use App\Sharp\Filters\TestAutocompleteRemoteMultipleFilter;
 use App\Sharp\Filters\TestCheckFilter;
@@ -28,6 +31,7 @@ use App\Sharp\Filters\TestSelectMultipleFilter;
 use App\Sharp\Filters\TestSelectRequiredFilter;
 use App\Sharp\TestModelStateHandler;
 use Code16\Sharp\EntityList\Eloquent\SimpleEloquentReorderHandler;
+use Code16\Sharp\EntityList\EntityListEntities;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\SharpEntityList;
@@ -67,7 +71,13 @@ class TestModelList extends SharpEntityList
         }
 
         if (session()->get('entity_list_multiform')) {
-            $this->configureMultiformAttribute('form');
+            $this->configureEntityMap(
+                attribute: 'form',
+                entities: EntityListEntities::make()
+                    ->addEntity('required', TestModelRequiredEntity::class)
+                    ->addEntity('readonly', TestModelReadonlyEntity::class)
+                    ->addEntity('tabs', TestModelTabsEntity::class),
+            );
         }
 
         $this
