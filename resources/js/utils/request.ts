@@ -10,6 +10,13 @@ export function parseBlobJSONContent(blob) {
     });
 }
 
+/**
+ * Compare only the MIME type, as Blob.type may include parameters (e.g. "application/json; charset=utf-8")
+ */
+export function blobHasMimeType(blob: Blob, mimeType: string) {
+    return blob.type.split(';')[0].trim().toLowerCase() === mimeType;
+}
+
 export function getCsrfToken() {
     return session('_token');
 }
