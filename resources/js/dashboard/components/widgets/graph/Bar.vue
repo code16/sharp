@@ -30,6 +30,9 @@
         containerConfig,
         yAxisConfig
     } = useXYChart(props);
+
+    // tooltip triggers receive the bar index, the template expects the x value (timestamp for timelines)
+    const barTooltipTemplate = (d: Datum, i: number) => tooltipTemplate(d, x(d, i));
 </script>
 
 <template>
@@ -68,7 +71,7 @@
                 />
             </template>
 
-            <ChartTooltip :triggers="{ [GroupedBar.selectors.barGroup]: tooltipTemplate }"/>
+            <ChartTooltip :triggers="{ [GroupedBar.selectors.barGroup]: barTooltipTemplate }"/>
 
             <VisGroupedBar
                 v-bind="{

@@ -29,7 +29,7 @@ export function useXYChart(props: DashboardWidgetProps<LineGraphWidgetData | Bar
         });
         return res;
     }, []));
-    const x: XYComponentConfigInterface<Datum>['x'] = (d, i) => {
+    const x = (d: Datum, i: number): number => {
         return props.widget.displayHorizontalAxisAsTimeline
             ? new Date(props.value.labels[i]).getTime()
             : i;
