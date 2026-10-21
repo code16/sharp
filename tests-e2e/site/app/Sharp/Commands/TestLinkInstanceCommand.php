@@ -2,7 +2,8 @@
 
 namespace App\Sharp\Commands;
 
-use Code16\Sharp\EntityList\Commands\InstanceCommand;
+use Code16\Sharp\Commands\InstanceCommand;
+use Code16\Sharp\Commands\Returns\CommandReturn;
 
 class TestLinkInstanceCommand extends InstanceCommand
 {
@@ -11,7 +12,7 @@ class TestLinkInstanceCommand extends InstanceCommand
         return 'Test link command';
     }
 
-    public function execute(mixed $instanceId, array $data = []): array
+    public function execute(mixed $instanceId, array $data = []): CommandReturn
     {
         return $this->link(route('test-page'));
     }

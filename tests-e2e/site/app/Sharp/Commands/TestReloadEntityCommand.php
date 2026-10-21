@@ -3,7 +3,8 @@
 namespace App\Sharp\Commands;
 
 use App\Models\TestModel;
-use Code16\Sharp\EntityList\Commands\EntityCommand;
+use Code16\Sharp\Commands\EntityCommand;
+use Code16\Sharp\Commands\Returns\CommandReturn;
 
 class TestReloadEntityCommand extends EntityCommand
 {
@@ -12,7 +13,7 @@ class TestReloadEntityCommand extends EntityCommand
         return 'Test reload command';
     }
 
-    public function execute(array $data = []): array
+    public function execute(array $data = []): CommandReturn
     {
         TestModel::query()->update(['text' => 'Reloaded']);
 

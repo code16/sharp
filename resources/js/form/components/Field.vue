@@ -12,7 +12,7 @@
     import Number from "./fields/Number.vue";
     import Select from "./fields/select/Select.vue";
     import Tags from "./fields/Tags.vue";
-    import Text from "./fields/Text.vue";
+    import Text from "./fields/text/Text.vue";
     import Textarea from "./fields/Textarea.vue";
     import Upload from "./fields/upload/Upload.vue";
     import { useParentForm } from "../useParentForm";
