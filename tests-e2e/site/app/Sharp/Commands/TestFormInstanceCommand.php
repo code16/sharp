@@ -2,7 +2,8 @@
 
 namespace App\Sharp\Commands;
 
-use Code16\Sharp\EntityList\Commands\InstanceCommand;
+use Code16\Sharp\Commands\InstanceCommand;
+use Code16\Sharp\Commands\Returns\CommandReturn;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class TestFormInstanceCommand extends InstanceCommand
@@ -24,7 +25,7 @@ class TestFormInstanceCommand extends InstanceCommand
         $this->buildTestFormCommandFields($formFields);
     }
 
-    public function execute(mixed $instanceId, array $data = []): array
+    public function execute(mixed $instanceId, array $data = []): CommandReturn
     {
         return $this->executeTestFormCommand($instanceId, $data);
     }

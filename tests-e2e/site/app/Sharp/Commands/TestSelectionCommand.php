@@ -3,7 +3,8 @@
 namespace App\Sharp\Commands;
 
 use App\Models\TestModel;
-use Code16\Sharp\EntityList\Commands\EntityCommand;
+use Code16\Sharp\Commands\EntityCommand;
+use Code16\Sharp\Commands\Returns\CommandReturn;
 
 class TestSelectionCommand extends EntityCommand
 {
@@ -17,7 +18,7 @@ class TestSelectionCommand extends EntityCommand
         $this->configureInstanceSelectionAllowed();
     }
 
-    public function execute(array $data = []): array
+    public function execute(array $data = []): CommandReturn
     {
         TestModel::query()
             ->whereIn('id', $this->selectedIds())

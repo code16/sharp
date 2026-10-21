@@ -3,6 +3,7 @@
 namespace App\Sharp\Commands;
 
 use App\Models\TestModel;
+use Code16\Sharp\Commands\Returns\CommandReturn;
 use Code16\Sharp\Form\Fields\SharpFormCheckField;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
@@ -25,7 +26,7 @@ trait TestFormCommand
             ]));
     }
 
-    public function executeTestFormCommand(mixed $instanceId, array $data = []): array
+    public function executeTestFormCommand(mixed $instanceId, array $data = []): CommandReturn
     {
         if ($data['required']) {
             $this->validate($data, [

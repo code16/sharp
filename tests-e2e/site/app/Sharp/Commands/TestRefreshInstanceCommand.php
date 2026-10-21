@@ -3,7 +3,8 @@
 namespace App\Sharp\Commands;
 
 use App\Models\TestModel;
-use Code16\Sharp\EntityList\Commands\InstanceCommand;
+use Code16\Sharp\Commands\InstanceCommand;
+use Code16\Sharp\Commands\Returns\CommandReturn;
 
 class TestRefreshInstanceCommand extends InstanceCommand
 {
@@ -12,7 +13,7 @@ class TestRefreshInstanceCommand extends InstanceCommand
         return 'Test refresh command';
     }
 
-    public function execute(mixed $instanceId, array $data = []): array
+    public function execute(mixed $instanceId, array $data = []): CommandReturn
     {
         TestModel::query()->update(['text' => 'Refreshed']);
 
