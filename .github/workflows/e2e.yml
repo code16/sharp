@@ -3,11 +3,9 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - 9.x
       - 10.x
   pull_request:
     branches:
-      - 9.x
       - 10.x
 jobs:
   e2e-test:
