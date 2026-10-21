@@ -38,11 +38,12 @@ export default defineConfig({
     extraHTTPHeaders: {
       'X-E2E-REQUEST': '1',
     },
-    // actionTimeout: 5000,
+    /* Fail fast on a stuck action/navigation instead of waiting for the whole test timeout */
+    actionTimeout: 5000,
+    navigationTimeout: 10000,
   },
 
   timeout: 60000,
-  // timeout: 5000,
 
   /* Configure projects for major browsers */
   projects: [
