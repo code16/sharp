@@ -10,11 +10,15 @@ abstract class AutocompleteRemoteMultipleFilter extends Filter
 
     public function fromQueryParam($value): array
     {
-        if (! is_string($value) || $value === '') {
+        if (! is_string($value)) {
             return [];
         }
 
         $ids = $this->formatIds(explode(',', $value));
+
+        if (! count($ids)) {
+            return [];
+        }
 
         return once(function () use ($ids) {
             $labels = $this->valueLabelsFor($ids);
@@ -56,7 +60,7 @@ abstract class AutocompleteRemoteMultipleFilter extends Filter
     {
         return collect($value)
             ->map(fn ($item) => is_array($item) ? ($item['id'] ?? null) : $item)
-            ->filter(fn ($id) => is_string($id) || is_int($id))
+            ->filter(fn ($id) => is_string($id) && trim($id) !== '' || is_int($id))
             ->unique(fn (string|int $id) => (string) $id)
             ->values()
             ->all();
