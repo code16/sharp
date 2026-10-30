@@ -23,7 +23,11 @@
 
     const props = defineProps<ShowFieldProps<ShowDashboardFieldData> & { ariaLabelledby?: string }>();
 
-    const collapsed = ref(props.collapsable);
+    const remembered = useRemember({
+        data: null as DashboardData | null,
+        collapsed: props.collapsable,
+    }, `dashboard_${props.field.key}`);
+    const collapsed = ref(props.collapsable && remembered.value.collapsed);
     const dashboard: Ref<Dashboard | null> = ref(null);
     const filters: FilterManager = useFilters();
     const reload: CommandResponseHandlers['reload'] = (data, { formModal }) => {
@@ -42,10 +46,6 @@
             reload({ action: 'reload' }, { formModal });
         },
     });
-    const remembered = useRemember({
-        data: null as DashboardData | null,
-        collapsed: collapsed.value, // TODO handle remembered collapse state
-    }, `dashboard_${props.field.key}`);
 
 
     if(remembered.value.data && !collapsed.value) {
