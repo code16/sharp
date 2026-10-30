@@ -828,11 +828,13 @@
                                                     </TableCell>
                                                 </template>
 
-                                                <TableCell class="w-0 pr-6 @5xl:pl-4 hidden group-data-reordering:table-cell">
-                                                    <div class="flex justify-center items-center size-10"> <!-- same size than dropdown -->
-                                                        <GripVertical class="w-4 h-4 opacity-50" />
-                                                    </div>
-                                                </TableCell>
+                                                <template v-if="reordering">
+                                                    <TableCell class="w-0 pr-6 @5xl:pl-4">
+                                                        <div class="flex justify-center items-center size-10"> <!-- same size than dropdown -->
+                                                            <GripVertical class="w-4 h-4 opacity-50" />
+                                                        </div>
+                                                    </TableCell>
+                                                </template>
 
                                                 <template v-if="entityList.instanceHasActions(item, showEntityState)">
                                                     <TableCell class="sticky bg-background pl-1 -right-3 z-10 group-data-[scroll-arrived-right=true]/scroll-area:bg-transparent group-data-reordering:hidden group-data-selecting:hidden @5xl:pl-4 @5xl:bg-transparent print:hidden"
