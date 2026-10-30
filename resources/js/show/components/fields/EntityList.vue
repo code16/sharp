@@ -22,7 +22,11 @@
     const props = defineProps<ShowFieldProps<ShowEntityListFieldData> & { highlightedInstanceId?: string | number, ariaLabelledby?: string }>();
 
     const el = ref();
-    const collapsed = ref(props.collapsable && !props.highlightedInstanceId);
+    const remembered = useRemember({
+        data: null as EntityListData | null,
+        collapsed: props.collapsable,
+    }, `entityList_${props.field.key}`);
+    const collapsed = ref(props.collapsable && !props.highlightedInstanceId && remembered.value.collapsed);
     const entityList: Ref<EntityList | null> = ref(null);
     const filters: FilterManager = useFilters();
     const commands = useCommands('entityList', {
@@ -41,10 +45,6 @@
             formModal.shouldReopen && formModal.reopen();
         },
     });
-    const remembered = useRemember({
-        data: null as EntityListData | null,
-        collapsed: collapsed.value, // TODO handle remembered collapse state
-    }, `entityList_${props.field.key}`);
 
 
     if(remembered.value.data && !collapsed.value) {
