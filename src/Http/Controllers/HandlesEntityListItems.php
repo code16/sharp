@@ -24,6 +24,7 @@ trait HandlesEntityListItems
                     ...$item,
                     '_meta' => [
                         'url' => $this->getItemUrl($item, $entityKey, $entity, $list),
+                        'entityKey' => $itemEntityKey->baseKey(),
                         'authorizations' => [
                             'view' => app(SharpAuthorizationManager::class)->isAllowed('view', $itemEntityKey, $instanceId),
                             'delete' => app(SharpAuthorizationManager::class)->isAllowed('delete', $itemEntityKey, $instanceId),

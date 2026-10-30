@@ -12,6 +12,7 @@ final class EntityListItemMeta extends Data
 {
     public function __construct(
         public ?string $url,
+        public string $entityKey,
         public InstanceAuthorizationsData $authorizations,
     ) {}
 }

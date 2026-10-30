@@ -171,6 +171,7 @@ it('sets appropriate `_meta` for with entities map', function () {
                     'entityKey' => 'person-chemist',
                     'instanceId' => 1,
                 ]))
+                ->where('_meta.entityKey', 'person-chemist')
                 ->etc()
             )
             ->has('entityList.data.1', fn (Assert $json) => $json
@@ -183,6 +184,7 @@ it('sets appropriate `_meta` for with entities map', function () {
             )
             ->has('entityList.data.2', fn (Assert $json) => $json
                 ->whereNull('_meta.url')
+                ->where('_meta.entityKey', 'person-unknown')
                 ->etc()
             )
         );

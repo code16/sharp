@@ -172,7 +172,8 @@
                                                             :field="show.fields[fieldLayout.key] as ShowEntityListFieldData"
                                                             :collapsable="section.collapsable"
                                                             :value="null"
-                                                            :highlighted-instance-id="highlightedEntityKey === (show.fields[fieldLayout.key] as ShowEntityListFieldData).entityListKey ? highlightedInstanceId : null"
+                                                            :highlighted-instance-id="highlightedInstanceId"
+                                                            :highlighted-entity-key="highlightedEntityKey"
                                                             :aria-labelledby="`section-${i}-title`"
                                                             @reordering="onEntityListReordering(fieldLayout.key, $event)"
                                                         />
