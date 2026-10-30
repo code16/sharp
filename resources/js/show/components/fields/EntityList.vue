@@ -19,18 +19,14 @@
     import { hasPoppedState, useRemember } from "@/router";
     import { router } from "@inertiajs/vue3";
 
-    const props = defineProps<ShowFieldProps<ShowEntityListFieldData> & { highlightedInstanceId?: string | number, highlightedEntityKey?: string, ariaLabelledby?: string }>();
+    const props = defineProps<ShowFieldProps<ShowEntityListFieldData> & { highlightedInstanceId?: string | number, ariaLabelledby?: string }>();
 
     const el = ref();
     const remembered = useRemember({
         data: null as EntityListData | null,
         collapsed: props.collapsable,
     }, `entityList_${props.field.key}`);
-    const collapsed = ref(
-        props.collapsable
-        && !(props.highlightedInstanceId && props.highlightedEntityKey === props.field.entityListKey)
-        && remembered.value.collapsed
-    );
+    const collapsed = ref(props.collapsable && !props.highlightedInstanceId && remembered.value.collapsed);
     const entityList: Ref<EntityList | null> = ref(null);
     const filters: FilterManager = useFilters();
     const commands = useCommands('entityList', {
@@ -150,7 +146,6 @@
            :show-search-field="field.showSearchField"
            :show-entity-state="field.showEntityState"
            :highlighted-instance-id="highlightedInstanceId"
-           :highlighted-entity-key="highlightedEntityKey"
            :collapsed="collapsed"
            :title="field.label"
            inline

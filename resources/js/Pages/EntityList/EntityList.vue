@@ -92,7 +92,6 @@
                     :commands="commands"
                     :title="breadcrumb.items[0].label"
                     :highlighted-instance-id="highlightedInstanceId"
-                    :highlighted-entity-key="highlightedEntityKey"
                     @reset="onReset"
                     @filter-change="onFilterChange"
                     @update:query="onQueryChange"

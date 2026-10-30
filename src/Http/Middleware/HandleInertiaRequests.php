@@ -49,6 +49,7 @@ class HandleInertiaRequests extends Middleware
                     'popstate',
                     'highlighted_entity_key',
                     'highlighted_instance_id',
+                    'entity_list_key',
                 ])
             )
                 ->after($request->schemeAndHttpHost())

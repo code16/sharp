@@ -232,7 +232,6 @@ export type EntityListFieldData = {
 };
 export type EntityListItemMeta = {
   url: string | null;
-  entityKey: string;
   authorizations: InstanceAuthorizationsData;
 };
 export type EntityListQueryParamsData = {

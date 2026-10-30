@@ -86,7 +86,6 @@
         showEntityState?: boolean,
         collapsed?: boolean,
         highlightedInstanceId?: string | number,
-        highlightedEntityKey?: string,
     }>(), {
         inline: true,
         showCount: true,
@@ -326,8 +325,7 @@
 
     function isHighlighted(item: EntityListInstance) {
         return props.highlightedInstanceId != null
-            && props.highlightedInstanceId == props.entityList.instanceId(item)
-            && (!props.highlightedEntityKey || props.highlightedEntityKey === item._meta.entityKey);
+            && props.highlightedInstanceId == props.entityList.instanceId(item);
     }
 
     async function focusHighlightedInstance() {
@@ -350,7 +348,7 @@
         }
     }
 
-    watch([sortableTableBody, () => props.highlightedInstanceId, () => props.highlightedEntityKey], focusHighlightedInstance);
+    watch([sortableTableBody, () => props.highlightedInstanceId], focusHighlightedInstance);
 </script>
 
 <template>

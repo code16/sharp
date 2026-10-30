@@ -115,6 +115,7 @@ it('sets appropriate `_meta` for each items linking to a form', function () {
                     'parentUri' => 's-list/person',
                     'entityKey' => 'person',
                     'instanceId' => 1,
+                    'entity_list_key' => 'person',
                 ]))
                 ->where('_meta.authorizations.view', true)
                 ->where('_meta.authorizations.delete', true)
@@ -125,6 +126,7 @@ it('sets appropriate `_meta` for each items linking to a form', function () {
                     'parentUri' => 's-list/person',
                     'entityKey' => 'person',
                     'instanceId' => 2,
+                    'entity_list_key' => 'person',
                 ]))
                 ->where('_meta.authorizations.view', true)
                 ->where('_meta.authorizations.delete', true)
@@ -170,8 +172,8 @@ it('sets appropriate `_meta` for with entities map', function () {
                     'parentUri' => 's-list/person',
                     'entityKey' => 'person-chemist',
                     'instanceId' => 1,
+                    'entity_list_key' => 'person',
                 ]))
-                ->where('_meta.entityKey', 'person-chemist')
                 ->etc()
             )
             ->has('entityList.data.1', fn (Assert $json) => $json
@@ -184,7 +186,6 @@ it('sets appropriate `_meta` for with entities map', function () {
             )
             ->has('entityList.data.2', fn (Assert $json) => $json
                 ->whereNull('_meta.url')
-                ->where('_meta.entityKey', 'person-unknown')
                 ->etc()
             )
         );
@@ -456,21 +457,21 @@ it('get entities if configured', function () {
                 ->where('entityKey', 'person-chemist')
                 ->where('label', 'Chemist')
                 ->where('icon.name', 'testicon-car')
-                ->where('formCreateUrl', route('code16.sharp.form.create', ['parentUri' => 's-list/person', 'entityKey' => 'person-chemist']))
+                ->where('formCreateUrl', route('code16.sharp.form.create', ['parentUri' => 's-list/person', 'entityKey' => 'person-chemist', 'entity_list_key' => 'person']))
                 ->etc()
             )
             ->has('entityList.entities.1', fn (Assert $config) => $config
                 ->where('key', 'physicist')
                 ->where('entityKey', 'person-physicist')
                 ->where('label', 'Physicist')
-                ->where('formCreateUrl', route('code16.sharp.form.create', ['parentUri' => 's-list/person', 'entityKey' => 'person-physicist']))
+                ->where('formCreateUrl', route('code16.sharp.form.create', ['parentUri' => 's-list/person', 'entityKey' => 'person-physicist', 'entity_list_key' => 'person']))
                 ->etc()
             )
             ->has('entityList.entities.2', fn (Assert $config) => $config
                 ->where('key', 'unknown')
                 ->where('entityKey', 'person-unknown')
                 ->where('label', 'Unknown')
-                ->where('formCreateUrl', route('code16.sharp.form.create', ['parentUri' => 's-list/person', 'entityKey' => 'person-unknown']))
+                ->where('formCreateUrl', route('code16.sharp.form.create', ['parentUri' => 's-list/person', 'entityKey' => 'person-unknown', 'entity_list_key' => 'person']))
                 ->etc()
             )
         );
