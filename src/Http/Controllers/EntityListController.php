@@ -89,22 +89,23 @@ class EntityListController extends Controller
         }
 
         return collect($entities)
-            ->map(function (EntityListEntity $listEntity, $key) {
+            ->map(function (EntityListEntity $listEntity, $key) use ($entityKey) {
                 $entity = $listEntity->getEntity();
-                $entityKey = $this->entityManager->entityKeyFor($entity);
+                $itemEntityKey = $this->entityManager->entityKeyFor($entity);
 
-                if (! $this->authorizationManager->isAllowed('create', $entityKey)) {
+                if (! $this->authorizationManager->isAllowed('create', $itemEntityKey)) {
                     return null;
                 }
 
                 return [
                     'key' => $key,
-                    'entityKey' => $entityKey,
+                    'entityKey' => $itemEntityKey,
                     'label' => $listEntity->getLabel() ?: $entity->getLabelOrFail(),
                     'icon' => app(IconManager::class)->iconToArray($listEntity->getIcon()),
                     'formCreateUrl' => route('code16.sharp.form.create', [
                         'parentUri' => sharp()->context()->breadcrumb()->getCurrentPath(),
-                        'entityKey' => $entityKey,
+                        'entityKey' => $itemEntityKey,
+                        'entity_list_key' => $entityKey,
                     ]),
                 ];
             })

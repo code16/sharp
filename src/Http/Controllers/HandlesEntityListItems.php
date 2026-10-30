@@ -79,6 +79,7 @@ trait HandlesEntityListItems
                     'parentUri' => $breadcrumb->getCurrentPath(),
                     'entityKey' => $itemEntityKey,
                     'instanceId' => $item[$list->getInstanceIdAttribute()],
+                    'entity_list_key' => $entityKey,
                 ]);
             }
         }

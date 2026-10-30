@@ -323,15 +323,32 @@
             )
     );
 
-    watch([sortableTableBody, () => props.highlightedInstanceId], () => {
-        if(sortableTableBody.value && props.highlightedInstanceId) {
-            const link = el.value?.querySelector(`[data-instance-row="${props.highlightedInstanceId}"] a`) as HTMLAnchorElement;
-            if(link) {
-                // link.scrollIntoView({ block: "center" });
-                link.focus();
-            }
+    function isHighlighted(item: EntityListInstance) {
+        return props.highlightedInstanceId != null
+            && props.highlightedInstanceId == props.entityList.instanceId(item);
+    }
+
+    async function focusHighlightedInstance() {
+        if(!sortableTableBody.value || props.highlightedInstanceId == null) {
+            return;
         }
-    });
+        const index = props.entityList.data.findIndex(item => isHighlighted(item));
+        if(index < 0 || !props.entityList.data[index]._meta.url) {
+            return;
+        }
+        if(index >= renderedCount.value) {
+            renderedCount.value = Math.ceil((index + 1) / renderedChunk) * renderedChunk;
+        }
+        // wait for the row to be rendered and for Inertia to reset the scroll after page swap
+        await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+        const link = el.value?.querySelector('[data-instance-row][data-highlighted] [data-row-link]') as HTMLElement;
+        if(link) {
+            link.closest('tr').scrollIntoView({ block: 'center' });
+            link.focus({ preventScroll: true });
+        }
+    }
+
+    watch([sortableTableBody, () => props.highlightedInstanceId], focusHighlightedInstance);
 </script>
 
 <template>
@@ -720,7 +737,7 @@
                                             <TableRow
                                                 class="group/row relative hover:bg-transparent has-[[data-row-action]:hover]:bg-muted/50 has-[[aria-expanded=true]]:bg-muted/50 group-data-reordering:cursor-move group-data-[reordering]:hover:bg-muted/50 group-[:has(.sortable-chosen)]:bg-background [&.sortable-chosen]:transition-none lg:*:first:pl-6 lg:*:last:pr-6 print:*:first:pl-0 print:*:last:pr-0"
                                                 :data-instance-row="entityList.instanceId(item)"
-                                                :data-highlighted="props.highlightedInstanceId && props.highlightedInstanceId == entityList.instanceId(item) ? true : null"
+                                                :data-highlighted="isHighlighted(item) ? true : null"
                                             >
                                                 <template v-if="selecting && selectedItems">
                                                     <TableCell>
@@ -804,6 +821,7 @@
                                                         <template v-if="fieldIndex === 0 && item._meta.url && !selecting && !reordering">
                                                             <Link class="absolute inset-0 ring-ring ring-inset focus-visible:outline-none focus-visible:ring-2 focus:group-data-highlighted/row:ring-2"
                                                                 data-row-action
+                                                                data-row-link
                                                                 :href="item._meta.url"
                                                             ></Link>
                                                         </template>

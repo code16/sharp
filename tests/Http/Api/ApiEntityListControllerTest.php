@@ -259,6 +259,7 @@ it('sets appropriate `_meta` for each item linking to a form in an EEL case', fu
                     'parentUri' => 's-list/person/s-show/person/1',
                     'entityKey' => 'person',
                     'instanceId' => 1,
+                    'entity_list_key' => 'person',
                 ]))
                 ->where('_meta.authorizations.view', true)
                 ->where('_meta.authorizations.delete', true)
@@ -269,6 +270,7 @@ it('sets appropriate `_meta` for each item linking to a form in an EEL case', fu
                     'parentUri' => 's-list/person/s-show/person/1',
                     'entityKey' => 'person',
                     'instanceId' => 2,
+                    'entity_list_key' => 'person',
                 ]))
                 ->where('_meta.authorizations.view', true)
                 ->where('_meta.authorizations.delete', true)
@@ -317,6 +319,7 @@ it('sets appropriate `_meta` for with entities map', function () {
                 'parentUri' => 's-list/person/s-show/person/1',
                 'entityKey' => 'person-chemist',
                 'instanceId' => 1,
+                'entity_list_key' => 'person',
             ]))
             ->where('data.1._meta.url', route('code16.sharp.show.show', [
                 'parentUri' => 's-list/person/s-show/person/1',
@@ -412,21 +415,21 @@ it('get entities if configured', function () {
                 ->where('entityKey', 'person-chemist')
                 ->where('label', 'Chemist')
                 ->where('icon.name', 'testicon-car')
-                ->where('formCreateUrl', route('code16.sharp.form.create', ['parentUri' => 's-list/person/s-show/person/1', 'entityKey' => 'person-chemist']))
+                ->where('formCreateUrl', route('code16.sharp.form.create', ['parentUri' => 's-list/person/s-show/person/1', 'entityKey' => 'person-chemist', 'entity_list_key' => 'person']))
                 ->etc()
             )
             ->has('entities.1', fn (AssertableJson $json) => $json
                 ->where('key', 'physicist')
                 ->where('entityKey', 'person-physicist')
                 ->where('label', 'Physicist')
-                ->where('formCreateUrl', route('code16.sharp.form.create', ['parentUri' => 's-list/person/s-show/person/1', 'entityKey' => 'person-physicist']))
+                ->where('formCreateUrl', route('code16.sharp.form.create', ['parentUri' => 's-list/person/s-show/person/1', 'entityKey' => 'person-physicist', 'entity_list_key' => 'person']))
                 ->etc()
             )
             ->has('entities.2', fn (AssertableJson $json) => $json
                 ->where('key', 'unknown')
                 ->where('entityKey', 'person-unknown')
                 ->where('label', 'Unknown')
-                ->where('formCreateUrl', route('code16.sharp.form.create', ['parentUri' => 's-list/person/s-show/person/1', 'entityKey' => 'person-unknown']))
+                ->where('formCreateUrl', route('code16.sharp.form.create', ['parentUri' => 's-list/person/s-show/person/1', 'entityKey' => 'person-unknown', 'entity_list_key' => 'person']))
                 ->etc()
             )
             ->etc()

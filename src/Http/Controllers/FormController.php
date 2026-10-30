@@ -56,6 +56,7 @@ class FormController extends Controller
                 'parentUri' => $parentUri,
                 'entityKey' => $entityKey,
                 'previous_page_url' => $this->getPreviousPageUrlFromReferer(),
+                'entity_list_key' => request()->query('entity_list_key'),
             ]),
         ]);
     }
@@ -118,6 +119,7 @@ class FormController extends Controller
                 'entityKey' => $entityKey,
                 'instanceId' => $instanceId,
                 'previous_page_url' => $this->getPreviousPageUrlFromReferer(),
+                'entity_list_key' => request()->query('entity_list_key'),
             ]),
         ]);
     }
@@ -193,7 +195,8 @@ class FormController extends Controller
     private function previousUrlWithHighlightedQuery(string $url, EntityKey $entityKey, ?string $instanceId): string
     {
         return Uri::of($url)->when($instanceId)->withQuery([
-            'highlighted_entity_key' => $entityKey->baseKey(),
+            // the key of the entity list the instance was opened from (may differ from the instance entity key with an entity map)
+            'highlighted_entity_key' => request()->query('entity_list_key') ?: $entityKey->baseKey(),
             'highlighted_instance_id' => $instanceId,
         ]);
     }

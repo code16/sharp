@@ -13,6 +13,7 @@ use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\SharpForm;
+use Code16\Sharp\Tests\Fixtures\Entities\PersonChemistEntity;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Entities\SinglePersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonForm;
@@ -169,6 +170,32 @@ it('stores or updates an instance and redirect to the list', function () {
         ->assertRedirectContains('/sharp/root/s-list/person')
         ->assertRedirectContains('highlighted_entity_key=person')
         ->assertRedirectContains('highlighted_instance_id=1');
+});
+
+it('highlights the instance with the entity list key it was opened from', function () {
+    sharp()->config()->declareEntity(PersonChemistEntity::class);
+
+    $this->get('/sharp/root/s-list/person/s-show/person/1/s-form/person-chemist/2?entity_list_key=person')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('endpointUrl', fn ($url) => str_contains($url, 'entity_list_key=person'))
+            ->where('cancelUrl', fn ($url) => str_contains($url, 'highlighted_entity_key=person&')
+                && str_contains($url, 'highlighted_instance_id=2')
+            )
+        );
+
+    $this
+        ->post('/sharp/root/s-list/person/s-show/person/1/s-form/person-chemist/2?entity_list_key=person', [
+            'name' => 'Stephen Hawking',
+        ])
+        ->assertRedirectContains('/sharp/root/s-list/person/s-show/person/1')
+        ->assertRedirectContains('highlighted_entity_key=person&');
+
+    $this
+        ->post('/sharp/root/s-list/person/s-show/person/1/s-form/person-chemist?entity_list_key=person', [
+            'name' => 'Stephen Hawking',
+        ])
+        ->assertRedirectContains('highlighted_entity_key=person&');
 });
 
 it('redirects to the show after an update', function () {
