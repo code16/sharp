@@ -72,6 +72,7 @@ it('turns a refresh into a reload in a dashboard command', function () {
         ->assertOk()
         ->assertExactJson([
             'action' => 'reload',
+            'showPageReload' => false,
         ]);
 });
 

@@ -30,7 +30,12 @@
     const entityList: Ref<EntityList | null> = ref(null);
     const filters: FilterManager = useFilters();
     const commands = useCommands('entityList', {
-        reload: (data, { formModal }) => {
+        reload: (data, context) => {
+            if(data.showPageReload) {
+                // the show page is built at setup, so it must be fully reloaded (without preserved state)
+                return commands.defaultCommandResponseHandlers.reload(data, context);
+            }
+            const { formModal } = context;
             onQueryChange(entityList.value.query);
             router.reload({
                 headers: {

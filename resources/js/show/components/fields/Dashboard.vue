@@ -30,20 +30,24 @@
     const collapsed = ref(props.collapsable && remembered.value.collapsed);
     const dashboard: Ref<Dashboard | null> = ref(null);
     const filters: FilterManager = useFilters();
-    const reload: CommandResponseHandlers['reload'] = (data, { formModal }) => {
-        onQueryChange(dashboard.value.query);
-        router.reload({
-            headers: {
-                'X-No-Preload': '1',
-            },
-            only: ['notifications'],
-        });
-        formModal.shouldReopen && formModal.reopen();
-    };
     const commands = useCommands('dashboard', {
-        reload,
-        refresh: (data, { formModal }) => {
-            reload({ action: 'reload' }, { formModal });
+        reload: (data, context) => {
+            if(data.showPageReload) {
+                // the show page is built at setup, so it must be fully reloaded (without preserved state)
+                return commands.defaultCommandResponseHandlers.reload(data, context);
+            }
+            const { formModal } = context;
+            onQueryChange(dashboard.value.query);
+            router.reload({
+                headers: {
+                    'X-No-Preload': '1',
+                },
+                only: ['notifications'],
+            });
+            formModal.shouldReopen && formModal.reopen();
+        },
+        refresh: () => {
+            commands.handleCommandResponse({ action: 'reload' });
         },
     });
 

@@ -31,6 +31,6 @@ class BulkPublishPostsCommand extends EntityCommand
 
         $this->notify('All selected posts were published!');
 
-        return $this->reload();
+        return $this->reload()->withShowPageReload();
     }
 }

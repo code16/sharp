@@ -105,9 +105,9 @@ export type CommandFormData = {
 };
 export type CommandResponseData =
   | { action: "link"; link: string; openInNewTab: boolean }
-  | { action: "info"; message: string; reload: boolean }
+  | { action: "info"; message: string; reload: boolean; showPageReload: boolean }
   | { action: "refresh"; items?: Array<{ [key: string]: any }> }
-  | { action: "reload" }
+  | { action: "reload"; showPageReload?: boolean }
   | { action: "step"; step: string }
   | { action: "view"; html: string };
 export type CommandType = "dashboard" | "entity" | "instance";
