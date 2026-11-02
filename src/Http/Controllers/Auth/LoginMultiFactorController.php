@@ -5,15 +5,19 @@ namespace Code16\Sharp\Http\Controllers\Auth;
 use Code16\Sharp\Auth\Passkeys\PasskeyManager;
 use Code16\Sharp\Auth\TwoFactor\MultiFactorManager;
 use Code16\Sharp\Enums\MultiFactorMethod;
+use Code16\Sharp\Http\Controllers\Auth\Concerns\RedirectsToIntendedUrl;
 use Code16\Sharp\Http\Controllers\Auth\Requests\Login2faRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Inertia\Inertia;
 use Inertia\Response;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 class LoginMultiFactorController extends Controller
 {
+    use RedirectsToIntendedUrl;
+
     public function create(Request $request, MultiFactorManager $multiFactor, PasskeyManager $passkeys): RedirectResponse|Response
     {
         $user = $multiFactor->pendingUser();
@@ -34,11 +38,11 @@ class LoginMultiFactorController extends Controller
         return redirect()->route('code16.sharp.login');
     }
 
-    public function store(Login2faRequest $request, MultiFactorManager $twoFactor): RedirectResponse
+    public function store(Login2faRequest $request, MultiFactorManager $twoFactor): SymfonyResponse
     {
         $request->authenticate($twoFactor->currentHandler());
         $request->session()->regenerate();
 
-        return redirect()->intended(route('code16.sharp.home'));
+        return $this->redirectToIntendedUrl();
     }
 }

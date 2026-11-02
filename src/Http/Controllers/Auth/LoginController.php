@@ -4,6 +4,7 @@ namespace Code16\Sharp\Http\Controllers\Auth;
 
 use Code16\Sharp\Auth\Passkeys\PasskeyManager;
 use Code16\Sharp\Exceptions\Auth\SharpAuthenticationNeeds2faException;
+use Code16\Sharp\Http\Controllers\Auth\Concerns\RedirectsToIntendedUrl;
 use Code16\Sharp\Http\Controllers\Auth\Requests\LoginRequest;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -13,9 +14,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Inertia\Response;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 class LoginController extends Controller
 {
+    use RedirectsToIntendedUrl;
+
     public function create(PasskeyManager $passkeys): RedirectResponse|Response
     {
         if ($loginPageUrl = sharp()->config()->get('auth.login_page_url')) {
@@ -41,7 +45,7 @@ class LoginController extends Controller
         ]);
     }
 
-    public function store(LoginRequest $request, PasskeyManager $passkeys): RedirectResponse
+    public function store(LoginRequest $request, PasskeyManager $passkeys): SymfonyResponse
     {
         try {
             $request->authenticate();
@@ -61,7 +65,7 @@ class LoginController extends Controller
             return redirect()->route('code16.sharp.passkeys.create', ['prompt' => true]);
         }
 
-        return redirect()->intended(route('code16.sharp.home'));
+        return $this->redirectToIntendedUrl();
     }
 
     public function destroy(Request $request): RedirectResponse
