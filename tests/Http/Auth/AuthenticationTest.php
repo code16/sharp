@@ -48,6 +48,35 @@ it('allows guests to login', function () {
     expect(auth('sharp')->check())->toBeTrue();
 });
 
+it('redirects Inertia login to the intended Sharp url', function () {
+    setTestAuthGuard();
+
+    $this
+        ->withSession(['url.intended' => route('code16.sharp.list', 'person')])
+        ->withHeader('X-Inertia', 'true')
+        ->post(route('code16.sharp.login.post'), [
+            'login' => 'test@example.org',
+            'password' => 'password',
+        ])
+        ->assertRedirect(route('code16.sharp.list', 'person'));
+});
+
+it('forces a full page visit on Inertia login when the intended url is not a Sharp page', function () {
+    setTestAuthGuard();
+
+    $this
+        ->withSession(['url.intended' => url('/tools/glyphs')])
+        ->withHeader('X-Inertia', 'true')
+        ->post(route('code16.sharp.login.post'), [
+            'login' => 'test@example.org',
+            'password' => 'password',
+        ])
+        ->assertStatus(409)
+        ->assertHeader('X-Inertia-Location', url('/tools/glyphs'));
+
+    expect(auth('sharp')->check())->toBeTrue();
+});
+
 it('does not allow to login with invalid payload', function () {
     $this->post(route('code16.sharp.login.post'))
         ->assertSessionHasErrors(['login', 'password']);
