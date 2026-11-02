@@ -188,9 +188,11 @@ it('call & assert an entity list entity command form', function () {
 
                         return match ($data['action']) {
                             'info' => $this->info('ok'),
+                            'info_show_page_reload' => $this->info('ok')->withShowPageReload(),
                             'link' => $this->link('https://example.org'),
                             'view' => $this->view('fixtures::test', ['text' => 'text']),
                             'reload' => $this->reload(),
+                            'reload_show_page' => $this->reload()->withShowPageReload(),
                             'download' => $this->download('pdf/account.pdf', 'account.pdf', 'files'),
                             'refresh' => $this->refresh([1, 2]),
                         };
@@ -213,6 +215,10 @@ it('call & assert an entity list entity command form', function () {
     expect($postedData)->toEqual(['action' => 'info', 'field_with_initial_value' => 'test']);
 
     $this->sharpList(PersonEntity::class)
+        ->entityCommand('cmd-form')->getForm()->post(['action' => 'info_show_page_reload'])
+        ->assertReturnsInfo('ok', reload: true, showPageReload: true);
+
+    $this->sharpList(PersonEntity::class)
         ->entityCommand('cmd-form')->getForm()->post(['action' => 'link'])
         ->assertReturnsLink('https://example.org');
 
@@ -224,7 +230,11 @@ it('call & assert an entity list entity command form', function () {
 
     $this->sharpList(PersonEntity::class)
         ->entityCommand('cmd-form')->getForm()->post(['action' => 'reload'])
-        ->assertReturnsReload();
+        ->assertReturnsReload(showPageReload: false);
+
+    $this->sharpList(PersonEntity::class)
+        ->entityCommand('cmd-form')->getForm()->post(['action' => 'reload_show_page'])
+        ->assertReturnsReload(showPageReload: true);
 
     $this->sharpList(PersonEntity::class)
         ->entityCommand('cmd-form')->getForm()->post(['action' => 'download'])

@@ -34,7 +34,7 @@ class EvaluateDraftPostWizardCommand extends InstanceWizardCommand
         if ($data['decision'] === 'yes') {
             Post::find($instanceId)->update(['state' => 'online']);
 
-            return $this->reload();
+            return $this->reload()->withShowPageReload();
         }
 
         $this->getWizardContext()->put('post_title', Post::find($instanceId)->getTranslation('title', 'en'));

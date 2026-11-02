@@ -48,7 +48,7 @@ export class CommandManager {
                 if(formModal.shouldReopen) {
                     formModal.reloadAndReopen();
                 } else if(data.reload) {
-                    await this.handleCommandResponse({ action: 'reload' });
+                    await this.handleCommandResponse({ action: 'reload', showPageReload: data.showPageReload });
                 }
             },
             link: (data, { formModal }) => {

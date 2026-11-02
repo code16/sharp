@@ -174,8 +174,8 @@ Override `buildPageAlert(PageAlert $pageAlert): void` to display a message above
 
 Finally, let's review the return possibilities: after a Command has been executed, the code must return something to tell to the front what to do next. Each helper returns a dedicated `Code16\Sharp\Commands\Returns\CommandReturn` subclass; there are eight of them:
 
-- `return $this->info(string $message)`: displays the entered text in a modal. Chain `->withReload()` to reload the page first.
-- `return $this->reload()`: reload the current page (with context).
+- `return $this->info(string $message)`: displays the entered text in a modal. Chain `->withReload()` to reload the page first, or `->withShowPageReload()` to also reload the whole Show Page (see `reload()` below).
+- `return $this->reload()`: reload the current page (with context). When the Command is executed from an Entity List or a Dashboard embedded in a Show Page, only this list or dashboard is reloaded: chain `->withShowPageReload()` to reload the whole Show Page as well.
 - `return $this->refresh(mixed $ids)`*: refresh only instance(s) with an id in `$ids`, which can be either a single id or an array.
 - `return $this->view(string $bladeView, array $params = [])`: display a view right in Sharp; useful for page previews.
 - `return $this->html(string $htmlContent)`: display an HTML content.
@@ -199,7 +199,7 @@ class OrderList extends SharpEntityList
 }
 ```
 
-The `withReload()` and `inNewTab()` modifiers accept an optional boolean, which is useful for conditional cases:
+The `withReload()`, `withShowPageReload()` and `inNewTab()` modifiers accept an optional boolean, which is useful for conditional cases:
 
 ```php
 public function execute(array $data = []): CommandReturn

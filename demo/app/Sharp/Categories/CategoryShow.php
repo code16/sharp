@@ -2,6 +2,7 @@
 
 namespace App\Sharp\Categories;
 
+use App\Enums\PostState;
 use App\Models\Category;
 use App\Sharp\Entities\PostEntity;
 use App\Sharp\Utils\Filters\CategoryFilter;
@@ -27,6 +28,10 @@ class CategoryShow extends SharpShow
                     ->setLabel('Description')
             )
             ->addField(
+                SharpShowTextField::make('latest_published_at')
+                    ->setLabel('Latest post published at')
+            )
+            ->addField(
                 SharpShowEntityListField::make(PostEntity::class)
                     ->setLabel('Related posts')
                     ->showCreateButton(false)
@@ -40,7 +45,7 @@ class CategoryShow extends SharpShow
         $showLayout
             ->addSection(fn (ShowLayoutSection $section) => $section
                 ->addColumn(6, fn (ShowLayoutColumn $column) => $column
-                    ->withField('name')
+                    ->withFields('name', 'latest_published_at')
                     ->withField('description')
                 )
             )
@@ -54,7 +59,10 @@ class CategoryShow extends SharpShow
 
     public function find(mixed $id): array
     {
-        return $this->transform(Category::findOrFail($id));
+        return $this->setCustomTransformer('latest_published_at', function ($value, Category $category) {
+            return $category->posts()->orderByDesc('published_at')->where('state', PostState::ONLINE)->first()?->published_at?->isoFormat('LLL');
+        })
+            ->transform(Category::findOrFail($id));
     }
 
     public function delete($id): void

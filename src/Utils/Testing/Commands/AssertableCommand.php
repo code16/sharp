@@ -74,12 +74,13 @@ class AssertableCommand
         return $this;
     }
 
-    public function assertReturnsInfo(?string $message = null, ?bool $reload = null): static
+    public function assertReturnsInfo(?string $message = null, ?bool $reload = null, ?bool $showPageReload = null): static
     {
         $this->response->assertOk()->assertJson(fn (AssertableJson $json) => $json
             ->where('action', 'info')
             ->when($message !== null, fn (AssertableJson $json) => $json->where('message', $message))
             ->when($reload !== null, fn (AssertableJson $json) => $json->where('reload', $reload))
+            ->when($showPageReload !== null, fn (AssertableJson $json) => $json->where('showPageReload', $showPageReload))
             ->etc()
         );
 
@@ -98,10 +99,11 @@ class AssertableCommand
         return $this;
     }
 
-    public function assertReturnsReload(): static
+    public function assertReturnsReload(?bool $showPageReload = null): static
     {
         $this->response->assertOk()->assertJson(fn (AssertableJson $json) => $json
             ->where('action', 'reload')
+            ->when($showPageReload !== null, fn (AssertableJson $json) => $json->where('showPageReload', $showPageReload))
             ->etc()
         );
 
