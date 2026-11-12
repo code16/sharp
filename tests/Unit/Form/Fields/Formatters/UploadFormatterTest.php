@@ -180,6 +180,33 @@ it('format image from front with width and height', function () {
         ]);
 });
 
+it('format svg from front with width and height', function (string $svgAttributes, ?int $width, ?int $height) {
+    $formatter = app(UploadFormatter::class);
+
+    Storage::disk('local')->put(
+        'tmp/image.svg',
+        '<?xml version="1.0" encoding="UTF-8"?>'."\n"
+        .'<svg xmlns="http://www.w3.org/2000/svg" '.$svgAttributes.'><rect width="10" height="10"/></svg>'
+    );
+
+    $formatted = $formatter->fromFront(SharpFormUploadField::make('upload'), 'attr', [
+        'name' => 'image.svg',
+        'uploaded' => true,
+    ]);
+
+    expect($formatted['mime_type'])->toBe('image/svg+xml')
+        ->and($formatted['width'] ?? null)->toBe($width)
+        ->and($formatted['height'] ?? null)->toBe($height);
+})->with([
+    'width & height' => ['width="120" height="80"', 120, 80],
+    'px units' => ['width="120.4px" height="80px" viewBox="0 0 24 24"', 120, 80],
+    'single quotes' => ["stroke-width='2' width='120' height='80'", 120, 80],
+    'viewBox only' => ['viewBox="0 0 300 150"', null, null],
+    'relative units' => ['width="100%" height="100%" viewBox="0 0 24 12"', null, null],
+    'single dimension' => ['width="100" viewBox="0 0 24 12"', null, null],
+    'no dimensions' => ['', null, null],
+]);
+
 describe('path signature', function () {
     it('adds a path signature when formatting an existing file to front', function () {
         $field = SharpFormUploadField::make('upload');
