@@ -10,7 +10,7 @@
     import { onMounted, provide, useTemplateRef } from "vue";
     import { CircleUser, ChevronsUpDown, LogOut, Moon, Sun, ChevronDown, ExternalLink } from "lucide-vue-next";
     import Notifications from "@/components/Notifications.vue";
-    import { useDialogs } from "@/utils/dialogs";
+    import { useDialogs, type RootAlertDialog } from "@/utils/dialogs";
     import useMenu from "@/composables/useMenu";
     import Logo from "@/components/Logo.vue";
     import { auth } from "@/utils/auth";
@@ -60,6 +60,12 @@
     import { Separator } from "@/components/ui/separator";
 
     const dialogs = useDialogs();
+
+    function closeDialog(dialog: RootAlertDialog) {
+        dialog.open = false;
+        window.setTimeout(() => dialog.onHidden(), 200);
+    }
+
     const menu = useMenu();
     const globalSearch = usePage().props.globalSearch as GlobalSearchData | null;
     const globalFilters = usePage().props.globalFilters as GlobalFiltersData | null;
@@ -283,7 +289,7 @@
             <template v-if="dialog.isHtmlContent">
                 <Dialog
                     v-model:open="dialog.open"
-                    @update:open="(open) => !open && window.setTimeout(() => dialog.onHidden(), 200)"
+                    @update:open="(open) => !open && closeDialog(dialog)"
                 >
                     <DialogContent
                         class="max-w-(--breakpoint-xl) overflow-hidden w-[calc(100%-4rem)] h-[90dvh]"
@@ -299,7 +305,7 @@
             <template v-else>
                 <AlertDialog
                     v-model:open="dialog.open"
-                    @update:open="(open) => !open && window.setTimeout(() => dialog.onHidden(), 200)"
+                    @update:open="(open) => !open && closeDialog(dialog)"
                 >
                     <AlertDialogContent :highlight-element="dialog.highlightElement">
                         <AlertDialogHeader>
@@ -311,7 +317,7 @@
                             <AlertDialogDescription as="div"
                                 class="break-words max-h-[calc(100vh-14rem)] pr-6 -mr-6 overflow-auto" :class="!dialog.title ? 'text-base font-medium text-foreground' : ''"
                             >
-                                <Content :html="dialog.text"></Content>
+                                <Content class="overflow-hidden" :html="dialog.text" @before-visit="closeDialog(dialog)"></Content>
                             </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>

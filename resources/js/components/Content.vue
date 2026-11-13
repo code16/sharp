@@ -9,6 +9,10 @@
         html: string | null,
     }>()
 
+    const emit = defineEmits<{
+        beforeVisit: [],
+    }>();
+
     const hoveringElementWithTitle = ref();
     const updatedHtml = computed(() => {
         return props.html?.replaceAll('title="', 'data-title="');
@@ -18,7 +22,12 @@
     function onClick(e: MouseEvent & { target: HTMLElement }) {
         const link: HTMLAnchorElement = e.target.closest('a[href]');
 
-        if(link && isSharpLink(link.href)) {
+        if(link && link.target !== '_blank' && isSharpLink(link.href)) {
+            if(e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
+                return;
+            }
+
+            emit('beforeVisit');
             router.visit(link.href);
             e.preventDefault();
         }
