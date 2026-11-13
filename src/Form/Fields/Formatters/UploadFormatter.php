@@ -192,6 +192,10 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
 
         $realPath = Storage::disk(sharp()->config()->get('uploads.tmp_disk'))->path($tmpFilePath);
 
+        if ($mimeType === 'image/svg+xml') {
+            return $this->getSvgDimensions($realPath);
+        }
+
         if ($size = @getimagesize($realPath)) {
             return [
                 'width' => $size[0],
@@ -200,5 +204,26 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
         }
 
         return null;
+    }
+
+    /**
+     * Reads the width / height attributes (unitless or px) of the <svg> tag, if both are present.
+     */
+    protected function getSvgDimensions(string $realPath): ?array
+    {
+        if (! preg_match('/<svg\b[^>]*>/i', (string) @file_get_contents($realPath), $svgTag)) {
+            return null;
+        }
+
+        $dimensions = [];
+        foreach (['width', 'height'] as $attribute) {
+            if (! preg_match('/\s'.$attribute.'\s*=\s*["\']\s*(\d*\.?\d+)\s*(?:px)?\s*["\']/i', $svgTag[0], $matches)) {
+                return null;
+            }
+
+            $dimensions[$attribute] = (int) round((float) $matches[1]);
+        }
+
+        return $dimensions;
     }
 }
