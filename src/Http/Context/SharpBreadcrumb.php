@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Http\Context;
 
 use Closure;
+use Code16\Sharp\Auth\SharpAuthorizationManager;
 use Code16\Sharp\Http\Context\Util\BreadcrumbItem;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Entities\ValueObjects\EntityKey;
@@ -246,6 +247,14 @@ class SharpBreadcrumb
             }
         }
 
+        if ($item->isShow() && ! $isLeaf && ! $this->canViewShowItem($item)) {
+            // Parent Show items come from the (client-controlled) URL:
+            // never expose a custom label the current user is not allowed to view.
+            return app(SharpEntityManager::class)
+                ->entityFor($item->key)
+                ->getLabelOrFail();
+        }
+
         if (! $isLeaf) {
             if ($label = $this->getCachedLabel($item)) {
                 return $label;
@@ -272,6 +281,10 @@ class SharpBreadcrumb
         }
 
         if ($formItem->instanceId() === null && ! $formItem->isSingleForm()) {
+            return null;
+        }
+
+        if (! $this->isAuthorizedTo('view', $formItem->key, $formItem->instanceId())) {
             return null;
         }
 
@@ -347,11 +360,21 @@ class SharpBreadcrumb
             return false;
         }
 
-        if ($showItem->instanceId() !== null) {
-            return true;
+        if ($showItem->instanceId() === null && ! $showItem->isSingleShow()) {
+            return false;
         }
 
-        return $showItem->isSingleShow();
+        return $this->canViewShowItem($showItem);
+    }
+
+    private function canViewShowItem(BreadcrumbItem $showItem): bool
+    {
+        return $this->isAuthorizedTo('view', $showItem->key, $showItem->instanceId());
+    }
+
+    private function isAuthorizedTo(string $ability, string $entityKey, ?string $instanceId): bool
+    {
+        return app(SharpAuthorizationManager::class)->isAllowed($ability, $entityKey, $instanceId);
     }
 
     private function breadcrumbCacheKey(BreadcrumbItem $item, ?string $type = null): string
