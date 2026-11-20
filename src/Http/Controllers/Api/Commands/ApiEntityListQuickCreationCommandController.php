@@ -3,6 +3,9 @@
 namespace Code16\Sharp\Http\Controllers\Api\Commands;
 
 use Code16\Sharp\Data\Commands\CommandFormData;
+use Code16\Sharp\EntityList\EntityListEntity;
+use Code16\Sharp\EntityList\SharpEntityList;
+use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Http\Controllers\Controller;
 use Code16\Sharp\Utils\Entities\ValueObjects\EntityKey;
 use Code16\Sharp\Utils\Uploads\SharpUploadManager;
@@ -30,8 +33,7 @@ class ApiEntityListQuickCreationCommandController extends Controller
             403
         );
 
-        $form = $this->entityManager->entityFor($formEntityKey)->getFormOrFail();
-        $form->buildFormConfig();
+        $form = $this->getQuickCreationFormOrFail($list, $entityKey, $formEntityKey);
 
         $quickCreationHandler
             ->setEntityKey($entityKey)
@@ -60,8 +62,7 @@ class ApiEntityListQuickCreationCommandController extends Controller
             403
         );
 
-        $form = $this->entityManager->entityFor($formEntityKey)->getFormOrFail();
-        $form->buildFormConfig();
+        $form = $this->getQuickCreationFormOrFail($list, $entityKey, $formEntityKey);
 
         $quickCreationHandler
             ->setEntityKey($entityKey)
@@ -76,5 +77,26 @@ class ApiEntityListQuickCreationCommandController extends Controller
         $this->uploadManager->dispatchJobs($quickCreationHandler->getInstanceId());
 
         return $result;
+    }
+
+    /**
+     * The form must be the one of the list entity, or of one of its sub-entities,
+     * and the user must be allowed to create an instance of it.
+     */
+    private function getQuickCreationFormOrFail(SharpEntityList $list, EntityKey $entityKey, EntityKey $formEntityKey): SharpForm
+    {
+        abort_unless(
+            $formEntityKey->toString() === $entityKey->toString()
+            || collect($list->getEntities()?->all() ?? [])
+                ->contains(fn (EntityListEntity $listEntity) => $listEntity->getEntityKey() === $formEntityKey->toString()),
+            403
+        );
+
+        $this->authorizationManager->check('create', $formEntityKey);
+
+        $form = $this->entityManager->entityFor($formEntityKey)->getFormOrFail();
+        $form->buildFormConfig();
+
+        return $form;
     }
 }
