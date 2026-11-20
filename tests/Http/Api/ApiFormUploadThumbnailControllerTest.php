@@ -69,3 +69,50 @@ it('does not allow to get a thumbnail without authorization', function () {
     )
         ->assertForbidden();
 });
+
+it('ignores disk and path parameters sent in the request body', function () {
+    UploadedFile::fake()->image('test.jpg', 600, 600)
+        ->storeAs('data/Posts/1', 'image.jpg', ['disk' => 'local']);
+    UploadedFile::fake()->image('secret.jpg', 600, 600)
+        ->storeAs('private', 'secret.jpg', ['disk' => 'local']);
+
+    $this->postJson(
+        URL::temporarySignedRoute('code16.sharp.api.form.upload.thumbnail.show', now()->addMinutes(120), [
+            'entityKey' => 'person',
+            'instanceId' => '1',
+            'path' => 'data/Posts/1/image.jpg',
+            'disk' => 'local',
+            'width' => 1000,
+            'height' => 1000,
+        ]),
+        [
+            'path' => 'private/secret.jpg',
+            'disk' => 'local',
+            'width' => 10,
+            'height' => 10,
+        ]
+    )
+        ->assertOk()
+        ->assertJsonPath('thumbnail', fn ($url) => str_contains($url, 'data/Posts/1/1000-1000_q-90/image.jpg'));
+
+    expect(Storage::disk('public')->exists('thumbnails/private/10-10_q-90/secret.jpg'))->toBeFalse();
+});
+
+it('does not allow to get a thumbnail from a disk not allowed for downloads', function () {
+    sharp()->config()->configureDownloads(allowedDisks: ['public']);
+
+    UploadedFile::fake()->image('test.jpg', 600, 600)
+        ->storeAs('data/Posts/1', 'image.jpg', ['disk' => 'local']);
+
+    $this->postJson(
+        URL::temporarySignedRoute('code16.sharp.api.form.upload.thumbnail.show', now()->addMinutes(120), [
+            'entityKey' => 'person',
+            'instanceId' => '1',
+            'path' => 'data/Posts/1/image.jpg',
+            'disk' => 'local',
+            'width' => 1000,
+            'height' => 1000,
+        ])
+    )
+        ->assertForbidden();
+});
