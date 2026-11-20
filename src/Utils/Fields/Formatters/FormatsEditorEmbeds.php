@@ -6,6 +6,7 @@ use Code16\Sharp\Form\Fields\Formatters\EditorEmbedsFormatter;
 use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Utils\Fields\IsSharpFieldWithLocalization;
 use Code16\Sharp\Utils\Fields\SharpFieldWithEmbeds;
+use Code16\Sharp\Utils\Uploads\UploadPathGuard;
 use DOMAttr;
 use Illuminate\Support\Str;
 
@@ -44,8 +45,15 @@ trait FormatsEditorEmbeds
                         })
                         ->when($locale)->merge(['_locale' => $locale])
                         ->pipe(function ($collection) use ($embed) {
+                            $data = $collection->toArray();
+
+                            if ($this instanceof EditorEmbedsFormatter) {
+                                // Embed data will be sent back by the client: sign existing files
+                                $data = app(UploadPathGuard::class)->signEmbedData($embed, $data);
+                            }
+
                             return $embed->transformDataWithRenderedTemplate(
-                                $collection->toArray(),
+                                $data,
                                 isForm: $this instanceof EditorEmbedsFormatter
                             );
                         });
