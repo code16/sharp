@@ -128,6 +128,42 @@ it('redirects to passkey creation when user has no passkey', function () {
     expect(app(MultiFactorManager::class)->pendingUser())->toBeNull();
 });
 
+it('forbids registering a new passkey during the 2fa step when user already has a passkey', function () {
+    $user = createPasskeyUser();
+    createPasskey($user);
+
+    $this->post(route('code16.sharp.login.post'), [
+        'login' => $user->email,
+        'password' => 'password',
+    ])->assertRedirect(route('code16.sharp.login.2fa'));
+
+    config()->set('passkeys.actions.store_passkey', FakeStorePasskeyActionForMultiFactor::class);
+
+    $this->postJson(route('code16.sharp.passkeys.spatie.validate'), ['name' => 'attacker'])
+        ->assertForbidden();
+
+    $this->postJson(route('code16.sharp.passkeys.spatie.store'), ['name' => 'attacker'])
+        ->assertForbidden();
+
+    expect(auth()->check())->toBeFalse();
+});
+
+it('forbids logging in from registered passkey page when flashed user is not the pending user', function () {
+    $user = createPasskeyUser();
+
+    $this->post(route('code16.sharp.login.post'), [
+        'login' => $user->email,
+        'password' => 'password',
+    ])->assertRedirect(route('code16.sharp.login.2fa'));
+
+    session()->put('registered_passkey', true);
+
+    $this->get(route('code16.sharp.passkeys.registered'))
+        ->assertForbidden();
+
+    expect(auth()->check())->toBeFalse();
+});
+
 class FakeStorePasskeyActionForMultiFactor extends StorePasskeyAction
 {
     public function execute($authenticatable, $passkeyJson, $passkeyOptionsJson, $hostName, $additionalProperties = []): Passkey

@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Http\Controllers\Auth\Passkeys;
 
+use Code16\Sharp\Auth\Passkeys\PasskeyManager;
 use Code16\Sharp\Auth\TwoFactor\MultiFactorManager;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\JsonResponse;
@@ -18,6 +19,8 @@ class SpatiePasskeyController extends Controller
 {
     public function validate(): JsonResponse
     {
+        $this->ensureCurrentUserCanRegisterPasskey();
+
         request()->validate([
             'name' => 'required|string|max:255',
         ]);
@@ -29,12 +32,16 @@ class SpatiePasskeyController extends Controller
 
     public function store(Request $request)
     {
+        $this->ensureCurrentUserCanRegisterPasskey();
+
         $passkey = request()->input('passkey');
         $storePasskeyAction = Config::getAction('store_passkey', StorePasskeyAction::class);
 
+        $user = $this->currentUser();
+
         try {
             $storePasskeyAction->execute(
-                $this->currentUser(),
+                $user,
                 $passkey, $this->previouslyGeneratedPasskeyOptions(),
                 request()->getHost(),
                 ['name' => request()->input('name')]
@@ -45,10 +52,25 @@ class SpatiePasskeyController extends Controller
             ])->errorBag('passkeyForm');
         }
 
-        // Only flash a flag: the Passkey model can't be stored in a JSON-serialized session
+        // Only flash the user id: the Passkey model can't be stored in a JSON-serialized session
         return redirect()
             ->route('code16.sharp.passkeys.registered')
-            ->with('registered_passkey', true);
+            ->with('registered_passkey', $user->getAuthIdentifier());
+    }
+
+    /**
+     * During the pending passkey MFA step, only a user without any passkey may enroll one
+     * (first passkey setup); otherwise, the existing passkey must be used as second factor.
+     */
+    protected function ensureCurrentUserCanRegisterPasskey(): void
+    {
+        if (! app(MultiFactorManager::class)->isUsingPasskeyMethod()) {
+            return;
+        }
+
+        $user = app(MultiFactorManager::class)->pendingUser();
+
+        abort_if(! $user || app(PasskeyManager::class)->userHasPasskey($user), 403);
     }
 
     protected function currentUser(): Authenticatable&HasPasskeys

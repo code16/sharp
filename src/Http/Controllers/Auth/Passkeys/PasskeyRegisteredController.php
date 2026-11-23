@@ -19,10 +19,16 @@ class PasskeyRegisteredController extends Controller
         }
 
         if ($multiFactor->isUsingPasskeyMethod()) {
-            if ($user = $multiFactor->pendingUser()) {
-                Auth::guard(sharp()->config()->get('auth.guard'))->login($user);
-                $request->session()->regenerate();
-            }
+            $user = $multiFactor->pendingUser();
+
+            // The registered passkey must belong to the pending user (who had no passkey before)
+            abort_if(
+                ! $user || session()->get('registered_passkey') !== $user->getAuthIdentifier(),
+                403
+            );
+
+            Auth::guard(sharp()->config()->get('auth.guard'))->login($user);
+            $request->session()->regenerate();
 
             $multiFactor->currentHandler()->forgetCode();
         }
