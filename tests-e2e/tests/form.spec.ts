@@ -732,6 +732,15 @@ test.describe('form', () => {
     await hasError(page.getByLabel('List', { exact: true }).getByRole('textbox', { name: 'List item text' }).nth(0), /required/);
   });
 
+  test('notification sent from update()', async ({ page }) => {
+    await init(page, { session: { notify_on_update: '1' } });
+    await page.goto('/sharp/root/s-list/test-models/s-form/test-models');
+    await page.getByRole('button', { name: 'Create' }).click();
+    await expect(page).toHaveURL(/\/sharp\/root\/s-list\/test-models$/);
+    await expect(page.getByText('Test model saved')).toBeVisible();
+    await expect(page.getByText('Notification sent from update()')).toBeVisible();
+  });
+
   test('tabs', async ({ page }) => {
     await init(page);
     await page.goto('/sharp/root/s-list/test-models/s-form/test-models');
