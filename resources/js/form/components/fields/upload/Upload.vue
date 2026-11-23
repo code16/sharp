@@ -399,8 +399,10 @@
             transformedImg.value = null;
             persistedEditableImg.value = null;
             playablePreviewUrl.value = null;
-            editModalImageUrl.value = null;
         }
+        // the removed file may be an already saved one (no uppyFile), so always reset the crop modal state
+        editModalImageUrl.value = null;
+        editModalCropperData.value = null;
     }
 
     function onInputChange(e: Event) {

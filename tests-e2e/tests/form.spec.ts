@@ -677,6 +677,30 @@ test.describe('form', () => {
       await expect(upload).toContainText('upload-image.jpg');
       await expect(upload.getByRole('img')).toBeVisible();
     });
+    test('upload image crop after replacing saved image', async ({ page }) => {
+      await init(page);
+      await page.goto('/sharp/root/s-list/test-models/s-form/test-models');
+      const upload = page.getByLabel('Upload');
+      const dialog = page.getByRole('dialog');
+      await upload.locator('input').setInputFiles(path.resolve(__dirname, '../fixtures/upload-image.jpg'));
+      await expect(upload).toContainText('upload-image.jpg');
+      await createForm(page);
+      await upload.getByRole('button', { name: 'Actions' }).click();
+      await page.getByRole('menu').getByRole('menuitem', { name: 'Crop...' }).click();
+      await expect(dialog).toBeVisible();
+      await page.keyboard.press('Escape');
+      await expect(dialog).toBeHidden();
+      await upload.getByRole('button', { name: 'Actions' }).click();
+      await page.getByRole('menu').getByRole('menuitem', { name: 'Remove' }).click();
+      await upload.locator('input').setInputFiles(path.resolve(__dirname, '../fixtures/upload-image-landscape.jpg'));
+      await expect(upload).toContainText('upload-image-landscape.jpg');
+      await upload.getByRole('button', { name: 'Actions' }).click();
+      await page.getByRole('menu').getByRole('menuitem', { name: 'Crop...' }).click();
+      await expect(dialog).toBeVisible();
+      // the crop modal must show the new (landscape) image, not the previously saved (portrait) one
+      await expect.poll(() => dialog.locator('img').first().evaluate((img: HTMLImageElement) => img.naturalWidth > img.naturalHeight))
+        .toBe(true);
+    });
     test('upload invalid', async ({ page }) => {
       await init(page);
       await page.goto('/sharp/root/s-list/test-models/s-form/test-models');
