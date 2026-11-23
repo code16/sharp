@@ -272,6 +272,10 @@ For this purpose, you have access to a shared context, maintained between each s
 - retrieve a value: `$this->getWizardContext()->get('name')` (in the `initialData()` method)
 - validate the stored values: `$this->getWizardContext()->validate($rules)` (in the `initialData()` method)
 
+::: tip
+The context is kept in the session: store scalars or arrays (like ids), not objects like Eloquent models, which don't survive Laravel's `json` session serialization.
+:::
+
 Consider the following example; first we build and execute the first step; in the process, we save the select post ids in the context:
 
 ```php

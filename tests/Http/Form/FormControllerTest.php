@@ -210,6 +210,40 @@ it('redirects to the show after an update', function () {
         ->assertRedirectContains('highlighted_instance_id=1');
 });
 
+it('displays a notification sent from update() after the redirection', function () {
+    // https://github.com/code16/sharp/issues/756
+    fakeFormFor('person', new class() extends PersonForm
+    {
+        public function update($id, array $data)
+        {
+            $this->notify('Person updated')
+                ->setLevelSuccess()
+                ->setDetail($data['name'])
+                ->setAutoHide(false);
+
+            return 1;
+        }
+    });
+
+    $this
+        ->followingRedirects()
+        ->post('/sharp/root/s-list/person/s-form/person/1', [
+            'name' => 'Stephen Hawking',
+        ])
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('EntityList/EntityList')
+            ->where('notifications', [
+                [
+                    'title' => 'Person updated',
+                    'level' => 'success',
+                    'message' => 'Stephen Hawking',
+                    'autoHide' => false,
+                ],
+            ])
+        );
+});
+
 it('creates an instance and redirect to the show if configured', function () {
     fakeFormFor('person', new class() extends PersonForm
     {

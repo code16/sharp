@@ -6,6 +6,7 @@ use BladeUI\Icons\BladeIconsServiceProvider;
 use BladeUI\Icons\Factory;
 use Code16\ContentRenderer\ContentRendererServiceProvider;
 use Code16\Sharp\SharpInternalServiceProvider;
+use Illuminate\Support\Arr;
 use Orchestra\Testbench\Pest\WithPest;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Spatie\LaravelImageOptimizer\ImageOptimizerServiceProvider;
@@ -48,5 +49,37 @@ class TestCase extends Orchestra
             'path' => __DIR__.'/Fixtures/resources/svg',
             'prefix' => 'testicon',
         ]);
+    }
+
+    /**
+     * With `session.serialization` set to `json`, only scalars and arrays survive from one
+     * request to the next. The test session store keeps its values in memory between test
+     * requests, so we check before and after each request that the session would survive.
+     */
+    public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
+    {
+        $this->assertSessionSurvivesJsonSerialization();
+
+        $response = parent::call($method, $uri, $parameters, $cookies, $files, $server, $content);
+
+        $this->assertSessionSurvivesJsonSerialization();
+
+        return $response;
+    }
+
+    protected function assertSessionSurvivesJsonSerialization(): void
+    {
+        if ($this->app['config']->get('session.serialization') !== 'json') {
+            return;
+        }
+
+        // Laravel's session store converts the ViewErrorBag to and from arrays itself
+        foreach (Arr::except($this->app['session.store']->all(), 'errors') as $key => $value) {
+            $this->assertSame(
+                $value,
+                json_decode((string) json_encode($value), true),
+                sprintf('Session key [%s] holds a value that does not survive JSON session serialization.', $key),
+            );
+        }
     }
 }

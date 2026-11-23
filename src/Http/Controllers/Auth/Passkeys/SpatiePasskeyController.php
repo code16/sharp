@@ -33,7 +33,7 @@ class SpatiePasskeyController extends Controller
         $storePasskeyAction = Config::getAction('store_passkey', StorePasskeyAction::class);
 
         try {
-            $registeredPasskey = $storePasskeyAction->execute(
+            $storePasskeyAction->execute(
                 $this->currentUser(),
                 $passkey, $this->previouslyGeneratedPasskeyOptions(),
                 request()->getHost(),
@@ -45,9 +45,10 @@ class SpatiePasskeyController extends Controller
             ])->errorBag('passkeyForm');
         }
 
+        // Only flash a flag: the Passkey model can't be stored in a JSON-serialized session
         return redirect()
             ->route('code16.sharp.passkeys.registered')
-            ->with('registered_passkey', $registeredPasskey);
+            ->with('registered_passkey', true);
     }
 
     protected function currentUser(): Authenticatable&HasPasskeys

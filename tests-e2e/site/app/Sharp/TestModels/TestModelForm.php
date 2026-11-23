@@ -369,7 +369,15 @@ class TestModelForm extends SharpForm
 
     public function update($id, array $data)
     {
-        return $this->save(TestModel::findOrNew($id), $data)->id;
+        $testModel = $this->save(TestModel::findOrNew($id), $data);
+
+        if (session()->get('notify_on_update')) {
+            $this->notify('Test model saved')
+                ->setDetail('Notification sent from update()')
+                ->setLevelSuccess();
+        }
+
+        return $testModel->id;
     }
 
     public function rules(): array
