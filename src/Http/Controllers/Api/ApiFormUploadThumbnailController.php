@@ -18,14 +18,27 @@ class ApiFormUploadThumbnailController extends Controller
 
         $this->authorizationManager->check('view', $entityKey, $instanceId);
 
+        // Only the signed query string is trusted: request body must not be able to override it.
+        $disk = request()->query('disk');
+        $path = request()->query('path');
+
+        if (
+            ($allowedDisks = sharp()->config()->get('downloads.allowed_disks')) !== null
+            && $allowedDisks != '*'
+        ) {
+            abort_if(! in_array($disk, $allowedDisks), 403);
+        }
+
+        abort_if(! is_string($disk) || ! is_string($path), 404);
+
         return response()->json([
             'thumbnail' => static::getUploadModelClass()::make([
-                'file_name' => request()->input('path'),
-                'disk' => request()->input('disk'),
+                'file_name' => $path,
+                'disk' => $disk,
             ])
                 ->thumbnail(
-                    request()->input('width'),
-                    request()->input('height')
+                    request()->query('width'),
+                    request()->query('height')
                 ),
         ]);
     }
