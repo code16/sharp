@@ -15,9 +15,11 @@ import {
 import { extent } from 'd3-array';
 import { ChartConfig, ChartTooltipContent, componentToString } from "@/components/ui/chart";
 import { useCurrentElement, useElementSize } from "@vueuse/core";
+import { getDefaultDateLocale } from "@/utils/dates";
 export type Datum = number[] & { total?: number };
 
 export function useXYChart(props: DashboardWidgetProps<LineGraphWidgetData | BarGraphWidgetData | AreaGraphWidgetData>) {
+    const locale = getDefaultDateLocale();
     const data = computed((): Datum[] => props.value?.datasets?.reduce((res, dataset, i) => {
         dataset.data.forEach((v, j) => {
             res[j] ??= [];
@@ -84,7 +86,7 @@ export function useXYChart(props: DashboardWidgetProps<LineGraphWidgetData | Bar
                         v => v
                     )
                 );
-                return formatDate(nearestDate);
+                return formatDate(nearestDate, locale);
             }
             return props.value.labels[Math.round(x as number)];
         }
@@ -110,7 +112,7 @@ export function useXYChart(props: DashboardWidgetProps<LineGraphWidgetData | Bar
         })(),
         tickFormat: (tick, i) => {
             if(props.widget.displayHorizontalAxisAsTimeline) {
-                return formatDate(tick as Date);
+                return formatDate(tick as Date, locale);
             }
             return props.value?.labels?.[tick as number] ?? '';
         },
@@ -162,10 +164,10 @@ function utc(d: Date) {
     return d2;
 }
 
-function formatDate(date: Date) {
+function formatDate(date: Date, locale: string) {
     date = utc(date);
     const hasHour = date.getHours() !== 0 || date.getMinutes() !== 0;
-    return new Intl.DateTimeFormat(undefined, {
+    return new Intl.DateTimeFormat(locale, {
         day: '2-digit',
         month: 'short',
         hour: hasHour ? '2-digit' : undefined,
