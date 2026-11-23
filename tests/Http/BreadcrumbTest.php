@@ -1,5 +1,7 @@
 <?php
 
+use Code16\Sharp\Auth\SharpEntityPolicy;
+use Code16\Sharp\Filters\GlobalFilters\GlobalFilters;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
@@ -9,6 +11,7 @@ use Code16\Sharp\Tests\Fixtures\Sharp\PersonShow;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\URL;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
@@ -17,7 +20,7 @@ beforeEach(function () {
 
     // We add a default here to avoid putting this everywhere in unit tests
     // it's handled by middleware in a real request, but we don't want to test that here.
-    \Illuminate\Support\Facades\URL::defaults(['globalFilter' => \Code16\Sharp\Filters\GlobalFilters\GlobalFilters::$defaultKey]);
+    URL::defaults(['globalFilter' => GlobalFilters::$defaultKey]);
 });
 
 it('builds the breadcrumb for an entity list', function () {
@@ -253,6 +256,132 @@ it('does not load parent show labels when lazy loading', function () {
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('breadcrumb.items.1.label', 'Scientist')
+        );
+
+    expect($show::$requestedIds)->not->toContain(1);
+});
+
+function fakeBreadcrumbLabelShowAndDenyViewOn(int $deniedId): PersonShow
+{
+    app(SharpEntityManager::class)
+        ->entityFor('person')
+        ->setLabel('Scientist');
+
+    fakePolicyFor('person', new class($deniedId) extends SharpEntityPolicy
+    {
+        public function __construct(private int $deniedId) {}
+
+        public function view($user, $instanceId): bool
+        {
+            return (int) $instanceId !== $this->deniedId;
+        }
+    });
+
+    $show = new class() extends PersonShow
+    {
+        public static array $requestedIds = [];
+
+        public function buildShowConfig(): void
+        {
+            $this->configureBreadcrumbCustomLabelAttribute('name');
+        }
+
+        public function find($id): array
+        {
+            $id = (int) $id;
+            self::$requestedIds[] = $id;
+
+            return $this->transform([
+                'id' => $id,
+                'name' => $id === 1 ? 'Marie Curie' : 'Albert Einstein',
+            ]);
+        }
+    };
+    $show::$requestedIds = [];
+
+    fakeShowFor('person', $show);
+
+    return $show;
+}
+
+it('does not load parent show labels the user is not allowed to view', function () {
+    Cache::flush();
+    $show = fakeBreadcrumbLabelShowAndDenyViewOn(1);
+
+    $this
+        ->get(
+            route('code16.sharp.show.show', [
+                'parentUri' => 's-list/person/s-show/person/1',
+                'person',
+                2,
+            ])
+        )
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('breadcrumb.items.1.label', 'Scientist')
+            ->where('breadcrumb.items.2.label', 'Albert Einstein')
+        );
+
+    expect($show::$requestedIds)->not->toContain(1);
+});
+
+it('does not expose cached parent show labels the user is not allowed to view', function () {
+    Cache::flush();
+    $show = fakeBreadcrumbLabelShowAndDenyViewOn(1);
+    Cache::put('sharp.breadcrumb.person.s-show.1', 'Marie Curie', now()->addMinutes(30));
+
+    $this
+        ->get(
+            route('code16.sharp.show.show', [
+                'parentUri' => 's-list/person/s-show/person/1',
+                'person',
+                2,
+            ])
+        )
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('breadcrumb.items.1.label', 'Scientist')
+        );
+
+    expect($show::$requestedIds)->not->toContain(1);
+});
+
+it('does not load a parent show label the user is not allowed to view when injected before a form', function () {
+    Cache::flush();
+    $show = fakeBreadcrumbLabelShowAndDenyViewOn(1);
+
+    $this
+        ->get(
+            route('code16.sharp.form.create', [
+                'parentUri' => 's-list/person/s-show/person/1',
+                'person',
+            ])
+        )
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('breadcrumb.items.1.label', 'Scientist')
+        );
+
+    expect($show::$requestedIds)->not->toContain(1);
+});
+
+it('does not use the parent show label on a form leaf the user is not allowed to view', function () {
+    Cache::flush();
+    $show = fakeBreadcrumbLabelShowAndDenyViewOn(1);
+    Cache::put('sharp.breadcrumb.person.s-show.1', 'Marie Curie', now()->addMinutes(30));
+
+    $this
+        ->get(
+            route('code16.sharp.form.edit', [
+                'parentUri' => 's-list/person/s-show/person/1',
+                'person',
+                1,
+            ])
+        )
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('breadcrumb.items.1.label', 'Scientist')
+            ->where('breadcrumb.items.2.documentTitleLabel', 'Edit “Scientist”')
         );
 
     expect($show::$requestedIds)->not->toContain(1);
