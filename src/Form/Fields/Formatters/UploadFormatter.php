@@ -19,6 +19,7 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
     public function toFront(SharpFormField $field, $value)
     {
         if (is_array($value)
+            && ! ($value['uploaded'] ?? false)
             && UploadPathSignature::enabled()
             && ($value['path'] ?? null)
             && ! isset($value['path_signature'])

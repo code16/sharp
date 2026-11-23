@@ -6,6 +6,7 @@ use Code16\Sharp\Exceptions\Form\SharpFormFieldDataException;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Utils\Sanitization\FormatsSanitizedValue;
+use Code16\Sharp\Utils\Uploads\UploadPathGuard;
 use Illuminate\Support\Collection;
 
 class EditorFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
@@ -47,6 +48,9 @@ class EditorFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
         if (is_string($value)) {
             $value = ['text' => $value];
         }
+
+        // Existing files referenced in the content (embeds, slots...) must have been signed by the server
+        $value = app(UploadPathGuard::class)->ensureFieldValueIsTrusted($field, $attribute, $value);
 
         $text = $this->maybeLocalized(
             $field,
